@@ -1,0 +1,26 @@
+{
+  "name": "quiqqer/frontend-user",
+  "type": "quiqqer-module",
+  "description": "QUIQQER Frontend User",
+  "version": "dev-master",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Henning Leutz",
+      "email": "leutz@pcsg.de",
+      "homepage": "http://www.pcsg.de",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "support@pcsg.de"
+  },
+  "require": {
+    "quiqqer/quiqqer": "*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "QUI\\FrontendUser\\": "src/QUI/FrontendUser"
+    }
+  }
+}
