@@ -1,11 +1,10 @@
-
-QUIQQER Frontend User
+QUIQQER Frontend Users
 ========
 
 
 Paketname:
 
-    quiqqer/frontend-user
+    quiqqer/frontend-users
 
 
 Features
@@ -17,15 +16,15 @@ Features
 Installation
 ------------
 
-Der Paketname ist: quiqqer/frontend-user
+Der Paketname ist: quiqqer/frontend-users
 
 
 Mitwirken
 ----------
 
-- Project: https://dev.quiqqer.com/quiqqer/frontend-user
-- Issue Tracker: https://dev.quiqqer.com/quiqqer/frontend-user/issues
-- Source Code: https://dev.quiqqer.com/quiqqer/frontend-user/tree/master
+- Project: https://dev.quiqqer.com/quiqqer/frontend-users
+- Issue Tracker: https://dev.quiqqer.com/quiqqer/frontend-users/issues
+- Source Code: https://dev.quiqqer.com/quiqqer/frontend-users/tree/master
 
 
 Support
