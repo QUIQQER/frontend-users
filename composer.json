@@ -1,7 +1,7 @@
 {
-  "name": "quiqqer/frontend-user",
+  "name": "quiqqer/frontend-users",
   "type": "quiqqer-module",
-  "description": "QUIQQER Frontend User",
+  "description": "QUIQQER Frontend Users",
   "version": "dev-master",
   "license": "MIT",
   "authors": [
@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "QUI\\FrontendUser\\": "src/QUI/FrontendUser"
+      "QUI\\FrontendUsers\\": "src/QUI/FrontendUsers"
     }
   }
 }
