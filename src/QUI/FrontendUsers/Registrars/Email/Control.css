@@ -1,0 +1,25 @@
+.quiqqer-registration {
+    float: left;
+    width: 100%;
+}
+
+.quiqqer-registration fieldset {
+    border: none;
+    margin-bottom: 10px;
+}
+
+.quiqqer-registration label,
+.quiqqer-registration fieldset {
+    float: left;
+    width: 100%;
+}
+
+.quiqqer-registration-field-title {
+    float: left;
+    width: 40%;
+}
+
+.quiqqer-registration-field-element {
+    float: left;
+    width: 60%;
+}

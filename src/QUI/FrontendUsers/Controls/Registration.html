@@ -1,0 +1,21 @@
+<div class="quiqqer-frontendUsers-controls-registration">
+    {foreach $Registrators as $Registrator}
+    <form action=""
+          method="POST"
+          class="quiqqer-frontendUsers-controls-registration-registrator"
+          data-registrator="{$Registrator->getType()}"
+    >
+        {$Registrator->getControl()->create()}
+        <input type="hidden" name="registrator" value="{$Registrator->getType()}"/>
+        <input type="hidden" name="registration" value="1"/>
+    </form>
+
+    {if $Registrator === $Registrators->last()}
+    <div class="quiqqer-frontendUsers-controls-registration-or">
+        <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
+            {locale group="quiqqer/frontend-users" var="control.registration.or"}
+        </span>
+    </div>
+    {/if}
+    {/foreach}
+</div>

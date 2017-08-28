@@ -1,0 +1,15 @@
+<quiqqer>
+    <package>
+        <title>
+            <locale group="quiqqer/frontend-user" var="package.title"/>
+        </title>
+
+        <description>
+            <locale group="quiqqer/frontend-user" var="package.description"/>
+        </description>
+
+        <provider>
+            <registrator src="\QUI\FrontendUsers\Registrars\Email\Registrator"/>
+        </provider>
+    </package>
+</quiqqer>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locales>
+
+    <groups name="quiqqer/frontend-users" datatype="php,js">
+        <locale name="package.title">
+            <de><![CDATA[QUIQQER - Frontend-User]]></de>
+            <en><![CDATA[QUIQQER - Frontend-User]]></en>
+        </locale>
+    </groups>
+
+    <groups name="quiqqer/frontend-users" datatype="php">
+        <locale name="control.registration.or">
+            <de><![CDATA[oder]]></de>
+            <en><![CDATA[or]]></en>
+        </locale>
+    </groups>
+</locales>

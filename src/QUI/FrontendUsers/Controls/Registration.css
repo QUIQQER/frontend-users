@@ -1,0 +1,21 @@
+.quiqqer-frontendUsers-controls-registration-or {
+    border-top: 1px solid #CFD2D2;
+    clear: both;
+    color: #CFD2D2;
+    float: left;
+    line-height: 30px;
+    margin: 50px 0;
+    text-align: center;
+    position: relative;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-controls-registration-or-text {
+    color: #666666;
+    font-size: 16px;
+    line-height: 30px;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    top: -15px;
+}
