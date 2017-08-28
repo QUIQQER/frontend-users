@@ -6,6 +6,11 @@
             <de><![CDATA[QUIQQER - Frontend-User]]></de>
             <en><![CDATA[QUIQQER - Frontend-User]]></en>
         </locale>
+
+        <locale name="exception.empty.username">
+            <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
+            <en><![CDATA[No user name was passed. Please provide a username.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">

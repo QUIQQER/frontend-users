@@ -18,9 +18,9 @@ interface RegistratorInterface
     /**
      * Set registration data
      *
-     * @param array $userData
+     * @param array $attributes
      */
-    public function setAttributes(array $userData);
+    public function setAttributes($attributes);
 
     /**
      * Return the sent registrator data
@@ -47,6 +47,14 @@ interface RegistratorInterface
     public function getAttribute($key);
 
     //endregion attributes
+
+    /**
+     * Create a new user
+     *
+     * @return int - QUI\FrontendUsers\Handler::REGISTRATION_STATUS_*
+     * @throws Exception
+     */
+    public function createUser();
 
     /**
      * Validate registration data

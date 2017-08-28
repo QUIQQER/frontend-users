@@ -35,6 +35,8 @@ class Control extends QUI\Control
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 
+
+
         return $Engine->fetch(dirname(__FILE__).'/Control.html');
     }
 }

@@ -1,3 +1,18 @@
+{if isset($error)}
+<div class="quiqqer-frontendUsers-error">
+    {$error}
+</div>
+{/if}
+
+{if isset($registrationStatus) && $registrationStatus === 1}
+<div class="quiqqer-frontendUsers-success">
+    {$Registrator->getSuccessMessage()}
+</div>
+{elseif isset($registrationStatus) && $registrationStatus === 2}
+<div class="quiqqer-frontendUsers-pending">
+    {$Registrator->getPendingMessage()}
+</div>
+{else}
 <div class="quiqqer-frontendUsers-controls-registration">
     {foreach $Registrators as $Registrator}
     <form action=""
@@ -10,7 +25,7 @@
         <input type="hidden" name="registration" value="1"/>
     </form>
 
-    {if $Registrator === $Registrators->last()}
+    {if $Registrator !== $Registrators->last()}
     <div class="quiqqer-frontendUsers-controls-registration-or">
         <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
             {locale group="quiqqer/frontend-users" var="control.registration.or"}
@@ -19,3 +34,4 @@
     {/if}
     {/foreach}
 </div>
+{/if}

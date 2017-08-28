@@ -27,6 +27,10 @@ class Registration extends QUI\Control
     {
         parent::__construct($attributes);
 
+        $this->setAttributes(array(
+            'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration'
+        ));
+
         $this->addCSSFile(dirname(__FILE__).'/Registration.css');
     }
 
@@ -40,11 +44,18 @@ class Registration extends QUI\Control
         $Engine       = QUI::getTemplateManager()->getEngine();
         $Registrators = QUI\FrontendUsers\Handler::getInstance()->getRegistrators();
 
-        try {
-            $this->register();
-        } catch (QUI\Exception $Exception) {
-            $Engine->assign('Error', $Exception->getMessage());
+        if (isset($_POST['registration'])) {
+            try {
+                $registrationStatus = $this->register();
+
+                $Engine->assign(array(
+                    'registrationStatus' => $registrationStatus
+                ));
+            } catch (QUI\Exception $Exception) {
+                $Engine->assign('error', $Exception->getMessage());
+            }
         }
+
 
         $Engine->assign(array(
             'Registrators' => $Registrators
@@ -88,19 +99,21 @@ class Registration extends QUI\Control
     public function register()
     {
         if (!isset($_POST['registration'])) {
-            return;
+            return QUI\FrontendUsers\Handler::REGISTRATION_STATUS_ERROR;
         }
 
         $Registrator = $this->isCurrentlyExecuted();
 
         if ($Registrator === false) {
             throw new QUI\FrontendUsers\Exception(array(
-                'quiqqer/frontend-user',
-                'exception.registrator.not.exists'
+                'quiqqer/frontend-users',
+                'exception.registrator.not.found'
             ));
         }
 
         $Registrator->setAttributes($_POST);
         $Registrator->validate();
+
+        return $Registrator->createUser();
     }
 }

@@ -37,8 +37,26 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
     abstract public function onRegistered(QUI\Interfaces\Users\User $User);
 
     /**
+     * Return the success message
+     * @return string
+     */
+    public function getSuccessMessage()
+    {
+        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.successfully.registered');
+    }
+
+    /**
+     * @return string
+     */
+    public function getPendingMessage()
+    {
+        return '';
+    }
+
+    /**
      * Create a new user
      *
+     * @return int - QUI\FrontendUsers\Handler::REGISTRATION_STATUS_*
      * @throws Exception
      */
     public function createUser()
@@ -47,8 +65,12 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
 
         // start the registration
         $Users = QUI::getUsers();
-        $User  = $Users->createChild($this->getUsername());
 
-        $status = $this->onRegistered($User);
+        $User = $Users->createChild(
+            $this->getUsername(),
+            QUI::getUsers()->getSystemUser()
+        );
+
+        return $this->onRegistered($User);
     }
 }

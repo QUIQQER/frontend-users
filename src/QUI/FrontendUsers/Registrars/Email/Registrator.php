@@ -22,7 +22,20 @@ class Registrator extends FrontendUsers\AbstractRegistrator
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
+        $User->setAttribute('email', $this->getAttribute('email'));
+
+        // @todo send activation mail
+
+
         return FrontendUsers\Handler::REGISTRATION_STATUS_PENDING;
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getPendingMessage()
+    {
+        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration.mail.was.send');
     }
 
     /**
@@ -34,9 +47,33 @@ class Registrator extends FrontendUsers\AbstractRegistrator
 
         if (empty($username)) {
             throw new FrontendUsers\Exception(array(
-                'quiqqer/frontend-user',
+                'quiqqer/frontend-users',
                 'exception.empty.username'
             ));
+        }
+
+        $email        = $this->getAttribute('email');
+        $emailConfirm = $this->getAttribute('emailConfirm');
+
+        if ($email != $emailConfirm) {
+            if (empty($username)) {
+                throw new FrontendUsers\Exception(array(
+                    'quiqqer/frontend-users',
+                    'exception.different.emails'
+                ));
+            }
+        }
+
+        $password        = $this->getAttribute('password');
+        $passwordConfirm = $this->getAttribute('passwordConfirm');
+
+        if ($password != $passwordConfirm) {
+            if (empty($username)) {
+                throw new FrontendUsers\Exception(array(
+                    'quiqqer/frontend-users',
+                    'exception.different.passwords'
+                ));
+            }
         }
     }
 
@@ -49,6 +86,10 @@ class Registrator extends FrontendUsers\AbstractRegistrator
 
         if (isset($data['username'])) {
             return $data['username'];
+        }
+
+        if (isset($data['email'])) {
+            return $data['email'];
         }
 
         return '';
