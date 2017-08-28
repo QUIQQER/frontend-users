@@ -10,8 +10,11 @@ Paketname:
 Features
 --------
 
-- Benutzer Registrierung über E-MAIL
 - Benutzer Registrierungs-API
+- Benutzer Registrierung über E-MAIL
+
+- Seitentyp: Registrierung
+- Seitentyp: Login
 
 Installation
 ------------
@@ -43,4 +46,4 @@ MIT
 Entwickler
 ------
 
-Coming soon...
+https://dev.quiqqer.com/quiqqer/frontend-users/wikis/home

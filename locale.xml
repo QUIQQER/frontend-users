@@ -3,10 +3,23 @@
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
         <locale name="package.title">
-            <de><![CDATA[QUIQQER - Frontend-User]]></de>
-            <en><![CDATA[QUIQQER - Frontend-User]]></en>
+            <de><![CDATA[QUIQQER - Frontend-Users]]></de>
+            <en><![CDATA[QUIQQER - Frontend-Users]]></en>
         </locale>
 
+        <locale name="admin.types.registration">
+            <de><![CDATA[Registrierung]]></de>
+            <en><![CDATA[Registration]]></en>
+        </locale>
+        <locale name="admin.types.login">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Login]]></en>
+        </locale>
+
+        <locale name="message.already.loged.in">
+            <de><![CDATA[Sie sind bereits eingelogt als [username]]]></de>
+            <en><![CDATA[You are already loged in as [username]]]></en>
+        </locale>
         <locale name="exception.empty.username">
             <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
             <en><![CDATA[No user name was passed. Please provide a username.]]></en>

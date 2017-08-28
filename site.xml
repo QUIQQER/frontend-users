@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
     <types>
-        <!-- Type with locale translation -->
-        <type type="types/registration" icon="fa fa-sign-in">
+        <type type="types/registration" icon="fa fa-user-plus">
             <locale group="quiqqer/frontend-users" var="admin.types.registration"/>
+        </type>
+        <type type="types/login" icon="fa fa-sign-in">
+            <locale group="quiqqer/frontend-users" var="admin.types.login"/>
         </type>
     </types>
 </site>
