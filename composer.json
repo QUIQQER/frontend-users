@@ -2,7 +2,7 @@
   "name": "quiqqer/frontend-users",
   "type": "quiqqer-module",
   "description": "QUIQQER Frontend Users",
-  "version": "dev-master",
+  "version": "dev-dev",
   "license": "MIT",
   "authors": [
     {
