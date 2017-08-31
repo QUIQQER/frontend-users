@@ -1,3 +1,8 @@
+.quiqqer-frontendUsers-controls-profile {
+    float: left;
+    width: 100%;
+}
+
 /** categories / tabs
  ==================================== */
 
@@ -16,8 +21,18 @@
     width: 100%;
 }
 
+.quiqqer-frontendUsers-controls-profile-category-active {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.quiqqer-frontendUsers-controls-profile-category:hover {
+    background: rgba(0, 0, 0, 0.3);
+    color: inherit;
+}
+
 .quiqqer-frontendUsers-controls-profile-category-icon {
     font-size: 30px;
+    margin: 10px 0;
     text-align: center;
     width: 100%;
 }
@@ -35,7 +50,12 @@
 .quiqqer-frontendUsers-controls-profile-categoryContent {
     float: left;
     padding-left: 10px;
+    position: relative;
     width: 70%;
+}
+
+.quiqqer-frontendUsers-controls-profile-categoryContentAnimation {
+    position: relative;
 }
 
 .quiqqer-frontendUsers-controls-profile-control label {
