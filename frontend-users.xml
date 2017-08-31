@@ -1,0 +1,11 @@
+<quiqqer>
+    <frontend-users>
+        <profile>
+            <tab name="user" require="" icon="fa fa-user" control="">
+                <text>Benutzer-Daten</text>
+                <image>fa fa-shopping-bag</image>
+                <template>OPT_DIR/quiqqer/frontend-users/src/QUI/FrontendUsers/Controls/Profile/user.html</template>
+            </tab>
+        </profile>
+    </frontend-users>
+</quiqqer>

@@ -1,5 +1,5 @@
-{if $UserSession && $UserSession->getId()}
-    {locale group="quiqqer/frontend-users" var="message.already.loged.in" username=$User->getName()}
+{if $SessionUser && $SessionUser->getId()}
+    {locale group="quiqqer/frontend-users" var="message.already.loged.in" username=$SessionUser->getName()}
 {else}
 <div class="quiqqer-frontendUsers-login-container">
     {control control="QUI\Users\Controls\Login"}

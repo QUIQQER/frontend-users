@@ -1,0 +1,76 @@
+/** categories / tabs
+ ==================================== */
+
+.quiqqer-frontendUsers-controls-profile-categories {
+    float: left;
+    padding-right: 10px;
+    width: 30%;
+}
+
+.quiqqer-frontendUsers-controls-profile-category {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    clear: both;
+    float: left;
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-controls-profile-category-icon {
+    font-size: 30px;
+    text-align: center;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-saveButton {
+    cursor: pointer;
+    margin-left: 33%;
+    padding: 10px;
+    width: 66%;
+}
+
+/** category content
+ ==================================== */
+
+.quiqqer-frontendUsers-controls-profile-categoryContent {
+    float: left;
+    padding-left: 10px;
+    width: 70%;
+}
+
+.quiqqer-frontendUsers-controls-profile-control label {
+    clear: both;
+    float: left;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-label {
+    float: left;
+    width: 33%;
+}
+
+.quiqqer-frontendUsers-controls-profile-control input {
+    padding: 10px;
+    width: 66%;
+}
+
+/** user
+ ==================================== */
+
+.package-intranet-profile-birthday {
+    float: left;
+    width: 66%;
+}
+
+.package-intranet-profile-birthday [name="birth_day"],
+.package-intranet-profile-birthday [name="birth_year"] {
+    float: left;
+    width: calc(20% - 10px);
+}
+
+.package-intranet-profile-birthday [name="birth_month"] {
+    float: left;
+    margin: 0 10px;
+    width: 60%;
+}

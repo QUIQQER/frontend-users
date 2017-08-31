@@ -7,5 +7,8 @@
         <type type="types/login" icon="fa fa-sign-in">
             <locale group="quiqqer/frontend-users" var="admin.types.login"/>
         </type>
+        <type type="types/profile" icon="fa fa-user">
+            <locale group="quiqqer/frontend-users" var="admin.types.profile"/>
+        </type>
     </types>
 </site>

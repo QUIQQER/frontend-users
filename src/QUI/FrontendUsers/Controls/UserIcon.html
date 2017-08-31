@@ -1,0 +1,8 @@
+<div class="quiqqer-frontendUsers-userIcon"
+     title="{$User->getName()}"
+     {if isset($avatar)}style="background-image: url('{$avatar}');" {/if}
+>
+{if isset($firstLetter) && $firstLetter}
+<span class="quiqqer-frontendUsers-userIcon-letter">{$firstLetter}</span>
+{/if}
+</div>

@@ -1,0 +1,39 @@
+.quiqqer-frontendUsers-userIcon {
+    background-color: #DEDEDE;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 45px;
+    cursor: pointer;
+    float: left;
+    font-size: 40px;
+    height: 90px;
+    overflow: hidden;
+    position: relative;
+    width: 90px;
+}
+
+.quiqqer-frontendUsers-userIcon-loader {
+    background: rgba(0, 0, 0, .5);
+    color: #fff;
+    font-size: 40px;
+    line-height: 90px;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-userIcon-letter {
+    line-height: 90px;
+    text-align: center;
+    width: 90px;
+}
+
+.quiqqer-frontendUsers-userIcon img {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    width: 100%;
+}

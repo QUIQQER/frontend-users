@@ -20,6 +20,10 @@
             <de><![CDATA[Sie sind bereits eingelogt als [username]]]></de>
             <en><![CDATA[You are already loged in as [username]]]></en>
         </locale>
+        <locale name="message.user.saved.successfully">
+            <de><![CDATA[Der Benutzer wurde erfolgreich gespeichert.]]></de>
+            <en><![CDATA[The User has successfully saved.]]></en>
+        </locale>
         <locale name="exception.empty.username">
             <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
             <en><![CDATA[No user name was passed. Please provide a username.]]></en>
@@ -31,5 +35,39 @@
             <de><![CDATA[oder]]></de>
             <en><![CDATA[or]]></en>
         </locale>
+        
+        <locale name="profile.title">
+            <de><![CDATA[Meine Daten]]></de>
+            <en><![CDATA[My data]]></en>
+        </locale>
+        <locale name="profile.save">
+            <de><![CDATA[Speichern]]></de>
+            <en><![CDATA[Save]]></en>
+        </locale>
+
+        <locale name="profile.firstname">
+            <de><![CDATA[Vornamen]]></de>
+            <en><![CDATA[First name]]></en>
+        </locale>
+        <locale name="profile.lastname">
+            <de><![CDATA[Nachname]]></de>
+            <en><![CDATA[Last name]]></en>
+        </locale>
+        <locale name="profile.dateOfBirth">
+            <de><![CDATA[Geburtstag]]></de>
+            <en><![CDATA[Date of birth]]></en>
+        </locale>
+        <locale name="profile.email">
+            <de><![CDATA[E-Mail]]></de>
+            <en><![CDATA[E-mail]]></en>
+        </locale>
     </groups>
+
+    <groups name="quiqqer/frontend-users" datatype="js">
+        <locale name="control.profile.window.title">
+            <de><![CDATA[Profil]]></de>
+            <en><![CDATA[Profile]]></en>
+        </locale>
+    </groups>
+
 </locales>
