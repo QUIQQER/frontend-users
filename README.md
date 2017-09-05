@@ -1,8 +1,10 @@
+![QUIQQER Blog](bin/images/Readme.jpg)
+
 QUIQQER Frontend Users
 ========
 
 
-Paketname:
+Package Name:
 
     quiqqer/frontend-users
 
@@ -22,7 +24,7 @@ Installation
 Der Paketname ist: quiqqer/frontend-users
 
 
-Mitwirken
+Contribute
 ----------
 
 - Project: https://dev.quiqqer.com/quiqqer/frontend-users
@@ -33,17 +35,13 @@ Mitwirken
 Support
 -------
 
-Falls Sie Fehler gefunden, Wünsche oder Verbesserungsvorschläge haben, 
-können Sie uns gern per Mail an support@pcsg.de darüber informieren.  
-Wir werden versuchen auf Ihre Wünsche einzugehen bzw. diese an die zuständigen Entwickler 
-des Projektes weiterleiten.
+If you have found errors, wishes or suggestions for improvement,
+you can contact us by email at support@pcsg.de.
+
+We will try to meet your needs or send them to the responsible developers
+of the project.
 
 License
 -------
 
 MIT
-
-Entwickler
-------
-
-https://dev.quiqqer.com/quiqqer/frontend-users/wikis/home

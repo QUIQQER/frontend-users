@@ -8,6 +8,16 @@
             <locale group="quiqqer/frontend-user" var="package.description"/>
         </description>
 
+        <image src="URL_OPT_DIR/quiqqer/frontend-user/bin/images/Logo.jpg"/>
+
+        <support>
+            <email>support@pcsg.de</email>
+            <forum>https://community.quiqqer.com</forum>
+            <source>https://dev.quiqqer.com/quiqqer/frontend-user</source>
+            <issues>https://dev.quiqqer.com/quiqqer/frontend-user/issues</issues>
+            <wiki>https://dev.quiqqer.com/quiqqer/frontend-user/wikis/home</wiki>
+        </support>
+
         <provider>
             <registrator src="\QUI\FrontendUsers\Registrars\Email\Registrator"/>
         </provider>
