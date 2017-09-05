@@ -3,6 +3,7 @@
 QUIQQER Frontend Users
 ========
 
+The Frontend Users module extends QUIQQER with a profile extension and a registry for users.
 
 Package Name:
 
@@ -21,7 +22,7 @@ Features
 Installation
 ------------
 
-Der Paketname ist: quiqqer/frontend-users
+The Package Name is: quiqqer/frontend-users
 
 
 Contribute

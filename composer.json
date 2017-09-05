@@ -1,13 +1,13 @@
 {
   "name": "quiqqer/frontend-users",
   "type": "quiqqer-module",
-  "description": "QUIQQER Frontend Users",
+  "description": "The Frontend Users module extends QUIQQER with a profile extension and a registry for users.",
   "version": "dev-dev",
   "license": "MIT",
   "authors": [
     {
       "name": "Henning Leutz",
-      "email": "leutz@pcsg.de",
+      "email": "support@pcsg.de",
       "homepage": "http://www.pcsg.de",
       "role": "Developer"
     }
