@@ -7,6 +7,11 @@
             <en><![CDATA[QUIQQER - Frontend-Users]]></en>
         </locale>
 
+        <locale name="package.description">
+            <de><![CDATA[Das Frontend Users Modul erweitert Quiqqer mit einer Profil-Erweiterung und einer Registrierung für Benutzer]]></de>
+            <en><![CDATA[The Frontend Users module extends QUIQQER with a profile extension and a registration for users.]]></en>
+        </locale>
+
         <locale name="admin.types.registration">
             <de><![CDATA[Registrierung]]></de>
             <en><![CDATA[Registration]]></en>

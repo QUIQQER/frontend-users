@@ -18,6 +18,11 @@
             <wiki>https://dev.quiqqer.com/quiqqer/frontend-user/wikis/home</wiki>
         </support>
 
+        <copyright>
+            <name><![CDATA[PCSG - Computer & Internet Service OHG]]></name>
+            <license></license>
+        </copyright>
+
         <provider>
             <registrator src="\QUI\FrontendUsers\Registrars\Email\Registrator"/>
         </provider>
