@@ -31,7 +31,7 @@ class Registration extends QUI\Control
             'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration'
         ));
 
-        $this->addCSSFile(dirname(__FILE__).'/Registration.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
     }
 
     /**
@@ -56,12 +56,12 @@ class Registration extends QUI\Control
             }
         }
 
-
         $Engine->assign(array(
-            'Registrators' => $Registrators
+            'Registrators' => $Registrators,
+            'Registrator'  => $this->isCurrentlyExecuted()
         ));
 
-        return $Engine->fetch(dirname(__FILE__).'/Registration.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
     }
 
     /**

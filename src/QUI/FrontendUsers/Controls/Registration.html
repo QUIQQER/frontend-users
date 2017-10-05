@@ -4,11 +4,11 @@
 </div>
 {/if}
 
-{if isset($registrationStatus) && $registrationStatus === 1}
+{if $Registrator && isset($registrationStatus) && $registrationStatus === 1}
 <div class="quiqqer-frontendUsers-success">
     {$Registrator->getSuccessMessage()}
 </div>
-{elseif isset($registrationStatus) && $registrationStatus === 2}
+{elseif $Registrator && isset($registrationStatus) && $registrationStatus === 2}
 <div class="quiqqer-frontendUsers-pending">
     {$Registrator->getPendingMessage()}
 </div>

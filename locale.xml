@@ -33,6 +33,86 @@
             <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
             <en><![CDATA[No user name was passed. Please provide a username.]]></en>
         </locale>
+
+        <!-- Settings -->
+        <locale name="settings.category.userProfile.title">
+            <de><![CDATA[Profil]]></de>
+            <en><![CDATA[Profile]]></en>
+        </locale>
+        <locale name="settings.showMyData.title" html="true">
+            <de><![CDATA[<b>Meine Daten</b> anzeigen]]></de>
+            <en><![CDATA[Show <b>My Data</b>]]></en>
+        </locale>
+        <locale name="settings.showPasswordChange.title" html="true">
+            <de><![CDATA[<b>Passwort ändern</b> anzeigen]]></de>
+            <en><![CDATA[Show <b>Change password</b>]]></en>
+        </locale>
+        <locale name="settings.showAddress.title" html="true">
+            <de><![CDATA[<b>Meine Adresse</b> anzeigen]]></de>
+            <en><![CDATA[Show <b>My address</b>]]></en>
+        </locale>
+        <locale name="settings.showAddressManager.title" html="true">
+            <de><![CDATA[<b>Meine Adressen</b> <i>(Adress-Manager)</i> anzeigen]]></de>
+            <en><![CDATA[Show <b>My addresses</b> <i>(Address manager)</i>]]></en>
+        </locale>
+        <locale name="settings.showDeleteAccount.title" html="true">
+            <de><![CDATA[<b>Mein Benutzerkonto löschen</b> anzeigen]]></de>
+            <en><![CDATA[Show <b>Delete my account</b>]]></en>
+        </locale>
+
+        <locale name="settings.category.registration.title">
+            <de><![CDATA[Registrierung]]></de>
+            <en><![CDATA[Registration]]></en>
+        </locale>
+        <locale name="settings.defaultGroups.title">
+            <de><![CDATA[Standard-Gruppen]]></de>
+            <en><![CDATA[Default groups]]></en>
+        </locale>
+        <locale name="settings.defaultGroups.description">
+            <de><![CDATA[Gruppen, denen ein Benutzer nach einer erfolgreichen Registrierung automatisch zugewiesen wird.]]></de>
+            <en><![CDATA[Groups to which a user is automatically assigned after a successful registration.]]></en>
+        </locale>
+        <locale name="settings.sendInfoMailOnRegistrationTo.title">
+            <de><![CDATA[E-Mail-Benachrichtigung bei Registrierung]]></de>
+            <en><![CDATA[Email notification on registration]]></en>
+        </locale>
+        <locale name="settings.sendInfoMailOnRegistrationTo.description">
+            <de><![CDATA[E-Mail-Adresse, an die eine Informationsnachricht gesendet wird, wenn sich ein neuer Benutzer am System registriert.]]></de>
+            <en><![CDATA[E-mail address to which an information message is sent when a new user registers with the system.]]></en>
+        </locale>
+        <locale name="settings.sendMailOnRegistration.title">
+            <de><![CDATA[Aktivierungs-Mail versenden]]></de>
+            <en><![CDATA[Send activation mail]]></en>
+        </locale>
+        <locale name="settings.sendMailOnRegistration.description">
+            <de><![CDATA[Jeder Benutzer bekommt nach der Registrierung einen Aktivierungs-Link per E-Mail, mit welchem er sein Benutzer-Konto aktivieren muss.]]></de>
+            <en><![CDATA[Each user gets an activation link by e-mail after registration, with which he must activate his account.]]></en>
+        </locale>
+        <locale name="settings.registrationForLoggedInUsersAllowed.title">
+            <de><![CDATA[Registrierung für eingeloggte Benutzer]]></de>
+            <en><![CDATA[Registration for logged in users]]></en>
+        </locale>
+        <locale name="settings.registrationForLoggedInUsersAllowed.description">
+            <de><![CDATA[Auch Benutzer, die eigeloggt sind, dürfen sich am System (mit einem anderen Benutzernamen) registrieren]]></de>
+            <en><![CDATA[Users that are logged in are allowed to register (with another username)]]></en>
+        </locale>
+        <locale name="settings.autoLoginOnActivation.title">
+            <de><![CDATA[Automatisches Login nach Aktivierung]]></de>
+            <en><![CDATA[Auto login after activation]]></en>
+        </locale>
+        <locale name="settings.autoLoginOnActivation.description">
+            <de><![CDATA[Benutzer automatisch einloggen, wenn er auf den Aktivierungs-Link klickt]]></de>
+            <en><![CDATA[Users automatically log in when they click on the activation link]]></en>
+        </locale>
+        <locale name="settings.mailFromText.title">
+            <de><![CDATA["Von"-Feld in Aktivierungs-Mail]]></de>
+            <en><![CDATA["From" field in activation mail]]></en>
+        </locale>
+        <locale name="settings.mailFromText.description">
+            <de><![CDATA[Legt den Bezeichner für das "Von"-Feld in der Aktivierungs-Mail fest.]]></de>
+            <en><![CDATA[Sets the content of the "From" field in the actication mail.]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
