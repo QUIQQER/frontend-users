@@ -74,9 +74,6 @@ class UserIcon extends Control
             $Engine->assign('firstLetter', $firstLetter);
         }
 
-        QUI\System\Log::writeRecursive($avatar);
-
-
         return $Engine->fetch(dirname(__FILE__).'/UserIcon.html');
     }
 }
