@@ -6,6 +6,8 @@
 
 namespace QUI\FrontendUsers;
 
+use QUI;
+
 /**
  * Interface RegistratorInterface
  *
@@ -47,11 +49,16 @@ interface RegistratorInterface
     public function getAttribute($key);
 
     //endregion attributes
+    /**
+     * @param QUI\Interfaces\Users\User $User
+     * @return int - QUI\FrontendUsers\Handler::REGISTRATION_STATUS_*
+     */
+    public function onRegistered(QUI\Interfaces\Users\User $User);
 
     /**
      * Create a new user
      *
-     * @return int - QUI\FrontendUsers\Handler::REGISTRATION_STATUS_*
+     * @return QUI\Users\User
      * @throws Exception
      */
     public function createUser();
@@ -76,4 +83,20 @@ interface RegistratorInterface
      * @return \QUI\Control
      */
     public function getControl();
+
+    /**
+     * Get title
+     *
+     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @return string
+     */
+    public function getTitle($Locale = null);
+
+    /**
+     * Get description
+     *
+     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @return string
+     */
+    public function getDescription($Locale = null);
 }

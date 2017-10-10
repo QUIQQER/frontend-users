@@ -22,12 +22,28 @@ class Registrator extends FrontendUsers\AbstractRegistrator
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
+        $Handler    = FrontendUsers\Handler::getInstance();
+        $settings   = $Handler->getRegistrarSettings($this->getType());
+        $SystemUser = QUI::getUsers()->getSystemUser();
+
         $User->setAttribute('email', $this->getAttribute('email'));
+        $User->setPassword($this->getAttribute('password'), $SystemUser);
+        $User->save($SystemUser);
 
-        // @todo send activation mail
+        $returnStatus = $Handler::REGISTRATION_STATUS_PENDING;
 
+        switch ($settings['activationMode']) {
+            case $Handler::ACTIVATION_MODE_MAIL:
+                $Handler->sendActivationMail($User);
+                break;
 
-        return FrontendUsers\Handler::REGISTRATION_STATUS_PENDING;
+            case $Handler::ACTIVATION_MODE_AUTO:
+                $User->activate(false, $SystemUser);
+                $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
+                break;
+        }
+
+        return $returnStatus;
     }
 
     /**
@@ -48,8 +64,20 @@ class Registrator extends FrontendUsers\AbstractRegistrator
         if (empty($username)) {
             throw new FrontendUsers\Exception(array(
                 'quiqqer/frontend-users',
-                'exception.empty.username'
+                'exception.registrars.email.empty_username'
             ));
+        }
+
+        try {
+            QUI::getUsers()->getUserByName($username);
+
+            // Username already exists
+            throw new FrontendUsers\Exception(array(
+                'quiqqer/frontend-users',
+                'exception.registrars.email.username_already_exists'
+            ));
+        } catch (\Exception $Exception) {
+            // Username does not exist
         }
 
         $email        = $this->getAttribute('email');
@@ -59,7 +87,7 @@ class Registrator extends FrontendUsers\AbstractRegistrator
             if (empty($username)) {
                 throw new FrontendUsers\Exception(array(
                     'quiqqer/frontend-users',
-                    'exception.different.emails'
+                    'exception.registrars.email.different_emails'
                 ));
             }
         }
@@ -71,7 +99,7 @@ class Registrator extends FrontendUsers\AbstractRegistrator
             if (empty($username)) {
                 throw new FrontendUsers\Exception(array(
                     'quiqqer/frontend-users',
-                    'exception.different.passwords'
+                    'exception.registrars.email.different_passwords'
                 ));
             }
         }
@@ -101,5 +129,35 @@ class Registrator extends FrontendUsers\AbstractRegistrator
     public function getControl()
     {
         return new Control();
+    }
+
+    /**
+     * Get title
+     *
+     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @return string
+     */
+    public function getTitle($Locale = null)
+    {
+        if (is_null($Locale)) {
+            $Locale = QUI::getLocale();
+        }
+
+        return $Locale->get('quiqqer/frontend-users', 'registrar.email.title');
+    }
+
+    /**
+     * Get description
+     *
+     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @return string
+     */
+    public function getDescription($Locale = null)
+    {
+        if (is_null($Locale)) {
+            $Locale = QUI::getLocale();
+        }
+
+        return $Locale->get('quiqqer/frontend-users', 'registrar.email.description');
     }
 }

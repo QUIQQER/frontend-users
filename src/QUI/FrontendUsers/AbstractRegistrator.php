@@ -37,6 +37,22 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
     abstract public function onRegistered(QUI\Interfaces\Users\User $User);
 
     /**
+     * Get title
+     *
+     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @return string
+     */
+    abstract public function getTitle($Locale = null);
+
+    /**
+     * Get description
+     *
+     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @return string
+     */
+    abstract public function getDescription($Locale = null);
+
+    /**
      * Return the success message
      * @return string
      */
@@ -56,21 +72,14 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
     /**
      * Create a new user
      *
-     * @return int - QUI\FrontendUsers\Handler::REGISTRATION_STATUS_*
+     * @return QUI\Users\User
      * @throws Exception
      */
     public function createUser()
     {
-        $this->validate();
-
-        // start the registration
-        $Users = QUI::getUsers();
-
-        $User = $Users->createChild(
+        return QUI::getUsers()->createChild(
             $this->getUsername(),
             QUI::getUsers()->getSystemUser()
         );
-
-        return $this->onRegistered($User);
     }
 }

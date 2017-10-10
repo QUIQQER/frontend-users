@@ -46,19 +46,36 @@
                 <conf name="defaultGroups">
                     <type><![CDATA[string]]></type>
                 </conf>
-                <conf name="sendMailOnRegistration">
-                    <type><![CDATA[bool]]></type>
-                </conf>
-                <conf name="registrationForLoggedInUsersAllowed">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
-                </conf>
                 <conf name="sendInfoMailOnRegistrationTo">
                     <type><![CDATA[String]]></type>
                 </conf>
                 <conf name="mailFromText">
                     <type><![CDATA[string]]></type>
                     <defaultvalue><![CDATA[QUIQQER System]]></defaultvalue>
+                </conf>
+                <conf name="mailFromAddress">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="visitRegistrationSiteBehaviour">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="usernameInput">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
+                <conf name="addressInput">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
+                <conf name="mailVerificationValidityDuration">
+                    <type><![CDATA[integer]]></type>
+                    <defaultvalue>1440</defaultvalue>
+                </conf>
+            </section>
+
+            <section name="registrars">
+                <conf name="registrarSettings">
+                    <type><![CDATA[String]]></type>
                 </conf>
             </section>
         </config>
@@ -80,7 +97,9 @@
                     <icon>fa fa-user</icon>
 
                     <settings title="userProfile_section" name="userProfile_section">
-                        <title>Profil Einstellungen</title>
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.userProfile.title"/>
+                        </title>
 
                         <input conf="userProfile.showMyData" type="checkbox">
                             <text>
@@ -117,9 +136,11 @@
                     <icon>fa fa-cogs</icon>
 
                     <settings title="registration_section" name="registration_section">
-                        <title>Standard Einstellungen</title>
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.registration.title"/>
+                        </title>
 
-                        <input conf="registration.defaultGroups" type="groups">
+                        <input conf="registration.defaultGroups" type="text" data-qui="controls/groups/Select">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.defaultGroups.title"/>
                             </text>
@@ -128,7 +149,7 @@
                             </description>
                         </input>
 
-                        <input conf="registration.sendInfoMailOnRegistrationTo" type="text">
+                        <input conf="registration.sendInfoMailOnRegistrationTo" type="text" data-qui="controls/email/Select">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.sendInfoMailOnRegistrationTo.title"/>
                             </text>
@@ -137,12 +158,21 @@
                             </description>
                         </input>
 
-                        <input conf="registration.sendMailOnRegistration" type="checkbox">
+                        <input conf="registration.usernameInput" type="checkbox">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.sendMailOnRegistration.title"/>
+                                <locale group="quiqqer/frontend-users" var="settings.usernameInput.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.sendMailOnRegistration.description"/>
+                                <locale group="quiqqer/frontend-users" var="settings.usernameInput.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.addressInput" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.addressInput.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.addressInput.description"/>
                             </description>
                         </input>
 
@@ -155,12 +185,12 @@
                             </description>
                         </input>
 
-                        <input conf="registration.registrationForLoggedInUsersAllowed" type="checkbox">
+                        <input conf="registration.mailFromAddress" type="text">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.registrationForLoggedInUsersAllowed.title"/>
+                                <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.registrationForLoggedInUsersAllowed.description"/>
+                                <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.description"/>
                             </description>
                         </input>
 
@@ -171,6 +201,50 @@
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.autoLoginOnActivation.description"/>
                             </description>
+                        </input>
+
+                        <input conf="registration.mailVerificationValidityDuration" type="number">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.mailVerificationValidityDuration.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.mailVerificationValidityDuration.description"/>
+                            </description>
+                        </input>
+
+                        <select conf="registration.visitRegistrationSiteBehaviour">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.description"/>
+                            </description>
+                            <option value="showProfile">
+                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.option.showProfile"/>
+                            </option>
+                            <option value="showMessage">
+                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.option.showMessage"/>
+                            </option>
+                        </select>
+
+                    </settings>
+                </category>
+
+                <category name="registrars">
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="settings.category.registrars.title"/>
+                    </text>
+                    <icon>fa fa-user-plus</icon>
+
+                    <settings title="registrars_section" name="registrars_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.registrars.title"/>
+                        </title>
+
+                        <input conf="registrars.registrarSettings" type="text" data-qui="package/quiqqer/frontend-users/bin/controls/settings/Registrars" label="false">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.registrarSettings.title"/>
+                            </text>
                         </input>
 
                     </settings>

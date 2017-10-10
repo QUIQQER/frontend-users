@@ -7,7 +7,7 @@
     <fieldset class="quiqqer-registration-email">
         <label>
             <span class="quiqqer-registration-field-title">
-                E-mail address *
+                {locale group="quiqqer/frontend-users" var="registrars.email.label.email"}
             </span>
 
             <input type="email" name="email" class="quiqqer-registration-field-element" required/>
@@ -17,7 +17,7 @@
     <fieldset class="quiqqer-registration-emailConfirm">
         <label>
             <span class="quiqqer-registration-field-title">
-                Confirm e-mail *
+                {locale group="quiqqer/frontend-users" var="registrars.email.label.email_confirm"}
             </span>
 
             <input type="email" name="emailConfirm" class="quiqqer-registration-field-element" required/>
@@ -27,7 +27,7 @@
     <fieldset class="quiqqer-registration-password">
         <label>
             <span class="quiqqer-registration-field-title">
-                Password *
+                {locale group="quiqqer/frontend-users" var="registrars.email.label.password"}
             </span>
 
             <input name="password"
@@ -37,15 +37,12 @@
                    required
             />
         </label>
-        <div id="register-field-passwordSecurity">
-            Password strength
-        </div>
     </fieldset>
 
     <fieldset class="quiqqer-registration-passwordConfirm">
         <label>
             <span class="quiqqer-registration-field-title">
-                Confirm password *
+                {locale group="quiqqer/frontend-users" var="registrars.email.label.password_confirm"}
             </span>
 
             <input name="passwordConfirm"
@@ -59,7 +56,7 @@
 
     <div class="quiqqer-registration-submit">
         <button type="submit" class="btn-green grid-60 mobile-grid-100 push-40 mobile-push-0">
-            Sign up
+            {locale group="quiqqer/frontend-users" var="registrars.email.btn.submit"}
         </button>
     </div>
 

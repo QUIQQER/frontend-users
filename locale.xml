@@ -6,6 +6,10 @@
             <de><![CDATA[QUIQQER - Frontend-Users]]></de>
             <en><![CDATA[QUIQQER - Frontend-Users]]></en>
         </locale>
+        <locale name="menu.title">
+            <de><![CDATA[Benutzer]]></de>
+            <en><![CDATA[Users]]></en>
+        </locale>
 
         <locale name="package.description">
             <de><![CDATA[Das Frontend Users Modul erweitert Quiqqer mit einer Profil-Erweiterung und einer Registrierung für Benutzer]]></de>
@@ -22,47 +26,64 @@
         </locale>
 
         <locale name="message.already.loged.in">
-            <de><![CDATA[Sie sind bereits eingelogt als [username]]]></de>
-            <en><![CDATA[You are already loged in as [username]]]></en>
+            <de><![CDATA[Sie sind bereits eingeloggt als [username]]]></de>
+            <en><![CDATA[You are already logged in as [username]]]></en>
         </locale>
         <locale name="message.user.saved.successfully">
             <de><![CDATA[Der Benutzer wurde erfolgreich gespeichert.]]></de>
             <en><![CDATA[The User has successfully saved.]]></en>
         </locale>
-        <locale name="exception.empty.username">
-            <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
-            <en><![CDATA[No user name was passed. Please provide a username.]]></en>
+
+        <!-- Registrars -->
+        <locale name="registrar.email.title">
+            <de><![CDATA[Registrierung per E-Mail]]></de>
+            <en><![CDATA[Registration via e-mail]]></en>
+        </locale>
+        <locale name="registrar.email.description">
+            <de><![CDATA[Registrierung eines Benutzerkontos durch die Eingabe einer E-Mail-Adresse und eines Passworts.]]></de>
+            <en><![CDATA[Registration of a user account by entering an e-mail address and a password.]]></en>
         </locale>
 
         <!-- Settings -->
+
+        <!-- Settings: User profile -->
+        <locale name="settings.section.userProfile.title">
+            <de><![CDATA[Einstellungen für das Benutzer-Profil]]></de>
+            <en><![CDATA[User profile settings]]></en>
+        </locale>
         <locale name="settings.category.userProfile.title">
             <de><![CDATA[Profil]]></de>
             <en><![CDATA[Profile]]></en>
         </locale>
         <locale name="settings.showMyData.title" html="true">
-            <de><![CDATA[<b>Meine Daten</b> anzeigen]]></de>
-            <en><![CDATA[Show <b>My Data</b>]]></en>
+            <de><![CDATA["Meine Daten" anzeigen]]></de>
+            <en><![CDATA[Show "My Data"]]></en>
         </locale>
         <locale name="settings.showPasswordChange.title" html="true">
-            <de><![CDATA[<b>Passwort ändern</b> anzeigen]]></de>
-            <en><![CDATA[Show <b>Change password</b>]]></en>
+            <de><![CDATA["Passwort ändern" anzeigen]]></de>
+            <en><![CDATA[Show "Change password"]]></en>
         </locale>
         <locale name="settings.showAddress.title" html="true">
-            <de><![CDATA[<b>Meine Adresse</b> anzeigen]]></de>
-            <en><![CDATA[Show <b>My address</b>]]></en>
+            <de><![CDATA["Meine Adresse" anzeigen]]></de>
+            <en><![CDATA[Show "My address"]]></en>
         </locale>
         <locale name="settings.showAddressManager.title" html="true">
-            <de><![CDATA[<b>Meine Adressen</b> <i>(Adress-Manager)</i> anzeigen]]></de>
-            <en><![CDATA[Show <b>My addresses</b> <i>(Address manager)</i>]]></en>
+            <de><![CDATA["Meine Adressen" (Adress-Manager) anzeigen]]></de>
+            <en><![CDATA[Show "My addresses" (Address manager)]]></en>
         </locale>
         <locale name="settings.showDeleteAccount.title" html="true">
-            <de><![CDATA[<b>Mein Benutzerkonto löschen</b> anzeigen]]></de>
-            <en><![CDATA[Show <b>Delete my account</b>]]></en>
+            <de><![CDATA["Mein Benutzerkonto löschen" anzeigen]]></de>
+            <en><![CDATA[Show "Delete my account"]]></en>
         </locale>
 
+        <!-- Settings: Registration -->
+        <locale name="settings.section.registration.title">
+            <de><![CDATA[Allgemeine Registrierungs-Einstellungen]]></de>
+            <en><![CDATA[General registration settings]]></en>
+        </locale>
         <locale name="settings.category.registration.title">
-            <de><![CDATA[Registrierung]]></de>
-            <en><![CDATA[Registration]]></en>
+            <de><![CDATA[Registrierung<br>(Allgemeine Einstellungen)]]></de>
+            <en><![CDATA[Registration<br>(General settings)]]></en>
         </locale>
         <locale name="settings.defaultGroups.title">
             <de><![CDATA[Standard-Gruppen]]></de>
@@ -77,8 +98,8 @@
             <en><![CDATA[Email notification on registration]]></en>
         </locale>
         <locale name="settings.sendInfoMailOnRegistrationTo.description">
-            <de><![CDATA[E-Mail-Adresse, an die eine Informationsnachricht gesendet wird, wenn sich ein neuer Benutzer am System registriert.]]></de>
-            <en><![CDATA[E-mail address to which an information message is sent when a new user registers with the system.]]></en>
+            <de><![CDATA[E-Mail-Adressen, an die eine Informationsnachricht gesendet wird, wenn sich ein neuer Benutzer am System registriert.]]></de>
+            <en><![CDATA[E-mail addresses to which an information message is sent when a new user registers with the system.]]></en>
         </locale>
         <locale name="settings.sendMailOnRegistration.title">
             <de><![CDATA[Aktivierungs-Mail versenden]]></de>
@@ -88,16 +109,8 @@
             <de><![CDATA[Jeder Benutzer bekommt nach der Registrierung einen Aktivierungs-Link per E-Mail, mit welchem er sein Benutzer-Konto aktivieren muss.]]></de>
             <en><![CDATA[Each user gets an activation link by e-mail after registration, with which he must activate his account.]]></en>
         </locale>
-        <locale name="settings.registrationForLoggedInUsersAllowed.title">
-            <de><![CDATA[Registrierung für eingeloggte Benutzer]]></de>
-            <en><![CDATA[Registration for logged in users]]></en>
-        </locale>
-        <locale name="settings.registrationForLoggedInUsersAllowed.description">
-            <de><![CDATA[Auch Benutzer, die eigeloggt sind, dürfen sich am System (mit einem anderen Benutzernamen) registrieren]]></de>
-            <en><![CDATA[Users that are logged in are allowed to register (with another username)]]></en>
-        </locale>
         <locale name="settings.autoLoginOnActivation.title">
-            <de><![CDATA[Automatisches Login nach Aktivierung]]></de>
+            <de><![CDATA[Automatischer Login nach Aktivierung]]></de>
             <en><![CDATA[Auto login after activation]]></en>
         </locale>
         <locale name="settings.autoLoginOnActivation.description">
@@ -109,10 +122,81 @@
             <en><![CDATA["From" field in activation mail]]></en>
         </locale>
         <locale name="settings.mailFromText.description">
-            <de><![CDATA[Legt den Bezeichner für das "Von"-Feld in der Aktivierungs-Mail fest.]]></de>
-            <en><![CDATA[Sets the content of the "From" field in the actication mail.]]></en>
+            <de><![CDATA[Legt den Bezeichner für das "Von"-Feld für Aktivierungs-Mails fest.]]></de>
+            <en><![CDATA[Sets the content of the "From" field for activation mails.]]></en>
+        </locale>
+        <locale name="settings.mailFromAddress.title">
+            <de><![CDATA[Absender E-Mail-Adresse Aktivierungs-Mail]]></de>
+            <en><![CDATA[Sender e-mail address in activation mail]]></en>
+        </locale>
+        <locale name="settings.mailFromAddress.description">
+            <de><![CDATA[Legt die Absender E-Mail-Adresse für Aktivierungs-Mails fest.]]></de>
+            <en><![CDATA[Sets the sender e-mail address for activation mails.]]></en>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.title">
+            <de><![CDATA[Verhalten bei eingeloggten Benutzern auf Registrierungs-Seite]]></de>
+            <en><![CDATA[Behaviour for logged in users at registration site]]></en>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.description">
+            <de><![CDATA[Legt das Verhalten fest, wenn ein bereits eingeloggter Benutzer die Registrierungs-Seite der Webseite besucht.]]></de>
+            <en><![CDATA[Sets the behavior when a user who is already logged in visits the registration site of the Web page.]]></en>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.showProfile">
+            <de><![CDATA[Benutzerprofil anzeigen]]></de>
+            <en><![CDATA[Show user profile]]></en>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.showMessage">
+            <de><![CDATA[Hinweis-Nachricht anzeigen ("Sie sind bereits registriert...")]]></de>
+            <en><![CDATA[Show hint message ("You are already registered...")]]></en>
+        </locale>
+        <locale name="settings.addressInput.title">
+            <de><![CDATA[Adress-Eingabe]]></de>
+            <en><![CDATA[Address input]]></en>
+        </locale>
+        <locale name="settings.addressInput.description">
+            <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihre Haupt-Adresse festzulegen]]></de>
+            <en><![CDATA[Users have the option to set their main address when registering]]></en>
+        </locale>
+        <locale name="settings.usernameInput.title">
+            <de><![CDATA[Eingabe Benutzername]]></de>
+            <en><![CDATA[Username input]]></en>
+        </locale>
+        <locale name="settings.usernameInput.description">
+            <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Benutzernamen festzulegen]]></de>
+            <en><![CDATA[Users have the option to set their username when registering]]></en>
+        </locale>
+        <locale name="settings.mailVerificationValidityDuration.title">
+            <de><![CDATA[Gültigkeitsdauer Aktivierungs-Link]]></de>
+            <en><![CDATA[Activation link validity]]></en>
+        </locale>
+        <locale name="settings.mailVerificationValidityDuration.description">
+            <de><![CDATA[Dauer in <b>Minuten</b>, die ein Aktivierungs-Link gültig ist. Ruft der Benutzer einen abgelaufenen Aktivierungs-Link auf, wird er automatisch zur normalen Registrierungs-Seite weitergeleitet.]]></de>
+            <en><![CDATA[Duration in <b>minutes</b>, for which an activation link is valid. If the user calls an expired activation link, he is automatically redirected to the standard registration site.]]></en>
         </locale>
 
+        <!-- Settings: Registrars -->
+        <locale name="settings.section.registrars.title">
+            <de><![CDATA[Spezifische Einstellungen für Registrierungs-Methoden]]></de>
+            <en><![CDATA[Specific settings for registration methods]]></en>
+        </locale>
+        <locale name="settings.category.registrars.title">
+            <de><![CDATA[Registrierungs-Methoden]]></de>
+            <en><![CDATA[Registration methods]]></en>
+        </locale>
+        <locale name="settings.registrarSettings.title">
+            <de><![CDATA[Registrierungs-Methoden]]></de>
+            <en><![CDATA[Registration methods]]></en>
+        </locale>
+
+        <!-- Control: Registration -->
+        <locale name="control.registration.label.username">
+            <de><![CDATA[Benutzername]]></de>
+            <en><![CDATA[Username]]></en>
+        </locale>
+        <locale name="control.registration.label.address">
+            <de><![CDATA[Adresse]]></de>
+            <en><![CDATA[Address]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -154,12 +238,72 @@
             <de><![CDATA[Benutzerbild]]></de>
             <en><![CDATA[Avatar]]></en>
         </locale>
+
+        <!-- Registar: Email -->
+        <locale name="registrars.email.label.email">
+            <de><![CDATA[E-Mail-Adresse]]></de>
+            <en><![CDATA[E-mail address]]></en>
+        </locale>
+        <locale name="registrars.email.label.email_confirm">
+            <de><![CDATA[E-Mail-Adresse bestätigen]]></de>
+            <en><![CDATA[Confirm E-mail address]]></en>
+        </locale>
+        <locale name="registrars.email.label.password">
+            <de><![CDATA[Passwort]]></de>
+            <en><![CDATA[Password]]></en>
+        </locale>
+        <locale name="registrars.email.label.password_confirm">
+            <de><![CDATA[Passwort bestätigen]]></de>
+            <en><![CDATA[Confirm password]]></en>
+        </locale>
+        <locale name="registrars.email.btn.submit">
+            <de><![CDATA[Jetzt registrieren]]></de>
+            <en><![CDATA[Register now]]></en>
+        </locale>
+        <locale name="exception.registrars.email.empty_username">
+            <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
+            <en><![CDATA[No username given. Please provide a username.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.different_emails">
+            <de><![CDATA[Die übergebenen E-Mail-Adressen stimmen nicht überein.]]></de>
+            <en><![CDATA[The given e-mail addresses do not match.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.different_passwords">
+            <de><![CDATA[Die übergebenen Passwörter stimmen nicht überein.]]></de>
+            <en><![CDATA[The given passwords do not match.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.username_already_exists">
+            <de><![CDATA[Der Benutzername bzw. die E-Mail-Adresse exisitert bereits.]]></de>
+            <en><![CDATA[The username or e-mail address already exists.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
         <locale name="control.profile.window.title">
             <de><![CDATA[Profil]]></de>
             <en><![CDATA[Profile]]></en>
+        </locale>
+
+        <!-- Control: settings/Registars -->
+        <locale name="controls.settings.registrars.template.labelActivationMode">
+            <de><![CDATA[Benutzer-Aktivierung]]></de>
+            <en><![CDATA[User activation]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionMail">
+            <de><![CDATA[Bestätigung per Aktivierungs-Link (Versand per E-Mail)]]></de>
+            <en><![CDATA[Confirmation via activation link (sent via e-mail)]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionAuto">
+            <de><![CDATA[Automatische Aktivierung]]></de>
+            <en><![CDATA[Auto activation]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionManual">
+            <de><![CDATA[Manuelle Aktivierung (über Benutzer-Verwaltung)]]></de>
+            <en><![CDATA[Manual activation (via User Management)]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.labelActive">
+            <de><![CDATA[Aktiv]]></de>
+            <en><![CDATA[Active]]></en>
         </locale>
     </groups>
 

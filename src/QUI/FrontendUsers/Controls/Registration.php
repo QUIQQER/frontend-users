@@ -28,7 +28,8 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes(array(
-            'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration'
+            'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+            'data'     => array()
         ));
 
         $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
@@ -41,8 +42,10 @@ class Registration extends QUI\Control
      */
     public function getBody()
     {
-        $Engine       = QUI::getTemplateManager()->getEngine();
-        $Registrators = QUI\FrontendUsers\Handler::getInstance()->getRegistrators();
+        $Engine               = QUI::getTemplateManager()->getEngine();
+        $RegistratorHandler   = QUI\FrontendUsers\Handler::getInstance();
+        $Registrators         = $RegistratorHandler->getRegistrators();
+        $registrationSettings = $RegistratorHandler->getRegistrationSettings();
 
         if (isset($_POST['registration'])) {
             try {
@@ -57,8 +60,11 @@ class Registration extends QUI\Control
         }
 
         $Engine->assign(array(
-            'Registrators' => $Registrators,
-            'Registrator'  => $this->isCurrentlyExecuted()
+            'Registrators'      => $Registrators,
+            'Registrator'       => $this->isCurrentlyExecuted(),
+            'data'              => $this->getAttribute('data'),
+            'showUsernameInput' => boolval($registrationSettings['usernameInput']),
+            'showAddressInput'  => boolval($registrationSettings['addressInput'])
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -111,9 +117,22 @@ class Registration extends QUI\Control
             ));
         }
 
+        $RegistratorHandler   = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $RegistratorHandler->getRegistrationSettings();
+
         $Registrator->setAttributes($_POST);
         $Registrator->validate();
 
-        return $Registrator->createUser();
+        $NewUser = $Registrator->createUser();
+
+        $defaultGroups = explode(",", $registrationSettings['defaultGroups']);
+
+        foreach ($defaultGroups as $groupId) {
+            $NewUser->addToGroup($groupId);
+        }
+
+        $NewUser->save(QUI::getUsers()->getSystemUser());
+
+        return $Registrator->onRegistered($NewUser);
     }
 }
