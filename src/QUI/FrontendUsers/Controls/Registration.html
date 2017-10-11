@@ -5,22 +5,26 @@
 {/if}
 
 {if (!empty($data['status']) && $data['status'] === 'success')
-|| ($Registrator && isset($registrationStatus) && $registrationStatus === 1)}
+|| ($Registrar && isset($registrationStatus) && $registrationStatus === 1)}
 <div class="quiqqer-frontendUsers-success">
-    {$Registrator->getSuccessMessage()}
+    {$Registrar->getSuccessMessage()}
 </div>
-{elseif $Registrator && isset($registrationStatus) && $registrationStatus === 2}
+{elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
 <div class="quiqqer-frontendUsers-pending">
-    {$Registrator->getPendingMessage()}
+    {$Registrar->getPendingMessage()}
 </div>
 {else}
 <div class="quiqqer-frontendUsers-controls-registration">
-    {foreach $Registrators as $Registrator}
+    {foreach $Registrars as $Registrar}
     <form action=""
           method="POST"
-          class="quiqqer-frontendUsers-controls-registration-registrator"
-          data-registrator="{$Registrator->getType()}"
+          class="quiqqer-frontendUsers-controls-registration-registrar"
+          data-registrar="{$Registrar->getType()}"
     >
+        <header>
+            <h1>{$Registrar->getTitle()}</h1>
+        </header>
+
         {if $showUsernameInput}
         <fieldset>
             <label>
@@ -42,13 +46,12 @@
             </label>
         </fieldset>
         {/if}
-
-        {$Registrator->getControl()->create()}
-        <input type="hidden" name="registrator" value="{$Registrator->getType()}"/>
+        {$Registrar->getControl()->create()}
+        <input type="hidden" name="registrar" value="{$Registrar->getType()}"/>
         <input type="hidden" name="registration" value="1"/>
     </form>
 
-    {if $Registrator !== $Registrators->last()}
+    {if $Registrar !== $Registrars->last()}
     <div class="quiqqer-frontendUsers-controls-registration-or">
         <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
             {locale group="quiqqer/frontend-users" var="control.registration.or"}

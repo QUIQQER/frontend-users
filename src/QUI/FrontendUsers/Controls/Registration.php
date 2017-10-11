@@ -32,6 +32,8 @@ class Registration extends QUI\Control
             'data'     => array()
         ));
 
+        $this->setAttributes($attributes);
+
         $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
     }
 
@@ -43,9 +45,9 @@ class Registration extends QUI\Control
     public function getBody()
     {
         $Engine               = QUI::getTemplateManager()->getEngine();
-        $RegistratorHandler   = QUI\FrontendUsers\Handler::getInstance();
-        $Registrators         = $RegistratorHandler->getRegistrators();
-        $registrationSettings = $RegistratorHandler->getRegistrationSettings();
+        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $Registrars           = $RegistrarHandler->getRegistrars();
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
         if (isset($_POST['registration'])) {
             try {
@@ -60,8 +62,8 @@ class Registration extends QUI\Control
         }
 
         $Engine->assign(array(
-            'Registrators'      => $Registrators,
-            'Registrator'       => $this->isCurrentlyExecuted(),
+            'Registrars'        => $Registrars,
+            'Registrar'         => $this->isCurrentlyExecuted(),
             'data'              => $this->getAttribute('data'),
             'showUsernameInput' => boolval($registrationSettings['usernameInput']),
             'showAddressInput'  => boolval($registrationSettings['addressInput'])
@@ -73,28 +75,26 @@ class Registration extends QUI\Control
     /**
      * Is registration started?
      *
-     * @return bool|QUI\FrontendUsers\RegistratorInterface
+     * @return bool|QUI\FrontendUsers\RegistrarInterface
      */
     protected function isCurrentlyExecuted()
     {
+        $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
+        $registrar     = QUI::getSession()->get($FrontendUsers::SESSION_REGISTRAR);
+
+        if ($registrar) {
+            return $FrontendUsers->getRegistrar($registrar);
+        }
+
         if (!isset($_POST['registration'])) {
             return false;
         }
 
-        if (!isset($_POST['registrator'])) {
+        if (!isset($_POST['registrar'])) {
             return false;
         }
 
-        $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
-        $Registrators  = $FrontendUsers->getRegistrators();
-
-        foreach ($Registrators as $Registrator) {
-            if (get_class($Registrator) === $_POST['registrator']) {
-                return $Registrator;
-            }
-        }
-
-        return false;
+        return $FrontendUsers->getRegistrar($_POST['registrar']);
     }
 
     /**
@@ -108,23 +108,27 @@ class Registration extends QUI\Control
             return QUI\FrontendUsers\Handler::REGISTRATION_STATUS_ERROR;
         }
 
-        $Registrator = $this->isCurrentlyExecuted();
+        /** @var QUI\FrontendUsers\AbstractRegistrar $Registrar */
+        $Registrar = $this->isCurrentlyExecuted();
 
-        if ($Registrator === false) {
+        if ($Registrar === false) {
             throw new QUI\FrontendUsers\Exception(array(
                 'quiqqer/frontend-users',
-                'exception.registrator.not.found'
+                'exception.registrar.not.found'
             ));
         }
 
-        $RegistratorHandler   = QUI\FrontendUsers\Handler::getInstance();
-        $registrationSettings = $RegistratorHandler->getRegistrationSettings();
+        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
-        $Registrator->setAttributes($_POST);
-        $Registrator->validate();
+        $Registrar->setProject(QUI::getRewrite()->getProject());
+        $Registrar->setAttributes($_POST);
+        $Registrar->validate();
 
-        $NewUser = $Registrator->createUser();
+        // create user
+        $NewUser = $Registrar->createUser();
 
+        // add user to default groups
         $defaultGroups = explode(",", $registrationSettings['defaultGroups']);
 
         foreach ($defaultGroups as $groupId) {
@@ -133,6 +137,12 @@ class Registration extends QUI\Control
 
         $NewUser->save(QUI::getUsers()->getSystemUser());
 
-        return $Registrator->onRegistered($NewUser);
+        // handle onRegistered from Registrar
+        $registratinoStatus = $Registrar->onRegistered($NewUser);
+
+        // send registration notice to admins
+        $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
+
+        return $registratinoStatus;
     }
 }

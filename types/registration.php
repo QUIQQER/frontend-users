@@ -30,7 +30,9 @@ if (isset($result[0])) {
  * User Registration
  */
 
-$Registration = new QUI\FrontendUsers\Controls\Registration();
+$Registration = new QUI\FrontendUsers\Controls\Registration(array(
+    'data' => $_REQUEST
+));
 
 $Engine->assign(array(
     'Registration' => $Registration

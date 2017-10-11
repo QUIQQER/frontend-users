@@ -9,6 +9,7 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Utils\Singleton;
 use QUI\Verification\Verifier;
+use QUI\Mail\Mailer;
 
 /**
  * Class Registration Handling
@@ -40,51 +41,75 @@ class Handler extends Singleton
     const SITE_TYPE_PROFILE      = 'quiqqer/frontend-users:types/profile';
 
     /**
-     * @var null|RegistratorCollection
+     * Misc
      */
-    protected $Registrator = null;
+    const SESSION_REGISTRAR = 'frontend_users_registrar';
+
+    /**
+     * @var null|RegistrarCollection
+     */
+    protected $Registrar = null;
 
     /**
      * Handler constructor.
      */
     public function __construct()
     {
-        $this->Registrator = new RegistratorCollection();
+        $this->Registrar = new RegistrarCollection();
     }
 
     /**
-     * @return RegistratorCollection
+     * @return RegistrarCollection
      */
-    public function getRegistrators()
+    public function getRegistrars()
     {
-        $Registrators      = new RegistratorCollection();
-        $Available         = $this->getAvailableRegistrators();
+        $Registrars      = new RegistrarCollection();
+        $Available         = $this->getAvailableRegistrars();
         $registrarSettings = $this->getRegistrarSettings();
 
-        /** @var AbstractRegistrator $Registrator */
-        foreach ($Available as $Registrator) {
-            $t = $Registrator->getType();
+        /** @var AbstractRegistrar $Registrar */
+        foreach ($Available as $Registrar) {
+            $t = $Registrar->getType();
 
             if (isset($registrarSettings[$t])
                 && !$registrarSettings[$t]['active']) {
                 continue;
             }
 
-            $Registrators->append($Registrator);
+            $Registrars->append($Registrar);
         }
 
-        return $Registrators;
+        return $Registrars;
     }
 
     /**
-     * Return all available registrator
+     * Get specific Registrar
      *
-     * @return RegistratorCollection
+     * @param string $registrar - Registrar
+     * @return false|AbstractRegistrar
      */
-    public function getAvailableRegistrators()
+    public function getRegistrar($registrar)
     {
-        if ($this->Registrator->isEmpty() !== false) {
-            return $this->Registrator;
+        /** @var AbstractRegistrar $Registrar */
+        foreach ($this->getAvailableRegistrars() as $Registrar)
+        {
+            if ($Registrar->getType() === $registrar) {
+                return $Registrar;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Return all available registrar
+     *
+     * @return RegistrarCollection
+     */
+    public function getAvailableRegistrars()
+    {
+        if ($this->Registrar->isEmpty() !== false) {
+            return $this->Registrar;
         }
 
         $list      = array();
@@ -98,8 +123,9 @@ class Handler extends Singleton
                     continue;
                 }
 
-                $list = array_merge($list, $Package->getProvider('registrator'));
-            } catch (QUI\Exception $exception) {
+                $list = array_merge($list, $Package->getProvider('registrar'));
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
             }
         }
 
@@ -109,13 +135,13 @@ class Handler extends Singleton
                     continue;
                 }
 
-                $this->Registrator->append(new $provider());
+                $this->Registrar->append(new $provider());
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
             }
         }
 
-        return $this->Registrator;
+        return $this->Registrar;
     }
 
     /**
@@ -161,14 +187,129 @@ class Handler extends Singleton
      * Send activtion mail for a user account
      *
      * @param QUI\Users\User $User
+     * @param AbstractRegistrar $Registrar
      * @return void
      */
-    public function sendActivationMail(QUI\Users\User $User)
+    public function sendActivationMail(QUI\Users\User $User, AbstractRegistrar $Registrar)
     {
-        $MailVerification = new MailVerification($User->getId());
-        $activationLink   = Verifier::startVerification($MailVerification);
+        $Project = $Registrar->getProject();
 
-        // todo
+        $MailVerification = new MailVerification($User->getId(), array(
+            'project'     => $Project->getName(),
+            'projectLang' => $Project->getLang(),
+            'registrar' => $Registrar->getType()
+        ));
+
+        $activationLink = Verifier::startVerification($MailVerification);
+
+        $L      = QUI::getLocale();
+        $lg     = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host   = $Project->getVHost();
+
+        try {
+            $this->sendMail(
+                $L->get($lg, 'mail.registration_activation.subject', array(
+                    'host' => $host
+                )),
+                array(
+                    $User->getAttribute('email')
+                ),
+                $tplDir . 'mail.registration_activation.html',
+                array(
+                    'body' => $L->get($lg, 'mail.registration_activation.body', array(
+                        'host'           => $host,
+                        'userId'         => $User->getId(),
+                        'username'       => $User->getUsername(),
+                        'email'          => $User->getAttribute('email'),
+                        'date'           => $L->formatDate(time()),
+                        'activationLink' => $activationLink
+                    ))
+                )
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendActivationMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
+     * Send information about a new registration
+     *
+     * @param QUI\Users\User $User
+     * @param QUI\Projects\Project $Project
+     * @return void
+     */
+    public function sendRegistrationNotice(QUI\Users\User $User, $Project)
+    {
+        $registrationSettings = $this->getRegistrationSettings();
+        $recipients           = explode(",", $registrationSettings['sendInfoMailOnRegistrationTo']);
+
+        $L      = QUI::getLocale();
+        $lg     = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host   = $Project->getVHost();
+
+        try {
+            $this->sendMail(
+                $L->get($lg, 'mail.registration_notice.subject', array(
+                    'host' => $host
+                )),
+                $recipients,
+                $tplDir . 'mail.registration_notice.html',
+                array(
+                    'body' => $L->get($lg, 'mail.registration_notice.body', array(
+                        'host'     => $host,
+                        'userId'   => $User->getId(),
+                        'username' => $User->getUsername(),
+                        'email'    => $User->getAttribute('email'),
+                        'date'     => $L->formatDate(time())
+                    ))
+                )
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendRegistrationNotice -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
+     * Send an email to the membership user
+     *
+     * @param string $subject - mail subject
+     * @param array $recipients - e-mail addresses
+     * @param string $templateFile
+     * @param array $templateVars (optional) - additional template variables (besides $this)
+     * @return void
+     *
+     * @throws QUI\Memberships\Exception
+     */
+    protected function sendMail($subject, $recipients, $templateFile, $templateVars = array())
+    {
+        if (empty($recipients)) {
+            return;
+        }
+
+        $Engine = QUI::getTemplateManager()->getEngine();
+
+        $Engine->assign($templateVars);
+
+        $template = $Engine->fetch($templateFile);
+        $Mailer   = new Mailer();
+
+        foreach ($recipients as $recipient) {
+            $Mailer->addRecipient($recipient);
+        }
+
+        $Mailer->setSubject($subject);
+        $Mailer->setBody($template);
+        $Mailer->send();
     }
 
     /**

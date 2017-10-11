@@ -13,16 +13,16 @@ use QUI;
  *
  * @package QUI\FrontendUsers
  */
-class RegistratorCollection extends QUI\Collection
+class RegistrarCollection extends QUI\Collection
 {
     /**
-     * RegistratorCollection constructor.
+     * RegistrarCollection constructor.
      * @param array $children
      */
     public function __construct(array $children = array())
     {
         $this->allowed = array(
-            AbstractRegistrator::class
+            AbstractRegistrar::class
         );
 
         parent::__construct($children);

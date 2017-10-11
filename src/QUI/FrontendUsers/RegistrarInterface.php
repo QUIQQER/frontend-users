@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains \QUI\FrontendUsers\RegistratorInterface
+ * This file contains \QUI\FrontendUsers\RegistrarInterface
  */
 
 namespace QUI\FrontendUsers;
@@ -9,11 +9,11 @@ namespace QUI\FrontendUsers;
 use QUI;
 
 /**
- * Interface RegistratorInterface
+ * Interface RegistrarInterface
  *
  * @package QUI\FrontendUsers
  */
-interface RegistratorInterface
+interface RegistrarInterface
 {
     //region attributes
 
@@ -25,14 +25,14 @@ interface RegistratorInterface
     public function setAttributes($attributes);
 
     /**
-     * Return the sent registrator data
+     * Return the sent registrar data
      *
      * @return array
      */
     public function getAttributes();
 
     /**
-     * Set one attribute to the registrator
+     * Set one attribute to the registrar
      *
      * @param string $key
      * @param mixed $value
@@ -78,7 +78,7 @@ interface RegistratorInterface
     public function getUsername();
 
     /**
-     * Return the control for the registrator
+     * Return the control for the registrar
      *
      * @return \QUI\Control
      */
@@ -99,4 +99,19 @@ interface RegistratorInterface
      * @return string
      */
     public function getDescription($Locale = null);
+
+    /**
+     * Set current Project the Registrar works for
+     *
+     * @param QUI\Projects\Project $Project
+     * @return void
+     */
+    public function setProject(QUI\Projects\Project $Project);
+
+    /**
+     * Get current Project the Registrar works for
+     *
+     * @return QUI\Projects\Project|null
+     */
+    public function getProject();
 }

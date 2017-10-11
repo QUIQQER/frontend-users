@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains QUI\FrontendUsers\Registrars\Email\Registrator
+ * This file contains QUI\FrontendUsers\Registrars\Email\Registrar
  */
 
 namespace QUI\FrontendUsers\Registrars\Email;
@@ -10,11 +10,13 @@ use QUI;
 use QUI\FrontendUsers;
 
 /**
- * Class EMail
+ * Class Emai\Registrar
+ *
+ * Registration via e-mail address
  *
  * @package QUI\FrontendUsers\Registrars
  */
-class Registrator extends FrontendUsers\AbstractRegistrator
+class Registrar extends FrontendUsers\AbstractRegistrar
 {
     /**
      * @param QUI\Interfaces\Users\User $User
@@ -23,23 +25,23 @@ class Registrator extends FrontendUsers\AbstractRegistrator
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
         $Handler    = FrontendUsers\Handler::getInstance();
-        $settings   = $Handler->getRegistrarSettings($this->getType());
+        $settings   = $this->getSettings();
         $SystemUser = QUI::getUsers()->getSystemUser();
 
         $User->setAttribute('email', $this->getAttribute('email'));
         $User->setPassword($this->getAttribute('password'), $SystemUser);
         $User->save($SystemUser);
 
-        $returnStatus = $Handler::REGISTRATION_STATUS_PENDING;
+        $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
 
         switch ($settings['activationMode']) {
             case $Handler::ACTIVATION_MODE_MAIL:
-                $Handler->sendActivationMail($User);
+                $Handler->sendActivationMail($User, $this);
+                $returnStatus = $Handler::REGISTRATION_STATUS_PENDING;
                 break;
 
             case $Handler::ACTIVATION_MODE_AUTO:
                 $User->activate(false, $SystemUser);
-                $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
                 break;
         }
 
@@ -47,11 +49,38 @@ class Registrator extends FrontendUsers\AbstractRegistrator
     }
 
     /**
-     * @return array|string
+     * Return the success message
+     * @return string
      */
-    public function getPendingMessage()
+    public function getSuccessMessage()
     {
-        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration.mail.was.send');
+        $settings = $this->getSettings();
+
+        switch ($settings['activationMode']) {
+            case FrontendUsers\Handler::ACTIVATION_MODE_MANUAL:
+                return QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'message.registrars.email.registration_success_manual'
+                );
+                break;
+
+            case FrontendUsers\Handler::ACTIVATION_MODE_AUTO:
+                return QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'message.registrars.email.registration_success_auto'
+                );
+                break;
+
+            case FrontendUsers\Handler::ACTIVATION_MODE_MAIL:
+                return QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'message.registrars.email.registration_success_mail'
+                );
+                break;
+
+            default:
+                return parent::getPendingMessage();
+        }
     }
 
     /**

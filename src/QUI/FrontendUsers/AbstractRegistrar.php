@@ -7,14 +7,20 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\FrontendUsers\Handler;
 
 /**
  * Class AbstractRegistrar
  *
  * @package QUI\FrontendUsers
  */
-abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterface
+abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
 {
+    /**
+     * @var QUI\Projects\Project
+     */
+    protected $Project = null;
+
     /**
      * @return mixed
      */
@@ -58,7 +64,7 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
      */
     public function getSuccessMessage()
     {
-        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.successfully.registered');
+        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_successful');
     }
 
     /**
@@ -66,7 +72,7 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
      */
     public function getPendingMessage()
     {
-        return '';
+        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
     }
 
     /**
@@ -81,5 +87,36 @@ abstract class AbstractRegistrator extends QUI\QDOM implements RegistratorInterf
             $this->getUsername(),
             QUI::getUsers()->getSystemUser()
         );
+    }
+
+    /**
+     * Set current Project the Registrar works for
+     *
+     * @param QUI\Projects\Project $Project
+     * @return void
+     */
+    public function setProject(QUI\Projects\Project $Project)
+    {
+        $this->Project = $Project;
+    }
+
+    /**
+     * Get current Project the Registrar works for
+     *
+     * @return QUI\Projects\Project|null
+     */
+    public function getProject()
+    {
+        return $this->Project;
+    }
+
+    /**
+     * Get registrar settings
+     *
+     * @return array
+     */
+    protected function getSettings()
+    {
+        return Handler::getInstance()->getRegistrarSettings($this->getType());
     }
 }

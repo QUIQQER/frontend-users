@@ -5,7 +5,7 @@
  */
 
 use QUI\FrontendUsers\Handler;
-use QUI\FrontendUsers\AbstractRegistrator;
+use QUI\FrontendUsers\AbstractRegistrar;
 
 /**
  * Return list of title, description and type of all registrars
@@ -17,12 +17,12 @@ QUI::$Ajax->registerFunction(
     function () {
         $registrars = array();
 
-        /** @var AbstractRegistrator $Registrator */
-        foreach (Handler::getInstance()->getRegistrators() as $Registrator) {
+        /** @var AbstractRegistrar $Registrar */
+        foreach (Handler::getInstance()->getRegistrars() as $Registrar) {
             $registrars[] = array(
-                'type'        => $Registrator->getType(),
-                'title'       => $Registrator->getTitle(),
-                'description' => $Registrator->getDescription()
+                'type'        => $Registrar->getType(),
+                'title'       => $Registrar->getTitle(),
+                'description' => $Registrar->getDescription()
             );
         }
 

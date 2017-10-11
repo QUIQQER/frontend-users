@@ -50,7 +50,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         },
 
         /**
-         * Send the registrator form
+         * Send the registrar form
          *
          * @param {HTMLFormElement} Form
          * @return {Promise}
@@ -76,7 +76,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     QUI.parse(self.getElm()).then(resolve);
                 }, {
                     'package'    : 'quiqqer/frontend-users',
-                    'registrator': Form.get('data-registrator'),
+                    'registrar': Form.get('data-registrar'),
                     'data'       : JSON.encode(formData),
                     onError      : reject
                 });

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains QUI\FrontendUsers\Registrars\Email\Registrator
+ * This file contains QUI\FrontendUsers\Registrars\Email\Registrar
  */
 
 namespace QUI\FrontendUsers\Registrars\Email;

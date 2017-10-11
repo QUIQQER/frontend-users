@@ -170,8 +170,10 @@
             <en><![CDATA[Activation link validity]]></en>
         </locale>
         <locale name="settings.mailVerificationValidityDuration.description">
-            <de><![CDATA[Dauer in <b>Minuten</b>, die ein Aktivierungs-Link gültig ist. Ruft der Benutzer einen abgelaufenen Aktivierungs-Link auf, wird er automatisch zur normalen Registrierungs-Seite weitergeleitet.]]></de>
-            <en><![CDATA[Duration in <b>minutes</b>, for which an activation link is valid. If the user calls an expired activation link, he is automatically redirected to the standard registration site.]]></en>
+            <de>
+                <![CDATA[Dauer in <b>Minuten</b>, die ein Aktivierungs-Link gültig ist. Ruft der Benutzer einen abgelaufenen Aktivierungs-Link auf, wird er automatisch zur normalen Registrierungs-Seite weitergeleitet.]]></de>
+            <en>
+                <![CDATA[Duration in <b>minutes</b>, for which an activation link is valid. If the user calls an expired activation link, he is automatically redirected to the standard registration site.]]></en>
         </locale>
 
         <!-- Settings: Registrars -->
@@ -200,6 +202,13 @@
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
+        <!-- Ajax -->
+        <locale name="exception.ajax.frontend_register.general_error">
+            <de><![CDATA[Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte kontaktieren Sie einen Administrator oder versuchen Sie es später noch einmal.]]></de>
+            <en><![CDATA[An unexpected error occurred during registration. Please contact an administrator or try again later.]]></en>
+        </locale>
+
+
         <locale name="control.registration.or">
             <de><![CDATA[oder]]></de>
             <en><![CDATA[or]]></en>
@@ -239,6 +248,17 @@
             <en><![CDATA[Avatar]]></en>
         </locale>
 
+        <!-- Generic registration messages -->
+        <locale name="message.registration_pending">
+            <de>
+                <![CDATA[Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren. Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail zugesandt wurde.]]></de>
+            <en><![CDATA[The registration was successful! Before you can log in, you must activate your user account. Please click on the activation link, which was sent to you by e-mail.]]></en>
+        </locale>
+        <locale name="message.registration_successful">
+            <de><![CDATA[Die Registrierung war erfolgreich!]]></de>
+            <en><![CDATA[Successful registration!]]></en>
+        </locale>
+
         <!-- Registar: Email -->
         <locale name="registrars.email.label.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
@@ -276,6 +296,61 @@
             <de><![CDATA[Der Benutzername bzw. die E-Mail-Adresse exisitert bereits.]]></de>
             <en><![CDATA[The username or e-mail address already exists.]]></en>
         </locale>
+        <locale name="message.registrars.email.registration_success_manual">
+            <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
+            <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
+        </locale>
+        <locale name="message.registrars.email.registration_success_auto">
+            <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert. Sie können sich nun einloggen.]]></de>
+            <en><![CDATA[The registration was successful. Your user account has been activated automatically. You can now log in.]]></en>
+        </locale>
+        <locale name="message.registrars.email.registration_success_mail">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
+            <en><![CDATA[Your user account has been activated successfully. You can now log in.]]></en>
+        </locale>
+
+        <!-- Registration Notice -->
+        <locale name="mail.registration_notice.subject">
+            <de><![CDATA[Neue Registrierung auf [host]]]></de>
+            <en><![CDATA[New registration on [host]]]></en>
+        </locale>
+        <locale name="mail.registration_notice.body" html="true">
+            <de><![CDATA[<h1>Neue Registrierung auf [host]</h1>
+<ul>
+    <li>User ID: [userId]</li>
+    <li>Username: [username]</li>
+    <li>E-Mail: [email]</li>
+    <li>Datum: [date]</li>
+</ul>]]></de>
+            <en><![CDATA[<h1>New registration on [host]</h1>
+<ul>
+    <li>User ID: [userId]</li>
+    <li>Username: [username]</li>
+    <li>E-Mail: [email]</li>
+    <li>Date: [date]</li>
+</ul>]]></en>
+        </locale>
+
+        <!-- Activation Notice -->
+        <locale name="mail.registration_activation.subject">
+            <de><![CDATA[Ihre Registrierung auf [host]]]></de>
+            <en><![CDATA[Your registration on [host]]]></en>
+        </locale>
+        <locale name="mail.registration_activation.body" html="true">
+            <de><![CDATA[<h1>Hallo [username],</h1>
+<p>
+Sie haben sich am [date] auf [host] registriert. Zur Bestätigung Ihrer E-Mail-Adresse und der Aktivierung Ihres Benutzerkontos, besuchen Sie bitte folgenden Link:
+<br><br>
+<a href="[activationLink]">[activationLink]</a>
+</p>]]></de>
+            <en><![CDATA[<h1>Hello [username],</h1>
+<p>
+At [date] you registered on [host]. To confirm your e-mail address and activate your user account, please visit the following link:
+<br><br>
+<a href="[activationLink]">[activationLink]</a>
+</p>]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">

@@ -13,7 +13,7 @@ class EventHandler
     public static function onPackageSetup(Package $Package)
     {
         // create auth provider as user permissions
-        $registrarProviders = $Package->getProvider('registrator');
+        $registrarProviders = $Package->getProvider('registrar');
 
         if (empty($registrarProviders)) {
             return;
@@ -29,7 +29,7 @@ class EventHandler
         foreach ($registrarProviders as $registrarProvider) {
             continue;
 
-            /* @var $Registrator RegistratorInterface */
+            /* @var $Registrar RegistrarInterface */
             $Authenticator  = new $registrarProvider($User->getUsername());
             $permissionName = Helper::parseAuthenticatorToPermission($authProvider);
 

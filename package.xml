@@ -24,7 +24,7 @@
         </copyright>
 
         <provider>
-            <registrator src="\QUI\FrontendUsers\Registrars\Email\Registrator"/>
+            <registrar src="\QUI\FrontendUsers\Registrars\Email\Registrar"/>
         </provider>
     </package>
 </quiqqer>

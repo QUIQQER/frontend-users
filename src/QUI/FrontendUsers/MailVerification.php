@@ -31,6 +31,9 @@ class MailVerification extends AbstractVerification
         try {
             $User = QUI::getUsers()->get($userId);
             $User->activate(false, QUI::getUsers()->getSystemUser());
+
+            $additionalData = $this->getAdditionalData();
+            QUI::getSession()->set(Handler::SESSION_REGISTRAR, $additionalData['registrar']);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
                 self::class . ' :: onSuccess -> Could not find user #' . $userId
@@ -79,15 +82,15 @@ class MailVerification extends AbstractVerification
     public function getOnSuccessRedirectUrl()
     {
         $RegistrationSite = Handler::getInstance()->getRegistrationSite(
-            QUI::getRewrite()->getProject()
+            $this->getProject()
         );
 
         if (!$RegistrationSite) {
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten(array(
-            'status' => 'success'
+        return $RegistrationSite->getUrlRewritten(array(), array(
+            'status' => 'error'
         ));
     }
 
@@ -106,8 +109,19 @@ class MailVerification extends AbstractVerification
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten(array(
+        return $RegistrationSite->getUrlRewritten(array(), array(
             'status' => 'error'
         ));
+    }
+
+    /**
+     * Get the Project this MailVerification is intended for
+     *
+     * @return QUI\Projects\Project
+     */
+    protected function getProject()
+    {
+        $additionalData = $this->getAdditionalData();
+        return QUI::getProjectManager()->getProject($additionalData['project'], $additionalData['projectLang']);
     }
 }
