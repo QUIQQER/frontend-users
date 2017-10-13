@@ -22,9 +22,14 @@ class Control extends QUI\Control
      */
     public function __construct(array $attributes = array())
     {
+        $this->setAttributes(array(
+            'invalidFields' => array(),
+            'fields'        => $_POST
+        ));
+
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Control.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Control.css');
         $this->addCSSClass('quiqqer-registration');
     }
 
@@ -35,8 +40,11 @@ class Control extends QUI\Control
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 
+        $Engine->assign(array(
+            'fields'        => $this->getAttribute('fields'),
+            'invalidFields' => $this->getAttribute('invalidFields')
+        ));
 
-
-        return $Engine->fetch(dirname(__FILE__).'/Control.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Control.html');
     }
 }

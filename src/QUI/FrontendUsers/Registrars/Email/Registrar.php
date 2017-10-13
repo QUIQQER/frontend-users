@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Registrars\Email;
 
 use QUI;
 use QUI\FrontendUsers;
+use QUI\FrontendUsers\InvalidFormField;
 
 /**
  * Class Emai\Registrar
@@ -135,15 +136,69 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     }
 
     /**
+     * Get all invalid registration form fields
+     *
+     * @return InvalidFormField[]
+     */
+    public function getInvalidFields()
+    {
+        $username      = $this->getUsername();
+        $L             = QUI::getLocale();
+        $lg            = 'quiqqer/frontend-users';
+        $invalidFields = array();
+
+        if (empty($username)) {
+            $invalidFields['email'] = new InvalidFormField(
+                'email',
+                $L->get($lg, 'exception.registrars.email.empty_username')
+            );
+        }
+
+        try {
+            QUI::getUsers()->getUserByName($username);
+
+            // Username already exists
+            $invalidFields['email'] = new InvalidFormField(
+                'email',
+                $L->get($lg, 'exception.registrars.email.username_already_exists')
+            );
+        } catch (\Exception $Exception) {
+            // Username does not exist
+        }
+
+        $email        = $this->getAttribute('email');
+        $emailConfirm = $this->getAttribute('emailConfirm');
+
+        if ($email != $emailConfirm) {
+            $invalidFields['email'] = new InvalidFormField(
+                'email',
+                $L->get($lg, 'exception.registrars.email.different_emails')
+            );
+        }
+
+        $password        = $this->getAttribute('password');
+        $passwordConfirm = $this->getAttribute('passwordConfirm');
+
+        if ($password != $passwordConfirm) {
+            $invalidFields['password'] = new InvalidFormField(
+                'password',
+                $L->get($lg, 'exception.registrars.email.different_passwords')
+            );
+        }
+
+        return $invalidFields;
+    }
+
+    /**
      * @return string
      */
     public function getUsername()
     {
         $data = $this->getAttributes();
 
-        if (isset($data['username'])) {
-            return $data['username'];
-        }
+//        if (isset($data['username'])) {
+//            return $data['username'];
+//        }
 
         if (isset($data['email'])) {
             return $data['email'];
@@ -157,7 +212,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getControl()
     {
-        return new Control();
+        $invalidFields = array();
+
+        if (!empty($_POST['registration'])) {
+            $invalidFields = $this->getInvalidFields();
+        }
+
+        return new Control(array(
+            'invalidFields' => $invalidFields
+        ));
     }
 
     /**

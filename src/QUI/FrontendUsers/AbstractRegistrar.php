@@ -21,9 +21,16 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     protected $Project = null;
 
     /**
-     * @return mixed
+     * @return InvalidFormField[]
      */
     abstract public function validate();
+
+    /**
+     * Get all invalid registration form fields
+     *
+     * @return InvalidFormField[]
+     */
+    abstract public function getInvalidFields();
 
     /**
      * @return mixed

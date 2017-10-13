@@ -71,6 +71,13 @@ interface RegistrarInterface
     public function validate();
 
     /**
+     * Get all invalid registration form fields
+     *
+     * @return InvalidFormField[]
+     */
+    public function getInvalidFields();
+
+    /**
      * Return the username which is to be registered
      *
      * @throws Exception

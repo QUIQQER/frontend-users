@@ -46,7 +46,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
             forms.addEvent('submit', function (event) {
                 event.stop();
-                self.$sendForm(event.target);
+                self.$sendForm(event.target).then(self.$onImport);
             });
 
             var RedirectElm = Elm.getElement(
@@ -74,7 +74,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             var self     = this,
                 formData = QUIFormUtils.getFormData(Form);
 
-            new Promise(function (resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
                     var Container = new Element('div', {
                         html: html
