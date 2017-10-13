@@ -96,13 +96,10 @@ class Events
             return;
         }
 
-        \QUI\System\Log::writeRecursive("LOGGING USER IN! " . $User->getUsername());
-
         // login
         $secHash = QUI::getUsers()->getSecHash();
 
         $User->setAttributes(array(
-            'secHash'                                     => $secHash,
             $Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED => true
         ));
 
@@ -123,7 +120,8 @@ class Events
             QUI::getUsers()->table(),
             array(
                 'lastvisit'  => time(),
-                'user_agent' => $useragent
+                'user_agent' => $useragent,
+                'secHash'    => $secHash
             ),
             array('id' => $User->getId())
         );

@@ -333,12 +333,12 @@
             <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
         </locale>
         <locale name="message.registrars.email.registration_success_auto">
-            <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert. Sie können sich nun einloggen.]]></de>
-            <en><![CDATA[The registration was successful. Your user account has been activated automatically. You can now log in.]]></en>
+            <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
+            <en><![CDATA[The registration was successful. Your user account has been activated automatically.]]></en>
         </locale>
         <locale name="message.registrars.email.registration_success_mail">
-            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
-            <en><![CDATA[Your user account has been activated successfully. You can now log in.]]></en>
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert.]]></de>
+            <en><![CDATA[Your user account has been activated successfully.]]></en>
         </locale>
 
         <!-- Registration Notice -->
