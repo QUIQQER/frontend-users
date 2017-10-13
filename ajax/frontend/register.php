@@ -23,11 +23,8 @@ QUI::$Ajax->registerFunction(
         $_POST['registration'] = 1;
         $_POST['registrar']    = $registrar;
 
-        // do not show user edit messages
-        QUI::getMessagesHandler()->clear();
-
         try {
-            return $Registration->create();
+            $status = $Registration->create();
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
@@ -36,6 +33,11 @@ QUI::$Ajax->registerFunction(
                 'exception.ajax.frontend_register.general_error'
             ));
         }
+
+        // do not show user edit messages
+        QUI::getMessagesHandler()->clear();
+
+        return $status;
     },
     array('registrar', 'data')
 );

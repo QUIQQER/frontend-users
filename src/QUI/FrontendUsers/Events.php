@@ -69,7 +69,6 @@ class Events
         $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
 
         if (empty($registrar)) {
-            \QUI\System\Log::writeRecursive("no registrar");
             return;
         }
 
@@ -85,8 +84,8 @@ class Events
 
         // do not log in if autoLogin is deactivated or user is already logged in!
         if (!$registrationSettings['autoLoginOnActivation']
-            || QUI::getUserBySession()->getId()) {
-            \QUI\System\Log::writeRecursive("no setting or already logged in");
+            || QUI::getUserBySession()->getId()
+            || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)) {
             return;
         }
 
@@ -94,13 +93,25 @@ class Events
 
         // do not log in if users have to be manually activated
         if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
-            \QUI\System\Log::writeRecursive("manual activation mode");
             return;
         }
 
+        \QUI\System\Log::writeRecursive("LOGGING USER IN! " . $User->getUsername());
+
         // login
-        QUI::getSession()->set('uid', $User->getId());
-        QUI::getSession()->set('auth', 1);
+        $secHash = QUI::getUsers()->getSecHash();
+
+        $User->setAttributes(array(
+            'secHash'                                     => $secHash,
+            $Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED => true
+        ));
+
+        $User->save(QUI::getUsers()->getSystemUser());
+
+        $Session = QUI::getSession();
+        $Session->set('uid', $User->getId());
+        $Session->set('auth', 1);
+        $Session->set('secHash', $secHash);
 
         $useragent = '';
 

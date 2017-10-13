@@ -76,5 +76,6 @@ $Registration = new QUI\FrontendUsers\Controls\Registration(array(
 ));
 
 $Engine->assign(array(
-    'Registration' => $Registration
+    'Registration' => $Registration,
+    'User'         => QUI::getUserBySession()
 ));

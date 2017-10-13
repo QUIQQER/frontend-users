@@ -47,6 +47,8 @@ class Handler extends Singleton
     const USER_ATTR_REGISTRATION_PROJECT      = 'quiqqer.frontendUsers.registrationProject';
     const USER_ATTR_REGISTRATION_PROJECT_LANG = 'quiqqer.frontendUsers.registrationProjectLang';
     const USER_ATTR_REGISTRAR                 = 'quiqqer.frontendUsers.registrar';
+    const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
+    const USER_ATTR_EMAIL_VERIFIED            = 'quiqqer.frontendUsers.emailVerified';
 
     /**
      * Misc
