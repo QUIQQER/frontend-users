@@ -38,15 +38,28 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
          */
         $onImport: function () {
             var self  = this,
-                forms = this.getElm().getElements('form');
+                Elm   = this.getElm(),
+                forms = Elm.getElements('form');
 
             this.Loader = new QUILoader();
-            this.Loader.inject(this.getElm());
+            this.Loader.inject(Elm);
 
             forms.addEvent('submit', function (event) {
                 event.stop();
                 self.$sendForm(event.target);
             });
+
+            var RedirectElm = Elm.getElement(
+                '.quiqqer-frontendUsers-autoRedirect'
+            );
+
+            if (RedirectElm) {
+                var url = RedirectElm.get('data-url');
+
+                (function() {
+                    window.location = url;
+                }.delay(10000));
+            }
         },
 
         /**
@@ -75,10 +88,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
                     QUI.parse(self.getElm()).then(resolve);
                 }, {
-                    'package'    : 'quiqqer/frontend-users',
+                    'package'  : 'quiqqer/frontend-users',
                     'registrar': Form.get('data-registrar'),
-                    'data'       : JSON.encode(formData),
-                    onError      : reject
+                    'data'     : JSON.encode(formData),
+                    onError    : reject
                 });
             });
         }

@@ -7,7 +7,6 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
-use QUI\FrontendUsers\Handler;
 
 /**
  * Class AbstractRegistrar
@@ -76,6 +75,15 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     }
 
     /**
+     * Get message for registration errors
+     * @return string
+     */
+    public function getErrorMessage()
+    {
+        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_error');
+    }
+
+    /**
      * Create a new user
      *
      * @return QUI\Users\User
@@ -115,8 +123,18 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      *
      * @return array
      */
-    protected function getSettings()
+    public function getSettings()
     {
         return Handler::getInstance()->getRegistrarSettings($this->getType());
+    }
+
+    /**
+     * Get unique hash that identifies the Registrar
+     *
+     * @return string
+     */
+    public function getHash()
+    {
+        return hash('sha256', $this->getType());
     }
 }

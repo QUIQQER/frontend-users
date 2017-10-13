@@ -1,5 +1,7 @@
 <?php
 
+use QUI\FrontendUsers\Handler as FrontendUsersHandler;
+
 // AGB
 $result = $Project->getSites(array(
     'where' => array(
@@ -14,7 +16,7 @@ if (isset($result[0])) {
 }
 
 
-// Datenschutz
+// Privacy
 $result = $Project->getSites(array(
     'where' => array(
         'type' => 'quiqqer/intranet:registration/privacy'
@@ -26,12 +28,51 @@ if (isset($result[0])) {
     $Engine->assign('Site_Privacy', $result[0]);
 }
 
+// Behaviour if user is already logged in
+$FrontendUsersHandler = FrontendUsersHandler::getInstance();
+$loggedIn             = boolval(QUI::getUserBySession()->getId());
+
+if ($loggedIn) {
+    $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
+
+    switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
+        case 'showProfile':
+            $ProfileSite = $FrontendUsersHandler->getProfileSite($Site->getProject());
+
+            if ($ProfileSite) {
+                header('Location: ' . $ProfileSite->getUrlRewritten());
+                exit;
+            }
+            break;
+
+        case 'showMessage':
+            $Engine->assign('msg', QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.types.registration.already_registered'
+            ));
+            break;
+    }
+}
+
+$urlParams = QUI::getRewrite()->getUrlParamsList();
+$status    = false;
+
+if (!empty($urlParams)) {
+    $status = current($urlParams);
+}
+
+$Registrar = false;
+
+if (!empty($_REQUEST['r'])) {
+    $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['r']);
+}
+
 /**
  * User Registration
  */
-
 $Registration = new QUI\FrontendUsers\Controls\Registration(array(
-    'data' => $_REQUEST
+    'status'    => $status,
+    'Registrar' => $Registrar
 ));
 
 $Engine->assign(array(

@@ -4,10 +4,19 @@
 </div>
 {/if}
 
-{if (!empty($data['status']) && $data['status'] === 'success')
-|| ($Registrar && isset($registrationStatus) && $registrationStatus === 1)}
+{if $success}
 <div class="quiqqer-frontendUsers-success">
     {$Registrar->getSuccessMessage()}
+
+    {if $autoRedirect}
+    <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
+        <a href="{$autoRedirect}">
+            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
+        </a>
+    </div>
+    {else}
+    <!-- SHOW LOGIN -->
+    {/if}
 </div>
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
 <div class="quiqqer-frontendUsers-pending">
@@ -19,7 +28,7 @@
     <form action=""
           method="POST"
           class="quiqqer-frontendUsers-controls-registration-registrar"
-          data-registrar="{$Registrar->getType()}"
+          data-registrar="{$Registrar->getHash()}"
     >
         <header>
             <h1>{$Registrar->getTitle()}</h1>
@@ -47,7 +56,7 @@
         </fieldset>
         {/if}
         {$Registrar->getControl()->create()}
-        <input type="hidden" name="registrar" value="{$Registrar->getType()}"/>
+        <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
         <input type="hidden" name="registration" value="1"/>
     </form>
 

@@ -41,6 +41,14 @@ class Handler extends Singleton
     const SITE_TYPE_PROFILE      = 'quiqqer/frontend-users:types/profile';
 
     /**
+     * User attributes
+     */
+    const USER_ATTR_WELCOME_MAIL_SENT         = 'quiqqer.frontendUsers.welcomeMailSent';
+    const USER_ATTR_REGISTRATION_PROJECT      = 'quiqqer.frontendUsers.registrationProject';
+    const USER_ATTR_REGISTRATION_PROJECT_LANG = 'quiqqer.frontendUsers.registrationProjectLang';
+    const USER_ATTR_REGISTRAR                 = 'quiqqer.frontendUsers.registrar';
+
+    /**
      * Misc
      */
     const SESSION_REGISTRAR = 'frontend_users_registrar';
@@ -63,11 +71,10 @@ class Handler extends Singleton
      */
     public function getRegistrars()
     {
-        $Registrars      = new RegistrarCollection();
+        $Registrars        = new RegistrarCollection();
         $Available         = $this->getAvailableRegistrars();
         $registrarSettings = $this->getRegistrarSettings();
 
-        /** @var AbstractRegistrar $Registrar */
         foreach ($Available as $Registrar) {
             $t = $Registrar->getType();
 
@@ -83,17 +90,34 @@ class Handler extends Singleton
     }
 
     /**
-     * Get specific Registrar
+     * Get ACTIVE Registrar
      *
      * @param string $registrar - Registrar
-     * @return false|AbstractRegistrar
+     * @return false|RegistrarInterface
      */
     public function getRegistrar($registrar)
     {
-        /** @var AbstractRegistrar $Registrar */
-        foreach ($this->getAvailableRegistrars() as $Registrar)
-        {
+        /** @var RegistrarInterface $Registrar */
+        foreach ($this->getAvailableRegistrars() as $Registrar) {
             if ($Registrar->getType() === $registrar) {
+                return $Registrar;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get ACTIVE Registrar by hash
+     *
+     * @param string $hash
+     * @return false|RegistrarInterface
+     */
+    public function getRegistrarByHash($hash)
+    {
+        /** @var RegistrarInterface $Registrar */
+        foreach ($this->getAvailableRegistrars() as $Registrar) {
+            if ($Registrar->getHash() === $hash) {
                 return $Registrar;
             }
         }
@@ -187,20 +211,21 @@ class Handler extends Singleton
      * Send activtion mail for a user account
      *
      * @param QUI\Users\User $User
-     * @param AbstractRegistrar $Registrar
+     * @param RegistrarInterface $Registrar
      * @return void
      */
-    public function sendActivationMail(QUI\Users\User $User, AbstractRegistrar $Registrar)
+    public function sendActivationMail(QUI\Users\User $User, RegistrarInterface $Registrar)
     {
-        $Project = $Registrar->getProject();
+        $Project              = $Registrar->getProject();
+        $registrationSettings = $this->getRegistrationSettings();
 
-        $MailVerification = new MailVerification($User->getId(), array(
+        $ActivationVerification = new ActivationVerification($User->getId(), array(
             'project'     => $Project->getName(),
             'projectLang' => $Project->getLang(),
-            'registrar' => $Registrar->getType()
+            'registrar'   => $Registrar->getHash()
         ));
 
-        $activationLink = Verifier::startVerification($MailVerification);
+        $activationLink = Verifier::startVerification($ActivationVerification);
 
         $L      = QUI::getLocale();
         $lg     = 'quiqqer/frontend-users';
@@ -209,9 +234,13 @@ class Handler extends Singleton
 
         try {
             $this->sendMail(
-                $L->get($lg, 'mail.registration_activation.subject', array(
-                    'host' => $host
-                )),
+                array(
+                    'subject'  => $L->get($lg, 'mail.registration_activation.subject', array(
+                        'host' => $host
+                    )),
+                    'from'     => $registrationSettings['mailFromAddress'],
+                    'fromName' => $registrationSettings['mailFromText']
+                ),
                 array(
                     $User->getAttribute('email')
                 ),
@@ -237,13 +266,66 @@ class Handler extends Singleton
     }
 
     /**
+     * Send welcome mail to user upon activation
+     *
+     * @param QUI\Users\User $User
+     * @param QUI\Projects\Project $Project
+     * @return void
+     */
+    public function sendWelcomeMail(QUI\Users\User $User, QUI\Projects\Project $Project)
+    {
+        $L      = QUI::getLocale();
+        $lg     = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host   = $Project->getVHost();
+
+        $LoginSite = $this->getLoginSite($Project);
+        $loginUrl  = $Project->getVHost(true);
+
+        if ($LoginSite) {
+            $loginUrl = $LoginSite->getUrlRewritten();
+        }
+
+        try {
+            $this->sendMail(
+                array(
+                    'subject' => $L->get($lg, 'mail.registration_welcome.subject', array(
+                        'host' => $host
+                    ))
+                ),
+                array(
+                    $User->getAttribute('email')
+                ),
+                $tplDir . 'mail.registration_welcome.html',
+                array(
+                    'body' => $L->get($lg, 'mail.registration_welcome.body', array(
+                        'host'     => $host,
+                        'username' => $User->getUsername(),
+                        'loginUrl' => $loginUrl
+                    ))
+                )
+            );
+
+            // set "welcome mail sent"-flag to user so it won't be sent again
+            $User->setAttribute(Handler::USER_ATTR_WELCOME_MAIL_SENT, true);
+            $User->save(QUI::getUsers()->getSystemUser());
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendWelcomeMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
      * Send information about a new registration
      *
      * @param QUI\Users\User $User
      * @param QUI\Projects\Project $Project
      * @return void
      */
-    public function sendRegistrationNotice(QUI\Users\User $User, $Project)
+    public function sendRegistrationNotice(QUI\Users\User $User, QUI\Projects\Project $Project)
     {
         $registrationSettings = $this->getRegistrationSettings();
         $recipients           = explode(",", $registrationSettings['sendInfoMailOnRegistrationTo']);
@@ -255,9 +337,11 @@ class Handler extends Singleton
 
         try {
             $this->sendMail(
-                $L->get($lg, 'mail.registration_notice.subject', array(
-                    'host' => $host
-                )),
+                array(
+                    'subject' => $L->get($lg, 'mail.registration_notice.subject', array(
+                        'host' => $host
+                    ))
+                ),
                 $recipients,
                 $tplDir . 'mail.registration_notice.html',
                 array(
@@ -282,7 +366,7 @@ class Handler extends Singleton
     /**
      * Send an email to the membership user
      *
-     * @param string $subject - mail subject
+     * @param array $mailData - mail data ("subject", "from", "fromName")
      * @param array $recipients - e-mail addresses
      * @param string $templateFile
      * @param array $templateVars (optional) - additional template variables (besides $this)
@@ -290,7 +374,7 @@ class Handler extends Singleton
      *
      * @throws QUI\Memberships\Exception
      */
-    protected function sendMail($subject, $recipients, $templateFile, $templateVars = array())
+    protected function sendMail($mailData, $recipients, $templateFile, $templateVars = array())
     {
         if (empty($recipients)) {
             return;
@@ -307,7 +391,18 @@ class Handler extends Singleton
             $Mailer->addRecipient($recipient);
         }
 
-        $Mailer->setSubject($subject);
+        if (!empty($mailData['subject'])) {
+            $Mailer->setSubject($mailData['subject']);
+        }
+
+        if (!empty($mailData['from'])) {
+            $Mailer->setFrom($mailData['from']);
+        }
+
+        if (!empty($mailData['fromName'])) {
+            $Mailer->setFromName($mailData['fromName']);
+        }
+
         $Mailer->setBody($template);
         $Mailer->send();
     }
@@ -327,6 +422,58 @@ class Handler extends Singleton
         $result = $Project->getSites(array(
             'where' => array(
                 'type' => self::SITE_TYPE_REGISTRATION
+            ),
+            'limit' => 1
+        ));
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return current($result);
+    }
+
+    /**
+     * Get ACTIVE login site for a project
+     *
+     * @param QUI\Projects\Project $Project (optional) - if omitted use default project
+     * @return QUI\Projects\Site|false - Site object or false if no ACTIVE login site found
+     */
+    public function getLoginSite($Project = null)
+    {
+        if (is_null($Project)) {
+            $Project = QUI::getProjectManager()->getStandard();
+        }
+
+        $result = $Project->getSites(array(
+            'where' => array(
+                'type' => self::SITE_TYPE_LOGIN
+            ),
+            'limit' => 1
+        ));
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return current($result);
+    }
+
+    /**
+     * Get ACTIVE profile site for a project
+     *
+     * @param QUI\Projects\Project $Project (optional) - if omitted use default project
+     * @return QUI\Projects\Site|false - Site object or false if no ACTIVE profile site found
+     */
+    public function getProfileSite($Project = null)
+    {
+        if (is_null($Project)) {
+            $Project = QUI::getProjectManager()->getStandard();
+        }
+
+        $result = $Project->getSites(array(
+            'where' => array(
+                'type' => self::SITE_TYPE_PROFILE
             ),
             'limit' => 1
         ));

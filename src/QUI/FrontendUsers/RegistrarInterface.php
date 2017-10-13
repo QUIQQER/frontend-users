@@ -114,4 +114,36 @@ interface RegistrarInterface
      * @return QUI\Projects\Project|null
      */
     public function getProject();
+
+    /**
+     * Return the success message
+     * @return string
+     */
+    public function getSuccessMessage();
+
+    /**
+     * Return message for pending registration status
+     * @return string
+     */
+    public function getPendingMessage();
+
+    /**
+     * Get message for registration errors
+     * @return string
+     */
+    public function getErrorMessage();
+
+    /**
+     * Get unique hash that identifies the Registrar
+     *
+     * @return string
+     */
+    public function getHash();
+
+    /**
+     * Returns fully qualified Namespace of this Registrar
+     *
+     * @return string
+     */
+    public function getType();
 }

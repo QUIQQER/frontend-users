@@ -114,8 +114,8 @@
             <en><![CDATA[Auto login after activation]]></en>
         </locale>
         <locale name="settings.autoLoginOnActivation.description">
-            <de><![CDATA[Benutzer automatisch einloggen, wenn er auf den Aktivierungs-Link klickt]]></de>
-            <en><![CDATA[Users automatically log in when they click on the activation link]]></en>
+            <de><![CDATA[Benutzer automatisch einloggen, wenn er aktiviert wird (gilt nicht für manuelle Aktivierung durch einen Administrator)]]></de>
+            <en><![CDATA[Users automatically log in after actovation (does not apply to manual activation by an admin)]]></en>
         </locale>
         <locale name="settings.mailFromText.title">
             <de><![CDATA["Von"-Feld in Aktivierungs-Mail]]></de>
@@ -149,6 +149,10 @@
             <de><![CDATA[Hinweis-Nachricht anzeigen ("Sie sind bereits registriert...")]]></de>
             <en><![CDATA[Show hint message ("You are already registered...")]]></en>
         </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.nothing">
+            <de><![CDATA[Kein besonderes Verhalten (zeige normale Registrierungs-Seite)]]></de>
+            <en><![CDATA[No special behaviour (show default registration site)]]></en>
+        </locale>
         <locale name="settings.addressInput.title">
             <de><![CDATA[Adress-Eingabe]]></de>
             <en><![CDATA[Address input]]></en>
@@ -165,15 +169,29 @@
             <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Benutzernamen festzulegen]]></de>
             <en><![CDATA[Users have the option to set their username when registering]]></en>
         </locale>
-        <locale name="settings.mailVerificationValidityDuration.title">
+        <locale name="settings.activationVerificationValidityDuration.title">
             <de><![CDATA[Gültigkeitsdauer Aktivierungs-Link]]></de>
             <en><![CDATA[Activation link validity]]></en>
         </locale>
-        <locale name="settings.mailVerificationValidityDuration.description">
-            <de>
-                <![CDATA[Dauer in <b>Minuten</b>, die ein Aktivierungs-Link gültig ist. Ruft der Benutzer einen abgelaufenen Aktivierungs-Link auf, wird er automatisch zur normalen Registrierungs-Seite weitergeleitet.]]></de>
-            <en>
-                <![CDATA[Duration in <b>minutes</b>, for which an activation link is valid. If the user calls an expired activation link, he is automatically redirected to the standard registration site.]]></en>
+        <locale name="settings.activationVerificationValidityDuration.description">
+            <de><![CDATA[Dauer in <b>Minuten</b>, die ein Aktivierungs-Link gültig ist. Ruft der Benutzer einen abgelaufenen Aktivierungs-Link auf, wird er automatisch zur normalen Registrierungs-Seite weitergeleitet.]]></de>
+            <en><![CDATA[Duration in <b>minutes</b>, for which an activation link is valid. If the user calls an expired activation link, he is automatically redirected to the standard registration site.]]></en>
+        </locale>
+        <locale name="settings.userWelcomeMail.title">
+            <de><![CDATA["Wilkommen"-E-Mail nach Aktivierung]]></de>
+            <en><![CDATA["Welcheom"-mail on activation]]></en>
+        </locale>
+        <locale name="settings.userWelcomeMail.description">
+            <de><![CDATA[Dem Benutzer wird nach erfolgreicher Aktivierung des Benutzerkontos eine Wilkommens-Mail geschickt.]]></de>
+            <en><![CDATA[The user gets a welcome e-mail on successful account activation.]]></en>
+        </locale>
+        <locale name="settings.autoRedirectOnSuccess.title">
+            <de><![CDATA[Automatische Weiterleitung nach Aktivierung]]></de>
+            <en><![CDATA[Auto redirect on activation]]></en>
+        </locale>
+        <locale name="settings.autoRedirectOnSuccess.description" html="true">
+            <de><![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer erfolgreich aktiviert wurde. Die automatische Weiterleitung erfolgt nach <b>10 Sekunden</b>. <b>Hinweis:</b> Gilt nicht, wenn Benutzer nach einer Registrierung <b>manuell</b> aktiviert werden müssen.]]></de>
+            <en><![CDATA[Automatic redirect to the specified page after the user has been successfully activated. The automatic forwarding takes place after <b>10 seconds</b>. <b>Note:</b> Does not apply if users are required to be activated <b>manually</b> after a registration.]]></en>
         </locale>
 
         <!-- Settings: Registrars -->
@@ -198,6 +216,10 @@
         <locale name="control.registration.label.address">
             <de><![CDATA[Adresse]]></de>
             <en><![CDATA[Address]]></en>
+        </locale>
+        <locale name="control.registration.auto_redirect">
+            <de><![CDATA[Sie werden automatisch weitergeleitet. Sollte die Weiterleitung nicht funktionieren, klicken Sie bitte hier.]]></de>
+            <en><![CDATA[You will be automatically redirected. If the redirect does not work, please click here.]]></en>
         </locale>
     </groups>
 
@@ -248,6 +270,12 @@
             <en><![CDATA[Avatar]]></en>
         </locale>
 
+        <!-- Site type: types/registration -->
+        <locale name="message.types.registration.already_registered">
+            <de><![CDATA[Sie sind bereits registriert und haben ein aktives Benutzerkonto. Um ein neues Benutzerkonto zu registrieren, loggen Sie sich bitte aus.]]></de>
+            <en><![CDATA[You are already registered and have an active user account. To register a new user account, please log out.]]></en>
+        </locale>
+
         <!-- Generic registration messages -->
         <locale name="message.registration_pending">
             <de>
@@ -258,8 +286,12 @@
             <de><![CDATA[Die Registrierung war erfolgreich!]]></de>
             <en><![CDATA[Successful registration!]]></en>
         </locale>
+        <locale name="message.registration_error">
+            <de><![CDATA[Bei der Registrierung ist leider ein Fehler aufgetreten. Bitte versuchen Sie es nochmal oder kontaktieren Sie einen Administrator.]]></de>
+            <en><![CDATA[Sorry, an error occured during the registration process. Please try again or contact an administrator.]]></en>
+        </locale>
 
-        <!-- Registar: Email -->
+        <!-- Registrar: Email -->
         <locale name="registrars.email.label.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
             <en><![CDATA[E-mail address]]></en>
@@ -348,6 +380,22 @@ Sie haben sich am [date] auf [host] registriert. Zur Bestätigung Ihrer E-Mail-A
 At [date] you registered on [host]. To confirm your e-mail address and activate your user account, please visit the following link:
 <br><br>
 <a href="[activationLink]">[activationLink]</a>
+</p>]]></en>
+        </locale>
+
+        <!-- Welcome mail -->
+        <locale name="mail.registration_welcome.subject">
+            <de><![CDATA[Herzlich Willkommen bei [host]!]]></de>
+            <en><![CDATA[Welcome to [host]!]]></en>
+        </locale>
+        <locale name="mail.registration_welcome.body" html="true">
+            <de><![CDATA[<h1>Herzlich Willkommen, [username]!</h1>
+<p>
+Ihr Benutzerkonto auf [host] wurde erfolgreich aktiviert. Sie können sich nun auf <a href="[loginUrl]">[loginUrl]</a> einloggen.
+</p>]]></de>
+            <en><![CDATA[<h1>Welcome, [username]!</h1>
+<p>
+Your user account on [host] has been successfully activated. You can now log in at <a href="[loginUrl]">[loginUrl]</a>.
 </p>]]></en>
         </locale>
 

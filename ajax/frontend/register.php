@@ -21,7 +21,10 @@ QUI::$Ajax->registerFunction(
         $_POST = array_merge($_POST, json_decode($data, true));
 
         $_POST['registration'] = 1;
-        $_POST['registrar']  = $registrar;
+        $_POST['registrar']    = $registrar;
+
+        // do not show user edit messages
+        QUI::getMessagesHandler()->clear();
 
         try {
             return $Registration->create();

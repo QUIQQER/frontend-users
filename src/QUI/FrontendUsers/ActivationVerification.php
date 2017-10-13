@@ -5,7 +5,14 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Verification\AbstractVerification;
 
-class MailVerification extends AbstractVerification
+/**
+ * Class ActivationVerification
+ *
+ * User verification for account activation
+ *
+ * @package QUI\FrontendUsers
+ */
+class ActivationVerification extends AbstractVerification
 {
     /**
      * Get the duration of a Verification (minutes)
@@ -16,7 +23,7 @@ class MailVerification extends AbstractVerification
     public function getValidDuration()
     {
         $settings = Handler::getInstance()->getRegistrationSettings();
-        return (int)$settings['mailVerificationValidityDuration'];
+        return (int)$settings['activationVerificationValidityDuration'];
     }
 
     /**
@@ -31,9 +38,6 @@ class MailVerification extends AbstractVerification
         try {
             $User = QUI::getUsers()->get($userId);
             $User->activate(false, QUI::getUsers()->getSystemUser());
-
-            $additionalData = $this->getAdditionalData();
-            QUI::getSession()->set(Handler::SESSION_REGISTRAR, $additionalData['registrar']);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
                 self::class . ' :: onSuccess -> Could not find user #' . $userId
@@ -60,7 +64,7 @@ class MailVerification extends AbstractVerification
      */
     public function getSuccessMessage()
     {
-        // TODO: Implement getSuccessMessage() method.
+        return '';
     }
 
     /**
@@ -71,7 +75,7 @@ class MailVerification extends AbstractVerification
      */
     public function getErrorMessage($reason)
     {
-        // TODO: Implement getErrorMessage() method.
+        return '';
     }
 
     /**
@@ -89,8 +93,10 @@ class MailVerification extends AbstractVerification
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten(array(), array(
-            'status' => 'error'
+        return $RegistrationSite->getUrlRewritten(array(
+            'success'
+        ), array(
+            'r' => $this->getRegistrarHash()
         ));
     }
 
@@ -109,13 +115,15 @@ class MailVerification extends AbstractVerification
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten(array(), array(
-            'status' => 'error'
+        return $RegistrationSite->getUrlRewritten(array(
+            'error'
+        ), array(
+            'r' => $this->getRegistrarHash()
         ));
     }
 
     /**
-     * Get the Project this MailVerification is intended for
+     * Get the Project this ActivationVerification is intended for
      *
      * @return QUI\Projects\Project
      */
@@ -123,5 +131,21 @@ class MailVerification extends AbstractVerification
     {
         $additionalData = $this->getAdditionalData();
         return QUI::getProjectManager()->getProject($additionalData['project'], $additionalData['projectLang']);
+    }
+
+    /**
+     * Get hash of registrar used for this Verification
+     *
+     * @return string
+     */
+    protected function getRegistrarHash()
+    {
+        $data = $this->getAdditionalData();
+
+        if (empty($data['registrar'])) {
+            return '';
+        }
+
+        return $data['registrar'];
     }
 }

@@ -19,5 +19,11 @@
 {/if}
 
 <section class="content-template grid-100 mobile-grid-100">
-    {$Registration->create()}
+    {if isset($msg)}
+        <div class="quiqqer-frontendUsers-info">
+            {$msg}
+        </div>
+    {else}
+        {$Registration->create()}
+    {/if}
 </section>

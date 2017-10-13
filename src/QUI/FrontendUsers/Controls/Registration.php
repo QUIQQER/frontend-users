@@ -28,8 +28,9 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes(array(
-            'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
-            'data'     => array()
+            'data-qui'  => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+            'status'    => false,
+            'Registrar' => false    // currently executed Registrar
         ));
 
         $this->setAttributes($attributes);
@@ -48,6 +49,8 @@ class Registration extends QUI\Control
         $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
         $Registrars           = $RegistrarHandler->getRegistrars();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+        $CurrentRegistrar     = $this->isCurrentlyExecuted();
+        $registrationStatus   = false;
 
         if (isset($_POST['registration'])) {
             try {
@@ -61,12 +64,31 @@ class Registration extends QUI\Control
             }
         }
 
+        $status = $this->getAttribute('status');
+
+        if ($status === 'error' && $CurrentRegistrar) {
+            $Engine->assign('error', $CurrentRegistrar->getErrorMessage());
+        }
+
+        // auto-redirect on success
+        $autoRedirect = false;
+
+        if (!empty($registrationSettings['autoRedirectOnSuccess'])) {
+            $autoRedirect = $registrationSettings['autoRedirectOnSuccess'];
+        }
+
+        $status  = $this->getAttribute('status');
+        $success = $CurrentRegistrar
+                   && ($status === 'success'
+                       || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
+
         $Engine->assign(array(
             'Registrars'        => $Registrars,
-            'Registrar'         => $this->isCurrentlyExecuted(),
-            'data'              => $this->getAttribute('data'),
+            'Registrar'         => $CurrentRegistrar,
+            'success'           => $success,
             'showUsernameInput' => boolval($registrationSettings['usernameInput']),
-            'showAddressInput'  => boolval($registrationSettings['addressInput'])
+            'showAddressInput'  => boolval($registrationSettings['addressInput']),
+            'autoRedirect'      => $autoRedirect
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -80,10 +102,10 @@ class Registration extends QUI\Control
     protected function isCurrentlyExecuted()
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
-        $registrar     = QUI::getSession()->get($FrontendUsers::SESSION_REGISTRAR);
+        $Registrar     = $this->getAttribute('Registrar');
 
-        if ($registrar) {
-            return $FrontendUsers->getRegistrar($registrar);
+        if ($Registrar && $Registrar instanceof QUI\FrontendUsers\RegistrarInterface) {
+            return $Registrar;
         }
 
         if (!isset($_POST['registration'])) {
@@ -94,7 +116,7 @@ class Registration extends QUI\Control
             return false;
         }
 
-        return $FrontendUsers->getRegistrar($_POST['registrar']);
+        return $FrontendUsers->getRegistrarByHash($_POST['registrar']);
     }
 
     /**
@@ -108,7 +130,7 @@ class Registration extends QUI\Control
             return QUI\FrontendUsers\Handler::REGISTRATION_STATUS_ERROR;
         }
 
-        /** @var QUI\FrontendUsers\AbstractRegistrar $Registrar */
+        /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
         $Registrar = $this->isCurrentlyExecuted();
 
         if ($Registrar === false) {
@@ -120,8 +142,9 @@ class Registration extends QUI\Control
 
         $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+        $Project              = QUI::getRewrite()->getProject();
 
-        $Registrar->setProject(QUI::getRewrite()->getProject());
+        $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);
         $Registrar->validate();
 
@@ -135,14 +158,21 @@ class Registration extends QUI\Control
             $NewUser->addToGroup($groupId);
         }
 
+        // set registration/registrar data to user
+        $NewUser->setAttributes(array(
+            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT      => $Project->getName(),
+            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT_LANG => $Project->getLang(),
+            $RegistrarHandler::USER_ATTR_REGISTRAR                 => $Registrar->getType()
+        ));
+
         $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // handle onRegistered from Registrar
-        $registratinoStatus = $Registrar->onRegistered($NewUser);
+        $registrationStatus = $Registrar->onRegistered($NewUser);
 
         // send registration notice to admins
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
 
-        return $registratinoStatus;
+        return $registrationStatus;
     }
 }
