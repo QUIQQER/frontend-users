@@ -209,9 +209,13 @@
         </locale>
 
         <!-- Settings: Address fields -->
+        <locale name="settings.section.registrationAddress.title">
+            <de><![CDATA[Adress-Angabe bei Registrierung]]></de>
+            <en><![CDATA[Address input on registration]]></en>
+        </locale>
         <locale name="settings.category.registrationAddress.title">
-            <de><![CDATA[Adress-Felder bei Registrierung]]></de>
-            <en><![CDATA[Address fields on Registration]]></en>
+            <de><![CDATA[Adresse bei Registrierung]]></de>
+            <en><![CDATA[Address on Registration]]></en>
         </locale>
 
         <!-- Control: Registration -->
