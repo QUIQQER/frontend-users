@@ -1,0 +1,24 @@
+.quiqqer-frontendusers-settings-addressfields {
+    width: 100%;
+}
+
+.quiqqer-frontendusers-settings-addressfields-header-row,
+.quiqqer-frontendusers-settings-addressfields-body-row {
+    display: flex;
+}
+
+.quiqqer-frontendusers-settings-addressfields-header-row th:nth-child(1),
+.quiqqer-frontendusers-settings-addressfields-body-row td:nth-child(1) {
+    width: 200px;
+}
+
+.quiqqer-frontendusers-settings-addressfields-header-row th:nth-child(2),
+.quiqqer-frontendusers-settings-addressfields-body-row td:nth-child(2) {
+    width: 75px;
+}
+
+.quiqqer-frontendusers-settings-addressfields-header-row th:nth-child(3),
+.quiqqer-frontendusers-settings-addressfields-body-row td:nth-child(3) {
+    flex-grow: 2;
+    width: auto !important;
+}

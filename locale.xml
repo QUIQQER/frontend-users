@@ -208,6 +208,12 @@
             <en><![CDATA[Registration methods]]></en>
         </locale>
 
+        <!-- Settings: Address fields -->
+        <locale name="settings.category.registrationAddress.title">
+            <de><![CDATA[Adress-Felder bei Registrierung]]></de>
+            <en><![CDATA[Address fields on Registration]]></en>
+        </locale>
+
         <!-- Control: Registration -->
         <locale name="control.registration.label.username">
             <de><![CDATA[Benutzername]]></de>
@@ -428,6 +434,26 @@ Your user account on [host] has been successfully activated. You can now log in 
             <de><![CDATA[Aktiv]]></de>
             <en><![CDATA[Active]]></en>
         </locale>
+
+        <!-- Control: settings/AddressFields -->
+        <locale name="controls.settings.addressfields.template.field">
+            <de><![CDATA[Adress-Feld]]></de>
+            <en><![CDATA[Address field]]></en>
+        </locale>
+        <locale name="controls.settings.addressfields.template.fieldShow">
+            <de><![CDATA[Anzeigen]]></de>
+            <en><![CDATA[Show]]></en>
+        </locale>
+        <locale name="controls.settings.addressfields.template.fieldRequired">
+            <de><![CDATA[Pflichtfeld]]></de>
+            <en><![CDATA[Required field]]></en>
+        </locale>
+        <locale name="controls.settings.addressfields.template.labelSalutation">
+            <de><![CDATA[Titel]]></de>
+            <en><![CDATA[Title]]></en>
+        </locale>
+
+
     </groups>
 
 </locales>
