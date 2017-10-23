@@ -47,7 +47,7 @@ class Events
         $project     = $User->getAttribute($Handler::USER_ATTR_REGISTRATION_PROJECT);
         $projectLang = $User->getAttribute($Handler::USER_ATTR_REGISTRATION_PROJECT_LANG);
 
-        // if not project data was set to the user this means the user
+        // if no project data was set to the user this means the user
         // was created by hand (by an administrator)
         if (empty($project) || empty($projectLang)) {
             return;
@@ -142,5 +142,78 @@ class Events
         } catch (\Exception $Exception) {
             // nothing -> if Verification not found it does not have to be deleted
         }
+    }
+
+    /**
+     * quiqqer/quiqqer: onPackageSetup
+     *
+     * @param QUI\Package\Package $Package
+     * @return void
+     */
+    public static function onPackageSetup(QUI\Package\Package $Package)
+    {
+        if ($Package->getName() !== 'quiqqer/frontend-users') {
+            return;
+        }
+
+        self::setAddressDefaultSettings();
+    }
+
+    /**
+     * Set address fields default settings
+     *
+     * @return void
+     */
+    protected static function setAddressDefaultSettings()
+    {
+        $Conf          = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $addressFields = $Conf->getValue('registration', 'addressFields');
+
+        // do not set default settings if manual settings have already been set
+        if (!empty($addressFields)) {
+            return;
+        }
+
+        $addressFields = array(
+            'salutation' => array(
+                'show'     => true,
+                'required' => false
+            ),
+            'firstname' => array(
+                'show'     => true,
+                'required' => true
+            ),
+            'lastname' => array(
+                'show'     => true,
+                'required' => true
+            ),
+            'street_no' => array(
+                'show'     => true,
+                'required' => true
+            ),
+            'zip' => array(
+                'show'     => true,
+                'required' => true
+            ),
+            'city' => array(
+                'show'     => true,
+                'required' => true
+            ),
+            'country' => array(
+                'show'     => true,
+                'required' => true
+            ),
+            'company' => array(
+                'show'     => true,
+                'required' => false
+            ),
+            'phone' => array(
+                'show'     => true,
+                'required' => false
+            )
+        );
+
+        $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
+        $Conf->save();
     }
 }

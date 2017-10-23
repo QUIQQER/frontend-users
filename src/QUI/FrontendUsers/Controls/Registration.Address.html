@@ -1,0 +1,16 @@
+<fieldset>
+    {foreach $addressFields as $field => $options}
+
+    {if !$options['show']}
+        {continue}
+    {/if}
+
+    <label>
+        <span class="quiqqer-registration-field-title">
+            {locale group="quiqqer/system" var=$field}
+            {if $options['required']}*{/if}
+        </span>
+        <input type="text" name="{$field}" class="quiqqer-registration-field-element">
+    </label>
+    {/foreach}
+</fieldset>

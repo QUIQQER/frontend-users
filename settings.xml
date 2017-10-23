@@ -273,7 +273,7 @@
                             </description>
                         </input>
 
-                        <input conf="registrars.addressFields" type="text" data-qui="package/quiqqer/frontend-users/bin/controls/settings/AddressFields" label="false">
+                        <input conf="registration.addressFields" type="text" data-qui="package/quiqqer/frontend-users/bin/controls/settings/AddressFields" label="false">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.addressFields.title"/>
                             </text>

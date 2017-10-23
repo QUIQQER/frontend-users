@@ -45,17 +45,12 @@
         </fieldset>
         {/if}
 
-        {if $showAddressInput}
-        <fieldset>
-            <label>
-                <span class="quiqqer-registration-field-title">
-                    {locale group="quiqqer/frontend-users" var="control.registration.label.address"}
-                </span>
-                <input type="text" name="address" class="quiqqer-registration-field-element">
-            </label>
-        </fieldset>
+        {if $addressTemplate}
+            {$addressTemplate}
         {/if}
+
         {$Registrar->getControl()->create()}
+
         <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
         <input type="hidden" name="registration" value="1"/>
     </form>

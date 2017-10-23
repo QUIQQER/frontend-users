@@ -82,12 +82,24 @@ class Registration extends QUI\Control
                    && ($status === 'success'
                        || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
+        $addressTemplate = false;
+
+        if (boolval($registrationSettings['addressInput'])) {
+            $Conf          = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $addressFields = $Conf->getValue('registration', 'addressFields');
+            $addressFields = json_decode($addressFields, true);
+
+            $Engine->assign('addressFields', $addressFields);
+
+            $addressTemplate = $Engine->fetch(dirname(__FILE__) . '/Registration.Address.html');
+        }
+
         $Engine->assign(array(
             'Registrars'        => $Registrars,
             'Registrar'         => $CurrentRegistrar,
             'success'           => $success,
             'showUsernameInput' => boolval($registrationSettings['usernameInput']),
-            'showAddressInput'  => boolval($registrationSettings['addressInput']),
+            'addressTemplate'   => $addressTemplate,
             'autoRedirect'      => $autoRedirect
         ));
 
