@@ -56,7 +56,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             if (RedirectElm) {
                 var url = RedirectElm.get('data-url');
 
-                (function() {
+                (function () {
                     window.location = url;
                 }.delay(10000));
             }
@@ -92,6 +92,21 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     'registrar': Form.get('data-registrar'),
                     'data'     : JSON.encode(formData),
                     onError    : reject
+                });
+            });
+        },
+
+        /**
+         * Validate e-mail address
+         *
+         * @param {String} email
+         * @return {Promise} - returns true if email address is valid; false otherwise
+         */
+        $validateUsername: function (username) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('ajax_email_validate', resolve, {
+                    mail   : email,
+                    onError: reject
                 });
             });
         }

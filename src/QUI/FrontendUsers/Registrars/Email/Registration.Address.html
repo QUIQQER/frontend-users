@@ -10,7 +10,7 @@
             {locale group="quiqqer/system" var=$field}
             {if $options['required']}*{/if}
         </span>
-        <input type="text" name="{$field}" class="quiqqer-registration-field-element">
+        <input type="text" name="{$field}" class="quiqqer-registration-field-element"{if $options['required']} required{/if}>
     </label>
     {/foreach}
 </fieldset>

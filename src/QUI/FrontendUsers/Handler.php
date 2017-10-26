@@ -182,6 +182,16 @@ class Handler extends Singleton
     }
 
     /**
+     * Get address field settings
+     *
+     * @return array
+     */
+    public function getAddressFieldSettings() {
+        $registrationSettings = $this->getRegistrationSettings();
+        return json_decode($registrationSettings['addressFields'], true);
+    }
+
+    /**
      * Get settings for one or all Registrars
      *
      * @param string $registrarClass (optional) - Registar class path (namespace)

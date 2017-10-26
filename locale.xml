@@ -169,6 +169,18 @@
             <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Benutzernamen festzulegen]]></de>
             <en><![CDATA[Users have the option to set their username when registering]]></en>
         </locale>
+        <locale name="settings.usernameInput.option.none">
+            <de><![CDATA[Keine Eingabe des Benutzernamens]]></de>
+            <en><![CDATA[No username input]]></en>
+        </locale>
+        <locale name="settings.usernameInput.option.optional">
+            <de><![CDATA[Benutzername ist optional]]></de>
+            <en><![CDATA[Username input is optional]]></en>
+        </locale>
+        <locale name="settings.usernameInput.option.required">
+            <de><![CDATA[Benutzername ist Pflichtangabe]]></de>
+            <en><![CDATA[Username input is required]]></en>
+        </locale>
         <locale name="settings.activationVerificationValidityDuration.title">
             <de><![CDATA[Gültigkeitsdauer Aktivierungs-Link]]></de>
             <en><![CDATA[Activation link validity]]></en>
@@ -457,6 +469,11 @@ Your user account on [host] has been successfully activated. You can now log in 
             <en><![CDATA[Title]]></en>
         </locale>
 
+        <!-- Controls: frontend/controls/registrars/Email -->
+        <locale name="controls.registrars.email.invalid_username">
+            <de><![CDATA[Dieser Benutzername ist bereits vergeben und kann daher nicht verwendet werden.]]></de>
+            <en><![CDATA[This username is already taken and can not be used.]]></en>
+        </locale>
 
     </groups>
 

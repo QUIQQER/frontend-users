@@ -1,5 +1,24 @@
 <section>
 
+    {if $usernameSetting != 'none'}
+        <fieldset class="quiqqer-registration-username">
+            <label>
+                <span class="quiqqer-registration-field-title">
+                    {locale group="quiqqer/frontend-users" var="control.registration.label.username"}{if $usernameSetting == 'required'} *{/if}
+                </span>
+
+                <input type="text" name="username"
+                       class="quiqqer-registration-field-element{if isset($invalidFields['username'])} quiqqer-registration-field-error{/if}"
+                       {if $usernameSetting == 'required'}required{/if}/>
+                {if isset($invalidFields['email'])}
+                <span class="quiqqer-registration-field-error-msg">
+                        {$invalidFields['email']->getMsg()}
+                    </span>
+                {/if}
+            </label>
+        </fieldset>
+    {/if}
+
     <fieldset class="quiqqer-registration-email">
         <label>
             <span class="quiqqer-registration-field-title">
@@ -64,6 +83,16 @@
         </label>
     </fieldset>
 
+</section>
+
+{if $addressTemplate}
+    <h2>Adresse</h2>
+    <section class="quiqqer-registration-address{if !$showAddress} quiqqer-registration-address__hidden{/if}">
+        {$addressTemplate}
+    </section>
+{/if}
+
+<section>
     <div class="quiqqer-registration-submit">
         <button type="submit"
                 class="btn-green grid-60 mobile-grid-100 push-40 mobile-push-0">
@@ -71,5 +100,4 @@
             var="registrars.email.btn.submit"}
         </button>
     </div>
-
 </section>

@@ -34,21 +34,6 @@
             <h1>{$Registrar->getTitle()}</h1>
         </header>
 
-        {if $showUsernameInput}
-        <fieldset>
-            <label>
-                <span class="quiqqer-registration-field-title">
-                    {locale group="quiqqer/frontend-users" var="control.registration.label.username"}
-                </span>
-                <input type="text" name="username" class="quiqqer-registration-field-element">
-            </label>
-        </fieldset>
-        {/if}
-
-        {if $addressTemplate}
-            {$addressTemplate}
-        {/if}
-
         {$Registrar->getControl()->create()}
 
         <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>

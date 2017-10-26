@@ -61,8 +61,8 @@
                     <defaultvalue><![CDATA[showProfile]]></defaultvalue>
                 </conf>
                 <conf name="usernameInput">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue>none</defaultvalue>
                 </conf>
                 <conf name="addressInput">
                     <type><![CDATA[bool]]></type>
@@ -169,14 +169,23 @@
                             </description>
                         </input>
 
-                        <input conf="registration.usernameInput" type="checkbox">
+                        <select conf="registration.usernameInput">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.usernameInput.title"/>
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.usernameInput.description"/>
                             </description>
-                        </input>
+                            <option value="none">
+                                <locale group="quiqqer/frontend-users" var="settings.usernameInput.option.none"/>
+                            </option>
+                            <option value="optional">
+                                <locale group="quiqqer/frontend-users" var="settings.usernameInput.option.optional"/>
+                            </option>
+                            <option value="required">
+                                <locale group="quiqqer/frontend-users" var="settings.usernameInput.option.required"/>
+                            </option>
+                        </select>
 
                         <input conf="registration.mailFromText" type="text">
                             <text>
