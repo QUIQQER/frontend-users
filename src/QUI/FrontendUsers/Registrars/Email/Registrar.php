@@ -142,32 +142,60 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getInvalidFields()
     {
-        $username      = $this->getUsername();
-        $L             = QUI::getLocale();
-        $lg            = 'quiqqer/frontend-users';
-        $invalidFields = array();
+        $username         = $this->getUsername();
+        $L                = QUI::getLocale();
+        $lg               = 'quiqqer/frontend-users';
+        $invalidFields    = array();
+        $RegistrarHandler = FrontendUsers\Handler::getInstance();
+        $settings         = $RegistrarHandler->getRegistrationSettings();
+        $usernameInput    = $settings['usernameInput'];
+        $Users            = QUI::getUsers();
+        $usernameExists   = $Users->usernameExists($username);
 
-        if (empty($username)) {
-            $invalidFields['email'] = new InvalidFormField(
-                'email',
-                $L->get($lg, 'exception.registrars.email.empty_username')
-            );
+        // Username check
+        if ($usernameInput !== 'none') {
+            // Check if username input is enabled
+            if (empty($username)
+                && $usernameInput === 'required') {
+                $invalidFields['username'] = new InvalidFormField(
+                    'username',
+                    $L->get($lg, 'exception.registrars.email.empty_username')
+                );
+            }
+
+            if ($usernameExists) {
+                $invalidFields['username'] = new InvalidFormField(
+                    'username',
+                    $L->get($lg, 'exception.registrars.email.username_already_exists')
+                );
+            }
+        } else {
+            // Check if username input is not enabled
+            if ($usernameExists) {
+                $invalidFields['email'] = new InvalidFormField(
+                    'email',
+                    $L->get($lg, 'exception.registrars.email.email_already_exists')
+                );
+            }
         }
 
-        try {
-            QUI::getUsers()->getUserByName($username);
-
-            // Username already exists
-            $invalidFields['email'] = new InvalidFormField(
-                'email',
-                $L->get($lg, 'exception.registrars.email.username_already_exists')
-            );
-        } catch (\Exception $Exception) {
-            // Username does not exist
-        }
-
+        // Email check
         $email        = $this->getAttribute('email');
         $emailConfirm = $this->getAttribute('emailConfirm');
+
+        if (empty($email)) {
+            $invalidFields['email'] = new InvalidFormField(
+                'email',
+                $L->get($lg, 'exception.registrars.email.empty_email')
+            );
+        }
+
+        if ($Users->emailExists($email)) {
+            $invalidFields['email'] = new InvalidFormField(
+                'email',
+                $L->get($lg, 'exception.registrars.email.email_already_exists')
+            );
+        }
 
         if ($email != $emailConfirm) {
             $invalidFields['email'] = new InvalidFormField(
@@ -176,6 +204,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             );
         }
 
+        // Password check
         $password        = $this->getAttribute('password');
         $passwordConfirm = $this->getAttribute('passwordConfirm');
 
@@ -196,9 +225,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     {
         $data = $this->getAttributes();
 
-//        if (isset($data['username'])) {
-//            return $data['username'];
-//        }
+        if (isset($data['username'])) {
+            return $data['username'];
+        }
 
         if (isset($data['email'])) {
             return $data['email'];

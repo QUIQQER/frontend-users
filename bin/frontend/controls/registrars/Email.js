@@ -30,6 +30,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
         initialize: function (options) {
             this.parent(options);
 
+            this.$UsernameInput = null;
+            this.$EmailInput    = null;
+
             this.addEvents({
                 onImport: this.$onImport
             });
@@ -39,7 +42,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
          * event: on import
          */
         $onImport: function () {
-            var Elm = this.getElm();
+            var Elm  = this.getElm();
+            var self = this;
 
             // Address input
             var AddressElm = Elm.getElement(
@@ -64,41 +68,81 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             }
 
             // Email validation
-            var EmailInputElm = Elm.getElement('input[name="email"]');
-
-            //EmailInputElm.addEvent('change', function(event) {
-            //    event.stop();
-            //
-            //    Registration.validateEmail
-            //});
+            this.$EmailInput = Elm.getElement('input[name="email"]');
 
             // Username validation
-            var UsernameInputElm = Elm.getElement('input[name="username"]');
+            this.$UsernameInput = Elm.getElement('input[name="username"]');
 
-            if (UsernameInputElm) {
-                UsernameInputElm.addEvent('blur', function(event) {
-                    event.stop();
+            var Form = Elm.getParent('form');
 
-                    var username = event.target.value.trim();
+            Form.addEvent('submit', function (event) {
+                event.stop();
 
-                    if (username === '') {
-                        return;
+                self.$checkForm().then(function(isFormValid) {
+                    if (isFormValid) {
+                        Form.submit();
                     }
-
-                    Registration.validateUsername(username).then(function(usernameExists) {
-                        if (!usernameExists) {
-                            return;
-                        }
-
-                        QUI.getMessageHandler().then(function(MH) {
-                            MH.addAttention(
-                                QUILocale.get(lg, 'controls.registrars.email.invalid_username'),
-                                UsernameInputElm
-                            );
-                        });
-                    });
                 });
-            }
+            });
+
+            Elm.getElements('input').addEvent('blur', function () {
+                self.$checkForm();
+            });
+
+            Elm.getElements('input').addEvent('keydown', function (event) {
+                
+                self.$checkForm();
+            });
+
+            self.$checkForm();
+        },
+
+        /**
+         * Checks if the form is valid and can be sent
+         *
+         * @return {Promise} - return true if form can be submitted; false otherwise
+         */
+        $checkForm: function () {
+            var self      = this;
+            var Elm       = this.getElm();
+            var SubmitBtn = Elm.getElement('button[type="submit"]');
+
+            var checkInvalidElements = function () {
+                var invalidElements = Elm.getElements(
+                    '.quiqqer-registration-field-error'
+                );
+
+                if (invalidElements.length) {
+                    SubmitBtn.disabled = true;
+                    return false;
+                }
+
+                SubmitBtn.disabled = false;
+                return true;
+            };
+
+            return new Promise(function (resolve) {
+                var checkPromises = [];
+
+                if (self.$UsernameInput) {
+                    checkPromises.push(
+                        Registration.inputUsernameValidation(self.$UsernameInput)
+                    );
+                }
+
+                if (self.$EmailInput) {
+                    checkPromises.push(
+                        Registration.inputEmailValidation(self.$EmailInput)
+                    );
+                }
+
+                if (!checkPromises.length) {
+                    resolve(checkInvalidElements());
+                    return;
+                }
+
+                Promise.all(checkPromises).then(checkInvalidElements);
+            });
         }
     });
 });

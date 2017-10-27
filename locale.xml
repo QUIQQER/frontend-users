@@ -335,8 +335,12 @@
             <en><![CDATA[Register now]]></en>
         </locale>
         <locale name="exception.registrars.email.empty_username">
-            <de><![CDATA[Es wurde kein Benutzername übergeben. Bitte geben Sie einen Benutzernamen an.]]></de>
-            <en><![CDATA[No username given. Please provide a username.]]></en>
+            <de><![CDATA[Bitte geben Sie einen Benutzernamen an.]]></de>
+            <en><![CDATA[Please provide a username.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.empty_email">
+            <de><![CDATA[Bitte geben Sie eine E-Mail-Adresse an.]]></de>
+            <en><![CDATA[Please provide an e-mail address.]]></en>
         </locale>
         <locale name="exception.registrars.email.different_emails">
             <de><![CDATA[Die übergebenen E-Mail-Adressen stimmen nicht überein.]]></de>
@@ -347,8 +351,12 @@
             <en><![CDATA[The given passwords do not match.]]></en>
         </locale>
         <locale name="exception.registrars.email.username_already_exists">
-            <de><![CDATA[Der Benutzername bzw. die E-Mail-Adresse exisitert bereits.]]></de>
-            <en><![CDATA[The username or e-mail address already exists.]]></en>
+            <de><![CDATA[Der Benutzername exisitert bereits.]]></de>
+            <en><![CDATA[The username already exists.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.username_already_exists">
+            <de><![CDATA[Die E-Mail-Adresse exisitert bereits.]]></de>
+            <en><![CDATA[The e-mail address already exists.]]></en>
         </locale>
         <locale name="message.registrars.email.registration_success_manual">
             <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
@@ -469,12 +477,15 @@ Your user account on [host] has been successfully activated. You can now log in 
             <en><![CDATA[Title]]></en>
         </locale>
 
-        <!-- Controls: frontend/controls/registrars/Email -->
-        <locale name="controls.registrars.email.invalid_username">
+        <!-- Class: frontend/classes/Registration -->
+        <locale name="frontend.classes.registration.username_taken">
             <de><![CDATA[Dieser Benutzername ist bereits vergeben und kann daher nicht verwendet werden.]]></de>
             <en><![CDATA[This username is already taken and can not be used.]]></en>
         </locale>
-
+        <locale name="frontend.classes.registration.email_taken">
+            <de><![CDATA[Diese E-Mail-Adresse ist bereits vergeben und kann daher nicht verwendet werden.]]></de>
+            <en><![CDATA[This email address is already taken and can not be used.]]></en>
+        </locale>
     </groups>
 
 </locales>
