@@ -48,14 +48,13 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
         },
 
         /**
-         * Execute username validation for the given Input
+         * Execute username validation
          *
-         * @param {HTMLInputElement} UsernameInput
+         * @param {String} username
          * @return {Promise} - return true if valid and false if invalid
          */
-        inputUsernameValidation: function (UsernameInput) {
+        usernameValidation: function (username) {
             var self     = this;
-            var username = UsernameInput.value.trim();
 
             if (username === '') {
                 return Promise.resolve(true);
@@ -63,35 +62,19 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
             return new Promise(function (resolve) {
                 self.validateUsername(username).then(function (usernameExists) {
-                    if (!usernameExists) {
-                        UsernameInput.removeClass('quiqqer-registration-field-error');
-                        resolve(true);
-                        return;
-                    }
-
-                    UsernameInput.addClass('quiqqer-registration-field-error');
-
-                    QUI.getMessageHandler().then(function (MH) {
-                        MH.addAttention(
-                            QUILocale.get(lg, 'frontend.classes.registration.username_taken'),
-                            UsernameInput
-                        );
-
-                        resolve(false);
-                    });
+                    resolve(!usernameExists);
                 });
             });
         },
 
         /**
-         * Exdecute email address validation for the given Input
+         * Exdecute email address validation for the e-mail address
          *
-         * @param {HTMLInputElement} EmailInput
+         * @param {String} email
          * @return {Promise} - return true if valid and false if invalid
          */
-        inputEmailValidation: function (EmailInput) {
+        emailValidation: function (email) {
             var self  = this;
-            var email = EmailInput.value.trim();
 
             if (email === '') {
                 return Promise.resolve(true);
@@ -99,22 +82,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
             return new Promise(function (resolve) {
                 self.validateEmail(email).then(function (emailExists) {
-                    if (!emailExists) {
-                        EmailInput.removeClass('quiqqer-registration-field-error');
-                        resolve(true);
-                        return;
-                    }
-
-                    EmailInput.addClass('quiqqer-registration-field-error');
-
-                    QUI.getMessageHandler().then(function (MH) {
-                        MH.addAttention(
-                            QUILocale.get(lg, 'frontend.classes.registration.email_taken'),
-                            EmailInput
-                        );
-
-                        resolve(false);
-                    });
+                    resolve(!emailExists);
                 });
             });
         }

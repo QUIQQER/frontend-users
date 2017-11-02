@@ -243,6 +243,16 @@
             <de><![CDATA[Sie werden automatisch weitergeleitet. Sollte die Weiterleitung nicht funktionieren, klicken Sie bitte hier.]]></de>
             <en><![CDATA[You will be automatically redirected. If the redirect does not work, please click here.]]></en>
         </locale>
+
+        <!-- Registrar: E-Mail -->
+        <locale name="exception.registrars.email.username_already_exists">
+            <de><![CDATA[Der Benutzername exisitert bereits.]]></de>
+            <en><![CDATA[The username already exists.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.email_already_exists">
+            <de><![CDATA[Die E-Mail-Adresse exisitert bereits.]]></de>
+            <en><![CDATA[The e-mail address already exists.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -349,14 +359,6 @@
         <locale name="exception.registrars.email.different_passwords">
             <de><![CDATA[Die übergebenen Passwörter stimmen nicht überein.]]></de>
             <en><![CDATA[The given passwords do not match.]]></en>
-        </locale>
-        <locale name="exception.registrars.email.username_already_exists">
-            <de><![CDATA[Der Benutzername exisitert bereits.]]></de>
-            <en><![CDATA[The username already exists.]]></en>
-        </locale>
-        <locale name="exception.registrars.email.username_already_exists">
-            <de><![CDATA[Die E-Mail-Adresse exisitert bereits.]]></de>
-            <en><![CDATA[The e-mail address already exists.]]></en>
         </locale>
         <locale name="message.registrars.email.registration_success_manual">
             <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
