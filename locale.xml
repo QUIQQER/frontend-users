@@ -392,6 +392,10 @@
             <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert.]]></de>
             <en><![CDATA[Your user account has been activated successfully.]]></en>
         </locale>
+        <locale name="registrars.email.password_auto_generate">
+            <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Registrierung per E-Mail zugesandt.]]></de>
+            <en><![CDATA[Your account password will be mailed to you after registration.]]></en>
+        </locale>
 
         <!-- Registration Notice -->
         <locale name="mail.registration_notice.subject">

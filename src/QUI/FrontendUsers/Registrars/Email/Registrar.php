@@ -25,12 +25,25 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
-        $Handler    = FrontendUsers\Handler::getInstance();
-        $settings   = $this->getSettings();
-        $SystemUser = QUI::getUsers()->getSystemUser();
+        $Handler              = FrontendUsers\Handler::getInstance();
+        $settings             = $this->getSettings();
+        $registrationSettings = $Handler->getRegistrationSettings();
+        $SystemUser           = QUI::getUsers()->getSystemUser();
 
+        // set e-mail address
         $User->setAttribute('email', $this->getAttribute('email'));
-        $User->setPassword($this->getAttribute('password'), $SystemUser);
+
+        // set password
+        if ($registrationSettings['passwordInput'] === 'sendmail') {
+            $randomPass = QUI\Security\Password::generateRandom();
+            $User->setPassword($randomPass, $SystemUser);
+            // @todo send $randomPass via e-mail
+
+            \QUI\System\Log::writeRecursive($randomPass);
+        } else {
+            $User->setPassword($this->getAttribute('password'), $SystemUser);
+        }
+
         $User->save($SystemUser);
 
         $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
@@ -205,14 +218,16 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         // Password check
-        $password        = $this->getAttribute('password');
-        $passwordConfirm = $this->getAttribute('passwordConfirm');
+        if ($settings['passwordInput'] !== 'sendmail') {
+            $password        = $this->getAttribute('password');
+            $passwordConfirm = $this->getAttribute('passwordConfirm');
 
-        if ($password != $passwordConfirm) {
-            $invalidFields['password'] = new InvalidFormField(
-                'password',
-                $L->get($lg, 'exception.registrars.email.different_passwords')
-            );
+            if ($password != $passwordConfirm) {
+                $invalidFields['password'] = new InvalidFormField(
+                    'password',
+                    $L->get($lg, 'exception.registrars.email.different_passwords')
+                );
+            }
         }
 
         return $invalidFields;

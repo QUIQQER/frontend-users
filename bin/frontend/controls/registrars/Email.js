@@ -122,34 +122,38 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             };
 
             // Email validation
-            this.$EmailInput = Elm.getElement('input[name="email"]');
+            var EmailInput = Elm.getElement('input[name="email"]');
 
-            this.$EmailInput.addEvent('blur', function (event) {
-                Registration.emailValidation(event.target.value).then(function (isValid) {
-                    HandleInputValidation(
-                        event.target,
-                        isValid,
-                        QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
-                    );
+            if (EmailInput) {
+                EmailInput.addEvent('blur', function (event) {
+                    Registration.emailValidation(event.target.value).then(function (isValid) {
+                        HandleInputValidation(
+                            event.target,
+                            isValid,
+                            QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
+                        );
 
-                    CheckFormValidation();
+                        CheckFormValidation();
+                    });
                 });
-            });
+            }
 
             // Username validation
-            this.$UsernameInput = Elm.getElement('input[name="username"]');
+            var UsernameInput = Elm.getElement('input[name="username"]');
 
-            this.$UsernameInput.addEvent('blur', function (event) {
-                Registration.usernameValidation(event.target.value).then(function (isValid) {
-                    HandleInputValidation(
-                        event.target,
-                        isValid,
-                        QUILocale.get(lg, 'exception.registrars.email.username_already_exists')
-                    );
+            if (UsernameInput) {
+                UsernameInput.addEvent('blur', function (event) {
+                    Registration.usernameValidation(event.target.value).then(function (isValid) {
+                        HandleInputValidation(
+                            event.target,
+                            isValid,
+                            QUILocale.get(lg, 'exception.registrars.email.username_already_exists')
+                        );
 
-                    CheckFormValidation();
+                        CheckFormValidation();
+                    });
                 });
-            });
+            }
 
             // Password validation
             var PasswordStrengthElm = this.$Elm.getElement(
@@ -178,53 +182,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                         Form.submit();
                     }
                 });
-            });
-        },
-
-        /**
-         * Checks if the form is valid and can be sent
-         *
-         * @return {Promise} - return true if form can be submitted; false otherwise
-         */
-        $checkForm: function () {
-            var self = this;
-            var Elm  = this.getElm();
-
-            var checkInvalidElements = function () {
-                var invalidElements = Elm.getElements(
-                    '.quiqqer-registration-field-error'
-                );
-
-                if (invalidElements.length) {
-                    SubmitBtn.disabled = true;
-                    return false;
-                }
-
-                SubmitBtn.disabled = false;
-                return true;
-            };
-
-            return new Promise(function (resolve) {
-                var checkPromises = [];
-
-                if (self.$UsernameInput) {
-                    checkPromises.push(
-                        Registration.inputUsernameValidation(self.$UsernameInput)
-                    );
-                }
-
-                if (self.$EmailInput) {
-                    checkPromises.push(
-                        Registration.inputEmailValidation(self.$EmailInput)
-                    );
-                }
-
-                if (!checkPromises.length) {
-                    resolve(checkInvalidElements());
-                    return;
-                }
-
-                Promise.all(checkPromises).then(checkInvalidElements);
             });
         }
     });
