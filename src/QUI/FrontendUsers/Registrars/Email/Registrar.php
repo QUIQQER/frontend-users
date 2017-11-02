@@ -30,20 +30,57 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $registrationSettings = $Handler->getRegistrationSettings();
         $SystemUser           = QUI::getUsers()->getSystemUser();
 
+        /** @var QUI\Users\User $User */
+
         // set e-mail address
         $User->setAttribute('email', $this->getAttribute('email'));
 
-        // set password
-        if ($registrationSettings['passwordInput'] === 'sendmail') {
-            $randomPass = QUI\Security\Password::generateRandom();
-            $User->setPassword($randomPass, $SystemUser);
-            // @todo send $randomPass via e-mail
+        // set address data
+        $User->setAttributes(array(
+            'firstname' => $this->getAttribute('firstname'),
+            'lastname'  => $this->getAttribute('lastname')
+        ));
 
-            \QUI\System\Log::writeRecursive($randomPass);
-        } else {
-            $User->setPassword($this->getAttribute('password'), $SystemUser);
+        $UserAddress = $User->addAddress(array(
+            'salutation' => $this->getAttribute('salutation'),
+            'firstname'  => $this->getAttribute('firstname'),
+            'lastname'   => $this->getAttribute('lastname'),
+            'mail'       => $this->getAttribute('email'),
+            'company'    => $this->getAttribute('company'),
+            'street_no'  => $this->getAttribute('street_no'),
+            'zip'        => $this->getAttribute('zip'),
+            'city'       => $this->getAttribute('city'),
+            'country'    => mb_strtolower($this->getAttribute('country'))
+        ));
+
+        $tel    = $this->getAttribute('phone');
+        $mobile = $this->getAttribute('mobile');
+        $fax    = $this->getAttribute('fax');
+
+        if (!empty($tel)) {
+            $UserAddress->addPhone(array(
+                'type' => 'tel',
+                'no'   => $tel
+            ));
         }
 
+        if (!empty($mobile)) {
+            $UserAddress->addPhone(array(
+                'type' => 'mobile',
+                'no'   => $mobile
+            ));
+        }
+
+        if (!empty($fax)) {
+            $UserAddress->addPhone(array(
+                'type' => 'fax',
+                'no'   => $fax
+            ));
+        }
+
+        $UserAddress->save();
+
+        $User->setPassword($this->getAttribute('password'), $SystemUser);
         $User->save($SystemUser);
 
         $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
@@ -68,25 +105,26 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getSuccessMessage()
     {
-        $settings = $this->getSettings();
+        $registrarSettings = $this->getSettings();
+        $settings          = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
 
-        switch ($settings['activationMode']) {
+        switch ($registrarSettings['activationMode']) {
             case FrontendUsers\Handler::ACTIVATION_MODE_MANUAL:
-                return QUI::getLocale()->get(
+                $msg = QUI::getLocale()->get(
                     'quiqqer/frontend-users',
                     'message.registrars.email.registration_success_manual'
                 );
                 break;
 
             case FrontendUsers\Handler::ACTIVATION_MODE_AUTO:
-                return QUI::getLocale()->get(
+                $msg = QUI::getLocale()->get(
                     'quiqqer/frontend-users',
                     'message.registrars.email.registration_success_auto'
                 );
                 break;
 
             case FrontendUsers\Handler::ACTIVATION_MODE_MAIL:
-                return QUI::getLocale()->get(
+                $msg = QUI::getLocale()->get(
                     'quiqqer/frontend-users',
                     'message.registrars.email.registration_success_mail'
                 );
@@ -95,6 +133,34 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             default:
                 return parent::getPendingMessage();
         }
+
+        if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
+            $msg .= "<p>" . QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'registrars.email.password_auto_generate'
+            ) . "</p>";
+        }
+
+        return $msg;
+    }
+
+    /**
+     * Return pending message
+     * @return string
+     */
+    public function getPendingMessage()
+    {
+        $msg      = parent::getPendingMessage();
+        $settings = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
+
+        if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
+            $msg .= "<p>" . QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'registrars.email.password_auto_generate'
+            ) . "</p>";
+        }
+
+        return $msg;
     }
 
     /**
@@ -103,11 +169,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function validate()
     {
         $username = $this->getUsername();
+        $Handler  = FrontendUsers\Handler::getInstance();
+        $settings = $Handler->getRegistrationSettings();
+        $lg       = 'quiqqer/frontend-users';
+        $lgPrefix = 'exception.registrars.email.';
 
         if (empty($username)) {
             throw new FrontendUsers\Exception(array(
                 'quiqqer/frontend-users',
-                'exception.registrars.email.empty_username'
+                $lgPrefix . 'empty_username'
             ));
         }
 
@@ -117,7 +187,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             // Username already exists
             throw new FrontendUsers\Exception(array(
                 'quiqqer/frontend-users',
-                'exception.registrars.email.username_already_exists'
+                $lgPrefix . 'username_already_exists'
             ));
         } catch (\Exception $Exception) {
             // Username does not exist
@@ -130,7 +200,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if (empty($username)) {
                 throw new FrontendUsers\Exception(array(
                     'quiqqer/frontend-users',
-                    'exception.registrars.email.different_emails'
+                    $lgPrefix . 'different_emails'
                 ));
             }
         }
@@ -142,8 +212,22 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if (empty($username)) {
                 throw new FrontendUsers\Exception(array(
                     'quiqqer/frontend-users',
-                    'exception.registrars.email.different_passwords'
+                    $lgPrefix . 'different_passwords'
                 ));
+            }
+        }
+
+        // Address validation
+        if ((int)$settings['addressInput']) {
+            foreach ($Handler->getAddressFieldSettings() as $field => $settings) {
+                $val = $this->getAttribute($field);
+
+                if ($settings['required'] && empty($val)) {
+                    throw new FrontendUsers\Exception(array(
+                        'quiqqer/frontend-users',
+                        $lgPrefix . 'missing_address_fields'
+                    ));
+                }
             }
         }
     }
@@ -158,6 +242,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $username         = $this->getUsername();
         $L                = QUI::getLocale();
         $lg               = 'quiqqer/frontend-users';
+        $lgPrefix         = 'exception.registrars.email.';
         $invalidFields    = array();
         $RegistrarHandler = FrontendUsers\Handler::getInstance();
         $settings         = $RegistrarHandler->getRegistrationSettings();
@@ -172,14 +257,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 && $usernameInput === 'required') {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
-                    $L->get($lg, 'exception.registrars.email.empty_username')
+                    $L->get($lg, $lgPrefix . 'empty_username')
                 );
             }
 
             if ($usernameExists) {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
-                    $L->get($lg, 'exception.registrars.email.username_already_exists')
+                    $L->get($lg, $lgPrefix . 'username_already_exists')
                 );
             }
         } else {
@@ -187,7 +272,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if ($usernameExists) {
                 $invalidFields['email'] = new InvalidFormField(
                     'email',
-                    $L->get($lg, 'exception.registrars.email.email_already_exists')
+                    $L->get($lg, $lgPrefix . 'email_already_exists')
                 );
             }
         }
@@ -199,34 +284,48 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (empty($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, 'exception.registrars.email.empty_email')
+                $L->get($lg, $lgPrefix . 'empty_email')
             );
         }
 
         if ($Users->emailExists($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, 'exception.registrars.email.email_already_exists')
+                $L->get($lg, $lgPrefix . 'email_already_exists')
             );
         }
 
         if ($email != $emailConfirm) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, 'exception.registrars.email.different_emails')
+                $L->get($lg, $lgPrefix . 'different_emails')
             );
         }
 
         // Password check
-        if ($settings['passwordInput'] !== 'sendmail') {
+        if ($settings['passwordInput'] !== $RegistrarHandler::PASSWORD_INPUT_SENDMAIL) {
             $password        = $this->getAttribute('password');
             $passwordConfirm = $this->getAttribute('passwordConfirm');
 
             if ($password != $passwordConfirm) {
                 $invalidFields['password'] = new InvalidFormField(
                     'password',
-                    $L->get($lg, 'exception.registrars.email.different_passwords')
+                    $L->get($lg, $lgPrefix . 'different_passwords')
                 );
+            }
+        }
+
+        // Address validation
+        if ((int)$settings['addressInput']) {
+            foreach ($RegistrarHandler->getAddressFieldSettings() as $field => $settings) {
+                $val = $this->getAttribute($field);
+
+                if ($settings['required'] && empty($val)) {
+                    $invalidFields[$field] = new InvalidFormField(
+                        $field,
+                        $L->get($lg, $lgPrefix . 'missing_field')
+                    );
+                }
             }
         }
 

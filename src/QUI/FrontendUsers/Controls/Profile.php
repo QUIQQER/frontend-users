@@ -46,8 +46,6 @@ class Profile extends Control
         $current    = false;
         $categories = QUI\FrontendUsers\Utils::getProfileCategories();
 
-        \QUI\System\Log::writeRecursive($categories);
-
         if (QUI::getRequest()->get('category')) {
             $this->setAttribute('category', QUI::getRequest()->get('category'));
         }

@@ -7,6 +7,7 @@
 namespace QUI\FrontendUsers\Registrars\Email;
 
 use QUI;
+use QUI\Countries\Controls\Select as CountrySelect;
 
 /**
  * Class EMail
@@ -46,10 +47,31 @@ class Control extends QUI\Control
         $showAddress          = false;
         $usernameSetting      = $registrationSettings['usernameInput'];
 
+        $Engine->assign(array(
+            'invalidFields' => $this->getAttribute('invalidFields'),
+            'fields'        => $this->getAttribute('fields')
+        ));
+
+        // check if email is username
+        if ($registrationSettings['usernameInput'] === $RegistrarHandler::USERNAME_INPUT_NONE) {
+            $this->setJavaScriptControlOption('emailIsUsername', true);
+        }
+
+        // address input
         if (boolval($registrationSettings['addressInput'])) {
             $addressFields = $RegistrarHandler->getAddressFieldSettings();
 
             $Engine->assign('addressFields', $addressFields);
+
+            if ($addressFields['country']['show']) {
+                $Engine->assign('CountrySelect', new CountrySelect(array(
+                    'selected' => mb_strtoupper(QUI::getRewrite()->getProject()->getLang()),
+                    'required' => $addressFields['country']['required'],
+                    'class'    => 'quiqqer-registration-field-element',
+                    'name'     => 'country'
+                )));
+            }
+
             $addressTemplate = $Engine->fetch(dirname(__FILE__) . '/Registration.Address.html');
 
             foreach ($addressFields as $field) {
@@ -61,8 +83,6 @@ class Control extends QUI\Control
         }
 
         $Engine->assign(array(
-            'fields'          => $this->getAttribute('fields'),
-            'invalidFields'   => $this->getAttribute('invalidFields'),
             'addressTemplate' => $addressTemplate,
             'showAddress'     => $showAddress,
             'usernameSetting' => $usernameSetting,

@@ -34,6 +34,20 @@ class Handler extends Singleton
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
+     * Password input types
+     */
+    const PASSWORD_INPUT_DEFAULT  = 'default';
+    const PASSWORD_INPUT_VALIDATE = 'validation';
+    const PASSWORD_INPUT_SENDMAIL = 'sendmail';
+
+    /**
+     * Username input types
+     */
+    const USERNAME_INPUT_NONE     = 'none';
+    const USERNAME_INPUT_OPTIONAL = 'optional';
+    const USERNAME_INPUT_REQUIRED = 'required';
+
+    /**
      * Site types
      */
     const SITE_TYPE_REGISTRATION = 'quiqqer/frontend-users:types/registration';
@@ -186,7 +200,8 @@ class Handler extends Singleton
      *
      * @return array
      */
-    public function getAddressFieldSettings() {
+    public function getAddressFieldSettings()
+    {
         $registrationSettings = $this->getRegistrationSettings();
         return json_decode($registrationSettings['addressFields'], true);
     }
@@ -282,9 +297,10 @@ class Handler extends Singleton
      *
      * @param QUI\Users\User $User
      * @param QUI\Projects\Project $Project
+     * @param string $userPassword (optional) - send user password
      * @return void
      */
-    public function sendWelcomeMail(QUI\Users\User $User, QUI\Projects\Project $Project)
+    public function sendWelcomeMail(QUI\Users\User $User, QUI\Projects\Project $Project, $userPassword = null)
     {
         $L      = QUI::getLocale();
         $lg     = 'quiqqer/frontend-users';
@@ -311,9 +327,14 @@ class Handler extends Singleton
                 $tplDir . 'mail.registration_welcome.html',
                 array(
                     'body' => $L->get($lg, 'mail.registration_welcome.body', array(
-                        'host'     => $host,
-                        'username' => $User->getUsername(),
-                        'loginUrl' => $loginUrl
+                        'host'         => $host,
+                        'username'     => $User->getUsername(),
+                        'loginUrl'     => $loginUrl,
+                        'userPassword' => is_null($userPassword) ? ''
+                            : $L->get($lg, 'mail.registration_welcome.body.password', array(
+                                'username' => $User->getUsername(),
+                                'password' => $userPassword
+                            ))
                     ))
                 )
             );

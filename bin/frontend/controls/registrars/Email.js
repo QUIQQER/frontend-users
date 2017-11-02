@@ -26,6 +26,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
         Extends: QUIControl,
         Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email',
 
+        options: {
+            emailisusername: false  // checks for existing username if only email field is enabled
+        },
+
         Binds: [
             '$onImport',
             '$checkForm'
@@ -33,9 +37,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
         initialize: function (options) {
             this.parent(options);
-
-            this.$UsernameInput = null;
-            this.$EmailInput    = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -112,21 +113,44 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
              * Check if the form is valid in its current state
              * and enable or disable form submit button
              */
-            var CheckFormValidation = function() {
+            var CheckFormValidation = function () {
                 // check if submit btn has to be disabled
                 var invalidElements = Elm.getElements(
                     '.quiqqer-registration-field-error-msg'
                 );
 
-                SubmitBtn.disabled = invalidElements.length;
+                var isValid = invalidElements.length;
+
+                SubmitBtn.disabled = isValid;
+
+                return isValid;
             };
 
             // Email validation
-            var EmailInput = Elm.getElement('input[name="email"]');
+            var EmailInput      = Elm.getElement('input[name="email"]');
+            var emailIsUsername = this.getAttribute('emailisusername');
 
             if (EmailInput) {
                 EmailInput.addEvent('blur', function (event) {
-                    Registration.emailValidation(event.target.value).then(function (isValid) {
+                    var value         = event.target.value;
+                    var checkPromises = [
+                        Registration.emailValidation(event.target.value)
+                    ];
+
+                    if (emailIsUsername) {
+                        checkPromises.push(Registration.usernameValidation(value));
+                    }
+
+                    Promise.all(checkPromises).then(function (result) {
+                        var isValid = true;
+
+                        for (var i = 0, len = result.length; i < len; i++) {
+                            if (!result[i]) {
+                                isValid = false;
+                                break;
+                            }
+                        }
+
                         HandleInputValidation(
                             event.target,
                             isValid,
@@ -177,11 +201,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             Form.addEvent('submit', function (event) {
                 event.stop();
 
-                self.$checkForm().then(function (isFormValid) {
-                    if (isFormValid) {
-                        Form.submit();
-                    }
-                });
+                if (CheckFormValidation()) {
+                    Form.submit();
+                }
             });
         }
     });

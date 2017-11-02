@@ -380,6 +380,14 @@
             <de><![CDATA[Die übergebenen Passwörter stimmen nicht überein.]]></de>
             <en><![CDATA[The given passwords do not match.]]></en>
         </locale>
+        <locale name="exception.registrars.email.missing_address_fields">
+            <de><![CDATA[Es wurden nicht alle Address-Pflichtfelder angegeben.]]></de>
+            <en><![CDATA[Not all required address fields were specified.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.missing_field">
+            <de><![CDATA[Bitte füllen Sie dieses Feld aus.]]></de>
+            <en><![CDATA[Please fill out this field.]]></en>
+        </locale>
         <locale name="message.registrars.email.registration_success_manual">
             <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
             <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
@@ -393,8 +401,8 @@
             <en><![CDATA[Your user account has been activated successfully.]]></en>
         </locale>
         <locale name="registrars.email.password_auto_generate">
-            <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Registrierung per E-Mail zugesandt.]]></de>
-            <en><![CDATA[Your account password will be mailed to you after registration.]]></en>
+            <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.]]></de>
+            <en><![CDATA[Your account password will be mailed to you after your account has been activated.]]></en>
         </locale>
 
         <!-- Registration Notice -->
@@ -453,6 +461,16 @@ Ihr Benutzerkonto auf [host] wurde erfolgreich aktiviert. Sie können sich nun a
 <p>
 Your user account on [host] has been successfully activated. You can now log in at <a href="[loginUrl]">[loginUrl]</a>.
 </p>]]></en>
+        </locale>
+        <locale name="mail.registration_welcome.body.password" html="true">
+            <de><![CDATA[<p>Ihre Login-Daten:
+
+Benutzername: [username]<br>
+Passwort: [password]</p>]]></de>
+            <en><![CDATA[<p>Your login credentials:
+
+Username: [username]<br>
+Password: [password]</p>]]></en>
         </locale>
 
     </groups>

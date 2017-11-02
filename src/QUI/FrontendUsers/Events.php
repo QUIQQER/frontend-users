@@ -43,18 +43,27 @@ class Events
             return;
         }
 
+        // set random password
+        $randomPass = null;
+
+        if ($registrationSettings['passwordInput'] === $Handler::PASSWORD_INPUT_SENDMAIL) {
+            $randomPass = QUI\Security\Password::generateRandom();
+            $User->setPassword($randomPass, QUI::getUsers()->getSystemUser());
+            $User->save(QUI::getUsers()->getSystemUser());
+        }
+
         // send welcome mail to user
         $project     = $User->getAttribute($Handler::USER_ATTR_REGISTRATION_PROJECT);
         $projectLang = $User->getAttribute($Handler::USER_ATTR_REGISTRATION_PROJECT_LANG);
 
         // if no project data was set to the user this means the user
-        // was created by hand (by an administrator)
+        // was created manually (by an administrator)
         if (empty($project) || empty($projectLang)) {
             return;
         }
 
         $Project = QUI::getProjectManager()->getProject($project, $projectLang);
-        $Handler->sendWelcomeMail($User, $Project);
+        $Handler->sendWelcomeMail($User, $Project, $randomPass);
     }
 
     /**
@@ -179,35 +188,35 @@ class Events
                 'show'     => true,
                 'required' => false
             ),
-            'firstname' => array(
+            'firstname'  => array(
                 'show'     => true,
                 'required' => true
             ),
-            'lastname' => array(
+            'lastname'   => array(
                 'show'     => true,
                 'required' => true
             ),
-            'street_no' => array(
+            'street_no'  => array(
                 'show'     => true,
                 'required' => true
             ),
-            'zip' => array(
+            'zip'        => array(
                 'show'     => true,
                 'required' => true
             ),
-            'city' => array(
+            'city'       => array(
                 'show'     => true,
                 'required' => true
             ),
-            'country' => array(
+            'country'    => array(
                 'show'     => true,
                 'required' => true
             ),
-            'company' => array(
+            'company'    => array(
                 'show'     => true,
                 'required' => false
             ),
-            'phone' => array(
+            'phone'      => array(
                 'show'     => true,
                 'required' => false
             )
