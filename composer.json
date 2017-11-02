@@ -17,7 +17,7 @@
   },
   "require": {
     "quiqqer/quiqqer": "*@dev",
-    "quiqqer/watcher": "*@dev",
+    "quiqqer/watcher": ">1.0|dev-master|dev-dev",
     "quiqqer/countries": ">1.1|dev-master|dev-dev"
   },
   "autoload": {
