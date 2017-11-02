@@ -158,8 +158,8 @@
             <en><![CDATA[Address input]]></en>
         </locale>
         <locale name="settings.addressInput.description">
-            <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihre Haupt-Adresse festzulegen]]></de>
-            <en><![CDATA[Users have the option to set their main address when registering]]></en>
+            <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihre Haupt-Adresse festzulegen (gilt nur für die Registrierungs-Methode via E-Mail!)]]></de>
+            <en><![CDATA[Users have the option to set their main address when registering (only valid for the registration via e-mail!)]]></en>
         </locale>
         <locale name="settings.usernameInput.title">
             <de><![CDATA[Eingabe Benutzername]]></de>
@@ -180,6 +180,26 @@
         <locale name="settings.usernameInput.option.required">
             <de><![CDATA[Benutzername ist Pflichtangabe]]></de>
             <en><![CDATA[Username input is required]]></en>
+        </locale>
+        <locale name="settings.passwordInput.title">
+            <de><![CDATA[Passwort-Eingabe]]></de>
+            <en><![CDATA[Password input]]></en>
+        </locale>
+        <locale name="settings.passwordInput.description" html="true">
+            <de><![CDATA[Bestimmt die Art der Passwort-Eingabe bei <b>Registrierung via E-Mail-Adresse</b>. Die Anzeige der Passwort-Stärke setzt aktiviertes <b>JavaScript</b> im Browser des Benutzers voraus.]]></de>
+            <en><![CDATA[Determines the type of password input for <b>registration via e-mail-address</b>. The display of password strength requires that <b>JavaScript</b> is activated in the browser of the user.]]></en>
+        </locale>
+        <locale name="settings.passwordInput.option.default">
+            <de><![CDATA[Passwort-Eingabe per Passwort-Feld]]></de>
+            <en><![CDATA[Password input via password input]]></en>
+        </locale>
+        <locale name="settings.passwordInput.option.validation">
+            <de><![CDATA[Passwort-Eingabe per Passwort-Feld mit Anzeige der Passwort-Stärke]]></de>
+            <en><![CDATA[Password input via password input with display of password strength]]></en>
+        </locale>
+        <locale name="settings.passwordInput.option.sendmail">
+            <de><![CDATA[Passwort automatisch generieren und per E-Mail zusenden]]></de>
+            <en><![CDATA[Auto-generate password and send it via e-mail]]></en>
         </locale>
         <locale name="settings.activationVerificationValidityDuration.title">
             <de><![CDATA[Gültigkeitsdauer Aktivierungs-Link]]></de>

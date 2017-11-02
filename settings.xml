@@ -82,6 +82,10 @@
                 <conf name="addressFields">
                     <type><![CDATA[string]]></type>
                 </conf>
+                <conf name="passwordInput">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue>default</defaultvalue>
+                </conf>
             </section>
 
             <section name="registrars">
@@ -184,6 +188,24 @@
                             </option>
                             <option value="required">
                                 <locale group="quiqqer/frontend-users" var="settings.usernameInput.option.required"/>
+                            </option>
+                        </select>
+
+                        <select conf="registration.passwordInput">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.description"/>
+                            </description>
+                            <option value="default">
+                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.default"/>
+                            </option>
+                            <option value="validation">
+                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.validation"/>
+                            </option>
+                            <option value="sendmail">
+                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.sendmail"/>
                             </option>
                         </select>
 

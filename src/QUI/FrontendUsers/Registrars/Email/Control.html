@@ -50,38 +50,45 @@
         </label>
     </fieldset>
 
-    <fieldset class="quiqqer-registration-password">
-        <label>
-            <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/frontend-users" var="registrars.email.label.password"} *
-            </span>
+    {if $passwordInput != 'sendmail'}
+        <fieldset class="quiqqer-registration-password">
+            <label>
+                <span class="quiqqer-registration-field-title">
+                    {locale group="quiqqer/frontend-users" var="registrars.email.label.password"} *
+                </span>
 
-            <input type="password" name="password"
-                   value="{if isset($fields['password'])}{$fields['password']}{/if}"
-                   class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
-                   autocomplete="off"
-                   required/>
-            {if isset($invalidFields['password'])}
-            <span class="quiqqer-registration-field-error-msg">
-                    {$invalidFields['password']->getMsg()}
-            </span>
-            {/if}
-        </label>
-    </fieldset>
+                <input type="password" name="password"
+                       value="{if isset($fields['password'])}{$fields['password']}{/if}"
+                       class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
+                       autocomplete="off"
+                       required/>
+                {if isset($invalidFields['password'])}
+                <span class="quiqqer-registration-field-error-msg">
+                        {$invalidFields['password']->getMsg()}
+                </span>
+                {/if}
+            </label>
+        </fieldset>
 
-    <fieldset class="quiqqer-registration-passwordConfirm">
-        <label>
-            <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/frontend-users" var="registrars.email.label.password_confirm"} *
-            </span>
+        <fieldset class="quiqqer-registration-passwordConfirm">
+            <label>
+                <span class="quiqqer-registration-field-title">
+                    {locale group="quiqqer/frontend-users" var="registrars.email.label.password_confirm"} *
+                </span>
 
-            <input type="password" name="passwordConfirm"
-                   value="{if isset($fields['passwordConfirm'])}{$fields['passwordConfirm']}{/if}"
-                   class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
-                   autocomplete="off"
-                   required/>
-        </label>
-    </fieldset>
+                <input type="password" name="passwordConfirm"
+                       value="{if isset($fields['passwordConfirm'])}{$fields['passwordConfirm']}{/if}"
+                       class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
+                       autocomplete="off"
+                       required/>
+            </label>
+        </fieldset>
+        {if $passwordInput == 'validation'}
+            <div class="quiqqer-registration-passwordstrength"></div>
+        {/if}
+    {else}
+
+    {/if}
 
 </section>
 

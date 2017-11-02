@@ -65,7 +65,8 @@ class Control extends QUI\Control
             'invalidFields'   => $this->getAttribute('invalidFields'),
             'addressTemplate' => $addressTemplate,
             'showAddress'     => $showAddress,
-            'usernameSetting' => $usernameSetting
+            'usernameSetting' => $usernameSetting,
+            'passwordInput'   => $registrationSettings['passwordInput']
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Control.html');

@@ -9,13 +9,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
     'qui/QUI',
     'qui/controls/Control',
     'qui/utils/Functions',
+    'qui/controls/utils/PasswordSecurity',
 
     'Locale',
     'package/quiqqer/frontend-users/bin/Registration',
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email.css'
 
-], function (QUI, QUIControl, QUIFunctionUtils, QUILocale, Registration) {
+], function (QUI, QUIControl, QUIFunctionUtils, QUIPwSecurityIndicator, QUILocale, Registration) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -81,7 +82,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
              * @param {String} [errorMsg]
              * @constructor
              */
-            var FuncHandleInputValidation = function (Input, isValid, errorMsg) {
+            var HandleInputValidation = function (Input, isValid, errorMsg) {
                 var ErrorElm = Input.getNext(
                     '.quiqqer-registration-field-error-msg'
                 );
@@ -107,6 +108,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                 }).inject(Input, 'after');
             };
 
+            /**
+             * Check if the form is valid in its current state
+             * and enable or disable form submit button
+             */
             var CheckFormValidation = function() {
                 // check if submit btn has to be disabled
                 var invalidElements = Elm.getElements(
@@ -121,7 +126,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
             this.$EmailInput.addEvent('blur', function (event) {
                 Registration.emailValidation(event.target.value).then(function (isValid) {
-                    FuncHandleInputValidation(
+                    HandleInputValidation(
                         event.target,
                         isValid,
                         QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
@@ -136,7 +141,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
             this.$UsernameInput.addEvent('blur', function (event) {
                 Registration.usernameValidation(event.target.value).then(function (isValid) {
-                    FuncHandleInputValidation(
+                    HandleInputValidation(
                         event.target,
                         isValid,
                         QUILocale.get(lg, 'exception.registrars.email.username_already_exists')
@@ -145,6 +150,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                     CheckFormValidation();
                 });
             });
+
+            // Password validation
+            var PasswordStrengthElm = this.$Elm.getElement(
+                '.quiqqer-registration-passwordstrength'
+            );
+
+            if (PasswordStrengthElm) {
+                var PasswordInput = this.$Elm.getElement(
+                    '.quiqqer-registration-password input'
+                );
+
+                var PassStrenghtIndicator = new QUIPwSecurityIndicator().inject(
+                    PasswordStrengthElm
+                );
+
+                PassStrenghtIndicator.bindInput(PasswordInput);
+            }
 
             var Form = Elm.getParent('form');
 
