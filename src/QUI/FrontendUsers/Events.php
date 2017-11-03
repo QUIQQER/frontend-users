@@ -43,16 +43,7 @@ class Events
             return;
         }
 
-        // set random password
-        $randomPass = null;
-
-        if ($registrationSettings['passwordInput'] === $Handler::PASSWORD_INPUT_SENDMAIL) {
-            $randomPass = QUI\Security\Password::generateRandom();
-            $User->setPassword($randomPass, QUI::getUsers()->getSystemUser());
-            $User->save(QUI::getUsers()->getSystemUser());
-        }
-
-        // send welcome mail to user
+        // check if user registered himself
         $project     = $User->getAttribute($Handler::USER_ATTR_REGISTRATION_PROJECT);
         $projectLang = $User->getAttribute($Handler::USER_ATTR_REGISTRATION_PROJECT_LANG);
 
@@ -62,6 +53,16 @@ class Events
             return;
         }
 
+        // set random password
+        $randomPass = null;
+
+        if ($registrationSettings['passwordInput'] === $Handler::PASSWORD_INPUT_SENDMAIL) {
+            $randomPass = QUI\Security\Password::generateRandom();
+            $User->setPassword($randomPass, QUI::getUsers()->getSystemUser());
+            $User->save(QUI::getUsers()->getSystemUser());
+        }
+
+        // send welcome mail
         $Project = QUI::getProjectManager()->getProject($project, $projectLang);
         $Handler->sendWelcomeMail($User, $Project, $randomPass);
     }

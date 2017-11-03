@@ -273,6 +273,7 @@
             <de><![CDATA[Die E-Mail-Adresse exisitert bereits.]]></de>
             <en><![CDATA[The e-mail address already exists.]]></en>
         </locale>
+
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -322,10 +323,20 @@
             <en><![CDATA[Avatar]]></en>
         </locale>
 
+        <!-- Class: Handler -->
+        <locale name="exception.handler.check_config.no_welcome_mail_for_password_send">
+            <de><![CDATA[Die Passwort-Eingabe ist auf "Passwort zusenden" gestellt, die Willkommens-Mail bei Aktivierung ist jedoch deaktiviert. Bitte aktivieren Sie die Willkommens-Mail, damit das Passwort über diesen Weg einem Benutzer zugesendet werden kann.]]></de>
+            <en><![CDATA[The password input is set to "Send password", but the "Welcome mail on activation" is deactivated. Please activate the welcome mail so that the password can be sent to a user via this way.]]></en>
+        </locale>
+
         <!-- Site type: types/registration -->
         <locale name="message.types.registration.already_registered">
             <de><![CDATA[Sie sind bereits registriert und haben ein aktives Benutzerkonto. Um ein neues Benutzerkonto zu registrieren, loggen Sie sich bitte aus.]]></de>
             <en><![CDATA[You are already registered and have an active user account. To register a new user account, please log out.]]></en>
+        </locale>
+        <locale name="message.types.registration.configuration_error">
+            <de><![CDATA[Eine Registrierung ist z.Z. nicht möglich, da eine Fehlkonfiguration im Registrierungs-Modul vorliegt. Bitte wenden Sie sich an einen Administrator.]]></de>
+            <en><![CDATA[A registration is currently not possible of a configuration error in the registry module. Please contact an administrator.]]></en>
         </locale>
 
         <!-- Generic registration messages -->
@@ -456,18 +467,20 @@ At [date] you registered on [host]. To confirm your e-mail address and activate 
             <de><![CDATA[<h1>Herzlich Willkommen, [username]!</h1>
 <p>
 Ihr Benutzerkonto auf [host] wurde erfolgreich aktiviert. Sie können sich nun auf <a href="[loginUrl]">[loginUrl]</a> einloggen.
+[userPassword]
 </p>]]></de>
             <en><![CDATA[<h1>Welcome, [username]!</h1>
 <p>
 Your user account on [host] has been successfully activated. You can now log in at <a href="[loginUrl]">[loginUrl]</a>.
+[userPassword]
 </p>]]></en>
         </locale>
         <locale name="mail.registration_welcome.body.password" html="true">
-            <de><![CDATA[<p>Ihre Login-Daten:
+            <de><![CDATA[<p>Ihre Login-Daten:<br><br>
 
 Benutzername: [username]<br>
 Passwort: [password]</p>]]></de>
-            <en><![CDATA[<p>Your login credentials:
+            <en><![CDATA[<p>Your login credentials:<br><br>
 
 Username: [username]<br>
 Password: [password]</p>]]></en>
@@ -530,6 +543,17 @@ Password: [password]</p>]]></en>
             <de><![CDATA[Diese E-Mail-Adresse ist bereits vergeben und kann daher nicht verwendet werden.]]></de>
             <en><![CDATA[This email address is already taken and can not be used.]]></en>
         </locale>
+
+        <!-- Control: frontend/controls/registrars/Email -->
+        <locale name="exception.registrars.email.email_addresses_not_equal">
+            <de><![CDATA[Die E-Mail-Adressen sind nicht identisch.]]></de>
+            <en><![CDATA[The e-mail addresses are not equal.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.passwords_not_equal">
+            <de><![CDATA[Die Passwörter sind nicht identisch.]]></de>
+            <en><![CDATA[The passwords are not equal.]]></en>
+        </locale>
+
     </groups>
 
 </locales>

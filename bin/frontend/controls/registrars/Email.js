@@ -127,14 +127,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             };
 
             // Email validation
-            var EmailInput      = Elm.getElement('input[name="email"]');
-            var emailIsUsername = this.getAttribute('emailisusername');
+            var EmailInput        = Elm.getElement('input[name="email"]');
+            var EmailConfirmInput = Elm.getElement('input[name="emailConfirm"]');
+            var emailIsUsername   = this.getAttribute('emailisusername');
 
             if (EmailInput) {
                 EmailInput.addEvent('blur', function (event) {
                     var value         = event.target.value;
                     var checkPromises = [
-                        Registration.emailValidation(event.target.value)
+                        Registration.emailValidation(value)
                     ];
 
                     if (emailIsUsername) {
@@ -162,6 +163,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                 });
             }
 
+            if (EmailConfirmInput) {
+                EmailConfirmInput.addEvent('blur', function (event) {
+                    HandleInputValidation(
+                        event.target,
+                        EmailInput.value === event.target.value,
+                        QUILocale.get(lg, 'exception.registrars.email.email_addresses_not_equal')
+                    );
+                });
+            }
+
             // Username validation
             var UsernameInput = Elm.getElement('input[name="username"]');
 
@@ -180,22 +191,34 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             }
 
             // Password validation
+            var PasswordInput        = Elm.getElement('input[name="password"]');
+            var PasswordConfirmInput = Elm.getElement('input[name="passwordConfirm"]');
+
             var PasswordStrengthElm = this.$Elm.getElement(
                 '.quiqqer-registration-passwordstrength'
             );
 
-            if (PasswordStrengthElm) {
-                var PasswordInput = this.$Elm.getElement(
-                    '.quiqqer-registration-password input'
-                );
+            if (PasswordInput) {
+                if (PasswordConfirmInput) {
+                    PasswordConfirmInput.addEvent('blur', function (event) {
+                        HandleInputValidation(
+                            event.target,
+                            PasswordInput.value === event.target.value,
+                            QUILocale.get(lg, 'exception.registrars.email.passwords_not_equal')
+                        );
+                    });
+                }
 
-                var PassStrenghtIndicator = new QUIPwSecurityIndicator().inject(
-                    PasswordStrengthElm
-                );
+                if (PasswordStrengthElm) {
+                    var PassStrenghtIndicator = new QUIPwSecurityIndicator().inject(
+                        PasswordStrengthElm
+                    );
 
-                PassStrenghtIndicator.bindInput(PasswordInput);
+                    PassStrenghtIndicator.bindInput(PasswordInput);
+                }
             }
 
+            // Handle form submit
             var Form = Elm.getParent('form');
 
             Form.addEvent('submit', function (event) {

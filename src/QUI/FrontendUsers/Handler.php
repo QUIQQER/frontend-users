@@ -517,4 +517,25 @@ class Handler extends Singleton
 
         return current($result);
     }
+
+    /**
+     * Checks the current configuration of quiqqer/frontend-users
+     * and throws Exceptions if a misconfiguration is detected
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function checkConfiguration()
+    {
+        $lg       = 'quiqqer/frontend-users';
+        $settings = $this->getRegistrationSettings();
+
+        if ($settings['passwordInput'] === self::PASSWORD_INPUT_SENDMAIL
+            && !(int)$settings['userWelcomeMail']) {
+            throw new Exception(array(
+                $lg,
+                'exception.handler.check_config.no_welcome_mail_for_password_send'
+            ));
+        }
+    }
 }

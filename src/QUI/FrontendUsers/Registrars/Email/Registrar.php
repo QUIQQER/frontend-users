@@ -11,7 +11,7 @@ use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 
 /**
- * Class Emai\Registrar
+ * Class Email\Registrar
  *
  * Registration via e-mail address
  *
@@ -25,10 +25,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
-        $Handler              = FrontendUsers\Handler::getInstance();
-        $settings             = $this->getSettings();
-        $registrationSettings = $Handler->getRegistrationSettings();
-        $SystemUser           = QUI::getUsers()->getSystemUser();
+        $Handler    = FrontendUsers\Handler::getInstance();
+        $settings   = $this->getSettings();
+        $SystemUser = QUI::getUsers()->getSystemUser();
 
         /** @var QUI\Users\User $User */
 
@@ -80,7 +79,13 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         $UserAddress->save();
 
-        $User->setPassword($this->getAttribute('password'), $SystemUser);
+        if ($this->getAttribute('password')) {
+            $User->setPassword($this->getAttribute('password'), $SystemUser);
+        } else {
+            // set dummy password so the user can be activated
+            $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
+        }
+
         $User->save($SystemUser);
 
         $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
@@ -168,17 +173,40 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function validate()
     {
-        $username = $this->getUsername();
-        $Handler  = FrontendUsers\Handler::getInstance();
-        $settings = $Handler->getRegistrationSettings();
+        $username       = $this->getUsername();
+        $Handler        = FrontendUsers\Handler::getInstance();
+        $settings       = $Handler->getRegistrationSettings();
+        $usernameInput  = $settings['usernameInput'];
+        $usernameExists = QUI::getUsers()->usernameExists($username);
+
         $lg       = 'quiqqer/frontend-users';
         $lgPrefix = 'exception.registrars.email.';
 
-        if (empty($username)) {
-            throw new FrontendUsers\Exception(array(
-                'quiqqer/frontend-users',
-                $lgPrefix . 'empty_username'
-            ));
+        // Username check
+        if ($usernameInput !== $Handler::USERNAME_INPUT_NONE) {
+            // Check if username input is enabled
+            if (empty($username)
+                && $usernameInput === $Handler::USERNAME_INPUT_REQUIRED) {
+                throw new FrontendUsers\Exception(array(
+                    $lg,
+                    $lgPrefix . 'empty_username'
+                ));
+            }
+
+            if ($usernameExists) {
+                throw new FrontendUsers\Exception(array(
+                    $lg,
+                    $lgPrefix . 'username_already_exists'
+                ));
+            }
+        } else {
+            // Check if username input is not enabled
+            if ($usernameExists) {
+                throw new FrontendUsers\Exception(array(
+                    $lg,
+                    $lgPrefix . 'email_already_exists'
+                ));
+            }
         }
 
         try {
@@ -186,35 +214,20 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
             // Username already exists
             throw new FrontendUsers\Exception(array(
-                'quiqqer/frontend-users',
+                $lg,
                 $lgPrefix . 'username_already_exists'
             ));
         } catch (\Exception $Exception) {
             // Username does not exist
         }
 
-        $email        = $this->getAttribute('email');
-        $emailConfirm = $this->getAttribute('emailConfirm');
+        $email = $this->getAttribute('email');
 
-        if ($email != $emailConfirm) {
-            if (empty($username)) {
-                throw new FrontendUsers\Exception(array(
-                    'quiqqer/frontend-users',
-                    $lgPrefix . 'different_emails'
-                ));
-            }
-        }
-
-        $password        = $this->getAttribute('password');
-        $passwordConfirm = $this->getAttribute('passwordConfirm');
-
-        if ($password != $passwordConfirm) {
-            if (empty($username)) {
-                throw new FrontendUsers\Exception(array(
-                    'quiqqer/frontend-users',
-                    $lgPrefix . 'different_passwords'
-                ));
-            }
+        if (QUI::getUsers()->emailExists($email)) {
+            throw new FrontendUsers\Exception(array(
+                $lg,
+                $lgPrefix . 'email_already_exists'
+            ));
         }
 
         // Address validation
@@ -224,7 +237,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
                 if ($settings['required'] && empty($val)) {
                     throw new FrontendUsers\Exception(array(
-                        'quiqqer/frontend-users',
+                        $lg,
                         $lgPrefix . 'missing_address_fields'
                     ));
                 }
@@ -240,9 +253,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     public function getInvalidFields()
     {
         $username         = $this->getUsername();
-        $L                = QUI::getLocale();
-        $lg               = 'quiqqer/frontend-users';
-        $lgPrefix         = 'exception.registrars.email.';
         $invalidFields    = array();
         $RegistrarHandler = FrontendUsers\Handler::getInstance();
         $settings         = $RegistrarHandler->getRegistrationSettings();
@@ -250,11 +260,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $Users            = QUI::getUsers();
         $usernameExists   = $Users->usernameExists($username);
 
+        $L        = QUI::getLocale();
+        $lg       = 'quiqqer/frontend-users';
+        $lgPrefix = 'exception.registrars.email.';
+
         // Username check
-        if ($usernameInput !== 'none') {
+        if ($usernameInput !== $RegistrarHandler::USERNAME_INPUT_NONE) {
             // Check if username input is enabled
             if (empty($username)
-                && $usernameInput === 'required') {
+                && $usernameInput === $RegistrarHandler::USERNAME_INPUT_REQUIRED) {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
                     $L->get($lg, $lgPrefix . 'empty_username')
@@ -278,8 +292,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         // Email check
-        $email        = $this->getAttribute('email');
-        $emailConfirm = $this->getAttribute('emailConfirm');
+        $email = $this->getAttribute('email');
 
         if (empty($email)) {
             $invalidFields['email'] = new InvalidFormField(
@@ -293,26 +306,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 'email',
                 $L->get($lg, $lgPrefix . 'email_already_exists')
             );
-        }
-
-        if ($email != $emailConfirm) {
-            $invalidFields['email'] = new InvalidFormField(
-                'email',
-                $L->get($lg, $lgPrefix . 'different_emails')
-            );
-        }
-
-        // Password check
-        if ($settings['passwordInput'] !== $RegistrarHandler::PASSWORD_INPUT_SENDMAIL) {
-            $password        = $this->getAttribute('password');
-            $passwordConfirm = $this->getAttribute('passwordConfirm');
-
-            if ($password != $passwordConfirm) {
-                $invalidFields['password'] = new InvalidFormField(
-                    'password',
-                    $L->get($lg, $lgPrefix . 'different_passwords')
-                );
-            }
         }
 
         // Address validation

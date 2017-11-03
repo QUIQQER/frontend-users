@@ -54,6 +54,22 @@ if ($loggedIn) {
     }
 }
 
+// check configuration
+try {
+    $FrontendUsersHandler->checkConfiguration();
+} catch (\QUI\FrontendUsers\Exception $Exception) {
+    QUI\System\Log::addError(
+        'quiqqer/frontend-users is misconfigured: ' . $Exception->getMessage()
+    );
+
+    $Engine->assign('msg', QUI::getLocale()->get(
+        'quiqqer/frontend-users',
+        'message.types.registration.configuration_error'
+    ));
+}
+
+
+
 $urlParams = QUI::getRewrite()->getUrlParamsList();
 $status    = false;
 

@@ -9,10 +9,11 @@
 
                 <input type="text" name="username"
                        class="quiqqer-registration-field-element{if isset($invalidFields['username'])} quiqqer-registration-field-error{/if}"
+                       value="{if isset($fields['username'])}{$fields['username']}{/if}"
                        {if $usernameSetting == 'required'}required{/if}/>
-                {if isset($invalidFields['email'])}
+                {if isset($invalidFields['username'])}
                 <span class="quiqqer-registration-field-error-msg">
-                        {$invalidFields['email']->getMsg()}
+                        {$invalidFields['username']->getMsg()}
                     </span>
                 {/if}
             </label>
