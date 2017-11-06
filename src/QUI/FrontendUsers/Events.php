@@ -28,6 +28,21 @@ class Events
     }
 
     /**
+     * quiqqer/quiqqer: onSiteInit
+     *
+     * @param QUI\Projects\Site $Site
+     */
+    public static function onSiteInit($Site)
+    {
+        switch ($Site->getAttribute('type')) {
+            case Handler::SITE_TYPE_REGISTRATION:
+            case Handler::SITE_TYPE_PROFILE:
+                $Site->setAttribute('nocache', 1);
+                break;
+        }
+    }
+
+    /**
      * Send welcome mail to the user
      *
      * @param User $User

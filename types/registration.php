@@ -15,7 +15,6 @@ if (isset($result[0])) {
     $Engine->assign('Site_TermsAndConditions', $result[0]);
 }
 
-
 // Privacy
 $result = $Project->getSites(array(
     'where' => array(
@@ -67,8 +66,6 @@ try {
         'message.types.registration.configuration_error'
     ));
 }
-
-
 
 $urlParams = QUI::getRewrite()->getUrlParamsList();
 $status    = false;
