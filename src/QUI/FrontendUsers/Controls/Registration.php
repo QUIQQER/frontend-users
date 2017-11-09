@@ -86,7 +86,8 @@ class Registration extends QUI\Control
             'Registrars'   => $Registrars,
             'Registrar'    => $CurrentRegistrar,
             'success'      => $success,
-            'autoRedirect' => $autoRedirect
+            'autoRedirect' => $autoRedirect,
+            'Login'        => new QUI\Users\Controls\Login()
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -122,7 +123,11 @@ class Registration extends QUI\Control
             return false;
         }
 
-        return $Registrar->isActive();
+        if (!$Registrar->isActive()) {
+            return false;
+        }
+
+        return $Registrar;
     }
 
     /**
@@ -138,6 +143,8 @@ class Registration extends QUI\Control
 
         /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
         $Registrar = $this->isCurrentlyExecuted();
+
+        \QUI\System\Log::writeRecursive(gettype($Registrar));
 
         if ($Registrar === false) {
             throw new QUI\FrontendUsers\Exception(array(

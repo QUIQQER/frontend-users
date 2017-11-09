@@ -15,7 +15,7 @@
         </a>
     </div>
     {else}
-    <!-- SHOW LOGIN -->
+        {$Login->create()}
     {/if}
 </div>
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}

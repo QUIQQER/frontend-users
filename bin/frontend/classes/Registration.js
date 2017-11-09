@@ -11,7 +11,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 ], function (QUI, QUILocale, QUIAjax) {
     "use strict";
 
-    var lg = 'quiqqer/frontend-users';
+    var pkg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -25,9 +25,10 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          */
         validateUsername: function (username) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get('ajax_users_exists', resolve, {
-                    username: username,
-                    onError : reject
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_userExists', resolve, {
+                    'package': pkg,
+                    username : username,
+                    onError  : reject
                 });
             });
         },
@@ -40,9 +41,10 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          */
         validateEmail: function (email) {
             return new Promise(function (resolve, reject) {
-                QUIAjax.get('ajax_users_emailExists', resolve, {
-                    email  : email,
-                    onError: reject
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_emailExists', resolve, {
+                    'package': pkg,
+                    email    : email,
+                    onError  : reject
                 });
             });
         },
@@ -54,7 +56,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          * @return {Promise} - return true if valid and false if invalid
          */
         usernameValidation: function (username) {
-            var self     = this;
+            var self = this;
 
             if (username === '') {
                 return Promise.resolve(true);
@@ -74,7 +76,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          * @return {Promise} - return true if valid and false if invalid
          */
         emailValidation: function (email) {
-            var self  = this;
+            var self = this;
 
             if (email === '') {
                 return Promise.resolve(true);

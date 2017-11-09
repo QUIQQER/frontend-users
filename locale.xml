@@ -277,6 +277,10 @@
             <de><![CDATA[Die E-Mail-Adresse exisitert bereits.]]></de>
             <en><![CDATA[The e-mail address already exists.]]></en>
         </locale>
+        <locale name="exception.registrars.email.email_invalid">
+            <de><![CDATA[Die E-Mail-Adresse ist ungültig.]]></de>
+            <en><![CDATA[The e-mail address is not valid.]]></en>
+        </locale>
 
     </groups>
 
