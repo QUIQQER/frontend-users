@@ -76,8 +76,8 @@ if (!empty($urlParams)) {
 
 $Registrar = false;
 
-if (!empty($_REQUEST['r'])) {
-    $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['r']);
+if (!empty($_REQUEST['registrar'])) {
+    $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['registrar']);
 }
 
 /**

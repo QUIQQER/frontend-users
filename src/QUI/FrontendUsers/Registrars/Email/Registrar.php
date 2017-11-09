@@ -50,7 +50,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             'zip'        => $this->getAttribute('zip'),
             'city'       => $this->getAttribute('city'),
             'country'    => mb_strtolower($this->getAttribute('country'))
-        ));
+        ), $SystemUser);
 
         $tel    = $this->getAttribute('phone');
         $mobile = $this->getAttribute('mobile');

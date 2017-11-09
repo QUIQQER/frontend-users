@@ -152,7 +152,7 @@ class Handler extends Singleton
      */
     public function getAvailableRegistrars()
     {
-        if ($this->Registrar->isEmpty() !== false) {
+        if ($this->Registrar->isNotEmpty()) {
             return $this->Registrar;
         }
 
