@@ -26,28 +26,6 @@
     top: -15px;
 }
 
-.quiqqer-frontendUsers-error {
-    background: #F2D4CE;
-    border: 1px solid #AE432E;
-    clear: both;
-    float: left;
-    margin: 10px 0;
-    padding: 10px;
-    position: relative;
-    width: 100%
-}
-
-.quiqqer-frontendUsers-info {
-    background: #CEE6F2;
-    border: 1px solid #058DC7;
-    clear: both;
-    float: left;
-    margin: 10px 0;
-    padding: 10px;
-    position: relative;
-    width: 100%
-}
-
 .quiqqer-frontendUsers-autoRedirect {
     margin-top: 10px;
 }

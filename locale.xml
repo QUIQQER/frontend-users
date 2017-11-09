@@ -25,9 +25,9 @@
             <en><![CDATA[Login]]></en>
         </locale>
 
-        <locale name="message.already.loged.in">
-            <de><![CDATA[Sie sind bereits eingeloggt als [username]]]></de>
-            <en><![CDATA[You are already logged in as [username]]]></en>
+        <locale name="message.already.loged.in" html="true">
+            <de><![CDATA[Sie sind bereits mit dem Benutzernamen <b>[username]</b> eingeloggt.]]></de>
+            <en><![CDATA[You are already logged in as <b>[username]</b>.]]></en>
         </locale>
         <locale name="message.user.saved.successfully">
             <de><![CDATA[Der Benutzer wurde erfolgreich gespeichert.]]></de>
@@ -492,6 +492,12 @@ Passwort: [password]</p>]]></de>
 
 Username: [username]<br>
 Password: [password]</p>]]></en>
+        </locale>
+
+        <!-- Site type: Login -->
+        <locale name="login.btn.logout">
+            <de><![CDATA[Logout]]></de>
+            <en><![CDATA[Logout]]></en>
         </locale>
 
     </groups>

@@ -35,10 +35,6 @@
     box-shadow: 0 0 0 2px #ff0000;
 }
 
-.quiqqer-registration-address__hidden {
-    display: none;
-}
-
 .quiqqer-registration-address {
     float: left;
 }

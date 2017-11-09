@@ -1,5 +1,15 @@
 {if $SessionUser && $SessionUser->getId()}
+<div class="quiqqer-frontendUsers-info">
     {locale group="quiqqer/frontend-users" var="message.already.loged.in" username=$SessionUser->getName()}
+</div>
+<a href="?logout=1">
+    <button class="qui-button qui-utils-noselect">
+        <span class="qui-button-text-image fa fa-sign-out"></span>
+        <span class="qui-button-text">
+                {locale group="quiqqer/frontend-users" var="login.btn.logout"}
+            </span>
+    </button>
+</a>
 {else}
 <div class="quiqqer-frontendUsers-login-container">
     {control control="QUI\Users\Controls\Login"}

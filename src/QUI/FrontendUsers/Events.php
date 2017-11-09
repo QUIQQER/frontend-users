@@ -37,6 +37,7 @@ class Events
         switch ($Site->getAttribute('type')) {
             case Handler::SITE_TYPE_REGISTRATION:
             case Handler::SITE_TYPE_PROFILE:
+            case Handler::SITE_TYPE_LOGIN:
                 $Site->setAttribute('nocache', 1);
                 break;
         }
@@ -266,5 +267,16 @@ class Events
 
         $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
         $Conf->save();
+    }
+
+    /**
+     * quiqqer/quiqqer: onTemplateGetHeader
+     *
+     * @param QUI\Template $TemplateManager
+     */
+    public static function onTemplateGetHeader(QUI\Template $TemplateManager)
+    {
+        $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
+        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
     }
 }

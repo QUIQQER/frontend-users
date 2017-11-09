@@ -57,16 +57,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
             if (AddressElm) {
                 // if address elm does not have the __hidden class -> address is not optional
-                if (AddressElm.hasClass('quiqqer-registration-address__hidden')) {
+                if (AddressElm.hasClass('quiqqer-frontendUsers__hidden')) {
                     var AddressHeaderElm = AddressElm.getPrevious('h2');
 
                     AddressHeaderElm.addEvent('click', function (event) {
                         event.stop();
 
-                        if (AddressElm.hasClass('quiqqer-registration-address__hidden')) {
-                            AddressElm.removeClass('quiqqer-registration-address__hidden');
+                        if (AddressElm.hasClass('quiqqer-frontendUsers__hidden')) {
+                            AddressElm.removeClass('quiqqer-frontendUsers__hidden');
                         } else {
-                            AddressElm.addClass('quiqqer-registration-address__hidden');
+                            AddressElm.addClass('quiqqer-frontendUsers__hidden');
                         }
                     });
                 }
