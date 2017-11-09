@@ -9,6 +9,7 @@ namespace QUI\FrontendUsers\Registrars\Email;
 use QUI;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
+use QUI\Utils\Security\Orthos;
 
 /**
  * Class Email\Registrar
@@ -230,6 +231,13 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             ));
         }
 
+        if (!Orthos::checkMailSyntax($email)) {
+            throw new FrontendUsers\Exception(array(
+                $lg,
+                $lgPrefix . 'email_invalid'
+            ));
+        }
+
         // Address validation
         if ((int)$settings['addressInput']) {
             foreach ($Handler->getAddressFieldSettings() as $field => $settings) {
@@ -305,6 +313,13 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             $invalidFields['email'] = new InvalidFormField(
                 'email',
                 $L->get($lg, $lgPrefix . 'email_already_exists')
+            );
+        }
+
+        if (!Orthos::checkMailSyntax($email)) {
+            $invalidFields['email'] = new InvalidFormField(
+                'email',
+                $L->get($lg, $lgPrefix . 'email_invalid')
             );
         }
 
