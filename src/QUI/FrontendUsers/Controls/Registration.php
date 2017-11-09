@@ -83,10 +83,10 @@ class Registration extends QUI\Control
                        || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
         $Engine->assign(array(
-            'Registrars'        => $Registrars,
-            'Registrar'         => $CurrentRegistrar,
-            'success'           => $success,
-            'autoRedirect'      => $autoRedirect
+            'Registrars'   => $Registrars,
+            'Registrar'    => $CurrentRegistrar,
+            'success'      => $success,
+            'autoRedirect' => $autoRedirect
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -102,7 +102,9 @@ class Registration extends QUI\Control
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
         $Registrar     = $this->getAttribute('Registrar');
 
-        if ($Registrar && $Registrar instanceof QUI\FrontendUsers\RegistrarInterface) {
+        if ($Registrar
+            && $Registrar instanceof QUI\FrontendUsers\RegistrarInterface
+            && $Registrar->isActive()) {
             return $Registrar;
         }
 
@@ -114,7 +116,13 @@ class Registration extends QUI\Control
             return false;
         }
 
-        return $FrontendUsers->getRegistrarByHash($_POST['registrar']);
+        $Registrar = $FrontendUsers->getRegistrarByHash($_POST['registrar']);
+
+        if (!$Registrar) {
+            return false;
+        }
+
+        return $Registrar->isActive();
     }
 
     /**

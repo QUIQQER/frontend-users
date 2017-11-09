@@ -91,11 +91,15 @@ class Handler extends Singleton
         $Available         = $this->getAvailableRegistrars();
         $registrarSettings = $this->getRegistrarSettings();
 
+        /** @var RegistrarInterface $Registrar */
         foreach ($Available as $Registrar) {
             $t = $Registrar->getType();
 
-            if (isset($registrarSettings[$t])
-                && !$registrarSettings[$t]['active']) {
+            if (isset($registrarSettings[$t])) {
+                if (!$Registrar->isActive()) {
+                    continue;
+                }
+            } else {
                 continue;
             }
 
@@ -232,6 +236,25 @@ class Handler extends Singleton
         }
 
         return $registrarSettings;
+    }
+
+    /**
+     * Set settings for registrars
+     *
+     * @param array $settings
+     * @return void
+     */
+    public function setRegistrarSettings($settings)
+    {
+        $Conf          = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $writeSettings = array();
+
+        foreach ($settings as $registrarType => $settingsData) {
+            $writeSettings[base64_encode($registrarType)] = $settingsData;
+        }
+
+        $Conf->set('registrars', 'registrarSettings', json_encode($writeSettings));
+        $Conf->save();
     }
 
     /**

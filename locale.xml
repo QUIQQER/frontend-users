@@ -263,6 +263,10 @@
             <de><![CDATA[Sie werden automatisch weitergeleitet. Sollte die Weiterleitung nicht funktionieren, klicken Sie bitte hier.]]></de>
             <en><![CDATA[You will be automatically redirected. If the redirect does not work, please click here.]]></en>
         </locale>
+        <locale name="control.registration.registration_disabled">
+            <de><![CDATA[Eine Registrierung ist zur Zeit nicht möglich.]]></de>
+            <en><![CDATA[Registration is disabled at the moment.]]></en>
+        </locale>
 
         <!-- Registrar: E-Mail -->
         <locale name="exception.registrars.email.username_already_exists">

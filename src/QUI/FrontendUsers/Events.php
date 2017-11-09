@@ -182,6 +182,32 @@ class Events
         }
 
         self::setAddressDefaultSettings();
+        self::setRegistrarsDefaultSettings();
+    }
+
+    /**
+     * Set default settings for all registrars
+     *
+     * @return void
+     */
+    protected static function setRegistrarsDefaultSettings()
+    {
+        $RegistrarsHanlder = Handler::getInstance();
+        $settings          = $RegistrarsHanlder->getRegistrarSettings();
+
+        /** @var RegistrarInterface $Registrar */
+        foreach ($RegistrarsHanlder->getAvailableRegistrars() as $Registrar) {
+            $name = $Registrar->getType();
+
+            if (!isset($settings[$name])) {
+                $settings[$name] = array(
+                    'active'         => false,
+                    'activationMode' => 'mail'
+                );
+            }
+        }
+
+        $RegistrarsHanlder->setRegistrarSettings($settings);
     }
 
     /**

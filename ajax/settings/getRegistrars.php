@@ -18,7 +18,7 @@ QUI::$Ajax->registerFunction(
         $registrars = array();
 
         /** @var AbstractRegistrar $Registrar */
-        foreach (Handler::getInstance()->getRegistrars() as $Registrar) {
+        foreach (Handler::getInstance()->getAvailableRegistrars() as $Registrar) {
             $registrars[] = array(
                 'type'        => $Registrar->getType(),
                 'title'       => $Registrar->getTitle(),

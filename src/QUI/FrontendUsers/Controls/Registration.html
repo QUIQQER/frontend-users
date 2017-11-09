@@ -23,30 +23,37 @@
     {$Registrar->getPendingMessage()}
 </div>
 {else}
-<div class="quiqqer-frontendUsers-controls-registration">
-    {foreach $Registrars as $Registrar}
-    <form action=""
-          method="POST"
-          class="quiqqer-frontendUsers-controls-registration-registrar"
-          data-registrar="{$Registrar->getHash()}"
-    >
-        <header>
-            <h1>{$Registrar->getTitle()}</h1>
-        </header>
 
-        {$Registrar->getControl()->create()}
+    {if $Registrars->isEmpty()}
+        <div class="quiqqer-frontendUsers-info">
+            {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
+        </div>
+    {else}
+        <div class="quiqqer-frontendUsers-controls-registration">
+            {foreach $Registrars as $Registrar}
+            <form action=""
+                  method="POST"
+                  class="quiqqer-frontendUsers-controls-registration-registrar"
+                  data-registrar="{$Registrar->getHash()}"
+            >
+                <header>
+                    <h1>{$Registrar->getTitle()}</h1>
+                </header>
 
-        <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
-        <input type="hidden" name="registration" value="1"/>
-    </form>
+                {$Registrar->getControl()->create()}
 
-    {if $Registrar !== $Registrars->last()}
-    <div class="quiqqer-frontendUsers-controls-registration-or">
-        <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
-            {locale group="quiqqer/frontend-users" var="control.registration.or"}
-        </span>
-    </div>
+                <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
+                <input type="hidden" name="registration" value="1"/>
+            </form>
+
+            {if $Registrar !== $Registrars->last()}
+            <div class="quiqqer-frontendUsers-controls-registration-or">
+                <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
+                    {locale group="quiqqer/frontend-users" var="control.registration.or"}
+                </span>
+            </div>
+            {/if}
+            {/foreach}
+        </div>
     {/if}
-    {/foreach}
-</div>
 {/if}

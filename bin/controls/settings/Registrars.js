@@ -132,7 +132,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
          */
         $getRegistrars: function () {
             return new Promise(function (resolve, reject) {
-                QUIAjax.post('package_quiqqer_frontend-users_ajax_settings_getRegistrars', resolve, {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_settings_getRegistrars', resolve, {
                     'package': 'quiqqer/frontend-users',
                     onError  : reject
                 });

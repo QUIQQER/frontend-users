@@ -153,4 +153,11 @@ interface RegistrarInterface
      * @return string
      */
     public function getType();
+
+    /**
+     * Check if this Registrar is activated in the settings
+     *
+     * @return bool
+     */
+    public function isActive();
 }

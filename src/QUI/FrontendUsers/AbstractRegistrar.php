@@ -144,4 +144,23 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     {
         return hash('sha256', $this->getType());
     }
+
+    /**
+     * Check if this Registrar is activated in the settings
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        $Handler           = Handler::getInstance();
+        $registrarSettings = $Handler->getRegistrarSettings();
+        $type              = $this->getType();
+
+        if (empty($registrarSettings[$type])
+            || empty($registrarSettings[$type]['active'])) {
+            return false;
+        }
+
+        return boolval($registrarSettings[$type]['active']);
+    }
 }
