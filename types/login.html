@@ -1,4 +1,4 @@
-{if $SessionUser && $SessionUser->getId()}
+{if $isAuth}
 <div class="quiqqer-frontendUsers-info">
     {locale group="quiqqer/frontend-users" var="message.already.loged.in" username=$SessionUser->getName()}
 </div>
@@ -11,7 +11,8 @@
     </button>
 </a>
 {else}
-<div class="quiqqer-frontendUsers-login-container">
-    {control control="QUI\Users\Controls\Login"}
-</div>
+    {if $error}
+        <div class="quiqqer-frontendUsers-error">{$error}</div>
+    {/if}
+    {$FrontendLogin->create()}
 {/if}

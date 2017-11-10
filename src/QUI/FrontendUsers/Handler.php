@@ -200,6 +200,17 @@ class Handler extends Singleton
     }
 
     /**
+     * Get login settings
+     *
+     * @return array
+     */
+    public function getLoginSettings()
+    {
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        return $Conf->getSection('login');
+    }
+
+    /**
      * Get address field settings
      *
      * @return array
@@ -275,7 +286,7 @@ class Handler extends Singleton
             'registrar'   => $Registrar->getHash()
         ));
 
-        $activationLink = Verifier::startVerification($ActivationVerification);
+        $activationLink = Verifier::startVerification($ActivationVerification, true);
 
         $L      = QUI::getLocale();
         $lg     = 'quiqqer/frontend-users';

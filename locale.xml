@@ -225,6 +225,22 @@
             <de><![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer erfolgreich aktiviert wurde. Die automatische Weiterleitung erfolgt nach <b>10 Sekunden</b>. <b>Hinweis:</b> Gilt nicht, wenn Benutzer nach einer Registrierung <b>manuell</b> aktiviert werden müssen.]]></de>
             <en><![CDATA[Automatic redirect to the specified page after the user has been successfully activated. The automatic forwarding takes place after <b>10 seconds</b>. <b>Note:</b> Does not apply if users are required to be activated <b>manually</b> after a registration.]]></en>
         </locale>
+        <locale name="settings.redirectOnLogin.title">
+            <de><![CDATA[Automatische Weiterleitung nach Login]]></de>
+            <en><![CDATA[Auto redirect on log in]]></en>
+        </locale>
+        <locale name="settings.redirectOnLogin.description" html="true">
+            <de><![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer sich im Frontend erfolgreich eingeloggt hat. Wenn diese Einstellung leergelassen wird, findet automatisch eine Weiterleitung auf die <b>Startseite</b> statt.]]></de>
+            <en><![CDATA[Automatic redirect to the specified page after the user has successfully logged in. If this setting is left empty and automatic redirect to the <b>start page</b> takes place.]]></en>
+        </locale>
+        <locale name="settings.category.login.title">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Login]]></en>
+        </locale>
+        <locale name="settings.section.login.title">
+            <de><![CDATA[Allgemeine Einstellungen]]></de>
+            <en><![CDATA[General settings]]></en>
+        </locale>
 
         <!-- Settings: Registrars -->
         <locale name="settings.section.registrars.title">
@@ -416,8 +432,8 @@
             <en><![CDATA[The registration was successful. Your user account has been activated automatically.]]></en>
         </locale>
         <locale name="message.registrars.email.registration_success_mail">
-            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert.]]></de>
-            <en><![CDATA[Your user account has been activated successfully.]]></en>
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
+            <en><![CDATA[Your user account has been activated successfully. You can now log in.]]></en>
         </locale>
         <locale name="registrars.email.password_auto_generate">
             <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.]]></de>
@@ -566,6 +582,38 @@ Password: [password]</p>]]></en>
         <locale name="exception.registrars.email.passwords_not_equal">
             <de><![CDATA[Die Passwörter sind nicht identisch.]]></de>
             <en><![CDATA[The passwords are not equal.]]></en>
+        </locale>
+
+        <!-- Control: frontend/controls/auth/FrontendLogin -->
+        <locale name="controls.frontend.auth.frontendlogin.user_not_active">
+            <de><![CDATA[Ein Login ist z.Z. nicht möglich, da Ihr Benutzerkonto noch nicht aktiviert wurde.]]></de>
+            <en><![CDATA[Login is currently not possible because your user account has not been activated yet.]]></en>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail">
+            <de><![CDATA[Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte auf den Aktivierungs-Link, der Ihnen bei der Registrierung per E-Mail zugeschickt wurde. Oder klicken Sie auf den Button, um den Aktivierungs-Link erneut zu versenden.]]></de>
+            <en><![CDATA[To activate your user account, please click on the activation link that was sent to you by e-mail on registration. Or click the button ro resend the activation link.]]></en>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.manual_activation">
+            <de><![CDATA[Sie können sich einloggen, sobald ein Administrator Ihr Benutzerkonto aktiviert hat.]]></de>
+            <en><![CDATA[You can log in as soon as an administrator activates your account.]]></en>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_success">
+            <de><![CDATA[Der Aktivierungs-Link wurde erfolgreich versandt! Bitte prüfen Sie Ihr E-Mail-Postfach und ggf. auch Ihren Spam-Ordner.]]></de>
+            <en><![CDATA[The activation link has been resent successfully! Please check your e-mail inbox and if need be your spam folder.]]></en>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_fail">
+            <de><![CDATA[Der Aktivierungs-Link konnte nicht versandt werden. Bitte versuchen Sie es erneut oder versuchen Sie es später noch einmal.]]></de>
+            <en><![CDATA[The activation link could not be sent! Please try again or try again later.]]></en>
+        </locale>
+
+        <!-- Control: frontend/controls/auth/ResendActivationLinkBtn -->
+        <locale name="controls.frontend.auth.resendactivationlinkbtn.resend_activation_mail">
+            <de><![CDATA[Aktivierungs-Link erneut versenden]]></de>
+            <en><![CDATA[Resend activation link]]></en>
+        </locale>
+        <locale name="controls.frontend.auth.resendactivationlinkbtn.resend_completed">
+            <de><![CDATA[Aktivierungs-Link erfolgreich verschickt]]></de>
+            <en><![CDATA[Activation link successfully resent]]></en>
         </locale>
 
     </groups>

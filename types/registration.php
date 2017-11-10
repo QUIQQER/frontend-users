@@ -77,7 +77,14 @@ if (!empty($urlParams)) {
 $Registrar = false;
 
 if (!empty($_REQUEST['registrar'])) {
-    $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['registrar']);
+    try {
+        $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['registrar']);
+    } catch (\Exception $Exception) {
+        $Engine->assign('msg', QUI::getLocale()->get(
+            'quiqqer/frontend-users',
+            'message.types.registration.configuration_error'
+        ));
+    }
 }
 
 /**

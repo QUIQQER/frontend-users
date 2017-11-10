@@ -93,6 +93,12 @@
                     <type><![CDATA[String]]></type>
                 </conf>
             </section>
+
+            <section name="login">
+                <conf name="redirectOnLogin">
+                    <type><![CDATA[String]]></type>
+                </conf>
+            </section>
         </config>
 
         <window>
@@ -141,6 +147,29 @@
                                 <locale group="quiqqer/frontend-users" var="settings.showDeleteAccount.title"/>
                             </text>
                         </input>
+                    </settings>
+                </category>
+
+                <category name="login">
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="settings.category.login.title"/>
+                    </text>
+                    <icon>fa fa-sign-in</icon>
+
+                    <settings title="login_section" name="login_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.login.title"/>
+                        </title>
+
+                        <input conf="login.redirectOnLogin" type="text" class="project-site">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.description"/>
+                            </description>
+                        </input>
+
                     </settings>
                 </category>
 

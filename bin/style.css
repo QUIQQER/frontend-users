@@ -20,6 +20,11 @@
     width: 100%
 }
 
+.quiqqer-frontendUsers-info p,
+.quiqqer-frontendUsers-error p {
+    margin: 0;
+}
+
 .quiqqer-frontendUsers__hidden {
     display: none;
 }

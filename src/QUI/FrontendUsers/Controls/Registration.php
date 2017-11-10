@@ -7,6 +7,7 @@
 namespace QUI\FrontendUsers\Controls;
 
 use QUI;
+use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 
 /**
  * Class Registration
@@ -87,7 +88,7 @@ class Registration extends QUI\Control
             'Registrar'    => $CurrentRegistrar,
             'success'      => $success,
             'autoRedirect' => $autoRedirect,
-            'Login'        => new QUI\Users\Controls\Login()
+            'Login'        => new FrontendLogin()
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -143,8 +144,6 @@ class Registration extends QUI\Control
 
         /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
         $Registrar = $this->isCurrentlyExecuted();
-
-        \QUI\System\Log::writeRecursive(gettype($Registrar));
 
         if ($Registrar === false) {
             throw new QUI\FrontendUsers\Exception(array(
