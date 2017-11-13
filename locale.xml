@@ -24,6 +24,10 @@
             <de><![CDATA[Login]]></de>
             <en><![CDATA[Login]]></en>
         </locale>
+        <locale name="admin.types.profile">
+            <de><![CDATA[Benutzerprofil]]></de>
+            <en><![CDATA[User profile]]></en>
+        </locale>
 
         <locale name="message.already.loged.in" html="true">
             <de><![CDATA[Sie sind bereits mit dem Benutzernamen <b>[username]</b> eingeloggt.]]></de>
@@ -514,6 +518,10 @@ Password: [password]</p>]]></en>
         <locale name="login.btn.logout">
             <de><![CDATA[Logout]]></de>
             <en><![CDATA[Logout]]></en>
+        </locale>
+        <locale name="login.general_error">
+            <de><![CDATA[Beim Login ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie einen Administrator.]]></de>
+            <en><![CDATA[An error occured on login. Please try again or contact an administrator.]]></en>
         </locale>
 
     </groups>
