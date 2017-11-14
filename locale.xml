@@ -245,6 +245,14 @@
             <de><![CDATA[Allgemeine Einstellungen]]></de>
             <en><![CDATA[General settings]]></en>
         </locale>
+        <locale name="settings.useCaptcha.title">
+            <de><![CDATA[CAPTCHA benutzen]]></de>
+            <en><![CDATA[Use CAPTCHA]]></en>
+        </locale>
+        <locale name="settings.useCaptcha.description" html="true">
+            <de><![CDATA[Registrierung erfordert die Eingabe eines CAPTCHAs. <b>Achtung:</b> Je nach eingestelltem Captcha-Modul wird u.U. <b>JavaScript</b> vorausgesetzt. Mit deaktiviertem JavaScript im Browser des Benutzers ist in so einem Fall <b>keine Registrierung</b> möglich!]]></de>
+            <en><![CDATA[Registration requires solving a CAPTCHA. <b>Attention:</b> Depending on the selected Captcha module <b>JavaScript</b> may be required. Registration is then not possible if JavaScript is deactivated in the users browser.]]></en>
+        </locale>
 
         <!-- Settings: Registrars -->
         <locale name="settings.section.registrars.title">
@@ -300,6 +308,10 @@
         <locale name="exception.registrars.email.email_invalid">
             <de><![CDATA[Die E-Mail-Adresse ist ungültig.]]></de>
             <en><![CDATA[The e-mail address is not valid.]]></en>
+        </locale>
+        <locale name="registrars.email.javascript_required">
+            <de><![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Bitte aktivieren Sie JavaScript in Ihrem Browser, um sich zu registrieren.]]></de>
+            <en><![CDATA[JavaScript is disabled in your browser. Please activate JavaScript in your browser to register.]]></en>
         </locale>
 
     </groups>
@@ -399,6 +411,10 @@
             <de><![CDATA[Passwort bestätigen]]></de>
             <en><![CDATA[Confirm password]]></en>
         </locale>
+        <locale name="registrars.email.label.captcha">
+            <de><![CDATA[Sicherheitsabfrage]]></de>
+            <en><![CDATA[Security Check]]></en>
+        </locale>
         <locale name="registrars.email.btn.submit">
             <de><![CDATA[Jetzt registrieren]]></de>
             <en><![CDATA[Register now]]></en>
@@ -442,6 +458,14 @@
         <locale name="registrars.email.password_auto_generate">
             <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.]]></de>
             <en><![CDATA[Your account password will be mailed to you after your account has been activated.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.captcha_empty">
+            <de><![CDATA[Bitte beantworten Sie die Sicherheitsabfrage.]]></de>
+            <en><![CDATA[Please answer the security check.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.captcha_invalid_response">
+            <de><![CDATA[Die Sicherheitsfrage wurde nicht korrekt beantwortet.]]></de>
+            <en><![CDATA[The security check was not answered correctly.]]></en>
         </locale>
 
         <!-- Registration Notice -->

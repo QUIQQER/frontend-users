@@ -10,6 +10,7 @@ use QUI;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\Utils\Security\Orthos;
+use QUI\Captcha\Handler as CaptchaHandler;
 
 /**
  * Class Email\Registrar
@@ -251,6 +252,25 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 }
             }
         }
+
+        // CAPTCHA validation
+        if (boolval($settings['useCaptcha'])) {
+            $captchaResponse = $this->getAttribute('captchaResponse');
+
+            if (empty($captchaResponse)) {
+                throw new FrontendUsers\Exception(array(
+                    $lg,
+                    $lgPrefix . 'captcha_empty'
+                ));
+            }
+
+            if (!CaptchaHandler::isResponseValid($captchaResponse)) {
+                throw new FrontendUsers\Exception(array(
+                    $lg,
+                    $lgPrefix . 'captcha_invalid_response'
+                ));
+            }
+        }
     }
 
     /**
@@ -347,11 +367,11 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     {
         $data = $this->getAttributes();
 
-        if (isset($data['username'])) {
+        if (!empty($data['username'])) {
             return $data['username'];
         }
 
-        if (isset($data['email'])) {
+        if (!empty($data['email'])) {
             return $data['email'];
         }
 

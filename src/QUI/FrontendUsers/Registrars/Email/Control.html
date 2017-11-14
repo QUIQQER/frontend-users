@@ -99,9 +99,32 @@
 {/if}
 
 <section>
-    <div class="quiqqer-registration-submit">
+    {if $useCaptcha}
+        {if $jsRequired}
+            <noscript>
+                <style>
+                    .quiqqer-frontendUsers__noScriptHidden {
+                        display: none;
+                    }
+                </style>
+
+                {locale group="quiqqer/frontend-users" var="registrars.email.javascript_required"}
+            </noscript>
+        {/if}
+
+        <label>
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/frontend-users" var="registrars.email.label.captcha"} *
+            </span>
+
+            {$Captcha->create()}
+            <input type="hidden" name="captchaResponse"/>
+        </label>
+    {/if}
+
+    <div class="quiqqer-registration-submit quiqqer-frontendUsers__noScriptHidden">
         <button type="submit"
-                class="btn-green grid-60 mobile-grid-100 push-40 mobile-push-0">
+                class="btn-green grid-60 mobile-grid-100 push-40 mobile-push-0"{if $useCaptcha && $jsRequired} disabled{/if}>
             {locale group="quiqqer/frontend-users"
             var="registrars.email.btn.submit"}
         </button>

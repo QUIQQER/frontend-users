@@ -8,6 +8,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
     'qui/QUI',
     'qui/controls/Control',
+    'utils/Controls',
     'qui/utils/Functions',
     'qui/controls/utils/PasswordSecurity',
 
@@ -16,7 +17,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email.css'
 
-], function (QUI, QUIControl, QUIFunctionUtils, QUIPwSecurityIndicator, QUILocale, Registration) {
+], function (QUI, QUIControl, QUIControlUtils, QUIFunctionUtils, QUIPwSecurityIndicator, QUILocale, Registration) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -27,7 +28,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
         Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email',
 
         options: {
-            emailisusername: false  // checks for existing username if only email field is enabled
+            emailisusername: false,  // checks for existing username if only email field is enabled
+            usecaptcha     : false  // Captcha is used
         },
 
         Binds: [
@@ -37,6 +39,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
         initialize: function (options) {
             this.parent(options);
+
+            this.$captchaResponse = false;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -81,7 +85,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
              * @param {HTMLInputElement} Input
              * @param {Boolean} isValid
              * @param {String} [errorMsg]
-             * @constructor
              */
             var HandleInputValidation = function (Input, isValid, errorMsg) {
                 var ErrorElm = Input.getNext(
@@ -120,6 +123,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                 );
 
                 var isValid = invalidElements.length;
+
+                // check for CAPTCHA (if used)
+                if (self.getAttribute('usecaptcha')) {
+                    isValid = isValid && self.$captchaResponse;
+                }
 
                 SubmitBtn.disabled = isValid;
 
@@ -227,6 +235,37 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                 if (CheckFormValidation()) {
                     Form.submit();
                 }
+            });
+
+            // Captcha handling
+            if (!this.getAttribute('usecaptcha')) {
+                SubmitBtn.disabled = false;
+                return;
+            }
+
+            var CaptchaResponseInput = Elm.getElement('input[name="captchaResponse"]');
+
+            QUIControlUtils.getControlByElement(
+                Elm.getElement('.quiqqer-captcha-display')
+            ).then(function (CaptchaDisplay) {
+                CaptchaDisplay.getCaptchaControl().then(function (CaptchaControl) {
+                    CaptchaControl.addEvents({
+                        onSuccess: function (response) {
+                            self.$captchaResponse      = response;
+                            CaptchaResponseInput.value = response;
+                            CheckFormValidation();
+                        },
+                        onExpired: function () {
+                            self.$captchaResponse      = false;
+                            CaptchaResponseInput.value = '';
+                            CheckFormValidation();
+                        }
+                    });
+                }, function () {
+                    SubmitBtn.disabled = false;
+                });
+            }, function () {
+                SubmitBtn.disabled = false;
             });
         }
     });
