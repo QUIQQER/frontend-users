@@ -11,10 +11,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
     'qui/QUI',
     'qui/controls/Control',
+    'qui/controls/loader/Loader',
+
     'Ajax',
     'qui/utils/Form'
 
-], function (QUI, QUIControl, QUIAjax, QUIFormUtils) {
+], function (QUI, QUIControl, QUILoader, QUIAjax, QUIFormUtils) {
     "use strict";
 
     return new Class({
@@ -34,6 +36,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.parent(options);
 
             this.$category = null;
+            this.Loader    = new QUILoader();
 
             this.addEvents({
                 onInject: this.$onInject,
@@ -59,6 +62,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         $onInject: function () {
             var self = this,
                 Elm  = this.getElm();
+
+            this.Loader.inject(Elm);
 
             this.openCategory().then(function () {
                 if (self.getAttribute('category')) {
@@ -95,6 +100,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         $onImport: function () {
             var self = this,
                 Elm  = this.getElm();
+
+            this.Loader.inject(Elm);
 
             this.$parseContent(this.getElm()).then(function () {
                 var Category = Elm.getElement(
@@ -147,10 +154,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     self.openCategory(Target.get('data-name'));
                 });
 
-
                 forms.addEvent('submit', function (event) {
                     event.stop();
-                    self.save();
+
+                    self.Loader.show();
+
+                    self.save().then(function () {
+                        self.Loader.hide();
+                    }, function () {
+                        self.Loader.hide();
+                    });
                 });
             });
         },
@@ -219,6 +232,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                                 self.$parseContent().then(resolve);
                             }
                         });
+
+                        self.$category = category;
                     }, {
                         'package': 'quiqqer/frontend-users',
                         category : category,

@@ -29,7 +29,7 @@ class Profile extends Control
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Profile.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile');
     }
@@ -41,23 +41,24 @@ class Profile extends Control
      */
     public function getBody()
     {
-        $Request    = QUI::getRequest();
-        $Engine     = QUI::getTemplateManager()->getEngine();
-        $current    = false;
-        $categories = QUI\FrontendUsers\Utils::getProfileCategories();
+        $Request       = QUI::getRequest();
+        $Engine        = QUI::getTemplateManager()->getEngine();
+        $current       = $this->getAttribute('category');
+        $categories    = QUI\FrontendUsers\Utils::getProfileCategories();
+        $requestParams = QUI::getRewrite()->getUrlParamsList();
 
-        if (QUI::getRequest()->get('category')) {
-            $this->setAttribute('category', QUI::getRequest()->get('category'));
+        if (!empty($requestParams)) {
+            $current = current($requestParams);
         }
 
-        if ($this->getAttribute('category')) {
-            try {
-                QUI\FrontendUsers\Utils::getProfileCategory(
-                    QUI::getRequest()->get('category')
-                );
+        if ($current) {
+            $this->setAttribute('category', $current);
 
-                $current = QUI::getRequest()->get('category');
+            try {
+                QUI\FrontendUsers\Utils::getProfileCategory($current);
             } catch (QUI\FrontendUsers\Exception $Exception) {
+                // category does not exist
+                $current = false;
             }
         }
 
@@ -83,7 +84,7 @@ class Profile extends Control
             'Category'   => $Control
         ));
 
-        return $Engine->fetch(dirname(__FILE__).'/Profile.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
     }
 
     /**

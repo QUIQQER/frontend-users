@@ -358,9 +358,39 @@
             <de><![CDATA[Benutzerdaten]]></de>
             <en><![CDATA[Userdata]]></en>
         </locale>
+        <locale name="profile.changePassword.text">
+            <de><![CDATA[Passwort ändern]]></de>
+            <en><![CDATA[Change password]]></en>
+        </locale>
         <locale name="profile.avatar.text">
             <de><![CDATA[Benutzerbild]]></de>
             <en><![CDATA[Avatar]]></en>
+        </locale>
+
+        <!-- Profile: ChangePassword -->
+        <locale name="profile.changepassword.title">
+            <de><![CDATA[Passwort ändern]]></de>
+            <en><![CDATA[Change password]]></en>
+        </locale>
+        <locale name="profile.changepassword.label.password_old">
+            <de><![CDATA[Aktuelles Passwort]]></de>
+            <en><![CDATA[Current password]]></en>
+        </locale>
+        <locale name="profile.changepassword.label.password_new">
+            <de><![CDATA[Neues Passwort]]></de>
+            <en><![CDATA[New password]]></en>
+        </locale>
+        <locale name="profile.changepassword.label.password_new_confirm">
+            <de><![CDATA[Neues Passwort bestätigen]]></de>
+            <en><![CDATA[Confirm new password]]></en>
+        </locale>
+        <locale name="profile.changepassword.btn.submit">
+            <de><![CDATA[Passwort ändern]]></de>
+            <en><![CDATA[Change password]]></en>
+        </locale>
+        <locale name="controls.profile.changepassword.wrong_password">
+            <de><![CDATA[Ihr aktuelles Passwort ist falsch. Bitte geben Sie das korrekte Login-Passwort an.]]></de>
+            <en><![CDATA[Your current password is wrong. Please provide your correct login password.]]></en>
         </locale>
 
         <!-- Class: Handler -->

@@ -42,7 +42,7 @@ class Utils
 
             $dir = $Package->getDir();
 
-            if (file_exists($dir.'/frontend-users.xml')) {
+            if (file_exists($dir . '/frontend-users.xml')) {
                 $list[] = $Package;
             }
         }
@@ -70,7 +70,7 @@ class Utils
         $packages = self::getFrontendUsersPackages();
 
         foreach ($packages as $Package) {
-            $Dom  = XML::getDomFromXml($Package->getDir().'/frontend-users.xml');
+            $Dom  = XML::getDomFromXml($Package->getDir() . '/frontend-users.xml');
             $Path = new \DOMXPath($Dom);
 
             $tabs = $Path->query("//quiqqer/frontend-users/profile/tab");
@@ -80,7 +80,7 @@ class Utils
                 $Text      = $Item->getElementsByTagName('text')->item(0);
                 $Templates = $Item->getElementsByTagName('template');
 
-                $name     = 'category-'.$catId;
+                $name     = 'category-' . $catId;
                 $template = '';
 
                 if ($Item->getAttribute('name')) {
@@ -97,6 +97,7 @@ class Utils
                     'icon'     => DOM::parseVar($Item->getAttribute('icon')),
                     'require'  => $Item->getAttribute('require'),
                     'exec'     => $Item->getAttribute('exec'),
+                    'control'  => $Item->getAttribute('control'),
                     'template' => $template
                 );
 
