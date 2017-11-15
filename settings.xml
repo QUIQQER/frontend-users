@@ -68,10 +68,6 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
                 </conf>
-                <conf name="activationVerificationValidityDuration">
-                    <type><![CDATA[integer]]></type>
-                    <defaultvalue>1440</defaultvalue>
-                </conf>
                 <conf name="userWelcomeMail">
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
@@ -270,15 +266,6 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.autoLoginOnActivation.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="registration.activationVerificationValidityDuration" type="number">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.activationVerificationValidityDuration.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.activationVerificationValidityDuration.description"/>
                             </description>
                         </input>
 
