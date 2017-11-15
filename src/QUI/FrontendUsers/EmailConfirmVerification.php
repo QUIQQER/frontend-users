@@ -22,9 +22,8 @@ class EmailConfirmVerification extends AbstractVerification
      */
     public function getValidDuration()
     {
-        // @todo ggf. eigenes setting für diese Verification
-        $settings = Handler::getInstance()->getRegistrationSettings();
-        return (int)$settings['activationVerificationValidityDuration'];
+        $settings = Handler::getInstance()->getMailSettings();
+        return (int)$settings['verificationValidityDuration'];
     }
 
     /**
@@ -96,7 +95,9 @@ class EmailConfirmVerification extends AbstractVerification
             return false;
         }
 
-        return $ProfileSite->getUrlRewritten(array(), array(
+        return $ProfileSite->getUrlRewritten(array(
+            'user'
+        ), array(
             'action' => 'change_email_success'
         ));
     }
@@ -116,7 +117,9 @@ class EmailConfirmVerification extends AbstractVerification
             return false;
         }
 
-        return $ProfileSite->getUrlRewritten(array(), array(
+        return $ProfileSite->getUrlRewritten(array(
+            'user'
+        ), array(
             'action' => 'change_email_error'
         ));
     }

@@ -464,9 +464,7 @@ class Handler extends Singleton
         try {
             $this->sendMail(
                 array(
-                    'subject' => $L->get($lg, 'mail.change_email_address.subject', array(
-                        'host' => $host
-                    ))
+                    'subject' => $L->get($lg, 'mail.change_email_address.subject')
                 ),
                 array(
                     $newEmail

@@ -7,10 +7,17 @@
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', [
 
     'qui/controls/Control',
-    'utils/Controls'
+    'utils/Controls',
+    'qui/utils/Functions',
 
-], function (QUIControl, QUIControlUtils) {
+    'Locale',
+
+    'package/quiqqer/frontend-users/bin/Registration'
+
+], function (QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
     "use strict";
+
+    var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -18,11 +25,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
         Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData',
 
         Binds: [
-            '$onInject'
+            '$onInject',
+            '$showEmailErrorMsg',
+            '$clearEmailErrorMsg'
         ],
 
         initialize: function (options) {
             this.parent(options);
+
+            this.$EmailErrorMsgElm = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -33,6 +44,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
          * event: on import
          */
         $onImport: function () {
+            var self           = this;
             var Elm            = this.getElm();
             var ChangeEmailElm = Elm.getElement('.quiqqer-frontendUsers-userdata-email-edit');
             var EmailNewElm    = Elm.getElement('.quiqqer-frontendUsers-userdata-email-new');
@@ -57,10 +69,66 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
                     EmailNewInput.focus();
                 });
 
-                EmailNewInput.addEvent('')
+                var CheckMail = function (event) {
+                    var email = event.target.value.trim();
+
+                    Promise.all([
+                        Registration.emailSyntaxValidation(email),
+                        Registration.emailValidation(email)
+                    ]).then(function (result) {
+                        var emailSyntaxValid = result[0];
+                        var emailValid       = result[1];
+
+                        if (emailSyntaxValid && emailValid) {
+                            self.$clearEmailErrorMsg();
+                            return;
+                        }
+
+                        if (!emailSyntaxValid) {
+                            self.$showEmailErrorMsg(
+                                QUILocale.get(lg, 'controls.profile.userdata.email_invalid')
+                            );
+                        }
+
+                        if (!emailValid) {
+                            self.$showEmailErrorMsg(
+                                QUILocale.get(lg, 'controls.profile.userdata.email_already_taken')
+                            );
+                        }
+                    });
+                };
+
+                var checkMail = QUIFunctionUtils.debounce(CheckMail, 500);
+
+                EmailNewInput.addEvent('keydown', checkMail);
             }, function () {
                 // do nothing
             });
+        },
+
+        /**
+         * Show error msg for e-mail change
+         *
+         * @param {String} msg
+         */
+        $showEmailErrorMsg: function (msg) {
+            if (!this.$EmailErrorMsgElm) {
+                this.$EmailErrorMsgElm = new Element('span', {
+                    'class': 'quiqqer-frontendUsers-error'
+                }).inject(this.getElm().getElement('input[name="emailNew"]'), 'after');
+            }
+
+            this.$EmailErrorMsgElm.set('html', msg);
+        },
+
+        /**
+         * Hide error msg for e-mail change
+         */
+        $clearEmailErrorMsg: function () {
+            if (this.$EmailErrorMsgElm) {
+                this.$EmailErrorMsgElm.destroy();
+                this.$EmailErrorMsgElm = null;
+            }
         }
     });
 });

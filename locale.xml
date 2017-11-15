@@ -205,14 +205,6 @@
             <de><![CDATA[Passwort automatisch generieren und per E-Mail zusenden]]></de>
             <en><![CDATA[Auto-generate password and send it via e-mail]]></en>
         </locale>
-        <locale name="settings.activationVerificationValidityDuration.title">
-            <de><![CDATA[Gültigkeitsdauer Aktivierungs-Link]]></de>
-            <en><![CDATA[Activation link validity]]></en>
-        </locale>
-        <locale name="settings.activationVerificationValidityDuration.description">
-            <de><![CDATA[Dauer in <b>Minuten</b>, die ein Aktivierungs-Link gültig ist. Ruft der Benutzer einen abgelaufenen Aktivierungs-Link auf, wird er automatisch zur normalen Registrierungs-Seite weitergeleitet.]]></de>
-            <en><![CDATA[Duration in <b>minutes</b>, for which an activation link is valid. If the user calls an expired activation link, he is automatically redirected to the standard registration site.]]></en>
-        </locale>
         <locale name="settings.userWelcomeMail.title">
             <de><![CDATA["Wilkommen"-E-Mail nach Aktivierung]]></de>
             <en><![CDATA["Welcheom"-mail on activation]]></en>
@@ -286,6 +278,18 @@
         <locale name="settings.section.mail.title">
             <de><![CDATA[E-Mail Absender]]></de>
             <en><![CDATA[E-mail sender]]></en>
+        </locale>
+        <locale name="settings.section.verification_mails.title">
+            <de><![CDATA[Verifizierungs E-Mail]]></de>
+            <en><![CDATA[Verification E-Mails]]></en>
+        </locale>
+        <locale name="settings.verificationValidityDuration.title">
+            <de><![CDATA[Verifizierungs E-Mail]]></de>
+            <en><![CDATA[Verification E-Mails]]></en>
+        </locale>
+        <locale name="settings.verificationValidityDuration.description">
+            <de><![CDATA[Dauer in <b>Minuten</b>, die ein Verifizierungs-Link (z.B. Benutzerkonto-Aktivierung nach Registrierung, Änderung der E-Mail-Adresse) gültig ist.]]></de>
+            <en><![CDATA[Duration in <b>minutes</b>, for which an activation link (i.e. user account activation on registration or e-mail address change) is valid.]]></en>
         </locale>
 
         <!-- Control: Registration -->
@@ -395,6 +399,14 @@
         <locale name="exception.controls.profile.userdata.new_email_address_already_exists">
             <de><![CDATA[Die E-Mail-Adresse, die Sie angegeben haben, kann nicht verwendet werden. Bitte geben Sie eine andere E-Mail-Adresse an.]]></de>
             <en><![CDATA[The e-mail address you provided cannot be used. Please enter a different e-mail address.]]></en>
+        </locale>
+        <locale name="profile.userdata.message.change_email_success">
+            <de><![CDATA[Ihre E-Mail-Adresse wurde erfolgreich geändert.]]></de>
+            <en><![CDATA[You e-mail address has been changed successfully.]]></en>
+        </locale>
+        <locale name="profile.userdata.message.change_email_error">
+            <de><![CDATA[Das Ändern Ihrer E-Mail-Adresse hat leider nicht funktioniert. Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.]]></de>
+            <en><![CDATA[Unfortunately, changing your e-mail address did not work. Please try again or try again later.]]></en>
         </locale>
 
         <!-- Profile: ChangePassword -->
@@ -732,6 +744,16 @@ The e-mail address for your user account on [host] has been changed to the addre
         <locale name="controls.frontend.auth.resendactivationlinkbtn.resend_completed">
             <de><![CDATA[Aktivierungs-Link erfolgreich verschickt]]></de>
             <en><![CDATA[Activation link successfully resent]]></en>
+        </locale>
+
+        <!-- Control: frontend/controls/profile/UserData -->
+        <locale name="controls.profile.userdata.email_invalid">
+            <de><![CDATA[Diese E-Mail-Adresse ist nicht gültig. Bitte verwenden Sie eine gültige E-Mail-Adresse.]]></de>
+            <en><![CDATA[This e-mail address is not valid. Please use a valid e-mail address.]]></en>
+        </locale>
+        <locale name="controls.profile.userdata.email_already_taken">
+            <de><![CDATA[Diese E-Mail-Adresse kann nicht verwendet werden. Bitte verwenden Sie eine gültige E-Mail-Adresse.]]></de>
+            <en><![CDATA[This e-mail address cannot be used. Please use a valid e-mail address.]]></en>
         </locale>
 
     </groups>

@@ -87,6 +87,26 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                     resolve(!emailExists);
                 });
             });
+        },
+
+        /**
+         * Validate e-mail syntax
+         *
+         * @param email
+         * @return {Promise}
+         */
+        emailSyntaxValidation: function (email) {
+            if (email === '') {
+                return Promise.resolve(true);
+            }
+
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_validateEmailSyntax', resolve, {
+                    'package': pkg,
+                    email    : email,
+                    onError  : reject
+                });
+            });
         }
     });
 });

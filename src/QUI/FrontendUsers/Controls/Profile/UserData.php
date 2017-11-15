@@ -39,9 +39,15 @@ class UserData extends Control
     public function getBody()
     {
         $Engine = QUI::getTemplateManager()->getEngine();
+        $action = false;
+
+        if (!empty($_REQUEST['action'])) {
+            $action = $_REQUEST['action'];
+        }
 
         $Engine->assign(array(
-            'User' => QUI::getUserBySession()
+            'User'   => QUI::getUserBySession(),
+            'action' => $action
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/UserData.html');

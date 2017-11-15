@@ -22,8 +22,8 @@ class ActivationVerification extends AbstractVerification
      */
     public function getValidDuration()
     {
-        $settings = Handler::getInstance()->getRegistrationSettings();
-        return (int)$settings['activationVerificationValidityDuration'];
+        $settings = Handler::getInstance()->getMailSettings();
+        return (int)$settings['verificationValidityDuration'];
     }
 
     /**

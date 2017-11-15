@@ -111,6 +111,10 @@
                 <conf name="mailFromAddress">
                     <type><![CDATA[string]]></type>
                 </conf>
+                <conf name="verificationValidityDuration">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue>1440</defaultvalue>
+                </conf>
             </section>
         </config>
 
@@ -372,6 +376,22 @@
                     </text>
                     <icon>fa fa-envelope</icon>
 
+                    <settings title="verification_mails_section" name="verification_mails_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.verification_mails.title"/>
+                        </title>
+
+                        <input conf="mail.verificationValidityDuration" type="number">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.verificationValidityDuration.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.verificationValidityDuration.description"/>
+                            </description>
+                        </input>
+
+                    </settings>
+
                     <settings title="mail_section" name="mail_section">
                         <title>
                             <locale group="quiqqer/frontend-users" var="settings.section.mail.title"/>
@@ -396,6 +416,7 @@
                         </input>
 
                     </settings>
+
                 </category>
 
             </categories>

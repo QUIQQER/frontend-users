@@ -8,6 +8,18 @@
 
 <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
 
+{if $action == 'change_email_success'}
+<div class="quiqqer-frontendUsers-success">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_success"}
+</div>
+{/if}
+
+{if $action == 'change_email_error'}
+<div class="quiqqer-frontendUsers-error">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_error"}
+</div>
+{/if}
+
 <label>
     <span class="quiqqer-frontendUsers-userdata-label">
         {locale group="quiqqer/frontend-users" var="profile.userdata.firstname"}
