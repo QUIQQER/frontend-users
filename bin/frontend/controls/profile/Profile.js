@@ -13,10 +13,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
     'qui/controls/Control',
     'qui/controls/loader/Loader',
 
+    'URI',
+
     'Ajax',
     'qui/utils/Form'
 
-], function (QUI, QUIControl, QUILoader, QUIAjax, QUIFormUtils) {
+], function (QUI, QUIControl, QUILoader, URI, QUIAjax, QUIFormUtils) {
     "use strict";
 
     return new Class({
@@ -25,7 +27,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile',
 
         Binds: [
-            '$onInject'
+            '$onInject',
+            '$setUri'
         ],
 
         options: {
@@ -234,9 +237,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         });
 
                         self.$category = category;
+                        self.$setUri();
                     }, {
                         'package': 'quiqqer/frontend-users',
                         category : category,
+                        project  : JSON.encode({
+                            name: QUIQQER_PROJECT.name,
+                            lang: QUIQQER_PROJECT.lang
+                        }),
+                        siteId   : QUIQQER_SITE.id,
                         onError  : reject
                     });
                 });
@@ -274,6 +283,27 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     }
                 });
             });
+        },
+
+        /**
+         * Set URI based on currently opened category
+         */
+        $setUri: function () {
+            var Uri       = new URI();
+            var UriParams = {
+                c: this.$category
+            };
+
+            Uri.search(UriParams);
+
+            var url = Uri.toString();
+
+            if ("history" in window) {
+                window.history.pushState({}, "", url);
+                window.fireEvent('popstate');
+            } else {
+                window.location = url;
+            }
         }
     });
 });

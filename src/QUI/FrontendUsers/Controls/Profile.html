@@ -1,6 +1,6 @@
 <div class="quiqqer-frontendUsers-controls-profile-categories">
     {foreach $categories as $item}
-    <a href="{url site=$Site params=$item.name}"
+    <a href="{$item.url}"
        class="quiqqer-frontendUsers-controls-profile-category"
        data-name="{$item.name}"
     >

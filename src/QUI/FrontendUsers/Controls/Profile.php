@@ -41,14 +41,13 @@ class Profile extends Control
      */
     public function getBody()
     {
-        $Request       = QUI::getRequest();
-        $Engine        = QUI::getTemplateManager()->getEngine();
-        $current       = $this->getAttribute('category');
-        $categories    = QUI\FrontendUsers\Utils::getProfileCategories();
-        $requestParams = QUI::getRewrite()->getUrlParamsList();
+        $Request    = QUI::getRequest();
+        $Engine     = QUI::getTemplateManager()->getEngine();
+        $current    = $this->getAttribute('category');
+        $categories = QUI\FrontendUsers\Utils::getProfileCategories();
 
-        if (!empty($requestParams)) {
-            $current = current($requestParams);
+        if (!empty($_GET['c'])) {
+            $current = $_GET['c'];
         }
 
         if ($current) {
@@ -77,9 +76,17 @@ class Profile extends Control
             }
         }
 
+        $Site       = $this->getSite();
+        $categories = QUI\FrontendUsers\Utils::getProfileCategories();
+
+        foreach ($categories as $k => $c) {
+            $categories[$k]['url'] = $Site->getUrlRewritten(array(), array(
+                'c' => $c['name']
+            ));
+        }
+
         $Engine->assign(array(
-            'Site'       => $this->getSite(),
-            'categories' => QUI\FrontendUsers\Utils::getProfileCategories(),
+            'categories' => $categories,
             'current'    => $current,
             'Category'   => $Control
         ));

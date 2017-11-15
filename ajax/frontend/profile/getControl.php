@@ -4,20 +4,30 @@
  * This file contains package_quiqqer_frontend-users_ajax_frontend_profile_getControl
  */
 
+use QUI\Utils\Security\Orthos;
+
 /**
  * @return string
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
-    function ($category) {
+    function ($category, $project, $siteId) {
         $Control = new QUI\FrontendUsers\Controls\Profile();
+
+        try {
+            $Project = QUI::getProjectManager()->decode($project);
+            $Control->setAttribute('Site', $Project->get((int)$siteId));
+        } catch (\Exception $Exception) {
+            // nothing
+        }
+
         $Control->setAttribute('User', QUI::getUserBySession());
-        $Control->setAttribute('category', $category);
+        $Control->setAttribute('category', Orthos::clear($category));
 
         $result = QUI\Control\Manager::getCSS();
         $result .= $Control->create();
 
         return QUI\Output::getInstance()->parse($result);
     },
-    array('category')
+    array('category', 'project', 'siteId')
 );
