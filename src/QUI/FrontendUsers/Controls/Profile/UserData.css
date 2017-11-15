@@ -1,0 +1,20 @@
+.quiqqer-frontendUsers-userdata-email__hidden {
+    display: none;
+}
+
+.quiqqer-frontendUsers-userdata-email-edit {
+    font-size: 25px;
+    left: 495px;
+    margin-top: 22px;
+    position: absolute;
+}
+
+.quiqqer-frontendUsers-userdata-email-edit:hover {
+    cursor: pointer;
+}
+
+.quiqqer-frontendUsers-userdata-email-new-hint {
+    clear: both;
+    width: 100%;
+    float: left;
+}

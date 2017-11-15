@@ -5,6 +5,7 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Users\User;
 use QUI\Verification\Verifier;
+use QUI\FrontendUsers\ActivationVerification;
 
 /**
  * Class Events
@@ -163,7 +164,11 @@ class Events
     {
         // delete Verification for user (if not yet deleted by quiqqer/verification cron)
         try {
-            $Verification = Verifier::getVerificationByIdentifier($User->getId());
+            $Verification = Verifier::getVerificationByIdentifier(
+                $User->getId(),
+                ActivationVerification::getType()
+            );
+
             Verifier::removeVerification($Verification);
         } catch (\Exception $Exception) {
             // nothing -> if Verification not found it does not have to be deleted

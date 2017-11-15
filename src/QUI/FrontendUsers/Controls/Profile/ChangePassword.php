@@ -71,7 +71,7 @@ class ChangePassword extends Control
             if ($Exception->getCode() === 401) {
                 $msg = QUI::getLocale()->get(
                     'quiqqer/frontend-users',
-                    'controls.profile.changepassword.wrong_password'
+                    'exception.controls.profile.changepassword.wrong_password'
                 );
             } else {
                 $msg = $Exception->getMessage();

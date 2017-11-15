@@ -103,6 +103,15 @@
                     <type><![CDATA[String]]></type>
                 </conf>
             </section>
+
+            <section name="mail">
+                <conf name="mailFromText">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="mailFromAddress">
+                    <type><![CDATA[string]]></type>
+                </conf>
+            </section>
         </config>
 
         <window>
@@ -242,24 +251,6 @@
                             </option>
                         </select>
 
-                        <input conf="registration.mailFromText" type="text">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.mailFromText.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.mailFromText.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="registration.mailFromAddress" type="text">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.description"/>
-                            </description>
-                        </input>
-
                         <input conf="registration.userWelcomeMail" type="checkbox">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.userWelcomeMail.title"/>
@@ -370,6 +361,38 @@
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.registrarSettings.title"/>
                             </text>
+                        </input>
+
+                    </settings>
+                </category>
+
+                <category name="mail">
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="settings.category.mail.title"/>
+                    </text>
+                    <icon>fa fa-envelope</icon>
+
+                    <settings title="mail_section" name="mail_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.mail.title"/>
+                        </title>
+
+                        <input conf="mail.mailFromText" type="text">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.mailFromText.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.mailFromText.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="mail.mailFromAddress" type="email">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.description"/>
+                            </description>
                         </input>
 
                     </settings>

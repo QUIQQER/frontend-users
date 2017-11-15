@@ -1,7 +1,7 @@
 <quiqqer>
     <frontend-users>
         <profile>
-            <tab name="user" require="" icon="fa fa-user" control="">
+            <tab name="user" require="" icon="fa fa-user" control="\QUI\FrontendUsers\Controls\Profile\UserData">
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.userData.text"/>
                 </text>

@@ -222,6 +222,17 @@ class Handler extends Singleton
     }
 
     /**
+     * Get settings for mail
+     *
+     * @return array
+     */
+    public function getMailSettings()
+    {
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        return $Conf->getSection('mail');
+    }
+
+    /**
      * Get settings for one or all Registrars
      *
      * @param string $registrarClass (optional) - Registar class path (namespace)
@@ -277,8 +288,7 @@ class Handler extends Singleton
      */
     public function sendActivationMail(QUI\Users\User $User, RegistrarInterface $Registrar)
     {
-        $Project              = $Registrar->getProject();
-        $registrationSettings = $this->getRegistrationSettings();
+        $Project = $Registrar->getProject();
 
         $ActivationVerification = new ActivationVerification($User->getId(), array(
             'project'     => $Project->getName(),
@@ -296,11 +306,9 @@ class Handler extends Singleton
         try {
             $this->sendMail(
                 array(
-                    'subject'  => $L->get($lg, 'mail.registration_activation.subject', array(
+                    'subject' => $L->get($lg, 'mail.registration_activation.subject', array(
                         'host' => $host
-                    )),
-                    'from'     => $registrationSettings['mailFromAddress'],
-                    'fromName' => $registrationSettings['mailFromText']
+                    ))
                 ),
                 array(
                     $User->getAttribute('email')
@@ -431,7 +439,61 @@ class Handler extends Singleton
     }
 
     /**
-     * Send an email to the membership user
+     * Send activtion mail for a user account
+     *
+     * @param QUI\Users\User $User
+     * @param string $newEmail - New E-Mail-Adress
+     * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
+     * @return void
+     */
+    public function sendChangeEmailAddressMail(QUI\Users\User $User, $newEmail, $Project)
+    {
+        $EmailConfirmVerification = new EmailConfirmVerification($User->getId(), array(
+            'project'     => $Project->getName(),
+            'projectLang' => $Project->getLang(),
+            'newEmail'    => $newEmail
+        ));
+
+        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+
+        $L      = QUI::getLocale();
+        $lg     = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host   = $Project->getVHost();
+
+        try {
+            $this->sendMail(
+                array(
+                    'subject' => $L->get($lg, 'mail.change_email_address.subject', array(
+                        'host' => $host
+                    ))
+                ),
+                array(
+                    $newEmail
+                ),
+                $tplDir . 'mail.change_email_address.html',
+                array(
+                    'body' => $L->get($lg, 'mail.change_email_address.body', array(
+                        'host'        => $host,
+                        'userId'      => $User->getId(),
+                        'username'    => $User->getUsername(),
+                        'newEmail'    => $newEmail,
+                        'date'        => $L->formatDate(time()),
+                        'confirmLink' => $confirmLink
+                    ))
+                )
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendChangeEmailAddressMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
+     * Send an email to the frontend user
      *
      * @param array $mailData - mail data ("subject", "from", "fromName")
      * @param array $recipients - e-mail addresses
@@ -439,7 +501,7 @@ class Handler extends Singleton
      * @param array $templateVars (optional) - additional template variables (besides $this)
      * @return void
      *
-     * @throws QUI\Memberships\Exception
+     * @throws QUI\Exception
      */
     protected function sendMail($mailData, $recipients, $templateFile, $templateVars = array())
     {
@@ -447,7 +509,8 @@ class Handler extends Singleton
             return;
         }
 
-        $Engine = QUI::getTemplateManager()->getEngine();
+        $mailSettings = self::getMailSettings();
+        $Engine       = QUI::getTemplateManager()->getEngine();
 
         $Engine->assign($templateVars);
 
@@ -462,12 +525,12 @@ class Handler extends Singleton
             $Mailer->setSubject($mailData['subject']);
         }
 
-        if (!empty($mailData['from'])) {
-            $Mailer->setFrom($mailData['from']);
+        if (!empty($mailSettings['mailFromAddress'])) {
+            $Mailer->setFrom($mailSettings['mailFromAddress']);
         }
 
-        if (!empty($mailData['fromName'])) {
-            $Mailer->setFromName($mailData['fromName']);
+        if (!empty($mailSettings['mailFromText'])) {
+            $Mailer->setFromName($mailSettings['mailFromText']);
         }
 
         $Mailer->setBody($template);

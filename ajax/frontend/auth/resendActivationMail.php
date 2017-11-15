@@ -6,6 +6,7 @@
 
 use QUI\Verification\Verifier;
 use QUI\FrontendUsers\Handler;
+use QUI\FrontendUsers\ActivationVerification;
 
 /**
  * Resend an activation mail
@@ -16,7 +17,7 @@ QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail',
     function ($userId) {
         try {
-            Verifier::getVerificationByIdentifier((int)$userId);
+            Verifier::getVerificationByIdentifier((int)$userId, ActivationVerification::getType());
         } catch (\Exception $Exception) {
             // if the verification does not exist -> do not resend mail
             return false;
