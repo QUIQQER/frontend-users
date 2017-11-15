@@ -52,8 +52,8 @@
 
         <!-- Settings: User profile -->
         <locale name="settings.section.userProfile.title">
-            <de><![CDATA[Einstellungen für das Benutzer-Profil]]></de>
-            <en><![CDATA[User profile settings]]></en>
+            <de><![CDATA[Sichtbare Kategorien im Benutzer-Profil]]></de>
+            <en><![CDATA[Visible categories in the User Profile]]></en>
         </locale>
         <locale name="settings.category.userProfile.title">
             <de><![CDATA[Profil]]></de>
@@ -78,6 +78,30 @@
         <locale name="settings.showDeleteAccount.title" html="true">
             <de><![CDATA["Mein Benutzerkonto löschen" anzeigen]]></de>
             <en><![CDATA[Show "Delete my account"]]></en>
+        </locale>
+        <locale name="settings.section.userAccount.title">
+            <de><![CDATA[Benuterkonto-Aktionen]]></de>
+            <en><![CDATA[User account actions]]></en>
+        </locale>
+        <locale name="settings.userDeleteMode.title">
+            <de><![CDATA[Verhalten, wenn Benuterkonto gelöscht wird]]></de>
+            <en><![CDATA[Behvaiour on user account deletion]]></en>
+        </locale>
+        <locale name="settings.userDeleteMode.description">
+            <de><![CDATA[Legt fest, was intern mit einem Benutzerkonto passiert, dass über das Frontend gelöscht wird.]]></de>
+            <en><![CDATA[Determines what happens internally to a user account that is deleted via frontend.]]></en>
+        </locale>
+        <locale name="settings.userDeleteMode.option.delete">
+            <de><![CDATA[Benutzerkonto als gelöscht markieren und alle Benutzerdaten beibehalten]]></de>
+            <en><![CDATA[Mark user account as deleted and keep all user data]]></en>
+        </locale>
+        <locale name="settings.userDeleteMode.option.wipe">
+            <de><![CDATA[Benutzerkonto als gelöscht markieren und alle personenbezogenen Benutzerdaten löschen]]></de>
+            <en><![CDATA[Mark user account as deleted and delete all personal user data]]></en>
+        </locale>
+        <locale name="settings.userDeleteMode.option.destroy">
+            <de><![CDATA[Benutzerkonto vollständig aus der Datenbank löschen (nicht wiederherstellbar!)]]></de>
+            <en><![CDATA[Completely delete the user account from the database (not recoverable!)]]></en>
         </locale>
 
         <!-- Settings: Registration -->
@@ -284,8 +308,8 @@
             <en><![CDATA[Verification E-Mails]]></en>
         </locale>
         <locale name="settings.verificationValidityDuration.title">
-            <de><![CDATA[Verifizierungs E-Mail]]></de>
-            <en><![CDATA[Verification E-Mails]]></en>
+            <de><![CDATA[Gültigkeitsdauer Verifizierungs-Mails]]></de>
+            <en><![CDATA[Period of validity Verification mails]]></en>
         </locale>
         <locale name="settings.verificationValidityDuration.description">
             <de><![CDATA[Dauer in <b>Minuten</b>, die ein Verifizierungs-Link (z.B. Benutzerkonto-Aktivierung nach Registrierung, Änderung der E-Mail-Adresse) gültig ist.]]></de>
@@ -433,6 +457,36 @@
         <locale name="exception.controls.profile.changepassword.wrong_password">
             <de><![CDATA[Ihr aktuelles Passwort ist falsch. Bitte geben Sie das korrekte Login-Passwort an.]]></de>
             <en><![CDATA[Your current password is wrong. Please provide your correct login password.]]></en>
+        </locale>
+
+        <!-- Profile: Delete account -->
+        <locale name="profile.deleteaccount.text">
+            <de><![CDATA[Benutzerkonto löschen]]></de>
+            <en><![CDATA[Delete user account]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.title">
+            <de><![CDATA[Benutzerkonto löschen]]></de>
+            <en><![CDATA[Delete user account]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.info">
+            <de><![CDATA[Bitte klicken Sie auf den Button, um Ihr Benutzerkonto zu löschen. Nach einer Bestätigung per E-Mail wird Ihr Benutzerkonto unwiderruflich gelöscht.]]></de>
+            <en><![CDATA[Please click on the button to delete your user account. After your verification via E-Mail your account will be irrevocably deleted.]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.btn.submit">
+            <de><![CDATA[Benutzerkonto löschen]]></de>
+            <en><![CDATA[Delete user account]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.btn.submit_again">
+            <de><![CDATA[Verifizierungs-Mail erneut senden]]></de>
+            <en><![CDATA[Re-send verification mail]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.message.confirm_wait">
+            <de><![CDATA[Bitte bestätigen Sie die Löschung Ihres Benutzerkontos über den Link, der Ihnen per E-Mail zugesandt wurde.]]></de>
+            <en><![CDATA[Please confirm deletion of your user account via the link sent to you by e-mail.]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.message.error">
+            <de><![CDATA[Das Löschen Ihres Benutzerkontos hat leider nicht funktioniert. Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.]]></de>
+            <en><![CDATA[Unfortunately, deleting your user account did not work. Please try again or try again later.]]></en>
         </locale>
 
         <!-- Class: Handler -->
@@ -633,6 +687,27 @@ The e-mail address for your user account on [host] has been changed to the addre
 </p>
 <p>
 <b>Note:</b> If you have not requested this change, please ignore this email.
+</p>]]></en>
+        </locale>
+
+        <!-- User delete confirm mail -->
+        <locale name="mail.delete_user_confirm.subject">
+            <de><![CDATA[Löschung Ihres Benutzerkontos]]></de>
+            <en><![CDATA[Deletion of your user account]]></en>
+        </locale>
+        <locale name="mail.delete_user_confirm.body" html="true">
+            <de><![CDATA[<h1>Hallo [username]!</h1>
+<p>
+Die Löschung Ihres Benutzerkontos auf [host] wurde am [date] beantragt. Bitte bestätigen Sie die unwiderrufliche Löschung Ihres Benutzerkontos mit einem Klick auf folgenden Link:
+<br><br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>]]></de>
+            <en><![CDATA[<h1>Hello [username]!</h1>
+<p>
+The deletion of your user account on [host] was requested on [date]. Please confirm the irrevocable deletion of your user account by clicking on the following link:
+<br>
+<a href="[confirmLink]">[confirmLink]</a>
 </p>]]></en>
         </locale>
 

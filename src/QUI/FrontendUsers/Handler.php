@@ -189,6 +189,17 @@ class Handler extends Singleton
     }
 
     /**
+     * Get all settings for user profile
+     *
+     * @return array
+     */
+    public function getUserProfileSettings()
+    {
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        return $Conf->getSection('userProfile');
+    }
+
+    /**
      * Get registration settings concerning all Registars alike
      *
      * @return array
@@ -484,6 +495,55 @@ class Handler extends Singleton
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
                 self::class . ' :: sendChangeEmailAddressMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
+     * Send verification mail for user account deletion
+     *
+     * @param QUI\Users\User $User
+     * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
+     * @return void
+     */
+    public function sendDeleteUserConfirmationMail(QUI\Users\User $User, $Project)
+    {
+        $EmailConfirmVerification = new UserDeleteConfirmVerification($User->getId(), array(
+            'project'     => $Project->getName(),
+            'projectLang' => $Project->getLang()
+        ));
+
+        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+
+        $L      = QUI::getLocale();
+        $lg     = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host   = $Project->getVHost();
+
+        try {
+            $this->sendMail(
+                array(
+                    'subject' => $L->get($lg, 'mail.delete_user_confirm.subject')
+                ),
+                array(
+                    $User->getAttribute('email')
+                ),
+                $tplDir . 'mail.delete_user_confirm.html',
+                array(
+                    'body' => $L->get($lg, 'mail.delete_user_confirm.body', array(
+                        'host'        => $host,
+                        'userId'      => $User->getId(),
+                        'username'    => $User->getUsername(),
+                        'date'        => $L->formatDate(time()),
+                        'confirmLink' => $confirmLink
+                    ))
+                )
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendDeleteUserConfirmationMail -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);

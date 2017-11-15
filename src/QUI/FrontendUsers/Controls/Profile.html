@@ -1,7 +1,7 @@
 <div class="quiqqer-frontendUsers-controls-profile-categories">
     {foreach $categories as $item}
     <a href="{$item.url}"
-       class="quiqqer-frontendUsers-controls-profile-category"
+       class="quiqqer-frontendUsers-controls-profile-category{if $current == $item.name} quiqqer-frontendUsers-controls-profile-category-active{/if}"
        data-name="{$item.name}"
     >
         {if isset($item.icon) && $item.icon}

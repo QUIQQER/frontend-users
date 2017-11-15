@@ -164,6 +164,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                     self.save().then(function () {
                         self.Loader.hide();
+                        self.openCategory(self.$category);
                     }, function () {
                         self.Loader.hide();
                     });

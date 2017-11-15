@@ -12,7 +12,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
 
     'Locale',
 
-    'package/quiqqer/frontend-users/bin/Registration'
+    'package/quiqqer/frontend-users/bin/Registration',
+
+    'css!package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData.css'
 
 ], function (QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
     "use strict";
@@ -38,6 +40,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
             this.addEvents({
                 onImport: this.$onImport
             });
+
+            console.log("init");
         },
 
         /**

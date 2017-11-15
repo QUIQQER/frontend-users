@@ -95,5 +95,16 @@ class UserData extends Control
                 QUI::getRewrite()->getProject()
             );
         }
+
+        // user data
+        $allowedFields = array(
+            'firstname',
+            'lastname',
+            'birthday'
+        );
+
+        foreach ($allowedFields as $field) {
+
+        }
     }
 }

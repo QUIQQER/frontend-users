@@ -18,6 +18,11 @@
                 </text>
                 <template>OPT_DIR/quiqqer/frontend-users/src/QUI/FrontendUsers/Controls/Profile/avatar.html</template>
             </tab>
+            <tab name="deleteaccount" icon="fa fa-trash" control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount">
+                <text>
+                    <locale group="quiqqer/frontend-users" var="profile.deleteaccount.text"/>
+                </text>
+            </tab>
         </profile>
     </frontend-users>
 </quiqqer>

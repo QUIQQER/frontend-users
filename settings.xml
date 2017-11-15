@@ -25,6 +25,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
                 </conf>
+                <conf name="userDeleteMode">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue><![CDATA[delete]]></defaultvalue>
+                </conf>
             </section>
 
             <section name="disable">
@@ -161,6 +165,31 @@
                             </text>
                         </input>
                     </settings>
+
+                    <settings title="user_account_section" name="user_account_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.userAccount.title"/>
+                        </title>
+
+                        <select conf="userProfile.userDeleteMode">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.description"/>
+                            </description>
+                            <option value="delete">
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.delete"/>
+                            </option>
+                            <option value="wipe">
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.wipe"/>
+                            </option>
+                            <option value="destroy">
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.destroy"/>
+                            </option>
+                        </select>
+                    </settings>
+
                 </category>
 
                 <category name="login">
