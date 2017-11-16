@@ -10,6 +10,7 @@ use QUI;
 use QUI\Utils\Text\XML;
 use QUI\Utils\DOM;
 use QUI\FrontendUsers\Controls\Profile\ControlWrapper;
+use QUI\Permissions;
 
 /**
  * Class Utils
@@ -69,6 +70,7 @@ class Utils
         $result   = array();
         $packages = self::getFrontendUsersPackages();
 
+        /** @var QUI\Package\Package $Package */
         foreach ($packages as $Package) {
             $Dom  = XML::getDomFromXml($Package->getDir() . '/frontend-users.xml');
             $Path = new \DOMXPath($Dom);
@@ -92,13 +94,17 @@ class Utils
                 }
 
                 $result[] = array(
-                    'text'     => DOM::getTextFromNode($Text),
-                    'name'     => $name,
-                    'icon'     => DOM::parseVar($Item->getAttribute('icon')),
-                    'require'  => $Item->getAttribute('require'),
-                    'exec'     => $Item->getAttribute('exec'),
-                    'control'  => $Item->getAttribute('control'),
-                    'template' => $template
+                    'text'          => DOM::getTextFromNode($Text),
+                    'textVar'       => DOM::getTextFromNode($Text, false),
+                    'name'          => $name,
+                    'icon'          => DOM::parseVar($Item->getAttribute('icon')),
+                    'require'       => $Item->getAttribute('require'),
+                    'exec'          => $Item->getAttribute('exec'),
+                    'control'       => $Item->getAttribute('control'),
+                    'showinmenu'    => boolval($Item->getAttribute('showinmenu')),
+                    'hideinprofile' => boolval($Item->getAttribute('hideinprofile')),
+                    'template'      => $template,
+                    'source'        => $Package->getTitle()
                 );
 
                 $catId++;
@@ -131,6 +137,29 @@ class Utils
             'quiqqer/frontend-users',
             'exception.profile.category.not.found'
         ));
+    }
+
+    /**
+     * Get (localized) titles of all categories that the Session User is allowed to view
+     *
+     * @return array
+     */
+    public static function getProfileBarCategories()
+    {
+        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+        $categories       = array();
+
+        foreach (Utils::getProfileCategories() as $c) {
+            if (Permissions\Permission::hasPermission($permissionPrefix . $c['name'])) {
+                $categories[] = array(
+                    'title' => $c['text'],
+                    'name'  => $c['name'],
+                    'icon'  => $c['icon']
+                );
+            }
+        }
+
+        return $categories;
     }
 
     /**

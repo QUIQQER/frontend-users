@@ -31,6 +31,17 @@
                 </conf>
             </section>
 
+            <section name="profileBar">
+                <conf name="showLogin">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+                <conf name="showRegistration">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+            </section>
+
             <section name="disable">
                 <conf name="hashLifetime">
                     <type><![CDATA[int]]></type>
@@ -163,6 +174,30 @@
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.showDeleteAccount.title"/>
                             </text>
+                        </input>
+                    </settings>
+
+                    <settings title="profileBar_section" name="profileBar_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.profileBar.title"/>
+                        </title>
+
+                        <input conf="profileBar.showLogin" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showLogin.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.showLogin.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="profileBar.showRegistration" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showRegistration.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.showRegistration.description"/>
+                            </description>
                         </input>
                     </settings>
 

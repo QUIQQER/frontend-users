@@ -7,7 +7,7 @@
                 </text>
                 <template>OPT_DIR/quiqqer/frontend-users/src/QUI/FrontendUsers/Controls/Profile/user.html</template>
             </tab>
-            <tab showinmenu="1" hideinprofile="1" name="changepassword" require="" icon="fa fa-key" control="\QUI\FrontendUsers\Controls\Profile\ChangePassword">
+            <tab showinmenu="1" name="changepassword" require="" icon="fa fa-key" control="\QUI\FrontendUsers\Controls\Profile\ChangePassword">
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.changePassword.text"/>
                 </text>

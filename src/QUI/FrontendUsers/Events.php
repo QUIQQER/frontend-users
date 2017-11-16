@@ -189,6 +189,7 @@ class Events
 
         self::setAddressDefaultSettings();
         self::setRegistrarsDefaultSettings();
+        self::createProfileCategoryViewPermissions();
     }
 
     /**
@@ -283,5 +284,37 @@ class Events
     {
         $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
         $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
+    }
+
+    /**
+     * Create view permissions for all Profile categories
+     *
+     * @return void
+     */
+    protected static function createProfileCategoryViewPermissions()
+    {
+        $Permissions      = new QUI\Permissions\Manager();
+        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+
+        foreach (Utils::getProfileCategories() as $c) {
+            $permission = $permissionPrefix . $c['name'];
+
+            try {
+                $Permissions->getPermissionData($permission);
+                continue;
+            } catch (\Exception $Exception) {
+                // if permission does not exist -> create it
+            }
+
+            $Permissions->addPermission(array(
+                'name'         => $permission,
+                'title'        => $c['textVar'][0] . ' ' . $c['textVar'][1],
+                'desc'         => '',
+                'type'         => 'bool',
+                'area'         => '',
+                'src'          => $c['source'],
+                'defaultvalue' => 0
+            ));
+        }
     }
 }

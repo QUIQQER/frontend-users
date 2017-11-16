@@ -112,7 +112,7 @@ class Handler extends Singleton
     /**
      * Get ACTIVE Registrar
      *
-     * @param string $registrar - Registrar
+     * @param string $registrar - Registrar type
      * @return false|RegistrarInterface
      */
     public function getRegistrar($registrar)
@@ -197,6 +197,17 @@ class Handler extends Singleton
     {
         $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         return $Conf->getSection('userProfile');
+    }
+
+    /**
+     * Get all settings for user bar
+     *
+     * @return array
+     */
+    public function getProfileBarSettings()
+    {
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        return $Conf->getSection('profileBar');
     }
 
     /**
@@ -421,6 +432,10 @@ class Handler extends Singleton
         $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
         $host   = $Project->getVHost();
 
+        $Registrar = self::getRegistrar(
+            $User->getAttribute(self::USER_ATTR_REGISTRAR)
+        );
+
         try {
             $this->sendMail(
                 array(
@@ -432,11 +447,12 @@ class Handler extends Singleton
                 $tplDir . 'mail.registration_notice.html',
                 array(
                     'body' => $L->get($lg, 'mail.registration_notice.body', array(
-                        'host'     => $host,
-                        'userId'   => $User->getId(),
-                        'username' => $User->getUsername(),
-                        'email'    => $User->getAttribute('email'),
-                        'date'     => $L->formatDate(time())
+                        'host'      => $host,
+                        'userId'    => $User->getId(),
+                        'username'  => $User->getUsername(),
+                        'email'     => $User->getAttribute('email'),
+                        'date'      => $L->formatDate(time()),
+                        'registrar' => $Registrar ? $Registrar->getTitle() : '-'
                     ))
                 )
             );

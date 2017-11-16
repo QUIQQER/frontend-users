@@ -77,7 +77,7 @@ class Profile extends Control
         }
 
         $Site       = $this->getSite();
-        $categories = QUI\FrontendUsers\Utils::getProfileCategories();
+        $categories = $this->getProfileCategories();
 
         foreach ($categories as $k => $c) {
             $categories[$k]['url'] = $Site->getUrlRewritten(array(), array(
@@ -92,6 +92,41 @@ class Profile extends Control
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
+    }
+
+    /**
+     * Get all categories from frontend-user.xml files that are
+     * shown in the User Profile
+     *
+     * @return array
+     */
+    protected function getProfileCategories()
+    {
+        $categories = QUI\FrontendUsers\Utils::getProfileCategories();
+        $settings   = QUI\FrontendUsers\Handler::getInstance()->getUserProfileSettings();
+
+        /** Maps internal name to setting name */
+        $categoryMapping = array(
+            'user'           => 'showMyData',
+            'changepassword' => 'showPasswordChange',
+//            'avatar'         => 'showAvatar',
+            'deleteaccount'  => 'showDeleteAccount',
+            'address'        => 'showAddress',
+            'addressManager' => 'showAddressManager'
+        );
+
+        foreach ($categories as $k => $data) {
+            if ($data['hideinprofile']) {
+                unset($categories[$k]);
+            }
+
+            if (isset($categoryMapping[$data['name']])
+                && !boolval($settings[$categoryMapping[$data['name']]])) {
+                unset($categories[$k]);
+            }
+        }
+
+        return $categories;
     }
 
     /**

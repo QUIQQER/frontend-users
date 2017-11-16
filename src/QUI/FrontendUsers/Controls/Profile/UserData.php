@@ -103,8 +103,24 @@ class UserData extends Control
             'birthday'
         );
 
-        foreach ($allowedFields as $field) {
+        // special case: birthday
+        $bday = '';
 
+        if ($Request->get('birth_year')
+            && $Request->get('birth_month')
+            && $Request->get('birth_day')) {
+            $bday .= $Request->get('birth_year');
+            $bday .= '-' . $Request->get('birth_month');
+            $bday .= '-' . $Request->get('birth_day');
+            $Request->set('birthday', $bday);
         }
+
+        foreach ($allowedFields as $field) {
+            if ($Request->get($field)) {
+                $User->setAttribute($field, $Request->get($field));
+            }
+        }
+
+        $User->save(QUI::getUsers()->getSystemUser());
     }
 }

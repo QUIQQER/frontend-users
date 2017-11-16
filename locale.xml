@@ -104,6 +104,28 @@
             <en><![CDATA[Completely delete the user account from the database (not recoverable!)]]></en>
         </locale>
 
+        <!-- Settings: ProfileBar -->
+        <locale name="settings.section.profileBar.title">
+            <de><![CDATA[Benutzer-Leiste]]></de>
+            <en><![CDATA[User Bar]]></en>
+        </locale>
+        <locale name="settings.showLogin.title">
+            <de><![CDATA[Zeige Login]]></de>
+            <en><![CDATA[Show Sign In]]></en>
+        </locale>
+        <locale name="settings.showLogin.description">
+            <de><![CDATA[Zeige in der Benutzer-Leiste einen Button, der ein Login-Fenster öffnet, wenn kein Benutzer eingeloggt ist]]></de>
+            <en><![CDATA[Show button that opens a Sign In popup in the User Bar if no user is logged in]]></en>
+        </locale>
+        <locale name="settings.showRegistration.title">
+            <de><![CDATA[Zeige Registrierung]]></de>
+            <en><![CDATA[Show Sign Up]]></en>
+        </locale>
+        <locale name="settings.showRegistration.description" html="true">
+            <de><![CDATA[Zeige in der Benutzer-Leiste einen Button, der auf die Registrierungs-Seite leitet, wenn kein Benutzer eingeloggt ist (setzt voraus, dass eine Seite mit dem Typ <b>Registrierung</b> angelegt und aktiv ist!)]]></de>
+            <en><![CDATA[Show button that opens a Sign Up popup in the User Bar if no user is logged in (requires an active Site of type <b>Registration</b>!)]]></en>
+        </locale>
+
         <!-- Settings: Registration -->
         <locale name="settings.section.registration.title">
             <de><![CDATA[Allgemeine Registrierungs-Einstellungen]]></de>
@@ -352,6 +374,20 @@
             <en><![CDATA[JavaScript is disabled in your browser. Please activate JavaScript in your browser to register.]]></en>
         </locale>
 
+        <!-- Permissions -->
+        <locale name="permission.quiqqer.frontendUsers._header">
+            <de><![CDATA[Frontend-Benutzer]]></de>
+            <en><![CDATA[Frontend Users]]></en>
+        </locale>
+        <locale name="permission.quiqqer.frontendUsers.profile._header">
+            <de><![CDATA[Profil]]></de>
+            <en><![CDATA[Profile]]></en>
+        </locale>
+        <locale name="permission.quiqqer.frontendUsers.profile.view._header">
+            <de><![CDATA[Profil-Kategorien, die dieser Benutzer/Gruppe sehen darf]]></de>
+            <en><![CDATA[Profile categories this user/group can view]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -520,6 +556,16 @@
             <en><![CDATA[Sorry, an error occured during the registration process. Please try again or contact an administrator.]]></en>
         </locale>
 
+        <!-- Control: ProfileBar -->
+        <locale name="controls.profilebar.login_text">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Sign In]]></en>
+        </locale>
+        <locale name="controls.profilebar.registration_text">
+            <de><![CDATA[Registrieren]]></de>
+            <en><![CDATA[Sign Up]]></en>
+        </locale>
+
         <!-- Registrar: Email -->
         <locale name="registrars.email.label.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
@@ -606,6 +652,7 @@
     <li>Username: [username]</li>
     <li>E-Mail: [email]</li>
     <li>Datum: [date]</li>
+    <li>Registrierung über: [registrar]</li>
 </ul>]]></de>
             <en><![CDATA[<h1>New registration on [host]</h1>
 <ul>
@@ -613,6 +660,7 @@
     <li>Username: [username]</li>
     <li>E-Mail: [email]</li>
     <li>Date: [date]</li>
+    <li>Registration via: [registrar]</li>
 </ul>]]></en>
         </locale>
 
