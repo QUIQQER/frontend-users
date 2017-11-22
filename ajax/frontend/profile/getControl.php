@@ -5,13 +5,24 @@
  */
 
 use QUI\Utils\Security\Orthos;
+use QUI\Permissions\Permission;
 
 /**
- * @return string
+ * Get profile control by category
+ *
+ * @param string $category
+ * @return false|string - false if category does not exist or user has no permission -> category control html otherwise
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
     function ($category, $project, $siteId) {
+        $category         = Orthos::clear($category);
+        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+
+        if (!Permission::hasPermission($permissionPrefix . $category)) {
+            return false;
+        }
+
         $Control = new QUI\FrontendUsers\Controls\Profile();
 
         try {
