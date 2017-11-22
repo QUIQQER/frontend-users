@@ -9,7 +9,7 @@
             </tab>
             <tab showinmenu="1" name="changepassword" require="" icon="fa fa-key" control="\QUI\FrontendUsers\Controls\Profile\ChangePassword">
                 <text>
-                    <locale group="quiqqer/frontend-users" var="profile.changePassword.title"/>
+                    <locale group="quiqqer/frontend-users" var="profile.changepassword.title"/>
                 </text>
             </tab>
             <tab name="avatar" icon="fa fa-address-book-o">
