@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\Control;
+use QUI\FrontendUsers\Utils;
 
 /**
  * Class Profile
@@ -44,13 +45,19 @@ class Profile extends Control
         $Request    = QUI::getRequest();
         $Engine     = QUI::getTemplateManager()->getEngine();
         $current    = $this->getAttribute('category');
-        $categories = QUI\FrontendUsers\Utils::getProfileCategories();
+        $categories = Utils::getProfileCategories();
+
+        foreach ($categories as $k => $c) {
+            if (!Utils::hasPermissionToViewCategory($c['name'])) {
+                unset($categories[$k]);
+            }
+        }
 
         if (!empty($_GET['c'])) {
             $current = $_GET['c'];
         }
 
-        if ($current) {
+        if ($current && Utils::hasPermissionToViewCategory($current)) {
             $this->setAttribute('category', $current);
 
             try {
@@ -65,19 +72,22 @@ class Profile extends Control
             $current = $categories[0]['name'];
         }
 
-        $Control = QUI\FrontendUsers\Utils::getProfileCategoryControl($current);
-        $Control->setAttribute('User', $this->getUser());
+        $Control = false;
 
-        if ($Request->request->get('profile-save')) {
-            try {
-                $Control->onSave();
-            } catch (QUI\FrontendUsers\Exception $Exception) {
-                $Engine->assign('Error', $Exception);
+        if ($current) {
+            $Control = QUI\FrontendUsers\Utils::getProfileCategoryControl($current);
+            $Control->setAttribute('User', $this->getUser());
+
+            if ($Request->request->get('profile-save')) {
+                try {
+                    $Control->onSave();
+                } catch (QUI\FrontendUsers\Exception $Exception) {
+                    $Engine->assign('Error', $Exception);
+                }
             }
         }
 
-        $Site       = $this->getSite();
-        $categories = $this->getProfileCategories();
+        $Site = $this->getSite();
 
         foreach ($categories as $k => $c) {
             $categories[$k]['url'] = $Site->getUrlRewritten(array(), array(
