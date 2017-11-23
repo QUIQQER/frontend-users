@@ -3,7 +3,12 @@
 QUIQQER Frontend Users
 ========
 
-The Frontend Users module extends QUIQQER with a profile extension and a registry for users.
+The Frontend Users module extends QUIQQER with a profile extension and a registration for users.
+
+Provided site types:
+* `login` - Login area with different Authenticators (i.e. `Username / Password`, `Facebook`, `Google`)
+* `profile` - Shows a complete user profile to frontend users with different categories, where the user can view and/or change his user data
+* `registration` - Shows (configurable) registration options (e.g. `Username / Password`, `Facebook`, `Google`)
 
 Package Name:
 
