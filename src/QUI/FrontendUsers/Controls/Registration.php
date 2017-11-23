@@ -174,7 +174,8 @@ class Registration extends QUI\Control
         $NewUser->setAttributes(array(
             $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT      => $Project->getName(),
             $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT_LANG => $Project->getLang(),
-            $RegistrarHandler::USER_ATTR_REGISTRAR                 => $Registrar->getType()
+            $RegistrarHandler::USER_ATTR_REGISTRAR                 => $Registrar->getType(),
+            $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED  => true
         ));
 
         $NewUser->save(QUI::getUsers()->getSystemUser());

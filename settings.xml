@@ -74,6 +74,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
                 </conf>
+                <conf name="deleteInactiveUserAfterDays">
+                    <type><![CDATA[integer]]></type>
+                    <defaultvalue>3</defaultvalue>
+                </conf>
             </section>
 
             <section name="registrars">
@@ -307,6 +311,15 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.useCaptcha.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.deleteInactiveUserAfterDays" type="number">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.deleteInactiveUserAfterDays.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.deleteInactiveUserAfterDays.description"/>
                             </description>
                         </input>
 

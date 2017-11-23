@@ -5,6 +5,7 @@
         <attribute>quiqqer.frontendUsers.registrationProject</attribute>
         <attribute>quiqqer.frontendUsers.registrationProjectLang</attribute>
         <attribute>quiqqer.frontendUsers.registrar</attribute>
+        <attribute>quiqqer.frontendUsers.userActivationRequired</attribute>
         <attribute>quiqqer.frontendUsers.activationLoginExecuted</attribute>
         <attribute>quiqqer.frontendUsers.emailVerified</attribute>
     </attributes>

@@ -2,6 +2,16 @@
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
+        <!-- Cron -->
+        <locale name="cron.deleteUnverifiedInactiveUsers.title">
+            <de><![CDATA[Nicht aktive Benutzer löschen]]></de>
+            <en><![CDATA[Delete inactive Users]]></en>
+        </locale>
+        <locale name="cron.deleteUnverifiedInactiveUsers.description">
+            <de><![CDATA[Löscht automatisch alle Benutzer, die sich zwar über das Frontend registriert haben, aber nicht aktiviert wurde und bei denen die Registrierung länger als X Tage (Einstellung) her ist.]]></de>
+            <en><![CDATA[Automatically deletes all users who have registered via the frontend but have not been activated and who have had their registration longer than X days (setting) ago.]]></en>
+        </locale>
+
         <locale name="package.title">
             <de><![CDATA[QUIQQER - Frontend-Users]]></de>
             <en><![CDATA[QUIQQER - Frontend-Users]]></en>
@@ -290,6 +300,14 @@
         <locale name="settings.useCaptcha.description" html="true">
             <de><![CDATA[Registrierung erfordert die Eingabe eines CAPTCHAs. <b>Achtung:</b> Je nach eingestelltem Captcha-Modul wird u.U. <b>JavaScript</b> vorausgesetzt. Mit deaktiviertem JavaScript im Browser des Benutzers ist in so einem Fall <b>keine Registrierung</b> möglich!]]></de>
             <en><![CDATA[Registration requires solving a CAPTCHA. <b>Attention:</b> Depending on the selected Captcha module <b>JavaScript</b> may be required. Registration is then not possible if JavaScript is deactivated in the users browser.]]></en>
+        </locale>
+        <locale name="settings.deleteInactiveUserAfterDays.title">
+            <de><![CDATA[Nicht aktivierte Benutzer nach X Tagen löschen]]></de>
+            <en><![CDATA[Delete inactive users after X days]]></en>
+        </locale>
+        <locale name="settings.deleteInactiveUserAfterDays.description" html="true">
+            <de><![CDATA[Benutzer, die sich zwar registrieren, aber nicht aktivieren, werden automatisch nach X Tagen gelöscht. Dies setzt voraus, dass der Cron <b>Nicht aktive Benutzer löschen</b> eingerichtet und aktiviert ist. Betrifft <b>nicht</b> Benutzer, die über die Benutzerverwaltung deaktiviert wurden.]]></de>
+            <en><![CDATA[Users who register but do not activate will automatically be deleted after X days. This assumes that the Cron <b>Delete Inactive User</b> is set up and enabled. Subject <b>not</b> users who have been disabled through user management.]]></en>
         </locale>
 
         <!-- Settings: Registrars -->

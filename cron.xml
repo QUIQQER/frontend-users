@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<crons>
+    <cron exec="\QUI\FrontendUsers\Cron::deleteUnverifiedInactiveUsers">
+        <title>
+            <locale group="quiqqer/frontend-users" var="cron.deleteUnverifiedInactiveUsers.title" />
+        </title>
+        <description>
+            <locale group="quiqqer/frontend-users" var="cron.deleteUnverifiedInactiveUsers.description" />
+        </description>
+    </cron>
+</crons>

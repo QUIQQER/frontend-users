@@ -26,6 +26,11 @@ class Events
     {
         self::sendWelcomeMail($User);
         self::autoLogin($User);
+
+        if ($User->getAttribute(Handler::USER_ATTR_USER_ACTIVATION_REQUIRED)) {
+            $User->setAttribute(Handler::USER_ATTR_USER_ACTIVATION_REQUIRED, false);
+            $User->save(QUI::getUsers()->getSystemUser());
+        }
     }
 
     /**
