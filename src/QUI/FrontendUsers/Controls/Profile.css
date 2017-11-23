@@ -17,7 +17,6 @@
     clear: both;
     float: left;
     padding: 10px;
-    text-align: center;
     width: 100%;
 }
 
@@ -31,10 +30,15 @@
 }
 
 .quiqqer-frontendUsers-controls-profile-category-icon {
-    font-size: 30px;
-    margin: 10px 0;
+    float: left;
+    font-size: 16px;
+    line-height: 30px;
     text-align: center;
-    width: 100%;
+    width: 50px;
+}
+
+.quiqqer-frontendUsers-controls-profile-category-text {
+
 }
 
 .quiqqer-frontendUsers-saveButton {
@@ -93,4 +97,44 @@
     float: left;
     margin: 0 10px;
     width: 60%;
+}
+
+/** responsive
+ ==================================== */
+
+.quiqqer-frontendUsers-controls-profile-categories-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .quiqqer-frontendUsers-controls-profile-categories-mobile {
+        clear: both;
+        display: inline;
+        float: left;
+        width: 100%;
+    }
+
+    .quiqqer-frontendUsers-controls-profile-categories-mobile select {
+        clear: both;
+        width: 100%;
+    }
+
+    .quiqqer-frontendUsers-controls-profile-categories {
+        display: none;
+    }
+
+    .quiqqer-frontendUsers-label,
+    .quiqqer-frontendUsers-controls-profile-categoryContent,
+    .quiqqer-frontendUsers-controls-profile-control input {
+        width: 100%;
+    }
+
+    .quiqqer-frontendUsers-controls-profile-categoryContent {
+        padding: 0;
+    }
+
+    .quiqqer-frontendUsers-saveButton {
+        margin: 0 auto;
+        width: 100%;
+    }
 }

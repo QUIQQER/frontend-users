@@ -40,8 +40,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
             this.addEvents({
                 onImport: this.$onImport
             });
-
-            console.log("init");
         },
 
         /**

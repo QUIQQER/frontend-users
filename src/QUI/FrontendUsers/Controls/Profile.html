@@ -9,10 +9,24 @@
             <span class="fa {$item.icon}"></span>
         </div>
         {/if}
-        {$item.text}
+        <div class="quiqqer-frontendUsers-controls-profile-category-text">
+            {$item.text}
+        </div>
     </a>
     {/foreach}
 </div>
+
+<form action="" method="post">
+    <label class="quiqqer-frontendUsers-controls-profile-categories-mobile">
+        <select name="profile-categories">
+            {foreach $categories as $item}
+            <option value="{$item.name}"{if $current == $item.name} selected{/if}>
+                {$item.text}
+            </option>
+            {/foreach}
+        </select>
+    </label>
+</form>
 
 <form class="quiqqer-frontendUsers-controls-profile-categoryContent"
       method="post"

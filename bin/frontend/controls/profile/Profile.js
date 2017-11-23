@@ -157,6 +157,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     self.openCategory(Target.get('data-name'));
                 });
 
+                var MobileCategories = Elm.getElement(
+                    '.quiqqer-frontendUsers-controls-profile-categories-mobile select'
+                );
+
+                if (self.$category) {
+                    MobileCategories.value = self.$category;
+                }
+
+                MobileCategories.addEvent('change', function () {
+                    self.openCategory(MobileCategories.value);
+                });
+
                 forms.addEvent('submit', function (event) {
                     event.stop();
 

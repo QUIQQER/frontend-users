@@ -1,13 +1,17 @@
 <quiqqer>
     <frontend-users>
         <profile>
-            <tab name="user" require="" icon="fa fa-user" control="\QUI\FrontendUsers\Controls\Profile\UserData">
+            <tab name="user" require="" icon="fa fa-user"
+                 control="\QUI\FrontendUsers\Controls\Profile\UserData"
+            >
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.userData.text"/>
                 </text>
                 <template>OPT_DIR/quiqqer/frontend-users/src/QUI/FrontendUsers/Controls/Profile/user.html</template>
             </tab>
-            <tab showinmenu="1" name="changepassword" require="" icon="fa fa-key" control="\QUI\FrontendUsers\Controls\Profile\ChangePassword">
+            <tab showinmenu="1" name="changepassword" require="" icon="fa fa-key"
+                 control="\QUI\FrontendUsers\Controls\Profile\ChangePassword"
+            >
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.changepassword.title"/>
                 </text>
@@ -18,7 +22,10 @@
                 </text>
                 <template>OPT_DIR/quiqqer/frontend-users/src/QUI/FrontendUsers/Controls/Profile/avatar.html</template>
             </tab>
-            <tab name="deleteaccount" icon="fa fa-trash" control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount">
+
+            <tab name="deleteaccount" icon="fa fa-trash"
+                 control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount"
+            >
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.deleteaccount.text"/>
                 </text>

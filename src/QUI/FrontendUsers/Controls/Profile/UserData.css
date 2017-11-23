@@ -2,19 +2,54 @@
     display: none;
 }
 
-.quiqqer-frontendUsers-userdata-email-edit {
-    font-size: 25px;
-    left: 495px;
-    margin-top: 22px;
-    position: absolute;
-}
-
-.quiqqer-frontendUsers-userdata-email-edit:hover {
-    cursor: pointer;
-}
-
 .quiqqer-frontendUsers-userdata-email-new-hint {
     clear: both;
     width: 100%;
     float: left;
+}
+
+.quiqqer-frontendUsers-userdata-label {
+    display: block;
+    width: 100%;
+}
+
+.package-intranet-profile-birthday {
+    width: 80%;
+}
+
+.quiqqer-frontendUsers-controls-profile-userdata input[name="firstname"],
+.quiqqer-frontendUsers-controls-profile-userdata input[name="lastname"] {
+    display: block;
+    width: 80%;
+}
+
+.quiqqer-frontendUsers-userdata-email {
+    display: block;
+    width: 80%;
+}
+
+.quiqqer-frontendUsers-userdata-email input {
+    float: left;
+    width: calc(100% - 60px);
+}
+
+.quiqqer-frontendUsers-userdata-email-edit {
+    border-width: 1px 1px 1px 0;
+    border-color: #ced9d9;
+    border-style: solid;
+    cursor: pointer;
+    float: left;
+    line-height: 38px;
+    text-align: center;
+    width: 60px;
+}
+
+@media (max-width: 768px) {
+    .quiqqer-frontendUsers-controls-profile-userdata input[name="firstname"],
+    .quiqqer-frontendUsers-controls-profile-userdata input[name="lastname"],
+    .package-intranet-profile-birthday,
+    .quiqqer-frontendUsers-userdata-email {
+        display: block;
+        width: 100%;
+    }
 }
