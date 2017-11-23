@@ -59,6 +59,5 @@ $Engine->assign(array(
     'isAuth'        => $isAuth,
     'SessionUser'   => $SessionUser,
     'FrontendLogin' => new FrontendLogin(),
-    'error'         => $error,
-    'ProfileBar'    => new FrontendUsers\Controls\ProfileBar()  // @todo entfernen
+    'error'         => $error
 ));
