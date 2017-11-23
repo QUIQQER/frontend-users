@@ -284,6 +284,54 @@ class Events
     {
         $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
         $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
+
+        $User = QUI::getUserBySession();
+
+        if (!$User->getAttribute('quiqqer.set.new.password')) {
+            return;
+        }
+
+        echo "<script>
+            var openChangePasswordWindow = function() {
+                require([
+                    'controls/users/password/Window',
+                    'Locale'
+                ], function(Password, QUILocale) {
+                    new Password({
+                        uid: '" . $User->getId() . "',
+                        mustChange: true,
+                        message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
+                        events: {
+                            onSuccess: function() {
+                                window.location.reload();
+                            }
+                        }
+                    }).open();
+                });
+            };
+       
+            var checkChangePasswordWindow = function() {
+                require(['Locale'], function(QUILocale) {
+                    if (!QUILocale.exists('quiqqer/quiqqer', 'message.set.new.password')) {
+                        (function() {
+                            openChangePasswordWindow();
+                        }).delay(2000);
+                        return;
+                    }
+                    
+                    openChangePasswordWindow();
+                });            
+            };
+    
+            var waitForRequire = setInterval(function() {
+                if (typeof require === 'undefined') {
+                    return;
+                }
+                
+                clearInterval(waitForRequire);
+                checkChangePasswordWindow();
+            }, 200);
+        </script>";
     }
 
     /**
