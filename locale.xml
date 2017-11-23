@@ -544,6 +544,10 @@
             <de><![CDATA[Adresse]]></de>
             <en><![CDATA[Address]]></en>
         </locale>
+        <locale name="profile.address.btn.submit">
+            <de><![CDATA[Speichern]]></de>
+            <en><![CDATA[Save]]></en>
+        </locale>
 
         <!-- Class: Handler -->
         <locale name="exception.handler.check_config.no_welcome_mail_for_password_send">

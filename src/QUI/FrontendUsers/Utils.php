@@ -166,6 +166,7 @@ class Utils
     /**
      * Checks if the given User is allowed to view a category
      *
+     * @param string $category - Profile category name
      * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
      * @return bool
      */

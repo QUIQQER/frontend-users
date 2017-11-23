@@ -40,25 +40,25 @@ class UserDeleteConfirmVerification extends AbstractVerification
             $User = QUI::getUsers()->get($userId);
 
             switch ($userProfileSettings['userDeleteMode']) {
-//                case 'delete':
-//                    QUI::getDataBase()->update(
-//                        QUI::getDBTableName('users'),
-//                        array(
-//                            'active' => -1
-//                        ),
-//                        array(
-//                            'id' => $User->getId()
-//                        )
-//                    );
-//                    break;
-//
-//                case 'wipe':
-//                    $User->disable(QUI::getUsers()->getSystemUser());
-//                    break;
-//
-//                case 'destroy':
-//                    $User->delete();
-//                    break;
+                case 'delete':
+                    QUI::getDataBase()->update(
+                        QUI::getDBTableName('users'),
+                        array(
+                            'active' => -1
+                        ),
+                        array(
+                            'id' => $User->getId()
+                        )
+                    );
+                    break;
+
+                case 'wipe':
+                    $User->disable(QUI::getUsers()->getSystemUser());
+                    break;
+
+                case 'destroy':
+                    $User->delete();
+                    break;
             }
 
             $User->logout();
