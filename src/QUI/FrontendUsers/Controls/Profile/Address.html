@@ -1,0 +1,20 @@
+<h2>{locale group="quiqqer/frontend-users" var="profile.address.title"}</h2>
+
+{foreach $addressFields as $field => $options}
+<label>
+    <span class="quiqqer-frontendUsers-label">
+        {locale group="quiqqer/system" var=$field}
+        {if $options['required']}*{/if}
+    </span>
+
+    {if $field == 'country'}
+    {$CountrySelect->create()}
+    {else}
+    <input name="{$field}" value="{$options['value']}"/>
+    {/if}
+</label>
+{/foreach}
+
+<button type="submit" class="quiqqer-frontendUsers-saveButton">
+    {locale group="quiqqer/frontend-users" var="profile.address.btn.submit"}
+</button>

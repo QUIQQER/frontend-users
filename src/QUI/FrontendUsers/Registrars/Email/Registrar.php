@@ -37,11 +37,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $User->setAttribute('email', $this->getAttribute('email'));
 
         // set address data
-        $User->setAttributes(array(
-            'firstname' => $this->getAttribute('firstname'),
-            'lastname'  => $this->getAttribute('lastname')
-        ));
-
         $UserAddress = $User->addAddress(array(
             'salutation' => $this->getAttribute('salutation'),
             'firstname'  => $this->getAttribute('firstname'),
@@ -53,6 +48,12 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             'city'       => $this->getAttribute('city'),
             'country'    => mb_strtolower($this->getAttribute('country'))
         ), $SystemUser);
+
+        $User->setAttributes(array(
+            'firstname' => $this->getAttribute('firstname'),
+            'lastname'  => $this->getAttribute('lastname'),
+            'address'   => $UserAddress->getId()    // set as main address
+        ));
 
         $tel    = $this->getAttribute('phone');
         $mobile = $this->getAttribute('mobile');
@@ -143,9 +144,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
             $msg .= "<p>" . QUI::getLocale()->get(
-                'quiqqer/frontend-users',
-                'registrars.email.password_auto_generate'
-            ) . "</p>";
+                    'quiqqer/frontend-users',
+                    'registrars.email.password_auto_generate'
+                ) . "</p>";
         }
 
         return $msg;
@@ -162,9 +163,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
             $msg .= "<p>" . QUI::getLocale()->get(
-                'quiqqer/frontend-users',
-                'registrars.email.password_auto_generate'
-            ) . "</p>";
+                    'quiqqer/frontend-users',
+                    'registrars.email.password_auto_generate'
+                ) . "</p>";
         }
 
         return $msg;

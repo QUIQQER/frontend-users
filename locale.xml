@@ -403,6 +403,12 @@
             <en><![CDATA[or]]></en>
         </locale>
 
+        <!-- Profile: General -->
+        <locale name="profile.no_categories_available">
+            <de><![CDATA[Sie haben z.Z. nicht die Berechtigung, Ihr Benutzerprofil einzusehen oder zu ändern.]]></de>
+            <en><![CDATA[You are currently not permitted to view or change your user profile.]]></en>
+        </locale>
+
         <!-- Profile: UserData -->
         <locale name="profile.userdata.title">
             <de><![CDATA[Meine Daten]]></de>
@@ -468,6 +474,10 @@
             <de><![CDATA[Das Ändern Ihrer E-Mail-Adresse hat leider nicht funktioniert. Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.]]></de>
             <en><![CDATA[Unfortunately, changing your e-mail address did not work. Please try again or try again later.]]></en>
         </locale>
+        <locale name="exception.controls.profile.address.required_fields_empty">
+            <de><![CDATA[Bitte füllen Sie alle Pflichtfelder aus.]]></de>
+            <en><![CDATA[Please fill out all required fields.]]></en>
+        </locale>
 
         <!-- Profile: ChangePassword -->
         <locale name="profile.changepassword.title">
@@ -523,6 +533,16 @@
         <locale name="profile.deleteaccount.message.error">
             <de><![CDATA[Das Löschen Ihres Benutzerkontos hat leider nicht funktioniert. Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.]]></de>
             <en><![CDATA[Unfortunately, deleting your user account did not work. Please try again or try again later.]]></en>
+        </locale>
+
+        <!-- Profile: Address -->
+        <locale name="profile.address.text">
+            <de><![CDATA[Adresse]]></de>
+            <en><![CDATA[Address]]></en>
+        </locale>
+        <locale name="profile.address.title">
+            <de><![CDATA[Adresse]]></de>
+            <en><![CDATA[Address]]></en>
         </locale>
 
         <!-- Class: Handler -->

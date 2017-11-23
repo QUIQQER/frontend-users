@@ -1,3 +1,8 @@
+{if !$Category}
+<p>
+    {locale group="quiqqer/frontend-users" var="profile.no_categories_available"}
+</p>
+{else}
 <div class="quiqqer-frontendUsers-controls-profile-categories">
     {foreach $categories as $item}
     <a href="{$item.url}"
@@ -37,3 +42,4 @@
         <input type="hidden" name="profile-save" value="1">
     </div>
 </form>
+{/if}

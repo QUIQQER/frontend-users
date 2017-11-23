@@ -5,7 +5,7 @@
  */
 
 use QUI\Utils\Security\Orthos;
-use QUI\Permissions\Permission;
+use QUI\FrontendUsers\Utils;
 
 /**
  * Get profile control by category
@@ -16,10 +16,9 @@ use QUI\Permissions\Permission;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
     function ($category, $project, $siteId) {
-        $category         = Orthos::clear($category);
-        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+        $category = Orthos::clear($category);
 
-        if (!Permission::hasPermission($permissionPrefix . $category)) {
+        if (!Utils::hasPermissionToViewCategory($category)) {
             return false;
         }
 

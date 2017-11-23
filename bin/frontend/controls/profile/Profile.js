@@ -117,6 +117,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     );
                 }
 
+                if (!Category) {
+                    return;
+                }
+
                 self.$category = Category.get('data-name');
 
                 Elm.getElements('[data-name="' + self.$category + '"]').addClass(

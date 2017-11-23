@@ -140,26 +140,44 @@ class Utils
     }
 
     /**
-     * Get (localized) titles of all categories that the Session User is allowed to view
+     * Get data of all categories
      *
      * @return array
      */
     public static function getProfileBarCategories()
     {
-        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $categories       = array();
+        $categories = array();
 
         foreach (Utils::getProfileCategories() as $c) {
-            if (Permissions\Permission::hasPermission($permissionPrefix . $c['name'])) {
-                $categories[] = array(
-                    'title' => $c['text'],
-                    'name'  => $c['name'],
-                    'icon'  => $c['icon']
-                );
+            if ($c['showinmenu']) {
+                continue;
             }
+
+            $categories[] = array(
+                'title' => $c['text'],
+                'name'  => $c['name'],
+                'icon'  => $c['icon']
+            );
         }
 
         return $categories;
+    }
+
+    /**
+     * Checks if the given User is allowed to view a category
+     *
+     * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
+     * @return bool
+     */
+    public static function hasPermissionToViewCategory($category, $User = null)
+    {
+        if (is_null($User)) {
+            $User = QUI::getUserBySession();
+        }
+
+        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+
+        return Permissions\Permission::hasPermission($permissionPrefix . $category, $User);
     }
 
     /**

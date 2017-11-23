@@ -16,16 +16,18 @@
                     <locale group="quiqqer/frontend-users" var="profile.changepassword.title"/>
                 </text>
             </tab>
-            <tab name="avatar" icon="fa fa-address-book-o">
+            <tab name="avatar" icon="fa fa-camera">
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.avatar.text"/>
                 </text>
                 <template>OPT_DIR/quiqqer/frontend-users/src/QUI/FrontendUsers/Controls/Profile/avatar.html</template>
             </tab>
-
-            <tab name="deleteaccount" icon="fa fa-trash"
-                 control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount"
-            >
+            <tab name="address" icon="fa fa-address-card" control="\QUI\FrontendUsers\Controls\Profile\Address">
+                <text>
+                    <locale group="quiqqer/frontend-users" var="profile.address.text"/>
+                </text>
+            </tab>
+            <tab name="deleteaccount" icon="fa fa-trash" control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount">
                 <text>
                     <locale group="quiqqer/frontend-users" var="profile.deleteaccount.text"/>
                 </text>
