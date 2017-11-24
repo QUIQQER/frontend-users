@@ -7,7 +7,7 @@
 {if $success}
 <div class="quiqqer-frontendUsers-success">
     {$Registrar->getSuccessMessage()}
-
+</div>
     {if $autoRedirect}
     <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
         <a href="{$autoRedirect}">
@@ -16,8 +16,7 @@
     </div>
     {else}
         {$Login->create()}
-    {/if}
-</div>
+{/if}
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
 <div class="quiqqer-frontendUsers-pending">
     {$Registrar->getPendingMessage()}
@@ -37,7 +36,7 @@
                   data-registrar="{$Registrar->getHash()}"
             >
                 <header>
-                    <h1>{$Registrar->getTitle()}</h1>
+                    <h2>{$Registrar->getTitle()}</h2>
                 </header>
 
                 {$Registrar->getControl()->create()}

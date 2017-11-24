@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls\Auth;
 
 use QUI;
 use QUI\Users\Controls\Login;
+use QUI\FrontendUsers\Controls\Registration;
 use QUI\FrontendUsers\Handler;
 
 /**
@@ -50,6 +51,7 @@ class FrontendLogin extends QUI\Control
 
         $Engine->assign(array(
             'Login'        => new Login(),
+            'Registration' => new Registration(),
             'dataRedirect' => $dataRedirect
         ));
 
