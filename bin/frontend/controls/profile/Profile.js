@@ -39,6 +39,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.parent(options);
 
             this.$category = null;
+            this.$settings = null;
             this.Loader    = new QUILoader();
 
             this.addEvents({
@@ -71,29 +72,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$bindCategoriesEvents();
 
             this.openSetting().then(function () {
-                // if (self.getAttribute('category')) {
-                //     var categories = Elm.getElements(
-                //         '.quiqqer-frontendUsers-controls-profile-category'
-                //     );
-                //
-                //     categories = categories.filter(function (Category) {
-                //         return Category.get('data-name') === self.getAttribute('category');
-                //     });
-                //
-                //     if (categories.length) {
-                //         self.$category = categories[0];
-                //     }
-                // }
-                //
-                // if (!self.$category) {
-                //     var FirstCategory = Elm.getElement(
-                //         '.quiqqer-frontendUsers-controls-profile-category'
-                //     );
-                //
-                //     if (FirstCategory) {
-                //         self.$category = FirstCategory.get('data-name');
-                //     }
-                // }
+                var Form     = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+                var category = Form.get('data-category');
+                var settings = Form.get('data-setting');
+
+                self.$category = category;
+                self.$settings = settings;
 
                 self.fireEvent('load', [self]);
             });
@@ -112,9 +96,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$parseContent(this.getElm()).then(function () {
                 var Form     = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
                 var category = Form.get('data-category');
-                var setting  = Form.get('data-setting');
+                var settings = Form.get('data-setting');
 
-                self.$setMenuItemActive(category, setting);
+                self.$category = category;
+                self.$settings = settings;
+
+                self.$setMenuItemActive(category, settings);
             });
         },
 
@@ -158,7 +145,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 }
 
                 MobileCategories.addEvent('change', function () {
-                    self.openCategory(MobileCategories.value);
+                    self.openSetting(MobileCategories.value);
                 });
 
 
@@ -172,7 +159,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                     self.save().then(function () {
                         self.Loader.hide();
-                        self.openCategory(self.$category);
+                        self.openSetting(self.$category, self.$settings);
                     }, function () {
                         self.Loader.hide();
                     });
@@ -185,6 +172,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          *
          * @param {String} [category]
          * @param {String} [settings]
+         * @return Promise
          */
         openSetting: function (category, settings) {
             var self = this,
@@ -192,6 +180,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
             category = category || false;
             settings = settings || false;
+
+            if (self.$category === category && self.$settings === settings) {
+                return Promise.resolve();
+            }
 
             var Animation = Elm.getElement(
                 '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
@@ -259,6 +251,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         });
 
                         self.$category = category;
+                        self.$settings = settings;
+
                         self.$setUri();
                     }, {
                         'package': 'quiqqer/frontend-users',
@@ -339,6 +333,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 }, {
                     'package': 'quiqqer/frontend-users',
                     category : self.$category,
+                    settings : self.$settings,
                     data     : JSON.encode(data),
                     onError  : function () {
                         self.fireEvent('saveError', [self]);
@@ -371,12 +366,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
         /**
          * Set an menu item active
-         * @param category
-         * @param setting
+         *
+         * @param {String} category
+         * @param {String} settings
          */
-        $setMenuItemActive: function (category, setting) {
+        $setMenuItemActive: function (category, settings) {
             var Item = this.$Elm.getElement(
-                '[data-category="' + category + '"] [data-setting="' + setting + '"]'
+                '[data-category="' + category + '"] [data-setting="' + settings + '"]'
             );
 
             if (!Item) {

@@ -63,11 +63,10 @@ class Utils
         $cache = 'package/quiqqer/frontendUsers/profileCategories';
 
         try {
-//            return QUI\Cache\Manager::get($cache);
+            return QUI\Cache\Manager::get($cache);
         } catch (QUI\Exception $exception) {
         }
 
-        $catId    = 0;
         $result   = array();
         $packages = self::getFrontendUsersPackages();
 
@@ -113,47 +112,6 @@ class Utils
 
                     $result[$categoryName]['items'][] = $item;
                 }
-            }
-
-            continue;
-
-
-            $Dom  = XML::getDomFromXml($Package->getDir().'/frontend-users.xml');
-            $Path = new \DOMXPath($Dom);
-
-            $tabs = $Path->query("//quiqqer/frontend-users/profile/tab");
-
-            foreach ($tabs as $Item) {
-                /* @var $Item \DOMElement */
-                $Text      = $Item->getElementsByTagName('text')->item(0);
-                $Templates = $Item->getElementsByTagName('template');
-
-                $name     = 'category-'.$catId;
-                $template = '';
-
-                if ($Item->getAttribute('name')) {
-                    $name = $Item->getAttribute('name');
-                }
-
-                if ($Templates->length) {
-                    $template = DOM::parseVar($Templates->item(0)->nodeValue);
-                }
-
-                $result[] = array(
-                    'text'          => DOM::getTextFromNode($Text),
-                    'textVar'       => DOM::getTextFromNode($Text, false),
-                    'name'          => $name,
-                    'icon'          => DOM::parseVar($Item->getAttribute('icon')),
-                    'require'       => $Item->getAttribute('require'),
-                    'exec'          => $Item->getAttribute('exec'),
-                    'control'       => $Item->getAttribute('control'),
-                    'showinmenu'    => boolval($Item->getAttribute('showinmenu')),
-                    'hideinprofile' => boolval($Item->getAttribute('hideinprofile')),
-                    'template'      => $template,
-                    'source'        => $Package->getTitle()
-                );
-
-                $catId++;
             }
         }
 
