@@ -174,6 +174,19 @@ class Handler extends Singleton
             }
         }
 
+        // default registrar has to be first
+        usort($list, function($a, $b) {
+            if ($a === '\\' . Registrars\Email\Registrar::class) {
+                return -1;
+            }
+
+            if ($b === '\\' . Registrars\Email\Registrar::class) {
+                return 1;
+            }
+
+            return 0;
+        });
+
         foreach ($list as $provider) {
             try {
                 if (!class_exists($provider)) {
