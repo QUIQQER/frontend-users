@@ -32,6 +32,8 @@ Provided site types:
 * `profile` - Shows a complete user profile to frontend users with different categories, where the user can view and/or change his user data
 * `registration` - Shows (configurable) registration options (e.g. `Username / Password`, `Facebook`, `Google`)
 
+*Hint*: All e-mails sent in the registration process currently use the default QUIQQER e-mail templates.
+
 Installation
 ------------
 
