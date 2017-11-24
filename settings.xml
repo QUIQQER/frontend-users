@@ -4,33 +4,6 @@
 
         <config>
 
-            <section name="userProfile">
-                <conf name="showMyData">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
-                </conf>
-                <conf name="showPasswordChange">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
-                </conf>
-                <conf name="showAddress">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
-                </conf>
-                <conf name="showAddressManager">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>0</defaultvalue>
-                </conf>
-                <conf name="showDeleteAccount">
-                    <type><![CDATA[bool]]></type>
-                    <defaultvalue>0</defaultvalue>
-                </conf>
-                <conf name="userDeleteMode">
-                    <type><![CDATA[string]]></type>
-                    <defaultvalue><![CDATA[delete]]></defaultvalue>
-                </conf>
-            </section>
-
             <section name="profileBar">
                 <conf name="showLogin">
                     <type><![CDATA[bool]]></type>
@@ -101,6 +74,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
                 </conf>
+                <conf name="deleteInactiveUserAfterDays">
+                    <type><![CDATA[integer]]></type>
+                    <defaultvalue>3</defaultvalue>
+                </conf>
             </section>
 
             <section name="registrars">
@@ -144,38 +121,6 @@
                         <locale group="quiqqer/frontend-users" var="settings.category.userProfile.title"/>
                     </text>
                     <icon>fa fa-user</icon>
-
-                    <settings title="userProfile_section" name="userProfile_section">
-                        <title>
-                            <locale group="quiqqer/frontend-users" var="settings.section.userProfile.title"/>
-                        </title>
-
-                        <input conf="userProfile.showMyData" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showMyData.title"/>
-                            </text>
-                        </input>
-                        <input conf="userProfile.showPasswordChange" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showPasswordChange.title"/>
-                            </text>
-                        </input>
-                        <input conf="userProfile.showAddress" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showAddress.title"/>
-                            </text>
-                        </input>
-                        <input conf="userProfile.showAddressManager" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showAddressManager.title"/>
-                            </text>
-                        </input>
-                        <input conf="userProfile.showDeleteAccount" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showDeleteAccount.title"/>
-                            </text>
-                        </input>
-                    </settings>
 
                     <settings title="profileBar_section" name="profileBar_section">
                         <title>
@@ -366,6 +311,15 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.useCaptcha.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.deleteInactiveUserAfterDays" type="number">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.deleteInactiveUserAfterDays.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.deleteInactiveUserAfterDays.description"/>
                             </description>
                         </input>
 

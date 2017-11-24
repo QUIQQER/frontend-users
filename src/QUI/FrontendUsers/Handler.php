@@ -63,6 +63,7 @@ class Handler extends Singleton
     const USER_ATTR_REGISTRAR                 = 'quiqqer.frontendUsers.registrar';
     const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
     const USER_ATTR_EMAIL_VERIFIED            = 'quiqqer.frontendUsers.emailVerified';
+    const USER_ATTR_USER_ACTIVATION_REQUIRED  = 'quiqqer.frontendUsers.userActivationRequired';
 
     /**
      * Misc
@@ -172,6 +173,19 @@ class Handler extends Singleton
                 QUI\System\Log::writeException($Exception);
             }
         }
+
+        // default registrar has to be first
+        usort($list, function($a, $b) {
+            if ($a === '\\' . Registrars\Email\Registrar::class) {
+                return -1;
+            }
+
+            if ($b === '\\' . Registrars\Email\Registrar::class) {
+                return 1;
+            }
+
+            return 0;
+        });
 
         foreach ($list as $provider) {
             try {

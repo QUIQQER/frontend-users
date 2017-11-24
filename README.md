@@ -3,7 +3,7 @@
 QUIQQER Frontend Users
 ========
 
-The Frontend Users module extends QUIQQER with a profile extension and a registry for users.
+The Frontend Users module extends QUIQQER with a profile extension and a registration for users.
 
 Package Name:
 
@@ -13,11 +13,26 @@ Package Name:
 Features
 --------
 
-- Benutzer Registrierungs-API
-- Benutzer Registrierung über E-MAIL
+* API for registration options ("Registrars")
+* Default registration option via e-mail (username optional)
+* Address form optional for registration
+* User activation via e-mail, automatically or by administrator (configurable for each Registrar)
+* Password reset
+* CAPTCHA for registration (optional via `quiqqer/captcha`)
+* Cron that deletes users whose account has not been activated after X days
+* Message administrators on new user registration
+* Default user groups for newly registered users
+* Frontend Profile: Lets users manage their account information
+  * Completely customizable via permissions for each profile category
+  * Profile categories and sub-categories can be added via `frontend-user.xml` API
 
-- Seitentyp: Registrierung
-- Seitentyp: Login
+
+Provided site types:
+* `login` - Login area with different Authenticators (i.e. `Username / Password`, `Facebook`, `Google`)
+* `profile` - Shows a complete user profile to frontend users with different categories, where the user can view and/or change his user data
+* `registration` - Shows (configurable) registration options (e.g. `Username / Password`, `Facebook`, `Google`)
+
+*Hint*: All e-mails sent in the registration process currently use the default QUIQQER e-mail templates.
 
 Installation
 ------------

@@ -129,7 +129,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                     isValid = isValid && self.$captchaResponse;
                 }
 
-                SubmitBtn.disabled = isValid;
+                //SubmitBtn.disabled = isValid;
 
                 return isValid;
             };
@@ -140,44 +140,50 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             var emailIsUsername   = this.getAttribute('emailisusername');
 
             if (EmailInput) {
-                EmailInput.addEvent('blur', function (event) {
-                    var value         = event.target.value;
-                    var checkPromises = [
-                        Registration.emailValidation(value)
-                    ];
+                EmailInput.addEvents({
+                    blur: function (event) {
+                        var value         = event.target.value;
+                        var checkPromises = [
+                            Registration.emailValidation(value)
+                        ];
 
-                    if (emailIsUsername) {
-                        checkPromises.push(Registration.usernameValidation(value));
-                    }
-
-                    Promise.all(checkPromises).then(function (result) {
-                        var isValid = true;
-
-                        for (var i = 0, len = result.length; i < len; i++) {
-                            if (!result[i]) {
-                                isValid = false;
-                                break;
-                            }
+                        if (emailIsUsername) {
+                            checkPromises.push(Registration.usernameValidation(value));
                         }
 
-                        HandleInputValidation(
-                            event.target,
-                            isValid,
-                            QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
-                        );
+                        Promise.all(checkPromises).then(function (result) {
+                            var isValid = true;
 
-                        CheckFormValidation();
-                    });
+                            for (var i = 0, len = result.length; i < len; i++) {
+                                if (!result[i]) {
+                                    isValid = false;
+                                    break;
+                                }
+                            }
+
+                            HandleInputValidation(
+                                event.target,
+                                isValid,
+                                QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
+                            );
+
+                            CheckFormValidation();
+                        });
+                    }
                 });
             }
 
             if (EmailConfirmInput) {
-                EmailConfirmInput.addEvent('blur', function (event) {
-                    HandleInputValidation(
-                        event.target,
-                        EmailInput.value === event.target.value,
-                        QUILocale.get(lg, 'exception.registrars.email.email_addresses_not_equal')
-                    );
+                EmailConfirmInput.addEvents({
+                    blur: function (event) {
+                        HandleInputValidation(
+                            event.target,
+                            EmailInput.value === event.target.value,
+                            QUILocale.get(lg, 'exception.registrars.email.email_addresses_not_equal')
+                        );
+
+                        CheckFormValidation();
+                    }
                 });
             }
 
