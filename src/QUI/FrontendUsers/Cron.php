@@ -33,12 +33,12 @@ class Cron
         foreach ($result as $row) {
             $User = $Users->get($row['id']);
 
-            // check if user registered via frontend (and was not created by an admin)
+            // do not check if user was created/deactivated via user administration in backend
             if (!$User->getAttribute($Handler::USER_ATTR_USER_ACTIVATION_REQUIRED)) {
                 continue;
             }
 
-            $RegistrationDate = new \DateTime($User->getAttribute('regdate'));
+            $RegistrationDate = new \DateTime("@" . $User->getAttribute('regdate'));
 
             if ($Now->diff($RegistrationDate)->days > $maxInactiveDays) {
                 $User->delete();
