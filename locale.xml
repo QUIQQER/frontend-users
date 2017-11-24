@@ -410,7 +410,12 @@
         </locale>
 
         <!-- Profile: UserData -->
-        <locale name="profile.userdata.title">
+        <locale name="profile.user.title">
+            <de><![CDATA[Benutzerdaten]]></de>
+            <en><![CDATA[User data]]></en>
+        </locale>
+
+        <locale name="profile.data.title">
             <de><![CDATA[Meine Daten]]></de>
             <en><![CDATA[My data]]></en>
         </locale>
@@ -450,7 +455,7 @@
             <de><![CDATA[Passwort ändern]]></de>
             <en><![CDATA[Change password]]></en>
         </locale>
-        <locale name="profile.userdata.avatar.text">
+        <locale name="profile.avatar.title">
             <de><![CDATA[Benutzerbild]]></de>
             <en><![CDATA[Avatar]]></en>
         </locale>

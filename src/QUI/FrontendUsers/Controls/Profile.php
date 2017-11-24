@@ -25,12 +25,13 @@ class Profile extends Control
     public function __construct(array $attributes = array())
     {
         $this->setAttributes(array(
-            'category' => false
+            'category' => false,
+            'setting'  => false
         ));
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
+        $this->addCSSFile(dirname(__FILE__).'/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile');
     }
@@ -44,64 +45,135 @@ class Profile extends Control
     {
         $Request    = QUI::getRequest();
         $Engine     = QUI::getTemplateManager()->getEngine();
-        $current    = $this->getAttribute('category');
         $categories = Utils::getProfileCategories();
 
-        foreach ($categories as $k => $c) {
-            if (!Utils::hasPermissionToViewCategory($c['name'])) {
-                unset($categories[$k]);
+        $currentCategory = $this->getAttribute('category');
+        $currentSetting  = $this->getAttribute('settings');
+
+        if (empty($categories)) {
+            return '';
+        }
+
+        /**
+         * @param $array
+         * @return int|null|string
+         */
+        function getFirstCategory($array)
+        {
+            reset($array);
+
+            return key($array);
+        }
+
+        /**
+         * @param $array
+         * @param bool $category
+         * @return bool
+         */
+        function getFirstCategorySetting($array, $category = false)
+        {
+            if ($category === false) {
+                $category = getFirstCategory($array);
+            }
+
+            if (!isset($array[$category])) {
+                return false;
+            }
+
+            $data = $array[$category];
+
+            return $data['items'][0]['name'];
+        }
+
+        foreach ($categories as $key => $category) {
+            if (!Utils::hasPermissionToViewCategory($category['name'])) {
+                unset($categories[$key]);
             }
         }
 
-        if (!empty($_GET['c'])) {
-            $current = $_GET['c'];
-        }
+//        if (!empty($_GET['c'])) {
+//            $current = $_GET['c'];
+//        }
 
-        if ($current && Utils::hasPermissionToViewCategory($current)) {
-            $this->setAttribute('category', $current);
-
+        if ($currentCategory
+            && $currentSetting
+            && Utils::hasPermissionToViewCategory($currentCategory, $currentSetting)) {
             try {
-                QUI\FrontendUsers\Utils::getProfileCategory($current);
+                QUI\FrontendUsers\Utils::getProfileSetting($currentCategory, $currentSetting);
             } catch (QUI\FrontendUsers\Exception $Exception) {
-                // category does not exist
-                $current = false;
+                QUI\System\Log::writeException($Exception);
+
+                $currentCategory = false;
+                $currentSetting  = false;
             }
         }
 
-        if ($current === false) {
-            $current = $categories[0]['name'];
+        if ($currentCategory === false) {
+            $currentCategory = getFirstCategory($categories);
         }
 
+        if ($currentSetting === false) {
+            $currentSetting = getFirstCategorySetting($categories, $currentCategory);
+        }
+
+        // find the current control
         $Control = false;
 
-        if ($current) {
-            $Control = QUI\FrontendUsers\Utils::getProfileCategoryControl($current);
-            $Control->setAttribute('User', $this->getUser());
+        if ($currentCategory && $currentSetting) {
+            try {
+                $Control = QUI\FrontendUsers\Utils::getProfileSettingControl(
+                    $currentCategory,
+                    $currentSetting
+                );
 
-            if ($Request->request->get('profile-save')) {
-                try {
-                    $Control->onSave();
-                } catch (QUI\FrontendUsers\Exception $Exception) {
-                    $Engine->assign('Error', $Exception);
+                $Control->setAttribute('User', $this->getUser());
+
+                if ($Request->request->get('profile-save')) {
+                    try {
+                        $Control->onSave();
+                    } catch (QUI\FrontendUsers\Exception $Exception) {
+                        $Engine->assign('Error', $Exception);
+                    }
                 }
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
             }
         }
 
         $Site = $this->getSite();
 
-        foreach ($categories as $k => $c) {
-            $categories[$k]['url'] = $Site->getUrlRewritten(array(), array(
-                'c' => $c['name']
-            ));
+//        foreach ($categories as $k => $c) {
+//            $categories[$k]['url'] = $Site->getUrlRewritten(array(), array(
+//                'c' => $c['name']
+//            ));
+//        }
+
+        foreach ($categories as $key => $category) {
+            $categories[$key]['title'] = QUI::getLocale()->get(
+                $category['title'][0],
+                $category['title'][1]
+            );
+
+            foreach ($category['items'] as $itemKey => $item) {
+                if (!is_array($categories[$key]['items'][$itemKey]['title'])) {
+                    continue;
+                }
+
+                $categories[$key]['items'][$itemKey]['title'] = QUI::getLocale()->get(
+                    $categories[$key]['items'][$itemKey]['title'][0],
+                    $categories[$key]['items'][$itemKey]['title'][1]
+                );
+            }
         }
 
         $Engine->assign(array(
-            'categories' => $categories,
-            'current'    => $current,
-            'Category'   => $Control
+            'categories'      => $categories,
+            'currentCategory' => $currentCategory,
+            'currentSetting'  => $currentSetting,
+            'Category'        => $Control
         ));
 
-        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
+        return $Engine->fetch(dirname(__FILE__).'/Profile.html');
     }
 
     /**

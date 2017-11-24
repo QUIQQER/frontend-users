@@ -15,7 +15,7 @@ use QUI\FrontendUsers\Utils;
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
-    function ($category, $project, $siteId) {
+    function ($category, $settings, $project, $siteId) {
         $category = Orthos::clear($category);
 
         if (!Utils::hasPermissionToViewCategory($category)) {
@@ -33,11 +33,12 @@ QUI::$Ajax->registerFunction(
 
         $Control->setAttribute('User', QUI::getUserBySession());
         $Control->setAttribute('category', Orthos::clear($category));
+        $Control->setAttribute('settings', Orthos::clear($settings));
 
         $result = QUI\Control\Manager::getCSS();
         $result .= $Control->create();
 
         return QUI\Output::getInstance()->parse($result);
     },
-    array('category', 'project', 'siteId')
+    array('category', 'settings', 'project', 'siteId')
 );

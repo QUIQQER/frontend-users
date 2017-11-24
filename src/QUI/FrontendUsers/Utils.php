@@ -11,6 +11,7 @@ use QUI\Utils\Text\XML;
 use QUI\Utils\DOM;
 use QUI\FrontendUsers\Controls\Profile\ControlWrapper;
 use QUI\Permissions;
+use Tracy\Debugger;
 
 /**
  * Class Utils
@@ -43,7 +44,7 @@ class Utils
 
             $dir = $Package->getDir();
 
-            if (file_exists($dir . '/frontend-users.xml')) {
+            if (file_exists($dir.'/frontend-users.xml')) {
                 $list[] = $Package;
             }
         }
@@ -62,7 +63,7 @@ class Utils
         $cache = 'package/quiqqer/frontendUsers/profileCategories';
 
         try {
-            return QUI\Cache\Manager::get($cache);
+//            return QUI\Cache\Manager::get($cache);
         } catch (QUI\Exception $exception) {
         }
 
@@ -70,9 +71,54 @@ class Utils
         $result   = array();
         $packages = self::getFrontendUsersPackages();
 
+        $Engine = QUI::getTemplateManager()->getEngine();
+
         /** @var QUI\Package\Package $Package */
         foreach ($packages as $Package) {
-            $Dom  = XML::getDomFromXml($Package->getDir() . '/frontend-users.xml');
+            $Parser = new QUI\Utils\XML\Settings();
+            $Parser->setXMLPath('//quiqqer/frontend-users/profile');
+
+            $Collection = $Parser->getCategories($Package->getDir().'/frontend-users.xml');
+
+            foreach ($Collection as $entry) {
+                $categoryName = $entry['name'];
+                $items        = $entry['items']->toArray();
+
+                if (!isset($result[$categoryName])) {
+                    $result[$categoryName]['name']  = $entry['name'];
+                    $result[$categoryName]['title'] = $entry['title'];
+                    $result[$categoryName]['items'] = array();
+                }
+
+                foreach ($items as $item) {
+                    $item['content'] = '';
+
+                    if (empty($item['items'])
+                        && empty($item['template'])
+                        && empty($item['control'])) {
+                        continue;
+                    }
+
+                    // template
+                    if (isset($item['template'])) {
+                        if (file_exists($item['template'])) {
+                            $item['content'] = $Engine->fetch($item['template']);
+                        }
+                    }
+
+                    // xml
+                    if (isset($item['items'])) {
+                        // @todo
+                    }
+
+                    $result[$categoryName]['items'][] = $item;
+                }
+            }
+
+            continue;
+
+
+            $Dom  = XML::getDomFromXml($Package->getDir().'/frontend-users.xml');
             $Path = new \DOMXPath($Dom);
 
             $tabs = $Path->query("//quiqqer/frontend-users/profile/tab");
@@ -82,7 +128,7 @@ class Utils
                 $Text      = $Item->getElementsByTagName('text')->item(0);
                 $Templates = $Item->getElementsByTagName('template');
 
-                $name     = 'category-' . $catId;
+                $name     = 'category-'.$catId;
                 $template = '';
 
                 if ($Item->getAttribute('name')) {
@@ -117,20 +163,78 @@ class Utils
     }
 
     /**
+     * Return a setting for the profile
+     *
+     * @param string $category
+     * @param bool|string $settings
+     * @return array
+     *
+     * @throws Exception
+     */
+    public static function getProfileSetting($category, $settings = false)
+    {
+        if ($category) {
+            $categories = [self::getProfileCategory($category)];
+        } else {
+            $categories = self::getProfileCategories();
+        }
+
+        foreach ($categories as $category) {
+            foreach ($category['items'] as $settingEntry) {
+                if ($settingEntry['name'] == $settings) {
+                    return $settingEntry;
+                }
+            }
+        }
+
+        throw new Exception(array(
+            'quiqqer/frontend-users',
+            'exception.profile.setting.not.found'
+        ));
+    }
+
+    /**
+     * Return a setting control for the profile
+     *
+     * @param string $category
+     * @param bool|string $settings
+     * @return QUI\Controls\Control|ControlWrapper
+     *
+     * @throws Exception
+     */
+    public static function getProfileSettingControl($category, $settings = false)
+    {
+        $setting = self::getProfileSetting($category, $settings);
+        $Control = null;
+
+        if (isset($setting['control'])) {
+            $cls = $setting['control'];
+
+            if (class_exists($cls)) {
+                $Control = new $cls();
+            }
+        }
+
+        if ($Control === null) {
+            $Control = new ControlWrapper($setting);
+        }
+
+        return $Control;
+    }
+
+    /**
      * Return a specific category
      *
-     * @param $name
+     * @param string $category
      * @return array
      * @throws Exception
      */
-    public static function getProfileCategory($name)
+    public static function getProfileCategory($category)
     {
         $categories = self::getProfileCategories();
 
-        foreach ($categories as $category) {
-            if ($category['name'] === $name) {
-                return $category;
-            }
+        if (isset($categories[$category])) {
+            return $categories[$category];
         }
 
         throw new Exception(array(
@@ -166,18 +270,25 @@ class Utils
     /**
      * Checks if the given User is allowed to view a category
      *
+     * @param string $category - Name of the category
+     * @param string|bool $settings (optional) - category settings
      * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
      * @return bool
      */
-    public static function hasPermissionToViewCategory($category, $User = null)
+    public static function hasPermissionToViewCategory($category, $settings = false, $User = null)
     {
-        if (is_null($User)) {
+        if ($User === null) {
             $User = QUI::getUserBySession();
         }
 
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+        $permission       = $permissionPrefix.$category;
 
-        return Permissions\Permission::hasPermission($permissionPrefix . $category, $User);
+        if ($settings) {
+            $permission = $permission.'.'.$settings;
+        }
+
+        return Permissions\Permission::hasPermission($permission, $User);
     }
 
     /**
@@ -185,6 +296,7 @@ class Utils
      *
      * @param string $name
      * @return QUI\Controls\Control|ControlWrapper
+     * @deprecated
      */
     public static function getProfileCategoryControl($name)
     {

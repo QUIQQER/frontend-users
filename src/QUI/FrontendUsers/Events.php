@@ -104,6 +104,7 @@ class Events
             $Registrar = $Handler->getRegistrar($registrar);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return;
         }
 
@@ -282,14 +283,16 @@ class Events
      */
     public static function onTemplateGetHeader(QUI\Template $TemplateManager)
     {
-        $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
-        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
+        $cssFile = URL_OPT_DIR.'quiqqer/frontend-users/bin/style.css';
+        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="'.$cssFile.'">');
     }
 
     /**
      * Create view permissions for all Profile categories
      *
      * @return void
+     *
+     * @todo settings permissions
      */
     protected static function createProfileCategoryViewPermissions()
     {
@@ -297,7 +300,7 @@ class Events
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
 
         foreach (Utils::getProfileCategories() as $c) {
-            $permission = $permissionPrefix . $c['name'];
+            $permission = $permissionPrefix.$c['name'];
 
             try {
                 $Permissions->getPermissionData($permission);
@@ -308,13 +311,15 @@ class Events
 
             $Permissions->addPermission(array(
                 'name'         => $permission,
-                'title'        => $c['textVar'][0] . ' ' . $c['textVar'][1],
+                'title'        => $c['textVar'][0].' '.$c['textVar'][1],
                 'desc'         => '',
                 'type'         => 'bool',
                 'area'         => '',
                 'src'          => $c['source'],
                 'defaultvalue' => 0
             ));
+
+            // @todo category items
         }
     }
 }

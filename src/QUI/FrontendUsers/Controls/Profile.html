@@ -4,8 +4,30 @@
 </p>
 {else}
 <div class="quiqqer-frontendUsers-controls-profile-categories">
-    {foreach $categories as $item}
-    <a href="{$item.url}"
+    {foreach $categories as $category}
+        <div class="quiqqer-fupc-category quiqqer-fupc-category--open"
+             data-category="{$category.name}"
+        >
+            <div class="quiqqer-fupc-category-header">
+                {$category.title}
+            </div>
+            <div class="quiqqer-fu-profile-categories-category-items">
+                {foreach $category.items as $item}
+                <a href=""
+                   class="quiqqer-fupc-category-items-item"
+                   data-setting="{$item.name}"
+                >
+                    {if $item.icon}
+                    <span class="quiqqer-fupc-category-items-item-icon {$item.icon}"></span>
+                    {/if}
+                    <span>{$item.title}</span>
+                </a>
+                {/foreach}
+            </div>
+        </div>
+
+
+    {*<a href="{$item.url}"
        class="quiqqer-frontendUsers-controls-profile-category{if $current == $item.name} quiqqer-frontendUsers-controls-profile-category-active{/if}"
        data-name="{$item.name}"
     >
@@ -17,7 +39,7 @@
         <div class="quiqqer-frontendUsers-controls-profile-category-text">
             {$item.text}
         </div>
-    </a>
+    </a>*}
     {/foreach}
 </div>
 
@@ -36,6 +58,8 @@
 <form class="quiqqer-frontendUsers-controls-profile-categoryContent"
       method="post"
       action=""
+      data-category="{$currentCategory}"
+      data-setting="{$currentSetting}"
 >
     <div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">
         {$Category->create()}
