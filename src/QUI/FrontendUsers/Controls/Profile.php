@@ -9,6 +9,7 @@ namespace QUI\FrontendUsers\Controls;
 use QUI;
 use QUI\Control;
 use QUI\FrontendUsers\Utils;
+use Tracy\Debugger;
 
 /**
  * Class Profile
@@ -58,22 +59,20 @@ class Profile extends Control
          * @param $array
          * @return int|null|string
          */
-        function getFirstCategory($array)
-        {
+        $getFirstCategory = function ($array) {
             reset($array);
 
             return key($array);
-        }
+        };
 
         /**
          * @param $array
          * @param bool $category
          * @return bool
          */
-        function getFirstCategorySetting($array, $category = false)
-        {
+        $getFirstCategorySetting = function ($array, $category = false) use ($getFirstCategory) {
             if ($category === false) {
-                $category = getFirstCategory($array);
+                $category = $getFirstCategory($array);
             }
 
             if (!isset($array[$category])) {
@@ -83,7 +82,7 @@ class Profile extends Control
             $data = $array[$category];
 
             return $data['items'][0]['name'];
-        }
+        };
 
         foreach ($categories as $key => $category) {
             if (!Utils::hasPermissionToViewCategory($category['name'])) {
@@ -109,11 +108,11 @@ class Profile extends Control
         }
 
         if ($currentCategory === false) {
-            $currentCategory = getFirstCategory($categories);
+            $currentCategory = $getFirstCategory($categories);
         }
 
         if ($currentSetting === false) {
-            $currentSetting = getFirstCategorySetting($categories, $currentCategory);
+            $currentSetting = $getFirstCategorySetting($categories, $currentCategory);
         }
 
         // find the current control

@@ -7,6 +7,13 @@
  * @event onSaveBegin [self]
  * @event onSaveError [self]
  */
+
+require.config({
+    paths: {
+        'HistoryEvents': URL_OPT_DIR + 'bin/history-events/dist/history-events.min'
+    }
+});
+
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
     'qui/QUI',
@@ -28,7 +35,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
         Binds: [
             '$onInject',
-            '$setUri'
+            '$setUri',
+            '$onChangeState'
         ],
 
         options: {
@@ -67,6 +75,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             var self = this,
                 Elm  = this.getElm();
 
+            window.addEventListener('changestate', this.$onChangeState, false);
+
             this.Loader.inject(Elm);
 
             this.$bindCategoriesEvents();
@@ -90,6 +100,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             var self = this,
                 Elm  = this.getElm();
 
+            window.addEventListener('changestate', this.$onChangeState, false);
+
             this.Loader.inject(Elm);
             this.$bindCategoriesEvents();
 
@@ -103,6 +115,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                 self.$setMenuItemActive(category, settings);
             });
+        },
+
+        /**
+         * event : on change location state
+         */
+        $onChangeState: function () {
+            var pathName = window.location.pathname;
+
+            console.warn(pathName);
         },
 
         /**
@@ -347,20 +368,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * Set URI based on currently opened category
          */
         $setUri: function () {
-            var Uri       = new URI();
-            var UriParams = {
-                c: this.$category
-            };
-
-            Uri.search(UriParams);
-
-            var url = Uri.toString();
+            var newUrl = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
 
             if ("history" in window) {
-                window.history.pushState({}, "", url);
+                window.history.pushState({}, "", newUrl);
                 window.fireEvent('popstate');
             } else {
-                window.location = url;
+                window.location = newUrl;
             }
         },
 

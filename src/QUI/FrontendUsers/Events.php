@@ -50,6 +50,22 @@ class Events
     }
 
     /**
+     * @param \QUI\Projects\Site\Edit $Site
+     */
+    public static function onSiteSave($Site)
+    {
+        // register path
+        if ($Site->getAttribute('active') &&
+            $Site->getAttribute('type') == 'quiqqer/frontend-users:types/profile'
+        ) {
+            $url = $Site->getLocation();
+            $url = str_replace(QUI\Rewrite::URL_DEFAULT_SUFFIX, '', $url);
+
+            QUI::getRewrite()->registerPath($url.'/*', $Site);
+        }
+    }
+
+    /**
      * Send welcome mail to the user
      *
      * @param User $User

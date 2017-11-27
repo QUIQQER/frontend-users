@@ -3,6 +3,8 @@
     <event on="onUserActivate" fire="\QUI\FrontendUsers\Events::onUserActivate"/>
     <event on="onUserDelete" fire="\QUI\FrontendUsers\Events::onUserDelete"/>
     <event on="onPackageSetup" fire="\QUI\FrontendUsers\Events::onPackageSetup"/>
-    <event on="onSiteInit" fire="\QUI\FrontendUsers\Events::onSiteInit"/>
     <event on="onTemplateGetHeader" fire="\QUI\FrontendUsers\Events::onTemplateGetHeader"/>
+
+    <event on="onSiteInit" fire="\QUI\FrontendUsers\Events::onSiteInit"/>
+    <event on="onSiteSave" fire="\QUI\FrontendUsers\Events::onSiteSave"/>
 </events>
