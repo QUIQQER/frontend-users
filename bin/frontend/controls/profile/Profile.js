@@ -126,9 +126,24 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * event : on change location state
          */
         $onChangeState: function () {
-            var pathName = window.location.pathname;
+            var pathName = window.location.pathname,
+                url      = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
 
-            console.warn(pathName);
+            if (pathName !== url) {
+                var requestPart = pathName.replace(QUIQQER_SITE.url, '');
+
+                requestPart = requestPart.split('/');
+                requestPart = requestPart.clean().filter(function (val) {
+                    return val !== '';
+                });
+
+                if (typeof requestPart[0] !== 'undefined' && typeof requestPart[1] !== 'undefined') {
+                    this.openSetting(
+                        requestPart[0],
+                        requestPart[1]
+                    );
+                }
+            }
         },
 
         /**
