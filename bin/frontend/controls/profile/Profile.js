@@ -140,7 +140,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 if (typeof requestPart[0] !== 'undefined' && typeof requestPart[1] !== 'undefined') {
                     this.openSetting(
                         requestPart[0],
-                        requestPart[1]
+                        requestPart[1],
+                        false
                     );
                 }
             }
@@ -215,11 +216,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          *
          * @param {String} [category]
          * @param {String} [settings]
+         * @param {Boolean} [setUrl]
          * @return Promise
          */
-        openSetting: function (category, settings) {
+        openSetting: function (category, settings, setUrl) {
             var self = this,
                 Elm  = this.getElm();
+
+            if (typeof setUrl === 'undefined') {
+                setUrl = true;
+            }
 
             category = category || false;
             settings = settings || false;
@@ -296,7 +302,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         self.$category = category;
                         self.$settings = settings;
 
-                        self.$setUri();
+                        if (setUrl) {
+                            self.$setUri();
+                        }
                     }, {
                         'package': 'quiqqer/frontend-users',
                         category : category,
