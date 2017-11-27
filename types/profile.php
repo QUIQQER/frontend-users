@@ -19,8 +19,8 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
         $category = $requestPart[0];
         $settings = $requestPart[1];
     } else {
-        $category = $requestPart[0];
-        $settings = $requestPart[1];
+        $category = false;
+        $settings = false;
     }
 
     $Control = new QUI\FrontendUsers\Controls\Profile();

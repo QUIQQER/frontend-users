@@ -106,7 +106,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$bindCategoriesEvents();
 
             this.$parseContent(this.getElm()).then(function () {
-                var Form     = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+                var Form = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+
+                if (!Form) {
+                    return;
+                }
+
                 var category = Form.get('data-category');
                 var settings = Form.get('data-setting');
 
@@ -161,13 +166,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     '.quiqqer-frontendUsers-controls-profile-categories-mobile select'
                 );
 
-                if (self.$category) {
-                    MobileCategories.value = self.$category;
-                }
+                if (MobileCategories) {
+                    if (self.$category) {
+                        MobileCategories.value = self.$category;
+                    }
 
-                MobileCategories.addEvent('change', function () {
-                    self.openSetting(MobileCategories.value);
-                });
+                    MobileCategories.addEvent('change', function () {
+                        self.openSetting(MobileCategories.value);
+                    });
+                }
 
 
                 // setting form events
