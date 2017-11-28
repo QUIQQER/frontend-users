@@ -53,8 +53,8 @@ class Utils
     }
 
     /**
-     * Return the extra profile categories from other plugins
-     * search intranet.xml
+     * Return all extra profile categories
+     * - search intranet.xml
      *
      * @return array
      */
@@ -185,6 +185,7 @@ class Utils
      *
      * @param string $category
      * @return array
+     *
      * @throws Exception
      */
     public static function getProfileCategory($category)
@@ -202,24 +203,59 @@ class Utils
     }
 
     /**
-     * Get data of all categories
+     * Return all categories and settings for the profile control
      *
      * @return array
      */
-    public static function getProfileBarCategories()
+    public static function getProfileCategorySettings()
     {
-        $categories = array();
+        $categories = Utils::getProfileCategories();
 
-        foreach (Utils::getProfileCategories() as $c) {
-            if ($c['showinmenu']) {
-                continue;
+        foreach ($categories as $key => $category) {
+            $items = $category['items'];
+
+            foreach ($items as $iKey => $setting) {
+                if (!isset($setting['showinprofile'])) {
+                    continue;
+                }
+
+                if (!(int)$setting['showinprofile']) {
+                    unset($categories[$key]['items'][$iKey]);
+                }
             }
 
-            $categories[] = array(
-                'title' => $c['text'],
-                'name'  => $c['name'],
-                'icon'  => $c['icon']
-            );
+            // reindex
+            $categories[$key]['items'] = array_values($categories[$key]['items']);
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Return all categories and settings for the profile bar control
+     *
+     * @return array
+     */
+    public static function getProfileBarCategorySettings()
+    {
+        $categories = Utils::getProfileCategories();
+
+        foreach ($categories as $key => $category) {
+            $items = $category['items'];
+
+            foreach ($items as $iKey => $setting) {
+                if (!isset($setting['showinprofilbar'])) {
+                    unset($categories[$key]['items'][$iKey]);
+                    continue;
+                }
+
+                if (!(int)$setting['showinprofilbar']) {
+                    unset($categories[$key]['items'][$iKey]);
+                }
+            }
+
+            // reindex
+            $categories[$key]['items'] = array_values($categories[$key]['items']);
         }
 
         return $categories;
@@ -254,6 +290,7 @@ class Utils
      *
      * @param string $name
      * @return QUI\Controls\Control|ControlWrapper
+     *
      * @deprecated
      */
     public static function getProfileCategoryControl($name)

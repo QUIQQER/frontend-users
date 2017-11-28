@@ -21,10 +21,13 @@ class ProfileBar extends Control
     {
         parent::__construct($attributes);
 
-        $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/ProfileBar');
+        $this->setAttribute(
+            'data-qui',
+            'package/quiqqer/frontend-users/bin/frontend/controls/ProfileBar'
+        );
 
         $this->addCSSClass('quiqqer-frontendUsers-profileBar');
-        $this->addCSSFile(dirname(__FILE__) . '/ProfileBar.css');
+        $this->addCSSFile(dirname(__FILE__).'/ProfileBar.css');
     }
 
     /**
@@ -34,10 +37,11 @@ class ProfileBar extends Control
      */
     public function getBody()
     {
-        $Engine   = QUI::getTemplateManager()->getEngine();
-        $User     = QUI::getUserBySession();
+        $Engine  = QUI::getTemplateManager()->getEngine();
+        $User    = QUI::getUserBySession();
+        $Project = QUI::getRewrite()->getProject();
+
         $Handler  = Handler::getInstance();
-        $Project  = QUI::getRewrite()->getProject();
         $settings = $Handler->getProfileBarSettings();
 
         $Engine->assign(array(
@@ -51,6 +55,6 @@ class ProfileBar extends Control
             'RegistrationSite' => $Handler->getRegistrationSite($Project)
         ));
 
-        return $Engine->fetch(dirname(__FILE__) . '/ProfileBar.html');
+        return $Engine->fetch(dirname(__FILE__).'/ProfileBar.html');
     }
 }

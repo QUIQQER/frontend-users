@@ -9,6 +9,7 @@ namespace QUI\FrontendUsers\Controls;
 use QUI;
 use QUI\Control;
 use QUI\FrontendUsers\Utils;
+use Tracy\Debugger;
 
 /**
  * Class Profile
@@ -50,7 +51,7 @@ class Profile extends Control
     {
         $Request    = QUI::getRequest();
         $Engine     = QUI::getTemplateManager()->getEngine();
-        $categories = Utils::getProfileCategories();
+        $categories = Utils::getProfileCategorySettings();
 
         $currentCategory = $this->getAttribute('category');
         $currentSetting  = $this->getAttribute('settings');
@@ -87,6 +88,7 @@ class Profile extends Control
 
             return $data['items'][0]['name'];
         };
+
 
         foreach ($categories as $key => $category) {
             if (!Utils::hasPermissionToViewCategory($category['name'])) {

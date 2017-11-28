@@ -2,19 +2,16 @@
     {$UserIcon->create()}
 {else}
     {if $showLogin}
-        {if $LoginSite}
-            <a href="{$LoginSite->getUrlRewritten()}">
-        {else}
-            <a href="#">
-        {/if}
-        <div class="quiqqer-frontendUsers-profileBar-login">
-            <span class="fa fa-sign-in"></span>
-            <span>
-                {locale group="quiqqer/frontend-users" var="controls.profilebar.login_text"}
-            </span>
-        </div>
+        <a href="{if $LoginSite}{$LoginSite->getUrlRewritten()}{else}#{/if}">
+            <div class="quiqqer-frontendUsers-profileBar-login">
+                <span class="fa fa-sign-in"></span>
+                <span>
+                    {locale group="quiqqer/frontend-users" var="controls.profilebar.login_text"}
+                </span>
+            </div>
         </a>
     {/if}
+
     {if $showRegistration && $RegistrationSite}
         <a href="{$RegistrationSite->getUrlRewritten()}">
             <div class="quiqqer-frontendUsers-profileBar-registration">

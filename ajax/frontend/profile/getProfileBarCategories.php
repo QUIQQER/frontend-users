@@ -14,7 +14,7 @@ use QUI\FrontendUsers\Utils;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getProfileBarCategories',
     function () {
-        $categories = Utils::getProfileBarCategories();
+        $categories = Utils::getProfileBarCategorySettings();
 
         foreach ($categories as $k => $data) {
             if (!Utils::hasPermissionToViewCategory($data['name'])) {
@@ -24,5 +24,5 @@ QUI::$Ajax->registerFunction(
 
         return $categories;
     },
-    array()
+    false
 );
