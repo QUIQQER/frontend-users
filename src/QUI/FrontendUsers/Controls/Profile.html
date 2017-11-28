@@ -5,50 +5,35 @@
 {else}
 <div class="quiqqer-frontendUsers-controls-profile-categories">
     {foreach $categories as $category}
-        <div class="quiqqer-fupc-category quiqqer-fupc-category--open"
-             data-category="{$category.name}"
-        >
-            <div class="quiqqer-fupc-category-header">
-                {$category.title}
-            </div>
-            <div class="quiqqer-fu-profile-categories-category-items">
-                {foreach $category.items as $item}
-                <a href=""
-                   class="quiqqer-fupc-category-items-item"
-                   data-setting="{$item.name}"
-                >
-                    {if $item.icon}
-                    <span class="quiqqer-fupc-category-items-item-icon {$item.icon}"></span>
-                    {/if}
-                    <span>{$item.title}</span>
-                </a>
-                {/foreach}
-            </div>
-        </div>
-
-
-    {*<a href="{$item.url}"
-       class="quiqqer-frontendUsers-controls-profile-category{if $current == $item.name} quiqqer-frontendUsers-controls-profile-category-active{/if}"
-       data-name="{$item.name}"
+    <div class="quiqqer-fupc-category quiqqer-fupc-category--open"
+         data-category="{$category.name}"
     >
-        {if isset($item.icon) && $item.icon}
-        <div class="quiqqer-frontendUsers-controls-profile-category-icon">
-            <span class="fa {$item.icon}"></span>
+        <div class="quiqqer-fupc-category-header">
+            {$category.title}
         </div>
-        {/if}
-        <div class="quiqqer-frontendUsers-controls-profile-category-text">
-            {$item.text}
+        <div class="quiqqer-fu-profile-categories-category-items">
+            {foreach $category.items as $item}
+            <a href=""
+               class="quiqqer-fupc-category-items-item"
+               data-setting="{$item.name}"
+            >
+                {if $item.icon}
+                <span class="quiqqer-fupc-category-items-item-icon {$item.icon}"></span>
+                {/if}
+                <span>{$item.title}</span>
+            </a>
+            {/foreach}
         </div>
-    </a>*}
+    </div>
     {/foreach}
 </div>
 
 <form action="" method="post">
     <label class="quiqqer-frontendUsers-controls-profile-categories-mobile">
         <select name="profile-categories">
-            {foreach $categories as $item}
-            <option value="{$item.name}"{if $current == $item.name} selected{/if}>
-                {$item.text}
+            {foreach $categories as $category}
+            <option value="{$item.name}" {if $currentCategory == $category.name} selected{/if}>
+                {$category.title}
             </option>
             {/foreach}
         </select>
