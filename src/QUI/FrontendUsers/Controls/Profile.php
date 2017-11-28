@@ -162,7 +162,8 @@ class Profile extends Control
             'categories'      => $categories,
             'currentCategory' => $currentCategory,
             'currentSetting'  => $currentSetting,
-            'Category'        => $Control
+            'Category'        => $Control,
+            'Site'            => $this->getSite()
         ));
 
         return $Engine->fetch(dirname(__FILE__).'/Profile.html');

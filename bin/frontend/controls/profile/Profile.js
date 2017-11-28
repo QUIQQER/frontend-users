@@ -183,12 +183,22 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 );
 
                 if (MobileCategories) {
-                    if (self.$category) {
-                        MobileCategories.value = self.$category;
+                    if (self.$category && self.$settings) {
+                        MobileCategories.value = self.$category + ':' + self.$settings;
                     }
 
                     MobileCategories.addEvent('change', function () {
-                        self.openSetting(MobileCategories.value);
+                        var value = MobileCategories.value;
+
+                        if (value === '') {
+                            return;
+                        }
+
+                        value = value.split(':');
+
+                        if (value.length === 2) {
+                            self.openSetting(value[0], value[1]);
+                        }
                     });
                 }
 

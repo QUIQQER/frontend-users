@@ -12,15 +12,20 @@
             {$category.title}
         </div>
         <div class="quiqqer-fu-profile-categories-category-items">
-            {foreach $category.items as $item}
-            <a href=""
-               class="quiqqer-fupc-category-items-item"
-               data-setting="{$item.name}"
+            {foreach $category.items as $setting}
+
+            {assign var=active value=""}
+            {if $currentCategory == $category.name && $currentSetting == $setting.name}
+                {assign var=active value=" quiqqer-fupc-category-items-item--active"}
+            {/if}
+            <a href="{$Site->getUrlRewritten()}/{$category.name}/{$setting.name}"
+               class="quiqqer-fupc-category-items-item{$active}"
+               data-setting="{$setting.name}"
             >
-                {if $item.icon}
-                <span class="quiqqer-fupc-category-items-item-icon {$item.icon}"></span>
+                {if $setting.icon}
+                <span class="quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
                 {/if}
-                <span>{$item.title}</span>
+                <span>{$setting.title}</span>
             </a>
             {/foreach}
         </div>
@@ -32,9 +37,17 @@
     <label class="quiqqer-frontendUsers-controls-profile-categories-mobile">
         <select name="profile-categories">
             {foreach $categories as $category}
-            <option value="{$item.name}" {if $currentCategory == $category.name} selected{/if}>
-                {$category.title}
-            </option>
+            <optgroup label="{$category.title}">
+                {foreach $category.items as $setting}
+                {assign var=active value=""}
+                    {if $currentCategory== $category.name}
+                {assign var=active value=" selected"}
+                {/if}
+                <option value="{$category.name}:{$setting.name}"{$active}>
+                    {$setting.title}
+                </option>
+                {/foreach}
+            </optgroup>
             {/foreach}
         </select>
     </label>
