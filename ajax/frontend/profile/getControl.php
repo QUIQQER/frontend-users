@@ -35,8 +35,10 @@ QUI::$Ajax->registerFunction(
         $Control->setAttribute('category', Orthos::clear($category));
         $Control->setAttribute('settings', Orthos::clear($settings));
 
+        $html = $Control->create();
+
         $result = QUI\Control\Manager::getCSS();
-        $result .= $Control->create();
+        $result .= $html;
 
         return QUI\Output::getInstance()->parse($result);
     },

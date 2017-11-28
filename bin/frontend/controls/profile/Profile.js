@@ -267,11 +267,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             html: result
                         });
 
+                        var Content = Ghost.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation');
+                        var styles  = Ghost.getElements('style');
+
                         Form.setStyle('height', height);
 
                         Animation.set({
-                            html: Ghost.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation').get('html')
+                            html: Content.get('html')
                         });
+
+                        styles.inject(Animation);
 
                         self.$setMenuItemActive(category, settings);
 

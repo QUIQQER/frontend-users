@@ -9,7 +9,6 @@ namespace QUI\FrontendUsers\Controls;
 use QUI;
 use QUI\Control;
 use QUI\FrontendUsers\Utils;
-use Tracy\Debugger;
 
 /**
  * Class Profile
@@ -21,6 +20,7 @@ class Profile extends Control
 {
     /**
      * Profile constructor.
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
@@ -34,7 +34,11 @@ class Profile extends Control
 
         $this->addCSSFile(dirname(__FILE__).'/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
-        $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile');
+
+        $this->setAttribute(
+            'data-qui',
+            'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile'
+        );
     }
 
     /**
@@ -90,10 +94,6 @@ class Profile extends Control
             }
         }
 
-//        if (!empty($_GET['c'])) {
-//            $current = $_GET['c'];
-//        }
-
         if ($currentCategory
             && $currentSetting
             && Utils::hasPermissionToViewCategory($currentCategory, $currentSetting)) {
@@ -139,14 +139,7 @@ class Profile extends Control
             }
         }
 
-        $Site = $this->getSite();
-
-//        foreach ($categories as $k => $c) {
-//            $categories[$k]['url'] = $Site->getUrlRewritten(array(), array(
-//                'c' => $c['name']
-//            ));
-//        }
-
+        // load the translations
         foreach ($categories as $key => $category) {
             $categories[$key]['title'] = QUI::getLocale()->get(
                 $category['title'][0],
