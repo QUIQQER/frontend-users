@@ -241,21 +241,23 @@ class Utils
         $categories = Utils::getProfileCategories();
 
         foreach ($categories as $key => $category) {
-            $items = $category['items'];
+            $items    = $category['items'];
+            $newItems = array();
 
             foreach ($items as $iKey => $setting) {
                 if (!isset($setting['showinprofilbar'])) {
-                    unset($categories[$key]['items'][$iKey]);
                     continue;
                 }
 
                 if (!(int)$setting['showinprofilbar']) {
-                    unset($categories[$key]['items'][$iKey]);
+                    continue;
                 }
+
+                $newItems[$iKey] = $setting;
             }
 
             // reindex
-            $categories[$key]['items'] = array_values($categories[$key]['items']);
+            $categories[$key]['items'] = array_values($newItems);
         }
 
         return $categories;
@@ -311,5 +313,35 @@ class Utils
         }
 
         return $Control;
+    }
+
+    /**
+     * Search title arrays and set the locale translations to it
+     *
+     * @param array $categories
+     * @return array
+     */
+    public static function loadTranslationForCategories($categories = array())
+    {
+        // load the translations
+        foreach ($categories as $key => $category) {
+            $categories[$key]['title'] = QUI::getLocale()->get(
+                $category['title'][0],
+                $category['title'][1]
+            );
+
+            foreach ($category['items'] as $itemKey => $item) {
+                if (!is_array($categories[$key]['items'][$itemKey]['title'])) {
+                    continue;
+                }
+
+                $categories[$key]['items'][$itemKey]['title'] = QUI::getLocale()->get(
+                    $categories[$key]['items'][$itemKey]['title'][0],
+                    $categories[$key]['items'][$itemKey]['title'][1]
+                );
+            }
+        }
+
+        return $categories;
     }
 }

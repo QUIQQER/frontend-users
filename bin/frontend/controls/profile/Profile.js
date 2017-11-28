@@ -168,7 +168,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         Target = Target.getParent('.quiqqer-fupc-category-items-item');
                     }
 
-
                     var category = Target.getParent('.quiqqer-fupc-category').get('data-category'),
                         setting  = Target.get('data-setting');
 

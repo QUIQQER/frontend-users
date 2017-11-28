@@ -142,23 +142,7 @@ class Profile extends Control
         }
 
         // load the translations
-        foreach ($categories as $key => $category) {
-            $categories[$key]['title'] = QUI::getLocale()->get(
-                $category['title'][0],
-                $category['title'][1]
-            );
-
-            foreach ($category['items'] as $itemKey => $item) {
-                if (!is_array($categories[$key]['items'][$itemKey]['title'])) {
-                    continue;
-                }
-
-                $categories[$key]['items'][$itemKey]['title'] = QUI::getLocale()->get(
-                    $categories[$key]['items'][$itemKey]['title'][0],
-                    $categories[$key]['items'][$itemKey]['title'][1]
-                );
-            }
-        }
+        $categories = utils::loadTranslationForCategories($categories);
 
         $Engine->assign(array(
             'categories'      => $categories,

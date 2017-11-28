@@ -17,6 +17,11 @@ use QUI\FrontendUsers\Handler;
  */
 class ProfileBar extends Control
 {
+    /**
+     * ProfileBar constructor.
+     *
+     * @param array $attributes
+     */
     public function __construct(array $attributes = array())
     {
         parent::__construct($attributes);

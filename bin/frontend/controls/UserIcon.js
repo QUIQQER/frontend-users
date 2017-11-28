@@ -9,12 +9,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
     'controls/users/LogoutWindow',
 
     'Ajax',
+    'Locale',
 
     'qui/controls/contextmenu/Menu',
     'qui/controls/contextmenu/Item',
     'qui/controls/contextmenu/Separator'
 
-], function (QUI, QUIControl, LogoutWindow, QUIAjax, QUIMenu, QUIMenuItem, QUIMenuSeparator) {
+], function (QUI, QUIControl, LogoutWindow, QUIAjax, QUILocale, QUIMenu, QUIMenuItem, QUIMenuSeparator) {
     "use strict";
 
     return new Class({
@@ -25,6 +26,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
         Binds: [
             '$onImport'
         ],
+
+        options: {
+            menuPosition: 'bottom' // bottom | top
+        },
 
         initialize: function (options) {
             this.parent(options);
@@ -40,12 +45,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
          * event: on inject
          */
         $onImport: function () {
-            var self    = this;
-            var Elm     = this.getElm();
-            var IconElm = Elm.getElement('.quiqqer-frontendUsers-userIcon-icon');
+            var self    = this,
+                Elm     = this.getElm(),
+                IconElm = Elm.getElement('.quiqqer-frontendUsers-userIcon-icon');
+
+            var corner = 'topRight';
+
+            if (this.getAttribute('menuPosition') === 'top') {
+                corner = 'bottomRight';
+            }
 
             var ProfileMenu = new QUIMenu({
-                corner: 'topRight',
+                corner: corner,
                 events: {
                     onBlur: function (ProfileMenu) {
                         ProfileMenu.hide();
@@ -54,22 +65,34 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
             });
 
             this.$getCategories().then(function (categories) {
-                for (var i = 0, len = categories.length; i < len; i++) {
-                    var Cat = categories[i];
+                var c, i, clen, items, Cat;
 
-                    ProfileMenu.appendChild(
-                        new QUIMenuItem({
-                            name  : Cat.name,
-                            title : Cat.title,
-                            text  : Cat.title,
-                            icon  : Cat.icon,
-                            events: {
-                                onClick: function (Item) {
-                                    console.log(Item.getAttribute('name'));
+                var menuClick = function (Item) {
+                    console.log(Item.getAttribute('name'));
+                };
+
+                for (i in categories) {
+                    if (!categories.hasOwnProperty(i)) {
+                        continue;
+                    }
+
+                    Cat   = categories[i];
+                    items = Cat.items;
+
+                    for (c = 0, clen = items.length; c < clen; c++) {
+                        ProfileMenu.appendChild(
+                            new QUIMenuItem({
+                                title   : items[c].title,
+                                text    : items[c].title,
+                                icon    : items[c].icon,
+                                category: Cat.name,
+                                settings: items[c].name,
+                                events  : {
+                                    onClick: menuClick
                                 }
-                            }
-                        })
-                    );
+                            })
+                        );
+                    }
                 }
 
                 ProfileMenu.appendChild(new QUIMenuSeparator());
@@ -77,8 +100,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                 ProfileMenu.appendChild(
                     new QUIMenuItem({
                         name  : 'profile',
-                        title : 'Logout', // #locale
-                        text  : 'Logout',
+                        title : QUILocale.get('quiqqer/system', 'logout'),
+                        text  : QUILocale.get('quiqqer/system', 'logout'),
                         icon  : 'fa fa-sign-out',
                         events: {
                             onClick: function () {
@@ -90,16 +113,31 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
 
                 ProfileMenu.inject(Elm, 'after');
 
-                IconElm.addEvent('click', function(event) {
+                IconElm.addEvent('click', function (event) {
                     event.stop();
+
+                    var menuPos = self.getAttribute('menuPosition'),
+                        MenuElm = ProfileMenu.getElm();
+
+                    if (menuPos === 'bottom' || !menuPos) {
+                        MenuElm.setStyles({
+                            left: 0,
+                            top : Elm.getSize().y + 10
+                        });
+                    } else {
+                        MenuElm.setStyle('opacity', 0);
+                        ProfileMenu.show();
+
+                        MenuElm.setStyles({
+                            left: 0,
+                            top : (MenuElm.getSize().y + 10) * -1
+                        });
+
+                        MenuElm.setStyle('opacity', null);
+                    }
+
+
                     ProfileMenu.show();
-
-                    //ProfileMenu.getElm().setStyles({
-                    //    left : null,
-                    //    right: 10,
-                    //    top  : 70
-                    //});
-
                     ProfileMenu.focus();
                 });
             });
@@ -115,7 +153,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_getProfileBarCategories', resolve, {
                     'package': 'quiqqer/frontend-users',
                     onError  : reject
-                })
+                });
             });
         }
     });

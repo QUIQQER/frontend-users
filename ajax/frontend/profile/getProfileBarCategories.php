@@ -22,6 +22,8 @@ QUI::$Ajax->registerFunction(
             }
         }
 
+        $categories = utils::loadTranslationForCategories($categories);
+
         return $categories;
     },
     false
