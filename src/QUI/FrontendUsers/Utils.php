@@ -344,4 +344,46 @@ class Utils
 
         return $categories;
     }
+
+
+    /**
+     * Search title arrays and set the locale translations to it
+     *
+     * @param array $categories
+     * @param null|QUI\Projects\Project $Project
+     * @return array
+     */
+    public static function setUrlsToCategorySettings($categories = array(), $Project = null)
+    {
+        if ($Project === null) {
+            $Project = QUI::getRewrite()->getProject();
+        }
+
+        $ids = $Project->getSitesIds(array(
+            'where' => array(
+                'type' => 'quiqqer/frontend-users:types/profile'
+            ),
+            'limit' => 1
+        ));
+
+        if (!isset($ids[0])) {
+            $Site = $Project->firstChild();
+        } else {
+            $Site = $Project->get($ids[0]['id']);
+        }
+
+        $url = $Site->getUrlRewritten();
+
+        // load the translations
+        foreach ($categories as $key => $category) {
+            foreach ($category['items'] as $itemKey => $item) {
+                $itemUrl = $url.'/'.$category['name'];
+                $itemUrl = $itemUrl.'/'.$item['name'];
+
+                $categories[$key]['items'][$itemKey]['url'] = $itemUrl;
+            }
+        }
+
+        return $categories;
+    }
 }

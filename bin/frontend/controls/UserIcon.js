@@ -68,7 +68,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                 var c, i, clen, items, Cat;
 
                 var menuClick = function (Item) {
-                    console.log(Item.getAttribute('name'));
+                    if (Item.getAttribute('url')) {
+                        window.location = Item.getAttribute('url');
+                    }
                 };
 
                 for (i in categories) {
@@ -85,6 +87,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                                 title   : items[c].title,
                                 text    : items[c].title,
                                 icon    : items[c].icon,
+                                url     : items[c].url,
                                 category: Cat.name,
                                 settings: items[c].name,
                                 events  : {

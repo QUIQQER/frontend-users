@@ -23,6 +23,7 @@ QUI::$Ajax->registerFunction(
         }
 
         $categories = utils::loadTranslationForCategories($categories);
+        $categories = utils::setUrlsToCategorySettings($categories);
 
         return $categories;
     },
