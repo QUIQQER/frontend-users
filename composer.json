@@ -25,7 +25,7 @@
     "quiqqer/quiqqer": ">=1.1|dev-master|dev-dev",
     "quiqqer/watcher": ">1.0|dev-master|dev-dev",
     "quiqqer/countries": ">1.1|dev-master|dev-dev",
-    "quiqqer/verification": ">1.0|dev-master|dev-dev"
+    "quiqqer/verification": ">1.0|@dev"
   },
   "autoload": {
     "psr-4": {
