@@ -386,4 +386,20 @@ class Utils
 
         return $categories;
     }
+
+    /**
+     * Is quiqqer/captcha installed?
+     *
+     * @return bool
+     */
+    public static function isCaptchaModuleInstalled()
+    {
+        try {
+            QUI::getPackage('quiqqer/captcha');
+        } catch (\Exception $Exception) {
+            return false;
+        }
+
+        return true;
+    }
 }

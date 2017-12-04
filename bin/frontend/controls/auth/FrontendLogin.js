@@ -135,13 +135,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                 new ResendActivationLinkBtn({
                     userId: userId,
                     events: {
-                        onResendSuccess: function (Btn) {
+                        onResendSuccess: function () {
                             ResendMsgElm.set(
                                 'html',
                                 QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.resend_activation_mail_success')
                             );
                         },
-                        onResendFail   : function (Btn) {
+                        onResendFail   : function () {
                             ResendMsgElm.set(
                                 'html',
                                 QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.resend_activation_mail_fail')
@@ -179,7 +179,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                     'package': 'quiqqer/frontend-users',
                     userId   : userId,
                     onError  : reject
-                })
+                });
             });
         }
     });

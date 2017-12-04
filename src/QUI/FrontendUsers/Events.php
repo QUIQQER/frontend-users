@@ -144,6 +144,8 @@ class Events
             return;
         }
 
+        \QUI\System\Log::writeRecursive("AUTO LOGIN!");
+
         $settings = $Handler->getRegistrarSettings($Registrar->getType());
 
         // do not log in if users have to be manually activated

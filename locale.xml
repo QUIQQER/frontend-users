@@ -257,6 +257,10 @@
             <de><![CDATA[Passwort-Eingabe per Passwort-Feld mit Anzeige der Passwort-Stärke]]></de>
             <en><![CDATA[Password input via password input with display of password strength]]></en>
         </locale>
+        <locale name="settings.passwordInput.option.none">
+            <de><![CDATA[Keine Passwort-Eingabe]]></de>
+            <en><![CDATA[No password input]]></en>
+        </locale>
         <locale name="settings.userWelcomeMail.title">
             <de><![CDATA["Wilkommen"-E-Mail nach Aktivierung]]></de>
             <en><![CDATA["Welcheom"-mail on activation]]></en>
@@ -310,8 +314,16 @@
             <en><![CDATA[Create & send random password]]></en>
         </locale>
         <locale name="settings.sendPassword.description">
-            <de><![CDATA[Bei Registrierung ein zufälliges Passwort erstellen und dem Benutzer per E-Mail senden. Der Benutzer wird nach dem ersten Login aufgefordert, ein neues Passwort zu setzen.]]></de>
-            <en><![CDATA[Create a random password upon registration and send it to the user by e-mail. The user is prompted after the first login to set a new password.]]></en>
+            <de><![CDATA[Bei Registrierung ein zufälliges Passwort erstellen und dem Benutzer per E-Mail senden.]]></de>
+            <en><![CDATA[Create a random password upon registration and send it to the user by e-mail.]]></en>
+        </locale>
+        <locale name="settings.forcePasswordReset.title">
+            <de><![CDATA[Neues Passwort beim ersten Login]]></de>
+            <en><![CDATA[New Passwort on first Login]]></en>
+        </locale>
+        <locale name="settings.forcePasswordReset.description">
+            <de><![CDATA[Der Benutzer muss beim ersten Login nach der Registrierung ein neues Passwort setzen.]]></de>
+            <en><![CDATA[The user has to set a new password on first login after registration.]]></en>
         </locale>
 
         <!-- Settings: Registrars -->

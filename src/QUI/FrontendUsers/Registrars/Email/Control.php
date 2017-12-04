@@ -82,7 +82,15 @@ class Control extends QUI\Control
             }
         }
 
-        $useCaptcha = boolval($registrationSettings['useCaptcha']);
+        $Captcha    = false;
+        $jsRequired = false;
+        $useCaptcha = false;
+
+        if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
+            $Captcha    = new QUI\Captcha\Controls\CaptchaDisplay();
+            $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
+            $useCaptcha = boolval($registrationSettings['useCaptcha']);
+        }
 
         $this->setJavaScriptControlOption('usecaptcha', $useCaptcha);
 
@@ -91,9 +99,9 @@ class Control extends QUI\Control
             'showAddress'     => $showAddress,
             'usernameSetting' => $usernameSetting,
             'passwordInput'   => $registrationSettings['passwordInput'],
-            'Captcha'         => new QUI\Captcha\Controls\CaptchaDisplay(),
+            'Captcha'         => $Captcha,
             'useCaptcha'      => $useCaptcha,
-            'jsRequired'      => QUI\Captcha\Handler::requiresJavaScript()
+            'jsRequired'      => $jsRequired
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Control.html');

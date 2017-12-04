@@ -25,6 +25,10 @@ class FrontendLogin extends QUI\Control
      */
     public function __construct(array $attributes = array())
     {
+        $this->setAttributes(array(
+            'showRegistration' => true
+        ));
+
         parent::__construct($attributes);
 
         $this->addCSSFile(dirname(__FILE__) . '/FrontendLogin.css');
@@ -49,9 +53,15 @@ class FrontendLogin extends QUI\Control
             $dataRedirect = QUI\Output::getInstance()->parse($dataRedirect);
         }
 
+        $Registration = false;
+
+        if ($this->getAttribute('showRegistration')) {
+            $Registration = new Registration();
+        }
+
         $Engine->assign(array(
             'Login'        => new Login(),
-            'Registration' => new Registration(),
+            'Registration' => $Registration,
             'dataRedirect' => $dataRedirect
         ));
 

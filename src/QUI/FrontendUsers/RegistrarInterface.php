@@ -51,7 +51,7 @@ interface RegistrarInterface
     //endregion attributes
     /**
      * @param QUI\Interfaces\Users\User $User
-     * @return int - QUI\FrontendUsers\Handler::REGISTRATION_STATUS_*
+     * @return void
      */
     public function onRegistered(QUI\Interfaces\Users\User $User);
 

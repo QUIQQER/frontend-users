@@ -38,6 +38,7 @@ class Handler extends Singleton
      */
     const PASSWORD_INPUT_DEFAULT  = 'default';
     const PASSWORD_INPUT_VALIDATE = 'validation';
+    const PASSWORD_INPUT_NONE     = 'none';
 
     /**
      * Username input types
@@ -341,7 +342,7 @@ class Handler extends Singleton
      *
      * @param QUI\Users\User $User
      * @param RegistrarInterface $Registrar
-     * @return void
+     * @return bool - success
      */
     public function sendActivationMail(QUI\Users\User $User, RegistrarInterface $Registrar)
     {
@@ -388,7 +389,11 @@ class Handler extends Singleton
             );
 
             QUI\System\Log::writeException($Exception);
+
+            return false;
         }
+
+        return true;
     }
 
     /**

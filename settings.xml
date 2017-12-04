@@ -74,6 +74,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
                 </conf>
+                <conf name="forcePasswordReset">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
                 <conf name="useCaptcha">
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
@@ -259,6 +263,9 @@
                             <option value="validation">
                                 <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.validation"/>
                             </option>
+                            <option value="none">
+                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.none"/>
+                            </option>
                         </select>
 
                         <input conf="registration.sendPassword" type="checkbox">
@@ -267,6 +274,15 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.sendPassword.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.forcePasswordReset" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.forcePasswordReset.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.forcePasswordReset.description"/>
                             </description>
                         </input>
 

@@ -14,9 +14,9 @@
             {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
         </a>
     </div>
-    {else}
+    {elseif $Login}
         {$Login->create()}
-{/if}
+    {/if}
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
 <div class="quiqqer-frontendUsers-pending">
     {$Registrar->getPendingMessage()}

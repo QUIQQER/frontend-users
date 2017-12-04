@@ -23,12 +23,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 {
     /**
      * @param QUI\Interfaces\Users\User $User
-     * @return int
+     * @return void
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
-        $Handler    = FrontendUsers\Handler::getInstance();
-        $settings   = $this->getSettings();
         $SystemUser = QUI::getUsers()->getSystemUser();
 
         /** @var QUI\Users\User $User */
@@ -84,27 +82,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         if ($this->getAttribute('password')) {
             $User->setPassword($this->getAttribute('password'), $SystemUser);
-        } else {
-            // set dummy password so the user can be activated
-            $User->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         }
 
         $User->save($SystemUser);
-
-        $returnStatus = $Handler::REGISTRATION_STATUS_SUCCESS;
-
-        switch ($settings['activationMode']) {
-            case $Handler::ACTIVATION_MODE_MAIL:
-                $Handler->sendActivationMail($User, $this);
-                $returnStatus = $Handler::REGISTRATION_STATUS_PENDING;
-                break;
-
-            case $Handler::ACTIVATION_MODE_AUTO:
-                $User->activate(false, $SystemUser);
-                break;
-        }
-
-        return $returnStatus;
     }
 
     /**

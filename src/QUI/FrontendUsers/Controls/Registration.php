@@ -67,7 +67,7 @@ class Registration extends QUI\Control
 
         $status = $this->getAttribute('status');
 
-        if ($status === 'error' && $CurrentRegistrar) {
+        if ($status === $RegistrarHandler::REGISTRATION_STATUS_ERROR && $CurrentRegistrar) {
             $Engine->assign('error', $CurrentRegistrar->getErrorMessage());
         }
 
@@ -76,6 +76,14 @@ class Registration extends QUI\Control
 
         if (!empty($registrationSettings['autoRedirectOnSuccess'])) {
             $autoRedirect = $registrationSettings['autoRedirectOnSuccess'];
+
+            try {
+                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink($autoRedirect);
+                $autoRedirect = $RedirectSite->getUrlRewrittenWithHost();
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+                $autoRedirect = false;
+            }
         }
 
         $status  = $this->getAttribute('status');
@@ -83,12 +91,20 @@ class Registration extends QUI\Control
                    && ($status === 'success'
                        || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
+        $Login = false;
+
+        if (QUI::getUserBySession()->getId()) {
+            $Login = new FrontendLogin(array(
+                'showRegistration' => false
+            ));
+        }
+
         $Engine->assign(array(
             'Registrars'   => $Registrars,
             'Registrar'    => $CurrentRegistrar,
             'success'      => $success,
             'autoRedirect' => $autoRedirect,
-            'Login'        => new FrontendLogin()
+            'Login'        => $Login
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -148,7 +164,7 @@ class Registration extends QUI\Control
         if ($Registrar === false) {
             throw new QUI\FrontendUsers\Exception(array(
                 'quiqqer/frontend-users',
-                'exception.registrar.not.found'
+                'exception.registration.registrar_not_found'
             ));
         }
 
@@ -179,10 +195,11 @@ class Registration extends QUI\Control
         ));
 
         // handle onRegistered from Registrar
-        $registrationStatus = $Registrar->onRegistered($NewUser);
+        $Registrar->onRegistered($NewUser);
+        $settings          = $RegistrarHandler->getRegistrationSettings();
+        $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
 
-        $settings = $RegistrarHandler->getRegistrationSettings();
-
+        // determine if the user has to set a new password on first login
         if (boolval($settings['forcePasswordReset'])) {
             $NewUser->setAttribute('quiqqer.set.new.password', true);
         }
@@ -191,6 +208,45 @@ class Registration extends QUI\Control
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
 
         $NewUser->save(QUI::getUsers()->getSystemUser());
+
+        // check if the user has a password
+        $result = QUI::getDataBase()->fetch(array(
+            'select' => 'password',
+            'from'   => QUI::getDBTableName('users'),
+            'where'  => array(
+                'id' => $NewUser->getId()
+            ),
+            'limit'  => 1
+        ));
+
+        $SystemUser = QUI::getUsers()->getSystemUser();
+
+        // set random password if the Registrar did not set a password
+        if (empty($result[0]['password'])) {
+            $NewUser->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
+        }
+
+        // determine registration status
+        $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_SUCCESS;
+
+        switch ($registrarSettings['activationMode']) {
+            case $RegistrarHandler::ACTIVATION_MODE_MAIL:
+                $sendMailSuccess = $RegistrarHandler->sendActivationMail($NewUser, $Registrar);
+
+                if (!$sendMailSuccess) {
+                    throw new QUI\FrontendUsers\Exception(array(
+                        'quiqqer/frontend-users',
+                        'exception.registration.send_mail_error'
+                    ));
+                }
+
+                $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_PENDING;
+                break;
+
+            case $RegistrarHandler::ACTIVATION_MODE_AUTO:
+                $NewUser->activate(false, $SystemUser);
+                break;
+        }
 
         return $registrationStatus;
     }
