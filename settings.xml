@@ -50,7 +50,7 @@
                 </conf>
                 <conf name="usernameInput">
                     <type><![CDATA[string]]></type>
-                    <defaultvalue>none</defaultvalue>
+                    <defaultvalue><![CDATA[none]]></defaultvalue>
                 </conf>
                 <conf name="addressInput">
                     <type><![CDATA[bool]]></type>
@@ -69,6 +69,10 @@
                 <conf name="passwordInput">
                     <type><![CDATA[string]]></type>
                     <defaultvalue>default</defaultvalue>
+                </conf>
+                <conf name="sendPassword">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
                 </conf>
                 <conf name="useCaptcha">
                     <type><![CDATA[bool]]></type>
@@ -255,10 +259,16 @@
                             <option value="validation">
                                 <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.validation"/>
                             </option>
-                            <option value="sendmail">
-                                <locale group="quiqqer/frontend-users" var="settings.passwordInput.option.sendmail"/>
-                            </option>
                         </select>
+
+                        <input conf="registration.sendPassword" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.sendPassword.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.sendPassword.description"/>
+                            </description>
+                        </input>
 
                         <input conf="registration.userWelcomeMail" type="checkbox">
                             <text>

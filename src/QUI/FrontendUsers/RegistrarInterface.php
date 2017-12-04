@@ -160,4 +160,11 @@ interface RegistrarInterface
      * @return bool
      */
     public function isActive();
+
+    /**
+     * Check if this Registrar can send passwords
+     *
+     * @return bool
+     */
+    public function canSendPassword();
 }

@@ -61,7 +61,7 @@ class Events
             $url = $Site->getLocation();
             $url = str_replace(QUI\Rewrite::URL_DEFAULT_SUFFIX, '', $url);
 
-            QUI::getRewrite()->registerPath($url.'/*', $Site);
+            QUI::getRewrite()->registerPath($url . '/*', $Site);
         }
     }
 
@@ -77,7 +77,7 @@ class Events
         $registrationSettings = $Handler->getRegistrationSettings();
 
         if (!$registrationSettings['userWelcomeMail']
-            || $User->getAttribute('quiqqer.frontendUsers.welcomeMailSent')) {
+            || $User->getAttribute($Handler::USER_ATTR_WELCOME_MAIL_SENT)) {
             return;
         }
 
@@ -93,8 +93,14 @@ class Events
 
         // set random password
         $randomPass = null;
+        $Registrar  = $Handler->getReigstrarByUser($User);
 
-        if ($registrationSettings['passwordInput'] === $Handler::PASSWORD_INPUT_SENDMAIL) {
+        if (!$Registrar) {
+            return;
+        }
+
+        if (boolval($registrationSettings['sendPassword'])
+            && $Registrar->canSendPassword()) {
             $randomPass = QUI\Security\Password::generateRandom();
             $User->setPassword($randomPass, QUI::getUsers()->getSystemUser());
             $User->save(QUI::getUsers()->getSystemUser());
@@ -221,11 +227,11 @@ class Events
      */
     protected static function setRegistrarsDefaultSettings()
     {
-        $RegistrarsHanlder = Handler::getInstance();
-        $settings          = $RegistrarsHanlder->getRegistrarSettings();
+        $RegistrarHandler = Handler::getInstance();
+        $settings         = $RegistrarHandler->getRegistrarSettings();
 
         /** @var RegistrarInterface $Registrar */
-        foreach ($RegistrarsHanlder->getAvailableRegistrars() as $Registrar) {
+        foreach ($RegistrarHandler->getAvailableRegistrars() as $Registrar) {
             $name = $Registrar->getType();
 
             if (!isset($settings[$name])) {
@@ -236,7 +242,7 @@ class Events
             }
         }
 
-        $RegistrarsHanlder->setRegistrarSettings($settings);
+        $RegistrarHandler->setRegistrarSettings($settings);
     }
 
     /**
@@ -304,8 +310,8 @@ class Events
      */
     public static function onTemplateGetHeader(QUI\Template $TemplateManager)
     {
-        $cssFile = URL_OPT_DIR.'quiqqer/frontend-users/bin/style.css';
-        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="'.$cssFile.'">');
+        $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
+        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
 
         $User = QUI::getUserBySession();
 
@@ -320,7 +326,7 @@ class Events
                     'Locale'
                 ], function(Password, QUILocale) {
                     new Password({
-                        uid: '".$User->getId()."',
+                        uid: '" . $User->getId() . "',
                         mustChange: true,
                         message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
                         events: {
@@ -369,7 +375,7 @@ class Events
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
 
         foreach (Utils::getProfileCategories() as $c) {
-            $permission = $permissionPrefix.$c['name'];
+            $permission = $permissionPrefix . $c['name'];
 
             try {
                 $Permissions->getPermissionData($permission);
@@ -380,11 +386,11 @@ class Events
 
             $Permissions->addPermission(array(
                 'name'         => $permission,
-                'title'        => $c['textVar'][0].' '.$c['textVar'][1],
+                'title'        => $c['title'][0] . ' ' . $c['title'][1],
                 'desc'         => '',
                 'type'         => 'bool',
                 'area'         => '',
-                'src'          => $c['source'],
+                'src'          => 'quiqqer/frontend-users',
                 'defaultvalue' => 0
             ));
 

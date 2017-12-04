@@ -257,10 +257,6 @@
             <de><![CDATA[Passwort-Eingabe per Passwort-Feld mit Anzeige der Passwort-Stärke]]></de>
             <en><![CDATA[Password input via password input with display of password strength]]></en>
         </locale>
-        <locale name="settings.passwordInput.option.sendmail">
-            <de><![CDATA[Passwort automatisch generieren und per E-Mail zusenden]]></de>
-            <en><![CDATA[Auto-generate password and send it via e-mail]]></en>
-        </locale>
         <locale name="settings.userWelcomeMail.title">
             <de><![CDATA["Wilkommen"-E-Mail nach Aktivierung]]></de>
             <en><![CDATA["Welcheom"-mail on activation]]></en>
@@ -308,6 +304,14 @@
         <locale name="settings.deleteInactiveUserAfterDays.description" html="true">
             <de><![CDATA[Benutzer, die sich zwar registrieren, aber nicht aktivieren, werden automatisch nach X Tagen gelöscht. Dies setzt voraus, dass der Cron <b>Nicht aktive Benutzer löschen</b> eingerichtet und aktiviert ist. Betrifft <b>nicht</b> Benutzer, die über die Benutzerverwaltung deaktiviert wurden.]]></de>
             <en><![CDATA[Users who register but do not activate will automatically be deleted after X days. This assumes that the Cron <b>Delete Inactive User</b> is set up and enabled. Subject <b>not</b> users who have been disabled through user management.]]></en>
+        </locale>
+        <locale name="settings.sendPassword.title">
+            <de><![CDATA[Zufalls-Passwort erstellen & senden]]></de>
+            <en><![CDATA[Create & send random password]]></en>
+        </locale>
+        <locale name="settings.sendPassword.description">
+            <de><![CDATA[Bei Registrierung ein zufälliges Passwort erstellen und dem Benutzer per E-Mail senden. Der Benutzer wird nach dem ersten Login aufgefordert, ein neues Passwort zu setzen.]]></de>
+            <en><![CDATA[Create a random password upon registration and send it to the user by e-mail. The user is prompted after the first login to set a new password.]]></en>
         </locale>
 
         <!-- Settings: Registrars -->
@@ -613,6 +617,24 @@
             <en><![CDATA[Sign Up]]></en>
         </locale>
 
+        <!-- Class: AbstractRegistrar -->
+        <locale name="message.registrars.registration_success_manual">
+            <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
+            <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
+        </locale>
+        <locale name="message.registrars.registration_success_auto">
+            <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
+            <en><![CDATA[The registration was successful. Your user account has been activated automatically.]]></en>
+        </locale>
+        <locale name="message.registrars.registration_success_mail">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
+            <en><![CDATA[Your user account has been activated successfully. You can now log in.]]></en>
+        </locale>
+        <locale name="registrars.password_auto_generate">
+            <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.]]></de>
+            <en><![CDATA[Your account password will be mailed to you after your account has been activated.]]></en>
+        </locale>
+
         <!-- Registrar: Email -->
         <locale name="registrars.email.label.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
@@ -661,22 +683,6 @@
         <locale name="exception.registrars.email.missing_field">
             <de><![CDATA[Bitte füllen Sie dieses Feld aus.]]></de>
             <en><![CDATA[Please fill out this field.]]></en>
-        </locale>
-        <locale name="message.registrars.email.registration_success_manual">
-            <de><![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
-            <en><![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
-        </locale>
-        <locale name="message.registrars.email.registration_success_auto">
-            <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
-            <en><![CDATA[The registration was successful. Your user account has been activated automatically.]]></en>
-        </locale>
-        <locale name="message.registrars.email.registration_success_mail">
-            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
-            <en><![CDATA[Your user account has been activated successfully. You can now log in.]]></en>
-        </locale>
-        <locale name="registrars.email.password_auto_generate">
-            <de><![CDATA[Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.]]></de>
-            <en><![CDATA[Your account password will be mailed to you after your account has been activated.]]></en>
         </locale>
         <locale name="exception.registrars.email.captcha_empty">
             <de><![CDATA[Bitte beantworten Sie die Sicherheitsabfrage.]]></de>

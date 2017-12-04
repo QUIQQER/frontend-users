@@ -68,9 +68,49 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      * Return the success message
      * @return string
      */
+    /**
+     * Return the success message
+     * @return string
+     */
     public function getSuccessMessage()
     {
-        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_successful');
+        $registrarSettings = $this->getSettings();
+        $settings          = Handler::getInstance()->getRegistrationSettings();
+
+        switch ($registrarSettings['activationMode']) {
+            case Handler::ACTIVATION_MODE_MANUAL:
+                $msg = QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'message.registrars.registration_success_manual'
+                );
+                break;
+
+            case Handler::ACTIVATION_MODE_AUTO:
+                $msg = QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'message.registrars.registration_success_auto'
+                );
+                break;
+
+            case Handler::ACTIVATION_MODE_MAIL:
+                $msg = QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'message.registrars.registration_success_mail'
+                );
+                break;
+
+            default:
+                return $this->getPendingMessage();
+        }
+
+        if (boolval($settings['sendPassword'])) {
+            $msg .= "<p>" . QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'registrars.password_auto_generate'
+                ) . "</p>";
+        }
+
+        return $msg;
     }
 
     /**
@@ -78,7 +118,17 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      */
     public function getPendingMessage()
     {
-        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
+        $msg      = QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
+        $settings = Handler::getInstance()->getRegistrationSettings();
+
+        if (boolval($settings['sendMail'])) {
+            $msg .= "<p>" . QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'registrars.email.password_auto_generate'
+                ) . "</p>";
+        }
+
+        return $msg;
     }
 
     /**
@@ -146,6 +196,13 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     }
 
     /**
+     * Check if this Registrar can send passwords
+     *
+     * @return bool
+     */
+    abstract public function canSendPassword();
+
+    /**
      * Check if this Registrar is activated in the settings
      *
      * @return bool
@@ -156,8 +213,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
         $registrarSettings = $Handler->getRegistrarSettings();
         $type              = $this->getType();
 
-        if (empty($registrarSettings[$type])
-            || empty($registrarSettings[$type]['active'])) {
+        if (empty($registrarSettings[$type]['active'])) {
             return false;
         }
 

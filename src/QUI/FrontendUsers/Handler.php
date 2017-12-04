@@ -38,7 +38,6 @@ class Handler extends Singleton
      */
     const PASSWORD_INPUT_DEFAULT  = 'default';
     const PASSWORD_INPUT_VALIDATE = 'validation';
-    const PASSWORD_INPUT_SENDMAIL = 'sendmail';
 
     /**
      * Username input types
@@ -129,6 +128,23 @@ class Handler extends Singleton
     }
 
     /**
+     * Get ACTIVE Registrar by user
+     *
+     * @param QUI\Users\User $User
+     * @return RegistrarInterface|false
+     */
+    public function getReigstrarByUser(QUI\Users\User $User)
+    {
+        $registrar = $User->getAttribute(self::USER_ATTR_REGISTRAR);
+
+        if (empty($registrar)) {
+            return false;
+        }
+
+        return self::getRegistrar($registrar);
+    }
+
+    /**
      * Get ACTIVE Registrar by hash
      *
      * @param string $hash
@@ -175,7 +191,7 @@ class Handler extends Singleton
         }
 
         // default registrar has to be first
-        usort($list, function($a, $b) {
+        usort($list, function ($a, $b) {
             if ($a === '\\' . Registrars\Email\Registrar::class) {
                 return -1;
             }
@@ -279,6 +295,11 @@ class Handler extends Singleton
         $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
         $registrarSettings = $Conf->get('registrars', 'registrarSettings');
+
+        if (empty($registrarSettings)) {
+            return array();
+        }
+
         $registrarSettings = json_decode($registrarSettings, true);
 
         foreach ($registrarSettings as $type => $settings) {
@@ -715,7 +736,7 @@ class Handler extends Singleton
         $lg       = 'quiqqer/frontend-users';
         $settings = $this->getRegistrationSettings();
 
-        if ($settings['passwordInput'] === self::PASSWORD_INPUT_SENDMAIL
+        if (boolval($settings['sendPassword'])
             && !(int)$settings['userWelcomeMail']) {
             throw new Exception(array(
                 $lg,

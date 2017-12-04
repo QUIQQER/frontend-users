@@ -108,70 +108,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     }
 
     /**
-     * Return the success message
-     * @return string
-     */
-    public function getSuccessMessage()
-    {
-        $registrarSettings = $this->getSettings();
-        $settings          = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
-
-        switch ($registrarSettings['activationMode']) {
-            case FrontendUsers\Handler::ACTIVATION_MODE_MANUAL:
-                $msg = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'message.registrars.email.registration_success_manual'
-                );
-                break;
-
-            case FrontendUsers\Handler::ACTIVATION_MODE_AUTO:
-                $msg = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'message.registrars.email.registration_success_auto'
-                );
-                break;
-
-            case FrontendUsers\Handler::ACTIVATION_MODE_MAIL:
-                $msg = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'message.registrars.email.registration_success_mail'
-                );
-                break;
-
-            default:
-                return parent::getPendingMessage();
-        }
-
-        if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
-            $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'registrars.email.password_auto_generate'
-                ) . "</p>";
-        }
-
-        return $msg;
-    }
-
-    /**
-     * Return pending message
-     * @return string
-     */
-    public function getPendingMessage()
-    {
-        $msg      = parent::getPendingMessage();
-        $settings = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
-
-        if ($settings['passwordInput'] === FrontendUsers\Handler::PASSWORD_INPUT_SENDMAIL) {
-            $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'registrars.email.password_auto_generate'
-                ) . "</p>";
-        }
-
-        return $msg;
-    }
-
-    /**
      * @throws FrontendUsers\Exception
      */
     public function validate()
@@ -423,5 +359,15 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         return $Locale->get('quiqqer/frontend-users', 'registrar.email.description');
+    }
+
+    /**
+     * Check if this Registrar can send passwords
+     *
+     * @return bool
+     */
+    public function canSendPassword()
+    {
+        return true;
     }
 }
