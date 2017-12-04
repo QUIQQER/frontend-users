@@ -178,13 +178,19 @@ class Registration extends QUI\Control
             $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED  => true
         ));
 
-        $NewUser->save(QUI::getUsers()->getSystemUser());
-
         // handle onRegistered from Registrar
         $registrationStatus = $Registrar->onRegistered($NewUser);
 
+        $settings = $RegistrarHandler->getRegistrationSettings();
+
+        if (boolval($settings['forcePasswordReset'])) {
+            $NewUser->setAttribute('quiqqer.set.new.password', true);
+        }
+
         // send registration notice to admins
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
+
+        $NewUser->save(QUI::getUsers()->getSystemUser());
 
         return $registrationStatus;
     }
