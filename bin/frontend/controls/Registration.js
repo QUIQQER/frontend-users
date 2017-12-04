@@ -39,7 +39,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         $onImport: function () {
             var self  = this,
                 Elm   = this.getElm(),
-                forms = Elm.getElements('form');
+                forms = Elm.getElements('form.quiqqer-frontendUsers-controls-registration-registrar');
 
             this.Loader = new QUILoader();
             this.Loader.inject(Elm);
