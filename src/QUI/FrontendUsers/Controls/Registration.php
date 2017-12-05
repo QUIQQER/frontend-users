@@ -29,9 +29,10 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes(array(
-            'data-qui'  => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
-            'status'    => false,
-            'Registrar' => false    // currently executed Registrar
+            'data-qui'           => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+            'status'             => false,
+            'Registrar'          => false,    // currently executed Registrar
+            'showRegistrarTitle' => true
         ));
 
         $this->setAttributes($attributes);
@@ -100,11 +101,12 @@ class Registration extends QUI\Control
         }
 
         $Engine->assign(array(
-            'Registrars'   => $Registrars,
-            'Registrar'    => $CurrentRegistrar,
-            'success'      => $success,
-            'autoRedirect' => $autoRedirect,
-            'Login'        => $Login
+            'Registrars'         => $Registrars,
+            'Registrar'          => $CurrentRegistrar,
+            'success'            => $success,
+            'autoRedirect'       => $autoRedirect,
+            'Login'              => $Login,
+            'showRegistrarTitle' => $this->getAttribute('showRegistrarTitle')
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
