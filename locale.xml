@@ -282,8 +282,8 @@
             <en><![CDATA[Auto redirect on log in]]></en>
         </locale>
         <locale name="settings.redirectOnLogin.description" html="true">
-            <de><![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer sich im Frontend erfolgreich eingeloggt hat. Wenn diese Einstellung leergelassen wird, findet automatisch eine Weiterleitung auf die <b>Startseite</b> statt.]]></de>
-            <en><![CDATA[Automatic redirect to the specified page after the user has successfully logged in. If this setting is left empty and automatic redirect to the <b>start page</b> takes place.]]></en>
+            <de><![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer sich im Frontend erfolgreich eingeloggt hat oder wenn ein eingeloggter Benutzer die Login-Seite besucht. Wenn diese Einstellung leergelassen wird, findet automatisch eine Weiterleitung auf die <b>Startseite</b> statt.]]></de>
+            <en><![CDATA[Automatic redirect to the specified page after the user has successfully logged in or visits the Login Site. If this setting is left empty and automatic redirect to the <b>start page</b> takes place.]]></en>
         </locale>
         <locale name="settings.category.login.title">
             <de><![CDATA[Login]]></de>
@@ -832,6 +832,16 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="login.general_error">
             <de><![CDATA[Beim Login ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie einen Administrator.]]></de>
             <en><![CDATA[An error occured on login. Please try again or contact an administrator.]]></en>
+        </locale>
+
+        <!-- Control: Auth\FrontendLogin -->
+        <locale name="controls.auth.frontendlogin.header.login">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Sign In]]></en>
+        </locale>
+        <locale name="controls.auth.frontendlogin.header.registration">
+            <de><![CDATA[Registrierung]]></de>
+            <en><![CDATA[Sign Up]]></en>
         </locale>
 
     </groups>

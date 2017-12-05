@@ -3,6 +3,7 @@
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\Utils\Security\Orthos;
 use QUI\FrontendUsers;
+use QUI\Projects\Site\Utils as SiteUtils;
 
 $error = false;
 
@@ -25,25 +26,6 @@ if (!empty($_POST['username'])
 
         QUI::getSession()->set('auth-globals', 1);
         $Users->login();
-
-        // check for redirection
-        $loginSettings = FrontendUsers\Handler::getInstance()->getLoginSettings();
-        $RedirectSite  = false;
-
-        if (!empty($loginSettings['redirectOnLogin'])) {
-            $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink($loginSettings['redirectOnLogin']);
-        }
-
-        if (!$RedirectSite) {
-            $RedirectSite = QUI::getRewrite()->getProject()->get(1);
-        }
-
-        if ($RedirectSite) {
-            $url = $RedirectSite->getProject()->getVHost(true) . $RedirectSite->getUrlRewritten();
-            header("Location: " . $url);
-
-            exit;
-        }
     } catch (QUI\Users\Exception $Exception) {
         $error = $Exception->getMessage();
     } catch (\Exception $Exception) {
@@ -54,6 +36,27 @@ if (!empty($_POST['username'])
 
 $SessionUser = QUI::getUserBySession();
 $isAuth      = boolval($SessionUser->getId());
+
+if ($isAuth) {
+    // check for redirection
+    $loginSettings = FrontendUsers\Handler::getInstance()->getLoginSettings();
+    $RedirectSite  = false;
+
+    if (!empty($loginSettings['redirectOnLogin'])) {
+        $RedirectSite = SiteUtils::getSiteByLink($loginSettings['redirectOnLogin']);
+    }
+
+    if (!$RedirectSite && $Site->getId() !== 1) {
+        $RedirectSite = QUI::getRewrite()->getProject()->get(1);
+    }
+
+    if ($RedirectSite) {
+        $url = $RedirectSite->getProject()->getVHost(true) . $RedirectSite->getUrlRewritten();
+        header("Location: " . $url);
+
+        exit;
+    }
+}
 
 $Engine->assign(array(
     'isAuth'        => $isAuth,

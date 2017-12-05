@@ -119,14 +119,14 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     public function getPendingMessage()
     {
         $msg      = QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
-        $settings = Handler::getInstance()->getRegistrationSettings();
-
-        if (boolval($settings['sendMail'])) {
-            $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'registrars.email.password_auto_generate'
-                ) . "</p>";
-        }
+//        $settings = Handler::getInstance()->getRegistrationSettings();
+//
+//        if (boolval($settings['sendPassword'])) {
+//            $msg .= "<p>" . QUI::getLocale()->get(
+//                    'quiqqer/frontend-users',
+//                    'registrars.email.password_auto_generate'
+//                ) . "</p>";
+//        }
 
         return $msg;
     }
@@ -144,7 +144,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      * Create a new user
      *
      * @return QUI\Users\User
-     * @throws Exception
+     * @throws QUI\Exception
      */
     public function createUser()
     {
