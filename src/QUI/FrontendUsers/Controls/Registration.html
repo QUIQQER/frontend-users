@@ -35,11 +35,9 @@
                   class="quiqqer-frontendUsers-controls-registration-registrar"
                   data-registrar="{$Registrar->getHash()}"
             >
-                {if $showRegistrarTitle}
                 <header>
                     <h2>{$Registrar->getTitle()}</h2>
                 </header>
-                {/if}
 
                 {$Registrar->getControl()->create()}
 
