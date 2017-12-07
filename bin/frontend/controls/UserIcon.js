@@ -1,6 +1,9 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
  * @author www.pcsg.de (Henning Leutz)
+ * @author www.pcsg.de (Patrick Müller)
+ *
+ * @event onSelect [itemName, this]
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
 
@@ -71,6 +74,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     if (Item.getAttribute('url')) {
                         window.location = Item.getAttribute('url');
                     }
+
+                    self.fireEvent('select', [Item.getAttribute('settings'), self]);
                 };
 
                 for (i in categories) {
