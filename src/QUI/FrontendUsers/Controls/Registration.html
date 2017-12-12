@@ -7,14 +7,15 @@
 {if $success}
 <div class="quiqqer-frontendUsers-success">
     {$Registrar->getSuccessMessage()}
-</div>
     {if $autoRedirect}
     <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
         <a href="{$autoRedirect}">
             {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
         </a>
     </div>
-    {elseif $Login}
+    {/if}
+</div>
+    {if $Login}
         {$Login->create()}
     {/if}
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
