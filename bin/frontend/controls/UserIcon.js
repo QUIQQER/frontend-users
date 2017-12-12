@@ -42,6 +42,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
             });
 
             this.$Loader = null;
+            this.$Menu   = null;
         },
 
         /**
@@ -58,7 +59,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                 corner = 'bottomRight';
             }
 
-            var ProfileMenu = new QUIMenu({
+            this.$Menu = new QUIMenu({
                 corner: corner,
                 events: {
                     onBlur: function (ProfileMenu) {
@@ -87,7 +88,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     items = Cat.items;
 
                     for (c = 0, clen = items.length; c < clen; c++) {
-                        ProfileMenu.appendChild(
+                        self.$Menu.appendChild(
                             new QUIMenuItem({
                                 title   : items[c].title,
                                 text    : items[c].title,
@@ -103,9 +104,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     }
                 }
 
-                ProfileMenu.appendChild(new QUIMenuSeparator());
+                self.$Menu.appendChild(new QUIMenuSeparator());
 
-                ProfileMenu.appendChild(
+                self.$Menu.appendChild(
                     new QUIMenuItem({
                         name  : 'profile',
                         title : QUILocale.get('quiqqer/system', 'logout'),
@@ -119,13 +120,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     })
                 );
 
-                ProfileMenu.inject(Elm, 'after');
+                self.$Menu.inject(Elm, 'after');
 
                 IconElm.addEvent('click', function (event) {
                     event.stop();
 
                     var menuPos = self.getAttribute('menuPosition'),
-                        MenuElm = ProfileMenu.getElm();
+                        MenuElm = self.$Menu.getElm();
 
                     if (menuPos === 'bottom' || !menuPos) {
                         MenuElm.setStyles({
@@ -134,7 +135,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                         });
                     } else {
                         MenuElm.setStyle('opacity', 0);
-                        ProfileMenu.show();
+                        self.$Menu.show();
 
                         MenuElm.setStyles({
                             left: 0,
@@ -145,9 +146,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     }
 
 
-                    ProfileMenu.show();
-                    ProfileMenu.focus();
+                    self.$Menu.show();
+                    self.$Menu.focus();
                 });
+
+                self.fireEvent('load', [self]);
             });
         },
 
