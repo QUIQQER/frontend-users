@@ -93,7 +93,7 @@ class Registration extends QUI\Control
 
         $Login = false;
 
-        if (QUI::getUserBySession()->getId()) {
+        if (!QUI::getUserBySession()->getId()) {
             $Login = new FrontendLogin(array(
                 'showRegistration' => false
             ));
