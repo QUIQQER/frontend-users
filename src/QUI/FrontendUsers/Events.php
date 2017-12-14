@@ -238,7 +238,7 @@ class Events
 
             if (!isset($settings[$name])) {
                 $settings[$name] = array(
-                    'active'         => false,
+                    'active'         => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
                     'activationMode' => 'mail'
                 );
             }
