@@ -69,12 +69,20 @@ class Registration extends QUI\Control
 
         if ($status === $RegistrarHandler::REGISTRATION_STATUS_ERROR && $CurrentRegistrar) {
             $Engine->assign('error', $CurrentRegistrar->getErrorMessage());
+        } elseif ($status === 'error') {
+            $Engine->assign('error', QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'control.registration.general_error'
+            ));
         }
 
         // auto-redirect on success
         $autoRedirect = false;
+        $success      = $CurrentRegistrar
+                        && ($status === 'success'
+                            || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
-        if (!empty($registrationSettings['autoRedirectOnSuccess'])) {
+        if ($success && !empty($registrationSettings['autoRedirectOnSuccess'])) {
             $autoRedirect = $registrationSettings['autoRedirectOnSuccess'];
 
             try {
@@ -86,11 +94,6 @@ class Registration extends QUI\Control
             }
         }
 
-        $status  = $this->getAttribute('status');
-        $success = $CurrentRegistrar
-                   && ($status === 'success'
-                       || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
-
         $Login = false;
 
         if (!QUI::getUserBySession()->getId()) {
@@ -100,11 +103,11 @@ class Registration extends QUI\Control
         }
 
         $Engine->assign(array(
-            'Registrars'         => $Registrars,
-            'Registrar'          => $CurrentRegistrar,
-            'success'            => $success,
-            'autoRedirect'       => $autoRedirect,
-            'Login'              => $Login
+            'Registrars'   => $Registrars,
+            'Registrar'    => $CurrentRegistrar,
+            'success'      => $success,
+            'autoRedirect' => $autoRedirect,
+            'Login'        => $Login
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');

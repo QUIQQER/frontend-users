@@ -27,31 +27,7 @@ if (isset($result[0])) {
     $Engine->assign('Site_Privacy', $result[0]);
 }
 
-// Behaviour if user is already logged in
 $FrontendUsersHandler = FrontendUsersHandler::getInstance();
-$loggedIn             = boolval(QUI::getUserBySession()->getId());
-
-if ($loggedIn) {
-    $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
-
-    switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
-        case 'showProfile':
-            $ProfileSite = $FrontendUsersHandler->getProfileSite($Site->getProject());
-
-            if ($ProfileSite) {
-                header('Location: ' . $ProfileSite->getUrlRewritten());
-                exit;
-            }
-            break;
-
-        case 'showMessage':
-            $Engine->assign('msg', QUI::getLocale()->get(
-                'quiqqer/frontend-users',
-                'message.types.registration.already_registered'
-            ));
-            break;
-    }
-}
 
 // check configuration
 try {
@@ -84,6 +60,31 @@ if (!empty($_REQUEST['registrar'])) {
             'quiqqer/frontend-users',
             'message.types.registration.configuration_error'
         ));
+    }
+}
+
+// Behaviour if user is already logged in
+$loggedIn = boolval(QUI::getUserBySession()->getId());
+
+if ($loggedIn && (!$Registrar || $status === 'error')) {
+    $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
+
+    switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
+        case 'showProfile':
+            $ProfileSite = $FrontendUsersHandler->getProfileSite($Site->getProject());
+
+            if ($ProfileSite) {
+                header('Location: ' . $ProfileSite->getUrlRewritten());
+                exit;
+            }
+            break;
+
+        case 'showMessage':
+            $Engine->assign('msg', QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.types.registration.already_registered'
+            ));
+            break;
     }
 }
 

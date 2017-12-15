@@ -1,34 +1,33 @@
-{if isset($error)}
+{if isset($error) && !$autoRedirect}
 <div class="quiqqer-frontendUsers-error">
     {$error}
 </div>
-{/if}
-
-{if $success}
-<div class="quiqqer-frontendUsers-success">
-    {$Registrar->getSuccessMessage()}
-    {if $autoRedirect}
-    <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
-        <a href="{$autoRedirect}">
-            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
-        </a>
-    </div>
-    {/if}
-</div>
-    {if $Login}
-        {$Login->create()}
-    {/if}
-{elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
-<div class="quiqqer-frontendUsers-pending">
-    {$Registrar->getPendingMessage()}
-</div>
 {else}
+    {if $success}
+        <div class="quiqqer-frontendUsers-success">
+            {$Registrar->getSuccessMessage()}
+            {if $autoRedirect}
+            <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
+                <a href="{$autoRedirect}">
+                    {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
+                </a>
+            </div>
+            {/if}
+        </div>
+        {if $Login}
+            {$Login->create()}
+        {/if}
+    {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
+    <div class="quiqqer-frontendUsers-pending">
+        {$Registrar->getPendingMessage()}
+    </div>
+    {else}
 
-    {if $Registrars->isEmpty()}
+        {if $Registrars->isEmpty()}
         <div class="quiqqer-frontendUsers-info">
             {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
         </div>
-    {else}
+        {else}
         <div class="quiqqer-frontendUsers-controls-registration">
             {foreach $Registrars as $Registrar}
             <form action=""
@@ -48,12 +47,13 @@
 
             {if $Registrar !== $Registrars->last()}
             <div class="quiqqer-frontendUsers-controls-registration-or">
-                <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
-                    {locale group="quiqqer/frontend-users" var="control.registration.or"}
-                </span>
+                        <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
+                            {locale group="quiqqer/frontend-users" var="control.registration.or"}
+                        </span>
             </div>
             {/if}
             {/foreach}
         </div>
+        {/if}
     {/if}
 {/if}

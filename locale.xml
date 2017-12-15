@@ -389,6 +389,10 @@
             <de><![CDATA[Eine Registrierung ist zur Zeit nicht möglich.]]></de>
             <en><![CDATA[Registration is disabled at the moment.]]></en>
         </locale>
+        <locale name="control.registration.general_error">
+            <de><![CDATA[Dieser Link ist nicht mehr gültig.]]></de>
+            <en><![CDATA[This link is no longer valid.]]></en>
+        </locale>
 
         <!-- Registrar: E-Mail -->
         <locale name="exception.registrars.email.username_already_exists">
