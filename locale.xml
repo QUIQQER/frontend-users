@@ -262,8 +262,8 @@
             <en><![CDATA[No password input]]></en>
         </locale>
         <locale name="settings.userWelcomeMail.title">
-            <de><![CDATA["Wilkommen"-E-Mail nach Aktivierung]]></de>
-            <en><![CDATA["Welcheom"-mail on activation]]></en>
+            <de><![CDATA["Willkommen"-E-Mail nach Aktivierung]]></de>
+            <en><![CDATA["Welcome"-mail on activation]]></en>
         </locale>
         <locale name="settings.userWelcomeMail.description">
             <de><![CDATA[Dem Benutzer wird nach erfolgreicher Aktivierung des Benutzerkontos eine Wilkommens-Mail geschickt.]]></de>
@@ -314,8 +314,8 @@
             <en><![CDATA[Create & send random password]]></en>
         </locale>
         <locale name="settings.sendPassword.description">
-            <de><![CDATA[Bei Registrierung ein zufälliges Passwort erstellen und dem Benutzer per E-Mail senden.]]></de>
-            <en><![CDATA[Create a random password upon registration and send it to the user by e-mail.]]></en>
+            <de><![CDATA[Bei Registrierung ein zufälliges Passwort erstellen und dem Benutzer in der "Willkommen"-Mail mitsenden.]]></de>
+            <en><![CDATA[Create a random password upon registration and send it via the "Weclome" mail.]]></en>
         </locale>
         <locale name="settings.forcePasswordReset.title">
             <de><![CDATA[Neues Passwort beim ersten Login]]></de>
