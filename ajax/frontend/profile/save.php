@@ -9,7 +9,7 @@
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_save',
-    function ($category, $data) {
+    function ($category, $settings, $data) {
         $data    = json_decode($data);
         $Request = QUI::getRequest();
 
@@ -19,7 +19,7 @@ QUI::$Ajax->registerFunction(
 
         $Request->request->set('profile-save', 1);
 
-        $Control = QUI\FrontendUsers\Utils::getProfileCategoryControl($category);
+        $Control = QUI\FrontendUsers\Utils::getProfileSettingControl($category, $settings);
         $Control->setAttribute('User', QUI::getUserBySession());
         $Control->onSave();
 
@@ -30,5 +30,5 @@ QUI::$Ajax->registerFunction(
             )
         );
     },
-    array('category', 'data')
+    array('category', 'settings', 'data')
 );

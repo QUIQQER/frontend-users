@@ -1,8 +1,4 @@
 .quiqqer-frontendUsers-userIcon {
-    background-color: #DEDEDE;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: cover;
     border-radius: 45px;
     cursor: pointer;
     float: left;
@@ -11,6 +7,20 @@
     overflow: hidden;
     position: relative;
     width: 90px;
+}
+
+.quiqqer-frontendUsers-userIcon-icon {
+    background-color: #DEDEDE;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 45px;
+    float: left;
+    font-size: 40px;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 
 .quiqqer-frontendUsers-userIcon-loader {

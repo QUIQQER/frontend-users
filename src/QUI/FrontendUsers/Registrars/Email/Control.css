@@ -1,4 +1,5 @@
-.quiqqer-registration {
+.quiqqer-registration,
+.quiqqer-registration section {
     float: left;
     width: 100%;
 }
@@ -22,4 +23,27 @@
 .quiqqer-registration-field-element {
     float: left;
     width: 60%;
+}
+
+.quiqqer-registration-field-error-msg {
+    color: #ff0000;
+    padding-left:40%;
+    width: 100%;
+}
+
+.quiqqer-registration-field-error {
+    box-shadow: 0 0 0 2px #ff0000;
+}
+
+.quiqqer-registration-address {
+    float: left;
+}
+
+.quiqqer-registration button[disabled] {
+    cursor: not-allowed;
+}
+
+.qui-utils-passwordsecurity {
+    float: right;
+    width: 60% !important;
 }

@@ -1,13 +1,19 @@
 {
   "name": "quiqqer/frontend-users",
   "type": "quiqqer-module",
-  "description": "QUIQQER Frontend Users",
+  "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
   "version": "dev-master",
-  "license": "MIT",
+  "license": "GPL-3.0+",
   "authors": [
     {
       "name": "Henning Leutz",
-      "email": "leutz@pcsg.de",
+      "email": "support@pcsg.de",
+      "homepage": "http://www.pcsg.de",
+      "role": "Developer"
+    },
+    {
+      "name": "Patrick Müller",
+      "email": "support@pcsg.de",
       "homepage": "http://www.pcsg.de",
       "role": "Developer"
     }
@@ -16,7 +22,10 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer/quiqqer": "*@dev"
+    "quiqqer/quiqqer": ">=1.1|dev-master",
+    "quiqqer/watcher": ">1.0|dev-master",
+    "quiqqer/countries": ">1.1|dev-master",
+    "quiqqer/verification": ">=1.0|dev-master"
   },
   "autoload": {
     "psr-4": {

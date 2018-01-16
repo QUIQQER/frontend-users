@@ -38,19 +38,32 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
          */
         $onImport: function () {
             var self  = this,
-                forms = this.getElm().getElements('form');
+                Elm   = this.getElm(),
+                forms = Elm.getElements('form.quiqqer-frontendUsers-controls-registration-registrar');
 
             this.Loader = new QUILoader();
-            this.Loader.inject(this.getElm());
+            this.Loader.inject(Elm);
 
             forms.addEvent('submit', function (event) {
                 event.stop();
-                self.$sendForm(event.target);
+                self.$sendForm(event.target).then(self.$onImport);
             });
+
+            var RedirectElm = Elm.getElement(
+                '.quiqqer-frontendUsers-autoRedirect'
+            );
+
+            if (RedirectElm) {
+                var url = RedirectElm.get('data-url');
+
+                (function () {
+                    window.location = url;
+                }.delay(10000));
+            }
         },
 
         /**
-         * Send the registrator form
+         * Send the registrar form
          *
          * @param {HTMLFormElement} Form
          * @return {Promise}
@@ -61,7 +74,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             var self     = this,
                 formData = QUIFormUtils.getFormData(Form);
 
-            new Promise(function (resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
                     var Container = new Element('div', {
                         html: html
@@ -75,10 +88,25 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
                     QUI.parse(self.getElm()).then(resolve);
                 }, {
-                    'package'    : 'quiqqer/frontend-users',
-                    'registrator': Form.get('data-registrator'),
-                    'data'       : JSON.encode(formData),
-                    onError      : reject
+                    'package'  : 'quiqqer/frontend-users',
+                    'registrar': Form.get('data-registrar'),
+                    'data'     : JSON.encode(formData),
+                    onError    : reject
+                });
+            });
+        },
+
+        /**
+         * Validate e-mail address
+         *
+         * @param {String} email
+         * @return {Promise} - returns true if email address is valid; false otherwise
+         */
+        $validateUsername: function (username) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('ajax_email_validate', resolve, {
+                    mail   : email,
+                    onError: reject
                 });
             });
         }

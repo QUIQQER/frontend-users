@@ -1,0 +1,15 @@
+<div class="quiqqer-frontendUsers-frontendlogin-message"></div>
+<div class="quiqqer-frontendUsers-frontendlogin-login" {if $dataRedirect}{$dataRedirect}{/if}>
+    <h1>
+        {locale group="quiqqer/frontend-users" var="controls.auth.frontendlogin.header.login"}
+    </h1>
+    {$Login->create()}
+</div>
+{if $Registration}
+<div class="quiqqer-frontendUsers-frontendlogin-registration">
+    <h1>
+        {locale group="quiqqer/frontend-users" var="controls.auth.frontendlogin.header.registration"}
+    </h1>
+    {$Registration->create()}
+</div>
+{/if}

@@ -1,0 +1,9 @@
+.quiqqer-frontendUsers-userdata-email__hidden {
+    display: none;
+}
+
+.quiqqer-frontendUsers-userdata-email-new-hint {
+    clear: both;
+    width: 100%;
+    float: left;
+}

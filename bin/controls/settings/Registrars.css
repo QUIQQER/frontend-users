@@ -1,0 +1,31 @@
+.quiqqer-frontendusers-settings-registrars {
+    width: 100%;
+}
+
+.quiqqer-frontendusers-settings-registrars-entry {
+    float: left;
+    width: 100%;
+}
+
+.quiqqer-frontendusers-settings-registrars-entry .data-table {
+    margin: 0;
+}
+
+.quiqqer-frontendusers-settings-registrars-entry:not(:last-of-type) {
+    margin-bottom: 20px;
+}
+
+.quiqqer-frontendusers-settings-registrars-entry-title {
+    float: left;
+}
+
+.quiqqer-frontendusers-settings-registrars-entry-description {
+    clear: both;
+    float: left;
+    font-size: 10px;
+    font-style: italic;
+}
+
+.quiqqer-frontendusers-settings-registrars-entry__hidden {
+    display: none;
+}

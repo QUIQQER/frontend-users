@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<user>
+    <attributes>
+        <attribute>quiqqer.frontendUsers.welcomeMailSent</attribute>
+        <attribute>quiqqer.frontendUsers.registrationProject</attribute>
+        <attribute>quiqqer.frontendUsers.registrationProjectLang</attribute>
+        <attribute>quiqqer.frontendUsers.registrar</attribute>
+        <attribute>quiqqer.frontendUsers.userActivationRequired</attribute>
+        <attribute>quiqqer.frontendUsers.activationLoginExecuted</attribute>
+        <attribute>quiqqer.frontendUsers.emailVerified</attribute>
+    </attributes>
+</user>

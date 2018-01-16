@@ -23,7 +23,7 @@ class UserIcon extends Control
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
 
         $this->addCSSClass('quiqqer-frontendUsers-userIcon');
-        $this->addCSSFile(dirname(__FILE__).'/UserIcon.css');
+        $this->addCSSFile(dirname(__FILE__) . '/UserIcon.css');
     }
 
     /**
@@ -74,9 +74,13 @@ class UserIcon extends Control
             $Engine->assign('firstLetter', $firstLetter);
         }
 
-        QUI\System\Log::writeRecursive($avatar);
+        $Engine->assign(
+            'ProfileSite',
+            QUI\FrontendUsers\Handler::getInstance()->getProfileSite(
+                QUI::getRewrite()->getProject()
+            )
+        );
 
-
-        return $Engine->fetch(dirname(__FILE__).'/UserIcon.html');
+        return $Engine->fetch(dirname(__FILE__) . '/UserIcon.html');
     }
 }

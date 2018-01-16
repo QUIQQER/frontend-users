@@ -1,4 +1,10 @@
-<div class="quiqqer-frontendUsers-userIcon"
+{if $ProfileSite}
+<noscript>
+    <a href="{$ProfileSite->getUrlRewritten()}">
+</noscript>
+{/if}
+
+<div class="quiqqer-frontendUsers-userIcon-icon"
      title="{$User->getName()}"
      {if isset($avatar)}style="background-image: url('{$avatar}');" {/if}
 >
@@ -6,3 +12,9 @@
 <span class="quiqqer-frontendUsers-userIcon-letter">{$firstLetter}</span>
 {/if}
 </div>
+
+{if $ProfileSite}
+<noscript>
+    </a>
+</noscript>
+{/if}

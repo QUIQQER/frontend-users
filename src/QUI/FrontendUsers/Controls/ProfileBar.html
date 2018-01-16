@@ -1,0 +1,25 @@
+{if $isAuth}
+    {$UserIcon->create()}
+{else}
+    {if $showLogin}
+        <a href="{if $LoginSite}{$LoginSite->getUrlRewritten()}{else}#{/if}">
+            <div class="quiqqer-frontendUsers-profileBar-login">
+                <span class="fa fa-sign-in"></span>
+                <span>
+                    {locale group="quiqqer/frontend-users" var="controls.profilebar.login_text"}
+                </span>
+            </div>
+        </a>
+    {/if}
+
+    {if $showRegistration && $RegistrationSite}
+        <a href="{$RegistrationSite->getUrlRewritten()}">
+            <div class="quiqqer-frontendUsers-profileBar-registration">
+                <span class="fa fa-user-plus"></span>
+                <span>
+                    {locale group="quiqqer/frontend-users" var="controls.profilebar.registration_text"}
+                </span>
+            </div>
+        </a>
+    {/if}
+{/if}

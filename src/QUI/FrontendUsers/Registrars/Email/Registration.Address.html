@@ -1,0 +1,27 @@
+<fieldset>
+    {foreach $addressFields as $field => $options}
+
+    {if !$options['show']}
+        {continue}
+    {/if}
+
+    <label>
+        <span class="quiqqer-registration-field-title">
+            {locale group="quiqqer/system" var=$field}
+            {if $options['required']}*{/if}
+        </span>
+
+        {if $field == 'country'}
+            {$CountrySelect->create()}
+        {else}
+        <input value="{if isset($fields[$field])}{$fields[$field]}{/if}" type="text" name="{$field}" class="quiqqer-registration-field-element{if isset($invalidFields[$field])} quiqqer-registration-field-error{/if}"{if $options['required']} required{/if}>
+        {/if}
+
+        {if isset($invalidFields[$field])}
+        <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields[$field]->getMsg()}
+        </span>
+        {/if}
+    </label>
+    {/foreach}
+</fieldset>
