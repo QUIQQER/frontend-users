@@ -1,8 +1,4 @@
-{if isset($error) && !$autoRedirect}
-<div class="quiqqer-frontendUsers-error">
-    {$error}
-</div>
-{else}
+
     {if $success}
         <div class="quiqqer-frontendUsers-success">
             {$Registrar->getSuccessMessage()}
@@ -22,6 +18,11 @@
         {$Registrar->getPendingMessage()}
     </div>
     {else}
+        {if isset($error) && !$autoRedirect}
+            <div class="quiqqer-frontendUsers-error">
+                {$error}
+            </div>
+        {/if}
 
         {if $Registrars->isEmpty()}
         <div class="quiqqer-frontendUsers-info">
@@ -56,4 +57,3 @@
         </div>
         {/if}
     {/if}
-{/if}
