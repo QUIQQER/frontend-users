@@ -22,7 +22,7 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer/quiqqer": ">=1.1|dev-master",
+    "quiqqer/quiqqer": ">=1.1|dev-master|dev-dev",
     "quiqqer/watcher": ">1.0|dev-master",
     "quiqqer/countries": ">1.1|dev-master",
     "quiqqer/verification": ">=1.0|dev-master"
