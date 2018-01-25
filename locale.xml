@@ -426,6 +426,32 @@
             <en><![CDATA[Profile categories this user/group can view]]></en>
         </locale>
 
+        <!-- Site types -->
+        <locale name="quiqqer/frontend-users:types/registration.title">
+            <de><![CDATA[Registrierung]]></de>
+            <en><![CDATA[Registration]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/registration.description">
+            <de><![CDATA[Zeigt alle Registrierungs-Methoden, die in den Einstellungen festgelegt wurden. Bietet Besuchern einer Website die Möglichkeit, sich ein Benutzerkonto am System zu erstellen.]]></de>
+            <en><![CDATA[Shows all registration methods that have been set in the settings. Offers visitors of a website to register a user account.]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/login.title">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Login / Sign In]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/login.description">
+            <de><![CDATA[Zeigt eine Login-Maske, mit der sich Benutzer am System anmelden können. Je nach konfigurieren Authentifikatoren werden unterschiedliche Login-Methoden angezeigt.]]></de>
+            <en><![CDATA[Shows a login form users can use to log into their user account. Depending on the configured authentication methods different login possibilites are shown.]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/profile.title">
+            <de><![CDATA[Benutzerprofil]]></de>
+            <en><![CDATA[User Profile]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/profile.description">
+            <de><![CDATA[Zeigt Benutzerdaten an und bietet die Möglichkeit, diese zu ändern (z.B. Adresse, Passwort etc.). Ist durch andere QUIQQER-Plugins erweiterbar.]]></de>
+            <en><![CDATA[Shows user data and offers the possibility to edit them (e.g. address, passwort etc.). Is extendable via other QUIQQER plugins.]]></en>
+        </locale>
+
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
