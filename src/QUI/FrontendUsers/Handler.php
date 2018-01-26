@@ -563,6 +563,9 @@ class Handler extends Singleton
      * @param QUI\Users\User $User
      * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
      * @return void
+     *
+     * @throws QUI\Verification\Exception
+     * @throws QUI\Exception
      */
     public function sendDeleteUserConfirmationMail(QUI\Users\User $User, $Project)
     {
