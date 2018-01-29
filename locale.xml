@@ -499,6 +499,10 @@
             <de><![CDATA[Geburtstag]]></de>
             <en><![CDATA[Date of birth]]></en>
         </locale>
+        <locale name="profile.userdata.username">
+            <de><![CDATA[Benutzername]]></de>
+            <en><![CDATA[Benutzername]]></en>
+        </locale>
         <locale name="profile.userdata.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
             <en><![CDATA[E-mail address]]></en>
@@ -534,6 +538,10 @@
         <locale name="exception.controls.profile.userdata.new_email_address_already_exists">
             <de><![CDATA[Die E-Mail-Adresse, die Sie angegeben haben, kann nicht verwendet werden. Bitte geben Sie eine andere E-Mail-Adresse an.]]></de>
             <en><![CDATA[The e-mail address you provided cannot be used. Please enter a different e-mail address.]]></en>
+        </locale>
+        <locale name="profile.userdata.message.change_email_request">
+            <de><![CDATA[Sie haben die Änderung Ihrer E-Mail-Adresse beantragt. Klicken Sie bitte auf den Aktivierungs-Link, der Ihnen an die neue E-Mail-Adresse gesendet wurde.]]></de>
+            <en><![CDATA[You have requested the change of your e-mail address. Please click on the activation link which has been sent to the new e-mail address.]]></en>
         </locale>
         <locale name="profile.userdata.message.change_email_success">
             <de><![CDATA[Ihre E-Mail-Adresse wurde erfolgreich geändert.]]></de>

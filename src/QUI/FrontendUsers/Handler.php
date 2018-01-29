@@ -752,4 +752,15 @@ class Handler extends Singleton
             ));
         }
     }
+
+    /**
+     * Check if users are allowed to set their own username
+     *
+     * @return bool
+     */
+    public function isUsernameInputAllowed()
+    {
+        $settings = $this->getRegistrationSettings();
+        return $settings['usernameInput'] !== self::USERNAME_INPUT_NONE;
+    }
 }
