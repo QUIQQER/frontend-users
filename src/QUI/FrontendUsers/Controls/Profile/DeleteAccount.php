@@ -9,8 +9,7 @@ namespace QUI\FrontendUsers\Controls\Profile;
 use QUI;
 use QUI\Control;
 use QUI\FrontendUsers\Handler;
-use QUI\Utils\Security\Orthos;
-use QUI\FrontendUsers\Handler as FrontendUsersHandler;
+use QUI\Verification\Verifier;
 
 /**
  * Class DeleteAccount
@@ -20,7 +19,7 @@ use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 class DeleteAccount extends Control
 {
     /**
-     * ControlWrapper constructor.
+     * DeleteAccount constructor.
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
@@ -41,15 +40,18 @@ class DeleteAccount extends Control
         $action = false;
 
         try {
-            QUI\Verification\Verifier::getVerificationByIdentifier(
+            $DeleteVerification = Verifier::getVerificationByIdentifier(
                 QUI::getUserBySession()->getId(),
                 QUI\FrontendUsers\UserDeleteConfirmVerification::getType(),
                 true
             );
 
-            $action = 'deleteaccount_confirm_wait';
+            if (Verifier::isVerificationValid($DeleteVerification)) {
+                $action = 'deleteaccount_confirm_wait';
+            } else {
+                Verifier::removeVerification($DeleteVerification);
+            }
         } catch (\Exception $Exception) {
-            \QUI\System\Log::writeRecursive($Exception->getMessage());
             // nothing - no active user delete verification
         }
 
@@ -83,6 +85,7 @@ class DeleteAccount extends Control
             );
         } catch (\Exception $Exception) {
             // nothing
+            \QUI\System\Log::writeException($Exception);
         }
     }
 }

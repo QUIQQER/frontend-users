@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains QUI\FrontendUsers\Controls\Profile\ControlWrapper
+ * This file contains QUI\FrontendUsers\Controls\Profile\ChangePassword
  */
 
 namespace QUI\FrontendUsers\Controls\Profile;
@@ -17,7 +17,7 @@ use QUI\Control;
 class ChangePassword extends Control
 {
     /**
-     * ControlWrapper constructor.
+     * ChangePassword constructor.
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
@@ -46,6 +46,8 @@ class ChangePassword extends Control
 
     /**
      * event: on save
+     *
+     * @throws QUI\FrontendUsers\Exception
      */
     public function onSave()
     {

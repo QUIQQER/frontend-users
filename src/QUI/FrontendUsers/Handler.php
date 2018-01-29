@@ -569,12 +569,12 @@ class Handler extends Singleton
      */
     public function sendDeleteUserConfirmationMail(QUI\Users\User $User, $Project)
     {
-        $EmailConfirmVerification = new UserDeleteConfirmVerification($User->getId(), array(
+        $DeleteUserVerification = new UserDeleteConfirmVerification($User->getId(), array(
             'project'     => $Project->getName(),
             'projectLang' => $Project->getLang()
         ));
 
-        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+        $confirmLink = Verifier::startVerification($DeleteUserVerification, true);
 
         $L      = QUI::getLocale();
         $lg     = 'quiqqer/frontend-users';

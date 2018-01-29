@@ -19,7 +19,7 @@ use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 class UserData extends Control
 {
     /**
-     * ControlWrapper constructor.
+     * UserData constructor.
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
