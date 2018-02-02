@@ -237,11 +237,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
             Form.addEvent('submit', function (event) {
                 event.stop();
-
-                if (CheckFormValidation()) {
-                    Form.submit();
-                }
             });
+
+            //if (CheckFormValidation()) {
+            //    Form.submit();
+            //}
 
             // Captcha handling
             if (!this.getAttribute('usecaptcha')) {
