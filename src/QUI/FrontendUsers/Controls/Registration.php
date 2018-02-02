@@ -52,6 +52,7 @@ class Registration extends QUI\Control
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $CurrentRegistrar     = $this->isCurrentlyExecuted();
         $registrationStatus   = false;
+        $projectLang          = QUI::getRewrite()->getProject()->getLang();
 
         if (isset($_POST['registration'])) {
             try {
@@ -82,9 +83,12 @@ class Registration extends QUI\Control
                         && ($status === 'success'
                             || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
-        if ($success && !empty($registrationSettings['autoRedirectOnSuccess'])) {
+        if ($success && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             try {
-                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink($registrationSettings['autoRedirectOnSuccess']);
+                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
+                    $registrationSettings['autoRedirectOnSuccess'][$projectLang]
+                );
+
                 $autoRedirect = $RedirectSite->getUrlRewrittenWithHost();
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
@@ -103,7 +107,6 @@ class Registration extends QUI\Control
         // Terms Of Use
         $termsOfUseRequired = false;
         $termsOfUseLabel    = '';
-        $projectLang        = QUI::getRewrite()->getProject()->getLang();
 
         if ($registrationSettings['termsOfUseRequired']
             && !empty($registrationSettings['termsOfUseSite'][$projectLang])) {

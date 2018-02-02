@@ -251,7 +251,8 @@ class Handler extends Singleton
         $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $settings = $Conf->getSection('registration');
 
-        $settings['termsOfUseSite'] = json_decode($settings['termsOfUseSite'], true);
+        $settings['termsOfUseSite']        = json_decode($settings['termsOfUseSite'], true);
+        $settings['autoRedirectOnSuccess'] = json_decode($settings['autoRedirectOnSuccess'], true);
 
         return $settings;
     }

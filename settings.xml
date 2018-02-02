@@ -329,7 +329,7 @@
                             </option>
                         </select>
 
-                        <input conf="registration.autoRedirectOnSuccess" type="text" class="project-site">
+                        <input conf="registration.autoRedirectOnSuccess" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.autoRedirectOnSuccess.title"/>
                             </text>
