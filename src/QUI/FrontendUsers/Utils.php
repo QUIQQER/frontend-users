@@ -173,9 +173,10 @@ class Utils
             }
         }
 
-        if ($Control === null) {
-            $Control = new ControlWrapper($setting);
-        }
+        // not sure if this is necessary
+//        if ($Control === null) {
+//            $Control = new ControlWrapper($setting);
+//        }
 
         return $Control;
     }
@@ -285,34 +286,6 @@ class Utils
         }
 
         return Permissions\Permission::hasPermission($permission, $User);
-    }
-
-    /**
-     * Return the control from the profile category
-     *
-     * @param string $name
-     * @return QUI\Controls\Control|ControlWrapper
-     *
-     * @deprecated
-     */
-    public static function getProfileCategoryControl($name)
-    {
-        $category = self::getProfileCategory($name);
-        $Control  = null;
-
-        if (isset($category['control'])) {
-            $cls = $category['control'];
-
-            if (class_exists($cls)) {
-                $Control = new $cls();
-            }
-        }
-
-        if ($Control === null) {
-            $Control = new ControlWrapper($category);
-        }
-
-        return $Control;
     }
 
     /**

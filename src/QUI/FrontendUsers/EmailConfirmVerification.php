@@ -36,9 +36,22 @@ class EmailConfirmVerification extends AbstractVerification
         $userId = (int)$this->getIdentifier();
 
         try {
-            $User = QUI::getUsers()->get($userId);
+            $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+            $User             = QUI::getUsers()->get($userId);
+            $newEmail         = $this->additionalData['newEmail'];
 
-            $User->setAttribute('email', $this->additionalData['newEmail']);
+            // if users cannot set their own username -> change username as well
+            // if it equals the old email-address
+            if (!$RegistrarHandler->isUsernameInputAllowed()) {
+                $oldEmail = $User->getAttribute('email');
+                $username = $User->getUsername();
+
+                if ($oldEmail === $username) {
+                    $User->setAttribute('username', $newEmail);
+                }
+            }
+
+            $User->setAttribute('email', $newEmail);
             $User->save(QUI::getUsers()->getSystemUser());
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(

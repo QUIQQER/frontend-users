@@ -29,3 +29,28 @@
 .quiqqer-frontendUsers-autoRedirect {
     margin-top: 10px;
 }
+
+.quiqqer-frontendUsers-controls-registration-locked {
+    height: 100%;
+    left: 0px;
+    position: absolute;
+    top: 0px;
+    width: 100%;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.quiqqer-frontendUsers-controls-registration-termsOfUse {
+    float: left;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-controls-registration-termsOfUse label {
+    float: left;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-controls-registration-termsOfUse label > input {
+    float: left;
+}

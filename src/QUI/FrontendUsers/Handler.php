@@ -248,8 +248,13 @@ class Handler extends Singleton
      */
     public function getRegistrationSettings()
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        return $Conf->getSection('registration');
+        $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $settings = $Conf->getSection('registration');
+
+        $settings['termsOfUseSite']        = json_decode($settings['termsOfUseSite'], true);
+        $settings['autoRedirectOnSuccess'] = json_decode($settings['autoRedirectOnSuccess'], true);
+
+        return $settings;
     }
 
     /**
@@ -259,8 +264,12 @@ class Handler extends Singleton
      */
     public function getLoginSettings()
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        return $Conf->getSection('login');
+        $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $settings = $Conf->getSection('login');
+
+        $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
+
+        return $settings;
     }
 
     /**
@@ -563,15 +572,18 @@ class Handler extends Singleton
      * @param QUI\Users\User $User
      * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
      * @return void
+     *
+     * @throws QUI\Verification\Exception
+     * @throws QUI\Exception
      */
     public function sendDeleteUserConfirmationMail(QUI\Users\User $User, $Project)
     {
-        $EmailConfirmVerification = new UserDeleteConfirmVerification($User->getId(), array(
+        $DeleteUserVerification = new UserDeleteConfirmVerification($User->getId(), array(
             'project'     => $Project->getName(),
             'projectLang' => $Project->getLang()
         ));
 
-        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+        $confirmLink = Verifier::startVerification($DeleteUserVerification, true);
 
         $L      = QUI::getLocale();
         $lg     = 'quiqqer/frontend-users';
@@ -748,5 +760,16 @@ class Handler extends Singleton
                 'exception.handler.check_config.no_welcome_mail_for_password_send'
             ));
         }
+    }
+
+    /**
+     * Check if users are allowed to set their own username
+     *
+     * @return bool
+     */
+    public function isUsernameInputAllowed()
+    {
+        $settings = $this->getRegistrationSettings();
+        return $settings['usernameInput'] !== self::USERNAME_INPUT_NONE;
     }
 }

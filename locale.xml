@@ -309,6 +309,22 @@
             <de><![CDATA[Benutzer, die sich zwar registrieren, aber nicht aktivieren, werden automatisch nach X Tagen gelöscht. Dies setzt voraus, dass der Cron <b>Nicht aktive Benutzer löschen</b> eingerichtet und aktiviert ist. Betrifft <b>nicht</b> Benutzer, die über die Benutzerverwaltung deaktiviert wurden.]]></de>
             <en><![CDATA[Users who register but do not activate will automatically be deleted after X days. This assumes that the Cron <b>Delete Inactive User</b> is set up and enabled. Subject <b>not</b> users who have been disabled through user management.]]></en>
         </locale>
+        <locale name="settings.termsOfUseRequired.title">
+            <de><![CDATA[Nutzungsbedingungen]]></de>
+            <en><![CDATA[Terms Of Use]]></en>
+        </locale>
+        <locale name="settings.termsOfUseRequired.description" html="true">
+            <de><![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> Seiten eingestellt sind)]]></de>
+            <en><![CDATA[Users are required to accept <b>Terms Of User</b> before registering (required sites to to be set under <b>Terms Of Use Sites</b>]]></en>
+        </locale>
+        <locale name="settings.termsOfUseSite.title">
+            <de><![CDATA[Nutzungsbedingungen-Seiten]]></de>
+            <en><![CDATA[Terms Of Use Sites]]></en>
+        </locale>
+        <locale name="settings.termsOfUseSite.description" html="true">
+            <de><![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen</b> aktiviert ist.]]></de>
+            <en><![CDATA[Determines the Site which containts the Terms Of Use in its <b>content</b>. This requires that the setting <b>Terms Of Use</b> is active.]]></en>
+        </locale>
         <locale name="settings.sendPassword.title">
             <de><![CDATA[Zufalls-Passwort erstellen & senden]]></de>
             <en><![CDATA[Create & send random password]]></en>
@@ -393,6 +409,26 @@
             <de><![CDATA[Dieser Link ist nicht mehr gültig.]]></de>
             <en><![CDATA[This link is no longer valid.]]></en>
         </locale>
+        <locale name="control.registration.terms_of_use.title">
+            <de><![CDATA[Nutzungsbedingungen]]></de>
+            <en><![CDATA[Terms Of Use]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use.info">
+            <de><![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen, um mit der Registrierung fortzufahren.]]></de>
+            <en><![CDATA[Accept our Terms Of Use to continue with the registration.]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use.label">
+            <de><![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and accept them]]></en>
+        </locale>
+        <locale name="exception.registration.registrar_not_found">
+            <de><![CDATA[Ungültige Registrierungs-Methode]]></de>
+            <en><![CDATA[Invalid registration method]]></en>
+        </locale>
+        <locale name="exception.registration.terms_of_use_not_accepted">
+            <de><![CDATA[Bitte akzeptieren Sie die Nutzungsbedingungen, um sich zu registrieren.]]></de>
+            <en><![CDATA[Please accept the Terms Of Use to register.]]></en>
+        </locale>
 
         <!-- Registrar: E-Mail -->
         <locale name="exception.registrars.email.username_already_exists">
@@ -424,6 +460,32 @@
         <locale name="permission.quiqqer.frontendUsers.profile.view._header">
             <de><![CDATA[Profil-Kategorien, die dieser Benutzer/Gruppe sehen darf]]></de>
             <en><![CDATA[Profile categories this user/group can view]]></en>
+        </locale>
+
+        <!-- Site types -->
+        <locale name="quiqqer/frontend-users:types/registration.title">
+            <de><![CDATA[Registrierung]]></de>
+            <en><![CDATA[Registration]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/registration.description">
+            <de><![CDATA[Zeigt alle Registrierungs-Methoden, die in den Einstellungen festgelegt wurden. Bietet Besuchern einer Website die Möglichkeit, sich ein Benutzerkonto am System zu erstellen.]]></de>
+            <en><![CDATA[Shows all registration methods that have been set in the settings. Offers visitors of a website to register a user account.]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/login.title">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Login / Sign In]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/login.description">
+            <de><![CDATA[Zeigt eine Login-Maske, mit der sich Benutzer am System anmelden können. Je nach konfigurieren Authentifikatoren werden unterschiedliche Login-Methoden angezeigt.]]></de>
+            <en><![CDATA[Shows a login form users can use to log into their user account. Depending on the configured authentication methods different login possibilites are shown.]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/profile.title">
+            <de><![CDATA[Benutzerprofil]]></de>
+            <en><![CDATA[User Profile]]></en>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/profile.description">
+            <de><![CDATA[Zeigt Benutzerdaten an und bietet die Möglichkeit, diese zu ändern (z.B. Adresse, Passwort etc.). Ist durch andere QUIQQER-Plugins erweiterbar.]]></de>
+            <en><![CDATA[Shows user data and offers the possibility to edit them (e.g. address, passwort etc.). Is extendable via other QUIQQER plugins.]]></en>
         </locale>
 
     </groups>
@@ -473,6 +535,10 @@
             <de><![CDATA[Geburtstag]]></de>
             <en><![CDATA[Date of birth]]></en>
         </locale>
+        <locale name="profile.userdata.username">
+            <de><![CDATA[Benutzername]]></de>
+            <en><![CDATA[Benutzername]]></en>
+        </locale>
         <locale name="profile.userdata.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
             <en><![CDATA[E-mail address]]></en>
@@ -508,6 +574,10 @@
         <locale name="exception.controls.profile.userdata.new_email_address_already_exists">
             <de><![CDATA[Die E-Mail-Adresse, die Sie angegeben haben, kann nicht verwendet werden. Bitte geben Sie eine andere E-Mail-Adresse an.]]></de>
             <en><![CDATA[The e-mail address you provided cannot be used. Please enter a different e-mail address.]]></en>
+        </locale>
+        <locale name="profile.userdata.message.change_email_request">
+            <de><![CDATA[Sie haben die Änderung Ihrer E-Mail-Adresse beantragt. Klicken Sie bitte auf den Aktivierungs-Link, der Ihnen an die neue E-Mail-Adresse gesendet wurde.]]></de>
+            <en><![CDATA[You have requested the change of your e-mail address. Please click on the activation link which has been sent to the new e-mail address.]]></en>
         </locale>
         <locale name="profile.userdata.message.change_email_success">
             <de><![CDATA[Ihre E-Mail-Adresse wurde erfolgreich geändert.]]></de>

@@ -19,7 +19,7 @@ use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 class UserData extends Control
 {
     /**
-     * ControlWrapper constructor.
+     * UserData constructor.
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
@@ -38,16 +38,32 @@ class UserData extends Control
      */
     public function getBody()
     {
-        $Engine = QUI::getTemplateManager()->getEngine();
-        $action = false;
+        $Engine           = QUI::getTemplateManager()->getEngine();
+        $action           = false;
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
         if (!empty($_REQUEST['action'])) {
             $action = $_REQUEST['action'];
         }
 
+        $emailChangeRequested = true;
+        $User                 = QUI::getUserBySession();
+
+        try {
+            QUI\Verification\Verifier::getVerificationByIdentifier(
+                $User->getId(),
+                QUI\FrontendUsers\EmailConfirmVerification::getType(),
+                true
+            );
+        } catch (\Exception $Exception) {
+            $emailChangeRequested = false;
+        }
+
         $Engine->assign(array(
-            'User'   => QUI::getUserBySession(),
-            'action' => $action
+            'User'              => QUI::getUserBySession(),
+            'action'            => $action,
+            'changeMailRequest' => $emailChangeRequested,
+            'username'          => $RegistrarHandler->isUsernameInputAllowed()
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/UserData.html');
@@ -97,11 +113,18 @@ class UserData extends Control
         }
 
         // user data
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+
         $allowedFields = array(
             'firstname',
             'lastname',
             'birthday'
         );
+
+        // allow edit of username if username can be set on registration
+        if ($RegistrarHandler->isUsernameInputAllowed()) {
+            $allowedFields[] = 'username';
+        }
 
         // special case: birthday
         $bday = '';

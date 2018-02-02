@@ -8,6 +8,12 @@
 
 <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
 
+{if $changeMailRequest}
+<div class="quiqqer-frontendUsers-info">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_request"}
+</div>
+{/if}
+
 {if $action == 'change_email_success'}
 <div class="quiqqer-frontendUsers-success">
     {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_success"}
@@ -63,6 +69,15 @@
         }
     </div>
 </label>
+
+{if $username}
+<label>
+    <span class="quiqqer-frontendUsers-userdata-label">
+        {locale group="quiqqer/frontend-users" var="profile.userdata.username"}
+    </span>
+    <input name="username" value="{$User->getUsername()}"/>
+</label>
+{/if}
 
 <label>
     <span class="quiqqer-frontendUsers-userdata-label">

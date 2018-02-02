@@ -52,6 +52,7 @@ class Registration extends QUI\Control
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $CurrentRegistrar     = $this->isCurrentlyExecuted();
         $registrationStatus   = false;
+        $projectLang          = QUI::getRewrite()->getProject()->getLang();
 
         if (isset($_POST['registration'])) {
             try {
@@ -82,11 +83,12 @@ class Registration extends QUI\Control
                         && ($status === 'success'
                             || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
-        if ($success && !empty($registrationSettings['autoRedirectOnSuccess'])) {
-            $autoRedirect = $registrationSettings['autoRedirectOnSuccess'];
-
+        if ($success && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             try {
-                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink($autoRedirect);
+                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
+                    $registrationSettings['autoRedirectOnSuccess'][$projectLang]
+                );
+
                 $autoRedirect = $RedirectSite->getUrlRewrittenWithHost();
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
@@ -102,12 +104,42 @@ class Registration extends QUI\Control
             ));
         }
 
+        // Terms Of Use
+        $termsOfUseRequired = false;
+        $termsOfUseLabel    = '';
+
+        if ($registrationSettings['termsOfUseRequired']
+            && !empty($registrationSettings['termsOfUseSite'][$projectLang])) {
+            try {
+                $TermsOfUseSite  = QUI\Projects\Site\Utils::getSiteByLink($registrationSettings['termsOfUseSite'][$projectLang]);
+                $termsOfUseLabel = QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'control.registration.terms_of_use.label',
+                    array(
+                        'termsOfUseUrl'       => $TermsOfUseSite->getUrlRewrittenWithHost(),
+                        'termsOfUseSiteTitle' => $TermsOfUseSite->getAttribute('title')
+                    )
+                );
+
+                $Engine->assign(array(
+                    'termsOfUseSiteId' => $TermsOfUseSite->getId()
+                ));
+
+                $termsOfUseRequired = true;
+            } catch (\Exception $Exception) {
+                // nothing
+            }
+        }
+
         $Engine->assign(array(
-            'Registrars'   => $Registrars,
-            'Registrar'    => $CurrentRegistrar,
-            'success'      => $success,
-            'autoRedirect' => $autoRedirect,
-            'Login'        => $Login
+            'Registrars'          => $Registrars,
+            'Registrar'           => $CurrentRegistrar,
+            'success'             => $success,
+            'autoRedirect'        => $autoRedirect,
+            'Login'               => $Login,
+            'termsOfUseLabel'     => $termsOfUseLabel,
+            'termsOfUseRequired'  => $termsOfUseRequired,
+            'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
         ));
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -174,6 +206,15 @@ class Registration extends QUI\Control
         $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $Project              = QUI::getRewrite()->getProject();
+
+        // check Terms Of Use
+        if (!empty($registrationSettings['termsOfUseRequired'])
+            && empty($_POST['termsOfUseAccepted'])) {
+            throw new QUI\FrontendUsers\Exception(array(
+                'quiqqer/frontend-users',
+                'exception.registration.terms_of_use_not_accepted'
+            ));
+        }
 
         $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);

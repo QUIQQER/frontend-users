@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains QUI\FrontendUsers\Controls\Profile\ControlWrapper
+ * This file contains QUI\FrontendUsers\Controls\Profile\Address
  */
 
 namespace QUI\FrontendUsers\Controls\Profile;
@@ -19,7 +19,7 @@ use QUI\Utils\Security\Orthos;
 class Address extends Control
 {
     /**
-     * ControlWrapper constructor.
+     * Address constructor.
      * @param array $attributes
      */
     public function __construct(array $attributes = array())
