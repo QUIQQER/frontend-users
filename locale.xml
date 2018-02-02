@@ -309,6 +309,22 @@
             <de><![CDATA[Benutzer, die sich zwar registrieren, aber nicht aktivieren, werden automatisch nach X Tagen gelöscht. Dies setzt voraus, dass der Cron <b>Nicht aktive Benutzer löschen</b> eingerichtet und aktiviert ist. Betrifft <b>nicht</b> Benutzer, die über die Benutzerverwaltung deaktiviert wurden.]]></de>
             <en><![CDATA[Users who register but do not activate will automatically be deleted after X days. This assumes that the Cron <b>Delete Inactive User</b> is set up and enabled. Subject <b>not</b> users who have been disabled through user management.]]></en>
         </locale>
+        <locale name="settings.termsOfUseRequired.title">
+            <de><![CDATA[Nutzungsbedingungen]]></de>
+            <en><![CDATA[Terms Of Use]]></en>
+        </locale>
+        <locale name="settings.termsOfUseRequired.description" html="true">
+            <de><![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> Seiten eingestellt sind)]]></de>
+            <en><![CDATA[Users are required to accept <b>Terms Of User</b> before registering (required sites to to be set under <b>Terms Of Use Sites</b>]]></en>
+        </locale>
+        <locale name="settings.termsOfUseSite.title">
+            <de><![CDATA[Nutzungsbedingungen-Seiten]]></de>
+            <en><![CDATA[Terms Of Use Sites]]></en>
+        </locale>
+        <locale name="settings.termsOfUseSite.description" html="true">
+            <de><![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen</b> aktiviert ist.]]></de>
+            <en><![CDATA[Determines the Site which containts the Terms Of Use in its <b>content</b>. This requires that the setting <b>Terms Of Use</b> is active.]]></en>
+        </locale>
         <locale name="settings.sendPassword.title">
             <de><![CDATA[Zufalls-Passwort erstellen & senden]]></de>
             <en><![CDATA[Create & send random password]]></en>
@@ -392,6 +408,26 @@
         <locale name="control.registration.general_error">
             <de><![CDATA[Dieser Link ist nicht mehr gültig.]]></de>
             <en><![CDATA[This link is no longer valid.]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use.title">
+            <de><![CDATA[Nutzungsbedingungen]]></de>
+            <en><![CDATA[Terms Of Use]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use.info">
+            <de><![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen, um mit der Registrierung fortzufahren.]]></de>
+            <en><![CDATA[Accept our Terms Of Use to continue with the registration.]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use.label">
+            <de><![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and accept them]]></en>
+        </locale>
+        <locale name="exception.registration.registrar_not_found">
+            <de><![CDATA[Ungültige Registrierungs-Methode]]></de>
+            <en><![CDATA[Invalid registration method]]></en>
+        </locale>
+        <locale name="exception.registration.terms_of_use_not_accepted">
+            <de><![CDATA[Bitte akzeptieren Sie die Nutzungsbedingungen, um sich zu registrieren.]]></de>
+            <en><![CDATA[Please accept the Terms Of Use to register.]]></en>
         </locale>
 
         <!-- Registrar: E-Mail -->

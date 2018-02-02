@@ -365,7 +365,7 @@
                             </description>
                         </input>
 
-                        <input conf="registration.termsOfUseSite" type="text" class="project-site">
+                        <input conf="registration.termsOfUseSite" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.termsOfUseSite.title"/>
                             </text>

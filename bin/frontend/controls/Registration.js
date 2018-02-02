@@ -7,10 +7,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
     'qui/QUI',
     'qui/controls/Control',
     'qui/controls/loader/Loader',
+    'package/quiqqer/controls/bin/site/Window',
     'qui/utils/Form',
     'Ajax'
 
-], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUIAjax) {
+], function (QUI, QUIControl, QUILoader, QUISiteWindow, QUIFormUtils, QUIAjax) {
     "use strict";
 
     return new Class({
@@ -26,7 +27,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader = null;
+            this.Loader              = null;
+            this.$TermsOfUseCheckBox = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -49,6 +51,46 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 self.$sendForm(event.target).then(self.$onImport);
             });
 
+            // Terms Of Use
+            var TermsOfUseElm = Elm.getElement('.quiqqer-frontendUsers-controls-registration-termsOfUse');
+
+            if (TermsOfUseElm) {
+                var TermsOfUseLink = TermsOfUseElm.getElement('a');
+
+                TermsOfUseLink.addEvent('click', function (event) {
+                    event.stop();
+
+                    new QUISiteWindow({
+                        showTitle: true,
+                        project  : QUIQQER_PROJECT.name,
+                        lang     : QUIQQER_PROJECT.lang,
+                        id       : TermsOfUseElm.get('data-siteid')
+                    }).open();
+                });
+
+                this.$TermsOfUseCheckBox = Elm.getElement(
+                    '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
+                );
+                var TermsOfUseLock       = Elm.getElement(
+                    '.quiqqer-frontendUsers-controls-registration-locked'
+                );
+
+                if (this.$TermsOfUseCheckBox && TermsOfUseLock) {
+                    this.$TermsOfUseCheckBox.addEvent('click', function (event) {
+                        if (event.target.checked) {
+                            TermsOfUseLock.setStyle('display', 'none');
+                        } else {
+                            TermsOfUseLock.setStyle('display', null);
+                        }
+                    });
+
+                    if (this.$TermsOfUseCheckBox.checked) {
+                        TermsOfUseLock.setStyle('display', 'none');
+                    }
+                }
+            }
+
+            // Auto redirect
             var RedirectElm = Elm.getElement(
                 '.quiqqer-frontendUsers-autoRedirect'
             );
@@ -74,6 +116,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             var self     = this,
                 formData = QUIFormUtils.getFormData(Form);
 
+            if (this.$TermsOfUseCheckBox) {
+                formData.termsOfUseAccepted = this.$TermsOfUseCheckBox.checked;
+            }
+
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
                     var Container = new Element('div', {
@@ -87,26 +133,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     self.getElm().set('html', Registration.get('html'));
 
                     QUI.parse(self.getElm()).then(resolve);
+
+                    resolve();
                 }, {
                     'package'  : 'quiqqer/frontend-users',
                     'registrar': Form.get('data-registrar'),
                     'data'     : JSON.encode(formData),
                     onError    : reject
-                });
-            });
-        },
-
-        /**
-         * Validate e-mail address
-         *
-         * @param {String} email
-         * @return {Promise} - returns true if email address is valid; false otherwise
-         */
-        $validateUsername: function (username) {
-            return new Promise(function (resolve, reject) {
-                QUIAjax.get('ajax_email_validate', resolve, {
-                    mail   : email,
-                    onError: reject
                 });
             });
         }

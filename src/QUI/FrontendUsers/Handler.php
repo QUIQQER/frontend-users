@@ -248,8 +248,12 @@ class Handler extends Singleton
      */
     public function getRegistrationSettings()
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        return $Conf->getSection('registration');
+        $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $settings = $Conf->getSection('registration');
+
+        $settings['termsOfUseSite'] = json_decode($settings['termsOfUseSite'], true);
+
+        return $settings;
     }
 
     /**

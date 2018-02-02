@@ -1,59 +1,85 @@
+<noscript>
+    <style>
+        .quiqqer-frontendUsers-controls-registration-locked {
+            display: none !important;
+        }
+    </style>
+</noscript>
 
-    {if $success}
-        <div class="quiqqer-frontendUsers-success">
-            {$Registrar->getSuccessMessage()}
-            {if $autoRedirect}
-            <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
-                <a href="{$autoRedirect}">
-                    {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
-                </a>
-            </div>
-            {/if}
-        </div>
-        {if $Login}
-            {$Login->create()}
-        {/if}
-    {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
-    <div class="quiqqer-frontendUsers-pending">
-        {$Registrar->getPendingMessage()}
+{if $success}
+<div class="quiqqer-frontendUsers-success">
+    {$Registrar->getSuccessMessage()}
+    {if $autoRedirect}
+    <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
+        <a href="{$autoRedirect}">
+            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
+        </a>
     </div>
-    {else}
-        {if isset($error) && !$autoRedirect}
-            <div class="quiqqer-frontendUsers-error">
-                {$error}
-            </div>
-        {/if}
+    {/if}
+</div>
+{if $Login}
+{$Login->create()}
+{/if}
+{elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
+<div class="quiqqer-frontendUsers-pending">
+    {$Registrar->getPendingMessage()}
+</div>
+{else}
+{if isset($error) && !$autoRedirect}
+<div class="quiqqer-frontendUsers-error">
+    {$error}
+</div>
+{/if}
 
-        {if $Registrars->isEmpty()}
-        <div class="quiqqer-frontendUsers-info">
-            {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
-        </div>
-        {else}
-        <div class="quiqqer-frontendUsers-controls-registration">
-            {foreach $Registrars as $Registrar}
-            <form action=""
-                  method="POST"
-                  class="quiqqer-frontendUsers-controls-registration-registrar"
-                  data-registrar="{$Registrar->getHash()}"
-            >
-                <header>
-                    <h2>{$Registrar->getTitle()}</h2>
-                </header>
+{if $Registrars->isEmpty()}
+<div class="quiqqer-frontendUsers-info">
+    {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
+</div>
+{else}
+{if $termsOfUseRequired}
+<div class="quiqqer-frontendUsers-controls-registration-termsOfUse" data-siteid="{$termsOfUseSiteId}">
+    <h2>
+        {locale group="quiqqer/frontend-users" var="control.registration.terms_of_use.title"}
+    </h2>
+    <p>
+        {locale group="quiqqer/frontend-users" var="control.registration.terms_of_use.info"}
+        <label>
+            <span>
+                {$termsOfUseLabel}
+            </span>
+            <input type="checkbox"{if $termsOfUseAcctepted} checked{/if}/>
+        </label>
+    </p>
+</div>
+{/if}
+<div class="quiqqer-frontendUsers-controls-registration">
+    {if $termsOfUseRequired}
+    <div class="quiqqer-frontendUsers-controls-registration-locked"></div>
+    {/if}
+    {foreach $Registrars as $Registrar}
+    <form action=""
+          method="POST"
+          class="quiqqer-frontendUsers-controls-registration-registrar"
+          data-registrar="{$Registrar->getHash()}"
+    >
+        <header>
+            <h2>{$Registrar->getTitle()}</h2>
+        </header>
 
-                {$Registrar->getControl()->create()}
+        {$Registrar->getControl()->create()}
 
-                <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
-                <input type="hidden" name="registration" value="1"/>
-            </form>
+        <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
+        <input type="hidden" name="registration" value="1"/>
+    </form>
 
-            {if $Registrar !== $Registrars->last()}
-            <div class="quiqqer-frontendUsers-controls-registration-or">
+    {if $Registrar !== $Registrars->last()}
+    <div class="quiqqer-frontendUsers-controls-registration-or">
                         <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
                             {locale group="quiqqer/frontend-users" var="control.registration.or"}
                         </span>
-            </div>
-            {/if}
-            {/foreach}
-        </div>
-        {/if}
+    </div>
     {/if}
+    {/foreach}
+</div>
+{/if}
+{/if}
