@@ -41,9 +41,10 @@ if ($isAuth) {
     // check for redirection
     $loginSettings = FrontendUsers\Handler::getInstance()->getLoginSettings();
     $RedirectSite  = false;
+    $projectLang   = $Project->getLang();
 
-    if (!empty($loginSettings['redirectOnLogin'])) {
-        $RedirectSite = SiteUtils::getSiteByLink($loginSettings['redirectOnLogin']);
+    if (!empty($loginSettings['redirectOnLogin'][$projectLang])) {
+        $RedirectSite = SiteUtils::getSiteByLink($loginSettings['redirectOnLogin'][$projectLang]);
     }
 
     if (!$RedirectSite && $Site->getId() !== 1) {
@@ -51,7 +52,7 @@ if ($isAuth) {
     }
 
     if ($RedirectSite) {
-        $url = $RedirectSite->getProject()->getVHost(true) . $RedirectSite->getUrlRewritten();
+        $url = $RedirectSite->getUrlRewrittenWithHost();
         header("Location: " . $url);
 
         exit;
