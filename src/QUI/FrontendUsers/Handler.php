@@ -259,8 +259,12 @@ class Handler extends Singleton
      */
     public function getLoginSettings()
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        return $Conf->getSection('login');
+        $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $settings = $Conf->getSection('login');
+
+        $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
+
+        return $settings;
     }
 
     /**
