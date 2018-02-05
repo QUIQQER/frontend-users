@@ -15,6 +15,13 @@
                 </conf>
             </section>
 
+            <section name="userProfile">
+                <conf name="userDeleteMode">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue><![CDATA[delete]]></defaultvalue>
+                </conf>
+            </section>
+
             <section name="disable">
                 <conf name="hashLifetime">
                     <type><![CDATA[int]]></type>

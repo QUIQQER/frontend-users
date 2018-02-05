@@ -65,29 +65,25 @@
             <de><![CDATA[Sichtbare Kategorien im Benutzer-Profil]]></de>
             <en><![CDATA[Visible categories in the User Profile]]></en>
         </locale>
-        <locale name="settings.category.userProfile.title">
-            <de><![CDATA[Profil]]></de>
-            <en><![CDATA[Profile]]></en>
+        <locale name="profile.userData.text">
+            <de><![CDATA[Darf seine grundlegenden Benutzerdaten ändern (Vorname, Nachname, Geburtstag, E-Mail-Adresse, Benutzername)]]></de>
+            <en><![CDATA[Is allowed to edit basic user data (first name, last name, birthday, e-mail address, username)]]></en>
         </locale>
-        <locale name="settings.showMyData.title" html="true">
-            <de><![CDATA["Meine Daten" anzeigen]]></de>
-            <en><![CDATA[Show "My Data"]]></en>
+        <locale name="profile.address.text">
+            <de><![CDATA[Darf seine Adress-Daten ändern]]></de>
+            <en><![CDATA[Is allowed to edit address data]]></en>
         </locale>
-        <locale name="settings.showPasswordChange.title" html="true">
-            <de><![CDATA["Passwort ändern" anzeigen]]></de>
-            <en><![CDATA[Show "Change password"]]></en>
+        <locale name="profile.changePassword.text">
+            <de><![CDATA[Darf sein Passwort ändern]]></de>
+            <en><![CDATA[Is allowed to change his password]]></en>
         </locale>
-        <locale name="settings.showAddress.title" html="true">
-            <de><![CDATA["Meine Adresse" anzeigen]]></de>
-            <en><![CDATA[Show "My address"]]></en>
+        <locale name="profile.avatar.text">
+            <de><![CDATA[Darf ein Benutzer-Bild festlegen]]></de>
+            <en><![CDATA[Is allowed to set an avatar image]]></en>
         </locale>
-        <locale name="settings.showAddressManager.title" html="true">
-            <de><![CDATA["Meine Adressen" (Adress-Manager) anzeigen]]></de>
-            <en><![CDATA[Show "My addresses" (Address manager)]]></en>
-        </locale>
-        <locale name="settings.showDeleteAccount.title" html="true">
-            <de><![CDATA["Mein Benutzerkonto löschen" anzeigen]]></de>
-            <en><![CDATA[Show "Delete my account"]]></en>
+        <locale name="profile.deleteaccount.text">
+            <de><![CDATA[Darf sein Benutzerkonto löschen (erfordert Bestätigung über E-Mail)]]></de>
+            <en><![CDATA[Is allowed to delete his user account (required confirmation via e-mail)]]></en>
         </locale>
         <locale name="settings.section.userAccount.title">
             <de><![CDATA[Benuterkonto-Aktionen]]></de>
@@ -619,10 +615,6 @@
         </locale>
 
         <!-- Profile: Delete account -->
-        <locale name="profile.deleteaccount.text">
-            <de><![CDATA[Benutzerkonto löschen]]></de>
-            <en><![CDATA[Delete user account]]></en>
-        </locale>
         <locale name="profile.deleteaccount.title">
             <de><![CDATA[Benutzerkonto löschen]]></de>
             <en><![CDATA[Delete user account]]></en>
@@ -649,10 +641,6 @@
         </locale>
 
         <!-- Profile: Address -->
-        <locale name="profile.address.text">
-            <de><![CDATA[Adresse]]></de>
-            <en><![CDATA[Address]]></en>
-        </locale>
         <locale name="profile.address.title">
             <de><![CDATA[Adresse]]></de>
             <en><![CDATA[Address]]></en>

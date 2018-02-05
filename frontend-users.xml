@@ -19,6 +19,16 @@
                         </title>
                     </settings>
 
+                    <!-- Address -->
+                    <settings control="\QUI\FrontendUsers\Controls\Profile\Address"
+                              name="address"
+                              icon="fa fa-address-card"
+                              showinprofilbar="1"
+                    >
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="profile.address.title"/>
+                        </title>
+                    </settings>
 
                     <!-- Passwort ändern -->
                     <settings control="\QUI\FrontendUsers\Controls\Profile\ChangePassword"
