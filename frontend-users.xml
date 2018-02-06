@@ -23,7 +23,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\Address"
                               name="address"
                               icon="fa fa-address-card"
-                              showinprofilebar="1"
+                              showinprofilebar="0"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.address.title"/>
@@ -34,7 +34,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\ChangePassword"
                               name="changepassword"
                               icon="fa fa-key"
-                              showinprofilebar="1"
+                              showinprofilebar="0"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.changepassword.title"/>
@@ -45,7 +45,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\UserAvatar"
                               name="avatar"
                               icon="fa fa-camera"
-                              showinprofilebar="1"
+                              showinprofilebar="0"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.avatar.title"/>
@@ -56,7 +56,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount"
                               name="deleteaccount"
                               icon="fa fa-trash"
-                              showinprofilebar="1"
+                              showinprofilebar="0"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.deleteaccount.title"/>
