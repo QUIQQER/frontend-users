@@ -33,7 +33,7 @@ class Profile extends Control
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Profile.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
 
         $this->setAttribute(
@@ -90,21 +90,19 @@ class Profile extends Control
         };
 
         foreach ($categories as $key => $category) {
-            if (!Utils::hasPermissionToViewCategory($category['name'])) {
-                unset($categories[$key]);
+            foreach ($category['items'] as $k => $setting) {
+                if (!Utils::hasPermissionToViewCategory($category['name'], $setting['name'])) {
+                    unset($categories[$key]['items'][$k]);
+
+                    if ($currentCategory === $category['name']
+                        && $currentSetting === $setting['name']) {
+                        $currentSetting = false;
+                    }
+                }
             }
-        }
 
-        if ($currentCategory
-            && $currentSetting
-            && Utils::hasPermissionToViewCategory($currentCategory, $currentSetting)) {
-            try {
-                QUI\FrontendUsers\Utils::getProfileSetting($currentCategory, $currentSetting);
-            } catch (QUI\FrontendUsers\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
-
-                $currentCategory = false;
-                $currentSetting  = false;
+            if (empty($category['items'])) {
+                unset($categories[$key]);
             }
         }
 
@@ -151,7 +149,7 @@ class Profile extends Control
             'Site'            => $this->getSite()
         ));
 
-        return $Engine->fetch(dirname(__FILE__).'/Profile.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
     }
 
     /**

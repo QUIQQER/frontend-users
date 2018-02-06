@@ -259,11 +259,11 @@ class Utils
      * Checks if the given User is allowed to view a category
      *
      * @param string $category - Name of the category
-     * @param string|bool $settings (optional) - category settings
+     * @param string|bool $setting (optional) - category settings
      * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
      * @return bool
      */
-    public static function hasPermissionToViewCategory($category, $settings = false, $User = null)
+    public static function hasPermissionToViewCategory($category, $setting = false, $User = null)
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -272,8 +272,8 @@ class Utils
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
         $permission       = $permissionPrefix . $category;
 
-        if ($settings) {
-            $permission = $permission . '.' . $settings;
+        if ($setting) {
+            $permission = $permission . '.' . $setting;
         }
 
         return Permissions\Permission::hasPermission($permission, $User);
