@@ -7,14 +7,13 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Control;
 
 /**
  * Class ChangePassword
  *
  * Change user password
  */
-class ChangePassword extends Control
+class ChangePassword extends AbstractProfileControl
 {
     /**
      * ChangePassword constructor.
@@ -32,10 +31,11 @@ class ChangePassword extends Control
 
     /**
      * @return string
+     * @throws QUI\Exception
      */
     public function getBody()
     {
-        $Engine   = QUI::getTemplateManager()->getEngine();
+        $Engine = QUI::getTemplateManager()->getEngine();
 
         $Engine->assign(array(
             'User' => QUI::getUserBySession()
@@ -52,15 +52,10 @@ class ChangePassword extends Control
     public function onSave()
     {
         $Request = QUI::getRequest()->request;
-
-        if (!$Request->get('profile-save')) {
-            return;
-        }
+        $User    = $this->getAttribute('User');
 
         $passwordOld = $Request->get('passwordOld');
         $passwordNew = $Request->get('passwordNew');
-
-        $User = $this->getAttribute('User');
 
         if (!$User) {
             $User = QUI::getUserBySession();

@@ -7,7 +7,6 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Control;
 use QUI\Countries\Controls\Select as CountrySelect;
 use QUI\Utils\Security\Orthos;
 
@@ -16,7 +15,7 @@ use QUI\Utils\Security\Orthos;
  *
  * Change user address
  */
-class Address extends Control
+class Address extends AbstractProfileControl
 {
     /**
      * Address constructor.
@@ -32,6 +31,9 @@ class Address extends Control
 
     /**
      * @return string
+     *
+     * @throws QUI\Users\Exception
+     * @throws QUI\Exception
      */
     public function getBody()
     {
@@ -97,17 +99,16 @@ class Address extends Control
     }
 
     /**
-     * event: on save
+     * Method is called, when on save is triggered
+     *
+     * @return mixed|void
+     * @throws QUI\Users\Exception
+     * @throws QUI\Exception
      */
     public function onSave()
     {
         $Request = QUI::getRequest()->request;
-
-        if (!$Request->get('profile-save')) {
-            return;
-        }
-
-        $User = $this->getAttribute('User');
+        $User    = $this->getAttribute('User');
 
         if (!$User) {
             $User = QUI::getUserBySession();

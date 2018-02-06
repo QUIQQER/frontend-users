@@ -7,7 +7,6 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Control;
 use QUI\Utils\Security\Orthos;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 
@@ -16,7 +15,7 @@ use QUI\FrontendUsers\Handler as FrontendUsersHandler;
  *
  * Change basic User data
  */
-class UserData extends Control
+class UserData extends AbstractProfileControl
 {
     /**
      * UserData constructor.
@@ -35,6 +34,7 @@ class UserData extends Control
 
     /**
      * @return string
+     * @throws QUI\Exception
      */
     public function getBody()
     {
@@ -71,15 +71,13 @@ class UserData extends Control
 
     /**
      * event: on save
+     *
+     * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Exception
      */
     public function onSave()
     {
-        $Request = QUI::getRequest()->request;
-
-        if (!$Request->get('profile-save')) {
-            return;
-        }
-
+        $Request  = QUI::getRequest()->request;
         $newEmail = $Request->get('emailNew');
         $User     = QUI::getUserBySession();
 

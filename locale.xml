@@ -110,12 +110,20 @@
             <en><![CDATA[Completely delete the user account from the database (not recoverable!)]]></en>
         </locale>
         <locale name="settings.useGravatar.title">
-            <de><![CDATA[Gravatar für Benutzerbilder verweden]]></de>
+            <de><![CDATA[Gravatar für Benutzerbilder verwenden]]></de>
             <en><![CDATA[Use Gravatar for user avatars]]></en>
         </locale>
         <locale name="settings.useGravatar.description">
-            <de><![CDATA[Gravatar für Benutzerbilder verweden]]></de>
+            <de><![CDATA[Gravatar für Benutzerbilder verwenden]]></de>
             <en><![CDATA[Use Gravatar for user avatars]]></en>
+        </locale>
+        <locale name="settings.useGravatarUserDefaultValue.title">
+            <de><![CDATA[Gravatar-Benutzerbild Standardwert]]></de>
+            <en><![CDATA[Gravatar icon default value]]></en>
+        </locale>
+        <locale name="settings.useGravatarUserDefaultValue.description">
+            <de><![CDATA[Verwendung des Gravatar-Benutzerbilds ist bei Benutzern standardmäßig aktiviert]]></de>
+            <en><![CDATA[Usage of Gravatar icon is activated by default for users]]></en>
         </locale>
 
         <!-- Settings: ProfileBar -->

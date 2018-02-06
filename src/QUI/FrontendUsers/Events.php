@@ -183,6 +183,22 @@ class Events
     }
 
     /**
+     * quiqqer/quiqqer: onUserCreate
+     *
+     * @param User $User
+     * @return void
+     * @throws QUI\Exception
+     */
+    public static function onUserCreate(User $User)
+    {
+        $Conf                     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $userGravatarDefaultValue = $Conf->get('userProfile', 'useGravatarUserDefaultValue');
+
+        $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $userGravatarDefaultValue);
+        $User->save(QUI::getUsers()->getSystemUser());
+    }
+
+    /**
      * quiqqer/quiqqer: onUserDelete
      *
      * @param \QUI\Users\User $User

@@ -7,7 +7,6 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Control;
 use QUI\FrontendUsers\Handler;
 use QUI\Projects\Media\Utils as QUIMediaUtils;
 use QUI\Projects\Media\ExternalImage;
@@ -18,7 +17,7 @@ use QUI\FrontendUsers\Utils;
  *
  * @package QUI\FrontendUsers\Controls
  */
-class UserAvatar extends Control
+class UserAvatar extends AbstractProfileControl
 {
     public function __construct(array $attributes = array())
     {
@@ -94,12 +93,7 @@ class UserAvatar extends Control
      */
     public function onSave()
     {
-        $Request = QUI::getRequest()->request;
-
-        if (!$Request->get('profile-save')) {
-            return;
-        }
-
+        $Request         = QUI::getRequest()->request;
         $settings        = Handler::getInstance()->getUserProfileSettings();
         $gravatarEnabled = boolval($settings['useGravatar']);
         $User            = QUI::getUserBySession();

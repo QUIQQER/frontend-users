@@ -10,13 +10,15 @@ interface ControlInterface
 {
     /**
      * Method is called, when on save is triggered
+     *
+     * @return mixed|void
      */
     public function onSave();
 
     /**
      * Validate the send data
      *
-     * @return mixed
+     * @return mixed|void
      */
     public function validate();
 }
