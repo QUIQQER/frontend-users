@@ -11,6 +11,7 @@ use QUI\Control;
 use QUI\FrontendUsers\Handler;
 use QUI\Projects\Media\Utils as QUIMediaUtils;
 use QUI\Projects\Media\ExternalImage;
+use QUI\FrontendUsers\Utils;
 
 /**
  * Class UserAvatar
@@ -47,7 +48,7 @@ class UserAvatar extends Control
 
         if (!empty($userGravatarIcon) && $gravatarEnabled && !empty($userEmail)) {
             $userGravatarIcon = true;
-            $AvatarImage      = new ExternalImage($this->getGravatarUrl($userEmail, 100));
+            $AvatarImage      = new ExternalImage(Utils::getGravatarUrl($userEmail, 100));
 
             $Engine->assign(array(
                 'avatarImageUrl' => $AvatarImage->getSizeCacheUrl(100, 100)
@@ -108,27 +109,5 @@ class UserAvatar extends Control
             $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $useGravatar);
             $User->save();
         }
-    }
-
-    /**
-     * Get URL for Gravatar Avatar image
-     *
-     * @param string $email
-     * @param int $s [default] - Size [default: 80x80 px]
-     * @return string
-     */
-    protected function getGravatarUrl($email, $s = 80)
-    {
-        if ($s < 1) {
-            $s = 1;
-        } elseif ($s > 2048) {
-            $s = 2048;
-        }
-
-        $url = 'https://www.gravatar.com/avatar/';
-        $url .= md5(mb_strtolower(trim($email)));
-        $url .= "?s=$s&d=mm";
-
-        return $url;
     }
 }

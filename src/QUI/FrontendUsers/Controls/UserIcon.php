@@ -8,6 +8,10 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\Control;
+use QUI\FrontendUsers\Handler;
+use QUI\Projects\Media\Utils as QUIMediaUtils;
+use QUI\Projects\Media\ExternalImage;
+use QUI\FrontendUsers\Utils;
 
 /**
  * Class UserIcon
@@ -18,6 +22,11 @@ class UserIcon extends Control
 {
     public function __construct(array $attributes = array())
     {
+        $this->setAttributes(array(
+            'iconWidth'  => 50,
+            'iconHeight' => 50
+        ));
+
         parent::__construct($attributes);
 
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
@@ -30,6 +39,7 @@ class UserIcon extends Control
      * Return the control body
      *
      * @return string
+     * @throws QUI\Exception
      */
     public function getBody()
     {
@@ -44,34 +54,56 @@ class UserIcon extends Control
         }
 
         $Engine = QUI::getTemplateManager()->getEngine();
-        $avatar = $User->getAttribute('avatar');
 
         $Engine->assign(array(
             'User' => $User
         ));
 
-        // if empty, us first Letter of the username
-        $Avatar = false;
+        $settings         = Handler::getInstance()->getUserProfileSettings();
+        $User             = QUI::getUserBySession();
+        $userGravatarIcon = $User->getAttribute('quiqqer.frontendUsers.useGravatarIcon');
+        $userEmail        = $User->getAttribute('email');
+        $gravatarEnabled  = boolval($settings['useGravatar']);
+        $iconWidth        = (int)$this->getAttribute('iconWidth');
+        $iconHeight       = (int)$this->getAttribute('iconHeight');
 
-        if (!empty($avatar)) {
-            try {
-                $Avatar = QUI\Projects\Media\Utils::getImageByUrl($avatar);
+        if (!empty($userGravatarIcon) && $gravatarEnabled && !empty($userEmail)) {
+            $AvatarImage = new ExternalImage(Utils::getGravatarUrl($userEmail, $iconHeight));
 
-                $Engine->assign(array(
-                    'Avatar' => $Avatar,
-                    'avatar' => $Avatar->getSizeCacheUrl(100, 100)
-                ));
-            } catch (QUI\Exception $Exception) {
+            $Engine->assign(array(
+                'avatarImageUrl' => $AvatarImage->getSizeCacheUrl($iconWidth, $iconHeight)
+            ));
+        } else {
+            $avatarMediaUrl = $User->getAttribute('avatar');
+            $AvatarImage    = false;
+
+            // if empty, us first Letter of the username
+            if (!empty($avatarMediaUrl)) {
+                try {
+                    $AvatarImage = QUIMediaUtils::getImageByUrl($avatarMediaUrl);
+
+                    $Engine->assign(array(
+                        'avatarImageUrl' => $AvatarImage->getSizeCacheUrl($iconWidth, $iconHeight)
+                    ));
+                } catch (QUI\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                }
+            }
+
+            if ($AvatarImage === false) {
+                $username    = $User->getUsername();
+                $firstLetter = mb_substr($username, 0, 1);
+                $firstLetter = mb_strtoupper($firstLetter);
+
+                $Engine->assign('firstLetter', $firstLetter);
             }
         }
 
-        if ($Avatar === false) {
-            $username    = $User->getUsername();
-            $firstLetter = mb_substr($username, 0, 1);
-            $firstLetter = mb_strtoupper($firstLetter);
-
-            $Engine->assign('firstLetter', $firstLetter);
-        }
+        $Engine->assign(array(
+            'User'       => $User,
+            'iconHeight' => $iconHeight,
+            'iconWidth'  => $iconWidth
+        ));
 
         $Engine->assign(
             'ProfileSite',

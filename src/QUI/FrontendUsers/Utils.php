@@ -44,7 +44,7 @@ class Utils
 
             $dir = $Package->getDir();
 
-            if (file_exists($dir.'/frontend-users.xml')) {
+            if (file_exists($dir . '/frontend-users.xml')) {
                 $list[] = $Package;
             }
         }
@@ -77,7 +77,7 @@ class Utils
             $Parser = new QUI\Utils\XML\Settings();
             $Parser->setXMLPath('//quiqqer/frontend-users/profile');
 
-            $Collection = $Parser->getCategories($Package->getDir().'/frontend-users.xml');
+            $Collection = $Parser->getCategories($Package->getDir() . '/frontend-users.xml');
 
             foreach ($Collection as $entry) {
                 $categoryName = $entry['name'];
@@ -246,11 +246,11 @@ class Utils
             $newItems = array();
 
             foreach ($items as $iKey => $setting) {
-                if (!isset($setting['showinprofilbar'])) {
+                if (!isset($setting['showinprofilebar'])) {
                     continue;
                 }
 
-                if (!(int)$setting['showinprofilbar']) {
+                if (!(int)$setting['showinprofilebar']) {
                     continue;
                 }
 
@@ -279,10 +279,10 @@ class Utils
         }
 
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $permission       = $permissionPrefix.$category;
+        $permission       = $permissionPrefix . $category;
 
         if ($settings) {
-            $permission = $permission.'.'.$settings;
+            $permission = $permission . '.' . $settings;
         }
 
         return Permissions\Permission::hasPermission($permission, $User);
@@ -350,8 +350,8 @@ class Utils
         // load the translations
         foreach ($categories as $key => $category) {
             foreach ($category['items'] as $itemKey => $item) {
-                $itemUrl = $url.'/'.$category['name'];
-                $itemUrl = $itemUrl.'/'.$item['name'];
+                $itemUrl = $url . '/' . $category['name'];
+                $itemUrl = $itemUrl . '/' . $item['name'];
 
                 $categories[$key]['items'][$itemKey]['url'] = $itemUrl;
             }
@@ -374,5 +374,27 @@ class Utils
         }
 
         return true;
+    }
+
+    /**
+     * Get URL for Gravatar Avatar image
+     *
+     * @param string $email
+     * @param int $s [default] - Size [default: 80x80 px]
+     * @return string
+     */
+    public static function getGravatarUrl($email, $s = 80)
+    {
+        if ($s < 1) {
+            $s = 1;
+        } elseif ($s > 2048) {
+            $s = 2048;
+        }
+
+        $url = 'https://www.gravatar.com/avatar/';
+        $url .= md5(mb_strtolower(trim($email)));
+        $url .= "?s=$s&d=mm";
+
+        return $url;
     }
 }
