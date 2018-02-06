@@ -261,13 +261,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         moofx(self.$Elm).animate({
                             height: Math.max(profileSize, menuSize)
                         }, {
-                            duration: 200,
+                            duration: 100,
                             callback: function () {
                                 moofx(Animation).animate({
                                     opacity: 1,
                                     left   : 0
                                 }, {
-                                    duration: 250,
+                                    duration: 100,
                                     callback: function () {
                                         self.$parseContent().then(resolve);
                                     }
