@@ -173,10 +173,10 @@ class Utils
             }
         }
 
-        // not sure if this is necessary
-//        if ($Control === null) {
-//            $Control = new ControlWrapper($setting);
-//        }
+        // build default control wrapper if a category has no dedicated control class
+        if ($Control === null) {
+            $Control = new ControlWrapper($setting);
+        }
 
         return $Control;
     }

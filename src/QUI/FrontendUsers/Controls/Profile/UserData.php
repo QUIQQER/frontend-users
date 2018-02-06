@@ -144,6 +144,6 @@ class UserData extends Control
             }
         }
 
-        $User->save(QUI::getUsers()->getSystemUser());
+        $User->save();
     }
 }

@@ -109,6 +109,14 @@
             <de><![CDATA[Benutzerkonto vollständig aus der Datenbank löschen (nicht wiederherstellbar!)]]></de>
             <en><![CDATA[Completely delete the user account from the database (not recoverable!)]]></en>
         </locale>
+        <locale name="settings.useGravatar.title">
+            <de><![CDATA[Gravatar für Benutzerbilder verweden]]></de>
+            <en><![CDATA[Use Gravatar for user avatars]]></en>
+        </locale>
+        <locale name="settings.useGravatar.description">
+            <de><![CDATA[Gravatar für Benutzerbilder verweden]]></de>
+            <en><![CDATA[Use Gravatar for user avatars]]></en>
+        </locale>
 
         <!-- Settings: ProfileBar -->
         <locale name="settings.section.profileBar.title">
@@ -648,6 +656,12 @@
         <locale name="profile.address.btn.submit">
             <de><![CDATA[Speichern]]></de>
             <en><![CDATA[Save]]></en>
+        </locale>
+        
+        <!-- Profile: UserAvatar -->
+        <locale name="profile.useravatar.gravatar_option">
+            <de><![CDATA[Gravatar benutzen ([email])]]></de>
+            <en><![CDATA[Use Gravatar ([email])]]></en>
         </locale>
 
         <!-- Class: Handler -->

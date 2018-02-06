@@ -20,6 +20,10 @@
                     <type><![CDATA[string]]></type>
                     <defaultvalue><![CDATA[delete]]></defaultvalue>
                 </conf>
+                <conf name="useGravatar">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
             </section>
 
             <section name="disable">
@@ -172,6 +176,15 @@
                         <title>
                             <locale group="quiqqer/frontend-users" var="settings.section.userAccount.title"/>
                         </title>
+
+                        <input conf="userProfile.useGravatar" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.description"/>
+                            </description>
+                        </input>
 
                         <select conf="userProfile.userDeleteMode">
                             <text>

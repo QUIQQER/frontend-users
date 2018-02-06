@@ -39,7 +39,6 @@ class UserIcon extends Control
             return '';
         }
 
-
         if (!($User instanceof QUI\Interfaces\Users\User)) {
             return '';
         }
