@@ -8,7 +8,7 @@
                         <locale group="quiqqer/frontend-users" var="profile.user.title"/>
                     </title>
 
-                    <!-- Meine Daten -->
+                    <!-- User Data -->
                     <settings control="\QUI\FrontendUsers\Controls\Profile\UserData"
                               name="data"
                               icon="fa fa-user"
@@ -30,7 +30,7 @@
                         </title>
                     </settings>
 
-                    <!-- Passwort ändern -->
+                    <!-- Change Password -->
                     <settings control="\QUI\FrontendUsers\Controls\Profile\ChangePassword"
                               name="changepassword"
                               icon="fa fa-key"
@@ -40,7 +40,6 @@
                             <locale group="quiqqer/frontend-users" var="profile.changepassword.title"/>
                         </title>
                     </settings>
-
 
                     <!-- Avatar -->
                     <settings control="\QUI\FrontendUsers\Controls\Profile\UserAvatar"
@@ -53,8 +52,7 @@
                         </title>
                     </settings>
 
-
-                    <!-- Deleting account -->
+                    <!-- Delete Account -->
                     <settings control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount"
                               name="deleteaccount"
                               icon="fa fa-trash"
