@@ -89,7 +89,6 @@ class Profile extends Control
             return $data['items'][0]['name'];
         };
 
-
         foreach ($categories as $key => $category) {
             if (!Utils::hasPermissionToViewCategory($category['name'])) {
                 unset($categories[$key]);
