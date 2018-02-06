@@ -12,7 +12,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\UserData"
                               name="data"
                               icon="fa fa-user"
-                              showinprofilbar="1"
+                              showinprofilebar="1"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.data.title"/>
@@ -23,7 +23,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\Address"
                               name="address"
                               icon="fa fa-address-card"
-                              showinprofilbar="1"
+                              showinprofilebar="1"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.address.title"/>
@@ -34,7 +34,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\ChangePassword"
                               name="changepassword"
                               icon="fa fa-key"
-                              showinprofilbar="1"
+                              showinprofilebar="1"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.changepassword.title"/>
@@ -46,7 +46,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\UserAvatar"
                               name="avatar"
                               icon="fa fa-camera"
-                              showinprofilbar="1"
+                              showinprofilebar="1"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.avatar.title"/>
@@ -58,7 +58,7 @@
                     <settings control="\QUI\FrontendUsers\Controls\Profile\DeleteAccount"
                               name="deleteaccount"
                               icon="fa fa-trash"
-                              showinprofilbar="1"
+                              showinprofilebar="1"
                     >
                         <title>
                             <locale group="quiqqer/frontend-users" var="profile.deleteaccount.title"/>
