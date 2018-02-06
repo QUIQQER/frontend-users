@@ -391,7 +391,7 @@ class Events
                 'type'         => 'bool',
                 'area'         => '',
                 'src'          => 'quiqqer/frontend-users',
-                'defaultvalue' => 0
+                'defaultvalue' => 1
             ));
 
             // @todo category items

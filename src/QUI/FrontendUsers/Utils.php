@@ -7,11 +7,7 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
-use QUI\Utils\Text\XML;
-use QUI\Utils\DOM;
-use QUI\FrontendUsers\Controls\Profile\ControlWrapper;
 use QUI\Permissions;
-use Tracy\Debugger;
 
 /**
  * Class Utils
@@ -156,7 +152,7 @@ class Utils
      *
      * @param string $category
      * @param bool|string $settings
-     * @return QUI\Controls\Control|ControlWrapper
+     * @return QUI\Controls\Control
      *
      * @throws Exception
      */
@@ -171,11 +167,6 @@ class Utils
             if (class_exists($cls)) {
                 $Control = new $cls();
             }
-        }
-
-        // build default control wrapper if a category has no dedicated control class
-        if ($Control === null) {
-            $Control = new ControlWrapper($setting);
         }
 
         return $Control;
