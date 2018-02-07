@@ -31,15 +31,28 @@ class Address extends AbstractProfileControl
 
     /**
      * @return string
-     *
-     * @throws QUI\Users\Exception
      * @throws QUI\Exception
      */
     public function getBody()
     {
         /** @var QUI\Users\User $User */
-        $User          = QUI::getUserBySession();
-        $UserAddress   = $User->getStandardAddress();
+        $User = QUI::getUserBySession();
+
+        try {
+            $UserAddress = $User->getStandardAddress();
+        } catch (QUI\Users\Exception $Exception) {
+            // if no user address exist -> create one
+            $SystemUser = QUI::getUsers()->getSystemUser();
+
+            $UserAddress = $User->addAddress(array(
+                'firstname' => $User->getAttribute('firstname'),
+                'lastname'  => $User->getAttribute('lastname')
+            ), $SystemUser);
+
+            $User->setAttribute('address', $UserAddress->getId());
+            $User->save($SystemUser);
+        }
+
         $userPhoneList = $UserAddress->getPhoneList();
         $Engine        = QUI::getTemplateManager()->getEngine();
         $addressFields = QUI\FrontendUsers\Handler::getInstance()->getAddressFieldSettings();
