@@ -50,7 +50,7 @@ class Utils
 
     /**
      * Return all extra profile categories
-     * - search intranet.xml
+     * - search frontend-users.xml
      *
      * @return array
      */
@@ -102,9 +102,9 @@ class Utils
                     }
 
                     // xml
-                    if (isset($item['items'])) {
-                        // @todo
-                    }
+//                    if (isset($item['items'])) {
+//
+//                    }
 
                     $result[$categoryName]['items'][] = $item;
                 }
@@ -152,7 +152,7 @@ class Utils
      *
      * @param string $category
      * @param bool|string $settings
-     * @return QUI\Controls\Control
+     * @return QUI\FrontendUsers\Controls\Profile\AbstractProfileControl
      *
      * @throws Exception
      */

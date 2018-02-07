@@ -22,11 +22,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
     'URI',
 
+    'Locale',
     'Ajax',
     'qui/utils/Form'
 
-], function (QUI, QUIControl, QUILoader, URI, QUIAjax, QUIFormUtils) {
+], function (QUI, QUIControl, QUILoader, URI, QUILocale, QUIAjax, QUIFormUtils) {
     "use strict";
+
+    var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -234,6 +237,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         var Form   = self.$Elm.getElement(
                             '.quiqqer-frontendUsers-controls-profile-categoryContent'
                         );
+
+                        if (!result) {
+                            result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">' +
+                                QUILocale.get(lg, 'controls.profile.Profile.setting_error') +
+                                '</div>';
+                        }
 
                         var Ghost = new Element('div', {
                             html: result

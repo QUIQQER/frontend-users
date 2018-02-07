@@ -473,6 +473,10 @@
             <de><![CDATA[Profil-Kategorien, die dieser Benutzer/Gruppe sehen darf]]></de>
             <en><![CDATA[Profile categories this user/group can view]]></en>
         </locale>
+        <locale name="permission.quiqqer.frontendUsers.profile.view.user._header">
+            <de><![CDATA[Profil-Kategorien, die dieser Benutzer/Gruppe in der Kategorie "Benutzerdaten" sehen darf]]></de>
+            <en><![CDATA[Profile categories this user/group can view in the category "User data"]]></en>
+        </locale>
 
         <!-- Site types -->
         <locale name="quiqqer/frontend-users:types/registration.title">
@@ -498,6 +502,28 @@
         <locale name="quiqqer/frontend-users:types/profile.description">
             <de><![CDATA[Zeigt Benutzerdaten an und bietet die Möglichkeit, diese zu ändern (z.B. Adresse, Passwort etc.). Ist durch andere QUIQQER-Plugins erweiterbar.]]></de>
             <en><![CDATA[Shows user data and offers the possibility to edit them (e.g. address, passwort etc.). Is extendable via other QUIQQER plugins.]]></en>
+        </locale>
+
+        <!-- Category titles -->
+        <locale name="profile.avatar.title">
+            <de><![CDATA[Benutzerbild]]></de>
+            <en><![CDATA[Avatar]]></en>
+        </locale>
+        <locale name="profile.changepassword.title">
+            <de><![CDATA[Passwort ändern]]></de>
+            <en><![CDATA[Change password]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.title">
+            <de><![CDATA[Benutzerkonto löschen]]></de>
+            <en><![CDATA[Delete user account]]></en>
+        </locale>
+        <locale name="profile.address.title">
+            <de><![CDATA[Adresse]]></de>
+            <en><![CDATA[Address]]></en>
+        </locale>
+        <locale name="profile.data.title">
+            <de><![CDATA[Meine Daten]]></de>
+            <en><![CDATA[My data]]></en>
         </locale>
 
     </groups>
@@ -527,10 +553,6 @@
             <en><![CDATA[User data]]></en>
         </locale>
 
-        <locale name="profile.data.title">
-            <de><![CDATA[Meine Daten]]></de>
-            <en><![CDATA[My data]]></en>
-        </locale>
         <locale name="profile.userdata.save">
             <de><![CDATA[Speichern]]></de>
             <en><![CDATA[Save]]></en>
@@ -571,10 +593,6 @@
             <de><![CDATA[Passwort ändern]]></de>
             <en><![CDATA[Change password]]></en>
         </locale>
-        <locale name="profile.avatar.title">
-            <de><![CDATA[Benutzerbild]]></de>
-            <en><![CDATA[Avatar]]></en>
-        </locale>
         <locale name="exception.controls.profile.userdata.invalid_new_email_address">
             <de><![CDATA[Die neue E-Mail-Adresse ist nicht gültig. Bitte geben Sie eine gültige E-Mail-Adresse an, wenn Sie Ihre aktuelle E-Mail-Adresse ändern möchten.]]></de>
             <en><![CDATA[The new e-mail address is invalid. Please provide a valid e-mail address in order to change your current e-mail address.]]></en>
@@ -605,10 +623,6 @@
         </locale>
 
         <!-- Profile: ChangePassword -->
-        <locale name="profile.changepassword.title">
-            <de><![CDATA[Passwort ändern]]></de>
-            <en><![CDATA[Change password]]></en>
-        </locale>
         <locale name="profile.changepassword.label.password_old">
             <de><![CDATA[Aktuelles Passwort]]></de>
             <en><![CDATA[Current password]]></en>
@@ -631,10 +645,6 @@
         </locale>
 
         <!-- Profile: Delete account -->
-        <locale name="profile.deleteaccount.title">
-            <de><![CDATA[Benutzerkonto löschen]]></de>
-            <en><![CDATA[Delete user account]]></en>
-        </locale>
         <locale name="profile.deleteaccount.info">
             <de><![CDATA[Bitte klicken Sie auf den Button, um Ihr Benutzerkonto zu löschen. Nach einer Bestätigung per E-Mail wird Ihr Benutzerkonto unwiderruflich gelöscht.]]></de>
             <en><![CDATA[Please click on the button to delete your user account. After your verification via E-Mail your account will be irrevocably deleted.]]></en>
@@ -657,10 +667,6 @@
         </locale>
 
         <!-- Profile: Address -->
-        <locale name="profile.address.title">
-            <de><![CDATA[Adresse]]></de>
-            <en><![CDATA[Address]]></en>
-        </locale>
         <locale name="profile.address.btn.submit">
             <de><![CDATA[Speichern]]></de>
             <en><![CDATA[Save]]></en>
@@ -1036,6 +1042,12 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="controls.profile.userdata.email_already_taken">
             <de><![CDATA[Diese E-Mail-Adresse kann nicht verwendet werden. Bitte verwenden Sie eine gültige E-Mail-Adresse.]]></de>
             <en><![CDATA[This e-mail address cannot be used. Please use a valid e-mail address.]]></en>
+        </locale>
+        
+        <!-- Control: frontend/controls/profile/Profile -->
+        <locale name="controls.profile.Profile.setting_error">
+            <de><![CDATA[Beim Laden dieses Profil-Bereichs ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an einen Administrator.]]></de>
+            <en><![CDATA[An unexpected error occurred while loading this profile section. Please try again or contact an administrator.]]></en>
         </locale>
 
     </groups>

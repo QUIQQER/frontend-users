@@ -62,11 +62,14 @@ class Profile extends Control
 
         /**
          * @param $array
-         * @return int|null|string
+         * @return int|string|false
          */
         $getFirstCategory = function ($array) {
-            reset($array);
+            if (empty($array)) {
+                return false;
+            }
 
+            reset($array);
             return key($array);
         };
 
@@ -89,6 +92,7 @@ class Profile extends Control
             return $data['items'][0]['name'];
         };
 
+        // check view permissions for each category / setting
         foreach ($categories as $key => $category) {
             foreach ($category['items'] as $k => $setting) {
                 if (!Utils::hasPermissionToViewCategory($category['name'], $setting['name'])) {
@@ -103,6 +107,8 @@ class Profile extends Control
 
             if (empty($category['items'])) {
                 unset($categories[$key]);
+            } else {
+                $categories[$key]['items'] = array_values($categories[$key]['items']);
             }
         }
 

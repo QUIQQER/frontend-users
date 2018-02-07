@@ -224,6 +224,7 @@ class Events
      *
      * @param QUI\Package\Package $Package
      * @return void
+     * @throws QUI\Exception
      */
     public static function onPackageSetup(QUI\Package\Package $Package)
     {
@@ -382,6 +383,7 @@ class Events
      * Create view permissions for all Profile categories
      *
      * @return void
+     * @throws QUI\Exception
      */
     protected static function createProfileCategoryViewPermissions()
     {

@@ -11,14 +11,18 @@ use QUI\FrontendUsers\Utils;
  * Get profile control by category
  *
  * @param string $category
+ * @param string $settings
+ * @param string $project
+ * @param int $siteId
  * @return false|string - false if category does not exist or user has no permission -> category control html otherwise
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
     function ($category, $settings, $project, $siteId) {
         $category = Orthos::clear($category);
+        $settings = Orthos::clear($settings);
 
-        if (!Utils::hasPermissionToViewCategory($category)) {
+        if (!Utils::hasPermissionToViewCategory($category, $settings)) {
             return false;
         }
 
@@ -35,7 +39,12 @@ QUI::$Ajax->registerFunction(
         $Control->setAttribute('category', Orthos::clear($category));
         $Control->setAttribute('settings', Orthos::clear($settings));
 
-        $html = $Control->create();
+        try {
+            $html = $Control->create();
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return false;
+        }
 
         $result = QUI\Control\Manager::getCSS();
         $result .= $html;
