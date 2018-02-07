@@ -17,8 +17,10 @@ QUI::$Ajax->registerFunction(
         $categories = Utils::getProfileBarCategorySettings();
 
         foreach ($categories as $k => $data) {
-            if (!Utils::hasPermissionToViewCategory($data['name'])) {
-                unset($categories[$k]);
+            foreach ($data['items'] as $key => $item) {
+                if (!Utils::hasPermissionToViewCategory($data['name'], $item['name'])) {
+                    unset($categories[$k]['items'][$key]);
+                }
             }
         }
 
