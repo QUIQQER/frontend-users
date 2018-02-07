@@ -223,6 +223,7 @@ class Handler extends Singleton
      * Get all settings for user profile
      *
      * @return array
+     * @throws QUI\Exception
      */
     public function getUserProfileSettings()
     {
@@ -234,6 +235,7 @@ class Handler extends Singleton
      * Get all settings for user bar
      *
      * @return array
+     * @throws QUI\Exception
      */
     public function getProfileBarSettings()
     {
@@ -245,6 +247,7 @@ class Handler extends Singleton
      * Get registration settings concerning all Registars alike
      *
      * @return array
+     * @throws QUI\Exception
      */
     public function getRegistrationSettings()
     {
@@ -261,6 +264,7 @@ class Handler extends Singleton
      * Get login settings
      *
      * @return array
+     * @throws QUI\Exception
      */
     public function getLoginSettings()
     {
@@ -276,6 +280,7 @@ class Handler extends Singleton
      * Get address field settings
      *
      * @return array
+     * @throws QUI\Exception
      */
     public function getAddressFieldSettings()
     {
@@ -287,6 +292,7 @@ class Handler extends Singleton
      * Get settings for mail
      *
      * @return array
+     * @throws QUI\Exception
      */
     public function getMailSettings()
     {
@@ -299,6 +305,7 @@ class Handler extends Singleton
      *
      * @param string $registrarClass (optional) - Registar class path (namespace)
      * @return array
+     * @throws QUI\Exception
      */
     public function getRegistrarSettings($registrarClass = null)
     {
@@ -332,6 +339,7 @@ class Handler extends Singleton
      *
      * @param array $settings
      * @return void
+     * @throws QUI\Exception
      */
     public function setRegistrarSettings($settings)
     {
@@ -352,6 +360,7 @@ class Handler extends Singleton
      * @param QUI\Users\User $User
      * @param RegistrarInterface $Registrar
      * @return bool - success
+     * @throws QUI\Exception
      */
     public function sendActivationMail(QUI\Users\User $User, RegistrarInterface $Registrar)
     {
@@ -412,6 +421,7 @@ class Handler extends Singleton
      * @param QUI\Projects\Project $Project
      * @param string $userPassword (optional) - send user password
      * @return void
+     * @throws QUI\Exception
      */
     public function sendWelcomeMail(QUI\Users\User $User, QUI\Projects\Project $Project, $userPassword = null)
     {
@@ -470,6 +480,7 @@ class Handler extends Singleton
      * @param QUI\Users\User $User
      * @param QUI\Projects\Project $Project
      * @return void
+     * @throws QUI\Exception
      */
     public function sendRegistrationNotice(QUI\Users\User $User, QUI\Projects\Project $Project)
     {
@@ -521,6 +532,7 @@ class Handler extends Singleton
      * @param string $newEmail - New E-Mail-Adress
      * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
      * @return void
+     * @throws QUI\Exception
      */
     public function sendChangeEmailAddressMail(QUI\Users\User $User, $newEmail, $Project)
     {
@@ -668,6 +680,7 @@ class Handler extends Singleton
      *
      * @param QUI\Projects\Project $Project (optional) - if omitted use default project
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE registration site found
+     * @throws QUI\Exception
      */
     public function getRegistrationSite($Project = null)
     {
@@ -694,6 +707,7 @@ class Handler extends Singleton
      *
      * @param QUI\Projects\Project $Project (optional) - if omitted use default project
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE login site found
+     * @throws QUI\Exception
      */
     public function getLoginSite($Project = null)
     {
@@ -720,6 +734,7 @@ class Handler extends Singleton
      *
      * @param QUI\Projects\Project $Project (optional) - if omitted use default project
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE profile site found
+     * @throws QUI\Exception
      */
     public function getProfileSite($Project = null)
     {
@@ -747,6 +762,7 @@ class Handler extends Singleton
      *
      * @return void
      * @throws Exception
+     * @throws QUI\Exception
      */
     public function checkConfiguration()
     {
@@ -766,6 +782,7 @@ class Handler extends Singleton
      * Check if users are allowed to set their own username
      *
      * @return bool
+     * @throws QUI\Exception
      */
     public function isUsernameInputAllowed()
     {

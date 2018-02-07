@@ -7,7 +7,6 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Control;
 use QUI\Countries\Controls\Select as CountrySelect;
 use QUI\Utils\Security\Orthos;
 
@@ -16,7 +15,7 @@ use QUI\Utils\Security\Orthos;
  *
  * Change user address
  */
-class Address extends Control
+class Address extends AbstractProfileControl
 {
     /**
      * Address constructor.
@@ -32,12 +31,28 @@ class Address extends Control
 
     /**
      * @return string
+     * @throws QUI\Exception
      */
     public function getBody()
     {
         /** @var QUI\Users\User $User */
-        $User          = QUI::getUserBySession();
-        $UserAddress   = $User->getStandardAddress();
+        $User = QUI::getUserBySession();
+
+        try {
+            $UserAddress = $User->getStandardAddress();
+        } catch (QUI\Users\Exception $Exception) {
+            // if no user address exist -> create one
+            $SystemUser = QUI::getUsers()->getSystemUser();
+
+            $UserAddress = $User->addAddress(array(
+                'firstname' => $User->getAttribute('firstname'),
+                'lastname'  => $User->getAttribute('lastname')
+            ), $SystemUser);
+
+            $User->setAttribute('address', $UserAddress->getId());
+            $User->save($SystemUser);
+        }
+
         $userPhoneList = $UserAddress->getPhoneList();
         $Engine        = QUI::getTemplateManager()->getEngine();
         $addressFields = QUI\FrontendUsers\Handler::getInstance()->getAddressFieldSettings();
@@ -97,17 +112,16 @@ class Address extends Control
     }
 
     /**
-     * event: on save
+     * Method is called, when on save is triggered
+     *
+     * @return mixed|void
+     * @throws QUI\Users\Exception
+     * @throws QUI\Exception
      */
     public function onSave()
     {
         $Request = QUI::getRequest()->request;
-
-        if (!$Request->get('profile-save')) {
-            return;
-        }
-
-        $User = $this->getAttribute('User');
+        $User    = $this->getAttribute('User');
 
         if (!$User) {
             $User = QUI::getUserBySession();

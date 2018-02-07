@@ -7,7 +7,6 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Control;
 use QUI\FrontendUsers\Handler;
 use QUI\Verification\Verifier;
 
@@ -16,7 +15,7 @@ use QUI\Verification\Verifier;
  *
  * Delete user account
  */
-class DeleteAccount extends Control
+class DeleteAccount extends AbstractProfileControl
 {
     /**
      * DeleteAccount constructor.
@@ -33,6 +32,7 @@ class DeleteAccount extends Control
 
     /**
      * @return string
+     * @throws QUI\Exception
      */
     public function getBody()
     {
@@ -72,12 +72,6 @@ class DeleteAccount extends Control
      */
     public function onSave()
     {
-        $Request = QUI::getRequest()->request;
-
-        if (!$Request->get('profile-save')) {
-            return;
-        }
-
         try {
             Handler::getInstance()->sendDeleteUserConfirmationMail(
                 QUI::getUserBySession(),

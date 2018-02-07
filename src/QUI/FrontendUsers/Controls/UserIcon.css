@@ -3,10 +3,8 @@
     cursor: pointer;
     float: left;
     font-size: 40px;
-    height: 90px;
     overflow: hidden;
     position: relative;
-    width: 90px;
 }
 
 .quiqqer-frontendUsers-userIcon-icon {
@@ -17,10 +15,9 @@
     border-radius: 45px;
     float: left;
     font-size: 40px;
-    height: 100%;
     overflow: hidden;
     position: relative;
-    width: 100%;
+    text-align: center;
 }
 
 .quiqqer-frontendUsers-userIcon-loader {
@@ -36,9 +33,7 @@
 }
 
 .quiqqer-frontendUsers-userIcon-letter {
-    line-height: 90px;
     text-align: center;
-    width: 90px;
 }
 
 .quiqqer-frontendUsers-userIcon img {

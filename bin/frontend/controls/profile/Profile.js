@@ -22,11 +22,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
     'URI',
 
+    'Locale',
     'Ajax',
     'qui/utils/Form'
 
-], function (QUI, QUIControl, QUILoader, URI, QUIAjax, QUIFormUtils) {
+], function (QUI, QUIControl, QUILoader, URI, QUILocale, QUIAjax, QUIFormUtils) {
     "use strict";
+
+    var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -235,6 +238,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             '.quiqqer-frontendUsers-controls-profile-categoryContent'
                         );
 
+                        if (!result) {
+                            result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">' +
+                                QUILocale.get(lg, 'controls.profile.Profile.setting_error') +
+                                '</div>';
+                        }
+
                         var Ghost = new Element('div', {
                             html: result
                         });
@@ -261,13 +270,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         moofx(self.$Elm).animate({
                             height: Math.max(profileSize, menuSize)
                         }, {
-                            duration: 200,
+                            duration: 100,
                             callback: function () {
                                 moofx(Animation).animate({
                                     opacity: 1,
                                     left   : 0
                                 }, {
-                                    duration: 250,
+                                    duration: 100,
                                     callback: function () {
                                         self.$parseContent().then(resolve);
                                     }

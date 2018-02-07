@@ -7,11 +7,7 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
-use QUI\Utils\Text\XML;
-use QUI\Utils\DOM;
-use QUI\FrontendUsers\Controls\Profile\ControlWrapper;
 use QUI\Permissions;
-use Tracy\Debugger;
 
 /**
  * Class Utils
@@ -44,7 +40,7 @@ class Utils
 
             $dir = $Package->getDir();
 
-            if (file_exists($dir.'/frontend-users.xml')) {
+            if (file_exists($dir . '/frontend-users.xml')) {
                 $list[] = $Package;
             }
         }
@@ -54,7 +50,7 @@ class Utils
 
     /**
      * Return all extra profile categories
-     * - search intranet.xml
+     * - search frontend-users.xml
      *
      * @return array
      */
@@ -77,7 +73,7 @@ class Utils
             $Parser = new QUI\Utils\XML\Settings();
             $Parser->setXMLPath('//quiqqer/frontend-users/profile');
 
-            $Collection = $Parser->getCategories($Package->getDir().'/frontend-users.xml');
+            $Collection = $Parser->getCategories($Package->getDir() . '/frontend-users.xml');
 
             foreach ($Collection as $entry) {
                 $categoryName = $entry['name'];
@@ -106,9 +102,9 @@ class Utils
                     }
 
                     // xml
-                    if (isset($item['items'])) {
-                        // @todo
-                    }
+//                    if (isset($item['items'])) {
+//
+//                    }
 
                     $result[$categoryName]['items'][] = $item;
                 }
@@ -156,7 +152,7 @@ class Utils
      *
      * @param string $category
      * @param bool|string $settings
-     * @return QUI\Controls\Control|ControlWrapper
+     * @return QUI\FrontendUsers\Controls\Profile\AbstractProfileControl
      *
      * @throws Exception
      */
@@ -172,11 +168,6 @@ class Utils
                 $Control = new $cls();
             }
         }
-
-        // not sure if this is necessary
-//        if ($Control === null) {
-//            $Control = new ControlWrapper($setting);
-//        }
 
         return $Control;
     }
@@ -246,11 +237,11 @@ class Utils
             $newItems = array();
 
             foreach ($items as $iKey => $setting) {
-                if (!isset($setting['showinprofilbar'])) {
+                if (!isset($setting['showinprofilebar'])) {
                     continue;
                 }
 
-                if (!(int)$setting['showinprofilbar']) {
+                if (!(int)$setting['showinprofilebar']) {
                     continue;
                 }
 
@@ -268,21 +259,21 @@ class Utils
      * Checks if the given User is allowed to view a category
      *
      * @param string $category - Name of the category
-     * @param string|bool $settings (optional) - category settings
+     * @param string|bool $setting (optional) - category settings
      * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
      * @return bool
      */
-    public static function hasPermissionToViewCategory($category, $settings = false, $User = null)
+    public static function hasPermissionToViewCategory($category, $setting = false, $User = null)
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
         }
 
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $permission       = $permissionPrefix.$category;
+        $permission       = $permissionPrefix . $category;
 
-        if ($settings) {
-            $permission = $permission.'.'.$settings;
+        if ($setting) {
+            $permission = $permission . '.' . $setting;
         }
 
         return Permissions\Permission::hasPermission($permission, $User);
@@ -350,8 +341,8 @@ class Utils
         // load the translations
         foreach ($categories as $key => $category) {
             foreach ($category['items'] as $itemKey => $item) {
-                $itemUrl = $url.'/'.$category['name'];
-                $itemUrl = $itemUrl.'/'.$item['name'];
+                $itemUrl = $url . '/' . $category['name'];
+                $itemUrl = $itemUrl . '/' . $item['name'];
 
                 $categories[$key]['items'][$itemKey]['url'] = $itemUrl;
             }
@@ -374,5 +365,27 @@ class Utils
         }
 
         return true;
+    }
+
+    /**
+     * Get URL for Gravatar Avatar image
+     *
+     * @param string $email
+     * @param int $s [default] - Size [default: 80x80 px]
+     * @return string
+     */
+    public static function getGravatarUrl($email, $s = 80)
+    {
+        if ($s < 1) {
+            $s = 1;
+        } elseif ($s > 2048) {
+            $s = 2048;
+        }
+
+        $url = 'https://www.gravatar.com/avatar/';
+        $url .= md5(mb_strtolower(trim($email)));
+        $url .= "?s=$s&d=mm";
+
+        return $url;
     }
 }

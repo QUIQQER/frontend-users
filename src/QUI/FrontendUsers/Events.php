@@ -183,6 +183,22 @@ class Events
     }
 
     /**
+     * quiqqer/quiqqer: onUserCreate
+     *
+     * @param User $User
+     * @return void
+     * @throws QUI\Exception
+     */
+    public static function onUserCreate(User $User)
+    {
+        $Conf                     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $userGravatarDefaultValue = $Conf->get('userProfile', 'useGravatarUserDefaultValue');
+
+        $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $userGravatarDefaultValue);
+        $User->save(QUI::getUsers()->getSystemUser());
+    }
+
+    /**
      * quiqqer/quiqqer: onUserDelete
      *
      * @param \QUI\Users\User $User
@@ -208,6 +224,7 @@ class Events
      *
      * @param QUI\Package\Package $Package
      * @return void
+     * @throws QUI\Exception
      */
     public static function onPackageSetup(QUI\Package\Package $Package)
     {
@@ -366,8 +383,7 @@ class Events
      * Create view permissions for all Profile categories
      *
      * @return void
-     *
-     * @todo settings permissions
+     * @throws QUI\Exception
      */
     protected static function createProfileCategoryViewPermissions()
     {
@@ -375,26 +391,36 @@ class Events
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
 
         foreach (Utils::getProfileCategories() as $c) {
-            $permission = $permissionPrefix . $c['name'];
+            foreach ($c['items'] as $setting) {
+                $permission = $permissionPrefix . $c['name'] . '.' . $setting['name'];
 
-            try {
-                $Permissions->getPermissionData($permission);
-                continue;
-            } catch (\Exception $Exception) {
-                // if permission does not exist -> create it
+                try {
+                    $Permissions->getPermissionData($permission);
+                    continue;
+                } catch (\Exception $Exception) {
+                    // if permission does not exist -> create it
+                }
+
+                $title = $permission;
+
+                if (!empty($setting['title'])) {
+                    if (is_string($setting['title'])) {
+                        $title = $setting['title'];
+                    } elseif (is_array($setting['title']) && count($setting['title']) === 2) {
+                        $title = $setting['title'][0] . ' ' . $setting['title'][1];
+                    }
+                }
+
+                $Permissions->addPermission(array(
+                    'name'         => $permission,
+                    'title'        => $title,
+                    'desc'         => '',
+                    'type'         => 'bool',
+                    'area'         => '',
+                    'src'          => 'quiqqer/frontend-users',
+                    'defaultvalue' => 1
+                ));
             }
-
-            $Permissions->addPermission(array(
-                'name'         => $permission,
-                'title'        => $c['title'][0] . ' ' . $c['title'][1],
-                'desc'         => '',
-                'type'         => 'bool',
-                'area'         => '',
-                'src'          => 'quiqqer/frontend-users',
-                'defaultvalue' => 0
-            ));
-
-            // @todo category items
         }
     }
 }

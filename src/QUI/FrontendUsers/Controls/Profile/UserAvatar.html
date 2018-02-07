@@ -1,0 +1,28 @@
+{if $AvatarImage}
+<div class="quiqqer-frontendUsers-userAvatar-icon"
+     title="{$User->getName()}"
+     {if isset($avatarImageUrl)}style="background-image: url('{$avatarImageUrl}');" {/if}
+></div>
+{else}
+<span class="quiqqer-frontendUsers-userAvatar-icon-none">
+    Kein Bild festgelegt
+</span>
+{/if}
+
+{if $gravatarEnabled}
+<div class="quiqqer-frontendUsers-userAvatar-gravatar">
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users"
+                    var="profile.useravatar.gravatar_option"
+                    email=$User->getAttribute('email')
+            }
+        </span>
+        <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
+    </label>
+</div>
+
+<button type="submit" class="quiqqer-frontendUsers-userAvatar-saveButton">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
+</button>
+{/if}

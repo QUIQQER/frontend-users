@@ -4,12 +4,14 @@
 </noscript>
 {/if}
 
+
 <div class="quiqqer-frontendUsers-userIcon-icon"
      title="{$User->getName()}"
-     {if isset($avatar)}style="background-image: url('{$avatar}');" {/if}
+     style="height: {$iconHeight}px; width: {$iconWidth}px;{if isset($avatarImageUrl)} background-image: url('{$avatarImageUrl}');{/if}"
 >
+
 {if isset($firstLetter) && $firstLetter}
-<span class="quiqqer-frontendUsers-userIcon-letter">{$firstLetter}</span>
+<span class="quiqqer-frontendUsers-userIcon-letter" style="height: {$iconHeight}px; width: {$iconWidth}px; line-height: {$iconHeight}px;">{$firstLetter}</span>
 {/if}
 </div>
 

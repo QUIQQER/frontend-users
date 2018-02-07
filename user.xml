@@ -8,5 +8,6 @@
         <attribute>quiqqer.frontendUsers.userActivationRequired</attribute>
         <attribute>quiqqer.frontendUsers.activationLoginExecuted</attribute>
         <attribute>quiqqer.frontendUsers.emailVerified</attribute>
+        <attribute>quiqqer.frontendUsers.useGravatarIcon</attribute>
     </attributes>
 </user>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
+    <event on="onUserCreate" fire="\QUI\FrontendUsers\Events::onUserCreate"/>
     <event on="onUserActivate" fire="\QUI\FrontendUsers\Events::onUserActivate"/>
     <event on="onUserDelete" fire="\QUI\FrontendUsers\Events::onUserDelete"/>
     <event on="onPackageSetup" fire="\QUI\FrontendUsers\Events::onPackageSetup"/>

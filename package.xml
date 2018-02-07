@@ -8,7 +8,14 @@
             <locale group="quiqqer/frontend-users" var="package.description"/>
         </description>
 
-        <image src="URL_OPT_DIR/quiqqer/frontend-user/bin/images/Logo.jpg"/>
+        <image src="URL_OPT_DIR/quiqqer/frontend-users/bin/images/Logo.jpg"/>
+
+        <preview>
+            <image src="URL_OPT_DIR/quiqqer/frontend-users/bin/images/preview/Frontend_Registration.png"/>
+            <image src="URL_OPT_DIR/quiqqer/frontend-users/bin/images/preview/Frontend_Login.png"/>
+            <image src="URL_OPT_DIR/quiqqer/frontend-users/bin/images/preview/Frontend_Profile.png"/>
+            <image src="URL_OPT_DIR/quiqqer/frontend-users/bin/images/preview/Backend_Settings.png"/>
+        </preview>
 
         <support>
             <email><![CDATA[support@pcsg.de]]></email>
