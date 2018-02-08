@@ -20,9 +20,9 @@
         <support>
             <email><![CDATA[support@pcsg.de]]></email>
             <forum><![CDATA[https://community.quiqqer.com]]></forum>
-            <source><![CDATA[https://dev.quiqqer.com/quiqqer/frontend-user]]></source>
-            <issues><![CDATA[https://dev.quiqqer.com/quiqqer/frontend-user/issues]]></issues>
-            <wiki><![CDATA[https://dev.quiqqer.com/quiqqer/frontend-user/wikis/home]]></wiki>
+            <source><![CDATA[https://dev.quiqqer.com/quiqqer/frontend-users]]></source>
+            <issues><![CDATA[https://dev.quiqqer.com/quiqqer/frontend-users/issues]]></issues>
+            <wiki><![CDATA[https://dev.quiqqer.com/quiqqer/frontend-users/wikis/home]]></wiki>
         </support>
 
         <copyright>
