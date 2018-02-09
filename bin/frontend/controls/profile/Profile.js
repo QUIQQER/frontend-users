@@ -68,8 +68,44 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         create: function () {
             this.$Elm = this.parent();
 
-
             return this.$Elm;
+        },
+
+        /**
+         * Resize the profile control
+         *
+         * @return {Promise}
+         */
+        resize: function () {
+            var self      = this,
+                Elm       = this.getElm(),
+                Animation = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'),
+                Menu      = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categories');
+
+            var newHeight = Math.max(
+                Animation.getSize().y,
+                Animation.getScrollSize().y,
+                Menu.getSize().y
+            );
+
+            return new Promise(function (resolve) {
+                moofx(self.$Elm).animate({
+                    height: newHeight
+                }, {
+                    duration: 100,
+                    callback: function () {
+                        moofx(Animation).animate({
+                            opacity: 1,
+                            left   : 0
+                        }, {
+                            duration: 100,
+                            callback: function () {
+                                self.$parseContent().then(resolve);
+                            }
+                        });
+                    }
+                });
+            });
         },
 
         /**
@@ -181,6 +217,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
         /**
          * parse the content and set the event handling
+         *
+         * @return {Promise}
          */
         $parseContent: function () {
             return QUI.parse(this.$Elm);
@@ -248,8 +286,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             html: result
                         });
 
-                        var Content = Ghost.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation');
                         var styles  = Ghost.getElements('style');
+                        var Content = Ghost.getElement(
+                            '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
+                        );
 
                         Form.setStyle('height', height);
 
@@ -261,35 +301,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                         self.$setMenuItemActive(category, settings);
 
-                        var profileSize = Animation.getSize().y,
-                            menuSize    = self.$Elm.getElement(
-                                '.quiqqer-frontendUsers-controls-profile-categories'
-                            ).getSize().y;
-
-
-                        moofx(self.$Elm).animate({
-                            height: Math.max(profileSize, menuSize)
-                        }, {
-                            duration: 100,
-                            callback: function () {
-                                moofx(Animation).animate({
-                                    opacity: 1,
-                                    left   : 0
-                                }, {
-                                    duration: 100,
-                                    callback: function () {
-                                        self.$parseContent().then(resolve);
-                                    }
-                                });
-                            }
-                        });
-
                         self.$category = category;
                         self.$settings = settings;
 
                         if (setUrl) {
                             self.$setUri();
                         }
+
+                        (function () {
+                            self.resize().then(resolve);
+                        }).delay(100);
+
                     }, {
                         'package': 'quiqqer/frontend-users',
                         category : category,

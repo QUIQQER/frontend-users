@@ -85,7 +85,9 @@
 }
 
 .quiqqer-frontendUsers-controls-profile-categoryContentAnimation {
+    float: left;
     position: relative;
+    width: 100%;
 }
 
 .quiqqer-frontendUsers-controls-profile-control label {

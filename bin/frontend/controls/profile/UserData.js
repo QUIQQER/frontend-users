@@ -6,6 +6,7 @@
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', [
 
+    'qui/QUI',
     'qui/controls/Control',
     'utils/Controls',
     'qui/utils/Functions',
@@ -16,7 +17,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData.css'
 
-], function (QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
+], function (QUI, QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -69,6 +70,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
                 ChangeEmailElm.addEvent('click', function () {
                     EmailNewElm.removeClass('quiqqer-frontendUsers-userdata-email__hidden');
                     EmailNewInput.focus();
+
+                    // resize profile
+                    var ProfileNode = self.getElm().getParent(
+                        '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
+                    );
+
+                    var Profile = QUI.Controls.getById(ProfileNode.get('data-quiid'));
+
+                    if (Profile) {
+                        Profile.resize();
+                    }
                 });
 
                 var CheckMail = function (event) {
