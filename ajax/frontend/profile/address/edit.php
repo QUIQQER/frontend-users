@@ -15,8 +15,8 @@ QUI::$Ajax->registerFunction(
         $_REQUEST['addressId'] = $addressId;
         $_REQUEST['editSave']  = true;
 
-        $AddressStep = new \QUI\ERP\Accounting\Invoice\Order\Address();
-        $AddressStep->editAddress(json_decode($data, true));
+        $Address = new QUI\FrontendUsers\Controls\Address\Address();
+        $Address->editAddress(json_decode($data, true));
     },
     array('addressId', 'data')
 );

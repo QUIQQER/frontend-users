@@ -15,8 +15,8 @@ QUI::$Ajax->registerFunction(
     function () {
         $_REQUEST['create'] = true;
 
-        $Control = new QUI\ERP\Accounting\Invoice\Order\Address();
+        $Address = new QUI\FrontendUsers\Controls\Address\Address();
 
-        return QUI\ControlUtils::parse($Control);
+        return QUI\ControlUtils::parse($Address);
     }
 );

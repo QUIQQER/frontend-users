@@ -1,10 +1,10 @@
 <section class="quiqqer-frontend-users-address-edit">
     <header>
-        <h1>{locale group="quiqqer/order" var="ordering.step.title.Address.edit"}</h1>
+        <h1>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.title"}</h1>
     </header>
 
     <label>
-        <span>{locale group="quiqqer/order" var="company"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="company"}</span>
         <input type="text"
                name="company"
                value="{$Address->getAttribute('company')|escape:'html'}"
@@ -13,14 +13,14 @@
 
 
     <label>
-        <span>{locale group="quiqqer/order" var="salutation"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="salutation"}</span>
         <input type="text"
                name="salutation"
                value="{$Address->getAttribute('salutation')|escape:'html'}"
         />
     </label>
     <label>
-        <span>{locale group="quiqqer/order" var="firstname"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="firstname"}</span>
         <input type="text"
                name="firstname"
                value="{$Address->getAttribute('firstname')|escape:'html'}"
@@ -28,7 +28,7 @@
     </label>
 
     <label>
-        <span>{locale group="quiqqer/order" var="lastname"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="lastname"}</span>
         <input type="text"
                name="lastname"
                value="{$Address->getAttribute('lastname')|escape:'html'}"
@@ -36,7 +36,7 @@
     </label>
 
     <label>
-        <span>{locale group="quiqqer/order" var="street_no"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="street_no"}</span>
         <input type="text"
                name="street_no"
                value="{$Address->getAttribute('street_no')|escape:'html'}"
@@ -44,7 +44,7 @@
     </label>
 
     <label>
-        <span>{locale group="quiqqer/order" var="zip"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="zip"}</span>
         <input type="text"
                name="zip"
                value="{$Address->getAttribute('zip')|escape:'html'}"
@@ -52,7 +52,7 @@
     </label>
 
     <label>
-        <span>{locale group="quiqqer/order" var="city"}</span>
+        <span>{locale group="quiqqer/frontend-users" var="city"}</span>
         <input type="text"
                name="city"
                value="{$Address->getAttribute('city')|escape:'html'}"
@@ -75,7 +75,7 @@
     </label>
 
     <button type="submit" name="editSave" value="1" class="quiqqer-frontend-users-address-edit-button">
-        {locale group="quiqqer/order" var="ordering.step.title.Address.edit.btn"}
+        {locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.address.btn"}
     </button>
 
     <input type="hidden" name="addressId" value="{$Address->getId()}"/>

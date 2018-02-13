@@ -14,9 +14,9 @@ QUI::$Ajax->registerFunction(
     function ($addressId) {
         $_REQUEST['edit'] = $addressId;
 
-        $Control = new QUI\ERP\Accounting\Invoice\Order\Address();
+        $Address = new QUI\FrontendUsers\Controls\Address\Address();
 
-        return $Control->create();
+        return QUI\ControlUtils::parse($Address);
     },
     array('addressId')
 );

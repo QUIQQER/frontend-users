@@ -588,9 +588,58 @@
         </locale>
 
 
-        <locale name="dialog.ftontend-users.delete.address">
+        <locale name="dialog.frontend-users.delete.address">
             <de><![CDATA[Möchten Sie die Adresse wirklichen löschen?]]></de>
             <en><![CDATA[Do you really want to delete the address?]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.title">
+            <de><![CDATA[Neue Adresse anlegen]]></de>
+            <en><![CDATA[Create new address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.create.address.btn">
+            <de><![CDATA[Neue Adresse anlegen]]></de>
+            <en><![CDATA[Create new address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.edit.title">
+            <de><![CDATA[Adresse bearbeiten]]></de>
+            <en><![CDATA[Edit the address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.edit.address.btn">
+            <de><![CDATA[Änderungen speichern]]></de>
+            <en><![CDATA[Save changes]]></en>
+        </locale>
+
+        <locale name="salutation">
+            <de><![CDATA[Anrede]]></de>
+            <en><![CDATA[Salutation]]></en>
+        </locale>
+        <locale name="firstname">
+            <de><![CDATA[Vorname]]></de>
+            <en><![CDATA[Firstname]]></en>
+        </locale>
+        <locale name="lastname">
+            <de><![CDATA[Nachname]]></de>
+            <en><![CDATA[Lastname]]></en>
+        </locale>
+        <locale name="company">
+            <de><![CDATA[Firma]]></de>
+            <en><![CDATA[Company]]></en>
+        </locale>
+        <locale name="street_no">
+            <de><![CDATA[Strasse und Hausnummer]]></de>
+            <en><![CDATA[Street and house number]]></en>
+        </locale>
+        <locale name="zip">
+            <de><![CDATA[PLZ]]></de>
+            <en><![CDATA[Zip]]></en>
+        </locale>
+        <locale name="city">
+            <de><![CDATA[Stadt]]></de>
+            <en><![CDATA[City]]></en>
+        </locale>
+        <locale name="country">
+            <de><![CDATA[Land]]></de>
+            <en><![CDATA[Country]]></en>
         </locale>
     </groups>
 

@@ -33,7 +33,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader    = new QUILoader();
+            this.Loader   = new QUILoader();
+            this.$Profile = null;
+
             this.$imported = false;
             this.$injected = false;
 
@@ -78,6 +80,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 duration: 200
             });
 
+            // profile
+            var Parent = this.getElm().getParent('.quiqqer-frontendUsers-controls-profile');
+
+            if (Parent && Parent.get('data-quiid')) {
+                this.$Profile = QUI.Controls.getById(Parent.get('data-quiid'));
+            }
+
             this.resize();
         },
 
@@ -97,11 +106,34 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          * resize the control
          */
         resize: function () {
-            var Parent = this.getElm().getParent('.quiqqer-frontendUsers-controls-profile');
-
-            if (Parent && Parent.get('data-quiid')) {
-                QUI.Controls.getById(Parent.get('data-quiid')).resize();
+            if (!this.$Profile) {
+                return;
             }
+
+            var self      = this;
+            var Container = this.getElm().getElement('.quiqqer-frontend-users-address-container');
+
+            if (!Container) {
+                this.$Profile.resize();
+                return;
+            }
+
+            var Content = this.getElm().getElement('.quiqqer-frontend-users-address-container-content');
+
+            Container.setStyle('overflow', 'hidden');
+            Container.setStyle('marginBottom', 20);
+            Content.setStyle('height', 'initial');
+
+            self.$Profile.getElm().setStyle('overflow', 'hidden');
+
+            moofx(this.getElm()).animate({
+                height: Container.getScrollSize().y
+            }, {
+                duration: 200,
+                callback: function () {
+                    self.$Profile.resize();
+                }
+            });
         },
 
         /**
@@ -145,7 +177,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             // open delete dialog
             this.$openContainer(this.getElm()).then(function (Container) {
                 return self.getCreateTemplate().then(function (result) {
-                    var Content = Container.getElement('.quiqqer-frontend-users-address-container-content');
+                    var Content = Container.getElement(
+                        '.quiqqer-frontend-users-address-container-content'
+                    );
 
                     new Element('form', {
                         'class': 'quiqqer-frontend-users-address-container-create',
@@ -157,7 +191,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                         }
                     }).inject(Content);
 
+                    Content.getElement('header').inject(
+                        Container.getElement('.quiqqer-frontend-users-address-container-header')
+                    );
+
                     Content.getElement('[type="submit"]').addEvent('click', self.$clickCreateSubmit);
+
+                    self.resize();
                 });
             });
         },
@@ -234,7 +274,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
                 new Element('div', {
                     'class': 'quiqqer-frontend-users-address-container-delete-message',
-                    html   : QUILocale.get(lg, 'dialog.ftontend-users.delete.address')
+                    html   : QUILocale.get(lg, 'dialog.frontend-users.delete.address')
                 }).inject(Content);
 
                 new Element('button', {
@@ -297,7 +337,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     onError  : reject
                 });
             });
-
         },
 
         //endregion
@@ -323,20 +362,32 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
             this.$openContainer(this.getElm()).then(function (Container) {
                 return self.getEditTemplate(addressId).then(function (result) {
-                    Container.addClass(
-                        'quiqqer-frontend-users-address-container-edit'
-                    );
-
                     var Content = Container.getElement(
                         '.quiqqer-frontend-users-address-container-content'
                     );
 
                     new Element('form', {
-                        'class': 'quiqqer-frontend-users-address-container-edit-message',
-                        html   : result
+                        'class': 'quiqqer-frontend-users-address-container-edit',
+                        html   : result,
+                        events : {
+                            submit: function (event) {
+                                event.stop();
+                            }
+                        }
                     }).inject(Content);
+                    //
+                    // new Element('form', {
+                    //     'class': 'quiqqer-frontend-users-address-container-edit-message',
+                    //     html   : result
+                    // }).inject(Content);
+
+                    Content.getElement('header').inject(
+                        Container.getElement('.quiqqer-frontend-users-address-container-header')
+                    );
 
                     Content.getElement('[name="editSave"]').addEvent('click', self.$clickEditSave);
+
+                    self.resize();
                 });
             });
         },
@@ -396,8 +447,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             var self = this;
 
             var Container = new Element('div', {
-                'class': 'quiqqer-frontend-users-address-container',
-                html   : '<div class="quiqqer-frontend-users-address-container-content"></div>'
+                'class' : 'quiqqer-frontend-users-address-container',
+                html    : '<div class="quiqqer-frontend-users-address-container-header"></div>' +
+                '<div class="quiqqer-frontend-users-address-container-content"></div>',
+                tabIndex: -1
             }).inject(Parent);
 
             new Element('span', {
@@ -416,6 +469,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 }, {
                     duration: 250,
                     callback: function () {
+                        Container.focus();
                         resolve(Container);
                     }
                 });
@@ -429,6 +483,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          * @return {Promise}
          */
         $closeContainer: function (Container) {
+            var self = this;
+
             return new Promise(function (resolve) {
                 moofx(Container).animate({
                     left   : -50,
@@ -437,6 +493,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     duration: 250,
                     callback: function () {
                         Container.destroy();
+                        self.getElm().setStyle('height', null);
+
+                        if (self.$Profile) {
+                            self.$Profile.getElm().setStyle('overflow', null);
+                        }
+
+                        self.resize();
                         resolve();
                     }
                 });

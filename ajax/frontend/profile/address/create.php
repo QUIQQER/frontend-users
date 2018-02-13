@@ -14,8 +14,8 @@ QUI::$Ajax->registerFunction(
     function ($data) {
         $_REQUEST['createSave'] = true;
 
-        $AddressStep = new \QUI\ERP\Accounting\Invoice\Order\Address();
-        $AddressStep->createAddress(json_decode($data, true));
+        $Address = new QUI\FrontendUsers\Controls\Address\Address();
+        $Address->createAddress(json_decode($data, true));
     },
     array('data')
 );
