@@ -1,0 +1,51 @@
+<section class="quiqqer-frontend-users-address">
+    <div class="quiqqer-frontend-users-address-description">
+        <div class="quiqqer-frontend-users-address-description-text">
+            {locale group="quiqqer/frontend-users" var="control.address.title.Address.description"}
+        </div>
+
+        <button name="create" class="quiqqer-frontend-users-address-description-button">
+            <span class="fa fa-plus"></span>
+            <span>{locale group="quiqqer/frontend-users" var="control.address.title.Address.addButton"}</span>
+        </button>
+    </div>
+
+    <div class="quiqqer-frontend-users-address-list">
+        {if $User->getId()}
+        {* Logged in user *}
+
+        {foreach $addresses as $Address}
+        <div class="quiqqer-frontend-users-address-list-entry">
+            <header>
+                <label>
+                    <span class="fa fa-address-card-o"></span>
+                    {locale group="quiqqer/frontend-users" var="control.address.header.title"}
+                    <input type="hidden"
+                           name="address"
+                           value="{$Address->getId()}"
+                    >
+                </label>
+            </header>
+            <address>
+                {$Address->render()}
+            </address>
+            <div class="quiqqer-frontend-users-address-list-entry-buttons">
+                <button type="submit" name="edit" value="{$Address->getId()}">
+                    <span class="fa fa-edit"></span>
+                    <span>
+                        {locale group="quiqqer/frontend-users" var="control.address.title.Address.editButton"}
+                    </span>
+                </button>
+                <button type="submit" name="delete" value="{$Address->getId()}">
+                    <span class="fa fa-trash"></span>
+                    <span>
+                        {locale group="quiqqer/frontend-users" var="control.address.title.Address.deleteButton"}
+                    </span>
+                </button>
+            </div>
+        </div>
+        {/foreach}
+        {/if}
+
+    </div>
+</section>
