@@ -11,6 +11,8 @@
     </div>
 
     <div class="quiqqer-frontend-users-address-list">
+        {template_event name="quiqqer::frontend-users::addressListBegin"}
+
         {if $User->getId()}
         {* Logged in user *}
 
@@ -47,5 +49,6 @@
         {/foreach}
         {/if}
 
+        {template_event name="quiqqer::frontend-users::addressListEnd"}
     </div>
 </section>
