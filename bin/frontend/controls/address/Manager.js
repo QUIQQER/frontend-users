@@ -56,10 +56,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             this.$imported = true;
             this.getElm().set('data-quiid', this.getId());
 
-            console.warn('$onImport');
-            console.warn(this.getElm());
-            console.warn(this.getId());
-
             var entries = this.getElm().getElements(
                 '.quiqqer-frontend-users-address-list-entry'
             );
@@ -353,7 +349,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             var self   = this,
                 Target = event.target;
 
-            if (Target.nodeName !== 'button') {
+            if (Target.nodeName !== 'BUTTON') {
                 Target = Target.getParent('button');
             }
 
@@ -375,11 +371,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                             }
                         }
                     }).inject(Content);
-                    //
-                    // new Element('form', {
-                    //     'class': 'quiqqer-frontend-users-address-container-edit-message',
-                    //     html   : result
-                    // }).inject(Content);
 
                     Content.getElement('header').inject(
                         Container.getElement('.quiqqer-frontend-users-address-container-header')
@@ -409,7 +400,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
             require(['qui/utils/Form'], function (FormUtils) {
                 var formData = FormUtils.getFormData(Form);
-                console.warn(formData);
+
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_edit', function () {
                     self.$closeContainer(Container);
                     self.refresh();

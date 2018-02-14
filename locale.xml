@@ -1105,7 +1105,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Löschen]]></de>
             <en><![CDATA[Delete]]></en>
         </locale>
-
+        <locale name="exception.add.address.not.allowed">
+            <de><![CDATA[Diese Funktion ist deaktiviert.]]></de>
+            <en><![CDATA[This function is deactivated.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
