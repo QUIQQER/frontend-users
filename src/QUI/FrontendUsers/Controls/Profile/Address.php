@@ -35,6 +35,20 @@ class Address extends AbstractProfileControl
      */
     public function getBody()
     {
+        $Package = QUI::getPackage('quiqqer/frontend-users');
+        $Config  = $Package->getConfig();
+
+        if ($Config->get('userProfile', 'useAddressManagement')) {
+            $Engine = QUI::getTemplateManager()->getEngine();
+
+            $Engine->assign(array(
+                'User'    => QUI::getUserBySession(),
+                'manager' => true
+            ));
+
+            return $Engine->fetch(dirname(__FILE__).'/Address.html');
+        }
+
         /** @var QUI\Users\User $User */
         $User = QUI::getUserBySession();
 
@@ -108,7 +122,7 @@ class Address extends AbstractProfileControl
             'addressFields' => $addressFields
         ));
 
-        return $Engine->fetch(dirname(__FILE__) . '/Address.html');
+        return $Engine->fetch(dirname(__FILE__).'/Address.html');
     }
 
     /**
@@ -120,6 +134,14 @@ class Address extends AbstractProfileControl
      */
     public function onSave()
     {
+        $Package = QUI::getPackage('quiqqer/frontend-users');
+        $Config  = $Package->getConfig();
+
+        if ($Config->get('userProfile', 'useAddressManagement')) {
+            return;
+        }
+
+
         $Request = QUI::getRequest()->request;
         $User    = $this->getAttribute('User');
 
