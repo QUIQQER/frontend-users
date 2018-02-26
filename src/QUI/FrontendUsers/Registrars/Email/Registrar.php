@@ -27,7 +27,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
-        $SystemUser = QUI::getUsers()->getSystemUser();
+        $SystemUser           = QUI::getUsers()->getSystemUser();
+        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+        $useAddress           = boolval($registrationSettings['addressInput']);
 
         /** @var QUI\Users\User $User */
 
@@ -35,50 +38,52 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $User->setAttribute('email', $this->getAttribute('email'));
 
         // set address data
-        $UserAddress = $User->addAddress(array(
-            'salutation' => $this->getAttribute('salutation'),
-            'firstname'  => $this->getAttribute('firstname'),
-            'lastname'   => $this->getAttribute('lastname'),
-            'mail'       => $this->getAttribute('email'),
-            'company'    => $this->getAttribute('company'),
-            'street_no'  => $this->getAttribute('street_no'),
-            'zip'        => $this->getAttribute('zip'),
-            'city'       => $this->getAttribute('city'),
-            'country'    => mb_strtolower($this->getAttribute('country'))
-        ), $SystemUser);
+        if ($useAddress) {
+            $UserAddress = $User->addAddress(array(
+                'salutation' => $this->getAttribute('salutation'),
+                'firstname'  => $this->getAttribute('firstname'),
+                'lastname'   => $this->getAttribute('lastname'),
+                'mail'       => $this->getAttribute('email'),
+                'company'    => $this->getAttribute('company'),
+                'street_no'  => $this->getAttribute('street_no'),
+                'zip'        => $this->getAttribute('zip'),
+                'city'       => $this->getAttribute('city'),
+                'country'    => mb_strtolower($this->getAttribute('country'))
+            ), $SystemUser);
 
-        $User->setAttributes(array(
-            'firstname' => $this->getAttribute('firstname'),
-            'lastname'  => $this->getAttribute('lastname'),
-            'address'   => $UserAddress->getId()    // set as main address
-        ));
-
-        $tel    = $this->getAttribute('phone');
-        $mobile = $this->getAttribute('mobile');
-        $fax    = $this->getAttribute('fax');
-
-        if (!empty($tel)) {
-            $UserAddress->addPhone(array(
-                'type' => 'tel',
-                'no'   => $tel
+            $User->setAttributes(array(
+                'firstname' => $this->getAttribute('firstname'),
+                'lastname'  => $this->getAttribute('lastname'),
+                'address'   => $UserAddress->getId()    // set as main address
             ));
-        }
 
-        if (!empty($mobile)) {
-            $UserAddress->addPhone(array(
-                'type' => 'mobile',
-                'no'   => $mobile
-            ));
-        }
+            $tel    = $this->getAttribute('phone');
+            $mobile = $this->getAttribute('mobile');
+            $fax    = $this->getAttribute('fax');
 
-        if (!empty($fax)) {
-            $UserAddress->addPhone(array(
-                'type' => 'fax',
-                'no'   => $fax
-            ));
-        }
+            if (!empty($tel)) {
+                $UserAddress->addPhone(array(
+                    'type' => 'tel',
+                    'no'   => $tel
+                ));
+            }
 
-        $UserAddress->save($SystemUser);
+            if (!empty($mobile)) {
+                $UserAddress->addPhone(array(
+                    'type' => 'mobile',
+                    'no'   => $mobile
+                ));
+            }
+
+            if (!empty($fax)) {
+                $UserAddress->addPhone(array(
+                    'type' => 'fax',
+                    'no'   => $fax
+                ));
+            }
+
+            $UserAddress->save($SystemUser);
+        }
 
         if ($this->getAttribute('password')) {
             $User->setPassword($this->getAttribute('password'), $SystemUser);
