@@ -78,7 +78,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             ));
         }
 
-        $UserAddress->save();
+        $UserAddress->save($SystemUser);
 
         if ($this->getAttribute('password')) {
             $User->setPassword($this->getAttribute('password'), $SystemUser);
