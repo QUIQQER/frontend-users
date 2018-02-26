@@ -28,6 +28,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
                 </conf>
+                <conf name="useAddressManagement">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
             </section>
 
             <section name="disable">
@@ -180,6 +184,15 @@
                         <title>
                             <locale group="quiqqer/frontend-users" var="settings.section.userAccount.title"/>
                         </title>
+
+                        <input conf="userProfile.useAddressManagement" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.description"/>
+                            </description>
+                        </input>
 
                         <input conf="userProfile.useGravatar" type="checkbox">
                             <text>

@@ -85,7 +85,9 @@
 }
 
 .quiqqer-frontendUsers-controls-profile-categoryContentAnimation {
+    float: left;
     position: relative;
+    width: 100%;
 }
 
 .quiqqer-frontendUsers-controls-profile-control label {
@@ -102,7 +104,7 @@
 
 .quiqqer-frontendUsers-controls-profile-control input {
     padding: 10px;
-    width: 66%;
+    width: 50%;
 }
 
 /** user
