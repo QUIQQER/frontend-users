@@ -126,7 +126,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
                 // check for CAPTCHA (if used)
                 if (self.getAttribute('usecaptcha')) {
-                    isValid = isValid && self.$captchaResponse;
+                    isValid            = isValid && self.$captchaResponse;
+                    isValid            = isValid && self.$captchaResponse;
+                    SubmitBtn.disabled = !self.$captchaResponse;
                 }
 
                 //SubmitBtn.disabled = isValid;
