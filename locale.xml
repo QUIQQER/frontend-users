@@ -70,6 +70,14 @@
             <de><![CDATA[Sichtbare Kategorien im Benutzer-Profil]]></de>
             <en><![CDATA[Visible categories in the User Profile]]></en>
         </locale>
+        <locale name="profile.userdata.title">
+            <de><![CDATA[Benutzerdaten]]></de>
+            <en><![CDATA[User data]]></en>
+        </locale>
+        <locale name="profile.userdata.additional.title">
+            <de><![CDATA[Zusätzliche Daten]]></de>
+            <en><![CDATA[Additional data]]></en>
+        </locale>
         <locale name="profile.userData.text">
             <de>
                 <![CDATA[Darf seine grundlegenden Benutzerdaten ändern (Vorname, Nachname, Geburtstag, E-Mail-Adresse, Benutzername)]]></de>

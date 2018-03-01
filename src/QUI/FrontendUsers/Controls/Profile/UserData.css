@@ -1,3 +1,16 @@
+.quiqqer-frontendUsers-userdata-section,
+.quiqqer-frontendUsers-userdata-address,
+.quiqqer-frontendUsers-userdata-address-additional {
+    clear: both;
+    max-width: 600px;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-userdata-saveButton {
+    clear: both;
+    display: block;
+}
+
 .quiqqer-frontendUsers-userdata-email__hidden {
     display: none;
 }
@@ -9,23 +22,53 @@
 }
 
 .quiqqer-frontendUsers-userdata-label {
-    display: block;
-    width: 100%;
+    float: left;
+    margin-bottom: 5px;
+    width: 30%;
 }
 
 .package-intranet-profile-birthday {
-    width: 80%;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-userdata-address {
+    float: left;
+    width: 100%;
 }
 
 .quiqqer-frontendUsers-controls-profile-userdata input[name="firstname"],
-.quiqqer-frontendUsers-controls-profile-userdata input[name="lastname"] {
-    display: block;
-    width: 80%;
+.quiqqer-frontendUsers-controls-profile-userdata input[name="lastname"],
+.quiqqer-frontendUsers-controls-profile-userdata input[name="street_no"],
+.quiqqer-frontendUsers-controls-profile-userdata input[name="zip"],
+.quiqqer-frontendUsers-controls-profile-userdata input[name="city"],
+.quiqqer-frontendUsers-userdata-address-country-select,
+.quiqqer-frontendUsers-userdata-field {
+    float: left;
+    width: 70%;
+}
+
+.quiqqer-frontendUsers-controls-profile-userdata select[name="country"] {
+    display: none;
+}
+
+.quiqqer-frontendUsers-controls-profile-userdata .qui-select {
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-userdata-address-country,
+.quiqqer-frontendUsers-controls-profile-userdata .qui-select,
+.quiqqer-frontendUsers-controls-profile-userdata .qui-select .text {
+    height: 40px;
+    line-height: 36px;
+}
+
+.quiqqer-frontendUsers-controls-profile-userdata .qui-select .drop-icon {
+    height: 36px;
 }
 
 .quiqqer-frontendUsers-userdata-email {
     display: block;
-    width: 80%;
+    width: 100%;
 }
 
 .quiqqer-frontendUsers-userdata-email input {

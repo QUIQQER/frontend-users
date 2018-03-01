@@ -27,7 +27,7 @@ class UserData extends AbstractProfileControl
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-userdata');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
+        $this->addCSSFile(dirname(__FILE__).'/UserData.css');
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData');
     }
@@ -38,16 +38,16 @@ class UserData extends AbstractProfileControl
      */
     public function getBody()
     {
+        $action               = false;
+        $emailChangeRequested = true;
+
+        $User             = QUI::getUserBySession();
         $Engine           = QUI::getTemplateManager()->getEngine();
-        $action           = false;
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
         if (!empty($_REQUEST['action'])) {
             $action = $_REQUEST['action'];
         }
-
-        $emailChangeRequested = true;
-        $User                 = QUI::getUserBySession();
 
         try {
             QUI\Verification\Verifier::getVerificationByIdentifier(
@@ -59,14 +59,22 @@ class UserData extends AbstractProfileControl
             $emailChangeRequested = false;
         }
 
+        /* @var $User QUI\Users\User */
+        try {
+            $Address = $User->getStandardAddress();
+        } catch (QUI\Users\Exception $Exception) {
+            $Address = $User->addAddress([]);
+        }
+
         $Engine->assign(array(
-            'User'              => QUI::getUserBySession(),
+            'User'              => $User,
+            'Address'           => $Address,
             'action'            => $action,
             'changeMailRequest' => $emailChangeRequested,
             'username'          => $RegistrarHandler->isUsernameInputAllowed()
         ));
 
-        return $Engine->fetch(dirname(__FILE__) . '/UserData.html');
+        return $Engine->fetch(dirname(__FILE__).'/UserData.html');
     }
 
     /**
@@ -131,8 +139,8 @@ class UserData extends AbstractProfileControl
             && $Request->get('birth_month')
             && $Request->get('birth_day')) {
             $bday .= $Request->get('birth_year');
-            $bday .= '-' . $Request->get('birth_month');
-            $bday .= '-' . $Request->get('birth_day');
+            $bday .= '-'.$Request->get('birth_month');
+            $bday .= '-'.$Request->get('birth_day');
             $Request->set('birthday', $bday);
         }
 
