@@ -89,6 +89,12 @@ class UserData extends AbstractProfileControl
         $newEmail = $Request->get('emailNew');
         $User     = QUI::getUserBySession();
 
+        if (QUI::getUsers()->isNobodyUser($User)) {
+            return;
+        }
+
+        /* @var $User QUI\Users\User */
+
         if (!empty($newEmail)) {
             if (!Orthos::checkMailSyntax($newEmail)) {
                 throw new QUI\FrontendUsers\Exception(array(
@@ -151,5 +157,45 @@ class UserData extends AbstractProfileControl
         }
 
         $User->save();
+
+
+        // update first address
+        try {
+            $Address     = $User->getStandardAddress();
+            $addressData = [];
+
+            if ($Request->get('firstname')) {
+                $addressData['firstname'] = $Request->get('firstname');
+            }
+
+            if ($Request->get('lastname')) {
+                $addressData['lastname'] = $Request->get('lastname');
+            }
+
+            if ($Request->get('company')) {
+                $addressData['company'] = $Request->get('company');
+            }
+
+            if ($Request->get('street_no')) {
+                $addressData['street_no'] = $Request->get('street_no');
+            }
+
+            if ($Request->get('zip')) {
+                $addressData['zip'] = $Request->get('zip');
+            }
+
+            if ($Request->get('city')) {
+                $addressData['city'] = $Request->get('city');
+            }
+
+            if ($Request->get('country')) {
+                $addressData['country'] = $Request->get('country');
+            }
+
+            $Address->setAttributes($addressData);
+            $Address->save();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
     }
 }

@@ -31,18 +31,36 @@
         <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
     </header>
 
+    <label class="quiqqer-order-customerData-edit-company">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/order" var="company"}
+        </span>
+        <input type="text"
+               name="company"
+               class="quiqqer-frontendUsers-userdata-field"
+               autocomplete="organization"
+               value="{$Address->getAttribute('company')|escape:'html'}"
+        />
+    </label>
+
     <label class="quiqqer-frontendUsers-userdata-address-firstname">
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.firstname"}
         </span>
-        <input name="firstname" value="{$User->getAttribute('firstname')|escape:'html'}"/>
+        <input name="firstname"
+               autocomplete="given-name"
+               value="{$User->getAttribute('firstname')|escape:'html'}"
+        />
     </label>
 
     <label class="quiqqer-frontendUsers-userdata-address-lastname">
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.lastname"}
         </span>
-        <input name="lastname" value="{$User->getAttribute('lastname')|escape:'html'}"/>
+        <input name="lastname"
+               autocomplete="family-name"
+               value="{$User->getAttribute('lastname')|escape:'html'}"
+        />
     </label>
 
     <label class="quiqqer-frontendUsers-userdata-address-street">
@@ -51,6 +69,7 @@
         </span>
         <input type="text"
                name="street_no"
+               autocomplete="street-address"
                value="{$Address->getAttribute('street_no')|escape:'html'}"
         />
     </label>
@@ -61,6 +80,7 @@
         </span>
         <input type="text"
                name="zip"
+               autocomplete="postal-code"
                value="{$Address->getAttribute('zip')|escape:'html'}"
         />
     </label>
@@ -71,6 +91,7 @@
         </span>
         <input type="text"
                name="city"
+               autocomplete="address-level2"
                value="{$Address->getAttribute('city')|escape:'html'}"
         />
     </label>
@@ -140,7 +161,10 @@
             {locale group="quiqqer/frontend-users" var="profile.userdata.email"}
         </span>
         <div class="quiqqer-frontendUsers-userdata-email">
-            <input name="email" value="{$User->getAttribute('email')|escape:'html'}" disabled/>
+            <input name="email" autocomplete="email"
+                   value="{$User->getAttribute('email')|escape:'html'}"
+                   disabled
+            />
             <span class="fa fa-edit quiqqer-frontendUsers-userdata-email-edit"></span>
         </div>
     </label>
