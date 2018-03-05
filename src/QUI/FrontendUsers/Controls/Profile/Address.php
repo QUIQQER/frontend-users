@@ -137,7 +137,7 @@ class Address extends AbstractProfileControl
         $Package = QUI::getPackage('quiqqer/frontend-users');
         $Config  = $Package->getConfig();
 
-        if ($Config->get('userProfile', 'useAddressManagement')) {
+        if (!$Config->get('userProfile', 'useAddressManagement')) {
             return;
         }
 
@@ -147,6 +147,37 @@ class Address extends AbstractProfileControl
 
         if (!$User) {
             $User = QUI::getUserBySession();
+        }
+
+        if (QUI::getUsers()->isNobodyUser($User)) {
+            return;
+        }
+
+        if ($Request->get('editSave') || $Request->get('createSave')) {
+            $this->saveAddress($User);
+        }
+
+        $User->save();
+    }
+
+    /**
+     * @param QUI\Users\User $User
+     * @throws QUI\Exception
+     * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Permissions\Exception
+     * @throws QUI\Users\Exception
+     */
+    protected function saveAddress(QUI\Users\User $User)
+    {
+        $Request = QUI::getRequest()->request;
+        $User    = $this->getAttribute('User');
+
+        if (!$User) {
+            $User = QUI::getUserBySession();
+        }
+
+        if (QUI::getUsers()->isNobodyUser($User)) {
+            return;
         }
 
         /** @var QUI\Users\User $User */

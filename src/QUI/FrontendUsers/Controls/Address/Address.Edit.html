@@ -3,14 +3,7 @@
         <h1>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.title"}</h1>
     </header>
 
-    <label>
-        <span>{locale group="quiqqer/frontend-users" var="company"}</span>
-        <input type="text"
-               name="company"
-               value="{$Address->getAttribute('company')|escape:'html'}"
-        />
-    </label>
-
+    {template_event name="quiqqer::frontend-users::user-address-edit-begin" User=$User Address=$Address}
 
     <label>
         <span>{locale group="quiqqer/frontend-users" var="salutation"}</span>
@@ -19,6 +12,7 @@
                value="{$Address->getAttribute('salutation')|escape:'html'}"
         />
     </label>
+
     <label>
         <span>{locale group="quiqqer/frontend-users" var="firstname"}</span>
         <input type="text"
@@ -73,6 +67,8 @@
             {/foreach}
         </select>
     </label>
+
+    {template_event name="quiqqer::frontend-users::user-address-edit-end" User=$User Address=$Address}
 
     <button type="submit" name="editSave" value="1" class="quiqqer-frontend-users-address-edit-button">
         {locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.address.btn"}

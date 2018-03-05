@@ -31,17 +31,7 @@
         <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
     </header>
 
-    <label class="quiqqer-order-customerData-edit-company">
-        <span class="quiqqer-frontendUsers-userdata-label">
-            {locale group="quiqqer/order" var="company"}
-        </span>
-        <input type="text"
-               name="company"
-               class="quiqqer-frontendUsers-userdata-field"
-               autocomplete="organization"
-               value="{$Address->getAttribute('company')|escape:'html'}"
-        />
-    </label>
+    {template_event name="quiqqer::frontend-users::profile::customer-data-begin" User=$User Address=$Address}
 
     <label class="quiqqer-frontendUsers-userdata-address-firstname">
         <span class="quiqqer-frontendUsers-userdata-label">
@@ -108,11 +98,13 @@
             }
         </span>
     </label>
+
+    {template_event name="quiqqer::frontend-users::profile::customer-data-end" User=$User Address=$Address}
 </section>
 
 {template_event name="quiqqer::frontend-users::profile::user-data-middle" User=$User Address=$Address}
 
-<section class="quiqqer-frontendUsers-userdata-address-additional">
+<section class="quiqqer-frontendUsers-userdata-address-additional quiqqer-frontendUsers-userdata-section">
     <header>
         <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.additional.title"}</h2>
     </header>

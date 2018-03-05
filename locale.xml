@@ -587,14 +587,17 @@
             <en><![CDATA[Delete user account]]></en>
         </locale>
         <locale name="profile.address.title">
-            <de><![CDATA[Adresse]]></de>
-            <en><![CDATA[Address]]></en>
+            <de><![CDATA[Adressen]]></de>
+            <en><![CDATA[Addresses]]></en>
+        </locale>
+        <locale name="profile.address.category.title">
+            <de><![CDATA[Adressenverwaltung]]></de>
+            <en><![CDATA[Address management]]></en>
         </locale>
         <locale name="profile.data.title">
             <de><![CDATA[Meine Daten]]></de>
             <en><![CDATA[My data]]></en>
         </locale>
-
 
         <locale name="dialog.frontend-users.delete.address">
             <de><![CDATA[Möchten Sie die Adresse wirklichen löschen?]]></de>
