@@ -1095,6 +1095,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Adresse]]></de>
             <en><![CDATA[Address]]></en>
         </locale>
+        <locale name="control.address.header.defaultAddress.title">
+            <de><![CDATA[Standard-Adresse]]></de>
+            <en><![CDATA[Default address]]></en>
+        </locale>
         <locale name="control.address.title.Address.addButton">
             <de><![CDATA[Neue Adresse hinzufügen]]></de>
             <en><![CDATA[Add new address]]></en>

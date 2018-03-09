@@ -27,7 +27,11 @@
             <header>
                 <label>
                     <span class="fa fa-address-card-o"></span>
+                    {if $Address->getId() == $User->getAttribute('address')}
+                    {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
+                    {else}
                     {locale group="quiqqer/frontend-users" var="control.address.header.title"}
+                    {/if}
                     <input type="hidden"
                            name="address"
                            value="{$Address->getId()}"
