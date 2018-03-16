@@ -258,11 +258,11 @@ class Handler extends Singleton
         $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $settings = $Conf->getSection('registration');
 
-        if (!isset($settings['termsOfUseSite'])) {
+        if (!empty($settings['termsOfUseSite'])) {
             $settings['termsOfUseSite'] = json_decode($settings['termsOfUseSite'], true);
         }
 
-        if (!isset($settings['autoRedirectOnSuccess'])) {
+        if (!empty($settings['autoRedirectOnSuccess'])) {
             $settings['autoRedirectOnSuccess'] = json_decode($settings['autoRedirectOnSuccess'], true);
         }
 
