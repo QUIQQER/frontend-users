@@ -1,6 +1,7 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
  * @author www.pcsg.de (Henning Leutz)
+ * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
@@ -131,10 +132,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     );
 
                     self.getElm().set('html', Registration.get('html'));
-
-                    QUI.parse(self.getElm()).then(resolve);
-
-                    resolve();
+                    QUI.parse(self.getElm()).then(resolve, reject);
                 }, {
                     'package'  : 'quiqqer/frontend-users',
                     'registrar': Form.get('data-registrar'),
