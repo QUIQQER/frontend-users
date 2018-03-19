@@ -20,6 +20,13 @@ use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 class Registration extends QUI\Control
 {
     /**
+     * Registration ID (for this runtime only)
+     *
+     * @var string
+     */
+    protected $id;
+
+    /**
      * Registration constructor.
      *
      * @param array $attributes
@@ -37,6 +44,7 @@ class Registration extends QUI\Control
         $this->setAttributes($attributes);
 
         $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
+        $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
     }
 
     /**
@@ -54,7 +62,8 @@ class Registration extends QUI\Control
         $registrationStatus   = false;
         $projectLang          = QUI::getRewrite()->getProject()->getLang();
 
-        if (isset($_POST['registration'])) {
+        if (isset($_POST['registration'])
+            && $_POST['registration_id'] === $this->id) {
             try {
                 $registrationStatus = $this->register();
 
@@ -140,6 +149,7 @@ class Registration extends QUI\Control
             'termsOfUseLabel'     => $termsOfUseLabel,
             'termsOfUseRequired'  => $termsOfUseRequired,
             'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
+            'registrationId'      => $this->id
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
@@ -188,6 +198,7 @@ class Registration extends QUI\Control
      * Execute the Registration
      *
      * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Exception
      */
     public function register()
     {

@@ -153,9 +153,9 @@ class Events
         // login
         $secHash = QUI::getUsers()->getSecHash();
 
-        $User->setAttributes(array(
+        $User->setAttributes([
             $Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED => true
-        ));
+        ]);
 
         $User->save(QUI::getUsers()->getSystemUser());
 
@@ -172,12 +172,12 @@ class Events
 
         QUI::getDataBase()->update(
             QUI::getUsers()->table(),
-            array(
+            [
                 'lastvisit'  => time(),
                 'user_agent' => $useragent,
                 'secHash'    => $secHash
-            ),
-            array('id' => $User->getId())
+            ],
+            ['id' => $User->getId()]
         );
     }
 
@@ -251,10 +251,10 @@ class Events
             $name = $Registrar->getType();
 
             if (!isset($settings[$name])) {
-                $settings[$name] = array(
+                $settings[$name] = [
                     'active'         => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
                     'activationMode' => 'mail'
-                );
+                ];
             }
         }
 
@@ -276,44 +276,44 @@ class Events
             return;
         }
 
-        $addressFields = array(
-            'salutation' => array(
+        $addressFields = [
+            'salutation' => [
                 'show'     => true,
                 'required' => false
-            ),
-            'firstname'  => array(
+            ],
+            'firstname'  => [
                 'show'     => true,
                 'required' => true
-            ),
-            'lastname'   => array(
+            ],
+            'lastname'   => [
                 'show'     => true,
                 'required' => true
-            ),
-            'street_no'  => array(
+            ],
+            'street_no'  => [
                 'show'     => true,
                 'required' => true
-            ),
-            'zip'        => array(
+            ],
+            'zip'        => [
                 'show'     => true,
                 'required' => true
-            ),
-            'city'       => array(
+            ],
+            'city'       => [
                 'show'     => true,
                 'required' => true
-            ),
-            'country'    => array(
+            ],
+            'country'    => [
                 'show'     => true,
                 'required' => true
-            ),
-            'company'    => array(
+            ],
+            'company'    => [
                 'show'     => true,
                 'required' => false
-            ),
-            'phone'      => array(
+            ],
+            'phone'      => [
                 'show'     => true,
                 'required' => false
-            )
-        );
+            ]
+        ];
 
         $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
         $Conf->save();
@@ -410,7 +410,7 @@ class Events
                     }
                 }
 
-                $Permissions->addPermission(array(
+                $Permissions->addPermission([
                     'name'         => $permission,
                     'title'        => $title,
                     'desc'         => '',
@@ -418,7 +418,7 @@ class Events
                     'area'         => '',
                     'src'          => 'quiqqer/frontend-users',
                     'defaultvalue' => 1
-                ));
+                ]);
             }
         }
     }
