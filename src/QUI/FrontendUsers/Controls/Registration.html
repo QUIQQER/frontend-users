@@ -36,26 +36,7 @@
     {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
 </div>
 {else}
-{if $termsOfUseRequired}
-<div class="quiqqer-frontendUsers-controls-registration-termsOfUse" data-siteid="{$termsOfUseSiteId}">
-    <h2>
-        {locale group="quiqqer/frontend-users" var="control.registration.terms_of_use.title"}
-    </h2>
-    <p>
-        {locale group="quiqqer/frontend-users" var="control.registration.terms_of_use.info"}
-        <label>
-            <span>
-                {$termsOfUseLabel}
-            </span>
-            <input type="checkbox"{if $termsOfUseAcctepted} checked{/if}/>
-        </label>
-    </p>
-</div>
-{/if}
 <div class="quiqqer-frontendUsers-controls-registration">
-    {if $termsOfUseRequired}
-    <div class="quiqqer-frontendUsers-controls-registration-locked"></div>
-    {/if}
     {foreach $Registrars as $Registrar}
     <form action=""
           method="POST"
@@ -80,6 +61,19 @@
     </div>
     {/if}
     {/foreach}
+
+    {if $termsOfUseRequired}
+    <div class="quiqqer-frontendUsers-controls-registration-termsOfUse" data-siteid="{$termsOfUseSiteId}">
+        <p>
+            <label>
+            <span>
+                {$termsOfUseLabel}
+            </span>
+                <input type="checkbox"{if $termsOfUseAcctepted} checked{/if}/>
+            </label>
+        </p>
+    </div>
+    {/if}
 </div>
 {/if}
 {/if}

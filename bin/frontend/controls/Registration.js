@@ -68,27 +68,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         id       : TermsOfUseElm.get('data-siteid')
                     }).open();
                 });
-
-                this.$TermsOfUseCheckBox = Elm.getElement(
-                    '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
-                );
-                var TermsOfUseLock       = Elm.getElement(
-                    '.quiqqer-frontendUsers-controls-registration-locked'
-                );
-
-                if (this.$TermsOfUseCheckBox && TermsOfUseLock) {
-                    this.$TermsOfUseCheckBox.addEvent('click', function (event) {
-                        if (event.target.checked) {
-                            TermsOfUseLock.setStyle('display', 'none');
-                        } else {
-                            TermsOfUseLock.setStyle('display', null);
-                        }
-                    });
-
-                    if (this.$TermsOfUseCheckBox.checked) {
-                        TermsOfUseLock.setStyle('display', 'none');
-                    }
-                }
             }
 
             // Auto redirect

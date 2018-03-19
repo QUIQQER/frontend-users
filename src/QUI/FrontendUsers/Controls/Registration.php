@@ -24,15 +24,15 @@ class Registration extends QUI\Control
      *
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
-        $this->setAttributes(array(
+        $this->setAttributes([
             'data-qui'  => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
             'status'    => false,
             'Registrar' => false    // currently executed Registrar
-        ));
+        ]);
 
         $this->setAttributes($attributes);
 
@@ -58,9 +58,9 @@ class Registration extends QUI\Control
             try {
                 $registrationStatus = $this->register();
 
-                $Engine->assign(array(
+                $Engine->assign([
                     'registrationStatus' => $registrationStatus
-                ));
+                ]);
             } catch (QUI\Exception $Exception) {
                 $Engine->assign('error', $Exception->getMessage());
             }
@@ -99,9 +99,9 @@ class Registration extends QUI\Control
         $Login = false;
 
         if (!QUI::getUserBySession()->getId()) {
-            $Login = new FrontendLogin(array(
+            $Login = new FrontendLogin([
                 'showRegistration' => false
-            ));
+            ]);
         }
 
         // Terms Of Use
@@ -115,15 +115,15 @@ class Registration extends QUI\Control
                 $termsOfUseLabel = QUI::getLocale()->get(
                     'quiqqer/frontend-users',
                     'control.registration.terms_of_use.label',
-                    array(
+                    [
                         'termsOfUseUrl'       => $TermsOfUseSite->getUrlRewrittenWithHost(),
                         'termsOfUseSiteTitle' => $TermsOfUseSite->getAttribute('title')
-                    )
+                    ]
                 );
 
-                $Engine->assign(array(
+                $Engine->assign([
                     'termsOfUseSiteId' => $TermsOfUseSite->getId()
-                ));
+                ]);
 
                 $termsOfUseRequired = true;
             } catch (\Exception $Exception) {
@@ -131,7 +131,7 @@ class Registration extends QUI\Control
             }
         }
 
-        $Engine->assign(array(
+        $Engine->assign([
             'Registrars'          => $Registrars,
             'Registrar'           => $CurrentRegistrar,
             'success'             => $success,
@@ -140,7 +140,7 @@ class Registration extends QUI\Control
             'termsOfUseLabel'     => $termsOfUseLabel,
             'termsOfUseRequired'  => $termsOfUseRequired,
             'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
-        ));
+        ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
     }
@@ -179,6 +179,8 @@ class Registration extends QUI\Control
             return false;
         }
 
+        $this->setAttribute('Registrar', $Registrar);
+
         return $Registrar;
     }
 
@@ -197,27 +199,27 @@ class Registration extends QUI\Control
         $Registrar = $this->isCurrentlyExecuted();
 
         if ($Registrar === false) {
-            throw new QUI\FrontendUsers\Exception(array(
+            throw new QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.registration.registrar_not_found'
-            ));
+            ]);
         }
 
         $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $Project              = QUI::getRewrite()->getProject();
+        $Registrar->setProject($Project);
+        $Registrar->setAttributes($_POST);
 
         // check Terms Of Use
         if (!empty($registrationSettings['termsOfUseRequired'])
             && empty($_POST['termsOfUseAccepted'])) {
-            throw new QUI\FrontendUsers\Exception(array(
+            throw new QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.registration.terms_of_use_not_accepted'
-            ));
+            ]);
         }
 
-        $Registrar->setProject($Project);
-        $Registrar->setAttributes($_POST);
         $Registrar->validate();
 
         // create user
@@ -231,12 +233,12 @@ class Registration extends QUI\Control
         }
 
         // set registration/registrar data to user
-        $NewUser->setAttributes(array(
+        $NewUser->setAttributes([
             $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT      => $Project->getName(),
             $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT_LANG => $Project->getLang(),
             $RegistrarHandler::USER_ATTR_REGISTRAR                 => $Registrar->getType(),
             $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED  => true
-        ));
+        ]);
 
         // handle onRegistered from Registrar
         $Registrar->onRegistered($NewUser);
@@ -254,14 +256,14 @@ class Registration extends QUI\Control
         $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // check if the user has a password
-        $result = QUI::getDataBase()->fetch(array(
+        $result = QUI::getDataBase()->fetch([
             'select' => 'password',
             'from'   => QUI::getDBTableName('users'),
-            'where'  => array(
+            'where'  => [
                 'id' => $NewUser->getId()
-            ),
+            ],
             'limit'  => 1
-        ));
+        ]);
 
         $SystemUser = QUI::getUsers()->getSystemUser();
 
@@ -278,10 +280,10 @@ class Registration extends QUI\Control
                 $sendMailSuccess = $RegistrarHandler->sendActivationMail($NewUser, $Registrar);
 
                 if (!$sendMailSuccess) {
-                    throw new QUI\FrontendUsers\Exception(array(
+                    throw new QUI\FrontendUsers\Exception([
                         'quiqqer/frontend-users',
                         'exception.registration.send_mail_error'
-                    ));
+                    ]);
                 }
 
                 $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_PENDING;
