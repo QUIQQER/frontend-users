@@ -5,7 +5,6 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Users\User;
 use QUI\Verification\Verifier;
-use QUI\FrontendUsers\ActivationVerification;
 
 /**
  * Class Events
