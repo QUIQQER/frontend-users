@@ -68,6 +68,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         id       : TermsOfUseElm.get('data-siteid')
                     }).open();
                 });
+
+                this.$TermsOfUseCheckBox = Elm.getElement(
+                    '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
+                );
             }
 
             // Auto redirect
