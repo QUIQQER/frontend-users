@@ -180,6 +180,16 @@ class Registration extends QUI\Control
             }
         }
 
+        // Sort registrars by display position
+        $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
+            $settingsA        = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
+            $settingsB        = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+            $displayPositionA = (int)$settingsA['displayPosition'];
+            $displayPositionB = (int)$settingsB['displayPosition'];
+
+            return $displayPositionA - $displayPositionB;
+        });
+
         $Engine->assign([
             'Registrars'          => $Registrars,
             'Registrar'           => $CurrentRegistrar,

@@ -262,8 +262,9 @@ class Events
 
             if (!isset($settings[$name])) {
                 $settings[$name] = [
-                    'active'         => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
-                    'activationMode' => 'mail'
+                    'active'          => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
+                    'activationMode'  => 'mail',
+                    'displayPosition' => 1
                 ];
             }
         }

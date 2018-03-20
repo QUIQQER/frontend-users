@@ -1153,6 +1153,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Aktiv]]></de>
             <en><![CDATA[Active]]></en>
         </locale>
+        <locale name="controls.settings.registrars.template.labelDisplayPosition">
+            <de><![CDATA[Anzeige-Position]]></de>
+            <en><![CDATA[Display position]]></en>
+        </locale>
 
         <!-- Control: settings/AddressFields -->
         <locale name="controls.settings.addressfields.template.field">
