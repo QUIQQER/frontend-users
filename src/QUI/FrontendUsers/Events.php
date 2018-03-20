@@ -71,8 +71,10 @@ class Events
      *
      * @param User $User
      * @return void
+     *
+     * @throws QUI\Exception
      */
-    protected static function sendWelcomeMail(User $User)
+    public static function sendWelcomeMail(User $User)
     {
         $Handler              = Handler::getInstance();
         $registrationSettings = $Handler->getRegistrationSettings();
