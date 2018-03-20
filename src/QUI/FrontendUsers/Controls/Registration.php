@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
+use QUI\Projects\Site\Utils as QUISiteUtils;
 
 /**
  * Class Registration
@@ -25,6 +26,13 @@ class Registration extends QUI\Control
      * @var string
      */
     protected $id;
+
+    /**
+     * The User that is registered in the current runtime
+     *
+     * @var QUI\Users\User
+     */
+    protected $RegisteredUser = null;
 
     /**
      * Registration constructor.
@@ -51,6 +59,8 @@ class Registration extends QUI\Control
      * Return the html body
      *
      * @return string
+     *
+     * @throws QUI\Exception
      */
     public function getBody()
     {
@@ -62,6 +72,7 @@ class Registration extends QUI\Control
         $registrationStatus   = false;
         $projectLang          = QUI::getRewrite()->getProject()->getLang();
 
+        // execute registration process
         if (isset($_POST['registration'])
             && $_POST['registration_id'] === $this->id) {
             try {
@@ -75,6 +86,7 @@ class Registration extends QUI\Control
             }
         }
 
+        // check for errors
         $status = $this->getAttribute('status');
 
         if ($status === $RegistrarHandler::REGISTRATION_STATUS_ERROR && $CurrentRegistrar) {
@@ -86,25 +98,53 @@ class Registration extends QUI\Control
             ));
         }
 
-        // auto-redirect on success
-        $autoRedirect = false;
-        $success      = $CurrentRegistrar
-                        && ($status === 'success'
-                            || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
+        // determine success
+        $success = $CurrentRegistrar
+                   && ($status === 'success'
+                       || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
-        if ($success && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
-            try {
-                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
-                    $registrationSettings['autoRedirectOnSuccess'][$projectLang]
-                );
+        // redirect directives
+        $redirectUrl     = false;
+        $instantRedirect = false;
 
-                $autoRedirect = $RedirectSite->getUrlRewrittenWithHost();
-            } catch (\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
-                $autoRedirect = false;
+        if ($success) {
+            if ($this->RegisteredUser
+                && $this->RegisteredUser->isActive()
+                && $registrationSettings['autoLoginOnActivation']
+            ) {
+                // instantly redirect (only used on auto-login)
+                $loginSettings   = $RegistrarHandler->getLoginSettings();
+                $redirectOnLogin = $loginSettings['redirectOnLogin'];
+                $Project         = $this->getProject();
+                $projectLang     = $Project->getLang();
+
+                try {
+                    if (!empty($redirectOnLogin[$projectLang])) {
+                        $RedirectSite = QUISiteUtils::getSiteByLink($redirectOnLogin[$projectLang]);
+                    } else {
+                        $RedirectSite = $Project->get(1);
+                    }
+
+                    $redirectUrl     = $RedirectSite->getUrlRewrittenWithHost();
+                    $instantRedirect = true;
+                } catch (\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                }
+            } elseif (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+                // show success message and redirect after 10 seconds
+                try {
+                    $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
+                        $registrationSettings['autoRedirectOnSuccess'][$projectLang]
+                    );
+
+                    $redirectUrl = $RedirectSite->getUrlRewrittenWithHost();
+                } catch (\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                }
             }
         }
 
+        // determine if Login control is shown
         $Login = false;
 
         if (!QUI::getUserBySession()->getId()) {
@@ -144,7 +184,8 @@ class Registration extends QUI\Control
             'Registrars'          => $Registrars,
             'Registrar'           => $CurrentRegistrar,
             'success'             => $success,
-            'autoRedirect'        => $autoRedirect,
+            'redirectUrl'         => $redirectUrl,
+            'instantRedirect'     => $instantRedirect,
             'Login'               => $Login,
             'termsOfUseLabel'     => $termsOfUseLabel,
             'termsOfUseRequired'  => $termsOfUseRequired,
@@ -304,6 +345,8 @@ class Registration extends QUI\Control
                 $NewUser->activate(false, $SystemUser);
                 break;
         }
+
+        $this->RegisteredUser = $NewUser;
 
         return $registrationStatus;
     }

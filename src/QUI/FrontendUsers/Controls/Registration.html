@@ -9,11 +9,13 @@
 {if $success}
 <div class="quiqqer-frontendUsers-success">
     {$Registrar->getSuccessMessage()}
-    {if $autoRedirect}
-    <div class="quiqqer-frontendUsers-autoRedirect" data-url="{$autoRedirect}">
-        <a href="{$autoRedirect}">
+    {if $redirectUrl}
+    <div class="quiqqer-frontendUsers-redirect" data-url="{$redirectUrl}" data-instant="{if $instantRedirect}1{else}0{/if}">
+        {if !$instantRedirect}
+        <a href="{$redirectUrl}">
             {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
         </a>
+        {/if}
     </div>
     {/if}
 </div>
@@ -25,7 +27,7 @@
     {$Registrar->getPendingMessage()}
 </div>
 {else}
-{if isset($error) && !$autoRedirect}
+{if isset($error) && !$redirectUrl}
 <div class="quiqqer-frontendUsers-error">
     {$error}
 </div>

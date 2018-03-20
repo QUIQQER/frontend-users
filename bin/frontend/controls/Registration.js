@@ -74,13 +74,22 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 );
             }
 
-            // Auto redirect
+            // Redirect
             var RedirectElm = Elm.getElement(
-                '.quiqqer-frontendUsers-autoRedirect'
+                '.quiqqer-frontendUsers-redirect'
             );
 
             if (RedirectElm) {
-                var url = RedirectElm.get('data-url');
+                var url     = RedirectElm.get('data-url');
+                var instant = RedirectElm.get('data-instant') === "1";
+
+                console.log(url);
+                console.log(instant);
+
+                if (instant) {
+                    window.location = url;
+                    return;
+                }
 
                 (function () {
                     window.location = url;

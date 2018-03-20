@@ -20,6 +20,8 @@ class Events
      *
      * @param \QUI\Users\User $User
      * @return void
+     *
+     * @throws QUI\Exception
      */
     public static function onUserActivate(User $User)
     {
@@ -114,40 +116,46 @@ class Events
      * Auto-login user
      *
      * @param User $User
+     * @param bool $checkEligibility (optional) - Checks if the user is eligible for auto login
      * @return void
+     *
+     * @throws QUI\Exception
      */
-    public static function autoLogin(User $User)
+    public static function autoLogin(User $User, $checkEligibility = true)
     {
-        $Handler   = Handler::getInstance();
-        $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
+        $Handler = Handler::getInstance();
 
-        if (empty($registrar)) {
-            return;
-        }
+        if ($checkEligibility) {
+            $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
 
-        // check if Registrar exists
-        try {
-            $Registrar = $Handler->getRegistrar($registrar);
-        } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
+            if (empty($registrar)) {
+                return;
+            }
 
-            return;
-        }
+            // check if Registrar exists
+            try {
+                $Registrar = $Handler->getRegistrar($registrar);
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
 
-        $registrationSettings = $Handler->getRegistrationSettings();
+                return;
+            }
 
-        // do not log in if autoLogin is deactivated or user is already logged in!
-        if (!$registrationSettings['autoLoginOnActivation']
-            || QUI::getUserBySession()->getId()
-            || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)) {
-            return;
-        }
+            $registrationSettings = $Handler->getRegistrationSettings();
 
-        $settings = $Handler->getRegistrarSettings($Registrar->getType());
+            // do not log in if autoLogin is deactivated or user is already logged in!
+            if (!$registrationSettings['autoLoginOnActivation']
+                || QUI::getUserBySession()->getId()
+                || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)) {
+                return;
+            }
 
-        // do not log in if users have to be manually activated
-        if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
-            return;
+            $settings = $Handler->getRegistrarSettings($Registrar->getType());
+
+            // do not log in if users have to be manually activated
+            if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
+                return;
+            }
         }
 
         // login

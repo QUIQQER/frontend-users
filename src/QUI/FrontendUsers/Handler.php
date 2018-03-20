@@ -659,7 +659,7 @@ class Handler extends Singleton
      *
      * @throws QUI\Exception
      */
-    protected function sendMail($mailData, $recipients, $templateFile, $templateVars = [])
+    public function sendMail($mailData, $recipients, $templateFile, $templateVars = [])
     {
         if (empty($recipients)) {
             return;
