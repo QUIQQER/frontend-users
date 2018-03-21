@@ -9,6 +9,7 @@ namespace QUI\FrontendUsers\Controls;
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\Projects\Site\Utils as QUISiteUtils;
+use QUI\FrontendUsers\RegistrarCollection;
 
 /**
  * Class Registration
@@ -44,9 +45,10 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes([
-            'data-qui'  => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
-            'status'    => false,
-            'Registrar' => false    // currently executed Registrar
+            'data-qui'   => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+            'status'     => false,
+            'Registrar'  => false,    // currently executed Registrar
+            'registrars' => []  // if empty load all default Registrars, otherwise load the ones provided here
         ]);
 
         $this->setAttributes($attributes);
@@ -66,7 +68,7 @@ class Registration extends QUI\Control
     {
         $Engine               = QUI::getTemplateManager()->getEngine();
         $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
-        $Registrars           = $RegistrarHandler->getRegistrars();
+        $Registrars           = $this->getRegistrars();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $CurrentRegistrar     = $this->isCurrentlyExecuted();
         $registrationStatus   = false;
@@ -205,6 +207,37 @@ class Registration extends QUI\Control
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
+    }
+
+    /**
+     * Get all Registrars that are displayed
+     *
+     * @return RegistrarCollection
+     * @throws QUI\Exception
+     */
+    protected function getRegistrars()
+    {
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+        $filterRegistrars = $this->getAttribute('registrars');
+        $Registrars       = $RegistrarHandler->getRegistrars();
+
+        if (empty($filterRegistrars)) {
+            return $Registrars;
+        }
+
+        $registrars         = $Registrars->toArray();
+        $FilteredRegistrars = new RegistrarCollection();
+
+        $registrars = array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
+            /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
+            return in_array($Registrar->getType(), $filterRegistrars);
+        });
+
+        foreach ($registrars as $Registrar) {
+            $FilteredRegistrars->append($Registrar);
+        }
+
+        return $FilteredRegistrars;
     }
 
     /**
