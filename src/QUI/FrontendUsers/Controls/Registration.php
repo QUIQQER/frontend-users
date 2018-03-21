@@ -200,7 +200,8 @@ class Registration extends QUI\Control
             'termsOfUseLabel'     => $termsOfUseLabel,
             'termsOfUseRequired'  => $termsOfUseRequired,
             'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
-            'registrationId'      => $this->id
+            'registrationId'      => $this->id,
+            'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle')
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
