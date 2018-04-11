@@ -103,9 +103,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 var url     = RedirectElm.get('data-url');
                 var instant = RedirectElm.get('data-instant') === "1";
 
-                console.log(url);
-                console.log(instant);
-
                 if (instant) {
                     window.location = url;
                     return;
