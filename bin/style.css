@@ -2,33 +2,30 @@
     background: #F2D4CE;
     border: 1px solid #AE432E;
     clear: both;
-    float: left;
-    margin: 10px 0;
+    margin: 10px auto;
     padding: 10px;
     position: relative;
-    width: 100%
+    width: 80%
 }
 
 .quiqqer-frontendUsers-info {
     background: #CEE6F2;
     border: 1px solid #058DC7;
     clear: both;
-    float: left;
-    margin: 10px 0;
+    margin: 10px auto;
     padding: 10px;
     position: relative;
-    width: 100%
+    width: 80%
 }
 
 .quiqqer-frontendUsers-success {
     background: #D9E6C3;
     border: 1px solid #77AB13;
     clear: both;
-    float: left;
-    margin: 10px 0;
+    margin: 10px auto;
     padding: 10px;
     position: relative;
-    width: 100%
+    width: 80%
 }
 
 .quiqqer-frontendUsers-info p,
