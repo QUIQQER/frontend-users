@@ -68,7 +68,10 @@
     {/foreach}
 
     {if $termsOfUseRequired}
-    <div class="quiqqer-frontendUsers-controls-registration-termsOfUse" data-siteid="{$termsOfUseSiteId}">
+    <div class="quiqqer-frontendUsers-controls-registration-termsOfUse"
+         {if $termsOfUseSiteId} data-termsofusesiteid="{$termsOfUseSiteId}"{/if}
+         {if $privacyPolicySiteId} data-privacypolicysiteid="{$privacyPolicySiteId}"{/if}
+    >
         <p>
             <label>
             <span>

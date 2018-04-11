@@ -36,6 +36,14 @@ class Registration extends QUI\Control
     protected $RegisteredUser = null;
 
     /**
+     * Flag that indicates if the registration process is performed via async
+     * or true POST request
+     *
+     * @var bool
+     */
+    protected $isAsync = false;
+
+    /**
      * Registration constructor.
      *
      * @param array $attributes
@@ -45,6 +53,7 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes([
+            'async'      => false,
             'data-qui'   => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
             'status'     => false,
             'Registrar'  => false,    // currently executed Registrar
@@ -53,8 +62,11 @@ class Registration extends QUI\Control
 
         $this->setAttributes($attributes);
 
+        $this->setJavaScriptControlOption('registrars', json_encode($this->getAttribute('registrars')));
         $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
-        $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
+
+        $this->id      = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
+        $this->isAsync = $this->getAttribute('async');
     }
 
     /**
@@ -76,7 +88,7 @@ class Registration extends QUI\Control
 
         // execute registration process
         if (isset($_POST['registration'])
-            && $_POST['registration_id'] === $this->id) {
+            && ($_POST['registration_id'] === $this->id || $this->isAsync)) {
             try {
                 $registrationStatus = $this->register();
 
@@ -160,21 +172,67 @@ class Registration extends QUI\Control
         $termsOfUseLabel    = '';
 
         if ($registrationSettings['termsOfUseRequired']
-            && !empty($registrationSettings['termsOfUseSite'][$projectLang])) {
+            && (!empty($registrationSettings['termsOfUseSite'][$projectLang]) || !empty($registrationSettings['privacyPolicySite'][$projectLang]))) {
             try {
-                $TermsOfUseSite  = QUI\Projects\Site\Utils::getSiteByLink($registrationSettings['termsOfUseSite'][$projectLang]);
-                $termsOfUseLabel = QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'control.registration.terms_of_use.label',
-                    [
-                        'termsOfUseUrl'       => $TermsOfUseSite->getUrlRewrittenWithHost(),
-                        'termsOfUseSiteTitle' => $TermsOfUseSite->getAttribute('title')
-                    ]
-                );
+                $TermsOfUseSite    = false;
+                $PrivacyPolicySite = false;
 
-                $Engine->assign([
-                    'termsOfUseSiteId' => $TermsOfUseSite->getId()
-                ]);
+                if (!empty($registrationSettings['termsOfUseSite'][$projectLang])) {
+                    $TermsOfUseSite = QUISiteUtils::getSiteByLink(
+                        $registrationSettings['termsOfUseSite'][$projectLang]
+                    );
+                }
+
+                if (!empty($registrationSettings['privacyPolicySite'][$projectLang])) {
+                    $PrivacyPolicySite = QUISiteUtils::getSiteByLink(
+                        $registrationSettings['privacyPolicySite'][$projectLang]
+                    );
+                }
+
+                // determine the label for terms of use / privacy policy checkbox
+                if ($TermsOfUseSite && $PrivacyPolicySite) {
+                    $termsOfUseLabel = QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'control.registration.terms_of_use_and_privacy_policy.label',
+                        [
+                            'termsOfUseUrl'          => $TermsOfUseSite->getUrlRewrittenWithHost(),
+                            'termsOfUseSiteTitle'    => $TermsOfUseSite->getAttribute('title'),
+                            'privacyPolicyUrl'       => $PrivacyPolicySite->getUrlRewrittenWithHost(),
+                            'privacyPolicySiteTitle' => $PrivacyPolicySite->getAttribute('title')
+                        ]
+                    );
+
+                    $Engine->assign([
+                        'termsOfUseSiteId'    => $TermsOfUseSite->getId(),
+                        'privacyPolicySiteId' => $PrivacyPolicySite->getId()
+                    ]);
+                } elseif ($TermsOfUseSite) {
+                    $termsOfUseLabel = QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'control.registration.terms_of_use.label',
+                        [
+                            'termsOfUseUrl'       => $TermsOfUseSite->getUrlRewrittenWithHost(),
+                            'termsOfUseSiteTitle' => $TermsOfUseSite->getAttribute('title')
+                        ]
+                    );
+
+                    $Engine->assign([
+                        'termsOfUseSiteId' => $TermsOfUseSite->getId()
+                    ]);
+                } elseif ($PrivacyPolicySite) {
+                    $termsOfUseLabel = QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'control.registration.privacy_policy.label',
+                        [
+                            'privacyPolicyUrl'       => $PrivacyPolicySite->getUrlRewrittenWithHost(),
+                            'privacyPolicySiteTitle' => $PrivacyPolicySite->getAttribute('title')
+                        ]
+                    );
+
+                    $Engine->assign([
+                        'privacyPolicySiteId' => $PrivacyPolicySite->getId()
+                    ]);
+                }
 
                 $termsOfUseRequired = true;
             } catch (\Exception $Exception) {

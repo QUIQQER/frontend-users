@@ -25,6 +25,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             '$sendForm'
         ],
 
+        options: {
+            registrars: [] // list of registar that are displayed in this controls
+        },
+
         initialize: function (options) {
             this.parent(options);
 
@@ -52,22 +56,38 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 self.$sendForm(event.target).then(self.$onImport);
             });
 
-            // Terms Of Use
+            // Terms Of Use / Privacy Policy
             var TermsOfUseElm = Elm.getElement('.quiqqer-frontendUsers-controls-registration-termsOfUse');
 
             if (TermsOfUseElm) {
-                var TermsOfUseLink = TermsOfUseElm.getElement('a');
+                var TermsOfUseLink    = TermsOfUseElm.getElement('a.quiqqer-frontendusers-termsofuse-link');
+                var PrivacyPolicyLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-privacypolicy-link');
 
-                TermsOfUseLink.addEvent('click', function (event) {
-                    event.stop();
+                if (TermsOfUseLink) {
+                    TermsOfUseLink.addEvent('click', function (event) {
+                        event.stop();
 
-                    new QUISiteWindow({
-                        showTitle: true,
-                        project  : QUIQQER_PROJECT.name,
-                        lang     : QUIQQER_PROJECT.lang,
-                        id       : TermsOfUseElm.get('data-siteid')
-                    }).open();
-                });
+                        new QUISiteWindow({
+                            showTitle: true,
+                            project  : QUIQQER_PROJECT.name,
+                            lang     : QUIQQER_PROJECT.lang,
+                            id       : TermsOfUseElm.get('data-termsofusesiteid')
+                        }).open();
+                    });
+                }
+
+                if (PrivacyPolicyLink) {
+                    PrivacyPolicyLink.addEvent('click', function (event) {
+                        event.stop();
+
+                        new QUISiteWindow({
+                            showTitle: true,
+                            project  : QUIQQER_PROJECT.name,
+                            lang     : QUIQQER_PROJECT.lang,
+                            id       : TermsOfUseElm.get('data-privacypolicysiteid')
+                        }).open();
+                    });
+                }
 
                 this.$TermsOfUseCheckBox = Elm.getElement(
                     '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
@@ -126,10 +146,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     self.getElm().set('html', Registration.get('html'));
                     QUI.parse(self.getElm()).then(resolve, reject);
                 }, {
-                    'package'  : 'quiqqer/frontend-users',
-                    'registrar': Form.get('data-registrar'),
-                    'data'     : JSON.encode(formData),
-                    onError    : reject
+                    'package' : 'quiqqer/frontend-users',
+                    registrar : Form.get('data-registrar'),
+                    data      : JSON.encode(formData),
+                    registrars: self.getAttribute('registrars'),
+                    onError   : reject
                 });
             });
         }

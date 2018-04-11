@@ -269,6 +269,10 @@ class Handler extends Singleton
             $settings['termsOfUseSite'] = json_decode($settings['termsOfUseSite'], true);
         }
 
+        if (!empty($settings['privacyPolicySite'])) {
+            $settings['privacyPolicySite'] = json_decode($settings['privacyPolicySite'], true);
+        }
+
         if (!empty($settings['autoRedirectOnSuccess'])) {
             $settings['autoRedirectOnSuccess'] = json_decode($settings['autoRedirectOnSuccess'], true);
         }

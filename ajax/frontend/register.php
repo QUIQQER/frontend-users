@@ -15,8 +15,17 @@
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_register',
-    function ($registrar, $data) {
-        $Registration = new QUI\FrontendUsers\Controls\Registration();
+    function ($registrar, $data, $registrars) {
+        if (!empty($registrars)) {
+            $registrars = json_decode($registrars, true);
+        } else {
+            $registrars = [];
+        }
+
+        $Registration = new QUI\FrontendUsers\Controls\Registration([
+            'async'      => true,
+            'registrars' => $registrars
+        ]);
 
         $_POST = array_merge($_POST, json_decode($data, true));
 
@@ -28,10 +37,10 @@ QUI::$Ajax->registerFunction(
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
-            throw new QUI\Exception(array(
+            throw new QUI\Exception([
                 'quiqqer/frontend-users',
                 'exception.ajax.frontend_register.general_error'
-            ));
+            ]);
         }
 
         // do not show user edit messages
@@ -39,5 +48,5 @@ QUI::$Ajax->registerFunction(
 
         return $status;
     },
-    array('registrar', 'data')
+    ['registrar', 'data', 'registrars']
 );

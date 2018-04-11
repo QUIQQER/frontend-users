@@ -373,24 +373,28 @@
                 <![CDATA[Users who register but do not activate will automatically be deleted after X days. This assumes that the Cron <b>Delete Inactive User</b> is set up and enabled. Subject <b>not</b> users who have been disabled through user management.]]></en>
         </locale>
         <locale name="settings.termsOfUseRequired.title">
-            <de><![CDATA[Nutzungsbedingungen]]></de>
-            <en><![CDATA[Terms Of Use]]></en>
+            <de><![CDATA[Nutzungsbedingungen / Datenschutzbestimmungen]]></de>
+            <en><![CDATA[Terms Of Use / Privacy]]></en>
         </locale>
         <locale name="settings.termsOfUseRequired.description" html="true">
-            <de>
-                <![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> Seiten eingestellt sind)]]></de>
-            <en>
-                <![CDATA[Users are required to accept <b>Terms Of User</b> before registering (required sites to to be set under <b>Terms Of Use Sites</b>]]></en>
+            <de><![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> und/oder <b>Datenschutzbestimmungen-Seiten</b> Seiten eingestellt sind)]]></de>
+            <en><![CDATA[Users are required to accept <b>Terms Of Use / Privacy Policy</b> before registering (requires sites to to be set under <b>Terms Of Use Sites</b> and/or <b>Privacy Policy Sites</b>)]]></en>
         </locale>
         <locale name="settings.termsOfUseSite.title">
             <de><![CDATA[Nutzungsbedingungen-Seiten]]></de>
             <en><![CDATA[Terms Of Use Sites]]></en>
         </locale>
         <locale name="settings.termsOfUseSite.description" html="true">
-            <de>
-                <![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen</b> aktiviert ist.]]></de>
-            <en>
-                <![CDATA[Determines the Site which containts the Terms Of Use in its <b>content</b>. This requires that the setting <b>Terms Of Use</b> is active.]]></en>
+            <de><![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> aktiviert ist.]]></de>
+            <en><![CDATA[Determines the Site which containts the Terms Of Use in its <b>content</b>. This requires that the setting <b>Terms Of Use / Privacy Policy</b> is active.]]></en>
+        </locale>
+        <locale name="settings.privacyPolicySite.title">
+            <de><![CDATA[Datenschutzbestimmungen-Seiten]]></de>
+            <en><![CDATA[Privacy Policy Sites]]></en>
+        </locale>
+        <locale name="settings.privacyPolicySite.description" html="true">
+            <de><![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Datenschutzbestimmungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> aktiviert ist.]]></de>
+            <en><![CDATA[Determines the Site which containts the Privacy Policy in its <b>content</b>. This requires that the setting <b>Terms Of Use / Privacy Policy</b> is active.]]></en>
         </locale>
         <locale name="settings.sendPassword.title">
             <de><![CDATA[Zufalls-Passwort erstellen & senden]]></de>
@@ -485,13 +489,20 @@
             <en><![CDATA[Terms Of Use]]></en>
         </locale>
         <locale name="control.registration.terms_of_use.info">
-            <de><![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen, um mit der Registrierung fortzufahren.]]></de>
-            <en><![CDATA[Accept our Terms Of Use to continue with the registration.]]></en>
+            <de><![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen und/oder Datenschutzbestimmungen, um mit der Registrierung fortzufahren.]]></de>
+            <en><![CDATA[Accept our Terms Of Use and/or Privacy Policy to continue with the registration.]]></en>
         </locale>
         <locale name="control.registration.terms_of_use.label">
-            <de>
-                <![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <de><![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
             <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and accept them]]></en>
+        </locale>
+        <locale name="control.registration.privacy_policy.label">
+            <de><![CDATA[Ja, ich habe die <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <en><![CDATA[Yes, I've read the <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use_and_privacy_policy.label">
+            <de><![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> und <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> and <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them]]></en>
         </locale>
         <locale name="exception.registration.registrar_not_found">
             <de><![CDATA[Ungültige Registrierungs-Methode]]></de>
