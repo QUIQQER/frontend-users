@@ -1,4 +1,10 @@
-<section class="quiqqer-frontend-users-address">
+{template_event name="quiqqer::frontend-users::user-address-top" User=$User}
+
+<section class="quiqqer-frontend-users-address quiqqer-frontendUsers-userdata-section">
+    <header>
+        <h2>{locale group="quiqqer/frontend-users" var="profile.address.category.title"}</h2>
+    </header>
+
     <div class="quiqqer-frontend-users-address-description">
         <div class="quiqqer-frontend-users-address-description-text">
             {locale group="quiqqer/frontend-users" var="control.address.title.Address.description"}
@@ -10,9 +16,9 @@
         </button>
     </div>
 
-    <div class="quiqqer-frontend-users-address-list">
-        {template_event name="quiqqer::frontend-users::addressListBegin"}
+    {template_event name="quiqqer::frontend-users::user-address-begin" User=$User}
 
+    <div class="quiqqer-frontend-users-address-list">
         {if $User->getId()}
         {* Logged in user *}
 
@@ -21,7 +27,11 @@
             <header>
                 <label>
                     <span class="fa fa-address-card-o"></span>
+                    {if $Address->getId() == $User->getAttribute('address')}
+                    {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
+                    {else}
                     {locale group="quiqqer/frontend-users" var="control.address.header.title"}
+                    {/if}
                     <input type="hidden"
                            name="address"
                            value="{$Address->getId()}"
@@ -48,7 +58,9 @@
         </div>
         {/foreach}
         {/if}
-
-        {template_event name="quiqqer::frontend-users::addressListEnd"}
     </div>
+
+    {template_event name="quiqqer::frontend-users::user-address-end" User=$User}
 </section>
+
+{template_event name="quiqqer::frontend-users::user-address-bottom" User=$User}

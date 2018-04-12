@@ -388,4 +388,35 @@ class Utils
 
         return $url;
     }
+
+    /**
+     * Check if the standard e-mail address of a user is verified
+     *
+     * @param QUI\Users\User $User
+     * @return bool
+     */
+    public static function isUserEmailVerified(QUI\Users\User $User)
+    {
+        $email = $User->getAttribute('email');
+
+        if (empty($email)) {
+            return false;
+        }
+
+        return $User->getAttribute(Handler::USER_ATTR_EMAIL_VERIFIED);
+    }
+
+    /**
+     * Set the standard e-mail address of a user to status "verified"
+     *
+     * @param QUI\Users\User $User
+     * @return void
+     *
+     * @throws QUI\Exception
+     */
+    public static function setUserEmailVerified(QUI\Users\User $User)
+    {
+        $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
+        $User->save(QUI::getUsers()->getSystemUser());
+    }
 }

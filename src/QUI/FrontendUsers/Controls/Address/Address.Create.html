@@ -3,67 +3,61 @@
         <h1>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.title"}</h1>
     </header>
 
-    <label>
-        <span>{locale group="quiqqer/frontend-users" var="company"}</span>
-        <input type="text"
-               name="company"
-        />
-    </label>
+    {template_event name="quiqqer::frontend-users::user-address-create-begin" User=$User}
 
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-create-address-salutation">
         <span>{locale group="quiqqer/frontend-users" var="salutation"}</span>
         <input type="text"
                name="salutation"
         />
     </label>
-    <label>
+
+    <label class="quiqqer-frontendUsers-userdata-create-address-firstname">
         <span>{locale group="quiqqer/frontend-users" var="firstname"}</span>
         <input type="text"
+               autocomplete="given-name"
                name="firstname"
         />
     </label>
 
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-create-address-lastname">
         <span>{locale group="quiqqer/frontend-users" var="lastname"}</span>
         <input type="text"
+               autocomplete="family-name"
                name="lastname"
         />
     </label>
 
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-create-address-street_no">
         <span>{locale group="quiqqer/frontend-users" var="street_no"}</span>
         <input type="text"
+               autocomplete="street-address"
                name="street_no"
         />
     </label>
 
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-create-address-zip">
         <span>{locale group="quiqqer/frontend-users" var="zip"}</span>
         <input type="text"
+               autocomplete="postal-code"
                name="zip"
         />
     </label>
 
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-create-address-city">
         <span>{locale group="quiqqer/frontend-users" var="city"}</span>
         <input type="text"
+               autocomplete="address-level2"
                name="city"
         />
     </label>
 
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-create-address-country">
         <span>{locale group="quiqqer/frontend-users" var="country"}</span>
-        <select name="country">
-            <option value=""></option>
-            {foreach from=$countries item=Country}
-            <option value="{$Country->getCode()|escape:'html'}"
-                    {if $currentCountry== $Country->getCode()}selected="selected"{/if}
-                >
-                {$Country->getName()}
-            </option>
-            {/foreach}
-        </select>
+        {control name="country" control="QUI\Countries\Controls\Select"}
     </label>
+
+    {template_event name="quiqqer::frontend-users::user-address-create-end" User=$User}
 
     <button type="submit" name="createSave" value="1" class="quiqqer-frontend-users-address-edit-button">
         {locale group="quiqqer/frontend-users" var="dialog.frontend-users.create.address.btn"}

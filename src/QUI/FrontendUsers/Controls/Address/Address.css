@@ -8,19 +8,20 @@
 .quiqqer-frontend-users-address-description {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     float: left;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
     width: 100%;
 }
 
 .quiqqer-frontend-users-address-description-text {
     float: left;
-    width: calc(100% - 200px);
+    width: 100%;
 }
 
 .quiqqer-frontend-users-address-description-button {
     float: right;
     font-size: 14px;
     line-height: 20px !important;
+    margin-top: 20px;
     max-width: 200px;
     padding: 10px !important;
     text-transform: inherit !important;
@@ -93,7 +94,7 @@
 .quiqqer-frontend-users-address-list-entry {
     display: flex;
     flex-direction: column;
-    margin-top: 20px;
+    margin-top: 10px;
     width: calc(50% - 5px);
 }
 

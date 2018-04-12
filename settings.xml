@@ -112,6 +112,9 @@
                 <conf name="termsOfUseSite">
                     <type><![CDATA[string]]></type>
                 </conf>
+                <conf name="privacyPolicySite">
+                    <type><![CDATA[string]]></type>
+                </conf>
             </section>
 
             <section name="registrars">
@@ -417,6 +420,15 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.termsOfUseSite.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.privacyPolicySite" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.privacyPolicySite.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.privacyPolicySite.description"/>
                             </description>
                         </input>
 

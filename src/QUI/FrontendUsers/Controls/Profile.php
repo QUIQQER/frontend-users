@@ -33,7 +33,7 @@ class Profile extends Control
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
+        $this->addCSSFile(dirname(__FILE__).'/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
 
         $this->setAttribute(
@@ -49,8 +49,15 @@ class Profile extends Control
      */
     public function getBody()
     {
+        try {
+            $Engine = QUI::getTemplateManager()->getEngine();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+
+            return '';
+        }
+
         $Request    = QUI::getRequest();
-        $Engine     = QUI::getTemplateManager()->getEngine();
         $categories = Utils::getProfileCategorySettings();
 
         $currentCategory = $this->getAttribute('category');
@@ -70,6 +77,7 @@ class Profile extends Control
             }
 
             reset($array);
+
             return key($array);
         };
 
@@ -155,7 +163,7 @@ class Profile extends Control
             'Site'            => $this->getSite()
         ));
 
-        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
+        return $Engine->fetch(dirname(__FILE__).'/Profile.html');
     }
 
     /**

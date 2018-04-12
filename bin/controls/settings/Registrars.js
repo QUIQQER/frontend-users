@@ -88,7 +88,8 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
                             activationModeOptionMail  : QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
                             activationModeOptionAuto  : QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
                             activationModeOptionManual: QUILocale.get(lg, lgPrefix + 'activationModeOptionManual'),
-                            labelActive               : QUILocale.get(lg, lgPrefix + 'labelActive')
+                            labelActive               : QUILocale.get(lg, lgPrefix + 'labelActive'),
+                            labelDisplayPosition      : QUILocale.get(lg, lgPrefix + 'labelDisplayPosition')
                         })
                     }).inject(self.$Content);
 

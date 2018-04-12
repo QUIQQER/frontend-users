@@ -17,7 +17,8 @@
                         {{labelActive}}
                     </span>
                     <div class="field-container-field">
-                        <input type="checkbox" name="active" class="field-container-field quiqqer-frontendusers-settings-registrars-setting">
+                        <input type="checkbox" name="active"
+                               class="field-container-field quiqqer-frontendusers-settings-registrars-setting">
                     </div>
                 </label>
             </td>
@@ -28,11 +29,23 @@
                     <span class="field-container-item">
                         {{labelActivationMode}}
                     </span>
-                    <select name="activationMode" class="field-container-field quiqqer-frontendusers-settings-registrars-setting">
+                    <select name="activationMode"
+                            class="field-container-field quiqqer-frontendusers-settings-registrars-setting">
                         <option value="mail">{{activationModeOptionMail}}</option>
                         <option value="auto">{{activationModeOptionAuto}}</option>
                         <option value="manual">{{activationModeOptionManual}}</option>
                     </select>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label class="field-container">
+                    <span class="field-container-item">
+                        {{labelDisplayPosition}}
+                    </span>
+                    <input type="number" name="displayPosition"
+                           class="field-container-field quiqqer-frontendusers-settings-registrars-setting" min="1">
                 </label>
             </td>
         </tr>
