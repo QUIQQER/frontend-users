@@ -106,10 +106,13 @@ class Registration extends QUI\Control
         if ($status === $RegistrarHandler::REGISTRATION_STATUS_ERROR && $CurrentRegistrar) {
             $Engine->assign('error', $CurrentRegistrar->getErrorMessage());
         } elseif ($status === 'error') {
-            $Engine->assign('error', QUI::getLocale()->get(
-                'quiqqer/frontend-users',
-                'control.registration.general_error'
-            ));
+            $Engine->assign([
+                'error'          => QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'control.registration.general_error'
+                ),
+                'isGeneralError' => true
+            ]);
         }
 
         // determine success
