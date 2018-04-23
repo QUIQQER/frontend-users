@@ -10,10 +10,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
     'qui/controls/loader/Loader',
     'package/quiqqer/controls/bin/site/Window',
     'qui/utils/Form',
+    'Locale',
     'Ajax'
 
-], function (QUI, QUIControl, QUILoader, QUISiteWindow, QUIFormUtils, QUIAjax) {
+], function (QUI, QUIControl, QUILoader, QUISiteWindow, QUIFormUtils, QUILocale, QUIAjax) {
     "use strict";
+
+    var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -68,10 +71,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         event.stop();
 
                         new QUISiteWindow({
-                            showTitle: true,
-                            project  : QUIQQER_PROJECT.name,
-                            lang     : QUIQQER_PROJECT.lang,
-                            id       : TermsOfUseElm.get('data-termsofusesiteid')
+                            closeButtonText: QUILocale.get(lg, 'btn.close'),
+                            showTitle      : true,
+                            project        : QUIQQER_PROJECT.name,
+                            lang           : QUIQQER_PROJECT.lang,
+                            id             : TermsOfUseElm.get('data-termsofusesiteid')
                         }).open();
                     });
                 }

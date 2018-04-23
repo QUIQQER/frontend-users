@@ -1263,6 +1263,11 @@ The deletion of your user account on [host] was requested on [date]. Please conf
                 <![CDATA[An unexpected error occurred while loading this profile section. Please try again or contact an administrator.]]></en>
         </locale>
 
+        <locale name="btn.close">
+            <de><![CDATA[Schließen]]></de>
+            <en><![CDATA[Close]]></en>
+        </locale>
+
     </groups>
 
 </locales>
