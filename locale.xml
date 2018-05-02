@@ -512,6 +512,10 @@
             <de><![CDATA[Bitte akzeptieren Sie die Nutzungsbedingungen, um sich zu registrieren.]]></de>
             <en><![CDATA[Please accept the Terms Of Use to register.]]></en>
         </locale>
+        <locale name="control.registration.success">
+            <de><![CDATA[Erfolg!]]></de>
+            <en><![CDATA[Success!]]></en>
+        </locale>
 
         <!-- Registrar: E-Mail -->
         <locale name="exception.registrars.email.username_already_exists">

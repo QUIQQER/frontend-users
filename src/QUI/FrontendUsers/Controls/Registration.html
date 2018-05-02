@@ -8,7 +8,9 @@
 
 {if $success}
 <div class="quiqqer-frontendUsers-success">
-    {$Registrar->getSuccessMessage()}
+    {if !$instantRedirect}
+        {$Registrar->getSuccessMessage()}
+    {/if}
     {if $redirectUrl}
     <div class="quiqqer-frontendUsers-redirect" data-url="{$redirectUrl}" data-instant="{if $instantRedirect}1{else}0{/if}">
         {if !$instantRedirect}
