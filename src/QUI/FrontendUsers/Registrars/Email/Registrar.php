@@ -352,9 +352,12 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      * Check if this Registrar can send passwords
      *
      * @return bool
+     * @throws QUI\Exception
      */
     public function canSendPassword()
     {
-        return true;
+        // Can only send password if the user does not provide it himself
+        $registrationSettings = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
+        return $registrationSettings['passwordInput'] === 'none';
     }
 }
