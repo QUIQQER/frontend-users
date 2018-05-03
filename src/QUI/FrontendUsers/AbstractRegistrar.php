@@ -103,7 +103,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
                 return $this->getPendingMessage();
         }
 
-        if (boolval($settings['sendPassword'])) {
+        if (boolval($settings['sendPassword']) && $this->canSendPassword()) {
             $msg .= "<p>" . QUI::getLocale()->get(
                     'quiqqer/frontend-users',
                     'registrars.password_auto_generate'
