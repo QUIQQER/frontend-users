@@ -88,6 +88,11 @@ if ($loggedIn && (!$Registrar || $status === 'error')) {
     }
 }
 
+if (!$Registrar) {
+    header('Location: /');
+    exit;
+}
+
 /**
  * User Registration
  */

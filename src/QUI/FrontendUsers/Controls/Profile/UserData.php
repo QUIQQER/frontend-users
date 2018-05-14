@@ -27,7 +27,7 @@ class UserData extends AbstractProfileControl
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-userdata');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
+        $this->addCSSFile(dirname(__FILE__).'/UserData.css');
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData');
     }
@@ -38,16 +38,16 @@ class UserData extends AbstractProfileControl
      */
     public function getBody()
     {
+        $action               = false;
+        $emailChangeRequested = true;
+
+        $User             = QUI::getUserBySession();
         $Engine           = QUI::getTemplateManager()->getEngine();
-        $action           = false;
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
         if (!empty($_REQUEST['action'])) {
             $action = $_REQUEST['action'];
         }
-
-        $emailChangeRequested = true;
-        $User                 = QUI::getUserBySession();
 
         try {
             QUI\Verification\Verifier::getVerificationByIdentifier(
@@ -59,14 +59,22 @@ class UserData extends AbstractProfileControl
             $emailChangeRequested = false;
         }
 
+        /* @var $User QUI\Users\User */
+        try {
+            $Address = $User->getStandardAddress();
+        } catch (QUI\Users\Exception $Exception) {
+            $Address = $User->addAddress([]);
+        }
+
         $Engine->assign(array(
-            'User'              => QUI::getUserBySession(),
+            'User'              => $User,
+            'Address'           => $Address,
             'action'            => $action,
             'changeMailRequest' => $emailChangeRequested,
             'username'          => $RegistrarHandler->isUsernameInputAllowed()
         ));
 
-        return $Engine->fetch(dirname(__FILE__) . '/UserData.html');
+        return $Engine->fetch(dirname(__FILE__).'/UserData.html');
     }
 
     /**
@@ -80,6 +88,12 @@ class UserData extends AbstractProfileControl
         $Request  = QUI::getRequest()->request;
         $newEmail = $Request->get('emailNew');
         $User     = QUI::getUserBySession();
+
+        if (QUI::getUsers()->isNobodyUser($User)) {
+            return;
+        }
+
+        /* @var $User QUI\Users\User */
 
         if (!empty($newEmail)) {
             if (!Orthos::checkMailSyntax($newEmail)) {
@@ -131,8 +145,8 @@ class UserData extends AbstractProfileControl
             && $Request->get('birth_month')
             && $Request->get('birth_day')) {
             $bday .= $Request->get('birth_year');
-            $bday .= '-' . $Request->get('birth_month');
-            $bday .= '-' . $Request->get('birth_day');
+            $bday .= '-'.$Request->get('birth_month');
+            $bday .= '-'.$Request->get('birth_day');
             $Request->set('birthday', $bday);
         }
 
@@ -143,5 +157,45 @@ class UserData extends AbstractProfileControl
         }
 
         $User->save();
+
+
+        // update first address
+        try {
+            $Address     = $User->getStandardAddress();
+            $addressData = [];
+
+            if ($Request->get('firstname')) {
+                $addressData['firstname'] = $Request->get('firstname');
+            }
+
+            if ($Request->get('lastname')) {
+                $addressData['lastname'] = $Request->get('lastname');
+            }
+
+            if ($Request->get('company')) {
+                $addressData['company'] = $Request->get('company');
+            }
+
+            if ($Request->get('street_no')) {
+                $addressData['street_no'] = $Request->get('street_no');
+            }
+
+            if ($Request->get('zip')) {
+                $addressData['zip'] = $Request->get('zip');
+            }
+
+            if ($Request->get('city')) {
+                $addressData['city'] = $Request->get('city');
+            }
+
+            if ($Request->get('country')) {
+                $addressData['country'] = $Request->get('country');
+            }
+
+            $Address->setAttributes($addressData);
+            $Address->save();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
     }
 }

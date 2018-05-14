@@ -1,6 +1,7 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
  * @author www.pcsg.de (Henning Leutz)
+ * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
@@ -9,10 +10,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
     'qui/controls/loader/Loader',
     'package/quiqqer/controls/bin/site/Window',
     'qui/utils/Form',
+    'Locale',
     'Ajax'
 
-], function (QUI, QUIControl, QUILoader, QUISiteWindow, QUIFormUtils, QUIAjax) {
+], function (QUI, QUIControl, QUILoader, QUISiteWindow, QUIFormUtils, QUILocale, QUIAjax) {
     "use strict";
+
+    var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -23,6 +27,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             '$onImport',
             '$sendForm'
         ],
+
+        options: {
+            registrars: [] // list of registar that are displayed in this controls
+        },
 
         initialize: function (options) {
             this.parent(options);
@@ -51,52 +59,58 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 self.$sendForm(event.target).then(self.$onImport);
             });
 
-            // Terms Of Use
+            // Terms Of Use / Privacy Policy
             var TermsOfUseElm = Elm.getElement('.quiqqer-frontendUsers-controls-registration-termsOfUse');
 
             if (TermsOfUseElm) {
-                var TermsOfUseLink = TermsOfUseElm.getElement('a');
+                var TermsOfUseLink    = TermsOfUseElm.getElement('a.quiqqer-frontendusers-termsofuse-link');
+                var PrivacyPolicyLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-privacypolicy-link');
 
-                TermsOfUseLink.addEvent('click', function (event) {
-                    event.stop();
+                if (TermsOfUseLink) {
+                    TermsOfUseLink.addEvent('click', function (event) {
+                        event.stop();
 
-                    new QUISiteWindow({
-                        showTitle: true,
-                        project  : QUIQQER_PROJECT.name,
-                        lang     : QUIQQER_PROJECT.lang,
-                        id       : TermsOfUseElm.get('data-siteid')
-                    }).open();
-                });
+                        new QUISiteWindow({
+                            closeButtonText: QUILocale.get(lg, 'btn.close'),
+                            showTitle      : true,
+                            project        : QUIQQER_PROJECT.name,
+                            lang           : QUIQQER_PROJECT.lang,
+                            id             : TermsOfUseElm.get('data-termsofusesiteid')
+                        }).open();
+                    });
+                }
+
+                if (PrivacyPolicyLink) {
+                    PrivacyPolicyLink.addEvent('click', function (event) {
+                        event.stop();
+
+                        new QUISiteWindow({
+                            showTitle: true,
+                            project  : QUIQQER_PROJECT.name,
+                            lang     : QUIQQER_PROJECT.lang,
+                            id       : TermsOfUseElm.get('data-privacypolicysiteid')
+                        }).open();
+                    });
+                }
 
                 this.$TermsOfUseCheckBox = Elm.getElement(
                     '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
                 );
-                var TermsOfUseLock       = Elm.getElement(
-                    '.quiqqer-frontendUsers-controls-registration-locked'
-                );
-
-                if (this.$TermsOfUseCheckBox && TermsOfUseLock) {
-                    this.$TermsOfUseCheckBox.addEvent('click', function (event) {
-                        if (event.target.checked) {
-                            TermsOfUseLock.setStyle('display', 'none');
-                        } else {
-                            TermsOfUseLock.setStyle('display', null);
-                        }
-                    });
-
-                    if (this.$TermsOfUseCheckBox.checked) {
-                        TermsOfUseLock.setStyle('display', 'none');
-                    }
-                }
             }
 
-            // Auto redirect
+            // Redirect
             var RedirectElm = Elm.getElement(
-                '.quiqqer-frontendUsers-autoRedirect'
+                '.quiqqer-frontendUsers-redirect'
             );
 
             if (RedirectElm) {
-                var url = RedirectElm.get('data-url');
+                var url     = RedirectElm.get('data-url');
+                var instant = RedirectElm.get('data-instant') === "1";
+
+                if (instant) {
+                    window.location = url;
+                    return;
+                }
 
                 (function () {
                     window.location = url;
@@ -131,15 +145,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     );
 
                     self.getElm().set('html', Registration.get('html'));
-
-                    QUI.parse(self.getElm()).then(resolve);
-
-                    resolve();
+                    QUI.parse(self.getElm()).then(resolve, reject);
                 }, {
-                    'package'  : 'quiqqer/frontend-users',
-                    'registrar': Form.get('data-registrar'),
-                    'data'     : JSON.encode(formData),
-                    onError    : reject
+                    'package' : 'quiqqer/frontend-users',
+                    registrar : Form.get('data-registrar'),
+                    data      : JSON.encode(formData),
+                    registrars: self.getAttribute('registrars'),
+                    onError   : reject
                 });
             });
         }

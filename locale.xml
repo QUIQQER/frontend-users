@@ -70,6 +70,14 @@
             <de><![CDATA[Sichtbare Kategorien im Benutzer-Profil]]></de>
             <en><![CDATA[Visible categories in the User Profile]]></en>
         </locale>
+        <locale name="profile.userdata.title">
+            <de><![CDATA[Benutzerdaten]]></de>
+            <en><![CDATA[User data]]></en>
+        </locale>
+        <locale name="profile.userdata.additional.title">
+            <de><![CDATA[Zusätzliche Daten]]></de>
+            <en><![CDATA[Additional data]]></en>
+        </locale>
         <locale name="profile.userData.text">
             <de>
                 <![CDATA[Darf seine grundlegenden Benutzerdaten ändern (Vorname, Nachname, Geburtstag, E-Mail-Adresse, Benutzername)]]></de>
@@ -365,24 +373,28 @@
                 <![CDATA[Users who register but do not activate will automatically be deleted after X days. This assumes that the Cron <b>Delete Inactive User</b> is set up and enabled. Subject <b>not</b> users who have been disabled through user management.]]></en>
         </locale>
         <locale name="settings.termsOfUseRequired.title">
-            <de><![CDATA[Nutzungsbedingungen]]></de>
-            <en><![CDATA[Terms Of Use]]></en>
+            <de><![CDATA[Nutzungsbedingungen / Datenschutzbestimmungen]]></de>
+            <en><![CDATA[Terms Of Use / Privacy]]></en>
         </locale>
         <locale name="settings.termsOfUseRequired.description" html="true">
-            <de>
-                <![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> Seiten eingestellt sind)]]></de>
-            <en>
-                <![CDATA[Users are required to accept <b>Terms Of User</b> before registering (required sites to to be set under <b>Terms Of Use Sites</b>]]></en>
+            <de><![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> und/oder <b>Datenschutzbestimmungen-Seiten</b> Seiten eingestellt sind)]]></de>
+            <en><![CDATA[Users are required to accept <b>Terms Of Use / Privacy Policy</b> before registering (requires sites to to be set under <b>Terms Of Use Sites</b> and/or <b>Privacy Policy Sites</b>)]]></en>
         </locale>
         <locale name="settings.termsOfUseSite.title">
             <de><![CDATA[Nutzungsbedingungen-Seiten]]></de>
             <en><![CDATA[Terms Of Use Sites]]></en>
         </locale>
         <locale name="settings.termsOfUseSite.description" html="true">
-            <de>
-                <![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen</b> aktiviert ist.]]></de>
-            <en>
-                <![CDATA[Determines the Site which containts the Terms Of Use in its <b>content</b>. This requires that the setting <b>Terms Of Use</b> is active.]]></en>
+            <de><![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> aktiviert ist.]]></de>
+            <en><![CDATA[Determines the Site which containts the Terms Of Use in its <b>content</b>. This requires that the setting <b>Terms Of Use / Privacy Policy</b> is active.]]></en>
+        </locale>
+        <locale name="settings.privacyPolicySite.title">
+            <de><![CDATA[Datenschutzbestimmungen-Seiten]]></de>
+            <en><![CDATA[Privacy Policy Sites]]></en>
+        </locale>
+        <locale name="settings.privacyPolicySite.description" html="true">
+            <de><![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Datenschutzbestimmungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> aktiviert ist.]]></de>
+            <en><![CDATA[Determines the Site which containts the Privacy Policy in its <b>content</b>. This requires that the setting <b>Terms Of Use / Privacy Policy</b> is active.]]></en>
         </locale>
         <locale name="settings.sendPassword.title">
             <de><![CDATA[Zufalls-Passwort erstellen & senden]]></de>
@@ -477,13 +489,20 @@
             <en><![CDATA[Terms Of Use]]></en>
         </locale>
         <locale name="control.registration.terms_of_use.info">
-            <de><![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen, um mit der Registrierung fortzufahren.]]></de>
-            <en><![CDATA[Accept our Terms Of Use to continue with the registration.]]></en>
+            <de><![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen und/oder Datenschutzbestimmungen, um mit der Registrierung fortzufahren.]]></de>
+            <en><![CDATA[Accept our Terms Of Use and/or Privacy Policy to continue with the registration.]]></en>
         </locale>
         <locale name="control.registration.terms_of_use.label">
-            <de>
-                <![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <de><![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
             <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and accept them]]></en>
+        </locale>
+        <locale name="control.registration.privacy_policy.label">
+            <de><![CDATA[Ja, ich habe die <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <en><![CDATA[Yes, I've read the <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them]]></en>
+        </locale>
+        <locale name="control.registration.terms_of_use_and_privacy_policy.label">
+            <de><![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> und <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
+            <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> and <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them]]></en>
         </locale>
         <locale name="exception.registration.registrar_not_found">
             <de><![CDATA[Ungültige Registrierungs-Methode]]></de>
@@ -492,6 +511,10 @@
         <locale name="exception.registration.terms_of_use_not_accepted">
             <de><![CDATA[Bitte akzeptieren Sie die Nutzungsbedingungen, um sich zu registrieren.]]></de>
             <en><![CDATA[Please accept the Terms Of Use to register.]]></en>
+        </locale>
+        <locale name="control.registration.success">
+            <de><![CDATA[Erfolg!]]></de>
+            <en><![CDATA[Success!]]></en>
         </locale>
 
         <!-- Registrar: E-Mail -->
@@ -579,14 +602,17 @@
             <en><![CDATA[Delete user account]]></en>
         </locale>
         <locale name="profile.address.title">
-            <de><![CDATA[Adresse]]></de>
-            <en><![CDATA[Address]]></en>
+            <de><![CDATA[Adressen]]></de>
+            <en><![CDATA[Addresses]]></en>
+        </locale>
+        <locale name="profile.address.category.title">
+            <de><![CDATA[Adressenverwaltung]]></de>
+            <en><![CDATA[Address management]]></en>
         </locale>
         <locale name="profile.data.title">
             <de><![CDATA[Meine Daten]]></de>
             <en><![CDATA[My data]]></en>
         </locale>
-
 
         <locale name="dialog.frontend-users.delete.address">
             <de><![CDATA[Möchten Sie die Adresse wirklichen löschen?]]></de>
@@ -1084,6 +1110,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Adresse]]></de>
             <en><![CDATA[Address]]></en>
         </locale>
+        <locale name="control.address.header.defaultAddress.title">
+            <de><![CDATA[Standard-Adresse]]></de>
+            <en><![CDATA[Default address]]></en>
+        </locale>
         <locale name="control.address.title.Address.addButton">
             <de><![CDATA[Neue Adresse hinzufügen]]></de>
             <en><![CDATA[Add new address]]></en>
@@ -1137,6 +1167,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="controls.settings.registrars.template.labelActive">
             <de><![CDATA[Aktiv]]></de>
             <en><![CDATA[Active]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.labelDisplayPosition">
+            <de><![CDATA[Anzeige-Position]]></de>
+            <en><![CDATA[Display position]]></en>
         </locale>
 
         <!-- Control: settings/AddressFields -->
@@ -1231,6 +1265,11 @@ The deletion of your user account on [host] was requested on [date]. Please conf
                 <![CDATA[Beim Laden dieses Profil-Bereichs ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an einen Administrator.]]></de>
             <en>
                 <![CDATA[An unexpected error occurred while loading this profile section. Please try again or contact an administrator.]]></en>
+        </locale>
+
+        <locale name="btn.close">
+            <de><![CDATA[Schließen]]></de>
+            <en><![CDATA[Close]]></en>
         </locale>
 
     </groups>

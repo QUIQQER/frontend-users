@@ -21,7 +21,7 @@ class Address extends QUI\Control
      *
      * @param array $attributes
      */
-    public function __construct($attributes = array())
+    public function __construct($attributes = [])
     {
         parent::__construct($attributes);
 
@@ -95,7 +95,7 @@ class Address extends QUI\Control
         }
 
         $UserAddress = null;
-        $addresses   = array();
+        $addresses   = [];
 
         try {
             $UserAddress = $User->getStandardAddress();
@@ -107,12 +107,12 @@ class Address extends QUI\Control
         } catch (QUI\Exception $Exception) {
         }
 
-        $Engine->assign(array(
+        $Engine->assign([
             'this'        => $this,
             'User'        => $User,
             'UserAddress' => $UserAddress,
             'addresses'   => $addresses
-        ));
+        ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Address.html');
     }
@@ -129,11 +129,12 @@ class Address extends QUI\Control
         $Engine  = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress((int)$_REQUEST['edit']);
 
-        $Engine->assign(array(
+        $Engine->assign([
             'this'      => $this,
             'Address'   => $Address,
+            'User'      => $User,
             'countries' => QUI\Countries\Manager::getList()
-        ));
+        ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Address.Edit.html');
     }
@@ -150,10 +151,11 @@ class Address extends QUI\Control
         $Engine  = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress((int)$_REQUEST['delete']);
 
-        $Engine->assign(array(
+        $Engine->assign([
             'this'    => $this,
-            'Address' => $Address
-        ));
+            'Address' => $Address,
+            'User'    => $User
+        ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Address.Delete.html');
     }
@@ -176,11 +178,12 @@ class Address extends QUI\Control
             $currentCountry = $Country->getCode();
         }
 
-        $Engine->assign(array(
+        $Engine->assign([
             'this'           => $this,
             'currentCountry' => $currentCountry,
-            'countries'      => QUI\Countries\Manager::getList()
-        ));
+            'countries'      => QUI\Countries\Manager::getList(),
+            'User'           => $User
+        ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Address.Create.html');
     }
@@ -189,8 +192,11 @@ class Address extends QUI\Control
      * Create a new address for the user
      *
      * @param array $data - address data
+     *
+     * @throws QUI\Exception
+     * @throws QUI\Permissions\Exception
      */
-    public function createAddress($data = array())
+    public function createAddress($data = [])
     {
         if (!isset($_REQUEST['createSave'])) {
             return;
@@ -204,7 +210,7 @@ class Address extends QUI\Control
         $User    = QUI::getUserBySession();
         $Address = $User->addAddress();
 
-        $fields = array(
+        $fields = [
             'company',
             'salutation',
             'firstname',
@@ -213,7 +219,7 @@ class Address extends QUI\Control
             'zip',
             'city',
             'country'
-        );
+        ];
 
         foreach ($fields as $field) {
             if (isset($data[$field])) {
@@ -228,8 +234,11 @@ class Address extends QUI\Control
      * Edit an address
      *
      * @param array $data - address data
+     *
+     * @throws QUI\Exception
+     * @throws QUI\Permissions\Exception
      */
-    public function editAddress($data = array())
+    public function editAddress($data = [])
     {
         if (!isset($_REQUEST['addressId']) || !isset($_REQUEST['editSave'])) {
             return;
@@ -242,7 +251,7 @@ class Address extends QUI\Control
         $User    = QUI::getUserBySession();
         $Address = $User->getAddress($_REQUEST['addressId']);
 
-        $fields = array(
+        $fields = [
             'company',
             'salutation',
             'firstname',
@@ -251,7 +260,7 @@ class Address extends QUI\Control
             'zip',
             'city',
             'country'
-        );
+        ];
 
         foreach ($fields as $field) {
             if (isset($data[$field])) {
@@ -286,10 +295,10 @@ class Address extends QUI\Control
      */
     public function validate(QUI\Users\Address $Address)
     {
-        $exception = array(
+        $exception = [
             'quiqqer/order',
             'exception.missing.address.field'
-        );
+        ];
 
         $firstName = $Address->getAttribute('firstname');
         $lastName  = $Address->getAttribute('lastname');

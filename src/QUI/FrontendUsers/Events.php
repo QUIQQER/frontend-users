@@ -5,7 +5,6 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Users\User;
 use QUI\Verification\Verifier;
-use QUI\FrontendUsers\ActivationVerification;
 
 /**
  * Class Events
@@ -21,6 +20,8 @@ class Events
      *
      * @param \QUI\Users\User $User
      * @return void
+     *
+     * @throws QUI\Exception
      */
     public static function onUserActivate(User $User)
     {
@@ -70,8 +71,10 @@ class Events
      *
      * @param User $User
      * @return void
+     *
+     * @throws QUI\Exception
      */
-    protected static function sendWelcomeMail(User $User)
+    public static function sendWelcomeMail(User $User)
     {
         $Handler              = Handler::getInstance();
         $registrationSettings = $Handler->getRegistrationSettings();
@@ -115,48 +118,54 @@ class Events
      * Auto-login user
      *
      * @param User $User
+     * @param bool $checkEligibility (optional) - Checks if the user is eligible for auto login
      * @return void
+     *
+     * @throws QUI\Exception
      */
-    public static function autoLogin(User $User)
+    public static function autoLogin(User $User, $checkEligibility = true)
     {
-        $Handler   = Handler::getInstance();
-        $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
+        $Handler = Handler::getInstance();
 
-        if (empty($registrar)) {
-            return;
-        }
+        if ($checkEligibility) {
+            $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
 
-        // check if Registrar exists
-        try {
-            $Registrar = $Handler->getRegistrar($registrar);
-        } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
+            if (empty($registrar)) {
+                return;
+            }
 
-            return;
-        }
+            // check if Registrar exists
+            try {
+                $Registrar = $Handler->getRegistrar($registrar);
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
 
-        $registrationSettings = $Handler->getRegistrationSettings();
+                return;
+            }
 
-        // do not log in if autoLogin is deactivated or user is already logged in!
-        if (!$registrationSettings['autoLoginOnActivation']
-            || QUI::getUserBySession()->getId()
-            || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)) {
-            return;
-        }
+            $registrationSettings = $Handler->getRegistrationSettings();
 
-        $settings = $Handler->getRegistrarSettings($Registrar->getType());
+            // do not log in if autoLogin is deactivated or user is already logged in!
+            if (!$registrationSettings['autoLoginOnActivation']
+                || QUI::getUserBySession()->getId()
+                || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)) {
+                return;
+            }
 
-        // do not log in if users have to be manually activated
-        if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
-            return;
+            $settings = $Handler->getRegistrarSettings($Registrar->getType());
+
+            // do not log in if users have to be manually activated
+            if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
+                return;
+            }
         }
 
         // login
         $secHash = QUI::getUsers()->getSecHash();
 
-        $User->setAttributes(array(
+        $User->setAttributes([
             $Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED => true
-        ));
+        ]);
 
         $User->save(QUI::getUsers()->getSystemUser());
 
@@ -173,12 +182,12 @@ class Events
 
         QUI::getDataBase()->update(
             QUI::getUsers()->table(),
-            array(
+            [
                 'lastvisit'  => time(),
                 'user_agent' => $useragent,
                 'secHash'    => $secHash
-            ),
-            array('id' => $User->getId())
+            ],
+            ['id' => $User->getId()]
         );
     }
 
@@ -252,10 +261,11 @@ class Events
             $name = $Registrar->getType();
 
             if (!isset($settings[$name])) {
-                $settings[$name] = array(
-                    'active'         => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
-                    'activationMode' => 'mail'
-                );
+                $settings[$name] = [
+                    'active'          => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
+                    'activationMode'  => 'mail',
+                    'displayPosition' => 1
+                ];
             }
         }
 
@@ -277,44 +287,44 @@ class Events
             return;
         }
 
-        $addressFields = array(
-            'salutation' => array(
+        $addressFields = [
+            'salutation' => [
                 'show'     => true,
                 'required' => false
-            ),
-            'firstname'  => array(
+            ],
+            'firstname'  => [
                 'show'     => true,
                 'required' => true
-            ),
-            'lastname'   => array(
+            ],
+            'lastname'   => [
                 'show'     => true,
                 'required' => true
-            ),
-            'street_no'  => array(
+            ],
+            'street_no'  => [
                 'show'     => true,
                 'required' => true
-            ),
-            'zip'        => array(
+            ],
+            'zip'        => [
                 'show'     => true,
                 'required' => true
-            ),
-            'city'       => array(
+            ],
+            'city'       => [
                 'show'     => true,
                 'required' => true
-            ),
-            'country'    => array(
+            ],
+            'country'    => [
                 'show'     => true,
                 'required' => true
-            ),
-            'company'    => array(
+            ],
+            'company'    => [
                 'show'     => true,
                 'required' => false
-            ),
-            'phone'      => array(
+            ],
+            'phone'      => [
                 'show'     => true,
                 'required' => false
-            )
-        );
+            ]
+        ];
 
         $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
         $Conf->save();
@@ -411,7 +421,7 @@ class Events
                     }
                 }
 
-                $Permissions->addPermission(array(
+                $Permissions->addPermission([
                     'name'         => $permission,
                     'title'        => $title,
                     'desc'         => '',
@@ -419,7 +429,7 @@ class Events
                     'area'         => '',
                     'src'          => 'quiqqer/frontend-users',
                     'defaultvalue' => 1
-                ));
+                ]);
             }
         }
     }
