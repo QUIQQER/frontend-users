@@ -24,12 +24,12 @@ class Profile extends Control
      *
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
-        $this->setAttributes(array(
+        $this->setAttributes([
             'category' => false,
             'setting'  => false
-        ));
+        ]);
 
         parent::__construct($attributes);
 
@@ -153,15 +153,15 @@ class Profile extends Control
         }
 
         // load the translations
-        $categories = utils::loadTranslationForCategories($categories);
+        $categories = Utils::loadTranslationForCategories($categories);
 
-        $Engine->assign(array(
+        $Engine->assign([
             'categories'      => $categories,
             'currentCategory' => $currentCategory,
             'currentSetting'  => $currentSetting,
             'Category'        => $Control,
             'Site'            => $this->getSite()
-        ));
+        ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Profile.html');
     }
@@ -177,20 +177,20 @@ class Profile extends Control
         $User = $this->getAttribute('User');
 
         if ($User === false) {
-            throw new QUI\FrontendUsers\Exception(array(
+            throw new QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.ser.was.not.net'
-            ));
+            ]);
         }
 
         if ($User instanceof QUI\Interfaces\Users\User) {
             return $User;
         }
 
-        throw new QUI\FrontendUsers\Exception(array(
+        throw new QUI\FrontendUsers\Exception([
             'quiqqer/frontend-users',
             'exception.ser.was.not.net'
-        ));
+        ]);
     }
 
     /**

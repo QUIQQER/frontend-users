@@ -24,7 +24,7 @@ class Utils
     public static function getFrontendUsersPackages()
     {
         $packages = QUI::getPackageManager()->getInstalled();
-        $list     = array();
+        $list     = [];
 
         /* @var $Package \QUI\Package\Package */
         foreach ($packages as $package) {
@@ -40,7 +40,7 @@ class Utils
 
             $dir = $Package->getDir();
 
-            if (file_exists($dir . '/frontend-users.xml')) {
+            if (file_exists($dir.'/frontend-users.xml')) {
                 $list[] = $Package;
             }
         }
@@ -63,17 +63,23 @@ class Utils
         } catch (QUI\Exception $exception) {
         }
 
-        $result   = array();
+        $result   = [];
         $packages = self::getFrontendUsersPackages();
 
-        $Engine = QUI::getTemplateManager()->getEngine();
+        try {
+            $Engine = QUI::getTemplateManager()->getEngine();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+
+            return [];
+        }
 
         /** @var QUI\Package\Package $Package */
         foreach ($packages as $Package) {
             $Parser = new QUI\Utils\XML\Settings();
             $Parser->setXMLPath('//quiqqer/frontend-users/profile');
 
-            $Collection = $Parser->getCategories($Package->getDir() . '/frontend-users.xml');
+            $Collection = $Parser->getCategories($Package->getDir().'/frontend-users.xml');
 
             foreach ($Collection as $entry) {
                 $categoryName = $entry['name'];
@@ -82,7 +88,7 @@ class Utils
                 if (!isset($result[$categoryName])) {
                     $result[$categoryName]['name']  = $entry['name'];
                     $result[$categoryName]['title'] = $entry['title'];
-                    $result[$categoryName]['items'] = array();
+                    $result[$categoryName]['items'] = [];
                 }
 
                 foreach ($items as $item) {
@@ -111,7 +117,12 @@ class Utils
             }
         }
 
-        QUI\Cache\Manager::set($cache, $result);
+        try {
+            QUI\Cache\Manager::set($cache, $result);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
+
 
         return $result;
     }
@@ -141,10 +152,10 @@ class Utils
             }
         }
 
-        throw new Exception(array(
+        throw new Exception([
             'quiqqer/frontend-users',
             'exception.profile.setting.not.found'
-        ));
+        ]);
     }
 
     /**
@@ -188,10 +199,10 @@ class Utils
             return $categories[$category];
         }
 
-        throw new Exception(array(
+        throw new Exception([
             'quiqqer/frontend-users',
             'exception.profile.category.not.found'
-        ));
+        ]);
     }
 
     /**
@@ -220,6 +231,21 @@ class Utils
             $categories[$key]['items'] = array_values($categories[$key]['items']);
         }
 
+        // sort
+        $sorting = function ($a, $b) {
+            $priority1 = isset($a['priority']) ? $a['priority'] : 0;
+            $priority2 = isset($b['priority']) ? $b['priority'] : 0;
+
+            return $priority1 > $priority2 ? +1 : -1;
+        };
+
+        foreach ($categories as $key => $values) {
+            $items = $categories[$key]['items'];
+            usort($items, $sorting);
+
+            $categories[$key]['items'] = $items;
+        }
+
         return $categories;
     }
 
@@ -234,7 +260,7 @@ class Utils
 
         foreach ($categories as $key => $category) {
             $items    = $category['items'];
-            $newItems = array();
+            $newItems = [];
 
             foreach ($items as $iKey => $setting) {
                 if (!isset($setting['showinprofilebar'])) {
@@ -270,10 +296,10 @@ class Utils
         }
 
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $permission       = $permissionPrefix . $category;
+        $permission       = $permissionPrefix.$category;
 
         if ($setting) {
-            $permission = $permission . '.' . $setting;
+            $permission = $permission.'.'.$setting;
         }
 
         return Permissions\Permission::hasPermission($permission, $User);
@@ -285,7 +311,7 @@ class Utils
      * @param array $categories
      * @return array
      */
-    public static function loadTranslationForCategories($categories = array())
+    public static function loadTranslationForCategories($categories = [])
     {
         // load the translations
         foreach ($categories as $key => $category) {
@@ -317,18 +343,18 @@ class Utils
      * @param null|QUI\Projects\Project $Project
      * @return array
      */
-    public static function setUrlsToCategorySettings($categories = array(), $Project = null)
+    public static function setUrlsToCategorySettings($categories = [], $Project = null)
     {
         if ($Project === null) {
             $Project = QUI::getRewrite()->getProject();
         }
 
-        $ids = $Project->getSitesIds(array(
-            'where' => array(
+        $ids = $Project->getSitesIds([
+            'where' => [
                 'type' => 'quiqqer/frontend-users:types/profile'
-            ),
+            ],
             'limit' => 1
-        ));
+        ]);
 
         if (!isset($ids[0])) {
             $Site = $Project->firstChild();
@@ -341,8 +367,8 @@ class Utils
         // load the translations
         foreach ($categories as $key => $category) {
             foreach ($category['items'] as $itemKey => $item) {
-                $itemUrl = $url . '/' . $category['name'];
-                $itemUrl = $itemUrl . '/' . $item['name'];
+                $itemUrl = $url.'/'.$category['name'];
+                $itemUrl = $itemUrl.'/'.$item['name'];
 
                 $categories[$key]['items'][$itemKey]['url'] = $itemUrl;
             }
