@@ -345,24 +345,30 @@ class Utils
      */
     public static function setUrlsToCategorySettings($categories = [], $Project = null)
     {
-        if ($Project === null) {
-            $Project = QUI::getRewrite()->getProject();
+        try {
+            if ($Project === null) {
+                $Project = QUI::getRewrite()->getProject();
+            }
+
+            $ids = $Project->getSitesIds([
+                'where' => [
+                    'type' => 'quiqqer/frontend-users:types/profile'
+                ],
+                'limit' => 1
+            ]);
+
+            if (!isset($ids[0])) {
+                $Site = $Project->firstChild();
+            } else {
+                $Site = $Project->get($ids[0]['id']);
+            }
+
+            $url = $Site->getUrlRewritten();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+
+            return [];
         }
-
-        $ids = $Project->getSitesIds([
-            'where' => [
-                'type' => 'quiqqer/frontend-users:types/profile'
-            ],
-            'limit' => 1
-        ]);
-
-        if (!isset($ids[0])) {
-            $Site = $Project->firstChild();
-        } else {
-            $Site = $Project->get($ids[0]['id']);
-        }
-
-        $url = $Site->getUrlRewritten();
 
         // load the translations
         foreach ($categories as $key => $category) {
