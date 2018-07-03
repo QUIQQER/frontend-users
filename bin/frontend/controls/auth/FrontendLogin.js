@@ -3,6 +3,8 @@
  *
  * @module package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin
  * @author www.pcsg.de (Patrick Müller)
+ *
+ * @event onLogin [this] - fires if the user successfully authenticates
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin', [
 
@@ -159,12 +161,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
             var LoginElm    = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-login');
             var redirectUrl = LoginElm.get('data-redirect');
 
+            this.fireEvent('login', [this]);
+
             if (redirectUrl) {
                 window.location = redirectUrl;
-                return;
             }
-
-            window.location = window.location.origin;
         },
 
         /**
