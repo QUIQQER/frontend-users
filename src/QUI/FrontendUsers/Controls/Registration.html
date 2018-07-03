@@ -24,15 +24,24 @@
 {if $Login}
 {$Login->create()}
 {/if}
+
+{template_event name="quiqqer::frontendUsers::registrationSuccess"}
+
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
 <div class="quiqqer-frontendUsers-pending">
     {$Registrar->getPendingMessage()}
 </div>
+
+{template_event name="quiqqer::frontendUsers::registrationPending"}
+
 {else}
 {if isset($error) && !$redirectUrl}
 <div class="quiqqer-frontendUsers-error">
     {$error}
 </div>
+
+{template_event name="quiqqer::frontendUsers::registrationError"}
+
 {/if}
 
 {if $Registrars->isEmpty()}
