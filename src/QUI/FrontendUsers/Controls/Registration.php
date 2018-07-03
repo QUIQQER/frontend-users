@@ -138,11 +138,9 @@ class Registration extends QUI\Control
                 try {
                     if (!empty($redirectOnLogin[$projectLang])) {
                         $RedirectSite = QUISiteUtils::getSiteByLink($redirectOnLogin[$projectLang]);
-                    } else {
-                        $RedirectSite = $Project->get(1);
+                        $redirectUrl     = $RedirectSite->getUrlRewrittenWithHost();
                     }
 
-                    $redirectUrl     = $RedirectSite->getUrlRewrittenWithHost();
                     $instantRedirect = true;
                 } catch (\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
