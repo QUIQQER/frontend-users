@@ -188,6 +188,10 @@
             <de><![CDATA[Registrierung<br>(Allgemeine Einstellungen)]]></de>
             <en><![CDATA[Registration<br>(General settings)]]></en>
         </locale>
+        <locale name="settings.category.userProfile.title">
+            <de><![CDATA[Benutzer-Profil]]></de>
+            <en><![CDATA[User profile]]></en>
+        </locale>
         <locale name="settings.defaultGroups.title">
             <de><![CDATA[Standard-Gruppen]]></de>
             <en><![CDATA[Default groups]]></en>
