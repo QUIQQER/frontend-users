@@ -41,6 +41,8 @@ try {
         'quiqqer/frontend-users',
         'message.types.registration.configuration_error'
     ));
+
+    exit;
 }
 
 $urlParams = QUI::getRewrite()->getUrlParamsList();

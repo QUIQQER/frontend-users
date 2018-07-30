@@ -44,7 +44,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         ],
 
         options: {
-            category: false
+            category     : false,
+            windowHistory: true
         },
 
         initialize: function (options) {
@@ -129,9 +130,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 self.$category = category;
                 self.$settings = settings;
 
-                self.$addFormEvents.then(function () {
-                    self.fireEvent('load', [self]);
-                });
+                self.$addFormEvents();
+                self.fireEvent('load', [self]);
             });
         },
 
@@ -285,6 +285,25 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         var Ghost = new Element('div', {
                             html: result
                         });
+
+                        // build the form
+                        if (!Form) {
+                            var Control = Ghost.getElement(
+                                '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
+                            );
+
+                            self.$Elm.set('html', Control.get('html'));
+
+                            Animation = Elm.getElement(
+                                '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
+                            );
+
+                            Form = self.$Elm.getElement(
+                                '.quiqqer-frontendUsers-controls-profile-categoryContent'
+                            );
+
+                            self.$bindCategoriesEvents();
+                        }
 
                         var styles  = Ghost.getElements('style');
                         var Content = Ghost.getElement(
@@ -454,7 +473,19 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * Set URI based on currently opened category
          */
         $setUri: function () {
-            var newUrl = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
+            if (this.getAttribute('windowHistory') === false) {
+                return;
+            }
+
+            var newUrl = '/' + this.$category + '/' + this.$settings;
+
+            if (QUIQQER_SITE.url !== '/') {
+                newUrl = QUIQQER_SITE.url + newUrl;
+            }
+
+            if (newUrl.indexOf('false') !== -1) {
+                return;
+            }
 
             if ("history" in window) {
                 window.history.pushState({}, "", newUrl);

@@ -2,6 +2,8 @@
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
  * @author www.pcsg.de (Henning Leutz)
  * @author www.pcsg.de (Patrick Müller)
+ *
+ * @event onRegister [this] - fires if the user successfully registers a user account
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
@@ -136,6 +138,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
+                    var Elm = self.getElm();
+
                     var Container = new Element('div', {
                         html: html
                     });
@@ -144,8 +148,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
                     );
 
-                    self.getElm().set('html', Registration.get('html'));
-                    QUI.parse(self.getElm()).then(resolve, reject);
+                    Elm.set('html', Registration.get('html'));
+
+                    QUI.parse(Elm).then(function () {
+                        if (Elm.getElement('.quiqqer-frontendUsers-success') ||
+                            Elm.getElement('.quiqqer-frontendUsers-pending')) {
+                            self.fireEvent('register', [self]);
+                        }
+
+                        resolve();
+                    }, reject);
                 }, {
                     'package' : 'quiqqer/frontend-users',
                     registrar : Form.get('data-registrar'),

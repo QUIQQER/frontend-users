@@ -188,6 +188,10 @@
             <de><![CDATA[Registrierung<br>(Allgemeine Einstellungen)]]></de>
             <en><![CDATA[Registration<br>(General settings)]]></en>
         </locale>
+        <locale name="settings.category.userProfile.title">
+            <de><![CDATA[Benutzer-Profil]]></de>
+            <en><![CDATA[User profile]]></en>
+        </locale>
         <locale name="settings.defaultGroups.title">
             <de><![CDATA[Standard-Gruppen]]></de>
             <en><![CDATA[Default groups]]></en>
@@ -344,9 +348,9 @@
         </locale>
         <locale name="settings.redirectOnLogin.description" html="true">
             <de>
-                <![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer sich im Frontend erfolgreich eingeloggt hat oder wenn ein eingeloggter Benutzer die Login-Seite besucht. Wenn diese Einstellung leergelassen wird, findet automatisch eine Weiterleitung auf die <b>Startseite</b> statt.]]></de>
+                <![CDATA[Automatische Weiterleitung auf die festgelegt Seite, nachdem der Benutzer sich im Frontend erfolgreich eingeloggt hat oder wenn ein eingeloggter Benutzer die Login-Seite besucht. Wenn diese Einstellung leergelassen wird, findet keine Weiterleitung statt.]]></de>
             <en>
-                <![CDATA[Automatic redirect to the specified page after the user has successfully logged in or visits the Login Site. If this setting is left empty and automatic redirect to the <b>start page</b> takes place.]]></en>
+                <![CDATA[Automatic redirect to the specified page after the user has successfully logged in or visits the Login Site. If this setting is left empty no redirect takes place.]]></en>
         </locale>
         <locale name="settings.category.login.title">
             <de><![CDATA[Login]]></de>
