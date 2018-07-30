@@ -44,7 +44,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         ],
 
         options: {
-            category: false
+            category     : false,
+            windowHistory: true
         },
 
         initialize: function (options) {
@@ -465,6 +466,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * Set URI based on currently opened category
          */
         $setUri: function () {
+            if (this.getAttribute('windowHistory') === false) {
+                return;
+            }
+            
             var newUrl = '/' + this.$category + '/' + this.$settings;
 
             if (QUIQQER_SITE.url !== '/') {
