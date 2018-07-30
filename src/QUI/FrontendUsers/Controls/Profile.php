@@ -120,11 +120,11 @@ class Profile extends Control
             }
         }
 
-        if ($currentCategory === false) {
+        if (empty($currentCategory)) {
             $currentCategory = $getFirstCategory($categories);
         }
 
-        if ($currentSetting === false) {
+        if (empty($currentSetting)) {
             $currentSetting = $getFirstCategorySetting($categories, $currentCategory);
         }
 
