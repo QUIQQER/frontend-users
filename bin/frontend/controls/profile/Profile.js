@@ -129,9 +129,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 self.$category = category;
                 self.$settings = settings;
 
-                self.$addFormEvents.then(function () {
-                    self.fireEvent('load', [self]);
-                });
+                self.$addFormEvents();
+                self.fireEvent('load', [self]);
             });
         },
 
@@ -280,6 +279,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">' +
                                 QUILocale.get(lg, 'controls.profile.Profile.setting_error') +
                                 '</div>';
+                        }
+
+                        if (!Form) {
+                            self.$Elm.set('html', result);
+
+                            Animation = Elm.getElement(
+                                '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
+                            );
+
+                            Form = self.$Elm.getElement(
+                                '.quiqqer-frontendUsers-controls-profile-categoryContent'
+                            );
                         }
 
                         var Ghost = new Element('div', {
@@ -454,7 +465,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * Set URI based on currently opened category
          */
         $setUri: function () {
-            var newUrl = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
+            var newUrl = '/' + this.$category + '/' + this.$settings;
+
+            if (QUIQQER_SITE.url !== '/') {
+                newUrl = QUIQQER_SITE.url + newUrl;
+            }
+
+            if (newUrl.indexOf('false') !== -1) {
+                return;
+            }
 
             if ("history" in window) {
                 window.history.pushState({}, "", newUrl);
