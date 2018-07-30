@@ -282,8 +282,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                                 '</div>';
                         }
 
+                        var Ghost = new Element('div', {
+                            html: result
+                        });
+
+                        // build the form
                         if (!Form) {
-                            self.$Elm.set('html', result);
+                            var Control = Ghost.getElement(
+                                '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
+                            );
+
+                            self.$Elm.set('html', Control.get('html'));
 
                             Animation = Elm.getElement(
                                 '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
@@ -292,11 +301,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             Form = self.$Elm.getElement(
                                 '.quiqqer-frontendUsers-controls-profile-categoryContent'
                             );
-                        }
 
-                        var Ghost = new Element('div', {
-                            html: result
-                        });
+                            self.$bindCategoriesEvents();
+                        }
 
                         var styles  = Ghost.getElements('style');
                         var Content = Ghost.getElement(
@@ -469,7 +476,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             if (this.getAttribute('windowHistory') === false) {
                 return;
             }
-            
+
             var newUrl = '/' + this.$category + '/' + this.$settings;
 
             if (QUIQQER_SITE.url !== '/') {
