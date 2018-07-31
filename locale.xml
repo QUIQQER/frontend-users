@@ -690,6 +690,11 @@
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
+        <locale name="message.UserDeleteConfirmVerification.success">
+            <de><![CDATA[Ihr Benuterkonto wurde erfolgreich gelöscht.]]></de>
+            <en><![CDATA[Your user account has been successfully deleted.]]></en>
+        </locale>
+        
         <!-- Ajax -->
         <locale name="exception.ajax.frontend_register.general_error">
             <de>

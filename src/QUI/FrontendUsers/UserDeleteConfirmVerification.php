@@ -88,7 +88,10 @@ class UserDeleteConfirmVerification extends AbstractVerification
      */
     public function getSuccessMessage()
     {
-        return '';
+        return QUI::getLocale()->get(
+            'quiqqer/frontend-users',
+            'message.UserDeleteConfirmVerification.success'
+        );
     }
 
     /**
@@ -109,7 +112,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      */
     public function getOnSuccessRedirectUrl()
     {
-        return $this->getProject()->get(1)->getUrlRewritten();
+        return false;
     }
 
     /**

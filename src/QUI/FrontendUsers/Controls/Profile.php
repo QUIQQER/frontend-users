@@ -113,7 +113,7 @@ class Profile extends Control
                 }
             }
 
-            if (empty($category['items'])) {
+            if (empty($categories[$key]['items'])) {
                 unset($categories[$key]);
             } else {
                 $categories[$key]['items'] = array_values($categories[$key]['items']);
