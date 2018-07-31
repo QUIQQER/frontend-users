@@ -43,6 +43,7 @@ QUI::$Ajax->registerFunction(
             $html = $Control->create();
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+
             return false;
         }
 
@@ -51,5 +52,5 @@ QUI::$Ajax->registerFunction(
 
         return QUI\Output::getInstance()->parse($result);
     },
-    array('category', 'settings', 'project', 'siteId')
+    ['category', 'settings', 'project', 'siteId']
 );

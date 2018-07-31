@@ -17,5 +17,5 @@ QUI::$Ajax->registerFunction(
         $Address = $User->getAddress($addressId);
         $Address->delete();
     },
-    array('addressId')
+    ['addressId']
 );

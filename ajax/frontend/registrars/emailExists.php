@@ -12,5 +12,5 @@ QUI::$Ajax->registerFunction(
     function ($email) {
         return QUI::getUsers()->emailExists($email);
     },
-    array('email')
+    ['email']
 );

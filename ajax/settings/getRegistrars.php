@@ -15,19 +15,19 @@ use QUI\FrontendUsers\AbstractRegistrar;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_settings_getRegistrars',
     function () {
-        $registrars = array();
+        $registrars = [];
 
         /** @var AbstractRegistrar $Registrar */
         foreach (Handler::getInstance()->getAvailableRegistrars() as $Registrar) {
-            $registrars[] = array(
+            $registrars[] = [
                 'type'        => $Registrar->getType(),
                 'title'       => $Registrar->getTitle(),
                 'description' => $Registrar->getDescription()
-            );
+            ];
         }
 
         return $registrars;
     },
-    array(),
+    [],
     'Permission::checkAdminUser'
 );

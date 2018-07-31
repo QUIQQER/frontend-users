@@ -18,5 +18,5 @@ QUI::$Ajax->registerFunction(
         $Address = new QUI\FrontendUsers\Controls\Address\Address();
         $Address->editAddress(json_decode($data, true));
     },
-    array('addressId', 'data')
+    ['addressId', 'data']
 );

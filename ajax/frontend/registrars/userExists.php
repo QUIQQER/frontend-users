@@ -12,5 +12,5 @@ QUI::$Ajax->registerFunction(
     function ($username) {
         return QUI::getUsers()->usernameExists($username);
     },
-    array('username')
+    ['username']
 );

@@ -29,5 +29,5 @@ QUI::$Ajax->registerFunction(
         $Address = new QUI\FrontendUsers\Controls\Address\Address();
         $Address->createAddress(json_decode($data, true));
     },
-    array('data')
+    ['data']
 );

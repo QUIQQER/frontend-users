@@ -13,5 +13,5 @@ QUI::$Ajax->registerFunction(
     function ($email) {
         return Orthos::checkMailSyntax($email);
     },
-    array('email')
+    ['email']
 );
