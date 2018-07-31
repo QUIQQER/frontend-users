@@ -22,5 +22,5 @@ QUI::$Ajax->registerFunction(
 
         return true;
     },
-    array('userId')
+    ['userId']
 );

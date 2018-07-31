@@ -30,5 +30,5 @@ QUI::$Ajax->registerFunction(
             )
         );
     },
-    array('category', 'settings', 'data')
+    ['category', 'settings', 'data']
 );

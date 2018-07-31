@@ -28,7 +28,7 @@ QUI::$Ajax->registerFunction(
             $registrarClass = $User->getAttribute(Handler::USER_ATTR_REGISTRAR);
 
             /** @var \QUI\FrontendUsers\RegistrarInterface $Registrar */
-            $Registrar      = new $registrarClass();
+            $Registrar = new $registrarClass();
             $Registrar->setProject(QUI::getRewrite()->getProject());
 
             Handler::getInstance()->sendActivationMail($User, $Registrar);
@@ -38,5 +38,5 @@ QUI::$Ajax->registerFunction(
 
         return true;
     },
-    array('userId')
+    ['userId']
 );

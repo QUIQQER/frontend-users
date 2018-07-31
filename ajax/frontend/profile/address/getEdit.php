@@ -18,5 +18,5 @@ QUI::$Ajax->registerFunction(
 
         return QUI\ControlUtils::parse($Address);
     },
-    array('addressId')
+    ['addressId']
 );
