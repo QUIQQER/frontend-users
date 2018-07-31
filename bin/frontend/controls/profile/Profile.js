@@ -197,6 +197,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             var pathName = window.location.pathname,
                 url      = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
 
+            if (!this.$settings || !this.$category) {
+                return;
+            }
+
             if (pathName !== url) {
                 var requestPart = pathName.replace(QUIQQER_SITE.url, '');
 
@@ -246,7 +250,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             //if (self.$category === category && self.$settings === settings) {
             //    return Promise.resolve();
             //}
-
+            console.log('openSetting');
             var Animation = Elm.getElement(
                 '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
             );
@@ -292,6 +296,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
                             );
 
+                            if (!Control) {
+                                return;
+                            }
+
                             self.$Elm.set('html', Control.get('html'));
 
                             Animation = Elm.getElement(
@@ -330,7 +338,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         (function () {
                             self.resize().then(resolve);
                         }).delay(100);
-
                     }, {
                         'package': 'quiqqer/frontend-users',
                         category : category,
@@ -403,7 +410,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     setting  = Target.get('data-setting');
 
                 self.$setMenuItemActive(category, setting);
-
 
                 self.openSetting(category, setting);
             });
