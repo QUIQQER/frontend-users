@@ -133,6 +133,7 @@ class Address extends QUI\Control
             'this'      => $this,
             'Address'   => $Address,
             'User'      => $User,
+            'phone'     => $Address->getPhone(),
             'countries' => QUI\Countries\Manager::getList()
         ]);
 
@@ -266,6 +267,10 @@ class Address extends QUI\Control
             if (isset($data[$field])) {
                 $Address->setAttribute($field, $data[$field]);
             }
+        }
+
+        if (isset($data['phone'])) {
+            $Address->editPhone(0, $data['phone']);
         }
 
         $Address->save();
