@@ -62,6 +62,14 @@
         }
     </label>
 
+    <label>
+        <span>{locale group="quiqqer/frontend-users" var="phone"}</span>
+        <input type="text"
+               name="phone"
+               value="{$phone|escape:'html'}"
+        />
+    </label>
+
     {template_event name="quiqqer::frontend-users::user-address-edit-end" User=$User Address=$Address}
 
     <button type="submit" name="editSave" value="1" class="quiqqer-frontend-users-address-edit-button">

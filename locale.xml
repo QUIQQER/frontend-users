@@ -687,6 +687,10 @@
             <de><![CDATA[Land]]></de>
             <en><![CDATA[Country]]></en>
         </locale>
+        <locale name="phone">
+            <de><![CDATA[Tel]]></de>
+            <en><![CDATA[Phone]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
