@@ -4,6 +4,7 @@
  * @author www.pcsg.de (Patrick Müller)
  *
  * @event onSelect [itemName, this]
+ * @event onMenuShow [self, MenuElm]
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
 
@@ -145,6 +146,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                         MenuElm.setStyle('opacity', null);
                     }
 
+                    self.fireEvent('menuShow', [self, MenuElm]);
 
                     self.$Menu.show();
                     self.$Menu.focus();
