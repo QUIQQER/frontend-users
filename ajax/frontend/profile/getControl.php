@@ -22,7 +22,7 @@ QUI::$Ajax->registerFunction(
         $category = Orthos::clear($category);
         $settings = Orthos::clear($settings);
 
-        if (!Utils::hasPermissionToViewCategory($category, $settings)) {
+        if (!empty($category) && !Utils::hasPermissionToViewCategory($category, $settings)) {
             return false;
         }
 
