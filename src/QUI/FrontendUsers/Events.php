@@ -62,7 +62,7 @@ class Events
             $url = $Site->getLocation();
             $url = str_replace(QUI\Rewrite::URL_DEFAULT_SUFFIX, '', $url);
 
-            QUI::getRewrite()->registerPath($url . '/*', $Site);
+            QUI::getRewrite()->registerPath($url.'/*', $Site);
         }
     }
 
@@ -337,8 +337,8 @@ class Events
      */
     public static function onTemplateGetHeader(QUI\Template $TemplateManager)
     {
-        $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
-        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
+        $cssFile = URL_OPT_DIR.'quiqqer/frontend-users/bin/style.css';
+        $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="'.$cssFile.'">');
 
         $User = QUI::getUserBySession();
 
@@ -353,7 +353,7 @@ class Events
                     'Locale'
                 ], function(Password, QUILocale) {
                     new Password({
-                        uid: '" . $User->getId() . "',
+                        uid: '".$User->getId()."',
                         mustChange: true,
                         message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
                         events: {
@@ -397,12 +397,16 @@ class Events
      */
     protected static function createProfileCategoryViewPermissions()
     {
-        $Permissions      = new QUI\Permissions\Manager();
-        $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
+        $Permissions           = new QUI\Permissions\Manager();
+        $permissionPrefix      = 'quiqqer.frontendUsers.profile.view.';
+        $defaultViewPermission = (int)QUI::getPackage('quiqqer/frontend-users')->getConfig()->get(
+            'user_profile',
+            'categoryViewDefaultPermission'
+        );
 
         foreach (Utils::getProfileCategories() as $c) {
             foreach ($c['items'] as $setting) {
-                $permission = $permissionPrefix . $c['name'] . '.' . $setting['name'];
+                $permission = $permissionPrefix.$c['name'].'.'.$setting['name'];
 
                 try {
                     $Permissions->getPermissionData($permission);
@@ -417,7 +421,7 @@ class Events
                     if (is_string($setting['title'])) {
                         $title = $setting['title'];
                     } elseif (is_array($setting['title']) && count($setting['title']) === 2) {
-                        $title = $setting['title'][0] . ' ' . $setting['title'][1];
+                        $title = $setting['title'][0].' '.$setting['title'][1];
                     }
                 }
 
@@ -428,7 +432,7 @@ class Events
                     'type'         => 'bool',
                     'area'         => '',
                     'src'          => 'quiqqer/frontend-users',
-                    'defaultvalue' => 1
+                    'defaultvalue' => $defaultViewPermission
                 ]);
             }
         }
