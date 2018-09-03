@@ -153,6 +153,14 @@
             <de><![CDATA[Adressverwaltung im Frontend Profil aktivieren]]></de>
             <en><![CDATA[Activate Address Management in the frontend profile]]></en>
         </locale>
+        <locale name="settings.categoryViewDefaultPermission.title">
+            <de><![CDATA[Standard-Berechtigung für neue Profilkategorien]]></de>
+            <en><![CDATA[Default permission for new profile categories]]></en>
+        </locale>
+        <locale name="settings.categoryViewDefaultPermission.description">
+            <de><![CDATA[Benutzerprofil-Kategorien, die bei einem System-Setup initial eingelesen werden, sollen von Benutzern standardmäßig gesehen werden dürfen.]]></de>
+            <en><![CDATA[User profile categories that are initially imported during a system setup should be allowed to be seen by users by default.]]></en>
+        </locale>
 
         <!-- Settings: ProfileBar -->
         <locale name="settings.section.profileBar.title">
