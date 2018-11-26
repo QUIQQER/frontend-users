@@ -18,7 +18,7 @@ use QUI\FrontendUsers\Utils;
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
-    function ($category, $settings, $project, $siteId) {
+    function ($category, $settings, $project, $siteId, $menu) {
         $category = Orthos::clear($category);
         $settings = Orthos::clear($settings);
 
@@ -38,6 +38,7 @@ QUI::$Ajax->registerFunction(
         $Control->setAttribute('User', QUI::getUserBySession());
         $Control->setAttribute('category', Orthos::clear($category));
         $Control->setAttribute('settings', Orthos::clear($settings));
+        $Control->setAttribute('menu', isset($menu) ? $menu : true);
 
         try {
             $html = $Control->create();
@@ -52,5 +53,5 @@ QUI::$Ajax->registerFunction(
 
         return QUI\Output::getInstance()->parse($result);
     },
-    ['category', 'settings', 'project', 'siteId']
+    ['category', 'settings', 'project', 'siteId', 'menu']
 );

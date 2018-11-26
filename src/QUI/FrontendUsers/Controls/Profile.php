@@ -28,7 +28,8 @@ class Profile extends Control
     {
         $this->setAttributes([
             'category' => false,
-            'setting'  => false
+            'settings' => false,
+            'menu'     => true
         ]);
 
         parent::__construct($attributes);
@@ -160,7 +161,8 @@ class Profile extends Control
             'currentCategory' => $currentCategory,
             'currentSetting'  => $currentSetting,
             'Category'        => $Control,
-            'Site'            => $this->getSite()
+            'Site'            => $this->getSite(),
+            'this'            => $this
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Profile.html');
