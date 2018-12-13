@@ -32,7 +32,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
         ],
 
         options: {
-            menuPosition: 'bottom' // bottom | top
+            menuPosition: 'bottom', // bottom | top
+            showlogout  : true // enable logout entry in the menu
         },
 
         initialize: function (options) {
@@ -104,22 +105,24 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                         );
                     }
                 }
+                
+                if (self.getAttribute('showlogout')) {
+                    self.$Menu.appendChild(new QUIMenuSeparator());
 
-                self.$Menu.appendChild(new QUIMenuSeparator());
-
-                self.$Menu.appendChild(
-                    new QUIMenuItem({
-                        name  : 'profile',
-                        title : QUILocale.get('quiqqer/system', 'logout'),
-                        text  : QUILocale.get('quiqqer/system', 'logout'),
-                        icon  : 'fa fa-sign-out',
-                        events: {
-                            onClick: function () {
-                                new LogoutWindow().open();
+                    self.$Menu.appendChild(
+                        new QUIMenuItem({
+                            name  : 'profile',
+                            title : QUILocale.get('quiqqer/system', 'logout'),
+                            text  : QUILocale.get('quiqqer/system', 'logout'),
+                            icon  : 'fa fa-sign-out',
+                            events: {
+                                onClick: function () {
+                                    new LogoutWindow().open();
+                                }
                             }
-                        }
-                    })
-                );
+                        })
+                    );
+                }
 
                 self.$Menu.inject(Elm, 'after');
 
