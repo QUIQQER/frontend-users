@@ -57,6 +57,10 @@
             <de><![CDATA[Registrierung eines Benutzerkontos durch die Eingabe einer E-Mail-Adresse und eines Passworts.]]></de>
             <en><![CDATA[Registration of a user account by entering an e-mail address and a password.]]></en>
         </locale>
+        <locale name="settings.category.userProfile.title">
+            <de><![CDATA[Benutzer-Profil]]></de>
+            <en><![CDATA[User profile]]></en>
+        </locale>
 
         <!-- Settings -->
 
