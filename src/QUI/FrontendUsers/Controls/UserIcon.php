@@ -24,7 +24,8 @@ class UserIcon extends Control
     {
         $this->setAttributes(array(
             'iconWidth'  => 50,
-            'iconHeight' => 50
+            'iconHeight' => 50,
+            'showLogout' => true
         ));
 
         parent::__construct($attributes);
@@ -52,6 +53,8 @@ class UserIcon extends Control
         if (!($User instanceof QUI\Interfaces\Users\User)) {
             return '';
         }
+
+        $this->setAttribute('data-qui-options-showlogout', $this->getAttribute('showLogout'));
 
         $Engine = QUI::getTemplateManager()->getEngine();
 

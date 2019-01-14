@@ -16,6 +16,10 @@
             </section>
 
             <section name="userProfile">
+                <conf name="categoryViewDefaultPermission">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
                 <conf name="userDeleteMode">
                     <type><![CDATA[string]]></type>
                     <defaultvalue><![CDATA[delete]]></defaultvalue>
@@ -187,6 +191,15 @@
                         <title>
                             <locale group="quiqqer/frontend-users" var="settings.section.userAccount.title"/>
                         </title>
+
+                        <input conf="userProfile.categoryViewDefaultPermission" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.categoryViewDefaultPermission.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.categoryViewDefaultPermission.description"/>
+                            </description>
+                        </input>
 
                         <input conf="userProfile.useAddressManagement" type="checkbox">
                             <text>

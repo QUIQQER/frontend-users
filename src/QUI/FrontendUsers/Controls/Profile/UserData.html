@@ -37,7 +37,8 @@
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.firstname"}
         </span>
-        <input name="firstname"
+        <input type="text"
+               name="firstname"
                autocomplete="given-name"
                value="{$User->getAttribute('firstname')|escape:'html'}"
         />
@@ -47,7 +48,8 @@
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.lastname"}
         </span>
-        <input name="lastname"
+        <input type="text"
+               name="lastname"
                autocomplete="family-name"
                value="{$User->getAttribute('lastname')|escape:'html'}"
         />

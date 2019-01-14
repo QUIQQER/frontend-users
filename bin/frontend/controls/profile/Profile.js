@@ -83,6 +83,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 Animation = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'),
                 Menu      = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categories');
 
+            if (!Menu) {
+                Menu = new Element('div'); // workaround
+            }
+
             var newHeight = Math.max(
                 Animation.getSize().y,
                 Animation.getScrollSize().y,
@@ -247,10 +251,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             category = category || false;
             settings = settings || false;
 
-            //if (self.$category === category && self.$settings === settings) {
-            //    return Promise.resolve();
-            //}
-            console.log('openSetting');
             var Animation = Elm.getElement(
                 '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
             );
