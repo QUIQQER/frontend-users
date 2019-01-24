@@ -1,0 +1,129 @@
+.quiqqer-fu-registrationSignIn {
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignIn-info,
+.quiqqer-fu-registrationSignIn-registration {
+    padding: 2rem;
+    position: relative;
+    text-align: center;
+    width: 40%;
+}
+
+.quiqqer-fu-registrationSignIn-registration-social {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.quiqqer-fu-registrationSignIn-registration-social-entry {
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    cursor: pointer;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    margin: 0 0.25rem;
+    text-align: center;
+    width: 50px;
+}
+
+.quiqqer-fu-registrationSignIn-registration-social-entry:hover {
+    background: #adadad;
+    color: #fff;
+}
+
+.quiqqer-fu-registrationSignIn-registration-email {
+    margin-top: 3rem;
+}
+
+.quiqqer-fu-registrationSignIn-registration-email label {
+    clear: both;
+    display: block;
+    margin: 0.5rem auto;
+    position: relative;
+    max-width: 360px;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignIn-registration-email label .icon {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    width: 30px;
+}
+
+.quiqqer-fu-registrationSignIn-registration-email label .label {
+    display: block;
+    padding: 0.25rem 0;
+    text-align: left;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignIn-registration-email label .field {
+    display: block;
+    position: relative;
+}
+
+.quiqqer-fu-registrationSignIn-registration-email label input {
+    width: 100%;
+    padding-left: 30px;
+}
+
+.quiqqer-fu-registrationSignIn-registration [type="submit"] {
+    margin-top: 0.5rem;
+    max-width: 360px;
+    padding: 0.75rem;
+    width: 100%;
+}
+
+/** registration sign in
+ ========================================== */
+
+.quiqqer-fu-registrationSignIn-terms {
+    align-items: center;
+    display: none;
+    flex-direction: column;
+    font-size: 1.3rem;
+    left: 0;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.quiqqer-fu-registrationSignIn-terms-text {
+    max-width: 570px;
+}
+
+.quiqqer-fu-registrationSignIn-terms-buttons {
+    clear: both;
+}
+
+.quiqqer-fu-registrationSignIn-terms button {
+    display: inline-block;
+    margin: 2rem auto;
+}
+
+.quiqqer-fu-registrationSignIn-terms button[name="decline"] {
+    background: transparent;
+    border: 1px solid #606975;
+    color: #606975;
+}
+
+.quiqqer-fu-registrationSignIn-terms button[name="decline"]:hover {
+    opacity: 0.5 !important;
+}
+
+
+.quiqqer-fu-registrationSignIn-terms label {
+    cursor: pointer;
+    max-width: 500px;
+    width: 100%
+}

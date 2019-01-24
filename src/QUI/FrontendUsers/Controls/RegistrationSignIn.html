@@ -1,0 +1,81 @@
+<section class="quiqqer-fu-registrationSignIn-registration">
+    <h2>Create an Account</h2>
+
+    <div class="quiqqer-fu-registrationSignIn-registration-social">
+        {foreach $Registrars as $Registrar}
+        <form action=""
+              method="POST"
+              class="quiqqer-fu-registrationSignIn-registration-social-entry"
+              data-registrar="{$Registrar->getHash()}"
+        >
+            {$Registrar->getControl()->create()}
+
+            <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
+            <input type="hidden" name="registration" value="1"/>
+            <input type="hidden" name="registration_id" value="{$registrationId}"/>
+        </form>
+        {/foreach}
+
+        {*
+        <div class="quiqqer-fu-registrationSignIn-registration-social-entry"
+             data-social-reg="google"
+        >
+            <span class="fa fa-google"></span>
+        </div>
+        <div class="quiqqer-fu-registrationSignIn-registration-social-entry"
+             data-social-reg="facebook"
+        >
+            <span class="fa fa-facebook"></span>
+        </div>
+        <div class="quiqqer-fu-registrationSignIn-registration-social-entry"
+             data-social-reg="twitter"
+        >
+            <span class="fa fa-twitter"></span>
+        </div>
+        <div class="quiqqer-fu-registrationSignIn-registration-social-entry"
+             data-social-reg="linkedin"
+        >
+            <span class="fa fa-linkedin"></span>
+        </div>
+        *}
+    </div>
+
+    {if $Registrars->count()}
+    <p>or you use your email account for registration</p>
+    {/if}
+
+    <form name="quiqqer-fu-registrationSignIn-email"
+          class="quiqqer-fu-registrationSignIn-registration-email"
+    >
+        <label>
+            <span class="label">Email</span>
+            <span class="field">
+                <span class="icon fa fa-envelope"></span>
+                <input type="email" name="email" required autocomplete="off"/>
+            </span>
+        </label>
+
+        <button type="submit">
+            Create Account
+        </button>
+    </form>
+
+    <div class="quiqqer-fu-registrationSignIn-terms">
+        <span class="quiqqer-fu-registrationSignIn-terms-text">
+            {$termsPrivacyMessage}
+        </span>
+
+        <div class="quiqqer-fu-registrationSignIn-terms-buttons">
+            <button name="decline">
+                {locale group="quiqqer/frontend-users" var="control.registration.sign.in.button.terms.decline"}
+            </button>
+            <button name="accept">
+                {locale group="quiqqer/frontend-users" var="control.registration.sign.in.button.terms"}
+            </button>
+        </div>
+    </div>
+</section>
+
+<section class="quiqqer-fu-registrationSignIn-info">
+    {$this->getAttribute('content')}
+</section>

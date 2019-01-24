@@ -1,0 +1,31 @@
+.registration-sign-in {
+    align-items: center;
+    background: #fff;
+    display: flex;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+.registration-login {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.registration-login button {
+    background: transparent;
+    box-shadow: rgba(0, 0, 0, 0.11) 0 0 0 2px;
+    color: #242c3a;
+    border: transparent;
+    width: 120px;
+}
+
+.registration-sign-in-container {
+    margin: 0 auto;
+    max-width: 1900px;
+    width: 100%;
+}

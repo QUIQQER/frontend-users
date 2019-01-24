@@ -38,6 +38,10 @@
             <de><![CDATA[Registrierung]]></de>
             <en><![CDATA[Registration]]></en>
         </locale>
+        <locale name="admin.types.registrationSignIn">
+            <de><![CDATA[Registrierung mit SignIn]]></de>
+            <en><![CDATA[Registration with Sign In]]></en>
+        </locale>
         <locale name="admin.types.login">
             <de><![CDATA[Login]]></de>
             <en><![CDATA[Login]]></en>
@@ -158,8 +162,10 @@
             <en><![CDATA[Default permission for new profile categories]]></en>
         </locale>
         <locale name="settings.categoryViewDefaultPermission.description">
-            <de><![CDATA[Benutzerprofil-Kategorien, die bei einem System-Setup initial eingelesen werden, sollen von Benutzern standardmäßig gesehen werden dürfen.]]></de>
-            <en><![CDATA[User profile categories that are initially imported during a system setup should be allowed to be seen by users by default.]]></en>
+            <de>
+                <![CDATA[Benutzerprofil-Kategorien, die bei einem System-Setup initial eingelesen werden, sollen von Benutzern standardmäßig gesehen werden dürfen.]]></de>
+            <en>
+                <![CDATA[User profile categories that are initially imported during a system setup should be allowed to be seen by users by default.]]></en>
         </locale>
 
         <!-- Settings: ProfileBar -->
@@ -511,26 +517,35 @@
             <en><![CDATA[Terms Of Use]]></en>
         </locale>
         <locale name="control.registration.terms_of_use.info">
-            <de>
-                <![CDATA[Akzeptieren Sie unsere Nutzungsbedingungen und/oder Datenschutzbestimmungen, um mit der Registrierung fortzufahren.]]></de>
+            <de><![CDATA[
+            Akzeptieren Sie unsere Nutzungsbedingungen und/oder Datenschutzbestimmungen, um mit der Registrierung fortzufahren.
+            ]]></de>
             <en><![CDATA[Accept our Terms Of Use and/or Privacy Policy to continue with the registration.]]></en>
         </locale>
         <locale name="control.registration.terms_of_use.label">
-            <de>
-                <![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
-            <en><![CDATA[Yes, I've read the <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and accept them]]></en>
+            <de><![CDATA[
+            Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> gelesen
+            und erkläre mich damit einverstanden
+            ]]></de>
+            <en><![CDATA[
+            Yes, I've read the <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and accept them
+            ]]></en>
         </locale>
         <locale name="control.registration.privacy_policy.label">
-            <de>
-                <![CDATA[Ja, ich habe die <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
-            <en>
-                <![CDATA[Yes, I've read the <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them]]></en>
+            <de><![CDATA[
+            Ja, ich habe die <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden
+            ]]></de>
+            <en><![CDATA[
+            Yes, I've read the <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them
+            ]]></en>
         </locale>
         <locale name="control.registration.terms_of_use_and_privacy_policy.label">
-            <de>
-                <![CDATA[Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> und <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden]]></de>
-            <en>
-                <![CDATA[Yes, I've read the <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> and <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them]]></en>
+            <de><![CDATA[
+            Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> und <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden
+            ]]></de>
+            <en><![CDATA[
+            Yes, I've read the <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> and <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> and accept them
+            ]]></en>
         </locale>
         <locale name="exception.registration.registrar_not_found">
             <de><![CDATA[Ungültige Registrierungs-Methode]]></de>
@@ -706,7 +721,7 @@
             <de><![CDATA[Ihr Benuterkonto wurde erfolgreich gelöscht.]]></de>
             <en><![CDATA[Your user account has been successfully deleted.]]></en>
         </locale>
-        
+
         <!-- Ajax -->
         <locale name="exception.ajax.frontend_register.general_error">
             <de>
@@ -850,15 +865,21 @@
             <en><![CDATA[Re-send verification mail]]></en>
         </locale>
         <locale name="profile.deleteaccount.message.confirm_wait">
-            <de>
-                <![CDATA[Bitte bestätigen Sie die Löschung Ihres Benutzerkontos über den Link, der Ihnen per E-Mail zugesandt wurde.]]></de>
+            <de><![CDATA[
+            Bitte bestätigen Sie die Löschung Ihres Benutzerkontos über den Link,
+            der Ihnen per E-Mail zugesandt wurde.
+            ]]></de>
             <en><![CDATA[Please confirm deletion of your user account via the link sent to you by e-mail.]]></en>
         </locale>
         <locale name="profile.deleteaccount.message.error">
-            <de>
-                <![CDATA[Das Löschen Ihres Benutzerkontos hat leider nicht funktioniert. Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.]]></de>
-            <en>
-                <![CDATA[Unfortunately, deleting your user account did not work. Please try again or try again later.]]></en>
+            <de><![CDATA[
+            Das Löschen Ihres Benutzerkontos hat leider nicht funktioniert.
+            Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.
+            ]]></de>
+            <en><![CDATA[
+            Unfortunately, deleting your user account did not work.
+            Please try again or try again later.
+            ]]></en>
         </locale>
 
         <!-- Profile: Address -->
@@ -875,10 +896,12 @@
 
         <!-- Class: Handler -->
         <locale name="exception.handler.check_config.no_welcome_mail_for_password_send">
-            <de>
-                <![CDATA[Die Passwort-Eingabe ist auf "Passwort zusenden" gestellt, die Willkommens-Mail bei Aktivierung ist jedoch deaktiviert. Bitte aktivieren Sie die Willkommens-Mail, damit das Passwort über diesen Weg einem Benutzer zugesendet werden kann.]]></de>
-            <en>
-                <![CDATA[The password input is set to "Send password", but the "Welcome mail on activation" is deactivated. Please activate the welcome mail so that the password can be sent to a user via this way.]]></en>
+            <de><![CDATA[
+            Die Passwort-Eingabe ist auf "Passwort zusenden" gestellt, die Willkommens-Mail bei Aktivierung ist jedoch deaktiviert.
+            Bitte aktivieren Sie die Willkommens-Mail, damit das Passwort über diesen Weg einem Benutzer zugesendet werden kann.
+            ]]></de>
+            <en><![CDATA[
+            The password input is set to "Send password", but the "Welcome mail on activation" is deactivated. Please activate the welcome mail so that the password can be sent to a user via this way.]]></en>
         </locale>
 
         <!-- Site type: types/registration -->
@@ -889,18 +912,30 @@
                 <![CDATA[You are already registered and have an active user account. To register a new user account, please log out.]]></en>
         </locale>
         <locale name="message.types.registration.configuration_error">
-            <de>
-                <![CDATA[Eine Registrierung ist z.Z. nicht möglich, da eine Fehlkonfiguration im Registrierungs-Modul vorliegt. Bitte wenden Sie sich an einen Administrator.]]></de>
-            <en>
-                <![CDATA[A registration is currently not possible of a configuration error in the registry module. Please contact an administrator.]]></en>
+            <de><![CDATA[
+            Eine Registrierung ist z.Z. nicht möglich, da eine Fehlkonfiguration im Registrierungs-Modul vorliegt.
+            Bitte wenden Sie sich an einen Administrator.
+            ]]></de>
+            <en><![CDATA[
+            A registration is currently not possible of a configuration error in the registry module.
+            Please contact an administrator.
+            ]]></en>
+        </locale>
+        <locale name="message.types.registration.not.possible">
+            <de><![CDATA[Die Registrierung ist zur zeit nicht möglich.]]></de>
+            <en><![CDATA[Registration is currently not possible.]]></en>
         </locale>
 
         <!-- Generic registration messages -->
         <locale name="message.registration_pending">
-            <de>
-                <![CDATA[Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren. Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail zugesandt wurde.]]></de>
-            <en>
-                <![CDATA[The registration was successful! Before you can log in, you must activate your user account. Please click on the activation link, which was sent to you by e-mail.]]></en>
+            <de><![CDATA[
+            Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren.
+            Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail zugesandt wurde.
+            ]]></de>
+            <en><![CDATA[
+            The registration was successful! Before you can log in, you must activate your user account.
+            Please click on the activation link, which was sent to you by e-mail.
+            ]]></en>
         </locale>
         <locale name="message.registration_successful">
             <de><![CDATA[Die Registrierung war erfolgreich!]]></de>
@@ -1176,6 +1211,15 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Diese Funktion ist deaktiviert.]]></de>
             <en><![CDATA[This function is deactivated.]]></en>
         </locale>
+
+        <locale name="control.registration.sign.in.button.terms">
+            <de><![CDATA[Weiter mit der Registrierung]]></de>
+            <en><![CDATA[Continue with registration]]></en>
+        </locale>
+        <locale name="control.registration.sign.in.button.terms.decline">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
@@ -1254,20 +1298,26 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Login is currently not possible because your user account has not been activated yet.]]></en>
         </locale>
         <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail">
-            <de>
-                <![CDATA[Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte auf den Aktivierungs-Link, der Ihnen bei der Registrierung per E-Mail zugeschickt wurde. Oder klicken Sie auf den Button, um den Aktivierungs-Link erneut zu versenden.]]></de>
-            <en>
-                <![CDATA[To activate your user account, please click on the activation link that was sent to you by e-mail on registration. Or click the button ro resend the activation link.]]></en>
+            <de><![CDATA[
+            Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte auf den Aktivierungs-Link, der Ihnen bei der Registrierung per E-Mail zugeschickt wurde.
+            Oder klicken Sie auf den Button, um den Aktivierungs-Link erneut zu versenden.
+            ]]></de>
+            <en><![CDATA[
+            To activate your user account, please click on the activation link that was sent to you by e-mail on registration.
+            Or click the button ro resend the activation link.
+            ]]></en>
         </locale>
         <locale name="controls.frontend.auth.frontendlogin.manual_activation">
             <de><![CDATA[Sie können sich einloggen, sobald ein Administrator Ihr Benutzerkonto aktiviert hat.]]></de>
             <en><![CDATA[You can log in as soon as an administrator activates your account.]]></en>
         </locale>
         <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_success">
-            <de>
-                <![CDATA[Der Aktivierungs-Link wurde erfolgreich versandt! Bitte prüfen Sie Ihr E-Mail-Postfach und ggf. auch Ihren Spam-Ordner.]]></de>
-            <en>
-                <![CDATA[The activation link has been resent successfully! Please check your e-mail inbox and if need be your spam folder.]]></en>
+            <de><![CDATA[
+            Der Aktivierungs-Link wurde erfolgreich versandt! Bitte prüfen Sie Ihr E-Mail-Postfach und ggf. auch Ihren Spam-Ordner.
+            ]]></de>
+            <en><![CDATA[
+            The activation link has been resent successfully! Please check your e-mail inbox and if need be your spam folder.
+            ]]></en>
         </locale>
         <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_fail">
             <de>
@@ -1308,7 +1358,5 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Schließen]]></de>
             <en><![CDATA[Close]]></en>
         </locale>
-
     </groups>
-
 </locales>
