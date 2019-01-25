@@ -65,11 +65,15 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     abstract public function getDescription($Locale = null);
 
     /**
-     * Return the success message
+     * Return an icon for the registratar
+     *
      * @return string
      */
+    abstract public function getIcon();
+
     /**
      * Return the success message
+     *
      * @return string
      */
     public function getSuccessMessage()
@@ -104,10 +108,9 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
         }
 
         if (boolval($settings['sendPassword']) && $this->canSendPassword()) {
-            $msg .= "<p>" . QUI::getLocale()->get(
-                    'quiqqer/frontend-users',
-                    'registrars.password_auto_generate'
-                ) . "</p>";
+            $msg .= "<p>".
+                    QUI::getLocale()->get('quiqqer/frontend-users', 'registrars.password_auto_generate').
+                    "</p>";
         }
 
         return $msg;
@@ -118,7 +121,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      */
     public function getPendingMessage()
     {
-        $msg      = QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
+        $msg = QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
 //        $settings = Handler::getInstance()->getRegistrationSettings();
 //
 //        if (boolval($settings['sendPassword'])) {

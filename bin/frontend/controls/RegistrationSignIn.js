@@ -57,7 +57,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                 }
 
                 self.loadSocialRegistration(
-                    Target.get('data-social-reg')
+                    Target.get('data-registrar')
                 );
             });
         },
@@ -68,55 +68,40 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
          * @param {string} registrar
          */
         loadSocialRegistration: function (registrar) {
-            return this.showTerms().then(function () {
+            var self = this;
 
-                console.log(registrar);
-
-                return this.showLoader();
-            }.bind(this)).catch(function () {
-                return this.hideTerms();
-            }.bind(this));
+            return this.showTerms(registrar).catch(function () {
+                self.Loader.hide();
+                return self.hideTerms();
+            });
         },
 
         /**
+         * Load the registrar
          *
          * @return {Promise}
          */
         $loadRegistrar: function (registrar) {
-            var self         = this;
-            var Registration = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration');
+            var self  = this,
+                Terms = self.getElm().getElement('.quiqqer-fu-registrationSignIn-terms'),
+                Form  = Terms.getElement('form');
 
-            return new Promise(function (resolve, reject) {
-                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
-                    var Elm = self.getElm();
-
-                    var Container = new Element('div', {
-                        html: html
+            return this.$getRegistrar(registrar).then(function (result) {
+                if (!Form) {
+                    Form = new Element('form', {
+                        method: 'POST'
                     });
+                }
 
-                    var RegistrarNode = Container.getElement(
-                        '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
-                    );
+                Form.set('html', result);
+                Form.inject(Terms);
 
-                    Registration.set('html', RegistrarNode.get('html'));
+                return QUI.parse(Form);
+            }).then(function () {
+                var Container = Form.getFirst(),
+                    Control   = QUI.Controls.getById(Container.get('data-quiid'));
 
-                    QUI.parse(Elm).then(function () {
-                        if (Elm.getElement('.quiqqer-frontendUsers-success') ||
-                            Elm.getElement('.quiqqer-frontendUsers-pending')) {
-                            self.fireEvent('register', [self]);
-                        }
-
-                        resolve();
-                    }, reject);
-                }, {
-                    'package' : 'quiqqer/frontend-users',
-                    registrar : registrar,
-                    data      : JSON.encode({
-                        termsOfUseAccepted: true
-                    }),
-                    registrars: self.getAttribute('registrars'),
-                    onError   : reject
-                });
+                console.warn(Control);
             });
         },
 
@@ -126,11 +111,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
          * Show the terms of use
          * - success if accepted
          *
+         * @param {String} registrar - registrar id
          * @return {Promise}
          */
-        showTerms: function () {
-            var Terms    = document.getElement('.quiqqer-fu-registrationSignIn-terms');
-            var children = document.getElement('.quiqqer-fu-registrationSignIn-registration').getChildren();
+        showTerms: function (registrar) {
+            var self     = this,
+                Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignIn-terms'),
+                children = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration').getChildren();
+
+            children = children.filter(function (Child) {
+                return !Child.hasClass('quiqqer-fu-registrationSignIn-terms') &&
+                    !Child.hasClass('qui-loader');
+            });
 
             children.setStyle('position', 'relative');
 
@@ -140,15 +132,19 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                     opacity: 0
                 }, {
                     callback: function () {
-                        Terms.setStyle('display', 'flex');
-                        Terms.setStyle('position', 'absolute');
+                        self.showLoader().then(function () {
+                            return self.$loadRegistrar(registrar);
+                        }).then(function () {
+                            Terms.getElement('button[name="decline"]').addEvent('click', reject);
+                            Terms.setStyle('display', 'flex');
+                            Terms.setStyle('position', 'absolute');
+                        }).then(function () {
+                            self.Loader.hide();
 
-                        Terms.getElement('button[name="accept"]').addEvent('click', resolve);
-                        Terms.getElement('button[name="decline"]').addEvent('click', reject);
-
-                        moofx(Terms).animate({
-                            left   : 0,
-                            opacity: 1
+                            moofx(Terms).animate({
+                                left   : 0,
+                                opacity: 1
+                            });
                         });
                     }
                 });
@@ -165,7 +161,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
             var children = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration').getChildren();
 
             children = children.filter(function (Child) {
-                return !Child.hasClass('quiqqer-fu-registrationSignIn-terms');
+                return !Child.hasClass('quiqqer-fu-registrationSignIn-terms') &&
+                    !Child.hasClass('qui-loader');
             });
 
             return new Promise(function (resolve) {
@@ -195,18 +192,42 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
          * @return {Promise}
          */
         showLoader: function () {
-            var Registration = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration'),
+            var self         = this,
+                Registration = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration'),
                 children     = Registration.getChildren();
 
-            return new Promise(function () {
+            return new Promise(function (resolve) {
                 moofx(children).animate({
                     opacity: 0
                 }, {
                     callback: function () {
+                        if (self.Loader) {
+                            self.Loader.show();
+                            resolve(self.Loader);
+                            return;
+                        }
+
                         require(['qui/controls/loader/Loader'], function (Loader) {
-                            new Loader().inject(Registration).show();
+                            self.Loader = new Loader().inject(Registration);
+                            self.Loader.show();
+                            resolve(self.Loader);
                         });
                     }
+                });
+            });
+        },
+
+        /**
+         * return the wanted registrar control
+         *
+         * @param registrar
+         * @return {Promise}
+         */
+        $getRegistrar: function (registrar) {
+            return new Promise(function (resolve) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_getControl', resolve, {
+                    'package': 'quiqqer/frontend-users',
+                    registrar: registrar
                 });
             });
         }

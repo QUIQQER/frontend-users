@@ -35,6 +35,10 @@
     color: #fff;
 }
 
+.quiqqer-fu-registrationSignIn-registration-social-entry-control {
+    display: none;
+}
+
 .quiqqer-fu-registrationSignIn-registration-email {
     margin-top: 3rem;
 }
@@ -106,15 +110,28 @@
     clear: both;
 }
 
+.quiqqer-fu-registrationSignIn-terms {
+    position: relative;
+}
+
 .quiqqer-fu-registrationSignIn-terms button {
     display: inline-block;
     margin: 2rem auto;
 }
 
-.quiqqer-fu-registrationSignIn-terms button[name="decline"] {
+.quiqqer-fu-registrationSignIn-terms-text {
+    position: relative;
+}
+
+.quiqqer-fu-registrationSignIn-terms-text [name="decline"] {
     background: transparent;
-    border: 1px solid #606975;
+    border: none;
     color: #606975;
+    margin: 0;
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    z-index: 10;
 }
 
 .quiqqer-fu-registrationSignIn-terms button[name="decline"]:hover {

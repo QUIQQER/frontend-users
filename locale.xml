@@ -724,10 +724,14 @@
 
         <!-- Ajax -->
         <locale name="exception.ajax.frontend_register.general_error">
-            <de>
-                <![CDATA[Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte kontaktieren Sie einen Administrator oder versuchen Sie es später noch einmal.]]></de>
-            <en>
-                <![CDATA[An unexpected error occurred during registration. Please contact an administrator or try again later.]]></en>
+            <de><![CDATA[
+            Bei der Registrierung ist ein unerwarteter Fehler aufgetreten.
+            Bitte kontaktieren Sie einen Administrator oder versuchen Sie es später noch einmal.
+            ]]></de>
+            <en><![CDATA[
+            An unexpected error occurred during registration.
+            Please contact an administrator or try again later.
+            ]]></en>
         </locale>
 
 
@@ -1219,6 +1223,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="control.registration.sign.in.button.terms.decline">
             <de><![CDATA[Abbrechen]]></de>
             <en><![CDATA[Cancel]]></en>
+        </locale>
+        <locale name="control.registration.sign.in.message.between" html="true">
+            <de><![CDATA[<p>oder Sie verwenden Ihr E-Mail-Konto für die Registrierung</p>]]></de>
+            <en><![CDATA[<p>or you use your email account for registration</p>]]></en>
         </locale>
     </groups>
 

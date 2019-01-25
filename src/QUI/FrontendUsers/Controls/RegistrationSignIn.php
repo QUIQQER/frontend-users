@@ -16,6 +16,13 @@ use QUI;
 class RegistrationSignIn extends QUI\Control
 {
     /**
+     * Registration ID (for this runtime only)
+     *
+     * @var string
+     */
+    protected $id;
+
+    /**
      * constructor.
      *
      * @param array $attributes
@@ -31,6 +38,8 @@ class RegistrationSignIn extends QUI\Control
         ]);
 
         $this->setAttributes($attributes);
+
+        $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
 
         $this->addCSSFile(dirname(__FILE__).'/RegistrationSignIn.css');
         $this->addCSSClass('quiqqer-fu-registrationSignIn');
@@ -70,8 +79,9 @@ class RegistrationSignIn extends QUI\Control
         });
 
         $Engine->assign([
-            'this'       => $this,
-            'Registrars' => $Registrars
+            'this'           => $this,
+            'Registrars'     => $Registrars,
+            'registrationId' => $this->id
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/RegistrationSignIn.html');
