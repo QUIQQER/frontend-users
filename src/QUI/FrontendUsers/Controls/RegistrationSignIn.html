@@ -16,25 +16,54 @@
         {/foreach}
     </div>
 
+    {if $Email}
     {if $Registrars->count()}
     {locale group="quiqqer/frontend-users" var="control.registration.sign.in.message.between"}
     {/if}
 
     <form name="quiqqer-fu-registrationSignIn-email"
           class="quiqqer-fu-registrationSignIn-registration-email"
+          data-registrar="{$Email->getHash()}"
+          data-registration_id="{$registrationId}"
     >
-        <label>
-            <span class="label">Email</span>
-            <span class="field">
+        <section class="quiqqer-fu-registrationSignIn-email-mailSection">
+            <label>
+                <span class="label">Email</span>
+                <span class="field">
                 <span class="icon fa fa-envelope"></span>
-                <input type="email" name="email" required autocomplete="off"/>
-            </span>
-        </label>
+                    <input type="email" name="email" required autocomplete="email"/>
+                </span>
+            </label>
 
-        <button type="submit">
-            Create Account
-        </button>
+            <div class="quiqqer-fu-registrationSignIn-email-buttons">
+                {if $this->getAttribute('registration-trial')}
+                <button type="submit" name="test-account">
+                    Test Account
+                </button>
+                {/if}
+                <button type="submit" name="go-to-password">
+                    Create Account
+                </button>
+            </div>
+        </section>
+
+        <section class="quiqqer-fu-registrationSignIn-email-passwordSection">
+            <label>
+                <span class="label">Passwort</span>
+                <span class="field">
+                <span class="icon fa fa-envelope"></span>
+                    <input type="password" name="password" required autocomplete="off"/>
+                </span>
+            </label>
+
+            <div class="quiqqer-fu-registrationSignIn-email-buttons">
+                <button type="submit" name="create-account">
+                    weiter
+                </button>
+            </div>
+        </section>
     </form>
+    {/if}
 
     <div class="quiqqer-fu-registrationSignIn-terms">
         <span class="quiqqer-fu-registrationSignIn-terms-text">

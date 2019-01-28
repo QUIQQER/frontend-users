@@ -78,12 +78,6 @@
     padding-left: 30px;
 }
 
-.quiqqer-fu-registrationSignIn-registration [type="submit"] {
-    margin-top: 0.5rem;
-    max-width: 360px;
-    padding: 0.75rem;
-    width: 100%;
-}
 
 /** registration sign in
  ========================================== */
@@ -138,9 +132,49 @@
     opacity: 0.5 !important;
 }
 
-
 .quiqqer-fu-registrationSignIn-terms label {
     cursor: pointer;
     max-width: 500px;
     width: 100%
+}
+
+
+/** registration sign in w email
+ ========================================== */
+
+.quiqqer-fu-registrationSignIn-email {
+    max-width: 360px;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignIn-email-buttons button {
+    flex-grow: 1;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+}
+
+.quiqqer-fu-registrationSignIn-email-buttons {
+    flex-grow: 1;
+    display: flex;
+    margin: 0 auto;
+    max-width: 360px;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignIn-email-passwordSection {
+    display: none;
+}
+
+.quiqqer-fu-registrationSignIn-email-buttons [name="test-account"] {
+    margin-right: 0.5rem;
+}
+
+.quiqqer-fu-registrationSignIn .quiqqer-frontendUsers-pending {
+    background: #e8fffe;
+    border: 1px solid #4dc0b5;
+    color: #0d3331;
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 2rem;
+    width: 100%;
 }

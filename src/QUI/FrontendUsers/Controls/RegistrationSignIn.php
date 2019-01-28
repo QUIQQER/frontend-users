@@ -64,6 +64,10 @@ class RegistrationSignIn extends QUI\Control
         $Registrars       = $this->getRegistrars();
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
+        $email = $Registrars->filter(function ($Registrar) {
+            return $Registrar instanceof QUI\FrontendUsers\Registrars\Email\Registrar;
+        });
+
         $Registrars = $Registrars->filter(function ($Registrar) {
             return get_class($Registrar) !== QUI\FrontendUsers\Registrars\Email\Registrar::class;
         });
@@ -78,9 +82,19 @@ class RegistrationSignIn extends QUI\Control
             return $displayPositionA - $displayPositionB;
         });
 
+
+        // show email registrar
+        $Email = false;
+
+        if (isset($email[0])) {
+            $Email = $email[0];
+        }
+
+
         $Engine->assign([
             'this'           => $this,
             'Registrars'     => $Registrars,
+            'Email'          => $Email,
             'registrationId' => $this->id
         ]);
 
@@ -91,7 +105,6 @@ class RegistrationSignIn extends QUI\Control
      * Get all Registrars that are displayed
      *
      * @return QUI\FrontendUsers\RegistrarCollection
-     * @throws QUI\Exception
      */
     protected function getRegistrars()
     {
