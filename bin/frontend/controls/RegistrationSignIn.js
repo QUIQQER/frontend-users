@@ -1,6 +1,8 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn
  * @author www.pcsg.de (Henning Leutz)
+ *
+ * @todo logged in user beachten
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn', [
 
@@ -19,8 +21,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
         Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn',
 
         Binds: [
+            '$onInject',
             '$onImport',
-            '$onMailTestClick',
+            '$onTrialClick',
             '$onMailCreateClick',
             '$onMailPasswordClick'
         ],
@@ -34,8 +37,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
 
             this.Loader = null;
 
+            this.$RegistrationSection = null;
+
             this.addEvents({
-                onImport: this.$onImport
+                onImport: this.$onImport,
+                onInject: this.$onInject
             });
         },
 
@@ -45,6 +51,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
         $onImport: function () {
             var self = this,
                 Node = this.getElm();
+
+            this.$RegistrationSection = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration');
 
             Node.getElements('.quiqqer-fu-registrationSignIn-terms a')
                 .set('target', '_blank');
@@ -66,6 +74,37 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
 
             // mail
             this.$initMail();
+        },
+
+        /**
+         * event: on inject
+         */
+        $onInject: function () {
+            var self = this;
+
+            QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_getSignInControl', function (result) {
+                var Ghost = new Element('div', {
+                    html: result
+                });
+
+                var Control = Ghost.getElement('.quiqqer-fu-registrationSignIn-registration');
+
+                self.$RegistrationSection = self.getElm().getElement('.quiqqer-fu-registrationSignIn-registration');
+                self.$RegistrationSection.set('html', Control.get('html'));
+
+                QUI.parse(self.$RegistrationSection).then(function () {
+                    self.$onImport();
+
+                    moofx(self.$RegistrationSection).animate({
+                        opacity: 1
+                    });
+                });
+            }, {
+                'package': 'quiqqer/frontend-users',
+                onError  : function (err) {
+                    console.error(err);
+                }
+            });
         },
 
         /**
@@ -151,7 +190,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
         showTerms: function (registrar) {
             var self     = this,
                 Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignIn-terms'),
-                children = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration').getChildren();
+                children = this.$RegistrationSection.getChildren();
 
             children = children.filter(function (Child) {
                 return !Child.hasClass('quiqqer-fu-registrationSignIn-terms') &&
@@ -201,7 +240,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
          */
         hideTerms: function () {
             var Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignIn-terms');
-            var children = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration').getChildren();
+            var children = this.$RegistrationSection.getChildren();
 
             children = children.filter(function (Child) {
                 return !Child.hasClass('quiqqer-fu-registrationSignIn-terms') &&
@@ -235,9 +274,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
          * @return {Promise}
          */
         showLoader: function () {
-            var self         = this,
-                Registration = this.getElm().getElement('.quiqqer-fu-registrationSignIn-registration'),
-                children     = Registration.getChildren();
+            var self     = this,
+                children = this.$RegistrationSection.getChildren();
 
             return new Promise(function (resolve) {
                 moofx(children).animate({
@@ -251,7 +289,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                         }
 
                         require(['qui/controls/loader/Loader'], function (Loader) {
-                            self.Loader = new Loader().inject(Registration);
+                            self.Loader = new Loader().inject(self.$RegistrationSection);
                             self.Loader.show();
                             resolve(self.Loader);
                         });
@@ -281,12 +319,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
          * init mail registration
          */
         $initMail: function () {
-            var ButtonTest    = this.getElm().getElement('[name="test-account"]'),
-                CreateTest    = this.getElm().getElement('[name="go-to-password"]'),
+            var ButtonTrial   = this.getElm().getElement('[name="trial-account"]'),
+                GoToPassword  = this.getElm().getElement('[name="go-to-password"]'),
                 CreateAccount = this.getElm().getElement('[name="create-account"]');
 
-            ButtonTest.addEvent('click', this.$onMailTestClick);
-            CreateTest.addEvent('click', this.$onMailCreateClick);
+            ButtonTrial.addEvent('click', this.$onTrialClick);
+            GoToPassword.addEvent('click', this.$onMailCreateClick);
             CreateAccount.addEvent('click', this.$onMailPasswordClick);
 
             this.getElm()
@@ -297,18 +335,39 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
         },
 
         /**
-         * create test account
+         * create trial account
          */
-        $onMailTestClick: function () {
+        $onTrialClick: function () {
             var self = this,
                 Form = this.getElm().getElement('[name="quiqqer-fu-registrationSignIn-email"]');
 
             return this.showLoader().then(function () {
                 return self.showTerms(Form.get('data-registrar'));
             }).then(function () {
+                var Form     = self.getElm().getElement('form[name="quiqqer-fu-registrationSignIn-email"]'),
+                    formData = {
+                        termsOfUseAccepted: true,
+                        email             : Form.elements.email.value
+                    };
 
-                console.log(1234);
-
+                return self.sendCreationViaEmail(
+                    Form.elements['registration-trial-registrator'].value,
+                    Form.get('data-registration_id'),
+                    formData
+                ).then(function () {
+                    if (self.getElm().getElement('.quiqqer-frontendUsers-error')) {
+                        (function () {
+                            moofx(self.$RegistrationSection).animate({
+                                opacity: 0
+                            }, {
+                                duration: 250,
+                                callback: function () {
+                                    self.$onInject();
+                                }
+                            });
+                        }).delay(2000);
+                    }
+                });
             });
         },
 
@@ -376,9 +435,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
             this.showLoader().then(function () {
                 return self.showTerms(Form.get('data-registrar'));
             }).then(function () {
-                var childNodes = self.getElm()
-                                     .getElement('.quiqqer-fu-registrationSignIn-registration')
-                                     .getChildren();
+                var childNodes = self.$RegistrationSection.getChildren();
 
                 childNodes = childNodes.filter(function (Child) {
                     return !Child.hasClass('qui-loader');
@@ -389,7 +446,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                 return self.hideTerms().then(function () {
                     return self.showLoader();
                 }).then(function () {
-                    return self.sendAccountCreationViaEmail();
+                    var Form     = self.getElm().getElement('form[name="quiqqer-fu-registrationSignIn-email"]'),
+                        formData = {
+                            termsOfUseAccepted: true,
+                            email             : Form.elements.email.value,
+                            password          : Form.elements.password.value
+                        };
+
+                    return self.sendCreationViaEmail(
+                        Form.get('data-registrar'),
+                        Form.get('data-registration_id'),
+                        formData
+                    );
                 });
             }).catch(function (err) {
                 console.error(err);
@@ -400,29 +468,36 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
         /**
          * Submit the email registration
          *
+         * @param {string} registrar
+         * @param {string} registration_id
+         * @param {object} formData
+         *
          * @return {Promise}
          */
-        sendAccountCreationViaEmail: function () {
+        sendCreationViaEmail: function (registrar, registration_id, formData) {
             this.showLoader();
 
-            var self     = this,
-                Form     = this.getElm().getElement('form[name="quiqqer-fu-registrationSignIn-email"]'),
-                formData = {
-                    termsOfUseAccepted: true,
-                    email             : Form.elements.email.value,
-                    password          : Form.elements.password.value
-                };
+            var self = this;
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
-                    var Section = self.getElm().getElement('.quiqqer-fu-registrationSignIn-registration');
+                    var Section = self.$RegistrationSection;
 
                     moofx(Section).animate({
                         opacity: 0
                     }, {
                         duration: 250,
                         callback: function () {
-                            Section.set('html', html);
+                            var Ghost = new Element('div', {
+                                html: html
+                            });
+
+                            if (Ghost.getElement('.quiqqer-frontendUsers-error')) {
+                                Section.set('html', '');
+                                Ghost.getElement('.quiqqer-frontendUsers-error').inject(Section);
+                            } else {
+                                Section.set('html', html);
+                            }
 
                             moofx(Section).animate({
                                 opacity: 1
@@ -433,16 +508,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                     });
                 }, {
                     'package'      : 'quiqqer/frontend-users',
-                    registrar      : Form.get('data-registrar'),
-                    registration_id: Form.get('data-registration_id'),
+                    registrar      : registrar,
+                    registration_id: registration_id,
                     data           : JSON.encode(formData),
                     onError        : reject
                 });
             });
-        },
-
-        sendRegistratoinTrial: function () {
-
         }
 
         //endregion

@@ -32,9 +32,12 @@ class RegistrationSignIn extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes([
-            'Registrar'  => false,   // currently executed Registrar
-            'registrars' => [],      // if empty load all default Registrars, otherwise load the ones provided here
-            'content'    => ''       // right content
+            // if empty load all default Registrars, otherwise load the ones provided here
+            'registrars' => [],
+
+            'Registrar'          => false, // currently executed Registrar
+            'content'            => '',    // right content
+            'registration-trial' => false  // use registration trial
         ]);
 
         $this->setAttributes($attributes);
@@ -61,15 +64,39 @@ class RegistrationSignIn extends QUI\Control
 
         $this->siteTermsPrivacy($Engine);
 
-        $Registrars       = $this->getRegistrars();
-        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+        $Registrars        = $this->getRegistrars();
+        $RegistrarHandler  = QUI\FrontendUsers\Handler::getInstance();
+        $RegistrationTrial = null;
 
         $email = $Registrars->filter(function ($Registrar) {
             return $Registrar instanceof QUI\FrontendUsers\Registrars\Email\Registrar;
         });
 
+        // trial registration
+        if ($this->getAttribute('registration-trial')) {
+            $registrationTrial = $Registrars->filter(function ($Registrar) {
+                return $Registrar instanceof QUI\Registration\Trial\Registrar;
+            });
+
+            if (isset($registrationTrial[0])) {
+                $RegistrationTrial = $registrationTrial[0];
+            }
+        }
+
+
         $Registrars = $Registrars->filter(function ($Registrar) {
-            return get_class($Registrar) !== QUI\FrontendUsers\Registrars\Email\Registrar::class;
+            $class    = get_class($Registrar);
+            $haystack = [
+                QUI\FrontendUsers\Registrars\Email\Registrar::class
+            ];
+
+            if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
+                $haystack[] = QUI\Registration\Trial\Registrar::class;
+            }
+
+            $haystack = array_flip($haystack);
+
+            return !isset($haystack[$class]);
         });
 
         // Sort registrars by display position
@@ -92,10 +119,11 @@ class RegistrationSignIn extends QUI\Control
 
 
         $Engine->assign([
-            'this'           => $this,
-            'Registrars'     => $Registrars,
-            'Email'          => $Email,
-            'registrationId' => $this->id
+            'this'              => $this,
+            'Registrars'        => $Registrars,
+            'Email'             => $Email,
+            'registrationId'    => $this->id,
+            'RegistrationTrial' => $RegistrationTrial
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/RegistrationSignIn.html');

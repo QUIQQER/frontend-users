@@ -37,9 +37,13 @@
 
             <div class="quiqqer-fu-registrationSignIn-email-buttons">
                 {if $this->getAttribute('registration-trial')}
-                <button type="submit" name="test-account">
+                <button type="submit" name="trial-account">
                     Test Account
                 </button>
+                <input type="hidden"
+                       name="registration-trial-registrator"
+                       value="{$RegistrationTrial->getHash()}"
+                />
                 {/if}
                 <button type="submit" name="go-to-password">
                     Create Account
