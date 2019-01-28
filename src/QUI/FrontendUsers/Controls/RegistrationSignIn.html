@@ -40,10 +40,16 @@
                 </span>
             </label>
 
+            {if $useCaptcha && $isCaptchaInvisible}
+            <div class="visible">
+                {$captchaHTML}
+            </div>
+            {/if}
+
             <div class="quiqqer-fu-registrationSignIn-email-buttons">
                 {if $this->getAttribute('registration-trial')}
                 <button type="submit" name="trial-account">
-                    Test it
+                    Try it
                 </button>
                 <input type="hidden"
                        name="registration-trial-registrator"
@@ -55,6 +61,10 @@
                 </button>
             </div>
         </section>
+
+        {if $useCaptcha && $isCaptchaInvisible === false}
+        {$captchaHTML}
+        {/if}
 
         <section class="quiqqer-fu-registrationSignIn-email-passwordSection">
             <label>

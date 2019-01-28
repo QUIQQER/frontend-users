@@ -65,9 +65,12 @@ class RegistrationSignIn extends QUI\Control
         $this->siteTermsPrivacy($Engine);
 
         $Registrars        = $this->getRegistrars();
-        $RegistrarHandler  = QUI\FrontendUsers\Handler::getInstance();
         $RegistrationTrial = null;
 
+        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+
+        // get email registrar
         $email = $Registrars->filter(function ($Registrar) {
             return $Registrar instanceof QUI\FrontendUsers\Registrars\Email\Registrar;
         });
@@ -83,7 +86,40 @@ class RegistrationSignIn extends QUI\Control
             }
         }
 
+        // captcha usage
+        $Captcha            = false;
+        $jsRequired         = false;
+        $useCaptcha         = false;
+        $isCaptchaInvisible = false;
 
+        if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
+            $Captcha    = new QUI\Captcha\Controls\CaptchaDisplay();
+            $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
+            $useCaptcha = boolval($registrationSettings['useCaptcha']);
+
+            $Default            = QUI\Captcha\Handler::getDefaultCaptchaModuleControl();
+            $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
+
+            if (class_exists('QUI\Captcha\Modules\Google')
+                && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class) {
+                $Engine->assign('googleSideKey', QUI\Captcha\Modules\Google::getSiteKey());
+            }
+        }
+
+        $this->setJavaScriptControlOption('usecaptcha', $useCaptcha);
+
+        $Engine->assign([
+            'Captcha'            => $Captcha,
+            'useCaptcha'         => $useCaptcha,
+            'jsRequired'         => $jsRequired,
+            'isCaptchaInvisible' => $isCaptchaInvisible
+        ]);
+
+        $Engine->assign([
+            'captchaHTML' => $Engine->fetch(dirname(__FILE__).'/RegistrationSignIn.Captcha.html')
+        ]);
+
+        // default stuff
         $Registrars = $Registrars->filter(function ($Registrar) {
             $class    = get_class($Registrar);
             $haystack = [
@@ -116,7 +152,6 @@ class RegistrationSignIn extends QUI\Control
         if (isset($email[0])) {
             $Email = $email[0];
         }
-
 
         $Engine->assign([
             'this'              => $this,

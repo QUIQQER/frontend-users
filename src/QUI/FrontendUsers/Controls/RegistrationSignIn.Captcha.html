@@ -1,0 +1,16 @@
+<section class="quiqqer-fu-registrationSignIn-email-captcha-display">
+    {if $jsRequired}
+    <noscript>
+        <style>
+            .quiqqer-frontendUsers__noScriptHidden {
+                display: none;
+            }
+        </style>
+
+        {locale group="quiqqer/frontend-users" var="registrars.email.javascript_required"}
+    </noscript>
+    {/if}
+
+    {$Captcha->create()}
+    <input type="hidden" name="captchaResponse"/>
+</section>

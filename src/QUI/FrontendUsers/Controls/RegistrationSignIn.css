@@ -182,3 +182,14 @@
     padding: 2rem;
     width: 100%;
 }
+
+/** registration sign in w email
+ ========================================== */
+
+.quiqqer-fu-registrationSignIn-email-captcha-display {
+    display: none;
+}
+
+.visible .quiqqer-fu-registrationSignIn-email-captcha-display {
+    display: inline-block;
+}
