@@ -2,7 +2,8 @@
  * @module package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn
  * @author www.pcsg.de (Henning Leutz)
  *
- * @todo logged in user beachten
+ * @todo check mail
+ * @todo use captcha
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn', [
 
@@ -368,6 +369,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                         }).delay(2000);
                     }
                 });
+            }).catch(function () {
+                self.hideTerms();
             });
         },
 
@@ -387,9 +390,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
             if (typeof MailInput.checkValidity !== 'undefined' && MailInput.checkValidity() === false) {
                 return;
             }
-
-            // @todo check mail
-            // @todo use captcha
 
             MailSection.setStyle('position', 'relative');
 
@@ -459,8 +459,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
                         formData
                     );
                 });
-            }).catch(function (err) {
-                console.error(err);
+            }).catch(function () {
                 self.hideTerms();
             });
         },

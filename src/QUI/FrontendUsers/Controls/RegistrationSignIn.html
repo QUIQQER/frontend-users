@@ -1,4 +1,9 @@
 <section class="quiqqer-fu-registrationSignIn-registration">
+    {if $SessionUser->getId()}
+    <div class="quiqqer-fu-registrationSignIn-registration-logged-in message-information">
+        {locale group="quiqqer/frontend-users" var="message.types.registration.already_registered"}
+    </div>
+    {else}
     <h2>Create an Account</h2>
 
     <div class="quiqqer-fu-registrationSignIn-registration-social">
@@ -38,7 +43,7 @@
             <div class="quiqqer-fu-registrationSignIn-email-buttons">
                 {if $this->getAttribute('registration-trial')}
                 <button type="submit" name="trial-account">
-                    Test Account
+                    Test it
                 </button>
                 <input type="hidden"
                        name="registration-trial-registrator"
@@ -81,6 +86,7 @@
         </span>
         <div class="quiqqer-fu-registrationSignIn-terms-buttons"></div>
     </div>
+    {/if}
 </section>
 
 <section class="quiqqer-fu-registrationSignIn-info">

@@ -13,6 +13,10 @@
     width: 40%;
 }
 
+.quiqqer-fu-registrationSignIn-registration-logged-in {
+    padding: 2rem;
+}
+
 .quiqqer-fu-registrationSignIn-registration-social {
     text-align: center;
     margin: 3rem 0;

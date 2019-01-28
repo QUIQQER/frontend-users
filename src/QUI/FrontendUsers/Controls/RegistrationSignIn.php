@@ -123,7 +123,8 @@ class RegistrationSignIn extends QUI\Control
             'Registrars'        => $Registrars,
             'Email'             => $Email,
             'registrationId'    => $this->id,
-            'RegistrationTrial' => $RegistrationTrial
+            'RegistrationTrial' => $RegistrationTrial,
+            'SessionUser'       => QUI::getUserBySession()
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/RegistrationSignIn.html');

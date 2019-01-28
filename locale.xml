@@ -910,10 +910,12 @@
 
         <!-- Site type: types/registration -->
         <locale name="message.types.registration.already_registered">
-            <de>
-                <![CDATA[Sie sind bereits registriert und haben ein aktives Benutzerkonto. Um ein neues Benutzerkonto zu registrieren, loggen Sie sich bitte aus.]]></de>
-            <en>
-                <![CDATA[You are already registered and have an active user account. To register a new user account, please log out.]]></en>
+            <de><![CDATA[
+            Sie sind bereits registriert und haben ein aktives Benutzerkonto. Um ein neues Benutzerkonto zu registrieren, loggen Sie sich bitte aus.
+            ]]></de>
+            <en><![CDATA[
+            You are already registered and have an active user account. To register a new user account, please log out.
+            ]]></en>
         </locale>
         <locale name="message.types.registration.configuration_error">
             <de><![CDATA[
