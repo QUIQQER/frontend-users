@@ -38,9 +38,9 @@
             <de><![CDATA[Registrierung]]></de>
             <en><![CDATA[Registration]]></en>
         </locale>
-        <locale name="admin.types.registrationSignIn">
-            <de><![CDATA[Registrierung mit SignIn]]></de>
-            <en><![CDATA[Registration with Sign In]]></en>
+        <locale name="admin.types.registrationSignUp">
+            <de><![CDATA[Registrierung mit SignUp]]></de>
+            <en><![CDATA[Registration with Sign Up]]></en>
         </locale>
         <locale name="admin.types.login">
             <de><![CDATA[Login]]></de>

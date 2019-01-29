@@ -1,28 +1,28 @@
-.quiqqer-fu-registrationSignIn {
+.quiqqer-fu-registrationSignUp {
     display: flex;
     justify-content: center;
     margin: 3rem 0;
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignIn-info,
-.quiqqer-fu-registrationSignIn-registration {
+.quiqqer-fu-registrationSignUp-info,
+.quiqqer-fu-registrationSignUp-registration {
     padding: 2rem;
     position: relative;
     text-align: center;
     width: 40%;
 }
 
-.quiqqer-fu-registrationSignIn-registration-logged-in {
+.quiqqer-fu-registrationSignUp-registration-logged-in {
     padding: 2rem;
 }
 
-.quiqqer-fu-registrationSignIn-registration-social {
+.quiqqer-fu-registrationSignUp-registration-social {
     text-align: center;
     margin: 3rem 0;
 }
 
-.quiqqer-fu-registrationSignIn-registration-social-entry {
+.quiqqer-fu-registrationSignUp-registration-social-entry {
     border: 1px solid #ddd;
     border-radius: 100%;
     cursor: pointer;
@@ -34,20 +34,20 @@
     width: 50px;
 }
 
-.quiqqer-fu-registrationSignIn-registration-social-entry:hover {
+.quiqqer-fu-registrationSignUp-registration-social-entry:hover {
     background: #adadad;
     color: #fff;
 }
 
-.quiqqer-fu-registrationSignIn-registration-social-entry-control {
+.quiqqer-fu-registrationSignUp-registration-social-entry-control {
     display: none;
 }
 
-.quiqqer-fu-registrationSignIn-registration-email {
+.quiqqer-fu-registrationSignUp-registration-email {
     margin-top: 3rem;
 }
 
-.quiqqer-fu-registrationSignIn-registration-email label {
+.quiqqer-fu-registrationSignUp-registration-email label {
     clear: both;
     display: block;
     margin: 0.5rem auto;
@@ -56,7 +56,7 @@
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignIn-registration-email label .icon {
+.quiqqer-fu-registrationSignUp-registration-email label .icon {
     align-items: center;
     display: flex;
     height: 100%;
@@ -65,19 +65,19 @@
     width: 30px;
 }
 
-.quiqqer-fu-registrationSignIn-registration-email label .label {
+.quiqqer-fu-registrationSignUp-registration-email label .label {
     display: block;
     padding: 0.25rem 0;
     text-align: left;
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignIn-registration-email label .field {
+.quiqqer-fu-registrationSignUp-registration-email label .field {
     display: block;
     position: relative;
 }
 
-.quiqqer-fu-registrationSignIn-registration-email label input {
+.quiqqer-fu-registrationSignUp-registration-email label input {
     width: 100%;
     padding-left: 30px;
 }
@@ -86,7 +86,7 @@
 /** registration sign in
  ========================================== */
 
-.quiqqer-fu-registrationSignIn-terms {
+.quiqqer-fu-registrationSignUp-terms {
     align-items: center;
     display: none;
     flex-direction: column;
@@ -100,28 +100,28 @@
     z-index: 10;
 }
 
-.quiqqer-fu-registrationSignIn-terms-text {
+.quiqqer-fu-registrationSignUp-terms-text {
     max-width: 570px;
 }
 
-.quiqqer-fu-registrationSignIn-terms-buttons {
+.quiqqer-fu-registrationSignUp-terms-buttons {
     clear: both;
 }
 
-.quiqqer-fu-registrationSignIn-terms {
+.quiqqer-fu-registrationSignUp-terms {
     position: relative;
 }
 
-.quiqqer-fu-registrationSignIn-terms button {
+.quiqqer-fu-registrationSignUp-terms button {
     display: inline-block;
     margin: 2rem auto;
 }
 
-.quiqqer-fu-registrationSignIn-terms-text {
+.quiqqer-fu-registrationSignUp-terms-text {
     position: relative;
 }
 
-.quiqqer-fu-registrationSignIn-terms-text [name="decline"] {
+.quiqqer-fu-registrationSignUp-terms-text [name="decline"] {
     background: transparent;
     border: none;
     color: #606975;
@@ -132,11 +132,11 @@
     z-index: 10;
 }
 
-.quiqqer-fu-registrationSignIn-terms button[name="decline"]:hover {
+.quiqqer-fu-registrationSignUp-terms button[name="decline"]:hover {
     opacity: 0.5 !important;
 }
 
-.quiqqer-fu-registrationSignIn-terms label {
+.quiqqer-fu-registrationSignUp-terms label {
     cursor: pointer;
     max-width: 500px;
     width: 100%
@@ -146,18 +146,18 @@
 /** registration sign in w email
  ========================================== */
 
-.quiqqer-fu-registrationSignIn-email {
+.quiqqer-fu-registrationSignUp-email {
     max-width: 360px;
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignIn-email-buttons button {
+.quiqqer-fu-registrationSignUp-email-buttons button {
     flex-grow: 1;
     margin-top: 0.5rem;
     padding: 0.75rem;
 }
 
-.quiqqer-fu-registrationSignIn-email-buttons {
+.quiqqer-fu-registrationSignUp-email-buttons {
     flex-grow: 1;
     display: flex;
     margin: 0 auto;
@@ -165,15 +165,15 @@
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignIn-email-passwordSection {
+.quiqqer-fu-registrationSignUp-email-passwordSection {
     display: none;
 }
 
-.quiqqer-fu-registrationSignIn-email-buttons [name="trial-account"] {
+.quiqqer-fu-registrationSignUp-email-buttons [name="trial-account"] {
     margin-right: 0.5rem;
 }
 
-.quiqqer-fu-registrationSignIn .quiqqer-frontendUsers-pending {
+.quiqqer-fu-registrationSignUp .quiqqer-frontendUsers-pending {
     background: #e8fffe;
     border: 1px solid #4dc0b5;
     color: #0d3331;
@@ -186,10 +186,10 @@
 /** registration sign in w email
  ========================================== */
 
-.quiqqer-fu-registrationSignIn-email-captcha-display {
+.quiqqer-fu-registrationSignUp-email-captcha-display {
     display: none;
 }
 
-.visible .quiqqer-fu-registrationSignIn-email-captcha-display {
+.visible .quiqqer-fu-registrationSignUp-email-captcha-display {
     display: inline-block;
 }

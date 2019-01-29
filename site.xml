@@ -4,8 +4,8 @@
         <type type="types/registration" icon="fa fa-user-plus">
             <locale group="quiqqer/frontend-users" var="admin.types.registration"/>
         </type>
-        <type type="types/registrationSignIn" icon="fa fa-user-plus">
-            <locale group="quiqqer/frontend-users" var="admin.types.registrationSignIn"/>
+        <type type="types/registrationSignUp" icon="fa fa-user-plus">
+            <locale group="quiqqer/frontend-users" var="admin.types.registrationSignUp"/>
         </type>
         <type type="types/login" icon="fa fa-sign-in">
             <locale group="quiqqer/frontend-users" var="admin.types.login"/>

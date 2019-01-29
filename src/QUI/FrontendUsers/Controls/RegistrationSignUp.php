@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file contains QUI\FrontendUsers\Controls\RegistrationSignIn
+ * This file contains QUI\FrontendUsers\Controls\RegistrationSignUp
  */
 
 namespace QUI\FrontendUsers\Controls;
@@ -9,11 +9,11 @@ namespace QUI\FrontendUsers\Controls;
 use QUI;
 
 /**
- * Class RegistrationSignIn
+ * Class RegistrationSignUp
  *
  * @package QUI\FrontendUsers\Controls
  */
-class RegistrationSignIn extends QUI\Control
+class RegistrationSignUp extends QUI\Control
 {
     /**
      * Registration ID (for this runtime only)
@@ -44,11 +44,11 @@ class RegistrationSignIn extends QUI\Control
 
         $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
 
-        $this->addCSSFile(dirname(__FILE__).'/RegistrationSignIn.css');
-        $this->addCSSClass('quiqqer-fu-registrationSignIn');
+        $this->addCSSFile(dirname(__FILE__).'/RegistrationSignUp.css');
+        $this->addCSSClass('quiqqer-fu-registrationSignUp');
 
         $this->setJavaScriptControl(
-            'package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignIn'
+            'package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         );
     }
 
@@ -116,7 +116,7 @@ class RegistrationSignIn extends QUI\Control
         ]);
 
         $Engine->assign([
-            'captchaHTML' => $Engine->fetch(dirname(__FILE__).'/RegistrationSignIn.Captcha.html')
+            'captchaHTML' => $Engine->fetch(dirname(__FILE__).'/RegistrationSignUp.Captcha.html')
         ]);
 
         // default stuff
@@ -162,7 +162,7 @@ class RegistrationSignIn extends QUI\Control
             'SessionUser'       => QUI::getUserBySession()
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/RegistrationSignIn.html');
+        return $Engine->fetch(dirname(__FILE__).'/RegistrationSignUp.html');
     }
 
     /**
