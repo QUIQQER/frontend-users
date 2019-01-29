@@ -1,7 +1,7 @@
 <?php
 
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
-    'content' => '<img src="https://dev.quiqqer.com/namefruits/juicer/uploads/8d4acac55b049745c9a1e5bdc9804c30/Logo-Mockup_Server_Generate_3.png" alt=""/>'
+    'content' => $Site->getAttribute('content')
 ]);
 
 if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
