@@ -6,7 +6,6 @@
  *
  * @todo redirect
  * @todo facebook check
- * @todo responsive
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
 

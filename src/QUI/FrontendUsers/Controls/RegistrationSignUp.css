@@ -201,7 +201,6 @@
     display: inline-block;
 }
 
-
 /** no script
  ========================================== */
 
@@ -209,4 +208,24 @@
     background: #fcebea;
     color: #cc1f1a;
     padding: 2rem;
+}
+
+/** mobile
+ ========================================== */
+
+@media (max-width: 768px) {
+    .registration-sign-in {
+        align-items: baseline;
+        overflow: auto;
+    }
+
+    .quiqqer-fu-registrationSignUp {
+        flex-direction: column-reverse;
+        justify-content: initial;
+    }
+
+    .quiqqer-fu-registrationSignUp-info,
+    .quiqqer-fu-registrationSignUp-registration {
+        width: 100%;
+    }
 }
