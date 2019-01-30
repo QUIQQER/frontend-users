@@ -243,7 +243,7 @@ class RegistrationSignUp extends QUI\Control
         if ($SiteTerms && $SitePrivacy) {
             $termsPrivacyMessage = QUI::getLocale()->get(
                 'quiqqer/frontend-users',
-                'control.registration.terms_of_use_and_privacy_policy.label',
+                'control.sign.up.terms_of_use_and_privacy_policy.label',
                 [
                     'termsOfUseUrl'          => $SiteTerms->getUrlRewritten(),
                     'termsOfUseSiteTitle'    => $SiteTerms->getAttribute('title'),
@@ -254,7 +254,7 @@ class RegistrationSignUp extends QUI\Control
         } elseif ($SiteTerms) {
             $termsPrivacyMessage = QUI::getLocale()->get(
                 'quiqqer/frontend-users',
-                'control.registration.terms_of_use.label',
+                'control.sign.up.terms_of_use.label',
                 [
                     'termsOfUseUrl'       => $SiteTerms->getUrlRewritten(),
                     'termsOfUseSiteTitle' => $SiteTerms->getAttribute('title')
@@ -263,7 +263,7 @@ class RegistrationSignUp extends QUI\Control
         } elseif ($SitePrivacy) {
             $termsPrivacyMessage = QUI::getLocale()->get(
                 'quiqqer/frontend-users',
-                'control.registration.privacy_policy.label',
+                'control.sign.up.privacy_policy.label',
                 [
                     'privacyPolicyUrl'       => $SitePrivacy->getUrlRewritten(),
                     'privacyPolicySiteTitle' => $SitePrivacy->getAttribute('title')

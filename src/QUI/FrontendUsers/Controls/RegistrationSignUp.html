@@ -4,7 +4,7 @@
         {locale group="quiqqer/frontend-users" var="message.types.registration.already_registered"}
     </div>
     {else}
-    <h2>Create an Account</h2>
+    <h2>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}</h2>
 
     <div class="quiqqer-fu-registrationSignUp-registration-social">
         {foreach $Registrars as $Registrar}
@@ -24,7 +24,7 @@
 
     {if $Email}
     {if $Registrars->count()}
-    {locale group="quiqqer/frontend-users" var="control.registration.sign.in.message.between"}
+    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.message.between"}
     {/if}
 
     <form name="quiqqer-fu-registrationSignUp-email"
@@ -34,7 +34,9 @@
     >
         <section class="quiqqer-fu-registrationSignUp-email-mailSection">
             <label>
-                <span class="label">Email</span>
+                <span class="label">
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.email.title"}
+                </span>
                 <span class="field">
                 <span class="icon fa fa-envelope"></span>
                     <input type="email" name="email" required autocomplete="email"/>
@@ -50,7 +52,7 @@
             <div class="quiqqer-fu-registrationSignUp-email-buttons">
                 {if $this->getAttribute('registration-trial')}
                 <button type="submit" name="trial-account">
-                    Try it
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.try"}
                 </button>
                 <input type="hidden"
                        name="registration-trial-registrator"
@@ -58,7 +60,7 @@
                 />
                 {/if}
                 <button type="submit" name="go-to-password">
-                    Create Account
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
                 </button>
             </div>
         </section>
@@ -69,7 +71,9 @@
 
         <section class="quiqqer-fu-registrationSignUp-email-passwordSection">
             <label>
-                <span class="label">Passwort</span>
+                <span class="label">
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.title"}
+                </span>
                 <span class="field">
                 <span class="icon fa fa-envelope"></span>
                     <input type="password" name="password" required autocomplete="off"/>
@@ -78,7 +82,7 @@
 
             <div class="quiqqer-fu-registrationSignUp-email-buttons">
                 <button type="submit" name="create-account">
-                    weiter
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
                 </button>
             </div>
         </section>
@@ -90,7 +94,7 @@
             {$termsPrivacyMessage}
 
             <button name="decline"
-                    title="{locale group='quiqqer/frontend-users' var='control.registration.sign.in.button.terms.decline'}"
+                    title="{locale group='quiqqer/frontend-users' var='control.registration.sign.up.button.terms.decline'}"
             >
                 <span class="fa fa-close"></span>
             </button>

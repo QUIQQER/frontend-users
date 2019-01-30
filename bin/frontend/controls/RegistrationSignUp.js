@@ -4,9 +4,12 @@
  *
  * @event onRegister
  *
- * @todo check mail
  * @todo redirect
  * @todo captcha expire
+ * @todo facebook check
+ * @todo on enter bei mail -> weiter, kein try out
+ * @todo passwort -> animation?
+ * @todo noscript
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
 
@@ -163,7 +166,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 if (MailRegistrar) {
                     var Button = new Element('button', {
-                        html: 'Account erstellen'
+                        html: QUILocale.get(lg, 'control.registration.sign.up.create.button')
                     }).inject(MailRegistrar.getParent());
 
                     MailRegistrar.destroy();
@@ -461,7 +464,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     clearTimeout(mailTimeout);
                 }
 
-                if (event.enter) {
+                // workaround
+                if (event.key === 'enter' || typeof event.code === 'undefined') {
                     self.emailValidation(EmailField);
                     return;
                 }

@@ -966,10 +966,12 @@
 
         <!-- Class: AbstractRegistrar -->
         <locale name="message.registrars.registration_success_manual">
-            <de>
-                <![CDATA[Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.]]></de>
-            <en>
-                <![CDATA[The registration was successful. Before you can log in, an administrator must activate your user account.]]></en>
+            <de><![CDATA[
+            Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.
+            ]]></de>
+            <en><![CDATA[
+            The registration was successful. Before you can log in, an administrator must activate your user account.
+            ]]></en>
         </locale>
         <locale name="message.registrars.registration_success_auto">
             <de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
@@ -980,8 +982,9 @@
             <en><![CDATA[Your user account has been activated successfully. You can now log in.]]></en>
         </locale>
         <locale name="registrars.password_auto_generate">
-            <de>
-                <![CDATA[Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.]]></de>
+            <de><![CDATA[
+            Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.
+            ]]></de>
             <en><![CDATA[Your account password will be mailed to you after your account has been activated.]]></en>
         </locale>
 
@@ -1218,17 +1221,76 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[This function is deactivated.]]></en>
         </locale>
 
-        <locale name="control.registration.sign.in.button.terms">
+        <locale name="control.registration.sign.up.button.terms">
             <de><![CDATA[Weiter mit der Registrierung]]></de>
             <en><![CDATA[Continue with registration]]></en>
         </locale>
-        <locale name="control.registration.sign.in.button.terms.decline">
+        <locale name="control.registration.sign.up.button.terms.decline">
             <de><![CDATA[Abbrechen]]></de>
             <en><![CDATA[Cancel]]></en>
         </locale>
-        <locale name="control.registration.sign.in.message.between" html="true">
-            <de><![CDATA[<p>oder Sie verwenden Ihr E-Mail-Konto für die Registrierung</p>]]></de>
+        <locale name="control.registration.sign.up.message.between" html="true">
+            <de><![CDATA[<p>oder verwende deine E-Mail-Adresse für die Anmeldung</p>]]></de>
             <en><![CDATA[<p>or you use your email account for registration</p>]]></en>
+        </locale>
+        <locale name="control.registration.sign.up.title">
+            <de><![CDATA[Konto erstellen]]></de>
+            <en><![CDATA[Create an Account]]></en>
+        </locale>
+        <locale name="control.registration.sign.up.email.title">
+            <de><![CDATA[E-Mail]]></de>
+            <en><![CDATA[Email]]></en>
+        </locale>
+        <locale name="control.registration.sign.up.try">
+            <de><![CDATA[Ausprobieren]]></de>
+            <en><![CDATA[Try It Out]]></en>
+        </locale>
+        <locale name="control.registration.sign.up.registration">
+            <de><![CDATA[Registrieren]]></de>
+            <en><![CDATA[Sign Up]]></en>
+        </locale>
+        <locale name="control.registration.sign.up.password.title">
+            <de><![CDATA[Passwort]]></de>
+            <en><![CDATA[Password]]></en>
+        </locale>
+        <locale name="control.registration.sign.up.password.next">
+            <de><![CDATA[Weiter]]></de>
+            <en><![CDATA[Next]]></en>
+        </locale>
+        <locale name="control.sign.up.terms_of_use_and_privacy_policy.label" html="true">
+            <de><![CDATA[
+            Durch das Erstellen eines Benutzerkontos versichere ich die
+            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> und
+            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>
+            gelesen zu haben und erkläre mich mit diesen einverstanden.
+            ]]></de>
+            <en><![CDATA[
+            By creating a user account, I confirm that I have read and agree to the
+            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and
+            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
+            ]]></en>
+        </locale>
+        <locale name="control.sign.up.terms_of_use.label" html="true">
+            <de><![CDATA[
+            Durch das Erstellen eines Benutzerkontos versichere ich die
+            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen zu haben
+            und erkläre mich mit diesen einverstanden.
+            ]]></de>
+            <en><![CDATA[
+            By creating a user account, I confirm that I have read and agree to the
+            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a>.
+            ]]></en>
+        </locale>
+        <locale name="control.sign.up.privacy_policy.label" html="true">
+            <de><![CDATA[
+            Durch das Erstellen eines Benutzerkontos versichere ich die
+            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>
+            gelesen zu haben und erkläre mich mit diesen einverstanden.
+            ]]></de>
+            <en><![CDATA[
+            By creating a user account, I confirm that I have read and agree to the
+            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
+            ]]></en>
         </locale>
     </groups>
 
@@ -1330,8 +1392,9 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             ]]></en>
         </locale>
         <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_fail">
-            <de>
-                <![CDATA[Der Aktivierungs-Link konnte nicht versandt werden. Bitte versuchen Sie es erneut oder versuchen Sie es später noch einmal.]]></de>
+            <de><![CDATA[
+            Der Aktivierungs-Link konnte nicht versandt werden. Bitte versuchen Sie es erneut oder versuchen Sie es später noch einmal.
+            ]]></de>
             <en><![CDATA[The activation link could not be sent! Please try again or try again later.]]></en>
         </locale>
 
@@ -1351,22 +1414,30 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[This e-mail address is not valid. Please use a valid e-mail address.]]></en>
         </locale>
         <locale name="controls.profile.userdata.email_already_taken">
-            <de>
-                <![CDATA[Diese E-Mail-Adresse kann nicht verwendet werden. Bitte verwenden Sie eine gültige E-Mail-Adresse.]]></de>
+            <de><![CDATA[
+            Diese E-Mail-Adresse kann nicht verwendet werden. Bitte verwenden Sie eine gültige E-Mail-Adresse.
+            ]]></de>
             <en><![CDATA[This e-mail address cannot be used. Please use a valid e-mail address.]]></en>
         </locale>
 
         <!-- Control: frontend/controls/profile/Profile -->
         <locale name="controls.profile.Profile.setting_error">
-            <de>
-                <![CDATA[Beim Laden dieses Profil-Bereichs ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an einen Administrator.]]></de>
-            <en>
-                <![CDATA[An unexpected error occurred while loading this profile section. Please try again or contact an administrator.]]></en>
+            <de><![CDATA[
+            Beim Laden dieses Profil-Bereichs ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an einen Administrator.
+            ]]></de>
+            <en><![CDATA[
+            An unexpected error occurred while loading this profile section. Please try again or contact an administrator.
+            ]]></en>
         </locale>
 
         <locale name="btn.close">
             <de><![CDATA[Schließen]]></de>
             <en><![CDATA[Close]]></en>
+        </locale>
+
+        <locale name="control.registration.sign.up.create.button">
+            <de><![CDATA[Konto erstellen]]></de>
+            <en><![CDATA[Create Account]]></en>
         </locale>
     </groups>
 </locales>
