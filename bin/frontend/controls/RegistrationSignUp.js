@@ -7,7 +7,6 @@
  * @todo redirect
  * @todo captcha expire
  * @todo facebook check
- * @todo on enter bei mail -> weiter, kein try out
  * @todo passwort -> animation?
  * @todo noscript
  */
@@ -444,6 +443,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 .getElement('.quiqqer-fu-registrationSignUp-registration-email')
                 .addEvent('submit', function (event) {
                     event.stop();
+
+                    console.log(1234);
                 });
 
 
@@ -465,14 +466,26 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 // workaround
-                if (event.key === 'enter' || typeof event.code === 'undefined') {
+                if (typeof event.code === 'undefined') {
                     self.emailValidation(EmailField);
+                    event.stop();
                     return;
                 }
 
                 mailTimeout = (function () {
                     self.emailValidation(EmailField);
                 }).delay(2000);
+            });
+
+            EmailField.addEvent('keydown', function (event) {
+                if (event.key === 'enter') {
+                    event.stop();
+                    self.emailValidation(EmailField).then(function (isValid) {
+                        if (isValid) {
+                            self.$onMailCreateClick();
+                        }
+                    });
+                }
             });
         },
 
@@ -547,7 +560,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }).then(function () {
                 return self.showTerms(Form.get('data-registrar'));
             }).then(function () {
-                console.warn('---');
                 var Form     = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
                     formData = {
                         termsOfUseAccepted: true,
