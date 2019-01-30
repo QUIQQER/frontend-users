@@ -5,9 +5,7 @@
  * @event onRegister
  *
  * @todo redirect
- * @todo captcha expire
  * @todo facebook check
- * @todo noscript
  * @todo responsive
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
@@ -76,7 +74,22 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             this.$RegistrationSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration');
+            this.$TextSection         = this.getElm().getElement('.quiqqer-fu-registrationSignUp-info');
             this.$SocialLogins        = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration-social');
+
+            this.$RegistrationSection.setStyle('opacity', 0);
+            this.$RegistrationSection.setStyle('display', 'inline');
+
+            this.$TextSection.setStyle('opacity', 0);
+            this.$TextSection.setStyle('display', 'inline');
+
+            moofx([
+                this.$RegistrationSection,
+                this.$TextSection
+            ]).animate({
+                opacity: 1
+            });
+
 
             Node.getElements('.quiqqer-fu-registrationSignUp-terms a').set('target', '_blank');
 

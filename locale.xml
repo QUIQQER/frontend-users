@@ -574,10 +574,12 @@
             <en><![CDATA[The e-mail address is not valid.]]></en>
         </locale>
         <locale name="registrars.email.javascript_required">
-            <de>
-                <![CDATA[JavaScript ist in Ihrem Browser deaktiviert. Bitte aktivieren Sie JavaScript in Ihrem Browser, um sich zu registrieren.]]></de>
-            <en>
-                <![CDATA[JavaScript is disabled in your browser. Please activate JavaScript in your browser to register.]]></en>
+            <de><![CDATA[
+            JavaScript ist in Ihrem Browser deaktiviert. Bitte aktivieren Sie JavaScript in Ihrem Browser, um sich zu registrieren.
+            ]]></de>
+            <en><![CDATA[
+            JavaScript is disabled in your browser. Please activate JavaScript in your browser to register.
+            ]]></en>
         </locale>
 
         <!-- Permissions -->

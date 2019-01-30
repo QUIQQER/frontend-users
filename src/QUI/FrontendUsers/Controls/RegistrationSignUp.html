@@ -1,4 +1,10 @@
-<section class="quiqqer-fu-registrationSignUp-registration">
+<noscript class="quiqqer-fu-registrationSignUp-registration-noscript">
+    <div class="message-error">
+        {locale group="quiqqer/frontend-users" var="registrars.email.javascript_required"}
+    </div>
+</noscript>
+
+<section class="quiqqer-fu-registrationSignUp-registration" style="display: none">
     {if $SessionUser->getId()}
     <div class="quiqqer-fu-registrationSignUp-registration-logged-in message-information">
         {locale group="quiqqer/frontend-users" var="message.types.registration.already_registered"}
@@ -104,6 +110,6 @@
     {/if}
 </section>
 
-<section class="quiqqer-fu-registrationSignUp-info">
+<section class="quiqqer-fu-registrationSignUp-info" style="display: none">
     {$this->getAttribute('content')}
 </section>

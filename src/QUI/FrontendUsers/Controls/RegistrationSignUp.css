@@ -200,3 +200,13 @@
 .visible .quiqqer-fu-registrationSignUp-email-captcha-display {
     display: inline-block;
 }
+
+
+/** no script
+ ========================================== */
+
+.quiqqer-fu-registrationSignUp-registration-noscript .message-error {
+    background: #fcebea;
+    color: #cc1f1a;
+    padding: 2rem;
+}
