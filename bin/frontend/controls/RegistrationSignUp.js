@@ -65,6 +65,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             var self = this,
                 Node = this.getElm();
 
+            // if user, sign in is not possible
+            if (window.QUIQQER_USER.id) {
+                return;
+            }
+
             if (parseInt(Node.get('data-qui-options-usecaptcha'))) {
                 this.setAttribute('useCaptcha', Node.get('data-qui-options-usecaptcha'));
             }
@@ -443,8 +448,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 .getElement('.quiqqer-fu-registrationSignUp-registration-email')
                 .addEvent('submit', function (event) {
                     event.stop();
-
-                    console.log(1234);
                 });
 
 
@@ -619,12 +622,20 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return;
             }
 
+            MailInput.set('disabled', true);
+            ButtonTrial.set('disabled', true);
+            GoToPassword.set('disabled', true);
+
             this.emailValidation(MailInput).then(function (isValid) {
                 if (!isValid) {
                     return Promise.reject('isInValid');
                 }
 
                 MailSection.setStyle('position', 'relative');
+
+                MailInput.set('disabled', false);
+                ButtonTrial.set('disabled', false);
+                GoToPassword.set('disabled', false);
 
                 moofx(MailSection).animate({
                     left   : -50,
@@ -634,17 +645,22 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     callback: function () {
                         MailSection.setStyle('display', 'none');
 
-                        self.$captchaCheck().then(function () {
-                            PasswordSection.setStyle('opacity', 0);
-                            PasswordSection.setStyle('display', 'inline');
+                        self.$onMailPasswordClick();
 
-                            moofx(PasswordSection).animate({
-                                left   : 0,
-                                opacity: 1
-                            }, {
-                                duration: 250
-                            });
-                        });
+                        // show password
+                        //
+                        //
+                        // self.$captchaCheck().then(function () {
+                        //     PasswordSection.setStyle('opacity', 0);
+                        //     PasswordSection.setStyle('display', 'inline');
+                        //
+                        //     moofx(PasswordSection).animate({
+                        //         left   : 0,
+                        //         opacity: 1
+                        //     }, {
+                        //         duration: 250
+                        //     });
+                        // });
                     }
                 });
             }).catch(function (err) {
