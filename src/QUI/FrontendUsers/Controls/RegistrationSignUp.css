@@ -45,6 +45,8 @@
 
 .quiqqer-fu-registrationSignUp-registration-email {
     margin-top: 3rem;
+    min-height: 140px;
+    position: relative;
 }
 
 .quiqqer-fu-registrationSignUp-registration-email label {
@@ -150,6 +152,7 @@
 
 .quiqqer-fu-registrationSignUp-email {
     max-width: 360px;
+    position: relative;
     width: 100%;
 }
 
@@ -169,6 +172,8 @@
 
 .quiqqer-fu-registrationSignUp-email-passwordSection {
     display: none;
+    position: absolute;
+    width: 100%;
 }
 
 .quiqqer-fu-registrationSignUp-email-buttons [name="trial-account"] {

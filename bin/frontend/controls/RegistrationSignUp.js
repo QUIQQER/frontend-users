@@ -7,8 +7,8 @@
  * @todo redirect
  * @todo captcha expire
  * @todo facebook check
- * @todo passwort -> animation?
  * @todo noscript
+ * @todo responsive
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
 
@@ -34,7 +34,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             '$onImport',
             '$onTrialClick',
             '$onMailCreateClick',
-            '$onMailPasswordClick'
+            '$onMailPasswordClick',
+            '$onPasswordNextClick'
         ],
 
         options: {
@@ -316,7 +317,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             Terms.setStyle('position', 'absolute');
 
                             if (typeOf(Control) === 'element') {
+                                // mail
                                 Control.addEvent('click', resolve);
+                                return;
                             }
 
                             // create the social login form
@@ -435,14 +438,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * init mail registration
          */
         $initMail: function () {
-            var ButtonTrial   = this.getElm().getElement('[name="trial-account"]'),
-                GoToPassword  = this.getElm().getElement('[name="go-to-password"]'),
-                CreateAccount = this.getElm().getElement('[name="create-account"]'),
-                EmailField    = this.getElm().getElement('[name="email"]');
+            var ButtonTrial  = this.getElm().getElement('[name="trial-account"]'),
+                GoToPassword = this.getElm().getElement('[name="go-to-password"]'),
+                PasswordNext = this.getElm().getElement('[name="create-account"]'),
+                EmailField   = this.getElm().getElement('[name="email"]');
 
             ButtonTrial.addEvent('click', this.$onTrialClick);
             GoToPassword.addEvent('click', this.$onMailCreateClick);
-            CreateAccount.addEvent('click', this.$onMailPasswordClick);
+            PasswordNext.addEvent('click', this.$onPasswordNextClick);
 
             this.getElm()
                 .getElement('.quiqqer-fu-registrationSignUp-registration-email')
@@ -607,7 +610,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         },
 
         /**
-         * account creation via mail - next to password step
+         * account creation via mail
+         * - 1. show password step
+         * - 2. show captcha step
+         * - 3. show term check
          */
         $onMailCreateClick: function () {
             var MailSection     = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-mailSection'),
@@ -645,22 +651,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     callback: function () {
                         MailSection.setStyle('display', 'none');
 
-                        self.$onMailPasswordClick();
+                        PasswordSection.setStyle('opacity', 0);
+                        PasswordSection.setStyle('display', 'inline');
+                        PasswordSection.setStyle('left', 50);
+                        PasswordSection.setStyle('top', 0);
 
-                        // show password
-                        //
-                        //
-                        // self.$captchaCheck().then(function () {
-                        //     PasswordSection.setStyle('opacity', 0);
-                        //     PasswordSection.setStyle('display', 'inline');
-                        //
-                        //     moofx(PasswordSection).animate({
-                        //         left   : 0,
-                        //         opacity: 1
-                        //     }, {
-                        //         duration: 250
-                        //     });
-                        // });
+                        moofx(PasswordSection).animate({
+                            left   : 0,
+                            opacity: 1
+                        }, {
+                            duration: 250
+                        });
                     }
                 });
             }).catch(function (err) {
@@ -671,6 +672,33 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 MailInput.set('disabled', false);
                 ButtonTrial.set('disabled', false);
                 GoToPassword.set('disabled', false);
+            });
+        },
+
+        /**
+         * event: on password next click
+         * - check captcha
+         * - create account
+         */
+        $onPasswordNextClick: function () {
+            var PasswordSection = this.getElm().getElement(
+                '.quiqqer-fu-registrationSignUp-email-passwordSection'
+            );
+
+            var self = this;
+
+            moofx(PasswordSection).animate({
+                left   : -50,
+                opacity: 0
+            }, {
+                duration: 250,
+                callback: function () {
+                    PasswordSection.setStyle('display', 'none');
+
+                    self.$captchaCheck().then(function () {
+                        self.$onMailPasswordClick();
+                    });
+                }
             });
         },
 
@@ -698,7 +726,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             var self    = this;
-            var Display = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-captcha-display');
+            var Display = this.getElm().getElement(
+                '.quiqqer-fu-registrationSignUp-email-captcha-display'
+            );
 
             return new Promise(function (resolve) {
                 if (self.$captchaResponse) {
