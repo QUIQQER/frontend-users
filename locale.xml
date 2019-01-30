@@ -1292,6 +1292,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
             ]]></en>
         </locale>
+        <locale name="control.sign.up.type.login.in.button">
+            <de><![CDATA[Log in]]></de>
+            <en><![CDATA[Log in]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
