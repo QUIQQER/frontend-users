@@ -526,6 +526,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         onExpired: function () {
                             self.$captchaResponse      = false;
                             CaptchaResponseInput.value = '';
+
+                            self.$resetMail();
                         }
                     });
                 });
@@ -768,6 +770,41 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                     resolve();
                                 }
                             });
+                        });
+                    }
+                });
+            });
+        },
+
+        /**
+         * reset the mail stuff and shows the mail input
+         *
+         * @return {Promise}
+         */
+        $resetMail: function () {
+            var Mail     = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-mailSection');
+            var Captcha  = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-captcha-display');
+            var Password = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-passwordSection');
+
+            return new Promise(function (resolve) {
+                moofx([Captcha, Password]).animate({
+                    left   : -50,
+                    opacity: 0
+                }, {
+                    duration: 250,
+                    callback: function () {
+                        Captcha.setStyle('display', 'none');
+                        Password.setStyle('display', 'none');
+
+                        Mail.setStyle('opacity', 0);
+                        Mail.setStyle('display', 'inline');
+
+                        moofx(Mail).animate({
+                            left   : 0,
+                            opacity: 1
+                        }, {
+                            duration: 250,
+                            callback: resolve
                         });
                     }
                 });
