@@ -2,7 +2,7 @@
  * @module package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp
  * @author www.pcsg.de (Henning Leutz)
  *
- * @event onRegister
+ * @event onRegister [this] - fires if the user successfully registers a user account
  *
  * @todo redirect
  */
@@ -293,6 +293,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
                             );
 
+                            // we need no login?
+                            var Login = Ghost.getElement(
+                                '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin"]'
+                            );
+
+                            if (Login) {
+                                Login.destroy();
+                            }
+
+
                             if (Ghost.getElement('.quiqqer-frontendUsers-error')) {
                                 Section.set('html', '');
                                 Ghost.getElement('.quiqqer-frontendUsers-error').inject(Section);
@@ -302,11 +312,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 Section.set('html', html);
                             }
 
-                            moofx(Section).animate({
-                                opacity: 1
-                            }, {
-                                callback: resolve
-                            });
+                            QUI.parse(Section).then(function () {
+                                if (Section.getElement('.quiqqer-frontendUsers-success') ||
+                                    Section.getElement('.quiqqer-frontendUsers-pending')) {
+                                    self.fireEvent('register', [self]);
+                                }
+
+                                moofx(Section).animate({
+                                    opacity: 1
+                                }, {
+                                    callback: resolve
+                                });
+                            }, reject);
                         }
                     });
                 }, {
