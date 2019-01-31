@@ -1,5 +1,7 @@
 <?php
 
+$Site->setAttribute('nocache', 1);
+
 $background = $Site->getAttribute('quiqqer.sign.up.background');
 $Background = null;
 
