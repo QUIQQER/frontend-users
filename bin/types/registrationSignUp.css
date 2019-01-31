@@ -11,10 +11,6 @@
     z-index: 10000;
 }
 
-.registration-sign-in-container {
-    background: rgba(255, 255, 255, 0.75);
-}
-
 .registration-login {
     position: absolute;
     right: 10px;
@@ -30,8 +26,8 @@
 }
 
 .registration-sign-in-container {
+    background: rgba(255, 255, 255, 0.75);
     margin: 0 auto;
-    max-width: 1900px;
     width: 100%;
 }
 
