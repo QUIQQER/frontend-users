@@ -65,6 +65,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             // if user, sign in is not possible
             if (window.QUIQQER_USER.id) {
+                this.$RegistrationSection = this.getElm().getElement(
+                    '.quiqqer-fu-registrationSignUp-registration'
+                );
+
+                this.$RegistrationSection.setStyle('opacity', 0);
+                this.$RegistrationSection.setStyle('display', 'inline');
+
+                moofx(
+                    this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration')
+                ).animate({
+                    opacity: 1
+                }, {
+                    callback: function () {
+                        self.fireEvent('loaded', [self]);
+                    }
+                });
+
                 return;
             }
 

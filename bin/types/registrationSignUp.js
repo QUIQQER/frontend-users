@@ -7,6 +7,10 @@ function signUpOnLoad() {
         });
 
         Button.set('disabled', false);
+
+        if (window.QUIQQER_USER.id) {
+            Button.setStyle('display', 'none');
+        }
     });
 
     require(['qui/QUI'], function (QUI) {
