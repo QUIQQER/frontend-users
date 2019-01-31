@@ -43,3 +43,10 @@
     text-align: center;
     width: 4rem;
 }
+
+.registration-sign-in-container .quiqqer-frontendUsers-success {
+    background: #E3FCEC;
+    border: none;
+    border-left: 4px solid #51D88A;
+    color: #38C172;
+}

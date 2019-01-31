@@ -318,10 +318,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                     self.fireEvent('register', [self]);
                                 }
 
-                                moofx(Section).animate({
-                                    opacity: 1
-                                }, {
-                                    callback: resolve
+                                self.hideTextSection().then(function () {
+                                    moofx(Section).animate({
+                                        opacity: 1
+                                    }, {
+                                        callback: resolve
+                                    });
                                 });
                             }, reject);
                         }
@@ -468,6 +470,36 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             self.Loader = new Loader().inject(self.$RegistrationSection);
                             self.Loader.show();
                             resolve(self.Loader);
+                        });
+                    }
+                });
+            });
+        },
+
+        /**
+         * Hides the content / text section
+         *
+         * @return {Promise}
+         */
+        hideTextSection: function () {
+            var self = this;
+
+            return new Promise(function (resolve) {
+                moofx(self.$TextSection).animate({
+                    opacity: 0
+                }, {
+                    duration: 250,
+                    callback: function () {
+                        moofx(self.$TextSection).animate({
+                            height : 0,
+                            padding: 0,
+                            width  : 0
+                        }, {
+                            duration: 250,
+                            callback: function () {
+                                self.$TextSection.setStyle('display', 'none');
+                                resolve();
+                            }
                         });
                     }
                 });
