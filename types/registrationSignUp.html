@@ -1,4 +1,6 @@
-<div class="registration-sign-in">
+<div class="registration-sign-in"
+     style="{if $Background}background-image: url('{image image=$Background onlysrc=1}');{/if}"
+>
 
     <div class="registration-login">
         <button name="registration-sign-in-login-button" disabled>
@@ -7,8 +9,11 @@
         </button>
     </div>
 
-    <div class="registration-sign-in-container">
-        {$Registration->create()}
+    <div class="registration-sign-in-container" style="height: 6rem; overflow: hidden;">
+        <span class="loader fa far fa-circle-notch fa-spinner fa-spin"></span>
+        <div class="registration-sign-in-container-instance">
+            {$Registration->create()}
+        </div>
     </div>
 
 </div>

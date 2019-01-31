@@ -4,14 +4,42 @@
         <type type="types/registration" icon="fa fa-user-plus">
             <locale group="quiqqer/frontend-users" var="admin.types.registration"/>
         </type>
-        <type type="types/registrationSignUp" icon="fa fa-user-plus">
-            <locale group="quiqqer/frontend-users" var="admin.types.registrationSignUp"/>
-        </type>
         <type type="types/login" icon="fa fa-sign-in">
             <locale group="quiqqer/frontend-users" var="admin.types.login"/>
         </type>
         <type type="types/profile" icon="fa fa-user">
             <locale group="quiqqer/frontend-users" var="admin.types.profile"/>
+        </type>
+
+        <type type="types/registrationSignUp" icon="fa fa-user-plus">
+            <locale group="quiqqer/frontend-users" var="admin.types.registrationSignUp"/>
+
+            <!-- extra attributes -->
+            <attributes>
+                <attribute>quiqqer.sign.up.background</attribute>
+            </attributes>
+
+            <!-- list settings -->
+            <settings>
+
+                <category name="sign-up-settings">
+                    <settings>
+                        <title>
+                            <locale group="quiqqer/frontend-users"
+                                    var="quiqqer.sign.up.settings.title"
+                            />
+                        </title>
+
+                        <input conf="quiqqer.sign.up.background" class="media-image">
+                            <locale group="quiqqer/frontend-users"
+                                    var="admin.types.registrationSignUp.setting.background"
+                            />
+                        </input>
+                    </settings>
+                </category>
+
+            </settings>
+
         </type>
     </types>
 </site>

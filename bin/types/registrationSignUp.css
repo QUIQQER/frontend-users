@@ -1,6 +1,7 @@
 .registration-sign-in {
     align-items: center;
-    background: #fff;
+    background-color: #fff;
+    background-size: cover;
     display: flex;
     height: 100%;
     left: 0;
@@ -8,6 +9,10 @@
     top: 0;
     width: 100%;
     z-index: 10000;
+}
+
+.registration-sign-in-container {
+    background: rgba(255, 255, 255, 0.75);
 }
 
 .registration-login {
@@ -28,4 +33,13 @@
     margin: 0 auto;
     max-width: 1900px;
     width: 100%;
+}
+
+.registration-sign-in-container .fa-spinner {
+    display: block;
+    font-size: 2rem;
+    line-height: 4rem;
+    margin: 1rem auto;
+    text-align: center;
+    width: 4rem;
 }

@@ -44,7 +44,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader = null;
+            this.Loader  = null;
+            this.$loaded = false;
 
             this.$RegistrationSection = null;
             this.$captchaResponse     = false;
@@ -110,6 +111,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             // init
             this.$initMail();
             this.$initCaptcha();
+
+            this.fireEvent('loaded', [this]);
         },
 
         /**
@@ -141,6 +144,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     console.error(err);
                 }
             });
+        },
+
+        /**
+         * Is the control loaded?
+         *
+         * @return {boolean}
+         */
+        isLoaded: function () {
+            return this.$loaded;
         },
 
         /**
