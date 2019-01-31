@@ -3,8 +3,6 @@
  * @author www.pcsg.de (Henning Leutz)
  *
  * @event onRegister [this] - fires if the user successfully registers a user account
- *
- * @todo redirect
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
 
@@ -316,6 +314,20 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 if (Section.getElement('.quiqqer-frontendUsers-success') ||
                                     Section.getElement('.quiqqer-frontendUsers-pending')) {
                                     self.fireEvent('register', [self]);
+                                }
+
+                                if (Section.getElement('.quiqqer-frontendUsers-success')) {
+                                    var html = Section.getElement('.quiqqer-frontendUsers-success').get('html').trim();
+
+                                    if (html === '') {
+                                        window.location.reload();
+                                    }
+                                }
+
+                                var Redirect = Section.getElement('.quiqqer-frontendUsers-redirect');
+
+                                if (Redirect && Redirect.get('data-instant')) {
+                                    window.location = Redirect.get('data-url');
                                 }
 
                                 self.hideTextSection().then(function () {
