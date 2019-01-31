@@ -5,7 +5,6 @@
  * @event onRegister
  *
  * @todo redirect
- * @todo facebook check
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
 
