@@ -15,6 +15,13 @@
     <span class="fa fa-envelope"></span>
     {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit_again"}
 </button>
+
+<script>
+    require(['qui/QUI'], function (QUI) {
+        QUI.fireEvent('quiqqerFrontendUsersAccountDeleteStart');
+        QUI.setAttribute('QUIQQER_FRONTEND_USERS_ACCOUNT_DELETE_START', true);
+    });
+</script>
 {else}
 <p>
     {locale group="quiqqer/frontend-users" var="profile.deleteaccount.info"}

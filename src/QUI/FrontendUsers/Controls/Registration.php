@@ -63,7 +63,7 @@ class Registration extends QUI\Control
         $this->setAttributes($attributes);
 
         $this->setJavaScriptControlOption('registrars', json_encode($this->getAttribute('registrars')));
-        $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
+        $this->addCSSFile(dirname(__FILE__).'/Registration.css');
 
         $this->id      = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
         $this->isAsync = $this->getAttribute('async');
@@ -138,7 +138,7 @@ class Registration extends QUI\Control
                 try {
                     if (!empty($redirectOnLogin[$projectLang])) {
                         $RedirectSite = QUISiteUtils::getSiteByLink($redirectOnLogin[$projectLang]);
-                        $redirectUrl     = $RedirectSite->getUrlRewrittenWithHost();
+                        $redirectUrl  = $RedirectSite->getUrlRewrittenWithHost();
                     }
 
                     $instantRedirect = true;
@@ -265,7 +265,7 @@ class Registration extends QUI\Control
             'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle')
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
+        return $Engine->fetch(dirname(__FILE__).'/Registration.html');
     }
 
     /**

@@ -3,12 +3,12 @@
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 
 // AGB
-$result = $Project->getSites(array(
-    'where' => array(
+$result = $Project->getSites([
+    'where' => [
         'type' => 'quiqqer/intranet:registration/termsOfUse'
-    ),
+    ],
     'limit' => 1
-));
+]);
 
 
 if (isset($result[0])) {
@@ -16,12 +16,12 @@ if (isset($result[0])) {
 }
 
 // Privacy
-$result = $Project->getSites(array(
-    'where' => array(
+$result = $Project->getSites([
+    'where' => [
         'type' => 'quiqqer/intranet:registration/privacy'
-    ),
+    ],
     'limit' => 1
-));
+]);
 
 if (isset($result[0])) {
     $Engine->assign('Site_Privacy', $result[0]);
@@ -34,7 +34,7 @@ try {
     $FrontendUsersHandler->checkConfiguration();
 } catch (\QUI\FrontendUsers\Exception $Exception) {
     QUI\System\Log::addError(
-        'quiqqer/frontend-users is misconfigured: ' . $Exception->getMessage()
+        'quiqqer/frontend-users is misconfigured: '.$Exception->getMessage()
     );
 
     $Engine->assign('msg', QUI::getLocale()->get(
@@ -76,7 +76,7 @@ if ($loggedIn && (!$Registrar || $status === 'error')) {
             $ProfileSite = $FrontendUsersHandler->getProfileSite($Site->getProject());
 
             if ($ProfileSite) {
-                header('Location: ' . $ProfileSite->getUrlRewritten());
+                header('Location: '.$ProfileSite->getUrlRewritten());
                 exit;
             }
             break;
@@ -91,19 +91,21 @@ if ($loggedIn && (!$Registrar || $status === 'error')) {
 }
 
 if (!$Registrar) {
-    header('Location: /');
-    exit;
+    $Engine->assign('msg', QUI::getLocale()->get(
+        'quiqqer/frontend-users',
+        'message.types.registration.not.possible'
+    ));
+} else {
+    /**
+     * User Registration
+     */
+    $Registration = new QUI\FrontendUsers\Controls\Registration([
+        'status'    => $status,
+        'Registrar' => $Registrar
+    ]);
+
+    $Engine->assign([
+        'Registration' => $Registration,
+        'User'         => QUI::getUserBySession()
+    ]);
 }
-
-/**
- * User Registration
- */
-$Registration = new QUI\FrontendUsers\Controls\Registration(array(
-    'status'    => $status,
-    'Registrar' => $Registrar
-));
-
-$Engine->assign(array(
-    'Registration' => $Registration,
-    'User'         => QUI::getUserBySession()
-));
