@@ -3,6 +3,8 @@
  * @author www.pcsg.de (Henning Leutz)
  *
  * @event onRegister [this] - fires if the user successfully registers a user account
+ * @event onQuiqqerFrontendUsersRegisterStart [this]
+ * @event onQuiqqerFrontendUsersRegisterStart [this]
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp', [
 
@@ -60,6 +62,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         $onImport: function () {
             var self = this,
                 Node = this.getElm();
+
+            QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
 
             // if user, sign in is not possible
             if (window.QUIQQER_USER.id) {
@@ -313,7 +317,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             QUI.parse(Section).then(function () {
                                 if (Section.getElement('.quiqqer-frontendUsers-success') ||
                                     Section.getElement('.quiqqer-frontendUsers-pending')) {
+
                                     self.fireEvent('register', [self]);
+                                    QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self]);
                                 }
 
                                 if (Section.getElement('.quiqqer-frontendUsers-success')) {
