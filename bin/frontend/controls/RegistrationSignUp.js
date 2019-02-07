@@ -550,7 +550,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 PasswordNext = this.getElm().getElement('[name="create-account"]'),
                 EmailField   = this.getElm().getElement('[name="email"]');
 
-            ButtonTrial.addEvent('click', this.$onTrialClick);
+            if (ButtonTrial) {
+                ButtonTrial.addEvent('click', this.$onTrialClick);
+            }
+
             GoToPassword.addEvent('click', this.$onMailCreateClick);
             PasswordNext.addEvent('click', this.$onPasswordNextClick);
 

@@ -44,6 +44,10 @@ function signUpOnLoad() {
             show();
         };
 
+        if (!Control) {
+            return;
+        }
+
         if (Control.get('data-quiid')) {
             instanceLoaded(
                 QUI.Controls.getById(Control.get('data-quiid'))
