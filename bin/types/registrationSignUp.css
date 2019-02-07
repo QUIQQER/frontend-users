@@ -11,6 +11,16 @@
     z-index: 10000;
 }
 
+.registration-sign-in-logo {
+    left: 10px;
+    position: absolute;
+    top: 10px;
+}
+
+.registration-sign-in-logo img {
+    height: 32px;
+}
+
 .registration-login {
     position: absolute;
     right: 10px;

@@ -2,6 +2,7 @@
 
 $Site->setAttribute('nocache', 1);
 
+
 $background = $Site->getAttribute('quiqqer.sign.up.background');
 $Background = null;
 
@@ -11,6 +12,7 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
     } catch (QUI\Exception $exception) {
     }
 }
+
 
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
     'content' => $Site->getAttribute('content')
@@ -22,5 +24,6 @@ if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
 
 $Engine->assign([
     'Registration' => $Registration,
-    'Background'   => $Background
+    'Background'   => $Background,
+    'Logo'         => $Site->getProject()->getMedia()->getLogoImage()
 ]);

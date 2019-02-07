@@ -1,3 +1,4 @@
+{if $Captcha}
 <section class="quiqqer-fu-registrationSignUp-email-captcha-display">
     {if $jsRequired}
     <noscript>
@@ -14,3 +15,4 @@
     {$Captcha->create()}
     <input type="hidden" name="captchaResponse"/>
 </section>
+{/if}
