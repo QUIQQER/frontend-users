@@ -1,6 +1,11 @@
 <div class="registration-sign-in"
      style="{if $Background}background-image: url('{image image=$Background onlysrc=1}');{/if}"
 >
+    {if $Logo}
+    <a href="{url id=1}" class="registration-sign-in-logo">
+        {image image=$Logo}
+    </a>
+    {/if}
 
     <div class="registration-login">
         <button name="registration-sign-in-login-button" disabled>

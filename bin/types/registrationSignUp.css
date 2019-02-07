@@ -1,7 +1,7 @@
 .registration-sign-in {
     align-items: center;
     background-color: #fff;
-    background-size: contain;
+    background-size: cover;
     display: flex;
     height: 100%;
     left: 0;
@@ -9,6 +9,16 @@
     top: 0;
     width: 100%;
     z-index: 10000;
+}
+
+.registration-sign-in-logo {
+    left: 10px;
+    position: absolute;
+    top: 10px;
+}
+
+.registration-sign-in-logo img {
+    height: 32px;
 }
 
 .registration-login {
