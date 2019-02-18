@@ -22,8 +22,52 @@ if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
     $Registration->setAttribute('registration-trial', true);
 }
 
+
 $Engine->assign([
     'Registration' => $Registration,
     'Background'   => $Background,
     'Logo'         => $Site->getProject()->getMedia()->getLogoImage()
 ]);
+
+
+/**
+ * Links
+ */
+
+// Privacy
+$result = $Project->getSites([
+    'where' => [
+        'type' => 'quiqqer/sitetypes:types/privacypolicy'
+    ],
+    'limit' => 1
+]);
+
+if (isset($result[0])) {
+    $Engine->assign('Site_Privacy', $result[0]);
+}
+
+// AGB
+$result = $Project->getSites([
+    'where' => [
+        'type' => 'quiqqer/sitetypes:types/generalTermsAndConditions'
+    ],
+    'limit' => 1
+]);
+
+
+if (isset($result[0])) {
+    $Engine->assign('Site_TermsAndConditions', $result[0]);
+}
+
+// Legal Notes
+$result = $Project->getSites([
+    'where' => [
+        'type' => 'quiqqer/sitetypes:types/legalnotes'
+    ],
+    'limit' => 1
+]);
+
+
+if (isset($result[0])) {
+    $Engine->assign('Site_LegalNotes', $result[0]);
+}
