@@ -53,5 +53,6 @@ QUI::$Ajax->registerFunction(
 
         return QUI\Output::getInstance()->parse($result);
     },
-    ['category', 'settings', 'project', 'siteId', 'menu']
+    ['category', 'settings', 'project', 'siteId', 'menu'],
+    ['Permission::checkUser']
 );

@@ -18,5 +18,6 @@ QUI::$Ajax->registerFunction(
 
         return QUI\ControlUtils::parse($Address);
     },
-    ['addressId']
+    ['addressId'],
+    ['Permission::checkUser']
 );

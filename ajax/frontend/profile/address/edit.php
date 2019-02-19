@@ -18,5 +18,6 @@ QUI::$Ajax->registerFunction(
         $Address = new QUI\FrontendUsers\Controls\Address\Address();
         $Address->editAddress(json_decode($data, true));
     },
-    ['addressId', 'data']
+    ['addressId', 'data'],
+    ['Permission::checkUser']
 );
