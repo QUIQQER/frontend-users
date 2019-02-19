@@ -72,10 +72,11 @@
 @media (max-width: 1200px) {
     .registration-sign-in {
         flex-direction: column;
+        overflow: auto;
     }
 
     .registration-sign-in-container {
-        margin-top: 80px;
+        padding-top: 20px;
     }
 
     .registration-sign-in-links {
