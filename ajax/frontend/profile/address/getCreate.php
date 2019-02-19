@@ -18,5 +18,7 @@ QUI::$Ajax->registerFunction(
         $Address = new QUI\FrontendUsers\Controls\Address\Address();
 
         return QUI\ControlUtils::parse($Address);
-    }
+    },
+    false,
+    ['Permission::checkUser']
 );

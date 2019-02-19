@@ -17,5 +17,6 @@ QUI::$Ajax->registerFunction(
         $Address = $User->getAddress($addressId);
         $Address->delete();
     },
-    ['addressId']
+    ['addressId'],
+    ['Permission::checkUser']
 );
