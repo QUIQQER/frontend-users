@@ -741,8 +741,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             MailInput.set('disabled', true);
-            ButtonTrial.set('disabled', true);
             GoToPassword.set('disabled', true);
+
+            if (ButtonTrial) {
+                ButtonTrial.set('disabled', true);
+            }
 
             this.emailValidation(MailInput).then(function (isValid) {
                 if (!isValid) {
@@ -752,8 +755,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 MailSection.setStyle('position', 'relative');
 
                 MailInput.set('disabled', false);
-                ButtonTrial.set('disabled', false);
                 GoToPassword.set('disabled', false);
+
+                if (ButtonTrial) {
+                    ButtonTrial.set('disabled', false);
+                }
 
                 moofx(MailSection).animate({
                     left   : -50,
@@ -782,8 +788,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 MailInput.set('disabled', false);
-                ButtonTrial.set('disabled', false);
                 GoToPassword.set('disabled', false);
+
+                if (ButtonTrial) {
+                    ButtonTrial.set('disabled', false);
+                }
             });
         },
 
