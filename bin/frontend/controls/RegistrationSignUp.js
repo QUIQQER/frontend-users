@@ -831,7 +831,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          */
         $captchaCheck: function () {
             if (!this.getAttribute('useCaptcha')) {
-                return new Promise.resolve();
+                return Promise.resolve();
             }
 
             var CaptchaContainer = this.getElm().getElement(
@@ -839,7 +839,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             );
 
             if (!CaptchaContainer) {
-                return new Promise.resolve();
+                return Promise.resolve();
             }
 
             if (this.$captchaResponse) {
