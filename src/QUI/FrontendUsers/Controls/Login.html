@@ -1,0 +1,72 @@
+<noscript class="quiqqer-fu-login-noscript">
+    <div class="message-error">
+        {locale group="quiqqer/frontend-users" var="registrars.email.javascript_required"}
+    </div>
+</noscript>
+
+{if $SessionUser->getId()}
+<div class="quiqqer-fu-login-logged-in message-information">
+    {locale
+    group="quiqqer/frontend-users"
+    var="message.already.loged.in"
+    username=$SessionUser->getName()
+    }
+</div>
+{else}
+
+<section class="quiqqer-fu-login-container" style="display: none">
+    <h2>{locale group="quiqqer/frontend-users" var="control.login.title"}</h2>
+
+    <div class="quiqqer-fu-login-social">
+        {foreach $authenticators as $entry}
+        <form action=""
+              method="POST"
+              class="quiqqer-fu-login-social-entry"
+              data-authenticator="{$entry.class}"
+        >
+            <span class="{$entry.Login->getAttribute('icon')}"></span>
+            <div class="quiqqer-fu-login-social-entry-control">
+                {$entry.Login->create()}
+            </div>
+        </form>
+        {/foreach}
+    </div>
+
+    {if count($authenticators)}
+    <div class="quiqqer-fu-login-between-text">
+        {locale group="quiqqer/frontend-users" var="control.login.message.between"}
+    </div>
+    {/if}
+
+    <form name="quiqqer-fu-login-email" class="quiqqer-fu-login-email">
+        <section class="quiqqer-fu-login-email-mailSection">
+            <label>
+                <span class="label">
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.email.title"}
+                </span>
+                <span class="field">
+                <span class="icon fa fa-envelope"></span>
+                    <input type="text" name="username" required autocomplete="email"/>
+                </span>
+            </label>
+
+            <label>
+                <span class="label">
+                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.title"}
+                </span>
+                <span class="field">
+                <span class="icon fa fa-envelope"></span>
+                    <input type="password" name="password" required autocomplete="off"/>
+                </span>
+            </label>
+
+            <div class="quiqqer-fu-login-email-buttons">
+                <button type="submit" name="mail-login">
+                    {locale group="quiqqer/frontend-users" var="control.login.button"}
+                </button>
+            </div>
+        </section>
+    </form>
+</section>
+
+{/if}

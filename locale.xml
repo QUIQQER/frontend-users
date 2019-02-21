@@ -976,6 +976,21 @@
             <en><![CDATA[Sign Up]]></en>
         </locale>
 
+        <!-- Control: Login -->
+        <locale name="control.login.title">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Login in]]></en>
+        </locale>
+        <locale name="control.login.button" html="true">
+            <de><![CDATA[Login]]></de>
+            <en><![CDATA[Login in]]></en>
+        </locale>
+        <locale name="control.login.message.between">
+            <de><![CDATA[oder verwende deine E-Mail Adresse für den Login]]></de>
+            <en><![CDATA[or use your e-mail address for the login]]></en>
+        </locale>
+
+
         <!-- Class: AbstractRegistrar -->
         <locale name="message.registrars.registration_success_manual">
             <de><![CDATA[

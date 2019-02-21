@@ -1,7 +1,9 @@
 function signUpOnLoad() {
     var Button = document.getElement('button[name="registration-sign-in-login-button"]');
 
-    require(['controls/users/LoginWindow'], function (Login) {
+    require([
+        'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
+    ], function (Login) {
         Button.addEvent('click', function () {
             new Login().open();
         });
