@@ -1,0 +1,43 @@
+.quiqqer-frontendUsers-loginWindow-logo {
+    display: block;
+    margin: 0 0 2rem;
+    max-height: 32px;
+}
+
+.quiqqer-frontendUsers-loginWindow-close {
+    background: #fff;
+    border: none;
+    color: inherit;
+    font-size: 1.5rem;
+    height: 60px;
+    line-height: 60px;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 60px;
+}
+
+.quiqqer-frontendUsers-loginWindow-close .fa {
+    margin: 0;
+    padding: 0;
+}
+
+.quiqqer-frontendUsers-loginWindow-close:hover {
+    background: #c3c3c3;
+    color: #222;
+}
+
+.quiqqer-frontendUsers-loginWindow-message {
+
+}
+
+.quiqqer-frontendUsers-loginWindow .quiqqer-frontendUsers-login {
+    display: flex;
+    flex-direction: column;
+}
+
+.quiqqer-frontendUsers-loginWindow .quiqqer-fu-login-container {
+    padding-bottom: 1rem;
+}
