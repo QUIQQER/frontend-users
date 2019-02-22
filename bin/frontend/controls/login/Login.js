@@ -64,7 +64,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          */
         create: function () {
             this.$Elm = this.parent();
+
+            this.$Elm.addClass('quiqqer-frontendUsers-login');
+            this.$Elm.set({
+                'data-quiid': this.getId(),
+                'data-qui'  : this.getType()
+            });
+
             this.Loader.inject(this.$Elm);
+
+            if (this.getAttribute('styles')) {
+                this.$Elm.setStyles(this.getAttribute('styles'));
+            }
 
             return this.$Elm;
         },
