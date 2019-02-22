@@ -30,5 +30,6 @@ QUI::$Ajax->registerFunction(
             )
         );
     },
-    ['category', 'settings', 'data']
+    ['category', 'settings', 'data'],
+    ['Permission::checkUser']
 );

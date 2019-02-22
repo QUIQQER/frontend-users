@@ -56,3 +56,33 @@
     border-left: 4px solid #51D88A;
     color: #38C172;
 }
+
+.registration-sign-in-links {
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
+}
+
+.registration-sign-in-links a {
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+@media (max-width: 1200px) {
+    .registration-sign-in {
+        flex-direction: column;
+        overflow: auto;
+    }
+
+    .registration-sign-in-container {
+        margin-top: 60px;
+    }
+
+    .registration-sign-in-links {
+        margin-top: 10px;
+        position: relative;
+        text-align: center;
+        width: 100%;
+    }
+}
