@@ -26,8 +26,25 @@
     height: 50px;
     line-height: 50px;
     margin: 0 0.25rem;
+    position: relative;
     text-align: center;
     width: 50px;
+}
+
+.quiqqer-fu-login-social-entry-icon,
+.quiqqer-fu-login-social-entry-loader {
+    display: none;
+    height: 50px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 50px;
+}
+
+.quiqqer-fu-login-social-entry-icon {
+    display: inline-block;
+    opacity: 1;
 }
 
 .quiqqer-fu-login-social-entry:hover {

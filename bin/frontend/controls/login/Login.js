@@ -41,7 +41,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
         options: {
             showLoader: true,
-            onSuccess : false
+            onSuccess : false,
+            redirect  : true
         },
 
         initialize: function (options) {
@@ -72,9 +73,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * event: on import
          */
         $onImport: function () {
-
-            console.log(111);
-
+            console.log('Not implemented yet');
         },
 
         /**
@@ -174,6 +173,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     QUI.fireEvent('quiqqerUserAuthLoginSuccess', [self]);
                     resolve(self);
 
+                    self.$onSuccess();
+
                     if (typeof self.getAttribute('onSuccess') === 'function') {
                         self.getAttribute('onSuccess')(self);
                         return;
@@ -187,10 +188,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     params       : JSON.encode(
                         QUIFormUtils.getFormData(Form)
                     ),
-                    onError: function (e) {
+                    onError      : function (e) {
                         self.Loader.hide();
-                        self.fireEvent('userLoginError', [self]);
-                        QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self]);
+                        self.fireEvent('userLoginError', [self, e]);
+                        QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self, e]);
 
                         reject(e);
                     }
@@ -198,17 +199,27 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             });
         },
 
+        /**
+         * Social authentication
+         *
+         * @param Form
+         */
         $authBySocial: function (Form) {
             var self = this;
 
             this.fireEvent('authBegin', [this]);
             QUI.fireEvent('quiqqerUserAuthLoginAuthBegin', [this]);
 
+            this.$showSocialLoader(Form);
+
             QUIAjax.post('ajax_users_login', function (result) {
                 window.QUIQQER_USER = result.user;
 
                 self.fireEvent('success', [self]);
                 QUI.fireEvent('quiqqerUserAuthLoginSuccess', [self]);
+
+                self.$hideSocialLoader(Form);
+                self.$onSuccess();
 
                 if (typeof self.getAttribute('onSuccess') === 'function') {
                     self.getAttribute('onSuccess')(self);
@@ -224,9 +235,66 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     QUIFormUtils.getFormData(Form)
                 ),
                 onError      : function (e) {
+                    self.$hideSocialLoader(Form);
                     self.Loader.hide();
-                    self.fireEvent('userLoginError', [self]);
-                    QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self]);
+                    self.fireEvent('userLoginError', [self, e]);
+                    QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self, e]);
+                }
+            });
+        },
+
+        /**
+         * Show a loader for the social login
+         *
+         * @param Form
+         */
+        $showSocialLoader: function (Form) {
+            var Icon   = Form.getElement('.quiqqer-fu-login-social-entry-icon');
+            var Loader = Form.getElement('.quiqqer-fu-login-social-entry-loader');
+
+            Loader.setStyle('opacity', 0);
+            Loader.setStyle('display', 'inline-block');
+
+            moofx(Icon).animate({
+                opacity: 0
+            }, {
+                duration: 250,
+                callback: function () {
+                    Icon.setStyle('display', 'none');
+                }
+            });
+
+            moofx(Loader).animate({
+                opacity: 1
+            }, {
+                duration: 250
+            });
+        },
+
+        /**
+         * hide the loader at the social login
+         *
+         * @param Form
+         */
+        $hideSocialLoader: function (Form) {
+            var Icon   = Form.getElement('.quiqqer-fu-login-social-entry-icon');
+            var Loader = Form.getElement('.quiqqer-fu-login-social-entry-loader');
+
+            Icon.setStyle('opacity', 0);
+            Icon.setStyle('display', 'inline-block');
+
+            moofx(Icon).animate({
+                opacity: 1
+            }, {
+                duration: 250
+            });
+
+            moofx(Loader).animate({
+                opacity: 1
+            }, {
+                duration: 250,
+                callback: function () {
+                    Loader.setStyle('display', 'none');
                 }
             });
         },
@@ -255,6 +323,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             (function () {
                 clicked = false;
             }).delay(200);
+        },
+
+        /**
+         * on success
+         */
+        $onSuccess: function () {
+            if (this.getAttribute('redirect') === false) {
+                return;
+            }
+
+            QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (result) {
+                if (result) {
+                    window.location = result;
+                }
+            }, {
+                'package': 'quiqqer/frontend-users'
+            });
         }
     });
 });

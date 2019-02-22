@@ -24,7 +24,12 @@
               class="quiqqer-fu-login-social-entry"
               data-authenticator="{$entry.class}"
         >
-            <span class="{$entry.Login->getAttribute('icon')}"></span>
+            <span class="quiqqer-fu-login-social-entry-icon">
+                <span class="{$entry.Login->getAttribute('icon')}"></span>
+            </span>
+            <span class="quiqqer-fu-login-social-entry-loader">
+                <span class="fa fa-spin fa-spinner fas fa-circle-notch"></span>
+            </span>
             <div class="quiqqer-fu-login-social-entry-control">
                 {$entry.Login->create()}
             </div>
