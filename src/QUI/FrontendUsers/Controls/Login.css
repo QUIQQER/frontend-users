@@ -35,9 +35,9 @@
     color: #fff;
 }
 
-/*.quiqqer-fu-login-social-entry-control {*/
-    /*display: none;*/
-/*}*/
+.quiqqer-fu-login-social-entry-control {
+    display: none;
+}
 
 .quiqqer-fu-login-between-text {
     text-align: center;

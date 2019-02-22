@@ -35,7 +35,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         Binds: [
             'onImport',
             'onInject',
-            '$auth'
+            '$auth',
+            '$authBySocial'
         ],
 
         options: {
@@ -113,16 +114,27 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                             event.stop();
                             self.authByEmail();
                         });
-                    //
+
+
                     self.getElm()
                         .getElements('.quiqqer-fu-login-social-entry')
                         .addEvent('click', self.$auth);
 
-                    // self.getElm()
-                    //     .getElements('.quiqqer-fu-login-social-entry')
-                    //     .addEvent('click', function() {
-                    //         console.log(11);
-                    //     });
+
+                    // submit events
+                    var container = self.getElm().getElements('.quiqqer-fu-login-social-entry-control');
+                    var i, len, Control, ControlDom;
+
+                    for (i = 0, len = container.length; i < len; i++) {
+                        ControlDom = container[i].getFirst();
+                        Control    = QUI.Controls.getById(ControlDom.get('data-quiid'));
+
+                        //Control.addEvent('');
+                    }
+
+                    self.getElm().getElements('form.quiqqer-fu-login-social-entry').addEvents({
+                        submit: self.$authBySocial
+                    });
 
 
                     moofx(Login).animate({
@@ -175,7 +187,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     params       : JSON.encode(
                         QUIFormUtils.getFormData(Form)
                     ),
-
                     onError: function (e) {
                         self.Loader.hide();
                         self.fireEvent('userLoginError', [self]);
@@ -184,6 +195,39 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                         reject(e);
                     }
                 });
+            });
+        },
+
+        $authBySocial: function (Form) {
+            var self = this;
+
+            this.fireEvent('authBegin', [this]);
+            QUI.fireEvent('quiqqerUserAuthLoginAuthBegin', [this]);
+
+            QUIAjax.post('ajax_users_login', function (result) {
+                window.QUIQQER_USER = result.user;
+
+                self.fireEvent('success', [self]);
+                QUI.fireEvent('quiqqerUserAuthLoginSuccess', [self]);
+
+                if (typeof self.getAttribute('onSuccess') === 'function') {
+                    self.getAttribute('onSuccess')(self);
+                    return;
+                }
+
+                window.location.reload();
+            }, {
+                showLogin    : false,
+                authenticator: Form.get('data-authenticator'),
+                globalauth   : 1,
+                params       : JSON.encode(
+                    QUIFormUtils.getFormData(Form)
+                ),
+                onError      : function (e) {
+                    self.Loader.hide();
+                    self.fireEvent('userLoginError', [self]);
+                    QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self]);
+                }
             });
         },
 
@@ -201,8 +245,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 Target = Target.getParent('.quiqqer-fu-login-social-entry');
             }
 
+            var Container  = Target.getElement('.quiqqer-fu-login-social-entry-control');
+            var ControlDom = Container.getFirst();
+            var Control    = QUI.Controls.getById(ControlDom.get('data-quiid'));
+
+            Control.click();
             clicked = true; // we need that because of control click
-            Target.getElement('.quiqqer-fu-login-social-entry-control').click();
 
             (function () {
                 clicked = false;
