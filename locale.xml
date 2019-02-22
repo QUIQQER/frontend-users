@@ -978,7 +978,7 @@
 
         <!-- Control: Login -->
         <locale name="control.login.title">
-            <de><![CDATA[Login]]></de>
+            <de><![CDATA[Anmelden]]></de>
             <en><![CDATA[Login in]]></en>
         </locale>
         <locale name="control.login.button" html="true">
