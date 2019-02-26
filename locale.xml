@@ -979,11 +979,11 @@
         <!-- Control: Login -->
         <locale name="control.login.title">
             <de><![CDATA[Anmelden]]></de>
-            <en><![CDATA[Login in]]></en>
+            <en><![CDATA[Log in]]></en>
         </locale>
         <locale name="control.login.button" html="true">
             <de><![CDATA[Login]]></de>
-            <en><![CDATA[Login in]]></en>
+            <en><![CDATA[Log in]]></en>
         </locale>
         <locale name="control.login.message.between">
             <de><![CDATA[oder verwende deine E-Mail Adresse für den Login]]></de>
