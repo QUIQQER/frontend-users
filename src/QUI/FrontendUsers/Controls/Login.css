@@ -12,10 +12,24 @@
     width: 40%;
 }
 
-
 .quiqqer-fu-login-social {
     text-align: center;
     margin: 3rem 0;
+}
+
+.quiqqer-fu-login-container h2 {
+    text-align: center;
+    position: relative;
+}
+
+.quiqqer-fu-login-container h2:after {
+    background: #3986dd;
+    bottom: -10px;
+    content: '';
+    height: 2px;
+    left: calc(50% - 40px);
+    position: absolute;
+    width: 80px;
 }
 
 .quiqqer-fu-login-social-entry {
