@@ -546,10 +546,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * init mail registration
          */
         $initMail: function () {
-            var ButtonTrial  = this.getElm().getElement('[name="trial-account"]'),
-                GoToPassword = this.getElm().getElement('[name="go-to-password"]'),
-                PasswordNext = this.getElm().getElement('[name="create-account"]'),
-                EmailField   = this.getElm().getElement('[name="email"]');
+            var ButtonTrial   = this.getElm().getElement('[name="trial-account"]'),
+                GoToPassword  = this.getElm().getElement('[name="go-to-password"]'),
+                PasswordNext  = this.getElm().getElement('[name="create-account"]'),
+                EmailField    = this.getElm().getElement('[name="email"]'),
+                PasswordField = this.getElm().getElement(
+                    '.quiqqer-fu-registrationSignUp-email-passwordSection [name="password"]'
+                );
 
             if (ButtonTrial) {
                 ButtonTrial.addEvent('click', this.$onTrialClick);
@@ -604,6 +607,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     });
                 }
             });
+
+            PasswordField.addEvent('keydown', function (event) {
+                if (event.key !== 'enter') {
+                    return;
+                }
+
+                event.stop();
+                PasswordNext.click();
+            });
+
         },
 
         /**
@@ -734,8 +747,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 ButtonTrial     = this.getElm().getElement('[name="trial-account"]'),
                 GoToPassword    = this.getElm().getElement('[name="go-to-password"]');
 
-            var self      = this,
-                MailInput = this.getElm().getElement('[name="email"]');
+            var self          = this,
+                MailInput     = this.getElm().getElement('[name="email"]'),
+                PasswordInput = PasswordSection.getElement('[type="password"]');
 
             if (MailInput.value === '') {
                 return;
@@ -781,7 +795,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         }, {
                             duration: 250,
                             callback: function () {
-                                PasswordSection.getElement('[type="password"]').focus();
+                                PasswordInput.focus();
                             }
                         });
                     }
@@ -805,10 +819,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * - check captcha
          * - create account
          */
-        $onPasswordNextClick: function () {
+        $onPasswordNextClick: function (event) {
             var PasswordSection = this.getElm().getElement(
                 '.quiqqer-fu-registrationSignUp-email-passwordSection'
             );
+
+            var PasswordField = PasswordSection.getElement('[type="password"]');
+
+            if (PasswordField.value === '') {
+                event.stop();
+                PasswordField.focus();
+                return;
+            }
 
             var self = this;
 
@@ -942,7 +964,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             var self          = this,
                 PasswordInput = this.getElm().getElement('[name="password"]'),
                 Form          = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]');
-
+            
             if (PasswordInput.value === '') {
                 return;
             }
