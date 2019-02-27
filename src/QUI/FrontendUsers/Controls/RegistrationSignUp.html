@@ -16,7 +16,7 @@
         {foreach $Registrars as $Registrar}
         <form action=""
               method="POST"
-              class="quiqqer-fu-registrationSignUp-registration-social-entry"
+              class="quiqqer-fu-registrationSignUp-registration-social-entry {$Registrar->getAttribute('icon-css-class')}"
               data-registrar="{$Registrar->getHash()}"
               data-registration_id="{$registrationId}"
         >
