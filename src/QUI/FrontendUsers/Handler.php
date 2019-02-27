@@ -22,28 +22,28 @@ class Handler extends Singleton
     /**
      * Registration statuses
      */
-    const REGISTRATION_STATUS_ERROR   = 0;
+    const REGISTRATION_STATUS_ERROR = 0;
     const REGISTRATION_STATUS_SUCCESS = 1;
     const REGISTRATION_STATUS_PENDING = 2;
 
     /**
      * Activation modes
      */
-    const ACTIVATION_MODE_MAIL   = 'mail';
-    const ACTIVATION_MODE_AUTO   = 'auto';
+    const ACTIVATION_MODE_MAIL = 'mail';
+    const ACTIVATION_MODE_AUTO = 'auto';
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
      * Password input types
      */
-    const PASSWORD_INPUT_DEFAULT  = 'default';
+    const PASSWORD_INPUT_DEFAULT = 'default';
     const PASSWORD_INPUT_VALIDATE = 'validation';
-    const PASSWORD_INPUT_NONE     = 'none';
+    const PASSWORD_INPUT_NONE = 'none';
 
     /**
      * Username input types
      */
-    const USERNAME_INPUT_NONE     = 'none';
+    const USERNAME_INPUT_NONE = 'none';
     const USERNAME_INPUT_OPTIONAL = 'optional';
     const USERNAME_INPUT_REQUIRED = 'required';
 
@@ -51,19 +51,19 @@ class Handler extends Singleton
      * Site types
      */
     const SITE_TYPE_REGISTRATION = 'quiqqer/frontend-users:types/registration';
-    const SITE_TYPE_LOGIN        = 'quiqqer/frontend-users:types/login';
-    const SITE_TYPE_PROFILE      = 'quiqqer/frontend-users:types/profile';
+    const SITE_TYPE_LOGIN = 'quiqqer/frontend-users:types/login';
+    const SITE_TYPE_PROFILE = 'quiqqer/frontend-users:types/profile';
 
     /**
      * User attributes
      */
-    const USER_ATTR_WELCOME_MAIL_SENT         = 'quiqqer.frontendUsers.welcomeMailSent';
-    const USER_ATTR_REGISTRATION_PROJECT      = 'quiqqer.frontendUsers.registrationProject';
+    const USER_ATTR_WELCOME_MAIL_SENT = 'quiqqer.frontendUsers.welcomeMailSent';
+    const USER_ATTR_REGISTRATION_PROJECT = 'quiqqer.frontendUsers.registrationProject';
     const USER_ATTR_REGISTRATION_PROJECT_LANG = 'quiqqer.frontendUsers.registrationProjectLang';
-    const USER_ATTR_REGISTRAR                 = 'quiqqer.frontendUsers.registrar';
+    const USER_ATTR_REGISTRAR = 'quiqqer.frontendUsers.registrar';
     const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
-    const USER_ATTR_EMAIL_VERIFIED            = 'quiqqer.frontendUsers.emailVerified';
-    const USER_ATTR_USER_ACTIVATION_REQUIRED  = 'quiqqer.frontendUsers.userActivationRequired';
+    const USER_ATTR_EMAIL_VERIFIED = 'quiqqer.frontendUsers.emailVerified';
+    const USER_ATTR_USER_ACTIVATION_REQUIRED = 'quiqqer.frontendUsers.userActivationRequired';
 
     /**
      * Misc
@@ -92,8 +92,6 @@ class Handler extends Singleton
 
     /**
      * @return RegistrarCollection
-     *
-     * @throws QUI\Exception
      */
     public function getRegistrars()
     {
@@ -327,11 +325,17 @@ class Handler extends Singleton
      *
      * @param string $registrarClass (optional) - Registar class path (namespace)
      * @return array
-     * @throws QUI\Exception
      */
     public function getRegistrarSettings($registrarClass = null)
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        try {
+            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::addError($Exception->getMessage());
+
+            return [];
+        }
+
 
         $registrarSettings = $Conf->get('registrars', 'registrarSettings');
 

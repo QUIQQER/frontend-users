@@ -113,14 +113,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 && $usernameInput === $Handler::USERNAME_INPUT_REQUIRED) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix . 'empty_username'
+                    $lgPrefix.'empty_username'
                 ]);
             }
 
             if ($usernameExists) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix . 'username_already_exists'
+                    $lgPrefix.'username_already_exists'
                 ]);
             }
         } else {
@@ -128,7 +128,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if ($usernameExists) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix . 'email_already_exists'
+                    $lgPrefix.'email_already_exists'
                 ]);
             }
         }
@@ -139,7 +139,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             // Username already exists
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'username_already_exists'
+                $lgPrefix.'username_already_exists'
             ]);
         } catch (\Exception $Exception) {
             // Username does not exist
@@ -150,14 +150,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (QUI::getUsers()->emailExists($email)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'email_already_exists'
+                $lgPrefix.'email_already_exists'
             ]);
         }
 
         if (!Orthos::checkMailSyntax($email)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix . 'email_invalid'
+                $lgPrefix.'email_invalid'
             ]);
         }
 
@@ -169,7 +169,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 if ($settings['required'] && empty($val)) {
                     throw new FrontendUsers\Exception([
                         $lg,
-                        $lgPrefix . 'missing_address_fields'
+                        $lgPrefix.'missing_address_fields'
                     ]);
                 }
             }
@@ -182,14 +182,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if (empty($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix . 'captcha_empty'
+                    $lgPrefix.'captcha_empty'
                 ]);
             }
 
             if (!CaptchaHandler::isResponseValid($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix . 'captcha_invalid_response'
+                    $lgPrefix.'captcha_invalid_response'
                 ]);
             }
         }
@@ -221,14 +221,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 && $usernameInput === $RegistrarHandler::USERNAME_INPUT_REQUIRED) {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
-                    $L->get($lg, $lgPrefix . 'empty_username')
+                    $L->get($lg, $lgPrefix.'empty_username')
                 );
             }
 
             if ($usernameExists) {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
-                    $L->get($lg, $lgPrefix . 'username_already_exists')
+                    $L->get($lg, $lgPrefix.'username_already_exists')
                 );
             }
         } else {
@@ -236,7 +236,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if ($usernameExists) {
                 $invalidFields['email'] = new InvalidFormField(
                     'email',
-                    $L->get($lg, $lgPrefix . 'email_already_exists')
+                    $L->get($lg, $lgPrefix.'email_already_exists')
                 );
             }
         }
@@ -247,21 +247,21 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (empty($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, $lgPrefix . 'empty_email')
+                $L->get($lg, $lgPrefix.'empty_email')
             );
         }
 
         if ($Users->emailExists($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, $lgPrefix . 'email_already_exists')
+                $L->get($lg, $lgPrefix.'email_already_exists')
             );
         }
 
         if (!Orthos::checkMailSyntax($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, $lgPrefix . 'email_invalid')
+                $L->get($lg, $lgPrefix.'email_invalid')
             );
         }
 
@@ -273,7 +273,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 if ($settings['required'] && empty($val)) {
                     $invalidFields[$field] = new InvalidFormField(
                         $field,
-                        $L->get($lg, $lgPrefix . 'missing_field')
+                        $L->get($lg, $lgPrefix.'missing_field')
                     );
                 }
             }
@@ -349,6 +349,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     }
 
     /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        return 'fa fa-envelope';
+    }
+
+    /**
      * Check if this Registrar can send passwords
      *
      * @return bool
@@ -358,6 +366,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     {
         // Can only send password if the user does not provide it himself
         $registrationSettings = FrontendUsers\Handler::getInstance()->getRegistrationSettings();
+
         return $registrationSettings['passwordInput'] === 'none';
     }
 }

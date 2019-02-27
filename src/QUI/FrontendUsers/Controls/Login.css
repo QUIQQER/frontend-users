@@ -1,0 +1,128 @@
+.quiqqer-fu-login {
+    display: flex;
+    justify-content: center;
+    margin: 3rem 0;
+    width: 100%;
+}
+
+.quiqqer-fu-login-info {
+    padding: 2rem;
+    position: relative;
+    text-align: center;
+    width: 40%;
+}
+
+.quiqqer-fu-login-social {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.quiqqer-fu-login-container h2 {
+    text-align: center;
+    position: relative;
+}
+
+.quiqqer-fu-login-container h2:after {
+    background: #3986dd;
+    bottom: -10px;
+    content: '';
+    height: 2px;
+    left: calc(50% - 40px);
+    position: absolute;
+    width: 80px;
+}
+
+.quiqqer-fu-login-social-entry {
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    cursor: pointer;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    margin: 0 0.25rem;
+    position: relative;
+    text-align: center;
+    width: 50px;
+}
+
+.quiqqer-fu-login-social-entry-icon,
+.quiqqer-fu-login-social-entry-loader {
+    display: none;
+    height: 50px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 50px;
+}
+
+.quiqqer-fu-login-social-entry-icon {
+    display: inline-block;
+    opacity: 1;
+}
+
+.quiqqer-fu-login-social-entry:hover {
+    background: #adadad;
+    color: #fff;
+}
+
+.quiqqer-fu-login-social-entry-control {
+    display: none;
+}
+
+.quiqqer-fu-login-between-text {
+    text-align: center;
+}
+
+.quiqqer-fu-login-email {
+    margin-top: 3rem;
+    min-height: 140px;
+    position: relative;
+}
+
+.quiqqer-fu-login-email label {
+    clear: both;
+    display: block;
+    margin: 0.5rem auto;
+    position: relative;
+    max-width: 360px;
+    width: 100%;
+}
+
+.quiqqer-fu-login-email label .icon {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    position: absolute;
+    width: 30px;
+}
+
+.quiqqer-fu-login-email label .label {
+    display: block;
+    padding: 0.25rem 0;
+    text-align: left;
+    width: 100%;
+}
+
+.quiqqer-fu-login-email label .field {
+    display: block;
+    position: relative;
+}
+
+.quiqqer-fu-login-email label input {
+    width: 100%;
+    padding-left: 30px;
+}
+
+.quiqqer-fu-login-email-buttons {
+    margin: 0 auto;
+    max-width: 360px;
+    text-align: center;
+    width: 100%;
+}
+
+.quiqqer-fu-login-email-buttons button {
+    margin-top: 1rem;
+    width: 100%;
+}

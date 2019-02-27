@@ -1,0 +1,88 @@
+.registration-sign-in {
+    align-items: center;
+    background-color: #fff;
+    background-size: cover;
+    display: flex;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10000;
+}
+
+.registration-sign-in-logo {
+    left: 10px;
+    position: absolute;
+    top: 10px;
+}
+
+.registration-sign-in-logo img {
+    height: 32px;
+}
+
+.registration-login {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.registration-login button {
+    background: transparent;
+    box-shadow: rgba(0, 0, 0, 0.11) 0 0 0 2px;
+    color: #242c3a;
+    border: transparent;
+    width: 120px;
+}
+
+.registration-sign-in-container {
+    background: rgba(255, 255, 255, 0.75);
+    margin: 0 auto;
+    width: 100%;
+}
+
+.registration-sign-in-container > .fa-spinner {
+    display: block;
+    font-size: 2rem;
+    line-height: 4rem;
+    margin: 1rem auto;
+    text-align: center;
+    width: 4rem;
+}
+
+.registration-sign-in-container .quiqqer-frontendUsers-success {
+    background: #E3FCEC;
+    border: none;
+    border-left: 4px solid #51D88A;
+    color: #38C172;
+}
+
+.registration-sign-in-links {
+    bottom: 10px;
+    position: absolute;
+    right: 10px;
+}
+
+.registration-sign-in-links a {
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+@media (max-width: 1200px) {
+    .registration-sign-in {
+        flex-direction: column;
+        overflow: auto;
+    }
+
+    .registration-sign-in-container {
+        margin-top: 60px;
+    }
+
+    .registration-sign-in-links {
+        margin-top: 10px;
+        position: relative;
+        text-align: center;
+        width: 100%;
+    }
+}

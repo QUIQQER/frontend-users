@@ -4,6 +4,8 @@
  * @author www.pcsg.de (Patrick Müller)
  *
  * @event onRegister [this] - fires if the user successfully registers a user account
+ * @event onQuiqqerFrontendUsersRegisterStart [this]
+ * @event onQuiqqerFrontendUsersRegisterSuccess [this]
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
@@ -52,6 +54,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             var self  = this,
                 Elm   = this.getElm(),
                 forms = Elm.getElements('form.quiqqer-frontendUsers-controls-registration-registrar');
+
+            QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
 
             this.Loader = new QUILoader();
             this.Loader.inject(Elm);
@@ -153,7 +157,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     QUI.parse(Elm).then(function () {
                         if (Elm.getElement('.quiqqer-frontendUsers-success') ||
                             Elm.getElement('.quiqqer-frontendUsers-pending')) {
+
                             self.fireEvent('register', [self]);
+                            QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self]);
                         }
 
                         resolve();

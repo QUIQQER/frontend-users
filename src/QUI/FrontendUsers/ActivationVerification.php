@@ -42,7 +42,7 @@ class ActivationVerification extends AbstractVerification
             Utils::setUserEmailVerified($User);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find user #' . $userId
+                self::class.' :: onSuccess -> Could not find user #'.$userId
             );
 
             QUI\System\Log::writeException($Exception);
@@ -84,22 +84,36 @@ class ActivationVerification extends AbstractVerification
      * Automatically redirect the user to this URL on successful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws \QUI\Exception
      */
     public function getOnSuccessRedirectUrl()
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSite(
+        $RegistrarHandler = Handler::getInstance();
+        $RegistrationSite = $RegistrarHandler->getRegistrationSite(
             $this->getProject()
         );
 
         if (!$RegistrationSite) {
+            // Fallback if no registration site is set up
+            $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+            $projectLang          = $Project = QUI::getRewrite()->getProject()->getLang();
+
+            if (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
+                    $registrationSettings['autoRedirectOnSuccess'][$projectLang]
+                );
+
+                return $RedirectSite->getUrlRewrittenWithHost();
+            }
+
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten(array(
+        return $RegistrationSite->getUrlRewritten([
             'success'
-        ), array(
+        ], [
             'registrar' => $this->getRegistrarHash()
-        ));
+        ]);
     }
 
     /**
@@ -117,11 +131,11 @@ class ActivationVerification extends AbstractVerification
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten(array(
+        return $RegistrationSite->getUrlRewritten([
             'error'
-        ), array(
+        ], [
             'registrar' => $this->getRegistrarHash()
-        ));
+        ]);
     }
 
     /**

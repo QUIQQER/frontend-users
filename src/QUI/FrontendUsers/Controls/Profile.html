@@ -3,6 +3,8 @@
     {locale group="quiqqer/frontend-users" var="profile.no_categories_available"}
 </p>
 {else}
+
+{if $this->getAttribute('menu')}
 <div class="quiqqer-frontendUsers-controls-profile-categories">
     {foreach $categories as $category}
     <div class="quiqqer-fupc-category quiqqer-fupc-category--open"
@@ -16,7 +18,7 @@
 
             {assign var=active value=""}
             {if $currentCategory == $category.name && $currentSetting == $setting.name}
-                {assign var=active value=" quiqqer-fupc-category-items-item--active"}
+            {assign var=active value=" quiqqer-fupc-category-items-item--active"}
             {/if}
             <a href="{$Site->getUrlRewritten()}/{$category.name}/{$setting.name}"
                class="quiqqer-fupc-category-items-item{$active}"
@@ -32,6 +34,7 @@
     </div>
     {/foreach}
 </div>
+{/if}
 
 <form action="" method="post">
     <label class="quiqqer-frontendUsers-controls-profile-categories-mobile">
@@ -40,7 +43,7 @@
             <optgroup label="{$category.title}">
                 {foreach $category.items as $setting}
                 {assign var=active value=""}
-                    {if $currentCategory== $category.name}
+                {if $currentCategory== $category.name}
                 {assign var=active value=" selected"}
                 {/if}
                 <option value="{$category.name}:{$setting.name}"{$active}>
