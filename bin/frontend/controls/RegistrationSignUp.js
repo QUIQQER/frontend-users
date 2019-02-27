@@ -213,6 +213,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 if (MailRegistrar) {
                     var Button = new Element('button', {
+                        'class' : 'quiqqer-fu-registrationSignUp-terms-mail',
                         html: QUILocale.get(lg, 'control.registration.sign.up.create.button')
                     }).inject(MailRegistrar.getParent());
 
