@@ -213,8 +213,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 if (MailRegistrar) {
                     var Button = new Element('button', {
-                        'class' : 'quiqqer-fu-registrationSignUp-terms-mail',
-                        html: QUILocale.get(lg, 'control.registration.sign.up.create.button')
+                        'class': 'quiqqer-fu-registrationSignUp-terms-mail',
+                        html   : QUILocale.get(lg, 'control.registration.sign.up.create.button')
                     }).inject(MailRegistrar.getParent());
 
                     MailRegistrar.destroy();
@@ -779,7 +779,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             left   : 0,
                             opacity: 1
                         }, {
-                            duration: 250
+                            duration: 250,
+                            callback: function () {
+                                PasswordSection.getElement('[type="password"]').focus();
+                            }
                         });
                     }
                 });
@@ -980,7 +983,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     );
                 });
             }).catch(function () {
-                self.hideTerms();
+                self.hideTerms().then(function () {
+                    self.$resetMail();
+                });
             });
         },
 
