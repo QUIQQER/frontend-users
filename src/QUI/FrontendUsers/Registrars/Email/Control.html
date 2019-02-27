@@ -12,7 +12,7 @@
                        value="{if isset($fields['username'])}{$fields['username']}{/if}"
                        {if $usernameSetting == 'required'}required{/if}/>
                 {if isset($invalidFields['username'])}
-                <span class="quiqqer-registration-field-error-msg">
+                    <span class="quiqqer-registration-field-error-msg">
                         {$invalidFields['username']->getMsg()}
                     </span>
                 {/if}
@@ -125,8 +125,7 @@
     <div class="quiqqer-registration-submit quiqqer-frontendUsers__noScriptHidden">
         <button type="submit"
                 class="btn-green grid-60 mobile-grid-100 push-40 mobile-push-0"{if $useCaptcha && $jsRequired} disabled{/if}>
-            {locale group="quiqqer/frontend-users"
-            var="registrars.email.btn.submit"}
+            {locale group="quiqqer/frontend-users" var="registrars.email.btn.submit"}
         </button>
     </div>
 </section>
