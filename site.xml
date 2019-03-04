@@ -17,6 +17,7 @@
             <!-- extra attributes -->
             <attributes>
                 <attribute>quiqqer.sign.up.background</attribute>
+                <attribute>quiqqer.sign.up.registrars</attribute>
             </attributes>
 
             <!-- list settings -->
@@ -31,9 +32,22 @@
                         </title>
 
                         <input conf="quiqqer.sign.up.background" class="media-image">
-                            <locale group="quiqqer/frontend-users"
-                                    var="admin.types.registrationSignUp.setting.background"
-                            />
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.background"
+                                />
+                            </text>
+                        </input>
+
+                        <input conf="quiqqer.sign.up.registrars"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars"
+                               label="0"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.registrars"
+                                />
+                            </text>
                         </input>
                     </settings>
                 </category>

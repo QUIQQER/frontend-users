@@ -56,7 +56,7 @@
             {/if}
 
             <div class="quiqqer-fu-registrationSignUp-email-buttons">
-                {if $this->getAttribute('registration-trial')}
+                {if $RegistrationTrial && $this->getAttribute('registration-trial')}
                 <button type="submit" name="trial-account">
                     {locale group="quiqqer/frontend-users" var="control.registration.sign.up.try"}
                 </button>

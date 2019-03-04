@@ -1332,6 +1332,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Hintergrund Bild]]></de>
             <en><![CDATA[Background image]]></en>
         </locale>
+        <locale name="admin.types.registrationSignUp.setting.registrars">
+            <de><![CDATA[Angezeigte Registrare]]></de>
+            <en><![CDATA[Displayed Registrars]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
