@@ -147,6 +147,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 var Control = Ghost.getElement('.quiqqer-fu-registrationSignUp-registration');
 
                 self.$RegistrationSection = self.getElm().getElement('.quiqqer-fu-registrationSignUp-registration');
+                self.$RegistrationSection.setStyle('opacity', 0);
                 self.$RegistrationSection.set('html', Control.get('html'));
 
                 QUI.parse(self.$RegistrationSection).then(function () {
@@ -310,7 +311,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 Login.destroy();
                             }
 
-
                             if (Ghost.getElement('.quiqqer-frontendUsers-error')) {
                                 Section.set('html', '');
                                 Ghost.getElement('.quiqqer-frontendUsers-error').inject(Section);
@@ -340,6 +340,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                                 if (Redirect && Redirect.get('data-instant')) {
                                     window.location = Redirect.get('data-url');
+                                }
+
+                                if (Section.getElement('.quiqqer-frontendUsers-error')) {
+                                    (function () {
+                                        self.$onInject();
+                                    }).delay(5000);
                                 }
 
                                 self.hideTextSection().then(function () {
