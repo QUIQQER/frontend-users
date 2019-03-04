@@ -13,7 +13,11 @@ QUI::$Ajax->registerFunction(
     function ($registrar) {
         $Registrar = Handler::getInstance()->getRegistrarByHash($registrar);
 
-        return $Registrar->getControl()->create();
+        $Output  = new QUI\Output();
+        $control = $Registrar->getControl()->create();
+        $css     = QUI\Control\Manager::getCSS();
+
+        return $Output->parse($css.$control);
     },
     ['registrar']
 );
