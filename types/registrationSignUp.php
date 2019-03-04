@@ -6,6 +6,13 @@ $Site->setAttribute('nocache', 1);
 $background = $Site->getAttribute('quiqqer.sign.up.background');
 $Background = null;
 
+$registrars = [];
+
+if ($Site->getAttribute('quiqqer.sign.up.registrars')) {
+    $registrars = $Site->getAttribute('quiqqer.sign.up.registrars');
+    $registrars = json_decode($registrars, true);
+}
+
 if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
     try {
         $Background = QUI\Projects\Media\Utils::getImageByUrl($background);
@@ -15,7 +22,8 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
 
 
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
-    'content' => $Site->getAttribute('content')
+    'content'    => $Site->getAttribute('content'),
+    'registrars' => $registrars
 ]);
 
 if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {

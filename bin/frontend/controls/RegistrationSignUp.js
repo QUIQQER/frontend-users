@@ -559,6 +559,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     '.quiqqer-fu-registrationSignUp-email-passwordSection [name="password"]'
                 );
 
+            if (!EmailField) {
+                return;
+            }
+
             if (ButtonTrial) {
                 ButtonTrial.addEvent('click', this.$onTrialClick);
             }
