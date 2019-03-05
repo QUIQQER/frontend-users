@@ -66,11 +66,16 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
 
             var Container = new Element('div.field-container-field').inject(this.$Elm);
 
-            var values = {};
+            var values = [];
 
             try {
                 values = JSON.decode(this.$Input.value);
             } catch (e) {
+                values = [];
+            }
+
+            if (!values) {
+                values = [];
             }
 
             this.$getRegistrars().then(function (registrars) {
