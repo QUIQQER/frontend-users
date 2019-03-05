@@ -50,6 +50,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
             var self    = this,
                 Content = this.getContent();
 
+            this.Loader.show();
+
             this.getElm().addClass('quiqqer-frontendUsers-loginWindow');
 
             new Element('button', {
@@ -85,6 +87,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
                         self.Loader.show();
                     },
                     onAuthNext : function () {
+                        self.Loader.hide();
+                    },
+
+                    onLoad: function () {
                         self.Loader.hide();
                     }
                 },
