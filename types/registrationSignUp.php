@@ -20,7 +20,7 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
     }
 }
 
-if (QUI::getUserBySession()->getId() && (!$Registrar || $status === 'error')) {
+if (QUI::getUserBySession()->getId()) {
     try {
         $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
@@ -33,8 +33,24 @@ if (QUI::getUserBySession()->getId() && (!$Registrar || $status === 'error')) {
                 exit;
             }
         }
+
+        if (!empty($registrationSettings['autoRedirectOnSuccess'])) {
+            $current  = QUI::getLocale()->getCurrent();
+            $Redirect = null;
+
+            if (isset($registrationSettings['autoRedirectOnSuccess'][$current])) {
+                $Redirect = QUI\Projects\Site\Utils::getSiteByLink(
+                    $registrationSettings['autoRedirectOnSuccess'][$current]
+                );
+            }
+
+            if ($Redirect) {
+                header('Location: '.$Redirect->getUrlRewritten());
+                exit;
+            }
+        }
     } catch (QUI\Exception $Exception) {
-        \QUI\System\Log::writeDebugException($Exception);
+        QUI\System\Log::writeDebugException($Exception);
     }
 }
 
