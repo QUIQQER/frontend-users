@@ -20,6 +20,24 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
     }
 }
 
+if (QUI::getUserBySession()->getId() && (!$Registrar || $status === 'error')) {
+    try {
+        $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
+
+        if ($registrationSettings['visitRegistrationSiteBehaviour'] === 'showProfile') {
+            $ProfileSite = $FrontendUsersHandler->getProfileSite($Site->getProject());
+
+            if ($ProfileSite) {
+                header('Location: '.$ProfileSite->getUrlRewritten());
+                exit;
+            }
+        }
+    } catch (QUI\Exception $Exception) {
+        \QUI\System\Log::writeDebugException($Exception);
+    }
+}
+
 
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
     'content'    => $Site->getAttribute('content'),
