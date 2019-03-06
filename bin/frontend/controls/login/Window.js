@@ -92,6 +92,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
                     onLoad: function () {
                         self.Loader.hide();
+                    },
+
+                    userLoginError: function () {
+                        self.Loader.hide();
                     }
                 },
                 styles    : {
