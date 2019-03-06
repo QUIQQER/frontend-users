@@ -1336,6 +1336,15 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Angezeigte Registrare]]></de>
             <en><![CDATA[Displayed Registrars]]></en>
         </locale>
+
+        <locale name="control.login.forgotten.password">
+            <de><![CDATA[Passwort vergessen]]></de>
+            <en><![CDATA[Password forgotten]]></en>
+        </locale>
+        <locale name="quiqqer.auth.login.password.title">
+            <de><![CDATA[Passwort zurücksetzen]]></de>
+            <en><![CDATA[Reset password]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">

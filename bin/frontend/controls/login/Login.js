@@ -20,12 +20,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
     'qui/controls/Control',
     'qui/controls/loader/Loader',
     'qui/utils/Form',
-    'Ajax'
+    'Ajax',
+    'Locale'
 
-], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUIAjax) {
+], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUIAjax, QUILocale) {
     "use strict";
 
     var clicked = false;
+    var lg      = '';
 
     return new Class({
 
@@ -84,6 +86,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * event: on import
          */
         $onImport: function () {
+            if (this.getAttribute('showLoader')) {
+                this.Loader.show();
+            }
+
+            new Element('div', {
+                html: ''
+            }).inject(this.getElm());
+
             console.log('Not implemented yet');
         },
 
@@ -129,6 +139,27 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     self.getElm()
                         .getElements('.quiqqer-fu-login-social-entry')
                         .addEvent('click', self.$auth);
+
+                    self.getElm().getElements(
+                        '.quiqqer-fu-login-forget-password-link a'
+                    ).addEvent('click', function (event) {
+                        event.stop();
+                        self.openForgottenPassword();
+                    });
+
+                    self.getElm().getElements(
+                        '.quiqqer-fu-login-forget-password-reset [name="cancel"]'
+                    ).addEvent('click', function (event) {
+                        event.stop();
+                        self.closeForgottenPassword();
+                    });
+
+                    self.getElm().getElements(
+                        '.quiqqer-fu-login-forget-password-reset [type="submit"]'
+                    ).addEvent('click', function (event) {
+                        event.stop();
+                        self.sendForgottenPassword();
+                    });
 
 
                     // submit events
@@ -351,6 +382,172 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             }, {
                 'package': 'quiqqer/frontend-users'
             });
+        },
+
+        //region password reset
+
+        /**
+         * opens the password forgotten sheet
+         */
+        openForgottenPassword: function () {
+            var Reset = this.getElm().getElement('.quiqqer-fu-login-forget-password-reset');
+
+            if (!Reset) {
+                return;
+            }
+
+            Reset.setStyle('opacity', 0);
+            Reset.setStyle('left', -50);
+            Reset.setStyle('display', 'block');
+
+            moofx(Reset).animate({
+                left   : 0,
+                opacity: 1
+            }, {
+                callback: function () {
+
+                }
+            });
+        },
+
+        /**
+         * close the password reset
+         */
+        closeForgottenPassword: function () {
+            var Reset = this.getElm().getElement('.quiqqer-fu-login-forget-password-reset');
+
+            if (!Reset) {
+                return;
+            }
+
+            moofx(Reset).animate({
+                left   : -50,
+                opacity: 0
+            }, {
+                callback: function () {
+                    Reset.setStyle('display', 'none');
+                }
+            });
+        },
+
+        /**
+         * send password reset call
+         */
+        sendForgottenPassword: function () {
+            var self       = this,
+                Elm        = this.getElm(),
+                SubmitBtn  = Elm.getElement('.quiqqer-fu-login-forget-password-reset [type="submit"]'),
+                EmailInput = Elm.getElement('.quiqqer-fu-login-forget-password-reset [name="email"]'),
+                Section    = Elm.getElement('.quiqqer-fu-login-forget-password-reset section');
+
+            if (EmailInput.value === '') {
+                return Promise.resolve();
+            }
+
+            EmailInput.disabled = true;
+            SubmitBtn.disabled  = true;
+
+            var showHideMessage = function (Message) {
+                moofx(Section).animate({
+                    opacity: 0
+                }, {
+                    callback: function () {
+                        Section.setStyle('display', 'none');
+                    }
+                });
+
+                moofx(Message).animate({
+                    opacity: 1,
+                    top    : 0
+                }, {
+                    duration: 200,
+                    callback: function () {
+                        (function () {
+                            moofx(Message).animate({
+                                opacity: 0,
+                                top    : -20
+                            }, {
+                                duration: 200,
+                                callback: function () {
+                                    Message.destroy();
+
+                                    EmailInput.value = '';
+                                    EmailInput.setStyle('display', null);
+
+                                    Section.setStyle('display', null);
+                                    Section.setStyle('opacity', null);
+
+                                    self.closeForgottenPassword();
+                                }
+                            });
+                        }).delay(4000);
+                    }
+                });
+            };
+
+            this.$sendPasswordResetConfirmMail(EmailInput.value).then(function () {
+                self.Loader.hide();
+
+                var Message = new Element('div', {
+                    html   : QUILocale.get('quiqqer/system', 'controls.users.auth.quiqqerlogin.send_mail_success'),
+                    'class': 'message-success',
+                    styles : {
+                        left    : 0,
+                        opacity : 0,
+                        padding : 20,
+                        position: 'absolute',
+                        top     : 0,
+                        width   : '100%',
+                        zIndex  : 1
+                    }
+                }).inject(self.getElm());
+
+                showHideMessage(Message);
+
+                EmailInput.disabled = false;
+                SubmitBtn.disabled  = false;
+            }, function (e) {
+                self.Loader.hide();
+
+                var Message = new Element('div', {
+                    html   : QUILocale.get('quiqqer/system', 'controls.users.auth.quiqqerlogin.send_mail_error', {
+                        error: e.getMessage()
+                    }),
+                    'class': 'message-error',
+                    styles : {
+                        left    : 0,
+                        opacity : 0,
+                        padding : 20,
+                        position: 'absolute',
+                        top     : 0,
+                        width   : '100%',
+                        zIndex  : 1
+                    }
+                }).inject(self.getElm());
+
+                showHideMessage(Message);
+
+                EmailInput.disabled = false;
+                SubmitBtn.disabled  = false;
+            });
+        },
+
+        /**
+         * Send e-mail to user to confirm password reset
+         *
+         * @param {String} email
+         * @return {Promise}
+         */
+        $sendPasswordResetConfirmMail: function (email) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.post('ajax_users_authenticator_sendPasswordResetConfirmMail', resolve, {
+                    email    : email,
+                    onError  : reject,
+                    showError: false
+                });
+            });
         }
+
+        //endregion
     });
 });
