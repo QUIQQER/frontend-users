@@ -17,6 +17,10 @@
     margin: 3rem 0;
 }
 
+.quiqqer-fu-login-container {
+    position: relative;
+}
+
 .quiqqer-fu-login-container h2 {
     text-align: center;
     position: relative;
@@ -125,4 +129,63 @@
 .quiqqer-fu-login-email-buttons button {
     margin-top: 1rem;
     width: 100%;
+}
+
+/** password reset
+ ====================================== */
+
+.quiqqer-fu-login-forget-password-link {
+    display: block;
+    margin: 1rem auto 0;
+    max-width: 360px;
+    text-align: right;
+    width: 100%;
+}
+
+.quiqqer-fu-login-forget-password-reset {
+    background: #fff;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.quiqqer-fu-login-forget-password-reset section {
+    margin: 0 auto;
+    max-width: 400px;
+}
+
+.quiqqer-fu-login-forget-password-reset h2 {
+    margin-bottom: 3rem;
+}
+
+.quiqqer-fu-login-forget-password-reset label {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.quiqqer-fu-login-forget-password-reset label span {
+    line-height: 2.5rem;
+    width: 100%;
+}
+
+.quiqqer-fu-login-forget-password-reset label input {
+    width: 100%;
+}
+
+.quiqqer-fu-login-forget-password-reset [type="submit"] {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.quiqqer-fu-login-forget-password-reset [name="cancel"] {
+    bottom: 0;
+    padding: 0.5rem 2rem;
+    position: absolute;
+    right: 0;
 }

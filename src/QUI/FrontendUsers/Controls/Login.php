@@ -84,10 +84,23 @@ class Login extends QUI\Control
             }
         }
 
+        // show password reset - yes / no
+        $showPasswordReset = false;
+
+        if (QUI\Users\Auth\Handler::getInstance()->isQuiqqerVerificationPackageInstalled()) {
+            if (!empty($_REQUEST['isAdminLogin']) || QUI::isBackend()) {
+                $showPasswordReset = boolval(QUI::conf('auth_settings', 'showResetPasswordBackend'));
+            } else {
+                $showPasswordReset = boolval(QUI::conf('auth_settings', 'showResetPasswordFrontend'));
+            }
+        }
+
         $Engine->assign([
             'this'           => $this,
             'authenticators' => $instances,
-            'SessionUser'    => QUI::getUserBySession()
+            'SessionUser'    => QUI::getUserBySession(),
+
+            'showPasswordReset' => $showPasswordReset
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Login.html');

@@ -72,6 +72,41 @@
             </div>
         </section>
     </form>
+
+    {if $showPasswordReset}
+    <div class="quiqqer-fu-login-forget-password-link">
+        <a href="#">
+            {locale group="quiqqer/frontend-users" var="control.login.forgotten.password"}
+        </a>
+    </div>
+    {/if}
+
+    {if $showPasswordReset}
+    <div class="quiqqer-fu-login-forget-password-reset" style="display: none;">
+        <section>
+            <h2>{locale group="quiqqer/frontend-users" var="quiqqer.auth.login.password.title"}</h2>
+
+            <p>
+                {locale group="quiqqer/system" var="quiqqer.auth.login.password.message"}
+            </p>
+
+            <label>
+            <span>
+                {locale group="quiqqer/system" var="quiqqer.auth.login.label.email"}
+            </span>
+                <input type="email" value="" name="email"/>
+            </label>
+
+            <button type="submit" class="login qui-button btn-green reset-password">
+                <span>{locale group='quiqqer/quiqqer' value='controls.users.auth.quiqqerlogin.btn.password_reset'}</span>
+            </button>
+
+            <button name="cancel" type="reset">
+                {locale group='quiqqer/quiqqer' value='cancel'}
+            </button>
+        </section>
+    </div>
+    {/if}
 </section>
 
 {/if}
