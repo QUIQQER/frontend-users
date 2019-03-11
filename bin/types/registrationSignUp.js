@@ -62,6 +62,32 @@ function signUpOnLoad() {
             });
         }
     });
+
+    document.getElements('.registration-sign-in-links a').addEvent('click', function (event) {
+        event.stop();
+
+        var Target = event.target;
+
+        if (Target.nodeName !== 'A') {
+            Target = Target.getParent('a');
+        }
+
+        require([
+            'package/quiqqer/controls/bin/site/Window',
+            'Locale'
+        ], function (QUISiteWindow, QUILocale) {
+            var lg     = 'quiqqer/frontend-users',
+                sideId = Target.get('data-id');
+
+            new QUISiteWindow({
+                closeButtonText: QUILocale.get(lg, 'btn.close'),
+                showTitle      : true,
+                project        : QUIQQER_PROJECT.name,
+                lang           : QUIQQER_PROJECT.lang,
+                id             : sideId
+            }).open();
+        });
+    });
 }
 
 if (typeof window.whenQuiLoaded !== 'undefined') {

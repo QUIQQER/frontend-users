@@ -24,19 +24,19 @@
     {if isset($Site_Privacy) || isset($Site_TermsAndConditions)}
     <div class="registration-sign-in-links">
         {if isset($Site_Privacy)}
-        <a href="{url site=$Site_Privacy}" target="_blank">
+        <a href="{url site=$Site_Privacy}" target="_blank" data-id="{$Site_Privacy->getId()}">
             {$Site_Privacy->getAttribute('title')}
         </a>
         {/if}
 
         {if isset($Site_TermsAndConditions)}
-        <a href="{url site=$Site_TermsAndConditions}" target="_blank">
+        <a href="{url site=$Site_TermsAndConditions}" target="_blank" data-id="{$Site_TermsAndConditions->getId()}">
             {$Site_TermsAndConditions->getAttribute('title')}
         </a>
         {/if}
 
         {if isset($Site_LegalNotes)}
-        <a href="{url site=$Site_LegalNotes}" target="_blank">
+        <a href="{url site=$Site_LegalNotes}" target="_blank" data-id="{$Site_LegalNotes->getId()}">
             {$Site_LegalNotes->getAttribute('title')}
         </a>
         {/if}
