@@ -86,7 +86,6 @@ if ($Site->getAttribute('quiqqer.sign.up.logoUrl')) {
         }
     } else {
         $siteUrl = Orthos::clearFormRequest($siteUrl);
-        $siteUrl = Orthos::urlEncodeString($siteUrl);
         $logoUrl = $siteUrl;
     }
 }
