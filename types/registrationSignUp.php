@@ -1,7 +1,12 @@
 <?php
 
-$Site->setAttribute('nocache', 1);
+/**
+ * Registration Sign Up Site Type
+ */
 
+use QUI\Utils\Security\Orthos;
+
+$Site->setAttribute('nocache', 1);
 
 $background = $Site->getAttribute('quiqqer.sign.up.background');
 $Background = null;
@@ -54,7 +59,9 @@ if (QUI::getUserBySession()->getId()) {
     }
 }
 
-
+/**
+ * Registration / Sign up
+ */
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
     'content'    => $Site->getAttribute('content'),
     'registrars' => $registrars
@@ -64,11 +71,32 @@ if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
     $Registration->setAttribute('registration-trial', true);
 }
 
+// logo url
+$logoUrl = $Project->firstChild()->getUrlRewritten();
+
+if ($Site->getAttribute('quiqqer.sign.up.logoUrl')) {
+    $siteUrl = $Site->getAttribute('quiqqer.sign.up.logoUrl');
+
+    if (QUI\Projects\Site\Utils::isSiteLink($siteUrl)) {
+        try {
+            $InternalSite = QUI\Projects\Site\Utils::getSiteByLink($siteUrl);
+            $logoUrl      = $InternalSite->getUrlRewritten();
+        } catch (QUI\Exception $Exception) {
+            QUI\System\Log::writeDebugException($Exception);
+        }
+    } else {
+        $siteUrl = Orthos::clearFormRequest($siteUrl);
+        $siteUrl = Orthos::urlEncodeString($siteUrl);
+        $logoUrl = $siteUrl;
+    }
+}
+
 
 $Engine->assign([
     'Registration' => $Registration,
     'Background'   => $Background,
-    'Logo'         => $Site->getProject()->getMedia()->getLogoImage()
+    'Logo'         => $Site->getProject()->getMedia()->getLogoImage(),
+    'logoUrl'      => $logoUrl
 ]);
 
 
