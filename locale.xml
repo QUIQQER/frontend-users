@@ -1336,6 +1336,20 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Angezeigte Registrare]]></de>
             <en><![CDATA[Displayed Registrars]]></en>
         </locale>
+        <locale name="admin.types.registrationSignUp.setting.logoUrl">
+            <de><![CDATA[Link des Logos]]></de>
+            <en><![CDATA[Link of the logo]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.logoUrl.description">
+            <de><![CDATA[
+            Bestimme welche URL bei dem Logo per Klick verwendet werden soll.
+            Wenn die Einstellung leer ist, wird zur Hauptseite weitergeleitet
+            ]]></de>
+            <en><![CDATA[
+            Determine which URL should be used for the logo per click.
+            If the setting is empty, you will be redirected to the main page.
+            ]]></en>
+        </locale>
 
         <locale name="control.login.forgotten.password">
             <de><![CDATA[Passwort vergessen]]></de>

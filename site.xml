@@ -18,6 +18,7 @@
             <attributes>
                 <attribute>quiqqer.sign.up.background</attribute>
                 <attribute>quiqqer.sign.up.registrars</attribute>
+                <attribute>quiqqer.sign.up.logoUrl</attribute>
             </attributes>
 
             <!-- list settings -->
@@ -39,7 +40,24 @@
                             </text>
                         </input>
 
+                        <input conf="quiqqer.sign.up.logoUrl"
+                               data-qui="controls/projects/project/site/Input"
+                               data-qui-options-external="1"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.logoUrl"
+                                />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.logoUrl.description"
+                                />
+                            </description>
+                        </input>
+
                         <input conf="quiqqer.sign.up.registrars"
+                               type="hidden"
                                data-qui="package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars"
                                label="0"
                         >
