@@ -90,11 +90,28 @@ if ($Site->getAttribute('quiqqer.sign.up.logoUrl')) {
     }
 }
 
+// logo
+$Logo = null;
+
+if ($Site->getAttribute('quiqqer.sign.up.logo')) {
+    try {
+        $Logo = QUI\Projects\Media\Utils::getImageByUrl(
+            $Site->getAttribute('quiqqer.sign.up.logo')
+        );
+    } catch (QUI\Exception $Exception) {
+        QUI\System\Log::writeDebugException($Exception);
+    }
+}
+
+if (!$Logo) {
+    $Logo = $Site->getProject()->getMedia()->getLogoImage();
+}
+
 
 $Engine->assign([
     'Registration' => $Registration,
     'Background'   => $Background,
-    'Logo'         => $Site->getProject()->getMedia()->getLogoImage(),
+    'Logo'         => $Logo,
     'logoUrl'      => $logoUrl
 ]);
 

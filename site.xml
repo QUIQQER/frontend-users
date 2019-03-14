@@ -18,6 +18,7 @@
             <attributes>
                 <attribute>quiqqer.sign.up.background</attribute>
                 <attribute>quiqqer.sign.up.registrars</attribute>
+                <attribute>quiqqer.sign.up.logo</attribute>
                 <attribute>quiqqer.sign.up.logoUrl</attribute>
             </attributes>
 
@@ -38,6 +39,19 @@
                                         var="admin.types.registrationSignUp.setting.background"
                                 />
                             </text>
+                        </input>
+
+                        <input conf="quiqqer.sign.up.logo" class="media-image">
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.logo"
+                                />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.logo.description"
+                                />
+                            </description>
                         </input>
 
                         <input conf="quiqqer.sign.up.logoUrl"

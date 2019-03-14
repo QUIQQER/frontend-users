@@ -1350,6 +1350,20 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             If the setting is empty, you will be redirected to the main page.
             ]]></en>
         </locale>
+        <locale name="admin.types.registrationSignUp.setting.logo">
+            <de><![CDATA[Logos oben links]]></de>
+            <en><![CDATA[Logo oben links]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.logo.description">
+            <de><![CDATA[
+            Bestimme welches bei der Registrierung verwendet werden soll. Dies kann separat zum Projektlogo bestimmt werden.
+            Wenn die Einstellung leer ist, wird das Projektlogo verwendet.
+            ]]></de>
+            <en><![CDATA[
+            Specify which should be used at the sign up. This can be set separately to the project logo.
+            If the setting is empty, the project logo will be used.
+            ]]></en>
+        </locale>
 
         <locale name="control.login.forgotten.password">
             <de><![CDATA[Passwort vergessen]]></de>
