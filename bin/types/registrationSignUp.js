@@ -1,4 +1,6 @@
 function signUpOnLoad() {
+    "use strict";
+
     var Button = document.getElement('button[name="registration-sign-in-login-button"]');
 
     require([
