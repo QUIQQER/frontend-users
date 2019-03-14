@@ -1,17 +1,19 @@
 <div class="registration-sign-in"
      style="{if $Background}background-image: url('{image image=$Background onlysrc=1}');{/if}"
 >
-    {if $Logo}
-    <a href="{$logoUrl}" class="registration-sign-in-logo">
-        {image image=$Logo}
-    </a>
-    {/if}
+    <div class="registration-sign-in-bar">
+        {if $Logo}
+        <a href="{$logoUrl}" class="registration-sign-in-logo">
+            {image image=$Logo}
+        </a>
+        {/if}
 
-    <div class="registration-login">
-        <button name="registration-sign-in-login-button" disabled>
-            <span class="fa fa-sign-in"></span>
-            <span>{locale group="quiqqer/frontend-users" var="control.sign.up.type.login.in.button"}</span>
-        </button>
+        <div class="registration-login">
+            <button name="registration-sign-in-login-button" disabled>
+                <span class="fa fa-sign-in"></span>
+                <span>{locale group="quiqqer/frontend-users" var="control.sign.up.type.login.in.button"}</span>
+            </button>
+        </div>
     </div>
 
     <div class="registration-sign-in-container" style="height: 6rem; overflow: hidden;">
