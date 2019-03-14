@@ -11,6 +11,14 @@
     z-index: 10000;
 }
 
+.registration-sign-in-bar {
+    height: 50px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
 .registration-sign-in-logo {
     left: 10px;
     position: absolute;
