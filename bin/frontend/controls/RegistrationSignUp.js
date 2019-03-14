@@ -13,9 +13,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
     'qui/utils/Form',
     'Ajax',
     'Locale',
-    'package/quiqqer/frontend-users/bin/Registration'
+    'package/quiqqer/frontend-users/bin/Registration',
+    'package/quiqqer/controls/bin/site/Window'
 
-], function (QUI, QUIControl, QUIFormUtils, QUIAjax, QUILocale, Registration) {
+], function (QUI, QUIControl, QUIFormUtils, QUIAjax, QUILocale, Registration, QUISiteWindow) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -415,6 +416,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             var Form       = Terms.getElement('form');
                             var SocialForm = self.getElm().getElement('form[data-registrar="' + registrar + '"]');
                             var hidden     = SocialForm.getElements('[type="hidden"]');
+                            var links      = Terms.getElements('a');
 
                             Form.set('method', SocialForm.get('method'));
                             Form.set('data-registrar', SocialForm.get('data-registrar'));
@@ -427,6 +429,30 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             Form.addEvent('submit', function (event) {
                                 event.stop();
                                 self.$sendForm(Form).then(resolve);
+                            });
+
+                            links.addEvent('click', function (event) {
+                                var Target = event.target;
+
+                                if (Target.nodeName !== 'A') {
+                                    Target = Target.getParent('a');
+                                }
+
+                                var href = Target.get('href');
+
+                                if (href.indexOf('/') !== 0) {
+                                    return;
+                                }
+
+                                event.stop();
+
+                                new QUISiteWindow({
+                                    closeButtonText: QUILocale.get(lg, 'btn.close'),
+                                    showTitle      : true,
+                                    project        : QUIQQER_PROJECT.name,
+                                    lang           : QUIQQER_PROJECT.lang,
+                                    siteUrl        : href
+                                }).open();
                             });
                         }).then(function () {
                             self.Loader.hide();
