@@ -24,6 +24,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
             '$onInject'
         ],
 
+        options: {
+            username: ''
+        },
+
         initialize: function (options) {
             this.parent(options);
 
@@ -45,6 +49,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                 return;
             }
 
+            var username = this.getAttribute('username');
+
+            if (!username) {
+                username = '';
+            }
+
             SubmitBtn.addEvent('click', function (event) {
                 if (confirmed) {
                     return;
@@ -56,7 +66,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                     maxHeight: 350,
                     autoclose: true,
 
-                    information: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information'),
+                    information: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information', {
+                        username: username
+                    }),
                     title      : QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.title'),
                     texticon   : 'fa fa-trash',
                     text       : QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.text'),
