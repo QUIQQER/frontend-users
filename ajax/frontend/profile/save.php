@@ -22,13 +22,6 @@ QUI::$Ajax->registerFunction(
         $Control = QUI\FrontendUsers\Utils::getProfileSettingControl($category, $settings);
         $Control->setAttribute('User', QUI::getUserBySession());
         $Control->onSave();
-
-        QUI::getMessagesHandler()->addSuccess(
-            QUI::getLocale()->get(
-                'quiqqer/frontend-users',
-                'message.user.saved.successfully'
-            )
-        );
     },
     ['category', 'settings', 'data'],
     ['Permission::checkUser']

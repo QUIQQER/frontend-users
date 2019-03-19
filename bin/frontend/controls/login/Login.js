@@ -27,7 +27,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
     "use strict";
 
     var clicked = false;
-    var lg      = '';
 
     return new Class({
 
@@ -42,9 +41,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         ],
 
         options: {
-            showLoader: true,
-            onSuccess : false,
-            redirect  : true
+            showLoader    : true,
+            onSuccess     : false,
+            redirect      : true,
+            header        : true,
+            authenticators: [],  // fixed list of authenticators shown
+            mail          : true,
+            passwordReset : true
         },
 
         initialize: function (options) {
@@ -113,6 +116,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     html: result
                 });
 
+                if (self.getAttribute('header') === false) {
+                    Ghost.getElement('h2').destroy();
+                }
+
                 self.getElm().set(
                     'html',
                     Ghost.getElement('.quiqqer-fu-login').get('html')
@@ -129,7 +136,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     Login.setStyle('display', null);
 
                     self.getElm()
-                        .getElement('form[name="quiqqer-fu-login-email"]')
+                        .getElements('form[name="quiqqer-fu-login-email"]')
                         .addEvent('submit', function (event) {
                             event.stop();
                             self.authByEmail();
@@ -189,7 +196,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     });
                 });
             }, {
-                'package': 'quiqqer/frontend-users'
+                'package'     : 'quiqqer/frontend-users',
+                authenticators: JSON.encode(this.getAttribute('authenticators')),
+                mail          : this.getAttribute('mail'),
+                passwordReset : this.getAttribute('passwordReset')
             });
         },
 
@@ -268,7 +278,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     return;
                 }
 
-                window.location.reload();
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (redirect) {
+                    if (redirect) {
+                        window.location = redirect;
+                        return;
+                    }
+
+                    window.location.reload();
+                });
             }, {
                 showLogin    : false,
                 authenticator: Form.get('data-authenticator'),

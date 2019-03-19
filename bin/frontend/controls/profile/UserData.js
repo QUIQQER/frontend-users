@@ -80,6 +80,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
                     '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
                 );
 
+                if (!ProfileNode) {
+                    return;
+                }
+
                 var Profile = QUI.Controls.getById(ProfileNode.get('data-quiid'));
 
                 if (Profile) {

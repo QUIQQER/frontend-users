@@ -103,5 +103,12 @@ class UserAvatar extends AbstractProfileControl
             $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $useGravatar);
             $User->save();
         }
+
+        QUI::getMessagesHandler()->addSuccess(
+            QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.user.saved.successfully'
+            )
+        );
     }
 }

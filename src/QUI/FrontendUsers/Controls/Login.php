@@ -27,8 +27,10 @@ class Login extends QUI\Control
 
         $this->setAttributes([
             // if empty load all default Registrars, otherwise load the ones provided here
-            'registrars' => [],
-            'Registrar'  => false // currently executed Registrar
+            'authenticators' => [],
+            'Authenticator'  => false,  // currently executed Registrar
+            'mail'           => true,   // show mail authenticator
+            'passwordReset'  => true    // show password reset
         ]);
 
         $this->setAttributes($attributes);
@@ -54,7 +56,7 @@ class Login extends QUI\Control
             return '';
         }
 
-        $authenticators = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();
+        $authenticators = $this->getAuthenticator();
         $instances      = [];
 
         $socialAuth = array_filter($authenticators, function ($authenticator) {
@@ -95,11 +97,14 @@ class Login extends QUI\Control
             }
         }
 
-        $Engine->assign([
-            'this'           => $this,
-            'authenticators' => $instances,
-            'SessionUser'    => QUI::getUserBySession(),
+        if (!$this->getAttribute('passwordReset')) {
+            $showPasswordReset = false;
+        }
 
+        $Engine->assign([
+            'this'              => $this,
+            'authenticators'    => $instances,
+            'SessionUser'       => QUI::getUserBySession(),
             'showPasswordReset' => $showPasswordReset
         ]);
 
@@ -107,32 +112,24 @@ class Login extends QUI\Control
     }
 
     /**
-     * Get all Registrars that are displayed
+     * Get all Authenticators that are displayed
      *
-     * @return QUI\FrontendUsers\RegistrarCollection
+     * @return array
      */
-    protected function getRegistrars()
+    protected function getAuthenticator()
     {
-        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-        $filterRegistrars = $this->getAttribute('registrars');
-        $Registrars       = $RegistrarHandler->getRegistrars();
+        $authenticators   = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();
+        $filterRegistrars = $this->getAttribute('authenticators');
 
         if (empty($filterRegistrars)) {
-            return $Registrars;
+            return $authenticators;
         }
 
-        $registrars         = $Registrars->toArray();
-        $FilteredRegistrars = new QUI\FrontendUsers\RegistrarCollection();
-
-        $registrars = array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
-            /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
-            return in_array($Registrar->getType(), $filterRegistrars);
+        $authenticators = array_filter($authenticators, function ($authenticator) use ($filterRegistrars) {
+            /** @var QUI\Users\AuthenticatorInterface $Authenticator */
+            return in_array($authenticator, $filterRegistrars);
         });
 
-        foreach ($registrars as $Registrar) {
-            $FilteredRegistrars->append($Registrar);
-        }
-
-        return $FilteredRegistrars;
+        return $authenticators;
     }
 }
