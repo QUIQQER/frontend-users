@@ -1,10 +1,7 @@
 <?php
 
-/**
- * This file contains package_quiqqer_frontend-users_ajax_frontend_profile_getControl
- */
-
 use QUI\FrontendUsers\Controls\Profile\DeleteAccount;
+
 /**
  * Checks if the current session user is allowed to delete the user account
  *
