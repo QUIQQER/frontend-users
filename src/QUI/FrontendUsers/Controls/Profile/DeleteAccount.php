@@ -30,6 +30,7 @@ class DeleteAccount extends AbstractProfileControl
         $this->addCSSFile(dirname(__FILE__) . '/DeleteAccount.css');
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount');
+        $this->setJavaScriptControlOption('username', QUI::getUserBySession()->getUsername());
     }
 
     /**

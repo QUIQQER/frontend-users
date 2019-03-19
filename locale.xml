@@ -1522,9 +1522,9 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         </locale>
         
         <!-- Control: package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount -->
-        <locale name="controls.profile.DeleteAccount.confirm.information">
-            <de><![CDATA[Ihr Benutzerkonto und alle damit verbundenen Vorteile gehen mit dem Löschvorgang verloren. Ihre persönlichen Daten werden, soweit nicht für geschäftliche Zwecke rechtlich notwendig, gelöscht. Sie müssen die Löschung über einen Link, der Ihnen per E-Mail zugesandt wird, bestätigen.]]></de>
-            <en><![CDATA[Your user account and all associated benefits will be lost with the deletion process. Your personal data will be deleted unless legally required for business purposes. You must confirm the deletion via a link sent to you by e-mail.]]></en>
+        <locale name="controls.profile.DeleteAccount.confirm.information" html="true">
+            <de><![CDATA[Ihr Benutzerkonto <b>[username]</b> und alle damit verbundenen Vorteile gehen mit dem Löschvorgang verloren. Ihre persönlichen Daten werden, soweit nicht für geschäftliche Zwecke rechtlich notwendig, gelöscht. Sie müssen die Löschung über einen Link, der Ihnen per E-Mail zugesandt wird, bestätigen.]]></de>
+            <en><![CDATA[Your user account <b>[username]</b> and all associated benefits will be lost with the deletion process. Your personal data will be deleted unless legally required for business purposes. You must confirm the deletion via a link sent to you by e-mail.]]></en>
         </locale>
         <locale name="controls.profile.DeleteAccount.confirm.text">
             <de><![CDATA[Möchten Sie Ihr Benutzerkonto wirklich löschen?]]></de>
