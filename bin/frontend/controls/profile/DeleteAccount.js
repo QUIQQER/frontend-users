@@ -8,9 +8,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
 
     'qui/controls/Control',
     'qui/controls/windows/Confirm',
-    'Locale'
+    'Locale',
+    'Ajax'
 
-], function (QUIControl, QUIConfirm, QUILocale) {
+], function (QUIControl, QUIConfirm, QUILocale, QUIAjax) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -21,7 +22,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount',
 
         Binds: [
-            '$onInject'
+            '$onImport',
+            '$checkDeleteAccount'
         ],
 
         options: {
@@ -49,6 +51,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                 return;
             }
 
+            var self     = this;
             var username = this.getAttribute('username');
 
             if (!username) {
@@ -85,6 +88,28 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                     },
 
                     events: {
+                        onOpen  : function (Popup) {
+                            var SubmitBtn = Popup.getButton('submit');
+
+                            SubmitBtn.disable();
+                            
+                            Popup.Loader.show();
+
+                            self.$checkDeleteAccount().then(function () {
+                                SubmitBtn.enable();
+                                Popup.Loader.hide();
+                            }, function (Error) {
+                                Popup.setAttribute(
+                                    'information',
+                                    QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information_error', {
+                                        username: username,
+                                        error   : Error.getMessage()
+                                    })
+                                );
+
+                                Popup.Loader.hide();
+                            });
+                        },
                         onSubmit: function (Popup) {
                             confirmed = true;
                             Popup.close();
@@ -92,6 +117,21 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                         }
                     }
                 }).open();
+            });
+        },
+
+        /**
+         * Check if a user account can be deleted
+         *
+         * @return {Promise}
+         */
+        $checkDeleteAccount: function () {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_checkDeleteAccount', resolve, {
+                    'package': 'quiqqer/frontend-users',
+                    onError  : reject,
+                    showError: false
+                });
             });
         }
     });
