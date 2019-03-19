@@ -285,6 +285,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     }
 
                     window.location.reload();
+                }, {
+                    'package': 'quiqqer/frontend-users'
                 });
             }, {
                 showLogin    : false,
