@@ -21,13 +21,13 @@ class DeleteAccount extends AbstractProfileControl
      * DeleteAccount constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-deleteaccount');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__) . '/DeleteAccount.css');
+        $this->addCSSFile(dirname(__FILE__).'/DeleteAccount.css');
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount');
         $this->setJavaScriptControlOption('username', QUI::getUserBySession()->getUsername());
@@ -62,19 +62,23 @@ class DeleteAccount extends AbstractProfileControl
             $action = $_GET['action'];
         }
 
-        $Engine->assign(array(
+        $Engine->assign([
             'User'   => QUI::getUserBySession(),
             'action' => $action
-        ));
+        ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/DeleteAccount.html');
+        return $Engine->fetch(dirname(__FILE__).'/DeleteAccount.html');
     }
 
     /**
      * event: on save
+     *
+     * @throws \Exception
      */
     public function onSave()
     {
+        self::checkDeleteAccount();
+
         try {
             Handler::getInstance()->sendDeleteUserConfirmationMail(
                 QUI::getUserBySession(),
@@ -84,5 +88,16 @@ class DeleteAccount extends AbstractProfileControl
             // nothing
             \QUI\System\Log::writeException($Exception);
         }
+    }
+
+    /**
+     * Checks if a user account can be deleted
+     *
+     * @throws QUI\Exception
+     * @throws QUI\ExceptionStack
+     */
+    public static function checkDeleteAccount()
+    {
+        QUI::getEvents()->fireEvent('quiqqerFrontendUsersDeleteAccountCheck', [QUI::getUserBySession()]);
     }
 }
