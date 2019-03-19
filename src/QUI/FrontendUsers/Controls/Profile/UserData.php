@@ -197,5 +197,12 @@ class UserData extends AbstractProfileControl
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::writeDebugException($Exception);
         }
+
+        QUI::getMessagesHandler()->addSuccess(
+            QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.user.saved.successfully'
+            )
+        );
     }
 }

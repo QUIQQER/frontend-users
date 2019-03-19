@@ -158,6 +158,13 @@ class Address extends AbstractProfileControl
         }
 
         $User->save();
+
+        QUI::getMessagesHandler()->addSuccess(
+            QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.user.saved.successfully'
+            )
+        );
     }
 
     /**
