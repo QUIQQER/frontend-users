@@ -7,13 +7,27 @@ function signUpOnLoad() {
         'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
     ], function (Login) {
         Button.addEvent('click', function () {
-            new Login().open();
+            new Login({
+                events: {
+                    onClose: function () {
+                        window.location.hash = '';
+                    },
+
+                    onOpen: function () {
+                        window.location.hash = '#login';
+                    }
+                }
+            }).open();
         });
 
         Button.set('disabled', false);
 
         if (window.QUIQQER_USER.id) {
             Button.setStyle('display', 'none');
+        }
+
+        if (window.location.hash === '#login') {
+            Button.click();
         }
     });
 
