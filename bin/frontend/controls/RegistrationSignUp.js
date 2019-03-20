@@ -390,7 +390,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return !Child.hasClass('quiqqer-fu-registrationSignUp-terms') &&
                     !Child.hasClass('qui-loader');
             });
-
+            
             children.setStyle('position', 'relative');
 
             return new Promise(function (resolve, reject) {
@@ -406,30 +406,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             Terms.setStyle('display', 'flex');
                             Terms.setStyle('position', 'absolute');
 
-                            if (typeOf(Control) === 'element') {
-                                // mail
-                                Control.addEvent('click', resolve);
-                                return;
-                            }
-
-                            // create the social login form
-                            var Form       = Terms.getElement('form');
-                            var SocialForm = self.getElm().getElement('form[data-registrar="' + registrar + '"]');
-                            var hidden     = SocialForm.getElements('[type="hidden"]');
-                            var links      = Terms.getElements('a');
-
-                            Form.set('method', SocialForm.get('method'));
-                            Form.set('data-registrar', SocialForm.get('data-registrar'));
-                            Form.set('data-registration_id', SocialForm.get('data-registration_id'));
-
-                            for (var i = 0, len = hidden.length; i < len; i++) {
-                                hidden[i].clone().inject(Form);
-                            }
-
-                            Form.addEvent('submit', function (event) {
-                                event.stop();
-                                self.$sendForm(Form).then(resolve);
-                            });
+                            var links = Terms.getElements('a');
 
                             links.addEvent('click', function (event) {
                                 var Target = event.target;
@@ -453,6 +430,30 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                     lang           : QUIQQER_PROJECT.lang,
                                     siteUrl        : href
                                 }).open();
+                            });
+
+                            if (typeOf(Control) === 'element') {
+                                // mail
+                                Control.addEvent('click', resolve);
+                                return;
+                            }
+
+                            // create the social login form
+                            var Form       = Terms.getElement('form');
+                            var SocialForm = self.getElm().getElement('form[data-registrar="' + registrar + '"]');
+                            var hidden     = SocialForm.getElements('[type="hidden"]');
+
+                            Form.set('method', SocialForm.get('method'));
+                            Form.set('data-registrar', SocialForm.get('data-registrar'));
+                            Form.set('data-registration_id', SocialForm.get('data-registration_id'));
+
+                            for (var i = 0, len = hidden.length; i < len; i++) {
+                                hidden[i].clone().inject(Form);
+                            }
+
+                            Form.addEvent('submit', function (event) {
+                                event.stop();
+                                self.$sendForm(Form).then(resolve);
                             });
                         }).then(function () {
                             self.Loader.hide();
