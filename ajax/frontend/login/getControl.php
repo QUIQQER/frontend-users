@@ -10,8 +10,8 @@ QUI::$Ajax->registerFunction(
     function ($authenticators, $mail, $passwordReset) {
         $Login = new QUI\FrontendUsers\Controls\Login([
             'authenticators' => json_decode($authenticators, true),
-            'mail'           => isset($mail) ? $mail : true,
-            'passwordReset'  => isset($passwordReset) ? $passwordReset : true
+            'mail'           => !!$mail,
+            'passwordReset'  => !!$passwordReset
         ]);
 
         $Output  = new QUI\Output();

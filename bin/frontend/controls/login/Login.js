@@ -198,8 +198,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             }, {
                 'package'     : 'quiqqer/frontend-users',
                 authenticators: JSON.encode(this.getAttribute('authenticators')),
-                mail          : this.getAttribute('mail'),
-                passwordReset : this.getAttribute('passwordReset')
+                mail          : this.getAttribute('mail') ? 1 : 0,
+                passwordReset : this.getAttribute('passwordReset') ? 1 : 0
             });
         },
 
