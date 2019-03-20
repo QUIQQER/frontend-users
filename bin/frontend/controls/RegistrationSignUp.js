@@ -390,7 +390,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return !Child.hasClass('quiqqer-fu-registrationSignUp-terms') &&
                     !Child.hasClass('qui-loader');
             });
-            
+
             children.setStyle('position', 'relative');
 
             return new Promise(function (resolve, reject) {
@@ -407,6 +407,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             Terms.setStyle('position', 'absolute');
 
                             var links = Terms.getElements('a');
+
+                            links.removeEvents('click');
 
                             links.addEvent('click', function (event) {
                                 var Target = event.target;
