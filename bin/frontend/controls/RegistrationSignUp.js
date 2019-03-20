@@ -526,7 +526,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         }
 
                         require(['qui/controls/loader/Loader'], function (Loader) {
-                            self.Loader = new Loader().inject(self.$RegistrationSection);
+                            self.Loader = new Loader({
+                                styles: {
+                                    background: 'transparent'
+                                }
+                            }).inject(self.$RegistrationSection);
+
                             self.Loader.show();
                             resolve(self.Loader);
                         });
