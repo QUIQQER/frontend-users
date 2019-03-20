@@ -996,6 +996,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     width : null
                 });
 
+                if (!Captcha) {
+                    Captcha = new Element('div');
+                }
+
                 moofx([Captcha, Password]).animate({
                     left   : -50,
                     opacity: 0
