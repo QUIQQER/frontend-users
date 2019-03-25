@@ -609,11 +609,6 @@ class Handler extends Singleton
         }
     }
 
-    public function createDeleteUserConfirmationVerification(QUI\Users\User $User, $Project)
-    {
-
-    }
-
     /**
      * Send verification mail for user account deletion
      *
