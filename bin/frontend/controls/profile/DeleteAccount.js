@@ -27,7 +27,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         ],
 
         options: {
-            username: ''
+            username     : '',
+            deletestarted: 0
         },
 
         initialize: function (options) {
@@ -59,7 +60,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
             }
 
             SubmitBtn.addEvent('click', function (event) {
-                if (confirmed) {
+                if (confirmed || self.getAttribute('deletestarted')) {
                     return;
                 }
 
@@ -92,7 +93,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                             var SubmitBtn = Popup.getButton('submit');
 
                             SubmitBtn.disable();
-                            
+
                             Popup.Loader.show();
 
                             self.$checkDeleteAccount().then(function () {
