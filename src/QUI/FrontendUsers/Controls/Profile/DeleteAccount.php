@@ -51,6 +51,7 @@ class DeleteAccount extends AbstractProfileControl
 
             if (Verifier::isVerificationValid($DeleteVerification)) {
                 $action = 'deleteaccount_confirm_wait';
+                $this->setJavaScriptControlOption('deletestarted', 1);
             } else {
                 Verifier::removeVerification($DeleteVerification);
             }
