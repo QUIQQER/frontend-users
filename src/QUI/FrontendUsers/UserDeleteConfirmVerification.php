@@ -61,6 +61,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
                     break;
             }
 
+            QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserDelete', [$User]);
+
             $User->logout();
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
