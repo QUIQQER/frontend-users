@@ -30,6 +30,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * Execute this method on successful verification
      *
      * @return void
+     * @throws \Exception
      */
     public function onSuccess()
     {
@@ -70,6 +71,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
             );
 
             QUI\System\Log::writeException($Exception);
+
+            throw $Exception;
         }
     }
 
