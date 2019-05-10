@@ -19,7 +19,7 @@ QUI::$Ajax->registerFunction(
         $Request->request->set('profile-save', 1);
 
         // Check permission
-        if (!Utils::hasPermissionToViewCategory($category)) {
+        if (!Utils::hasPermissionToViewCategory($category, $settings)) {
             throw new \QUI\FrontendUsers\Exception(
                 'quiqqer/frontend-users',
                 'exception.ajax.frontend.profile.save.no_category_permission'
