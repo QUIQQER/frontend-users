@@ -55,7 +55,7 @@ class EmailConfirmVerification extends AbstractVerification
             $User->save(QUI::getUsers()->getSystemUser());
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find user #' . $userId
+                self::class.' :: onSuccess -> Could not find user #'.$userId
             );
 
             QUI\System\Log::writeException($Exception);
@@ -100,19 +100,17 @@ class EmailConfirmVerification extends AbstractVerification
      */
     public function getOnSuccessRedirectUrl()
     {
-        $ProfileSite = Handler::getInstance()->getProfileSite(
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
             $this->getProject()
         );
 
-        if (!$ProfileSite) {
+        if (!$RegistrationSite) {
             return false;
         }
 
-        return $ProfileSite->getUrlRewritten(array(
-            'user'
-        ), array(
-            'action' => 'change_email_success'
-        ));
+        return $RegistrationSite->getUrlRewritten([], [
+            'success' => 'emailconfirm'
+        ]);
     }
 
     /**
@@ -122,19 +120,17 @@ class EmailConfirmVerification extends AbstractVerification
      */
     public function getOnErrorRedirectUrl()
     {
-        $ProfileSite = Handler::getInstance()->getRegistrationSite(
-            QUI::getRewrite()->getProject()
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
+            $this->getProject()
         );
 
-        if (!$ProfileSite) {
+        if (!$RegistrationSite) {
             return false;
         }
 
-        return $ProfileSite->getUrlRewritten(array(
-            'user'
-        ), array(
-            'action' => 'change_email_error'
-        ));
+        return $RegistrationSite->getUrlRewritten([], [
+            'error' => 'emailconfirm'
+        ]);
     }
 
     /**

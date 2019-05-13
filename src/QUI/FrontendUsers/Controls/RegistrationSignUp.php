@@ -153,13 +153,81 @@ class RegistrationSignUp extends QUI\Control
             $Email = $email[0];
         }
 
+        // messages
+        $isLoggedIn          = QUI::getUsers()->isAuth(QUI::getUserBySession());
+        $showLoggedInWarning = $isLoggedIn;
+        $msgSuccess          = false;
+        $msgError            = false;
+        $activationSuccess   = false;
+
+        if (!empty($_GET['success'])) {
+            switch ($_GET['success']) {
+                case 'activation':
+                    if ($isLoggedIn) {
+                        $msgSuccess = QUI::getLocale()->get(
+                            'quiqqer/frontend-users',
+                            'RegistrationSignUp.message.success.activation_logged_in'
+                        );
+                    } else {
+                        $msgSuccess = QUI::getLocale()->get(
+                            'quiqqer/frontend-users',
+                            'RegistrationSignUp.message.success.activation'
+                        );
+                    }
+
+                    $activationSuccess   = true;
+                    $showLoggedInWarning = false;
+                    break;
+                case 'emailconfirm':
+                case 'userdelete':
+                    $msgSuccess = QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'RegistrationSignUp.message.success.'.$_GET['success']
+                    );
+
+                    $showLoggedInWarning = false;
+                    break;
+            }
+        }
+
+        if (!empty($_GET['error'])) {
+            switch ($_GET['error']) {
+                case 'activation':
+                case 'emailconfirm':
+                case 'userdelete':
+                    $msgError = QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'RegistrationSignUp.message.error.'.$_GET['error']
+                    );
+
+                    $showLoggedInWarning = false;
+                    break;
+            }
+        }
+
+        // Auto-redirect
+        $redirect             = false;
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+        $projectLang          = $Project = QUI::getRewrite()->getProject()->getLang();
+
+        if ($activationSuccess && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+            $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
+                $registrationSettings['autoRedirectOnSuccess'][$projectLang]
+            );
+
+            $redirect = $RedirectSite->getUrlRewrittenWithHost();
+        }
+
         $Engine->assign([
-            'this'              => $this,
-            'Registrars'        => $Registrars,
-            'Email'             => $Email,
-            'registrationId'    => $this->id,
-            'RegistrationTrial' => $RegistrationTrial,
-            'SessionUser'       => QUI::getUserBySession()
+            'this'                => $this,
+            'Registrars'          => $Registrars,
+            'Email'               => $Email,
+            'registrationId'      => $this->id,
+            'RegistrationTrial'   => $RegistrationTrial,
+            'showLoggedInWarning' => $showLoggedInWarning,
+            'msgSuccess'          => $msgSuccess,
+            'msgError'            => $msgError,
+            'redirect'            => $redirect
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/RegistrationSignUp.html');

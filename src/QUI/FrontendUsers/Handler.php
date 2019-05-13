@@ -22,48 +22,49 @@ class Handler extends Singleton
     /**
      * Registration statuses
      */
-    const REGISTRATION_STATUS_ERROR = 0;
+    const REGISTRATION_STATUS_ERROR   = 0;
     const REGISTRATION_STATUS_SUCCESS = 1;
     const REGISTRATION_STATUS_PENDING = 2;
 
     /**
      * Activation modes
      */
-    const ACTIVATION_MODE_MAIL = 'mail';
-    const ACTIVATION_MODE_AUTO = 'auto';
+    const ACTIVATION_MODE_MAIL   = 'mail';
+    const ACTIVATION_MODE_AUTO   = 'auto';
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
      * Password input types
      */
-    const PASSWORD_INPUT_DEFAULT = 'default';
+    const PASSWORD_INPUT_DEFAULT  = 'default';
     const PASSWORD_INPUT_VALIDATE = 'validation';
-    const PASSWORD_INPUT_NONE = 'none';
+    const PASSWORD_INPUT_NONE     = 'none';
 
     /**
      * Username input types
      */
-    const USERNAME_INPUT_NONE = 'none';
+    const USERNAME_INPUT_NONE     = 'none';
     const USERNAME_INPUT_OPTIONAL = 'optional';
     const USERNAME_INPUT_REQUIRED = 'required';
 
     /**
      * Site types
      */
-    const SITE_TYPE_REGISTRATION = 'quiqqer/frontend-users:types/registration';
-    const SITE_TYPE_LOGIN = 'quiqqer/frontend-users:types/login';
-    const SITE_TYPE_PROFILE = 'quiqqer/frontend-users:types/profile';
+    const SITE_TYPE_REGISTRATION        = 'quiqqer/frontend-users:types/registration';
+    const SITE_TYPE_REGISTRATION_SIGNUP = 'quiqqer/frontend-users:types/registrationSignUp';
+    const SITE_TYPE_LOGIN               = 'quiqqer/frontend-users:types/login';
+    const SITE_TYPE_PROFILE             = 'quiqqer/frontend-users:types/profile';
 
     /**
      * User attributes
      */
-    const USER_ATTR_WELCOME_MAIL_SENT = 'quiqqer.frontendUsers.welcomeMailSent';
-    const USER_ATTR_REGISTRATION_PROJECT = 'quiqqer.frontendUsers.registrationProject';
+    const USER_ATTR_WELCOME_MAIL_SENT         = 'quiqqer.frontendUsers.welcomeMailSent';
+    const USER_ATTR_REGISTRATION_PROJECT      = 'quiqqer.frontendUsers.registrationProject';
     const USER_ATTR_REGISTRATION_PROJECT_LANG = 'quiqqer.frontendUsers.registrationProjectLang';
-    const USER_ATTR_REGISTRAR = 'quiqqer.frontendUsers.registrar';
+    const USER_ATTR_REGISTRAR                 = 'quiqqer.frontendUsers.registrar';
     const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
-    const USER_ATTR_EMAIL_VERIFIED = 'quiqqer.frontendUsers.emailVerified';
-    const USER_ATTR_USER_ACTIVATION_REQUIRED = 'quiqqer.frontendUsers.userActivationRequired';
+    const USER_ATTR_EMAIL_VERIFIED            = 'quiqqer.frontendUsers.emailVerified';
+    const USER_ATTR_USER_ACTIVATION_REQUIRED  = 'quiqqer.frontendUsers.userActivationRequired';
 
     /**
      * Misc
@@ -722,6 +723,33 @@ class Handler extends Singleton
         $result = $Project->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_REGISTRATION
+            ],
+            'limit' => 1
+        ]);
+
+        if (empty($result)) {
+            return false;
+        }
+
+        return current($result);
+    }
+
+    /**
+     * Get ACTIVE registration and signup site for a project
+     *
+     * @param QUI\Projects\Project $Project (optional) - if omitted use default project
+     * @return QUI\Projects\Site|false - Site object or false if no ACTIVE registration site found
+     * @throws QUI\Exception
+     */
+    public function getRegistrationSignUpSite($Project = null)
+    {
+        if (is_null($Project)) {
+            $Project = QUI::getProjectManager()->getStandard();
+        }
+
+        $result = $Project->getSites([
+            'where' => [
+                'type' => self::SITE_TYPE_REGISTRATION_SIGNUP
             ],
             'limit' => 1
         ]);

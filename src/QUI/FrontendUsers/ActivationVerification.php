@@ -89,30 +89,16 @@ class ActivationVerification extends AbstractVerification
     public function getOnSuccessRedirectUrl()
     {
         $RegistrarHandler = Handler::getInstance();
-        $RegistrationSite = $RegistrarHandler->getRegistrationSite(
+        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
             $this->getProject()
         );
 
-        if (!$RegistrationSite) {
-            // Fallback if no registration site is set up
-            $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-            $projectLang          = $Project = QUI::getRewrite()->getProject()->getLang();
-
-            if (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
-                $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
-                    $registrationSettings['autoRedirectOnSuccess'][$projectLang]
-                );
-
-                return $RedirectSite->getUrlRewrittenWithHost();
-            }
-
+        if (empty($RegistrationSite)) {
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten([
-            'success'
-        ], [
-            'registrar' => $this->getRegistrarHash()
+        return $RegistrationSite->getUrlRewritten([], [
+            'success' => 'activation'
         ]);
     }
 
@@ -123,7 +109,7 @@ class ActivationVerification extends AbstractVerification
      */
     public function getOnErrorRedirectUrl()
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSite(
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
             QUI::getRewrite()->getProject()
         );
 
@@ -131,10 +117,8 @@ class ActivationVerification extends AbstractVerification
             return false;
         }
 
-        return $RegistrationSite->getUrlRewritten([
-            'error'
-        ], [
-            'registrar' => $this->getRegistrarHash()
+        return $RegistrationSite->getUrlRewritten([], [
+            'error' => 'activation'
         ]);
     }
 

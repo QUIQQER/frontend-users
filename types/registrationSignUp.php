@@ -25,6 +25,7 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
     }
 }
 
+// Determine what happens if the user is already logged in
 if (QUI::getUserBySession()->getId()) {
     try {
         $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
@@ -39,21 +40,21 @@ if (QUI::getUserBySession()->getId()) {
             }
         }
 
-        if (!empty($registrationSettings['autoRedirectOnSuccess'])) {
-            $current  = QUI::getLocale()->getCurrent();
-            $Redirect = null;
-
-            if (isset($registrationSettings['autoRedirectOnSuccess'][$current])) {
-                $Redirect = QUI\Projects\Site\Utils::getSiteByLink(
-                    $registrationSettings['autoRedirectOnSuccess'][$current]
-                );
-            }
-
-            if ($Redirect) {
-                header('Location: '.$Redirect->getUrlRewritten());
-                exit;
-            }
-        }
+//        if (!empty($registrationSettings['autoRedirectOnSuccess'])) {
+//            $current  = QUI::getLocale()->getCurrent();
+//            $Redirect = null;
+//
+//            if (isset($registrationSettings['autoRedirectOnSuccess'][$current])) {
+//                $Redirect = QUI\Projects\Site\Utils::getSiteByLink(
+//                    $registrationSettings['autoRedirectOnSuccess'][$current]
+//                );
+//            }
+//
+//            if ($Redirect) {
+//                header('Location: '.$Redirect->getUrlRewritten());
+//                exit;
+//            }
+//        }
     } catch (QUI\Exception $Exception) {
         QUI\System\Log::writeDebugException($Exception);
     }
