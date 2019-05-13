@@ -719,6 +719,41 @@
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
+
+        <!-- Control: RegistrationSignUp -->
+        <locale name="RegistrationSignUp.message.success.activation">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können Sich nun einloggen.]]></de>
+            <en><![CDATA[Your user account has been activated successfully. You can now sign in.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.success.activation_logged_in">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert.]]></de>
+            <en><![CDATA[Your user account has been activated successfully.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.success.emailconfirm">
+            <de><![CDATA[Ihre E-Mail-Adresse wurde erfolgreich bestätigt.]]></de>
+            <en><![CDATA[Your e-mail address has been confirmed successfully.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.success.userdelete">
+            <de><![CDATA[Ihre Benutzerkonto wurde erfolgreich gelöscht.]]></de>
+            <en><![CDATA[Your user account has been successfully.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation">
+            <de><![CDATA[Leider hat ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en><![CDATA[Unfortunately an error occurred during the activation of your user account. Please repeat the process.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.emailconfirm">
+            <de><![CDATA[Leider ist bei der Bestätigung Ihres E-Mail-Adresse ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en><![CDATA[Unfortunately, an error occurred when confirming your e-mail address. Please repeat the process.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.errro.userdelete">
+            <de><![CDATA[Leider ist beim Löschen Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en><![CDATA[Unfortunately an error occurred when deleting your user account. Please repeat the process.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.redirect">
+            <de><![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet.]]></de>
+            <en><![CDATA[You will be automatically redirected in a few seconds.]]></en>
+        </locale>
+
         <locale name="message.UserDeleteConfirmVerification.success">
             <de><![CDATA[Ihr Benuterkonto wurde erfolgreich gelöscht.]]></de>
             <en><![CDATA[Your user account has been successfully deleted.]]></en>
@@ -1520,17 +1555,19 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Konto erstellen]]></de>
             <en><![CDATA[Create Account]]></en>
         </locale>
-        
+
         <!-- Control: package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount -->
         <locale name="controls.profile.DeleteAccount.confirm.information" html="true">
-            <de><![CDATA[Ihr Benutzerkonto <b>[username]</b> und alle damit verbundenen Vorteile gehen mit dem Löschvorgang verloren. Ihre persönlichen Daten werden, soweit nicht für geschäftliche Zwecke rechtlich notwendig, gelöscht. Sie müssen die Löschung über einen Link, der Ihnen per E-Mail zugesandt wird, bestätigen.]]></de>
-            <en><![CDATA[Your user account <b>[username]</b> and all associated benefits will be lost with the deletion process. Your personal data will be deleted unless legally required for business purposes. You must confirm the deletion via a link sent to you by e-mail.]]></en>
+            <de>
+                <![CDATA[Ihr Benutzerkonto <b>[username]</b> und alle damit verbundenen Vorteile gehen mit dem Löschvorgang verloren. Ihre persönlichen Daten werden, soweit nicht für geschäftliche Zwecke rechtlich notwendig, gelöscht. Sie müssen die Löschung über einen Link, der Ihnen per E-Mail zugesandt wird, bestätigen.]]></de>
+            <en>
+                <![CDATA[Your user account <b>[username]</b> and all associated benefits will be lost with the deletion process. Your personal data will be deleted unless legally required for business purposes. You must confirm the deletion via a link sent to you by e-mail.]]></en>
         </locale>
         <locale name="controls.profile.DeleteAccount.confirm.information_error" html="true">
             <de><![CDATA[Ihr Benutzerkonto <b>[username]</b> kann z.Z. nicht gelöscht werden:<br/><br/>[error]]]></de>
             <en><![CDATA[You user account <b>[username]</b> can currently not be deleted:<br/><br/>[error]]]></en>
         </locale>
-        
+
         <locale name="controls.profile.DeleteAccount.confirm.text">
             <de><![CDATA[Möchten Sie Ihr Benutzerkonto wirklich löschen?]]></de>
             <en><![CDATA[Do you really want to delete your user account?]]></en>
@@ -1543,6 +1580,6 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Ja, Benutzerkonto löschen]]></de>
             <en><![CDATA[Yes, delete user account]]></en>
         </locale>
-        
+
     </groups>
 </locales>

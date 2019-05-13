@@ -44,12 +44,12 @@ class UserDeleteConfirmVerification extends AbstractVerification
                 case 'delete':
                     QUI::getDataBase()->update(
                         QUI::getDBTableName('users'),
-                        array(
+                        [
                             'active' => -1
-                        ),
-                        array(
+                        ],
+                        [
                             'id' => $User->getId()
-                        )
+                        ]
                     );
                     break;
 
@@ -67,7 +67,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
             $User->logout();
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find/delete user #' . $userId
+                self::class.' :: onSuccess -> Could not find/delete user #'.$userId
             );
 
             QUI\System\Log::writeException($Exception);
@@ -117,7 +117,17 @@ class UserDeleteConfirmVerification extends AbstractVerification
      */
     public function getOnSuccessRedirectUrl()
     {
-        return false;
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
+            $this->getProject()
+        );
+
+        if (!$RegistrationSite) {
+            return false;
+        }
+
+        return $RegistrationSite->getUrlRewritten([], [
+            'success' => 'userdelete'
+        ]);
     }
 
     /**
@@ -127,19 +137,17 @@ class UserDeleteConfirmVerification extends AbstractVerification
      */
     public function getOnErrorRedirectUrl()
     {
-        $ProfileSite = Handler::getInstance()->getRegistrationSite(
-            QUI::getRewrite()->getProject()
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
+            $this->getProject()
         );
 
-        if (!$ProfileSite) {
+        if (!$RegistrationSite) {
             return false;
         }
 
-        return $ProfileSite->getUrlRewritten(array(
-            'deleteaccount'
-        ), array(
-            'action' => 'deleteaccount_error'
-        ));
+        return $RegistrationSite->getUrlRewritten([], [
+            'error' => 'emailconfirm'
+        ]);
     }
 
     /**
