@@ -1,0 +1,198 @@
+<?php
+
+namespace QUI\FrontendUsers\Console;
+
+use QUI;
+
+/**
+ * Console tool to send an e-mail to all (or a subset of) users in the system
+ *
+ * @author www.pcsg.de (Patrick Müller)
+ */
+class SendUserMails extends QUI\System\Console\Tool
+{
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->setName('frontend-users:sendUserMails')
+            ->setDescription(
+                "Send an e-mail to all (or subset of) users in the system"
+            );
+
+        $this->addArgument(
+            'bodyfile',
+            'File that contains the e-mail body (plaintext or html)'
+        );
+    }
+
+    /**
+     * Execute the console tool
+     */
+    public function execute()
+    {
+        QUI\Permissions\Permission::isAdmin();
+
+        $bodyFile = $this->getArgument('bodyfile');
+
+        if (!file_exists($bodyFile) || !is_readable($bodyFile)) {
+            $this->exitFail("Body file $bodyFile was not found or is not readable by PHP.");
+        }
+
+        $body = file_get_contents($bodyFile);
+
+        // Determine users the email is being sent to
+
+        // INCLUDE INACTIVE USERS?
+        $this->writeLn("Send mail to INACTIVE users? (y/N): ");
+        $inactiveUsers = mb_strtolower($this->readInput()) === 'y';
+
+        // USER LANGUAGE
+        $this->writeLn("Languages of the users? (comma separated language abbreviations) [en]: ");
+        $languages = $this->readInput();
+
+        if (!empty($languages)) {
+            $languages = explode(',', $languages);
+        } else {
+            $languages = ['en'];
+        }
+
+        // RESTRICT TO GROUPS
+        $this->writeLn(
+            "Send mail to users in the following GROUPS only (comma separated list of group ids;"
+            ." leave empty to ignore groups): "
+        );
+
+        $groupIds = $this->readInput();
+
+        if (empty($groupIds)) {
+            $groupIds = [];
+        } else {
+            $groupIds = explode(',', $groupIds);
+        }
+
+        // ORDER BY
+        $this->writeLn("ORDER BY clause for the `users` table (leave empty to use default order): ");
+        $orderBy = $this->readInput();
+
+        // Get all users
+        $sql     = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM ".QUI::getUsers()::table();
+        $where[] = "`lang` IN ('".implode("','", $languages)."')";
+
+        if (!$inactiveUsers) {
+            $where[] = "`active` = 1";
+        }
+
+        if (!empty($groupIds)) {
+            $whereOR = [];
+
+            foreach ($groupIds as $groupId) {
+                $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
+            }
+
+            $where[] = "(".implode(" OR ", $whereOR).")";
+        }
+
+        $sql .= " WHERE ".implode(" AND ", $where);
+
+        if (!empty($orderBy)) {
+            $sql .= " ORDER BY $orderBy";
+        }
+
+        $result     = QUI::getDataBase()->fetchSQL($sql);
+        $recipients = [];
+
+        foreach ($result as $row) {
+            if (empty($row['email'])) {
+                continue;
+            }
+
+            $recipients[] = $row;
+        }
+
+        // EMAIL SETTINGS
+        $this->writeLn("E-Mail subject?: ");
+        $subject = $this->readInput();
+
+        // SUMMARY
+        $this->writeLn("\nSUMMARY\n===============================================\n");
+
+        $this->writeLn("Include INACTIVE users: ".($inactiveUsers ? "YES" : "NO"));
+        $this->writeLn("User languages: ".implode(', ', $languages));
+        $this->writeLn("User groups: ".(empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
+        $this->writeLn("ORDER BY: ".(empty($orderBy) ? "DEFAULT" : $orderBy));
+        $this->writeLn("\nE-Mail subject: ".$subject);
+        $this->writeLn(
+            "\nE-Mail will be sent to ".count($recipients)." out of ".count($result)." selected users."
+            ." ".(count($result) - count($recipients))." users have no e-mail address and are ignored."
+        );
+
+        $this->writeLn("\n\nIs everything correct? (Y/n): ");
+        $confirm = mb_strtolower($this->readInput()) !== 'n';
+
+        if (!$confirm) {
+            $this->execute();
+            return;
+        }
+
+        // Queue mails
+        $Mailer = QUI::getMailManager()->getMailer();
+
+        foreach ($recipients as $recipient) {
+            $Mailer->setSubject($subject);
+            $Mailer->setHTML(true);
+
+            if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
+                $name = $recipient['firstname'].' '.$recipient['lastname'];
+            } else {
+                $name = $recipient['username'];
+            }
+
+            $email = $recipient['email'];
+
+            $body = str_replace(
+                ['[name]', '[email]'],
+                [$name, $email],
+                $body
+            );
+
+            $Mailer->setBody($body);
+            $Mailer->addRecipient($email);
+
+            $Mailer->send();
+        }
+
+        $this->exitSuccess();
+    }
+
+    /**
+     * Exits the console tool with a success msg and status 0
+     *
+     * @return void
+     */
+    protected function exitSuccess()
+    {
+        $this->writeLn("Mails have been successfully queued and will be sent via cron.");
+        $this->writeLn("");
+
+        exit(0);
+    }
+
+    /**
+     * Exits the console tool with an error msg and status 1
+     *
+     * @param $msg
+     * @return void
+     */
+    protected function exitFail($msg)
+    {
+        $this->writeLn("Script aborted due to an error:");
+        $this->writeLn("");
+        $this->writeLn($msg);
+        $this->writeLn("");
+        $this->writeLn("");
+
+        exit(1);
+    }
+}
