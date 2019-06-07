@@ -115,6 +115,20 @@ class SendUserMails extends QUI\System\Console\Tool
         $this->writeLn("E-Mail subject?: ");
         $subject = $this->readInput();
 
+        $this->writeLn("E-Mail sender mail? [system default]: ");
+        $senderMail = $this->readInput();
+
+        if (empty($senderMail)) {
+            $senderMail = QUI::conf('mail', 'MAILFrom');
+        }
+
+        $this->writeLn("E-Mail sender name? [system default]: ");
+        $senderName = $this->readInput();
+
+        if (empty($senderName)) {
+            $senderName = QUI::conf('mail', 'MAILFromText');
+        }
+
         // SUMMARY
         $this->writeLn("\nSUMMARY\n===============================================\n");
 
@@ -123,6 +137,8 @@ class SendUserMails extends QUI\System\Console\Tool
         $this->writeLn("User groups: ".(empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
         $this->writeLn("ORDER BY: ".(empty($orderBy) ? "DEFAULT" : $orderBy));
         $this->writeLn("\nE-Mail subject: ".$subject);
+        $this->writeLn("\nE-Mail sender mail: ".$senderMail);
+        $this->writeLn("\nE-Mail sender name: ".$senderName);
         $this->writeLn(
             "\nE-Mail will be sent to ".count($recipients)." out of ".count($result)." selected users."
             ." ".(count($result) - count($recipients))." users have no e-mail address and are ignored."
@@ -137,12 +153,7 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         // Queue mails
-        $Mailer = QUI::getMailManager()->getMailer();
-
         foreach ($recipients as $recipient) {
-            $Mailer->setSubject($subject);
-            $Mailer->setHTML(true);
-
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
                 $name = $recipient['firstname'].' '.$recipient['lastname'];
             } else {
@@ -157,6 +168,12 @@ class SendUserMails extends QUI\System\Console\Tool
                 $body
             );
 
+            $Mailer = QUI::getMailManager()->getMailer();
+            $Mailer->setFrom($senderMail);
+            $Mailer->setFromName($senderName);
+            $Mailer->setSubject($subject);
+            $Mailer->setHTML(true);
+            
             $Mailer->setBody($body);
             $Mailer->addRecipient($email);
 
