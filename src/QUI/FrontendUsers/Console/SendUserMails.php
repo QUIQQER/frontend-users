@@ -144,7 +144,34 @@ class SendUserMails extends QUI\System\Console\Tool
             ." ".(count($result) - count($recipients))." users have no e-mail address and are ignored."
         );
 
-        $this->writeLn("\n\nIs everything correct? (Y/n): ");
+        // TEST MAIL
+        $this->writeLn("\n\nSend test mail? (Y/n): ");
+        $testMail = mb_strtolower($this->readInput()) !== 'n';
+
+        if ($testMail) {
+            $this->writeLn("Test e-mail address: ");
+            $testEmailAddress = $this->readInput();
+
+            if (!empty($testEmailAddress)) {
+                $this->writeLn("\nSend test mail...");
+                $this->sendMails(
+                    $body,
+                    $senderMail,
+                    $senderName,
+                    $subject,
+                    [
+                        0 => [
+                            'username' => 'Test-User',
+                            'email'    => $testEmailAddress
+                        ]
+                    ]
+                );
+                $this->write(" SENT!");
+            }
+        }
+
+        // CONFIRM AND SEND E-MAILS
+        $this->writeLn("\n\nIs everything correct? Send e-mails NOW? (Y/n): ");
         $confirm = mb_strtolower($this->readInput()) !== 'n';
 
         if (!$confirm) {
@@ -152,6 +179,21 @@ class SendUserMails extends QUI\System\Console\Tool
             return;
         }
 
+        $this->sendMails($body, $senderMail, $senderName, $subject, $recipients);
+
+        $this->exitSuccess();
+    }
+
+    /**
+     * @param string $body
+     * @param string $senderMail
+     * @param string $senderName
+     * @param string $subject
+     * @param array $recipients
+     * @return void
+     */
+    protected function sendMails($body, $senderMail, $senderName, $subject, $recipients)
+    {
         // Queue mails
         foreach ($recipients as $recipient) {
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
@@ -173,14 +215,12 @@ class SendUserMails extends QUI\System\Console\Tool
             $Mailer->setFromName($senderName);
             $Mailer->setSubject($subject);
             $Mailer->setHTML(true);
-            
+
             $Mailer->setBody($body);
             $Mailer->addRecipient($email);
 
             $Mailer->send();
         }
-
-        $this->exitSuccess();
     }
 
     /**
