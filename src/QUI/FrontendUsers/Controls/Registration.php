@@ -304,7 +304,7 @@ class Registration extends QUI\Control
      *
      * @return QUI\Users\User|null
      */
-    protected function getRegisteredUser()
+    public function getRegisteredUser()
     {
         return $this->RegisteredUser;
     }
