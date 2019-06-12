@@ -300,6 +300,16 @@ class Registration extends QUI\Control
     }
 
     /**
+     * Get the user that registered in this instance
+     *
+     * @return QUI\Users\User|null
+     */
+    protected function getRegisteredUser()
+    {
+        return $this->RegisteredUser;
+    }
+
+    /**
      * Is registration started?
      *
      * @return bool|QUI\FrontendUsers\RegistrarInterface
