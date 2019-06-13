@@ -94,7 +94,9 @@ class SetUserGroups extends QUI\System\Console\Tool
             $where[] = "(".implode(" OR ", $whereOR).")";
         }
 
-        $sql .= " WHERE ".implode(" AND ", $where);
+        if (!empty($where)) {
+            $sql .= " WHERE ".implode(" AND ", $where);
+        }
 
         $result = QUI::getDataBase()->fetchSQL($sql);
 
