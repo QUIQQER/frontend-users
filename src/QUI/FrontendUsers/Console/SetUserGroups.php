@@ -73,7 +73,8 @@ class SetUserGroups extends QUI\System\Console\Tool
         }
 
         // Get all users
-        $sql = "SELECT `id` FROM ".QUI::getUsers()::table();
+        $sql   = "SELECT `id` FROM ".QUI::getUsers()::table();
+        $where = [];
 
         if (!empty($languages)) {
             $where[] = "`lang` IN ('".implode("','", $languages)."')";
