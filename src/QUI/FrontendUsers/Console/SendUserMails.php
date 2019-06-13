@@ -44,6 +44,12 @@ class SendUserMails extends QUI\System\Console\Tool
 
         // Determine users the email is being sent to
 
+        // LOCALE
+        $this->writeLn("System LOCALE language? [en]: ");
+        $lang = $this->readInput();
+
+        QUI::getLocale()->setCurrent($lang);
+
         // INCLUDE INACTIVE USERS?
         $this->writeLn("Send mail to INACTIVE users? (y/N): ");
         $inactiveUsers = mb_strtolower($this->readInput()) === 'y';
@@ -132,6 +138,7 @@ class SendUserMails extends QUI\System\Console\Tool
         // SUMMARY
         $this->writeLn("\nSUMMARY\n===============================================\n");
 
+        $this->writeLn("LOCALE language: ".$lang);
         $this->writeLn("Include INACTIVE users: ".($inactiveUsers ? "YES" : "NO"));
         $this->writeLn("User languages: ".implode(', ', $languages));
         $this->writeLn("User groups: ".(empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
