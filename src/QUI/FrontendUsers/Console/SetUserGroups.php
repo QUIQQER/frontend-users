@@ -49,13 +49,13 @@ class SetUserGroups extends QUI\System\Console\Tool
         $inactiveUsers = mb_strtolower($this->readInput()) === 'y';
 
         // USER LANGUAGE
-        $this->writeLn("Languages of the users? (comma separated language abbreviations) [en]: ");
+        $this->writeLn("Languages of the users? (comma separated language abbreviations) [all]: ");
         $languages = $this->readInput();
 
-        if (!empty($languages)) {
+        if (!empty($languages) && mb_strtolower($languages) !== 'all') {
             $languages = explode(',', $languages);
         } else {
-            $languages = ['en'];
+            $languages = false;
         }
 
         // RESTRICT TO GROUPS
@@ -73,8 +73,11 @@ class SetUserGroups extends QUI\System\Console\Tool
         }
 
         // Get all users
-        $sql     = "SELECT `id` FROM ".QUI::getUsers()::table();
-        $where[] = "`lang` IN ('".implode("','", $languages)."')";
+        $sql = "SELECT `id` FROM ".QUI::getUsers()::table();
+
+        if (!empty($languages)) {
+            $where[] = "`lang` IN ('".implode("','", $languages)."')";
+        }
 
         if (!$inactiveUsers) {
             $where[] = "`active` = 1";
@@ -99,7 +102,7 @@ class SetUserGroups extends QUI\System\Console\Tool
 
         $this->writeLn("Add users to groups: ".implode(', ', $groupIds));
         $this->writeLn("Include INACTIVE users: ".($inactiveUsers ? "YES" : "NO"));
-        $this->writeLn("User languages: ".implode(', ', $languages));
+        $this->writeLn("User languages: ".(empty($languages) ? 'ALL' : implode(', ', $languages)));
         $this->writeLn(
             "Select users in this groups only: ".(empty($userGroupIds) ? "ALL" : implode(', ', $userGroupIds))
         );
