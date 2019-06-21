@@ -23,7 +23,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
         ],
 
         options: {
-            maxHeight: 600,
+            maxHeight: 640,
             maxWidth : 500,
             buttons  : false,
             logo     : false

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<console>
+    <tool exec="\QUI\FrontendUsers\Console\SendUserMails" />
+    <tool exec="\QUI\FrontendUsers\Console\SetUserGroups" />
+</console>
