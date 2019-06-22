@@ -25,7 +25,11 @@
               data-authenticator="{$entry.class}"
         >
             <span class="quiqqer-fu-login-social-entry-icon">
+                {if $entry.icon}
                 <span class="{$entry.Login->getAttribute('icon')}"></span>
+                {elseif $entry.image}
+                <img src="{$entry.Login->getAttribute('icon')}" alt="" />
+                {/if}
             </span>
             <span class="quiqqer-fu-login-social-entry-loader">
                 <span class="fa fa-spin fa-spinner fas fa-circle-notch"></span>

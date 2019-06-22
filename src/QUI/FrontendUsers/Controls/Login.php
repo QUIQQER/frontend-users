@@ -76,10 +76,26 @@ class Login extends QUI\Control
                     continue;
                 }
 
+                $icon  = false;
+                $image = false;
+
+                $iconAttribute = $Login->getAttribute('icon');
+
+                if (\strpos($iconAttribute, 'fa ') !== false
+                    || \strpos($iconAttribute, 'fab ') !== false
+                    || \strpos($iconAttribute, 'fas ') !== false
+                ) {
+                    $icon = true;
+                } elseif ($iconAttribute !== '') {
+                    $image = true;
+                }
+
                 $instances[] = [
                     'Auth'  => $Auth,
                     'Login' => $Login,
-                    'class' => $class
+                    'class' => $class,
+                    'icon'  => $icon,
+                    'image' => $image
                 ];
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeDebugException($Exception);
