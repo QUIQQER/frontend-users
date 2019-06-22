@@ -44,6 +44,7 @@
     height: 50px;
     line-height: 50px;
     margin: 0 0.25rem;
+    overflow: hidden;
     position: relative;
     text-align: center;
     width: 50px;
@@ -63,6 +64,11 @@
 .quiqqer-fu-login-social-entry-icon {
     display: inline-block;
     opacity: 1;
+}
+
+.quiqqer-fu-login-social-entry img {
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .quiqqer-fu-login-social-entry:hover {
