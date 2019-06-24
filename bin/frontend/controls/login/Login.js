@@ -47,7 +47,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             header        : true,
             authenticators: [],  // fixed list of authenticators shown
             mail          : true,
-            passwordReset : true
+            passwordReset : true,
+            reload        : true
         },
 
         initialize: function (options) {
@@ -232,7 +233,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                         return;
                     }
 
-                    window.location.reload();
+                    if (self.getAttribute('reload')) {
+                        window.location.reload();
+                    }
                 }, {
                     showLogin    : false,
                     authenticator: 'QUI\\Users\\Auth\\QUIQQER',
@@ -279,6 +282,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 }
 
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (redirect) {
+                    if (self.getAttribute('reload') === false) {
+                        return;
+                    }
+
                     if (redirect) {
                         window.location = redirect;
                         return;
@@ -394,7 +401,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 return;
             }
 
+            var self = this;
+
             QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (result) {
+                if (self.getAttribute('reload') === false) {
+                    return;
+                }
+
                 if (result) {
                     window.location = result;
                 }

@@ -342,50 +342,89 @@ class Events
 
         $User = QUI::getUserBySession();
 
+        echo "<script>
+            (function() {
+                var registerNewLogin = function() {
+                    require(['qui/QUI'], function(QUI) {
+                        QUI.addEvent('onAjaxLogin', function(QUIAjax, call, method, callback, params) {
+                            require(['package/quiqqer/frontend-users/bin/frontend/controls/login/Window'], function(Window) {
+                                new Window({
+                                    reload: false,
+                                    events: {
+                                        onCancel: function() {
+                                            console.log('cancel');
+                                            window.location.reload();
+                                        },
+                                        
+                                        onSuccess: function() {
+                                            QUIAjax.request(call, method, callback, params);
+                                        }
+                                    }
+                                }).open();
+                            });
+                            
+                            return true;
+                        });
+                    });
+                };
+                
+                var waitForRequireEventRegister = setInterval(function() {
+                    if (typeof require === 'undefined') {
+                        return;
+                    }
+                    
+                    clearInterval(waitForRequireEventRegister);
+                    registerNewLogin();
+                }, 200);
+            })();
+        </script>";
+
         if (!$User->getAttribute('quiqqer.set.new.password')) {
             return;
         }
 
         echo "<script>
-            var openChangePasswordWindow = function() {
-                require([
-                    'controls/users/password/Window',
-                    'Locale'
-                ], function(Password, QUILocale) {
-                    new Password({
-                        uid: '".$User->getId()."',
-                        mustChange: true,
-                        message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
-                        events: {
-                            onSuccess: function() {
-                                window.location.reload();
+            (function() {
+                var openChangePasswordWindow = function() {
+                    require([
+                        'controls/users/password/Window',
+                        'Locale'
+                    ], function(Password, QUILocale) {
+                        new Password({
+                            uid: '".$User->getId()."',
+                            mustChange: true,
+                            message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
+                            events: {
+                                onSuccess: function() {
+                                    window.location.reload();
+                                }
                             }
+                        }).open();
+                    });
+                };
+           
+                var checkChangePasswordWindow = function() {
+                    require(['Locale'], function(QUILocale) {
+                        if (!QUILocale.exists('quiqqer/quiqqer', 'message.set.new.password')) {
+                            (function() {
+                                openChangePasswordWindow();
+                            }).delay(2000);
+                            return;
                         }
-                    }).open();
-                });
-            };
-       
-            var checkChangePasswordWindow = function() {
-                require(['Locale'], function(QUILocale) {
-                    if (!QUILocale.exists('quiqqer/quiqqer', 'message.set.new.password')) {
-                        (function() {
-                            openChangePasswordWindow();
-                        }).delay(2000);
+                        
+                        openChangePasswordWindow();
+                    });            
+                };
+                
+                var waitForRequire = setInterval(function() {
+                    if (typeof require === 'undefined') {
                         return;
                     }
                     
-                    openChangePasswordWindow();
-                });            
-            };
-    
-            var waitForRequire = setInterval(function() {
-                if (typeof require === 'undefined') {
-                    return;
-                }
-                
-                clearInterval(waitForRequire);
-                checkChangePasswordWindow();
-            }, 200);
+                    clearInterval(waitForRequire);
+                    checkChangePasswordWindow();
+                }, 200);
+            })();
         </script>";
     }
 
