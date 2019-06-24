@@ -26,7 +26,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
             maxHeight: 640,
             maxWidth : 500,
             buttons  : false,
-            logo     : false
+            logo     : false,
+            reload   : true
         },
 
         initialize: function (options) {
@@ -58,7 +59,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
                 'class': 'quiqqer-frontendUsers-loginWindow-close',
                 html   : '<span class="fa fa-close"></span>',
                 events : {
-                    click: this.close.bind(this)
+                    click: this.cancel.bind(this)
                 }
             }).inject(Content);
 
@@ -78,6 +79,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
             this.$Login = new Login({
                 showLoader: false,
+                reload    : this.getAttribute('reload'),
                 onSuccess : function () {
                     self.close();
                     self.fireEvent('success', [self]);
