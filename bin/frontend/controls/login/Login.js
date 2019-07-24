@@ -41,14 +41,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         ],
 
         options: {
-            showLoader    : true,
-            onSuccess     : false,
-            redirect      : true,
-            header        : true,
-            authenticators: [],  // fixed list of authenticators shown
-            mail          : true,
-            passwordReset : true,
-            reload        : true
+            showLoader        : true,
+            onSuccess         : false,
+            redirect          : true,
+            header            : true,
+            authenticators    : [],  // fixed list of authenticators shown
+            mail              : true,
+            passwordReset     : true,
+            reload            : true,
+            ownRedirectOnLogin: false // function
         },
 
         initialize: function (options) {
@@ -94,11 +95,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 this.Loader.show();
             }
 
-            new Element('div', {
-                html: ''
-            }).inject(this.getElm());
+            var Elm = this.getElm();
 
-            console.log('Not implemented yet');
+            if (this.getAttribute('header') === false) {
+                Elm.getElement('h2').destroy();
+            }
+
+            this.$parseQuiControls();
         },
 
         /**
@@ -107,7 +110,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         $onInject: function () {
             var self = this;
 
-            // @todo loader
             if (this.getAttribute('showLoader')) {
                 this.Loader.show();
             }
@@ -130,77 +132,87 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 Ghost.getElements('style').inject(self.getElm());
 
-                QUI.parse(self.getElm()).then(function () {
-                    var Login = self.getElm().getElement('.quiqqer-fu-login-container');
-
-                    Login.setStyle('opacity', 0);
-                    Login.setStyle('display', null);
-
-                    self.getElm()
-                        .getElements('form[name="quiqqer-fu-login-email"]')
-                        .addEvent('submit', function (event) {
-                            event.stop();
-                            self.authByEmail();
-                        });
-
-
-                    self.getElm()
-                        .getElements('.quiqqer-fu-login-social-entry')
-                        .addEvent('click', self.$auth);
-
-                    self.getElm().getElements(
-                        '.quiqqer-fu-login-forget-password-link a'
-                    ).addEvent('click', function (event) {
-                        event.stop();
-                        self.openForgottenPassword();
-                    });
-
-                    self.getElm().getElements(
-                        '.quiqqer-fu-login-forget-password-reset [name="cancel"]'
-                    ).addEvent('click', function (event) {
-                        event.stop();
-                        self.closeForgottenPassword();
-                    });
-
-                    self.getElm().getElements(
-                        '.quiqqer-fu-login-forget-password-reset [type="submit"]'
-                    ).addEvent('click', function (event) {
-                        event.stop();
-                        self.sendForgottenPassword();
-                    });
-
-
-                    // submit events
-                    var container = self.getElm().getElements('.quiqqer-fu-login-social-entry-control');
-                    var i, len, Control, ControlDom;
-
-                    for (i = 0, len = container.length; i < len; i++) {
-                        ControlDom = container[i].getFirst();
-                        Control    = QUI.Controls.getById(ControlDom.get('data-quiid'));
-
-                        //Control.addEvent('');
-                    }
-
-                    self.getElm().getElements('form.quiqqer-fu-login-social-entry').addEvents({
-                        submit: self.$authBySocial
-                    });
-
-
-                    moofx(Login).animate({
-                        opacity: 1
-                    }, {
-                        callback: function () {
-                            self.Loader.hide();
-                            self.fireEvent('load', [self]);
-                            QUI.fireEvent('quiqqerUserAuthLoginLoad', [self]);
-                        }
-                    });
-                });
+                self.$parseQuiControls();
             }, {
                 'package'     : 'quiqqer/frontend-users',
                 authenticators: JSON.encode(this.getAttribute('authenticators')),
                 mail          : this.getAttribute('mail') ? 1 : 0,
                 passwordReset : this.getAttribute('passwordReset') ? 1 : 0
+            });
+        },
+
+        /**
+         * parse qui controls for loading
+         */
+        $parseQuiControls: function () {
+            var self = this;
+
+            QUI.parse(this.getElm()).then(function () {
+                var Login = self.getElm().getElement('.quiqqer-fu-login-container');
+
+                Login.setStyle('opacity', 0);
+                Login.setStyle('display', null);
+
+                self.getElm()
+                    .getElements('form[name="quiqqer-fu-login-email"]')
+                    .addEvent('submit', function (event) {
+                        event.stop();
+                        self.authByEmail();
+                    });
+
+
+                self.getElm()
+                    .getElements('.quiqqer-fu-login-social-entry')
+                    .addEvent('click', self.$auth);
+
+                self.getElm().getElements(
+                    '.quiqqer-fu-login-forget-password-link a'
+                ).addEvent('click', function (event) {
+                    event.stop();
+                    self.openForgottenPassword();
+                });
+
+                self.getElm().getElements(
+                    '.quiqqer-fu-login-forget-password-reset [name="cancel"]'
+                ).addEvent('click', function (event) {
+                    event.stop();
+                    self.closeForgottenPassword();
+                });
+
+                self.getElm().getElements(
+                    '.quiqqer-fu-login-forget-password-reset [type="submit"]'
+                ).addEvent('click', function (event) {
+                    event.stop();
+                    self.sendForgottenPassword();
+                });
+
+
+                // submit events
+                var container = self.getElm().getElements('.quiqqer-fu-login-social-entry-control');
+                var i, len, Control, ControlDom;
+
+                for (i = 0, len = container.length; i < len; i++) {
+                    ControlDom = container[i].getFirst();
+                    Control    = QUI.Controls.getById(ControlDom.get('data-quiid'));
+
+                    //Control.addEvent('');
+                }
+
+                self.getElm().getElements('form.quiqqer-fu-login-social-entry').addEvents({
+                    submit: self.$authBySocial
+                });
+
+
+                moofx(Login).animate({
+                    opacity: 1
+                }, {
+                    callback: function () {
+                        self.Loader.hide();
+                        self.fireEvent('load', [self]);
+
+                        QUI.fireEvent('quiqqerUserAuthLoginLoad', [self]);
+                    }
+                });
             });
         },
 
@@ -283,6 +295,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (redirect) {
                     if (self.getAttribute('reload') === false) {
+                        return;
+                    }
+
+                    if (self.getAttribute('ownRedirectOnLogin')) {
+                        self.getAttribute('ownRedirectOnLogin')();
                         return;
                     }
 
@@ -405,6 +422,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (result) {
                 if (self.getAttribute('reload') === false) {
+                    return;
+                }
+
+                if (self.getAttribute('ownRedirectOnLogin')) {
+                    self.getAttribute('ownRedirectOnLogin')();
                     return;
                 }
 

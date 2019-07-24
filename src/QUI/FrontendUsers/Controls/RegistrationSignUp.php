@@ -44,7 +44,7 @@ class RegistrationSignUp extends QUI\Control
 
         $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
 
-        $this->addCSSFile(dirname(__FILE__).'/RegistrationSignUp.css');
+        $this->addCSSFile(\dirname(__FILE__).'/RegistrationSignUp.css');
         $this->addCSSClass('quiqqer-fu-registrationSignUp');
 
         $this->setJavaScriptControl(
@@ -95,12 +95,12 @@ class RegistrationSignUp extends QUI\Control
         if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
             $Captcha    = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
-            $useCaptcha = boolval($registrationSettings['useCaptcha']);
+            $useCaptcha = \boolval($registrationSettings['useCaptcha']);
 
             $Default            = QUI\Captcha\Handler::getDefaultCaptchaModuleControl();
             $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
 
-            if (class_exists('QUI\Captcha\Modules\Google')
+            if (\class_exists('QUI\Captcha\Modules\Google')
                 && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class) {
                 $Engine->assign('googleSideKey', QUI\Captcha\Modules\Google::getSiteKey());
             }
@@ -112,16 +112,17 @@ class RegistrationSignUp extends QUI\Control
             'Captcha'            => $Captcha,
             'useCaptcha'         => $useCaptcha,
             'jsRequired'         => $jsRequired,
-            'isCaptchaInvisible' => $isCaptchaInvisible
+            'isCaptchaInvisible' => $isCaptchaInvisible,
+            'hasNoContent'       => $this->getAttribute('content') === false
         ]);
 
         $Engine->assign([
-            'captchaHTML' => $Engine->fetch(dirname(__FILE__).'/RegistrationSignUp.Captcha.html')
+            'captchaHTML' => $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.Captcha.html')
         ]);
 
         // default stuff
         $Registrars = $Registrars->filter(function ($Registrar) {
-            $class    = get_class($Registrar);
+            $class    = \get_class($Registrar);
             $haystack = [
                 QUI\FrontendUsers\Registrars\Email\Registrar::class
             ];
@@ -130,15 +131,15 @@ class RegistrationSignUp extends QUI\Control
                 $haystack[] = QUI\Registration\Trial\Registrar::class;
             }
 
-            $haystack = array_flip($haystack);
+            $haystack = \array_flip($haystack);
 
             return !isset($haystack[$class]);
         });
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA        = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
-            $settingsB        = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+            $settingsA        = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarA));
+            $settingsB        = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarB));
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -230,7 +231,7 @@ class RegistrationSignUp extends QUI\Control
             'redirect'            => $redirect
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/RegistrationSignUp.html');
+        return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');
     }
 
     /**
@@ -251,9 +252,9 @@ class RegistrationSignUp extends QUI\Control
         $registrars         = $Registrars->toArray();
         $FilteredRegistrars = new QUI\FrontendUsers\RegistrarCollection();
 
-        $registrars = array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
+        $registrars = \array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
             /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
-            return in_array($Registrar->getType(), $filterRegistrars);
+            return \in_array($Registrar->getType(), $filterRegistrars);
         });
 
         foreach ($registrars as $Registrar) {
