@@ -74,7 +74,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             if (Redirect) {
                 var redirectUrl = Redirect.get('data-redirecturl');
 
-                (function() {
+                (function () {
                     window.location = redirectUrl;
                 }).delay(5000);
             }
@@ -111,6 +111,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             this.$RegistrationSection.setStyle('opacity', 0);
             this.$RegistrationSection.setStyle('display', 'inline');
+
+            if (!this.$TextSection) {
+                this.$TextSection = new Element('div'); // fake element
+            }
 
             this.$TextSection.setStyle('opacity', 0);
             this.$TextSection.setStyle('display', 'inline');

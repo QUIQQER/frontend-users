@@ -4,7 +4,9 @@
     </div>
 </noscript>
 
-<section class="quiqqer-fu-registrationSignUp-registration" style="display: none">
+<section class="quiqqer-fu-registrationSignUp-registration{if $hasNoContent} quiqqer-fu-registrationSignUp-registration-content{/if}"
+         style="display: none"
+>
     {if $showLoggedInWarning}
     <div class="quiqqer-fu-registrationSignUp-registration-logged-in message-information">
         {locale group="quiqqer/frontend-users" var="message.types.registration.already_registered"}
@@ -125,6 +127,8 @@
     {/if}
 </section>
 
+{if $this->getAttribute('content') !== false}
 <section class="quiqqer-fu-registrationSignUp-info" style="display: none">
     {$this->getAttribute('content')}
 </section>
+{/if}
