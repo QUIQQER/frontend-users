@@ -12,6 +12,33 @@ use QUI;
 class SendUserMails extends QUI\System\Console\Tool
 {
     /**
+     * Mail settings
+     *
+     * @var array
+     */
+    protected $mail = [
+        'body'       => '',
+        'senderMail' => '',
+        'senderName' => '',
+        'subject'    => ''
+    ];
+
+    /**
+     * @var array
+     */
+    protected $recipients = [];
+
+    /**
+     * General settings
+     *
+     * @var array
+     */
+    protected $settings = [
+        'setNewPassword'     => false,
+        'forcePasswordReset' => true
+    ];
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -78,6 +105,25 @@ class SendUserMails extends QUI\System\Console\Tool
             $groupIds = explode(',', $groupIds);
         }
 
+        // GENERATE NEW PASSWORD?
+        $this->writeLn(
+            "Shall a new password be generated for each user? The new password will be available via the"
+            ." [password] placeholder in the e-mail body. (y/N): "
+        );
+
+        $generatePassword   = mb_strtolower($this->readInput()) === 'y';
+        $forcePasswordReset = false;
+
+        if ($generatePassword) {
+            $this->writeLn(
+                "Shall users be forced to set a new password immediately after logging in with their"
+                ." generated password? (Y/n): "
+            );
+
+            $input              = $this->readInput();
+            $forcePasswordReset = empty($input) || mb_strtolower($input) !== 'n';
+        }
+
         // ORDER BY
         $this->writeLn("ORDER BY clause for the `users` table (leave empty to use default order): ");
         $orderBy = $this->readInput();
@@ -142,6 +188,8 @@ class SendUserMails extends QUI\System\Console\Tool
         $this->writeLn("Include INACTIVE users: ".($inactiveUsers ? "YES" : "NO"));
         $this->writeLn("User languages: ".implode(', ', $languages));
         $this->writeLn("User groups: ".(empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
+        $this->writeLn("Generate new password: ".($generatePassword ? "YES" : "NO"));
+        $this->writeLn("Force password reset: ".($forcePasswordReset ? "YES" : "NO"));
         $this->writeLn("ORDER BY: ".(empty($orderBy) ? "DEFAULT" : $orderBy));
         $this->writeLn("\nE-Mail subject: ".$subject);
         $this->writeLn("\nE-Mail sender mail: ".$senderMail);
@@ -150,6 +198,15 @@ class SendUserMails extends QUI\System\Console\Tool
             "\nE-Mail will be sent to ".count($recipients)." out of ".count($result)." selected users."
             ." ".(count($result) - count($recipients))." users have no e-mail address and are ignored."
         );
+
+        $this->mail['body']       = $body;
+        $this->mail['senderMail'] = $senderMail;
+        $this->mail['senderName'] = $senderName;
+        $this->mail['subject']    = $subject;
+
+        $this->recipients                     = $recipients;
+        $this->settings['forcePasswordReset'] = $forcePasswordReset;
+        $this->settings['setNewPassword']     = $generatePassword;
 
         // TEST MAIL
         $this->writeLn("\n\nSend test mail? (Y/n): ");
@@ -161,19 +218,7 @@ class SendUserMails extends QUI\System\Console\Tool
 
             if (!empty($testEmailAddress)) {
                 $this->writeLn("\nSend test mail...");
-                $this->sendMails(
-                    $body,
-                    $senderMail,
-                    $senderName,
-                    $subject,
-                    [
-                        0 => [
-                            'username' => 'Test-User',
-                            'email'    => $testEmailAddress
-                        ]
-                    ]
-                );
-                $this->write(" SENT!");
+                $this->sendMails($testEmailAddress);
             }
         }
 
@@ -186,21 +231,31 @@ class SendUserMails extends QUI\System\Console\Tool
             return;
         }
 
-        $this->sendMails($body, $senderMail, $senderName, $subject, $recipients);
+        $this->sendMails();
 
         $this->exitSuccess();
     }
 
     /**
-     * @param string $body
-     * @param string $senderMail
-     * @param string $senderName
-     * @param string $subject
-     * @param array $recipients
+     * @param string $testMailAddress (optional) - If set, a single test mail will be sent to this address
      * @return void
      */
-    protected function sendMails($body, $senderMail, $senderName, $subject, $recipients)
+    protected function sendMails($testMailAddress = null)
     {
+        $Users      = QUI::getUsers();
+        $SystemUser = $Users->getSystemUser();
+
+        if ($testMailAddress === null) {
+            $recipients = $this->recipients;
+        } else {
+            $recipients = [
+                0 => [
+                    'username' => 'Test-User',
+                    'email'    => $testMailAddress
+                ]
+            ];
+        }
+
         // Queue mails
         foreach ($recipients as $recipient) {
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
@@ -209,24 +264,60 @@ class SendUserMails extends QUI\System\Console\Tool
                 $name = $recipient['username'];
             }
 
-            $email = $recipient['email'];
+            $email       = $recipient['email'];
+            $newPassword = '';
+
+            if (!$testMailAddress && $this->settings['setNewPassword']) {
+                $this->writeLn("Generating new password for $email...");
+
+                try {
+                    $User        = $Users->get($recipient['id']);
+                    $newPassword = QUI\Security\Password::generateRandom();
+
+                    $User->setPassword($newPassword, $SystemUser);
+
+                    $this->write(" OK!");
+
+                    if ($this->settings['forcePasswordReset']) {
+                        $this->writeLn("Set force new password...");
+
+                        $User->setAttribute('quiqqer.set.new.password', true);
+                        $User->save($SystemUser);
+
+                        $this->write(" OK!");
+                    }
+                } catch (\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                    $this->write(" Error: ".$Exception->getMessage());
+                }
+            }
 
             $body = str_replace(
-                ['[name]', '[email]'],
-                [$name, $email],
-                $body
+                ['[name]', '[email]', '[password]'],
+                [$name, $email, $newPassword],
+                $this->mail['body']
             );
 
             $Mailer = QUI::getMailManager()->getMailer();
-            $Mailer->setFrom($senderMail);
-            $Mailer->setFromName($senderName);
-            $Mailer->setSubject($subject);
+            $Mailer->setFrom($this->mail['senderMail']);
+            $Mailer->setFromName($this->mail['senderName']);
+            $Mailer->setSubject($this->mail['subject']);
             $Mailer->setHTML(true);
 
             $Mailer->setBody($body);
             $Mailer->addRecipient($email);
 
-            $Mailer->send();
+            $this->writeLn("Sending mail to $name ($email)...");
+
+            try {
+                $Mailer->send();
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+                $this->write(" Error: ".$Exception->getMessage());
+                continue;
+            }
+
+            $this->write(" OK!");
         }
     }
 
@@ -237,7 +328,7 @@ class SendUserMails extends QUI\System\Console\Tool
      */
     protected function exitSuccess()
     {
-        $this->writeLn("Mails have been successfully queued and will be sent via cron.");
+        $this->writeLn("\n\nMails have been successfully queued and will be sent via cron.");
         $this->writeLn("");
 
         exit(0);
