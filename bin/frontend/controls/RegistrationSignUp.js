@@ -1209,6 +1209,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 Input.addClass('quiqqer-registration-field-error');
 
                 self.$tooltips[tipId] = Tip;
+
+                // destroy after 5 seconds
+                (function () {
+                    Tip.hide();
+                    Tip.destroy();
+                    Input.set('data-has-tooltip', '');
+                    delete self.$tooltips[this];
+                }).delay(3000, tipId);
             });
         }
 

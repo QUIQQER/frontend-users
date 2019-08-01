@@ -240,6 +240,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                     self.$onSuccess();
 
+                    if (self.getAttribute('ownRedirectOnLogin')) {
+                        return;
+                    }
+
                     if (typeof self.getAttribute('onSuccess') === 'function') {
                         self.getAttribute('onSuccess')(self);
                         return;

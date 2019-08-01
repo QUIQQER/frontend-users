@@ -12,7 +12,9 @@
         {locale group="quiqqer/frontend-users" var="message.types.registration.already_registered"}
     </div>
     {else}
-    <h2>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}</h2>
+    {if $this->getAttribute('header')}
+        <h2>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}</h2>
+    {/if}
 
     {if $msgSuccess}
     <div class="message-success">
