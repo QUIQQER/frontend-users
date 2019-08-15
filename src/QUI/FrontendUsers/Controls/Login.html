@@ -15,7 +15,9 @@
 {else}
 
 <section class="quiqqer-fu-login-container" style="display: none">
-    <h2>{locale group="quiqqer/frontend-users" var="control.login.title"}</h2>
+    {if $this->getAttribute('header')}
+        <h2>{locale group="quiqqer/frontend-users" var="control.login.title"}</h2>
+    {/if}
 
     <div class="quiqqer-fu-login-social">
         {foreach $authenticators as $entry}

@@ -30,12 +30,13 @@ class Login extends QUI\Control
             'authenticators' => [],
             'Authenticator'  => false,  // currently executed Registrar
             'mail'           => true,   // show mail authenticator
-            'passwordReset'  => true    // show password reset
+            'passwordReset'  => true,   // show password reset
+            'header'         => true    // show header title
         ]);
 
         $this->setAttributes($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Login.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Login.css');
         $this->addCSSClass('quiqqer-fu-login');
 
         $this->setJavaScriptControl(
@@ -124,7 +125,7 @@ class Login extends QUI\Control
             'showPasswordReset' => $showPasswordReset
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Login.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Login.html');
     }
 
     /**
