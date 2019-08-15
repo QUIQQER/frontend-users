@@ -374,7 +374,16 @@ class Events
                     }
                     
                     clearInterval(waitForRequireEventRegister);
-                    registerNewLogin();
+                    
+                    var loadQUI = function () {
+                        return Promise.resolve();
+                    };
+            
+                    if (typeof whenQuiLoaded === 'function') {
+                        loadQUI = whenQuiLoaded;
+                    }
+                    
+                    loadQUI().then(registerNewLogin);
                 }, 200);
             })();
         </script>";
