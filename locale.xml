@@ -192,6 +192,14 @@
             <en>
                 <![CDATA[Show button that opens a Sign Up popup in the User Bar if no user is logged in (requires an active Site of type <b>Registration</b>!)]]></en>
         </locale>
+        <locale name="settings.defaultAvatar.title">
+            <de><![CDATA[Standard Avatar-Bild]]></de>
+            <en><![CDATA[Default avatar image]]></en>
+        </locale>
+        <locale name="settings.defaultAvatar.description" html="true">
+            <de><![CDATA[Bild, welches standardmäßig als Avatar-Icon in der Benutzer-Leise angezeigt wird, wenn im Benutzer <b>kein</b> Bild hinterlegt ist. Ist hier <b>kein Bild ausgewählt</b>, wird der <b>erste Buchstabe</b> des Benutzernamens angezeigt.]]></de>
+            <en><![CDATA[Image that is shown as the default avatar icon in the user bar if the user has <b>no</b> image assigned. If there is <b>no image selected here</b> the <b>first letter</b> of the username will be shown.]]></en>
+        </locale>
 
         <!-- Settings: Registration -->
         <locale name="settings.section.registration.title">

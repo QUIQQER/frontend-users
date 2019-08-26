@@ -20,20 +20,20 @@ use QUI\FrontendUsers\Utils;
  */
 class UserIcon extends Control
 {
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
-        $this->setAttributes(array(
+        $this->setAttributes([
             'iconWidth'  => 50,
             'iconHeight' => 50,
             'showLogout' => true
-        ));
+        ]);
 
         parent::__construct($attributes);
 
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
 
         $this->addCSSClass('quiqqer-frontendUsers-userIcon');
-        $this->addCSSFile(dirname(__FILE__) . '/UserIcon.css');
+        $this->addCSSFile(dirname(__FILE__).'/UserIcon.css');
     }
 
     /**
@@ -58,9 +58,9 @@ class UserIcon extends Control
 
         $Engine = QUI::getTemplateManager()->getEngine();
 
-        $Engine->assign(array(
+        $Engine->assign([
             'User' => $User
-        ));
+        ]);
 
         $settings         = Handler::getInstance()->getUserProfileSettings();
         $User             = QUI::getUserBySession();
@@ -73,9 +73,9 @@ class UserIcon extends Control
         if (!empty($userGravatarIcon) && $gravatarEnabled && !empty($userEmail)) {
             $AvatarImage = new ExternalImage(Utils::getGravatarUrl($userEmail, $iconHeight));
 
-            $Engine->assign(array(
+            $Engine->assign([
                 'avatarImageUrl' => $AvatarImage->getSizeCacheUrl($iconWidth, $iconHeight)
-            ));
+            ]);
         } else {
             $avatarMediaUrl = $User->getAttribute('avatar');
             $AvatarImage    = false;
@@ -85,11 +85,21 @@ class UserIcon extends Control
                 try {
                     $AvatarImage = QUIMediaUtils::getImageByUrl($avatarMediaUrl);
 
-                    $Engine->assign(array(
+                    $Engine->assign([
                         'avatarImageUrl' => $AvatarImage->getSizeCacheUrl($iconWidth, $iconHeight)
-                    ));
+                    ]);
                 } catch (QUI\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
+                }
+            } else {
+                $AvatarImage = $this->getDefaultAvatarImage();
+
+                if (\is_string($AvatarImage)) {
+                    $Engine->assign('avatarImageIcon', $AvatarImage);
+                } elseif ($AvatarImage !== false) {
+                    $Engine->assign([
+                        'avatarImageUrl' => $AvatarImage->getSizeCacheUrl($iconWidth, $iconHeight)
+                    ]);
                 }
             }
 
@@ -97,16 +107,15 @@ class UserIcon extends Control
                 $username    = $User->getUsername();
                 $firstLetter = mb_substr($username, 0, 1);
                 $firstLetter = mb_strtoupper($firstLetter);
-
                 $Engine->assign('firstLetter', $firstLetter);
             }
         }
 
-        $Engine->assign(array(
+        $Engine->assign([
             'User'       => $User,
             'iconHeight' => $iconHeight,
             'iconWidth'  => $iconWidth
-        ));
+        ]);
 
         $Engine->assign(
             'ProfileSite',
@@ -115,6 +124,38 @@ class UserIcon extends Control
             )
         );
 
-        return $Engine->fetch(dirname(__FILE__) . '/UserIcon.html');
+        return $Engine->fetch(dirname(__FILE__).'/UserIcon.html');
+    }
+
+    /**
+     * Get default avatar image
+     *
+     * @return false|QUI\Projects\Media\Image|string
+     */
+    protected function getDefaultAvatarImage()
+    {
+        try {
+            $Conf               = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $defaultAvatarImage = $Conf->get('profileBar', 'defaultAvatar');
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return false;
+        }
+
+        if (empty($defaultAvatarImage)) {
+            return false;
+        }
+
+        // Check if icon
+        if (\mb_strpos($defaultAvatarImage, 'image.php') === false) {
+            return $defaultAvatarImage;
+        }
+
+        try {
+            return QUIMediaUtils::getImageByUrl($defaultAvatarImage);
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return false;
+        }
     }
 }
