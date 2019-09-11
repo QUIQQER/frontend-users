@@ -91,6 +91,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * event: on import
          */
         $onImport: function () {
+            this.Loader.inject(this.$Elm);
+
             if (this.getAttribute('showLoader')) {
                 this.Loader.show();
             }
@@ -222,7 +224,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         authByEmail: function () {
             var self = this,
                 Form = this.getElm().getElement('form[name="quiqqer-fu-login-email"]');
-
+            console.log('authByEmail');
+            console.log(this.getAttribute('showLoader'));
             if (this.getAttribute('showLoader')) {
                 this.Loader.show();
             }

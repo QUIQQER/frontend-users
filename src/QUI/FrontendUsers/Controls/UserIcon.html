@@ -10,7 +10,9 @@
      style="height: {$iconHeight}px; width: {$iconWidth}px;{if isset($avatarImageUrl)} background-image: url('{$avatarImageUrl}');{/if}"
 >
 
-{if isset($firstLetter) && $firstLetter}
+{if isset($avatarImageIcon)}
+<span class="{$avatarImageIcon}"></span>
+{elseif isset($firstLetter) && $firstLetter}
 <span class="quiqqer-frontendUsers-userIcon-letter" style="height: {$iconHeight}px; width: {$iconWidth}px; line-height: {$iconHeight}px;">{$firstLetter}</span>
 {/if}
 </div>
