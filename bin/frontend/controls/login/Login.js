@@ -152,6 +152,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             QUI.parse(this.getElm()).then(function () {
                 var Login = self.getElm().getElement('.quiqqer-fu-login-container');
 
+                // already logged in
+                if (!Login) {
+                    self.Loader.hide();
+                    self.fireEvent('load', [self]);
+
+                    QUI.fireEvent('quiqqerUserAuthLoginLoad', [self]);
+                    return;
+                }
+
                 Login.setStyle('opacity', 0);
                 Login.setStyle('display', null);
 
@@ -203,7 +212,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 self.getElm().getElements('form.quiqqer-fu-login-social-entry').addEvents({
                     submit: self.$authBySocial
                 });
-
 
                 moofx(Login).animate({
                     opacity: 1
