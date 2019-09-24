@@ -4,8 +4,9 @@
     </div>
 </noscript>
 
-<section class="quiqqer-fu-registrationSignUp-registration{if $hasNoContent} quiqqer-fu-registrationSignUp-registration-content{/if}"
-         style="display: none"
+<section
+        class="quiqqer-fu-registrationSignUp-registration{if $hasNoContent} quiqqer-fu-registrationSignUp-registration-content{/if}"
+        style="display: none"
 >
     {if $showLoggedInWarning}
     <div class="quiqqer-fu-registrationSignUp-registration-logged-in message-information">
@@ -13,14 +14,14 @@
     </div>
     {else}
     {if $this->getAttribute('header')}
-        <h2>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}</h2>
+    <h2>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}</h2>
     {/if}
 
     {if $msgSuccess}
     <div class="message-success">
         {$msgSuccess}
         {if $redirect}
-            <span data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect">
+        <span data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect">
             {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.redirect"}
             </span>
         {/if}
@@ -64,7 +65,11 @@
                 </span>
                 <span class="field">
                 <span class="icon fa fa-envelope"></span>
-                    <input type="email" name="email" required autocomplete="email"/>
+                    <input type="email"
+                           name="email"
+                           required
+                           {if $this->getAttribute('autocomplete')}autocomplete="email"{else}autocomplete="false"{/if}
+                    />
                 </span>
             </label>
 
