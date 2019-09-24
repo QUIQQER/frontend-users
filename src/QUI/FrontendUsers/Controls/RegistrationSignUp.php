@@ -38,14 +38,15 @@ class RegistrationSignUp extends QUI\Control
             'Registrar'          => false, // currently executed Registrar
             'content'            => '',    // right content
             'registration-trial' => false, // use registration trial
-            'header'             => true   // how header title
+            'header'             => true,   // how header title
+            'autofill'           => true
         ]);
 
         $this->setAttributes($attributes);
 
         $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
 
-        $this->addCSSFile(\dirname(__FILE__) . '/RegistrationSignUp.css');
+        $this->addCSSFile(\dirname(__FILE__).'/RegistrationSignUp.css');
         $this->addCSSClass('quiqqer-fu-registrationSignUp');
 
         $this->setJavaScriptControl(
@@ -118,7 +119,7 @@ class RegistrationSignUp extends QUI\Control
         ]);
 
         $Engine->assign([
-            'captchaHTML' => $Engine->fetch(\dirname(__FILE__) . '/RegistrationSignUp.Captcha.html')
+            'captchaHTML' => $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.Captcha.html')
         ]);
 
         // default stuff
@@ -184,7 +185,7 @@ class RegistrationSignUp extends QUI\Control
                 case 'userdelete':
                     $msgSuccess = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
-                        'RegistrationSignUp.message.success.' . $_GET['success']
+                        'RegistrationSignUp.message.success.'.$_GET['success']
                     );
 
                     $showLoggedInWarning = false;
@@ -199,7 +200,7 @@ class RegistrationSignUp extends QUI\Control
                 case 'userdelete':
                     $msgError = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
-                        'RegistrationSignUp.message.error.' . $_GET['error']
+                        'RegistrationSignUp.message.error.'.$_GET['error']
                     );
 
                     $showLoggedInWarning = false;
@@ -232,7 +233,7 @@ class RegistrationSignUp extends QUI\Control
             'redirect'            => $redirect
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__) . '/RegistrationSignUp.html');
+        return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');
     }
 
     /**
