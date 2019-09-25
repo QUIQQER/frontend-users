@@ -29,7 +29,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
         options: {
             emailisusername: false,  // checks for existing username if only email field is enabled
-            usecaptcha     : false  // Captcha is used
+            usecaptcha     : false,  // Captcha is used
+            noBlurCheck    : true
         },
 
         Binds: [
@@ -53,6 +54,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
         $onImport: function () {
             var Elm  = this.getElm();
             var self = this;
+
+            Elm.set('data-quiid', this.getId());
 
             // Address input
             var AddressElm = Elm.getElement(
@@ -143,6 +146,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             if (EmailInput) {
                 EmailInput.addEvents({
                     blur: function (event) {
+                        if (self.getAttribute('noBlurCheck')) {
+                            return;
+                        }
+
                         var value         = event.target.value;
                         var checkPromises = [
                             Registration.emailValidation(value)

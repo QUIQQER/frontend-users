@@ -60,7 +60,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         /**
          * event: on import
          */
-        $onImport: function () {
+        $onImport: function (onInject) {
             var self = this,
                 Node = this.getElm();
 
@@ -148,7 +148,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             this.$initMail();
             this.$initCaptcha();
 
-            this.fireEvent('loaded', [this]);
+            if (typeof onInject !== 'undefined' && onInject) {
+                this.$loaded = true;
+                this.fireEvent('loaded', [this]);
+            }
         },
 
         /**
@@ -169,7 +172,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 self.$RegistrationSection.set('html', Control.get('html'));
 
                 QUI.parse(self.$RegistrationSection).then(function () {
-                    self.$onImport();
+                    self.$onImport(true);
 
                     self.$TextSection.setStyles({
                         height: null,
@@ -179,6 +182,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     moofx(self.$RegistrationSection).animate({
                         opacity: 1
                     });
+
+                    self.$loaded = true;
+                    self.fireEvent('loaded', [this]);
                 });
             }, {
                 'package': 'quiqqer/frontend-users',
@@ -639,6 +645,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 mailTimeout = null;
 
             EmailField.addEvent('blur', function () {
+                if (EmailField.get('data-no-blur-check')) {
+                    return;
+                }
+                
                 if (mailTimeout) {
                     clearTimeout(mailTimeout);
                 }
