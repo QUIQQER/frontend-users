@@ -728,6 +728,15 @@
 
     <groups name="quiqqer/frontend-users" datatype="php">
 
+        <locale name="verification.ActivationVerification.success">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert!]]></de>
+            <en><![CDATA[Your user account has been activated successfully!]]></en>
+        </locale>
+        <locale name="verification.ActivationVerification.success_send_password">
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert! Sie erhalten nun Ihre Zugangsdaten per E-Mail .]]></de>
+            <en><![CDATA[Your user account has been activated successfully! You will now receive your login credentaisl via e-mail.]]></en>
+        </locale>
+
         <!-- Control: RegistrationSignUp -->
         <locale name="RegistrationSignUp.message.success.activation">
             <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können Sich nun einloggen.]]></de>
@@ -743,7 +752,7 @@
         </locale>
         <locale name="RegistrationSignUp.message.success.userdelete">
             <de><![CDATA[Ihre Benutzerkonto wurde erfolgreich gelöscht.]]></de>
-            <en><![CDATA[Your user account has been successfully.]]></en>
+            <en><![CDATA[Your user account has been successfully deleted.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.activation">
             <de><![CDATA[Leider hat ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>

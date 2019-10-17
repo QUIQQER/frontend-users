@@ -66,7 +66,15 @@ class ActivationVerification extends AbstractVerification
      */
     public function getSuccessMessage()
     {
-        return '';
+        $registrationSetting = Handler::getInstance()->getRegistrationSettings();
+
+        if (!empty($registrationSetting['sendPassword'])) {
+            $var = 'verification.ActivationVerification.success_send_password';
+        } else {
+            $var = 'verification.ActivationVerification.success';
+        }
+
+        return QUI::getLocale()->get('quiqqer/frontend-users', $var);
     }
 
     /**
