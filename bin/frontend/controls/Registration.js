@@ -155,8 +155,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     Elm.set('html', Registration.get('html'));
 
                     QUI.parse(Elm).then(function () {
-                        if (Elm.getElement('.quiqqer-frontendUsers-success') ||
-                            Elm.getElement('.quiqqer-frontendUsers-pending')) {
+                        if (Elm.getElement('.content-message-success') ||
+                            Elm.getElement('.content-message-attention')) {
 
                             self.fireEvent('register', [self]);
                             QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self]);

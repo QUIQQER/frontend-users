@@ -335,9 +335,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 Login.destroy();
                             }
 
-                            if (Ghost.getElement('.quiqqer-frontendUsers-error')) {
+                            if (Ghost.getElement('.content-message-error')) {
                                 Section.set('html', '');
-                                Ghost.getElement('.quiqqer-frontendUsers-error').inject(Section);
+                                Ghost.getElement('.content-message-error').inject(Section);
                             } else if (Registration) {
                                 Section.set('html', Registration.get('html'));
                             } else {
@@ -345,15 +345,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             }
 
                             QUI.parse(Section).then(function () {
-                                if (Section.getElement('.quiqqer-frontendUsers-success') ||
-                                    Section.getElement('.quiqqer-frontendUsers-pending')) {
+                                if (Section.getElement('.content-message-success') ||
+                                    Section.getElement('.content-message-attention')) {
 
                                     self.fireEvent('register', [self]);
                                     QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self]);
                                 }
 
-                                if (Section.getElement('.quiqqer-frontendUsers-success')) {
-                                    var html = Section.getElement('.quiqqer-frontendUsers-success').get('html').trim();
+                                if (Section.getElement('.content-message-success')) {
+                                    var html = Section.getElement('.content-message-success').get('html').trim();
 
                                     if (html === '') {
                                         window.location.reload();
@@ -366,7 +366,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                     window.location = Redirect.get('data-url');
                                 }
 
-                                if (Section.getElement('.quiqqer-frontendUsers-error')) {
+                                if (Section.getElement('.content-message-error')) {
                                     (function () {
                                         self.$onInject();
                                     }).delay(5000);
@@ -798,7 +798,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     Form.get('data-registration_id'),
                     formData
                 ).then(function () {
-                    if (self.getElm().getElement('.quiqqer-frontendUsers-error')) {
+                    if (self.getElm().getElement('.content-message-error')) {
                         (function () {
                             moofx(self.$RegistrationSection).animate({
                                 opacity: 0
