@@ -15,7 +15,7 @@
     <div class="quiqqer-frontendUsers-redirect" data-url="{$redirectUrl}" data-instant="{if $instantRedirect}1{else}0{/if}">
         {if !$instantRedirect}
         <a href="{$redirectUrl}">
-            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
+            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
         </a>
         {/if}
     </div>

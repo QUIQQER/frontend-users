@@ -211,7 +211,8 @@ class RegistrationSignUp extends QUI\Control
         // Auto-redirect
         $redirect             = false;
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $projectLang          = $Project = QUI::getRewrite()->getProject()->getLang();
+        $Project              = QUI::getRewrite()->getProject();
+        $projectLang          = $Project->getLang();
 
         if ($activationSuccess && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -219,6 +220,24 @@ class RegistrationSignUp extends QUI\Control
             );
 
             $redirect = $RedirectSite->getUrlRewrittenWithHost();
+        }
+
+        // Collect links that are presented to the user after successful activation
+        $nextLinksText = false;
+
+        if ($activationSuccess) {
+            $nextLinks = [];
+
+            $StartSite   = $Project->get(1);
+            $nextLinks[] = '<a href="'.$StartSite->getUrlRewrittenWithHost().'">'.$StartSite->getAttribute('title').'</a>';
+
+            $ProfileSite = QUI\FrontendUsers\Handler::getInstance()->getProfileSite($Project);
+
+            if ($ProfileSite) {
+                $nextLinks[] = '<a href="'.$ProfileSite->getUrlRewrittenWithHost().'">'.$ProfileSite->getAttribute('title').'</a>';
+            }
+
+            $nextLinksText = implode(' | ', $nextLinks);
         }
 
         $Engine->assign([
@@ -230,7 +249,9 @@ class RegistrationSignUp extends QUI\Control
             'showLoggedInWarning' => $showLoggedInWarning,
             'msgSuccess'          => $msgSuccess,
             'msgError'            => $msgError,
-            'redirect'            => $redirect
+            'redirect'            => $redirect,
+            'isLoggedIn'          => $isLoggedIn,
+            'nextLinksText'       => $nextLinksText
         ]);
 
         return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');

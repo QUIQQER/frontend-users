@@ -75,8 +75,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 var redirectUrl = Redirect.get('data-redirecturl');
 
                 (function () {
-                    window.location = redirectUrl;
-                }).delay(5000);
+                    //window.location = redirectUrl;
+                }).delay(10000);
             }
 
             // if user, sign in is not possible
