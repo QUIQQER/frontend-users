@@ -102,7 +102,13 @@ class ActivationVerification extends AbstractVerification
         );
 
         if (empty($RegistrationSite)) {
-            return false;
+            $RegistrationSite = $RegistrarHandler->getRegistrationSite(
+                $this->getProject()
+            );
+
+            if (empty($RegistrationSite)) {
+                return false;
+            }
         }
 
         return $RegistrationSite->getUrlRewritten([], [
@@ -114,15 +120,23 @@ class ActivationVerification extends AbstractVerification
      * Automatically redirect the user to this URL on unsuccessful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws \QUI\Exception
      */
     public function getOnErrorRedirectUrl()
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
-            QUI::getRewrite()->getProject()
+        $RegistrarHandler = Handler::getInstance();
+        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
+            $this->getProject()
         );
 
-        if (!$RegistrationSite) {
-            return false;
+        if (empty($RegistrationSite)) {
+            $RegistrationSite = $RegistrarHandler->getRegistrationSite(
+                $this->getProject()
+            );
+
+            if (empty($RegistrationSite)) {
+                return false;
+            }
         }
 
         return $RegistrationSite->getUrlRewritten([], [

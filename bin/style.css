@@ -1,38 +1,3 @@
-.quiqqer-frontendUsers-error {
-    background: #F2D4CE;
-    border: 1px solid #AE432E;
-    clear: both;
-    margin: 10px auto;
-    padding: 10px;
-    position: relative;
-    width: 80%
-}
-
-.quiqqer-frontendUsers-info {
-    background: #CEE6F2;
-    border: 1px solid #058DC7;
-    clear: both;
-    margin: 10px auto;
-    padding: 10px;
-    position: relative;
-    width: 80%
-}
-
-.quiqqer-frontendUsers-success {
-    background: #D9E6C3;
-    border: 1px solid #77AB13;
-    clear: both;
-    margin: 10px auto;
-    padding: 10px;
-    position: relative;
-    width: 80%
-}
-
-.quiqqer-frontendUsers-info p,
-.quiqqer-frontendUsers-error p {
-    margin: 0;
-}
-
 .quiqqer-frontendUsers__hidden {
     display: none;
 }

@@ -7,7 +7,7 @@
 </noscript>
 
 {if $success}
-<div class="quiqqer-frontendUsers-success">
+<div class="content-message-success">
     {if !$instantRedirect}
         {$Registrar->getSuccessMessage()}
     {/if}
@@ -15,7 +15,7 @@
     <div class="quiqqer-frontendUsers-redirect" data-url="{$redirectUrl}" data-instant="{if $instantRedirect}1{else}0{/if}">
         {if !$instantRedirect}
         <a href="{$redirectUrl}">
-            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect"}
+            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
         </a>
         {/if}
     </div>
@@ -28,7 +28,7 @@
 {template_event name="quiqqer::frontendUsers::registrationSuccess"}
 
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
-<div class="quiqqer-frontendUsers-pending">
+<div class="content-message-attention">
     {$Registrar->getPendingMessage()}
 </div>
 
@@ -36,7 +36,7 @@
 
 {else}
     {if isset($error) && !$redirectUrl}
-    <div class="quiqqer-frontendUsers-error">
+    <div class="content-message-error">
         {$error}
     </div>
 
@@ -46,7 +46,7 @@
 
     {if !isset($isGeneralError)}
         {if $Registrars->isEmpty()}
-        <div class="quiqqer-frontendUsers-info">
+        <div class="content-message-information">
             {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
         </div>
         {else}

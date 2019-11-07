@@ -22,16 +22,20 @@
         {$msgSuccess}
         {if $redirect}
         <span data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect">
-            {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.redirect"}
+            {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.redirect" url=$redirect}
             </span>
+        {elseif $nextLinksText}
+        <p class="quiqqer-fu-registrationSignUp-registration-nextlinks">
+            {$nextLinksText}
+        </p>
         {/if}
+
     </div>
     {elseif $msgError}
     <div class="message-error">
         {$msgError}
     </div>
-    {/if}
-
+    {else}
     <div class="quiqqer-fu-registrationSignUp-registration-social">
         {foreach $Registrars as $Registrar}
         <form action=""
@@ -131,6 +135,7 @@
         </span>
         <div class="quiqqer-fu-registrationSignUp-terms-buttons"></div>
     </div>
+    {/if}
     {/if}
 </section>
 

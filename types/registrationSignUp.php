@@ -108,14 +108,13 @@ if (!$Logo) {
     $Logo = $Site->getProject()->getMedia()->getLogoImage();
 }
 
-
 $Engine->assign([
     'Registration' => $Registration,
     'Background'   => $Background,
     'Logo'         => $Logo,
-    'logoUrl'      => $logoUrl
+    'logoUrl'      => $logoUrl,
+    'fullscreen'   => !!$Site->getAttribute('quiqqer.sign.up.fullscreen')
 ]);
-
 
 /**
  * Links

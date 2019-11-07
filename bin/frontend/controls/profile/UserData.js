@@ -133,8 +133,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
          */
         $showEmailErrorMsg: function (msg) {
             if (!this.$EmailErrorMsgElm) {
-                this.$EmailErrorMsgElm = new Element('span', {
-                    'class': 'quiqqer-frontendUsers-error'
+                this.$EmailErrorMsgElm = new Element('div', {
+                    'class': 'content-message-error'
                 }).inject(this.getElm().getElement('input[name="emailNew"]'), 'after');
             }
 

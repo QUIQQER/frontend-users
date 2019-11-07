@@ -3,33 +3,35 @@ function signUpOnLoad() {
 
     var Button = document.getElement('button[name="registration-sign-in-login-button"]');
 
-    require([
-        'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
-    ], function (Login) {
-        Button.addEvent('click', function () {
-            new Login({
-                events: {
-                    onClose: function () {
-                        window.location.hash = '';
-                    },
+    if (Button) {
+        require([
+            'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
+        ], function (Login) {
+            Button.addEvent('click', function () {
+                new Login({
+                    events: {
+                        onClose: function () {
+                            window.location.hash = '';
+                        },
 
-                    onOpen: function () {
-                        window.location.hash = '#login';
+                        onOpen: function () {
+                            window.location.hash = '#login';
+                        }
                     }
-                }
-            }).open();
+                }).open();
+            });
+
+            Button.set('disabled', false);
+
+            if (window.QUIQQER_USER.id) {
+                Button.setStyle('display', 'none');
+            }
+
+            if (window.location.hash === '#login') {
+                Button.click();
+            }
         });
-
-        Button.set('disabled', false);
-
-        if (window.QUIQQER_USER.id) {
-            Button.setStyle('display', 'none');
-        }
-
-        if (window.location.hash === '#login') {
-            Button.click();
-        }
-    });
+    }
 
     require(['qui/QUI'], function (QUI) {
         var Container        = document.getElement('.registration-sign-in-container');

@@ -507,10 +507,9 @@
             <de><![CDATA[Adresse]]></de>
             <en><![CDATA[Address]]></en>
         </locale>
-        <locale name="control.registration.auto_redirect">
-            <de>
-                <![CDATA[Sie werden automatisch weitergeleitet. Sollte die Weiterleitung nicht funktionieren, klicken Sie bitte hier.]]></de>
-            <en><![CDATA[You will be automatically redirected. If the redirect does not work, please click here.]]></en>
+        <locale name="control.registration.auto_redirect" html="true">
+            <de><![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
+            <en><![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
         </locale>
         <locale name="control.registration.registration_disabled">
             <de><![CDATA[Eine Registrierung ist zur Zeit nicht möglich.]]></de>
@@ -755,7 +754,7 @@
             <en><![CDATA[Your user account has been successfully deleted.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.activation">
-            <de><![CDATA[Leider hat ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <de><![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
             <en><![CDATA[Unfortunately an error occurred during the activation of your user account. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.emailconfirm">
@@ -767,8 +766,8 @@
             <en><![CDATA[Unfortunately an error occurred when deleting your user account. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.redirect">
-            <de><![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet.]]></de>
-            <en><![CDATA[You will be automatically redirected in a few seconds.]]></en>
+            <de><![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
+            <en><![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
         </locale>
 
         <locale name="message.UserDeleteConfirmVerification.success">
@@ -1381,7 +1380,7 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Sign In]]></en>
         </locale>
         <locale name="admin.types.registrationSignUp.setting.background">
-            <de><![CDATA[Hintergrund Bild]]></de>
+            <de><![CDATA[Hintergrundbild]]></de>
             <en><![CDATA[Background image]]></en>
         </locale>
         <locale name="admin.types.registrationSignUp.setting.registrars">
@@ -1394,11 +1393,11 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         </locale>
         <locale name="admin.types.registrationSignUp.setting.logoUrl.description">
             <de><![CDATA[
-            Bestimme welche URL bei dem Logo per Klick verwendet werden soll.
-            Wenn die Einstellung leer ist, wird zur Hauptseite weitergeleitet
+            Bestimmt, welche URL bei Klick auf das Logo aufgerufen wird.
+            Wenn die Einstellung leer ist, wird zur Hauptseite weitergeleitet.
             ]]></de>
             <en><![CDATA[
-            Determine which URL should be used for the logo per click.
+            Determines which URL is opened when clicking the logo.
             If the setting is empty, you will be redirected to the main page.
             ]]></en>
         </locale>
@@ -1408,13 +1407,21 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         </locale>
         <locale name="admin.types.registrationSignUp.setting.logo.description">
             <de><![CDATA[
-            Bestimme welches bei der Registrierung verwendet werden soll. Dies kann separat zum Projektlogo bestimmt werden.
+            Bestimmt, welches Logo bei der Registrierung verwendet werden soll. Dies kann separat zum Projektlogo bestimmt werden.
             Wenn die Einstellung leer ist, wird das Projektlogo verwendet.
             ]]></de>
             <en><![CDATA[
-            Specify which should be used at the sign up. This can be set separately to the project logo.
+            Specify which logo should be used at the sign up. This can be set separately to the project logo.
             If the setting is empty, the project logo will be used.
             ]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.fullscreen">
+            <de><![CDATA[Vollbild-Anzeige]]></de>
+            <en><![CDATA[Fullscreen view]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.fullscreen.description">
+            <de><![CDATA[Die Registrierung soll im gesamten Viewport angezeigt werden und alle anderen Elemente der Seite überdecken. Ein Login-Button wird oben rechts angezeigt.]]></de>
+            <en><![CDATA[The registration should be displayed in the entire viewport and cover all other elements of the page. A login button will be shown at the top right.]]></en>
         </locale>
 
         <locale name="control.login.forgotten.password">

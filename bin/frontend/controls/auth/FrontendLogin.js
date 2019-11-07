@@ -82,7 +82,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                                 MsgElm.set('html', '');
 
                                 new Element('div', {
-                                    'class': 'quiqqer-frontendUsers-error',
+                                    'class': 'content-message-error',
                                     html   : error.getMessage()
                                 }).inject(MsgElm);
                         }
@@ -109,7 +109,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                 self.Loader.hide();
 
                 var InfoElm = new Element('div', {
-                    'class': 'quiqqer-frontendUsers-info',
+                    'class': 'content-message-information',
                     html   : QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.user_not_active')
                 }).inject(MsgElm);
 
