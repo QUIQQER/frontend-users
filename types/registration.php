@@ -90,22 +90,15 @@ if ($loggedIn && (!$Registrar || $status === 'error')) {
     }
 }
 
-if (!$Registrar) {
-    $Engine->assign('msg', QUI::getLocale()->get(
-        'quiqqer/frontend-users',
-        'message.types.registration.not.possible'
-    ));
-} else {
-    /**
-     * User Registration
-     */
-    $Registration = new QUI\FrontendUsers\Controls\Registration([
-        'status'    => $status,
-        'Registrar' => $Registrar
-    ]);
+/**
+ * User Registration
+ */
+$Registration = new QUI\FrontendUsers\Controls\Registration([
+    'status'    => $status,
+    'Registrar' => $Registrar
+]);
 
-    $Engine->assign([
-        'Registration' => $Registration,
-        'User'         => QUI::getUserBySession()
-    ]);
-}
+$Engine->assign([
+    'Registration' => $Registration,
+    'User'         => QUI::getUserBySession()
+]);
