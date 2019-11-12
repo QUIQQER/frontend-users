@@ -45,7 +45,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         $onImport: function () {
             var Elm = this.getElm();
 
-            var SubmitBtn = Elm.getElement('button[class="quiqqer-frontendUsers-saveButton"]'),
+            var SubmitBtn = Elm.getElement('button.quiqqer-frontendUsers-saveButton'),
                 confirmed = false;
 
             if (!SubmitBtn) {
