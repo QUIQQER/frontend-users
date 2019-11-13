@@ -83,8 +83,8 @@ function signUpOnLoad() {
 
     var SignInLinks = document.getElements('.registration-sign-in-links');
 
-    if (SignInLinks) {
-        SignInLinks.getElements('a').addEvent('click', function (event) {
+    if (SignInLinks && SignInLinks.getElements('a').length) {
+        var socialClick = function (event) {
             event.stop();
 
             var Target = event.target;
@@ -108,6 +108,10 @@ function signUpOnLoad() {
                     id             : sideId
                 }).open();
             });
+        };
+
+        SignInLinks.getElements('a').forEach(function(Link) {
+            Link.addEvent('click', socialClick);
         });
     }
 }

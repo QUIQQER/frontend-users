@@ -75,7 +75,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 var redirectUrl = Redirect.get('data-redirecturl');
 
                 (function () {
-                    //window.location = redirectUrl;
+                    window.location = redirectUrl;
                 }).delay(10000);
             }
 
@@ -130,19 +130,21 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             Node.getElements('.quiqqer-fu-registrationSignUp-terms a').set('target', '_blank');
 
             // social login click
-            this.$SocialLogins.getElements(
-                '.quiqqer-fu-registrationSignUp-registration-social-entry'
-            ).addEvent('click', function (event) {
-                var Target = event.target;
+            if (this.$SocialLogins) {
+                this.$SocialLogins.getElements(
+                    '.quiqqer-fu-registrationSignUp-registration-social-entry'
+                ).addEvent('click', function (event) {
+                    var Target = event.target;
 
-                if (!Target.hasClass('quiqqer-fu-registrationSignUp-registration-social-entry')) {
-                    Target = Target.getParent('.quiqqer-fu-registrationSignUp-registration-social-entry');
-                }
+                    if (!Target.hasClass('quiqqer-fu-registrationSignUp-registration-social-entry')) {
+                        Target = Target.getParent('.quiqqer-fu-registrationSignUp-registration-social-entry');
+                    }
 
-                self.loadSocialRegistration(
-                    Target.get('data-registrar')
-                );
-            });
+                    self.loadSocialRegistration(
+                        Target.get('data-registrar')
+                    );
+                });
+            }
 
             // init
             this.$initMail();
@@ -648,7 +650,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 if (EmailField.get('data-no-blur-check')) {
                     return;
                 }
-                
+
                 if (mailTimeout) {
                     clearTimeout(mailTimeout);
                 }
