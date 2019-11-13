@@ -75,7 +75,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 var redirectUrl = Redirect.get('data-redirecturl');
 
                 (function () {
-                    //window.location = redirectUrl;
+                    window.location = redirectUrl;
                 }).delay(10000);
             }
 
@@ -650,7 +650,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 if (EmailField.get('data-no-blur-check')) {
                     return;
                 }
-                
+
                 if (mailTimeout) {
                     clearTimeout(mailTimeout);
                 }

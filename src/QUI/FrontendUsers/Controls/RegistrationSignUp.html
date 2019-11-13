@@ -139,7 +139,7 @@
     {/if}
 </section>
 
-{if $this->getAttribute('content') !== false}
+{if !empty($this->getAttribute('content'))}
 <section class="quiqqer-fu-registrationSignUp-info" style="display: none">
     {$this->getAttribute('content')}
 </section>
