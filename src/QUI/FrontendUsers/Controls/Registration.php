@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
+use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Projects\Site\Utils as QUISiteUtils;
 use QUI\FrontendUsers\RegistrarCollection;
 
@@ -159,6 +160,29 @@ class Registration extends QUI\Control
             }
         }
 
+        // Behaviour if user is already logged in
+        $loggedIn = boolval(QUI::getUserBySession()->getId());
+
+        if (!$success && $loggedIn) {
+            switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
+                case 'showProfile':
+                    $ProfileSite = $RegistrarHandler->getProfileSite(QUI::getRewrite()->getProject());
+
+                    if ($ProfileSite) {
+                        header('Location: '.$ProfileSite->getUrlRewritten());
+                        exit;
+                    }
+                    break;
+
+                case 'showMessage':
+                    $Engine->assign('error', QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'message.types.registration.already_registered'
+                    ));
+                    break;
+            }
+        }
+
         // determine if Login control is shown
         $Login = false;
 
@@ -262,7 +286,8 @@ class Registration extends QUI\Control
             'termsOfUseRequired'  => $termsOfUseRequired,
             'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
             'registrationId'      => $this->id,
-            'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle')
+            'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle'),
+            'nextLinksText'       => $success ? RegistrationUtils::getFurtherLinksText() : false
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Registration.html');
@@ -325,15 +350,15 @@ class Registration extends QUI\Control
             return $Registrar;
         }
 
-        if (!isset($_POST['registration'])) {
+//        if (!isset($_POST['registration'])) {
+//            return false;
+//        }
+
+        if (empty($_REQUEST['registrar'])) {
             return false;
         }
 
-        if (!isset($_POST['registrar'])) {
-            return false;
-        }
-
-        $Registrar = $FrontendUsers->getRegistrarByHash($_POST['registrar']);
+        $Registrar = $FrontendUsers->getRegistrarByHash($_REQUEST['registrar']);
 
         if (!$Registrar) {
             return false;

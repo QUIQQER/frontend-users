@@ -65,31 +65,6 @@ if (!empty($_REQUEST['registrar'])) {
     }
 }
 
-// Behaviour if user is already logged in
-$loggedIn = boolval(QUI::getUserBySession()->getId());
-
-if ($loggedIn && (!$Registrar || $status === 'error')) {
-    $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
-
-    switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
-        case 'showProfile':
-            $ProfileSite = $FrontendUsersHandler->getProfileSite($Site->getProject());
-
-            if ($ProfileSite) {
-                header('Location: '.$ProfileSite->getUrlRewritten());
-                exit;
-            }
-            break;
-
-        case 'showMessage':
-            $Engine->assign('msg', QUI::getLocale()->get(
-                'quiqqer/frontend-users',
-                'message.types.registration.already_registered'
-            ));
-            break;
-    }
-}
-
 /**
  * User Registration
  */

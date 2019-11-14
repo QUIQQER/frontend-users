@@ -14,11 +14,13 @@
     {if $redirectUrl}
     <div class="quiqqer-frontendUsers-redirect" data-url="{$redirectUrl}" data-instant="{if $instantRedirect}1{else}0{/if}">
         {if !$instantRedirect}
-        <a href="{$redirectUrl}">
             {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
-        </a>
         {/if}
     </div>
+    {elseif $nextLinksText}
+    <p class="quiqqer-frontendUsers-controls-registration-nextlinks">
+        {$nextLinksText}
+    </p>
     {/if}
 </div>
     {if $Login}
