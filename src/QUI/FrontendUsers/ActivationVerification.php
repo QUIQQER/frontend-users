@@ -111,8 +111,11 @@ class ActivationVerification extends AbstractVerification
             }
         }
 
-        return $RegistrationSite->getUrlRewritten([], [
-            'success' => 'activation'
+        return $RegistrationSite->getUrlRewritten([
+            'success'
+        ], [
+            'success'   => 'activation',
+            'registrar' => $this->getRegistrarHash()
         ]);
     }
 
@@ -139,8 +142,11 @@ class ActivationVerification extends AbstractVerification
             }
         }
 
-        return $RegistrationSite->getUrlRewritten([], [
-            'error' => 'activation'
+        return $RegistrationSite->getUrlRewritten([
+            'error'
+        ], [
+            'error'     => 'activation',
+            'registrar' => $this->getRegistrarHash()
         ]);
     }
 

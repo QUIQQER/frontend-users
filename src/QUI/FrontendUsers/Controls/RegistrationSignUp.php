@@ -7,6 +7,7 @@
 namespace QUI\FrontendUsers\Controls;
 
 use QUI;
+use QUI\FrontendUsers\RegistrationUtils;
 
 /**
  * Class RegistrationSignUp
@@ -248,24 +249,6 @@ class RegistrationSignUp extends QUI\Control
             $redirect = $RedirectSite->getUrlRewrittenWithHost();
         }
 
-        // Collect links that are presented to the user after successful activation
-        $nextLinksText = false;
-
-        if ($activationSuccess) {
-            $nextLinks = [];
-
-            $StartSite   = $Project->get(1);
-            $nextLinks[] = '<a href="'.$StartSite->getUrlRewrittenWithHost().'">'.$StartSite->getAttribute('title').'</a>';
-
-            $ProfileSite = QUI\FrontendUsers\Handler::getInstance()->getProfileSite($Project);
-
-            if ($ProfileSite) {
-                $nextLinks[] = '<a href="'.$ProfileSite->getUrlRewrittenWithHost().'">'.$ProfileSite->getAttribute('title').'</a>';
-            }
-
-            $nextLinksText = implode(' | ', $nextLinks);
-        }
-
         $Engine->assign([
             'this'                => $this,
             'Registrars'          => $Registrars,
@@ -277,7 +260,8 @@ class RegistrationSignUp extends QUI\Control
             'msgError'            => $msgError,
             'redirect'            => $redirect,
             'isLoggedIn'          => $isLoggedIn,
-            'nextLinksText'       => $nextLinksText
+            'nextLinksText'       => $activationSuccess ? RegistrationUtils::getFurtherLinksText() : false,
+            'showContent'         => !$msgSuccess && !$msgError
         ]);
 
         return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');

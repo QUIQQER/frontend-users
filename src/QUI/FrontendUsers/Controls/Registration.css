@@ -54,3 +54,7 @@
 .quiqqer-frontendUsers-controls-registration-termsOfUse label > input {
     float: left;
 }
+
+.quiqqer-frontendUsers-controls-registration-nextlinks {
+    margin: 10px 0 0 0 !important;
+}
