@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    {if isset($Site_Privacy) || isset($Site_TermsAndConditions)}
+    {if $fullscreen && (isset($Site_Privacy) || isset($Site_TermsAndConditions))}
     <div class="registration-sign-in-links">
         {if isset($Site_Privacy)}
         <a href="{url site=$Site_Privacy}" target="_blank" data-id="{$Site_Privacy->getId()}">
