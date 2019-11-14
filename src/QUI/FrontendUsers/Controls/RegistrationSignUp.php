@@ -183,9 +183,14 @@ class RegistrationSignUp extends QUI\Control
                     break;
                 case 'emailconfirm':
                 case 'userdelete':
+                    $startUrl = QUI::getRewrite()->getProject()->get(1)->getUrlRewrittenWithHost();
+
                     $msgSuccess = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
-                        'RegistrationSignUp.message.success.'.$_GET['success']
+                        'RegistrationSignUp.message.success.'.$_GET['success'],
+                        [
+                            'startUrl' => $startUrl
+                        ]
                     );
 
                     $showLoggedInWarning = false;
