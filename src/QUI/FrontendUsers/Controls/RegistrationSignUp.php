@@ -198,6 +198,27 @@ class RegistrationSignUp extends QUI\Control
             }
         }
 
+        // If this is not an activation process, determine what happens if the user is already
+        // logged in.
+        // Determine what happens if the user is already logged in
+        if (!$activationSuccess && $isLoggedIn) {
+            try {
+                $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
+                $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
+
+                if ($registrationSettings['visitRegistrationSiteBehaviour'] === 'showProfile') {
+                    $ProfileSite = $FrontendUsersHandler->getProfileSite(QUI::getRewrite()->getProject());
+
+                    if ($ProfileSite) {
+                        header('Location: '.$ProfileSite->getUrlRewritten());
+                        exit;
+                    }
+                }
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeDebugException($Exception);
+            }
+        }
+
         if (!empty($_GET['error'])) {
             switch ($_GET['error']) {
                 case 'activation':
