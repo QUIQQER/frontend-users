@@ -148,7 +148,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
         }
 
         return $RegistrationSite->getUrlRewritten([], [
-            'error' => 'emailconfirm'
+            'error' => 'userdelete'
         ]);
     }
 

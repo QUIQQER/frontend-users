@@ -750,8 +750,8 @@
             <en><![CDATA[Your e-mail address has been confirmed successfully.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.success.userdelete">
-            <de><![CDATA[Ihre Benutzerkonto wurde erfolgreich gelöscht.]]></de>
-            <en><![CDATA[Your user account has been successfully deleted.]]></en>
+            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich gelöscht.<br/><br/><a href="[startUrl]">Zurück zur Startseite</a>]]></de>
+            <en><![CDATA[Your user account has been successfully deleted.<br/><br/><a href="[startUrl]">Back to the start page</a>]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.activation">
             <de><![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
@@ -761,7 +761,7 @@
             <de><![CDATA[Leider ist bei der Bestätigung Ihres E-Mail-Adresse ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
             <en><![CDATA[Unfortunately, an error occurred when confirming your e-mail address. Please repeat the process.]]></en>
         </locale>
-        <locale name="RegistrationSignUp.message.errro.userdelete">
+        <locale name="RegistrationSignUp.message.error.userdelete">
             <de><![CDATA[Leider ist beim Löschen Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
             <en><![CDATA[Unfortunately an error occurred when deleting your user account. Please repeat the process.]]></en>
         </locale>
