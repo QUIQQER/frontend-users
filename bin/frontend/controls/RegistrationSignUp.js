@@ -13,10 +13,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
     'qui/utils/Form',
     'Ajax',
     'Locale',
-    'package/quiqqer/frontend-users/bin/Registration',
-    'package/quiqqer/controls/bin/site/Window'
 
-], function (QUI, QUIControl, QUIFormUtils, QUIAjax, QUILocale, Registration, QUISiteWindow) {
+    'package/quiqqer/frontend-users/bin/Registration',
+    'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
+
+    'package/quiqqer/controls/bin/site/Window',
+
+    'css!package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp.css'
+
+], function (QUI, QUIControl, QUIFormUtils, QUIAjax, QUILocale, Registration, QUILogin, QUISiteWindow) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -50,6 +55,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             this.$RegistrationSection = null;
             this.$captchaResponse     = false;
             this.$tooltips            = {};
+            this.$LoginControl        = null;
 
             this.addEvents({
                 onImport: this.$onImport,
@@ -646,34 +652,34 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             var self        = this,
                 mailTimeout = null;
 
-            EmailField.addEvent('blur', function () {
-                if (EmailField.get('data-no-blur-check')) {
-                    return;
-                }
-
-                if (mailTimeout) {
-                    clearTimeout(mailTimeout);
-                }
-
-                self.emailValidation(EmailField);
-            });
-
-            EmailField.addEvent('keyup', function (event) {
-                if (mailTimeout) {
-                    clearTimeout(mailTimeout);
-                }
-
-                // workaround
-                if (typeof event.code === 'undefined') {
-                    self.emailValidation(EmailField);
-                    event.stop();
-                    return;
-                }
-
-                mailTimeout = (function () {
-                    self.emailValidation(EmailField);
-                }).delay(2000);
-            });
+            //EmailField.addEvent('blur', function () {
+            //    if (EmailField.get('data-no-blur-check')) {
+            //        return;
+            //    }
+            //
+            //    if (mailTimeout) {
+            //        clearTimeout(mailTimeout);
+            //    }
+            //
+            //    self.emailValidation(EmailField);
+            //});
+            //
+            //EmailField.addEvent('keyup', function (event) {
+            //    if (mailTimeout) {
+            //        clearTimeout(mailTimeout);
+            //    }
+            //
+            //    // workaround
+            //    if (typeof event.code === 'undefined') {
+            //        self.emailValidation(EmailField);
+            //        event.stop();
+            //        return;
+            //    }
+            //
+            //    mailTimeout = (function () {
+            //        self.emailValidation(EmailField);
+            //    }).delay(2000);
+            //});
 
             EmailField.addEvent('keydown', function (event) {
                 if (event.key === 'enter') {
@@ -1124,6 +1130,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          */
         emailValidation: function (Field) {
             var value = Field.value;
+            var self  = this;
 
             var checkPromises = [
                 Registration.emailValidation(value)
@@ -1157,11 +1164,88 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     }
                 }
 
-                this.$handleInputValidation(
-                    Field,
-                    isValid,
-                    QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
-                );
+                //this.$handleInputValidation(
+                //    Field,
+                //    isValid,
+                //    QUILocale.get(lg, 'exception.registrars.email.email_already_exists')
+                //);
+
+                if (this.$LoginControl) {
+                    this.$LoginControl.destroy();
+                }
+
+                var RegistrationElm       = document.getElement('.quiqqer-fu-registrationSignUp-registration');
+                var RegistrationElmParent = RegistrationElm.getParent();
+                var RegistrationInfo      = document.getElement('.quiqqer-fu-registrationSignUp-info');
+
+                var RegistrationElmSize = RegistrationElm.getComputedSize();
+                var width               = RegistrationElmSize.width;
+                var height              = RegistrationElmSize.height;
+
+                RegistrationElm.getParent().setStyle('height', height);
+
+                moofx(
+                    RegistrationElm
+                ).animate({
+                    opacity: 0
+                }, {
+                    callback: function () {
+                        RegistrationInfo.setStyle('margin-left', width);
+                        RegistrationElm.setStyle('display', 'none');
+                    }
+                });
+
+                var loginHeight, LoginControlElm;
+
+                this.$LoginControl = new QUILogin({
+                    emailAddress: value,
+                    events      : {
+                        onLoadNoAnimation: function () {
+                            LoginControlElm.setStyle('display', null);
+                            LoginControlElm.addClass('quiqqer-fu-login-container-width');
+
+                            RegistrationInfo.setStyle('margin-left', null);
+
+                            loginHeight = LoginControlElm.getElement('.quiqqer-fu-login-container').getComputedSize().height;
+                            RegistrationElmParent.setStyle('height', loginHeight);
+
+                            // User info
+                            QUI.getMessageHandler().then(function (MH) {
+                                MH.addAttention(
+                                    QUILocale.get(lg, 'control.registration.sign.up.email_already_exists')
+                                );
+                            });
+                        },
+                        onLoad           : function (LoginControl) {
+                            RegistrationElmParent.setStyle('height', null);
+
+                            LoginControlElm.getElement('.quiqqer-fu-login-email-mailSection input[type="password"]').focus();
+
+                            var CloseBtn = new Element('span', {
+                                'class': 'fa fa-close quiqqer-fu-registrationSignUp-login-close',
+                                title  : QUILocale.get(lg, 'control.registration.sign.up.back_to_registration'),
+                                events : {
+                                    click: function () {
+                                        self.$LoginControl.destroy();
+                                        CloseBtn.destroy();
+
+                                        RegistrationElm.setStyle('display', '');
+
+                                        moofx(
+                                            RegistrationElm
+                                        ).animate({
+                                            opacity: 1
+                                        });
+                                    }
+
+                                }
+                            }).inject(LoginControl.getElm());
+                        }
+                    }
+                }).inject(RegistrationElm, 'before');
+
+                LoginControlElm = this.$LoginControl.getElm();
+                LoginControlElm.setStyle('display', 'none');
 
                 return isValid;
             }.bind(this));

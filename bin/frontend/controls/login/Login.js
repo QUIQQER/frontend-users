@@ -3,6 +3,7 @@
  * @author www.pcsg.de (Henning Leutz)
  *
  * @event onLoad [self]
+ * @event onLoadNoAnimation [self]
  * @event onAuthBegin [self]
  * @event onAuthNext [self]
  * @event onSuccess [self]
@@ -47,6 +48,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             header            : true,
             authenticators    : [],  // fixed list of authenticators shown
             mail              : true,
+            emailAddress      : '',
             passwordReset     : true,
             reload            : true,
             ownRedirectOnLogin: false // function
@@ -171,6 +173,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                         self.authByEmail();
                     });
 
+                var emailAddress = self.getAttribute('emailAddress');
+
+                if (emailAddress) {
+                    self.getElm()
+                        .getElement('form[name="quiqqer-fu-login-email"]')
+                        .getElement('input[name="username"]').value = emailAddress;
+
+                    self.getElm()
+                        .getElement('form[name="quiqqer-fu-login-email"]')
+                        .getElement('input[name="password"]').focus();
+                }
 
                 self.getElm()
                     .getElements('.quiqqer-fu-login-social-entry')
@@ -223,6 +236,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                         QUI.fireEvent('quiqqerUserAuthLoginLoad', [self]);
                     }
                 });
+
+                self.fireEvent('loadNoAnimation', [self]);
             });
         },
 
