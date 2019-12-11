@@ -1164,6 +1164,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     }
                 }
 
+                if (isValid) {
+                    return true;
+                }
+
                 //this.$handleInputValidation(
                 //    Field,
                 //    isValid,
@@ -1247,7 +1251,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 LoginControlElm = this.$LoginControl.getElm();
                 LoginControlElm.setStyle('display', 'none');
 
-                return isValid;
+                return false;
             }.bind(this));
         },
 
