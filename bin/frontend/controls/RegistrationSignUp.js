@@ -1185,8 +1185,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 var RegistrationElmSize = RegistrationElm.getComputedSize();
                 var width               = RegistrationElmSize.width;
                 var height              = RegistrationElmSize.height;
+                var infoMarginSet       = false;
 
-                RegistrationElm.getParent().setStyle('height', height);
+                RegistrationElmParent.setStyle('height', height);
 
                 moofx(
                     RegistrationElm
@@ -1194,7 +1195,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     opacity: 0
                 }, {
                     callback: function () {
-                        RegistrationInfo.setStyle('margin-left', width);
+                        if (!infoMarginSet) {
+                            RegistrationInfo.setStyle('margin-left', width);
+                            infoMarginSet = true;
+                        }
+
                         RegistrationElm.setStyle('display', 'none');
                     }
                 });
@@ -1209,6 +1214,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             LoginControlElm.addClass('quiqqer-fu-login-container-width');
 
                             RegistrationInfo.setStyle('margin-left', null);
+                            infoMarginSet = true;
 
                             loginHeight = LoginControlElm.getElement('.quiqqer-fu-login-container').getComputedSize().height;
                             RegistrationElmParent.setStyle('height', loginHeight);
