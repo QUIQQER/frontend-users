@@ -1,0 +1,24 @@
+.quiqqer-fu-registrationSignUp-login-close {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.quiqqer-fu-login-container > h2 {
+    text-align: center;
+}
+
+.quiqqer-fu-registrationSignUp {
+    transition: 0.5s all;
+}
+
+.quiqqer-fu-login-container-width {
+    width: 40%;
+}
+
+@media (max-width: 769px) {
+    .quiqqer-fu-login-container-width {
+        width: 100%;
+    }
+}
