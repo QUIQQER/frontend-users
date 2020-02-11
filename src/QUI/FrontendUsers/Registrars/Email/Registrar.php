@@ -33,6 +33,16 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $useAddress           = boolval($registrationSettings['addressInput']);
 
         /** @var QUI\Users\User $User */
+        $firstname = $this->getAttribute('firstname');
+        $lastname  = $this->getAttribute('lastname');
+
+        if (!empty($firstname)) {
+            $User->setAttribute('firstname', $firstname);
+        }
+
+        if (!empty($lastname)) {
+            $User->setAttribute('lastname', $lastname);
+        }
 
         // set e-mail address
         $User->setAttribute('email', $this->getAttribute('email'));
@@ -101,6 +111,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $Handler        = FrontendUsers\Handler::getInstance();
         $settings       = $Handler->getRegistrationSettings();
         $usernameInput  = $settings['usernameInput'];
+        $fullnameInput  = $settings['fullnameInput'];
         $usernameExists = QUI::getUsers()->usernameExists($username);
 
         $lg       = 'quiqqer/frontend-users';
@@ -131,6 +142,23 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                     $lgPrefix.'email_already_exists'
                 ]);
             }
+        }
+
+        // Fullname check
+        $firstname = $this->getAttribute('firstname');
+        $lastname  = $this->getAttribute('lastname');
+
+        switch ($fullnameInput) {
+            case $Handler::FULLNAME_INPUT_FIRSTNAME_REQUIRED:
+                if (empty($firstname)) {
+                    throw new FrontendUsers\Exception([$lg, $lgPrefix.'first_name_required']);
+                }
+                break;
+
+            case $Handler::FULLNAME_INPUT_FULLNAME_REQUIRED:
+                if (empty($firstname) || empty($lastname)) {
+                    throw new FrontendUsers\Exception([$lg, $lgPrefix.'full_name_required']);
+                }
         }
 
         try {

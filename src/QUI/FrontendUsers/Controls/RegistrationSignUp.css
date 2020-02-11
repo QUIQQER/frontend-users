@@ -184,7 +184,8 @@
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-email-passwordSection {
+.quiqqer-fu-registrationSignUp-email-passwordSection,
+.quiqqer-fu-registrationSignUp-email-fullnameSection {
     display: none;
     position: absolute;
     width: 100%;

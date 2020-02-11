@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\FrontendUsers\RegistrationUtils;
+use QUI\Utils\Security\Orthos;
 
 /**
  * Class RegistrationSignUp
@@ -249,6 +250,13 @@ class RegistrationSignUp extends QUI\Control
             $redirect = $RedirectSite->getUrlRewrittenWithHost();
         }
 
+        // Check values given via $_GET
+        $valueEmail = false;
+
+        if (!empty($_GET['email'])) {
+            $valueEmail = Orthos::clear($_GET['email']);
+        }
+
         $Engine->assign([
             'this'                => $this,
             'Registrars'          => $Registrars,
@@ -261,7 +269,9 @@ class RegistrationSignUp extends QUI\Control
             'redirect'            => $redirect,
             'isLoggedIn'          => $isLoggedIn,
             'nextLinksText'       => $activationSuccess ? RegistrationUtils::getFurtherLinksText() : false,
-            'showContent'         => !$msgSuccess && !$msgError
+            'showContent'         => !$msgSuccess && !$msgError,
+            'fullnameInput'       => $registrationSettings['fullnameInput'],
+            'valueEmail'          => $valueEmail
         ]);
 
         return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');

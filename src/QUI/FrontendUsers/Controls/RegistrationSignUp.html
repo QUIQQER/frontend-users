@@ -71,6 +71,7 @@
                     <span class="icon fa fa-envelope"></span>
                         <input type="email"
                                name="email"
+                               {if $valueEmail}value="{$valueEmail}"{/if}
                                required
                                {if $this->getAttribute('autocomplete')}autocomplete="email"{else}autocomplete="false"{/if}
                         />
@@ -93,7 +94,7 @@
                            value="{$RegistrationTrial->getHash()}"
                     />
                     {/if}
-                    <button type="submit" name="go-to-password">
+                    <button type="submit" name="email-next">
                         {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
                     </button>
                 </div>
@@ -101,6 +102,38 @@
 
             {if $useCaptcha && $isCaptchaInvisible === false}
                 {$captchaHTML}
+            {/if}
+
+            {if $fullnameInput !== 'none'}
+            <section class="quiqqer-fu-registrationSignUp-email-fullnameSection">
+                <label>
+                    <span class="label">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.firstname.title"}
+                    </span>
+                    <span class="field">
+                    <span class="icon fa fa-id-card-o"></span>
+                        <input type="text" name="firstname"{if $fullnameInput === 'firstname_required' || $fullnameInput === 'fullname_required'} data-required="1"{/if}/>
+                    </span>
+                </label>
+
+                {if $fullnameInput === 'fullname_optional' || fullname_optional === 'fullname_required'}
+                <label>
+                    <span class="label">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.lastname.title"}
+                    </span>
+                    <span class="field">
+                    <span class="icon fa fa-id-card-o"></span>
+                        <input type="text" name="lastname"{if $fullnameInput === 'fullname_required'} data-required="1"{/if}/>
+                    </span>
+                </label>
+                {/if}
+
+                <div class="quiqqer-fu-registrationSignUp-email-buttons">
+                    <button type="submit" name="fullname-next">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.fullname.next"}
+                    </button>
+                </div>
+            </section>
             {/if}
 
             <section class="quiqqer-fu-registrationSignUp-email-passwordSection">
