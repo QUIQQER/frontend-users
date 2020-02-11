@@ -78,6 +78,10 @@
                     <type><![CDATA[string]]></type>
                     <defaultvalue><![CDATA[none]]></defaultvalue>
                 </conf>
+                <conf name="fullnameInput">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue><![CDATA[none]]></defaultvalue>
+                </conf>
                 <conf name="addressInput">
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
@@ -328,6 +332,30 @@
                             </option>
                             <option value="required">
                                 <locale group="quiqqer/frontend-users" var="settings.usernameInput.option.required"/>
+                            </option>
+                        </select>
+
+                        <select conf="registration.fullnameInput">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.description"/>
+                            </description>
+                            <option value="none">
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.option.none"/>
+                            </option>
+                            <option value="firstname_optional">
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.option.firstname_optional"/>
+                            </option>
+                            <option value="firstname_required">
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.option.firstname_required"/>
+                            </option>
+                            <option value="fullname_optional">
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.option.fullname_optional"/>
+                            </option>
+                            <option value="fullname_required">
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.option.fullname_required"/>
                             </option>
                         </select>
 

@@ -352,7 +352,6 @@ class Events
                                     reload: false,
                                     events: {
                                         onCancel: function() {
-                                            console.log('cancel');
                                             window.location.reload();
                                         },
                                         

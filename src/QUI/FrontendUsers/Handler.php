@@ -48,6 +48,15 @@ class Handler extends Singleton
     const USERNAME_INPUT_REQUIRED = 'required';
 
     /**
+     * Full name input types
+     */
+    const FULLNAME_INPUT_NONE               = 'none';
+    const FULLNAME_INPUT_FIRSTNAME_OPTIONAL = 'firstname_optional';
+    const FULLNAME_INPUT_FIRSTNAME_REQUIRED = 'firstname_required';
+    const FULLNAME_INPUT_FULLNAME_OPTIONAL  = 'fullname_optional';
+    const FULLNAME_INPUT_FULLNAME_REQUIRED  = 'fullname_required';
+
+    /**
      * Site types
      */
     const SITE_TYPE_REGISTRATION        = 'quiqqer/frontend-users:types/registration';

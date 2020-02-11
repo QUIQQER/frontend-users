@@ -131,7 +131,6 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
             });
 
             this.$Input.value = JSON.encode(values);
-            console.log(this.$Input.value);
         }
     });
 });
