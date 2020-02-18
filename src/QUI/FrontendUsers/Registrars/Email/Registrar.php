@@ -191,10 +191,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         // Address validation
         if ((int)$settings['addressInput']) {
-            foreach ($Handler->getAddressFieldSettings() as $field => $settings) {
+            foreach ($Handler->getAddressFieldSettings() as $field => $addressSettings) {
                 $val = $this->getAttribute($field);
 
-                if ($settings['required'] && empty($val)) {
+                if ($addressSettings['required'] && empty($val)) {
                     throw new FrontendUsers\Exception([
                         $lg,
                         $lgPrefix.'missing_address_fields'
