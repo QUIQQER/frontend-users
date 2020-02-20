@@ -872,4 +872,28 @@ class Handler extends Singleton
 
         return $registrationId;
     }
+
+    /**
+     * Get max length for each user attribute
+     *
+     * @return array
+     */
+    public function getUserAttributeLengthRestrictions()
+    {
+        return [
+            'firstname'  => 40,
+            'lastname'   => 40,
+            'email'      => 255,
+            'salutation' => 10,
+            'company'    => 100,
+            'street_no'  => 200,
+            'zip'        => 200,
+            'city'       => 200,
+            'country'    => 100,
+            'phone'      => 200,
+            'mobile'     => 200,
+            'fax'        => 200,
+            'password'   => 200
+        ];
+    }
 }

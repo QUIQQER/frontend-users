@@ -21,16 +21,16 @@ class Control extends QUI\Control
      *
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
-        $this->setAttributes(array(
-            'invalidFields' => array(),
+        $this->setAttributes([
+            'invalidFields' => [],
             'fields'        => $_POST
-        ));
+        ]);
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Control.css');
+        $this->addCSSFile(dirname(__FILE__).'/Control.css');
         $this->addCSSClass('quiqqer-registration');
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email');
     }
@@ -47,10 +47,10 @@ class Control extends QUI\Control
         $showAddress          = false;
         $usernameSetting      = $registrationSettings['usernameInput'];
 
-        $Engine->assign(array(
+        $Engine->assign([
             'invalidFields' => $this->getAttribute('invalidFields'),
             'fields'        => $this->getAttribute('fields')
-        ));
+        ]);
 
         // check if email is username
         if ($registrationSettings['usernameInput'] === $RegistrarHandler::USERNAME_INPUT_NONE) {
@@ -62,17 +62,18 @@ class Control extends QUI\Control
             $addressFields = $RegistrarHandler->getAddressFieldSettings();
 
             $Engine->assign('addressFields', $addressFields);
+            $Engine->assign('addressFieldLengths', $RegistrarHandler->getUserAttributeLengthRestrictions());
 
             if ($addressFields['country']['show']) {
-                $Engine->assign('CountrySelect', new CountrySelect(array(
+                $Engine->assign('CountrySelect', new CountrySelect([
                     'selected' => mb_strtoupper(QUI::getRewrite()->getProject()->getLang()),
                     'required' => $addressFields['country']['required'],
                     'class'    => 'quiqqer-registration-field-element',
                     'name'     => 'country'
-                )));
+                ]));
             }
 
-            $addressTemplate = $Engine->fetch(dirname(__FILE__) . '/Registration.Address.html');
+            $addressTemplate = $Engine->fetch(dirname(__FILE__).'/Registration.Address.html');
 
             foreach ($addressFields as $field) {
                 if ($field['required']) {
@@ -94,7 +95,7 @@ class Control extends QUI\Control
 
         $this->setJavaScriptControlOption('usecaptcha', $useCaptcha);
 
-        $Engine->assign(array(
+        $Engine->assign([
             'addressTemplate' => $addressTemplate,
             'showAddress'     => $showAddress,
             'usernameSetting' => $usernameSetting,
@@ -102,8 +103,8 @@ class Control extends QUI\Control
             'Captcha'         => $Captcha,
             'useCaptcha'      => $useCaptcha,
             'jsRequired'      => $jsRequired
-        ));
+        ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Control.html');
+        return $Engine->fetch(dirname(__FILE__).'/Control.html');
     }
 }

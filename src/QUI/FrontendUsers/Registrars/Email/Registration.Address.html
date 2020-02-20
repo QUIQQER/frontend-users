@@ -14,7 +14,12 @@
         {if $field == 'country'}
             {$CountrySelect->create()}
         {else}
-        <input value="{if isset($fields[$field])}{$fields[$field]}{/if}" type="text" name="{$field}" class="quiqqer-registration-field-element{if isset($invalidFields[$field])} quiqqer-registration-field-error{/if}"{if $options['required']} required{/if}>
+        <input value="{if isset($fields[$field])}{$fields[$field]}{/if}"
+               type="text"
+               name="{$field}"
+               class="quiqqer-registration-field-element{if isset($invalidFields[$field])} quiqqer-registration-field-error{/if}"{if $options['required']} required{/if}
+               {if isset($addressFieldLengths[$field])}maxlength="{$addressFieldLengths[$field]}"{/if}
+        >
         {/if}
 
         {if isset($invalidFields[$field])}
