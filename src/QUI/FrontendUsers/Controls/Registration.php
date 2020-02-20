@@ -96,8 +96,13 @@ class Registration extends QUI\Control
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\FrontendUsers\Exception $Exception) {
                 $Engine->assign('error', $Exception->getMessage());
+            } catch (\Exception $Exception) {
+                $Engine->assign(
+                    'error',
+                    QUI::getLocale()->get('quiqqer/frontend-user', 'controls.Registation.general_error')
+                );
             }
         }
 
@@ -412,7 +417,22 @@ class Registration extends QUI\Control
 
         $Registrar->validate();
 
-        // create user
+        // Check user data
+        $username = $Registrar->getUsername();
+
+        if (\mb_strlen($username) > 255) {
+            throw new QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users',
+                'exception.registration.username_too_long',
+                [
+                    'maxLength' => 255
+                ]
+            ]);
+        }
+
+        $Registrar->checkUserAttributes();
+
+        // Create user if everything is valid
         $NewUser = $Registrar->createUser();
 
         // add user to default groups

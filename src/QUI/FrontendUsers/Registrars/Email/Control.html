@@ -10,6 +10,7 @@
                 <input type="text" name="username"
                        class="quiqqer-registration-field-element{if isset($invalidFields['username'])} quiqqer-registration-field-error{/if}"
                        value="{if isset($fields['username'])}{$fields['username']}{/if}"
+                       maxlength="40"
                        {if $usernameSetting == 'required'}required{/if}/>
                 {if isset($invalidFields['username'])}
                     <span class="quiqqer-registration-field-error-msg">
@@ -29,6 +30,7 @@
             <input type="email" name="email"
                    value="{if isset($fields['email'])}{$fields['email']}{/if}"
                    class="quiqqer-registration-field-element{if isset($invalidFields['email'])} quiqqer-registration-field-error{/if}"
+                   maxlength="40"
                    required/>
             {if isset($invalidFields['email'])}
             <span class="quiqqer-registration-field-error-msg">
@@ -47,6 +49,7 @@
             <input type="email" name="emailConfirm"
                    value="{if isset($fields['emailConfirm'])}{$fields['emailConfirm']}{/if}"
                    class="quiqqer-registration-field-element{if isset($invalidFields['email'])} quiqqer-registration-field-error{/if}"
+                   maxlength="40"
                    required/>
         </label>
     </fieldset>
@@ -62,6 +65,7 @@
                        value="{if isset($fields['password'])}{$fields['password']}{/if}"
                        class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
                        autocomplete="off"
+                       maxlength="200"
                        required/>
                 {if isset($invalidFields['password'])}
                 <span class="quiqqer-registration-field-error-msg">
@@ -81,6 +85,7 @@
                        value="{if isset($fields['passwordConfirm'])}{$fields['passwordConfirm']}{/if}"
                        class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
                        autocomplete="off"
+                       maxlength="200"
                        required/>
             </label>
         </fieldset>

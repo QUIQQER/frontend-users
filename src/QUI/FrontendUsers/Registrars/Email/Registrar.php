@@ -24,6 +24,8 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * @param QUI\Interfaces\Users\User $User
      * @return void
+     *
+     * @throws FrontendUsers\Exception
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {

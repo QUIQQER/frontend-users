@@ -595,9 +595,17 @@
             <de><![CDATA[Bitte akzeptieren Sie die Nutzungsbedingungen, um sich zu registrieren.]]></de>
             <en><![CDATA[Please accept the Terms Of Use to register.]]></en>
         </locale>
+        <locale name="exception.registration.username_too_long">
+            <de><![CDATA[Der Benutzername bzw. E-Mail-Adresse ist zu lang. Bitte geben Sie einen Benutzernamen oder E-Mail-Adresse an, die maximal [maxLength] Zeichen lang ist.]]></de>
+            <en><![CDATA[The username or e-mail address is too long. Please enter a username or e-mail address that is no longer than [maxLength] characters.]]></en>
+        </locale>
         <locale name="control.registration.success">
             <de><![CDATA[Erfolg!]]></de>
             <en><![CDATA[Success!]]></en>
+        </locale>
+        <locale name="controls.Registation.general_error">
+            <de><![CDATA[Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte wiederholen Sie den Registrierungsvorgang oder probieren Sie es später noch einmal.]]></de>
+            <en><![CDATA[An unexpected error occurred during registration. Please repeat the registration process or try again later.]]></en>
         </locale>
 
         <!-- Registrar: E-Mail -->
@@ -620,6 +628,10 @@
         <locale name="exception.registrars.email.full_name_required">
             <de><![CDATA[Bitte geben Sie Ihren Vor- und Nachnamen an.]]></de>
             <en><![CDATA[Please provide your first and last name.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.user_attribute_too_long">
+            <de><![CDATA[Die Angabe für "[label]" ist zu lang. Bitte geben Sie für "[label]" maximal [maxLength] Zeichen an.]]></de>
+            <en><![CDATA["[label]" is too long. Please enter a maximum of [maxLength] characters for "[label]".]]></en>
         </locale>
 
         <locale name="registrars.email.javascript_required">

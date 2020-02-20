@@ -167,4 +167,12 @@ interface RegistrarInterface
      * @return bool
      */
     public function canSendPassword();
+
+    /**
+     * Validates all user attributes
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function checkUserAttributes();
 }
