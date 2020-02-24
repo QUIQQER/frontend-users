@@ -46,10 +46,11 @@ class Control extends QUI\Control
         $addressTemplate      = false;
         $showAddress          = false;
         $usernameSetting      = $registrationSettings['usernameInput'];
+        $fields               = $this->getAttribute('fields');
 
         $Engine->assign([
             'invalidFields' => $this->getAttribute('invalidFields'),
-            'fields'        => $this->getAttribute('fields')
+            'fields'        => $fields
         ]);
 
         // check if email is username
@@ -65,8 +66,14 @@ class Control extends QUI\Control
             $Engine->assign('addressFieldLengths', $RegistrarHandler->getUserAttributeLengthRestrictions());
 
             if ($addressFields['country']['show']) {
+                $selectedCountry = mb_strtoupper(QUI::getRewrite()->getProject()->getLang());
+
+                if (!empty($fields['country'])) {
+                    $selectedCountry = $fields['country'];
+                }
+
                 $Engine->assign('CountrySelect', new CountrySelect([
-                    'selected' => mb_strtoupper(QUI::getRewrite()->getProject()->getLang()),
+                    'selected' => $selectedCountry,
                     'required' => $addressFields['country']['required'],
                     'class'    => 'quiqqer-registration-field-element',
                     'name'     => 'country'
