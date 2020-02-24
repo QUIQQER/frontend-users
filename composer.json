@@ -1,35 +1,34 @@
 {
-    "name": "quiqqer\/frontend-users",
-    "type": "quiqqer-module",
-    "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
-    "license": "GPL-3.0+",
-    "authors": [
-        {
-            "name": "Henning Leutz",
-            "email": "support@pcsg.de",
-            "homepage": "http:\/\/www.pcsg.de",
-            "role": "Developer"
-        },
-        {
-            "name": "Patrick M\u00fcller",
-            "email": "support@pcsg.de",
-            "homepage": "http:\/\/www.pcsg.de",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "support@pcsg.de"
+  "name": "quiqqer\/frontend-users",
+  "type": "quiqqer-module",
+  "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
+  "license": "GPL-3.0+",
+  "authors": [
+    {
+      "name": "Henning Leutz",
+      "email": "support@pcsg.de",
+      "homepage": "http:\/\/www.pcsg.de",
+      "role": "Developer"
     },
-    "require": {
-        "quiqqer\/quiqqer": "^1.1|*@dev",
-        "quiqqer\/watcher": "^1|*@dev",
-        "quiqqer\/countries": "^1.1|*@dev",
-        "quiqqer\/verification": "^1.1|*@dev",
-        "quiqqer\/tooltips": "^1|*@dev"
-    },
-    "autoload": {
-        "psr-4": {
-            "QUI\\FrontendUsers\\": "src\/QUI\/FrontendUsers"
-        }
+    {
+      "name": "Patrick M\u00fcller",
+      "email": "support@pcsg.de",
+      "homepage": "http:\/\/www.pcsg.de",
+      "role": "Developer"
     }
+  ],
+  "support": {
+    "email": "support@pcsg.de"
+  },
+  "require": {
+    "quiqqer\/quiqqer": "^1.1|*@dev",
+    "quiqqer\/countries": "^1.1|*@dev",
+    "quiqqer\/verification": "^1.1|*@dev",
+    "quiqqer\/tooltips": "^1|*@dev"
+  },
+  "autoload": {
+    "psr-4": {
+      "QUI\\FrontendUsers\\": "src\/QUI\/FrontendUsers"
+    }
+  }
 }
