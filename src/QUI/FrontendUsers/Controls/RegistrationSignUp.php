@@ -271,6 +271,7 @@ class RegistrationSignUp extends QUI\Control
             'nextLinksText'       => $activationSuccess ? RegistrationUtils::getFurtherLinksText() : false,
             'showContent'         => !$msgSuccess && !$msgError,
             'fullnameInput'       => $registrationSettings['fullnameInput'],
+            'passwordInput'       => $registrationSettings['passwordInput'],
             'valueEmail'          => $valueEmail
         ]);
 
