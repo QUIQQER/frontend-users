@@ -431,6 +431,8 @@ class Handler extends Singleton
                         'host'           => $host,
                         'userId'         => $User->getId(),
                         'username'       => $User->getUsername(),
+                        'userFirstName'  => $User->getAttribute('firstname') ?: '',
+                        'userLastName'   => $User->getAttribute('lastname') ?: '',
                         'email'          => $User->getAttribute('email'),
                         'date'           => $L->formatDate(time()),
                         'activationLink' => $activationLink
@@ -486,10 +488,12 @@ class Handler extends Singleton
                 $tplDir.'mail.registration_welcome.html',
                 [
                     'body' => $L->get($lg, 'mail.registration_welcome.body', [
-                        'host'         => $host,
-                        'username'     => $User->getUsername(),
-                        'loginUrl'     => $loginUrl,
-                        'userPassword' => is_null($userPassword) ? ''
+                        'host'          => $host,
+                        'username'      => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName'  => $User->getAttribute('lastname') ?: '',
+                        'loginUrl'      => $loginUrl,
+                        'userPassword'  => is_null($userPassword) ? ''
                             : $L->get($lg, 'mail.registration_welcome.body.password', [
                                 'username' => $User->getUsername(),
                                 'password' => $userPassword
@@ -601,12 +605,14 @@ class Handler extends Singleton
                 $tplDir.'mail.change_email_address.html',
                 [
                     'body' => $L->get($lg, 'mail.change_email_address.body', [
-                        'host'        => $host,
-                        'userId'      => $User->getId(),
-                        'username'    => $User->getUsername(),
-                        'newEmail'    => $newEmail,
-                        'date'        => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'host'          => $host,
+                        'userId'        => $User->getId(),
+                        'username'      => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName'  => $User->getAttribute('lastname') ?: '',
+                        'newEmail'      => $newEmail,
+                        'date'          => $L->formatDate(time()),
+                        'confirmLink'   => $confirmLink
                     ])
                 ]
             );
