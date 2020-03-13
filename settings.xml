@@ -138,6 +138,9 @@
                 <conf name="redirectOnLogin">
                     <type><![CDATA[String]]></type>
                 </conf>
+                <conf name="authenticators">
+                    <type><![CDATA[String]]></type>
+                </conf>
             </section>
 
             <section name="mail">
@@ -282,6 +285,15 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="login.authenticators" type="text" data-qui="package/quiqqer/frontend-users/bin/controls/settings/Authenticators">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.authenticators.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.authenticators.description"/>
                             </description>
                         </input>
 
