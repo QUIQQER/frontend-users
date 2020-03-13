@@ -301,6 +301,12 @@ class Handler extends Singleton
 
         $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
 
+        if (empty($settings['authenticators'])) {
+            $settings['authenticators'] = [];
+        } else {
+            $settings['authenticators']  = json_decode($settings['authenticators'], true);
+        }
+
         return $settings;
     }
 

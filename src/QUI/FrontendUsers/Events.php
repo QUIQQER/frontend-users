@@ -243,7 +243,44 @@ class Events
 
         self::setAddressDefaultSettings();
         self::setRegistrarsDefaultSettings();
+        self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();
+    }
+
+    /**
+     * Set default settings for all frontend authenticators
+     *
+     * @return void
+     */
+    protected static function setAuthenticatorsDefaultSettings()
+    {
+        try {
+            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $settings = $Conf->getSection('login');
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return;
+        }
+
+        if (!empty($settings['authenticators'])) {
+            return;
+        }
+
+        $settings['authenticators'] = [];
+
+        foreach (QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators() as $class) {
+            // Some authenticators are always available and cannot be switched off
+            switch ($class) {
+                case 'QUI\Users\Auth\QUIQQER':
+                    continue 2;
+                    break;
+            }
+
+            $settings['authenticators'][\base64_encode($class)] = true;
+        }
+
+        $Conf->setValue('login', 'authenticators', \json_encode($settings['authenticators']));
+        $Conf->save();
     }
 
     /**
