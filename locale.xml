@@ -1693,5 +1693,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Yes, delete user account]]></en>
         </locale>
 
+        <locale name="controls.profile.ChangePassword.success">
+            <de><![CDATA[Ihr Password wurde erfolgreich geändert.]]></de>
+            <en><![CDATA[Your password was changed successfully.]]></en>
+        </locale>
+
     </groups>
 </locales>
