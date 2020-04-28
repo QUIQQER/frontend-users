@@ -192,6 +192,17 @@
             <en>
                 <![CDATA[Show button that opens a Sign Up popup in the User Bar if no user is logged in (requires an active Site of type <b>Registration</b>!)]]></en>
         </locale>
+        <locale name="settings.showToProfile.description">
+            <de>
+                <![CDATA[Zeige in der Benutzer-Leiste einen Button, der auf die Profil-Seite leitet]]></de>
+            <en>
+                <![CDATA[Show button that opens the profile Site]]></en>
+        </locale>
+        <locale name="settings.showToProfile.title" html="true">
+            <de><![CDATA["Zum Profil"-Button anzeigen]]></de>
+            <en><![CDATA[Show "To profile" button]]></en>
+        </locale>
+
         <locale name="settings.defaultAvatar.title">
             <de><![CDATA[Standard Avatar-Bild]]></de>
             <en><![CDATA[Default avatar image]]></en>
@@ -789,6 +800,11 @@
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
+
+        <locale name="profilebar.to_profile">
+            <de><![CDATA[Benutzerprofil]]></de>
+            <en><![CDATA[User profile]]></en>
+        </locale>
 
         <locale name="verification.ActivationVerification.success">
             <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert!]]></de>
