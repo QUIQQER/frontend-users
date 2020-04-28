@@ -5,6 +5,7 @@
  * @event onLoad [self]
  * @event onSave [self]
  * @event onSaveBegin [self]
+ * @event onSaveEnd [self] - Fires after the profile control has been reloaded after save
  * @event onSaveError [self, error]
  */
 
@@ -187,7 +188,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                 self.save().then(function () {
                     self.Loader.hide();
-                    self.openSetting(self.$category, self.$settings);
+                    
+                    self.openSetting(self.$category, self.$settings).then(function () {
+                        self.fireEvent('saveEnd', [self]);
+                    });
                 }, function () {
                     self.Loader.hide();
                 });
