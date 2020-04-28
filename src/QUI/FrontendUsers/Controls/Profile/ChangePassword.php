@@ -41,6 +41,8 @@ class ChangePassword extends AbstractProfileControl
             'User' => QUI::getUserBySession()
         ));
 
+        $this->addCSSFile(dirname(__FILE__) . '/ChangePassword.css');
+
         return $Engine->fetch(dirname(__FILE__) . '/ChangePassword.html');
     }
 

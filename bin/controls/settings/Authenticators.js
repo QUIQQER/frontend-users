@@ -61,7 +61,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Authenticators', [
             }
 
             this.$Content = new Element('div', {
-                'class': 'quiqqer-frontendusers-settings-authenticators'
+                'class': 'quiqqer-frontendusers-settings-authenticators field-container-field'
             }).inject(this.$Input, 'after');
 
             this.Loader = new QUILoader();

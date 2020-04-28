@@ -5,7 +5,7 @@
  * @event onLoad [self]
  * @event onSave [self]
  * @event onSaveBegin [self]
- * @event onSaveError [self]
+ * @event onSaveError [self, error]
  */
 
 require.config({
@@ -467,8 +467,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     category : self.$category,
                     settings : self.$settings,
                     data     : JSON.encode(data),
-                    onError  : function () {
-                        self.fireEvent('saveError', [self]);
+                    onError  : function (error) {
+                        self.fireEvent('saveError', [self, error]);
                         reject();
                     }
                 });

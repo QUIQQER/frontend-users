@@ -407,6 +407,15 @@
             <en>
                 <![CDATA[Automatic redirect to the specified page after the user has successfully logged in or visits the Login Site. If this setting is left empty no redirect takes place.]]></en>
         </locale>
+        <locale name="settings.authenticators.title">
+            <de><![CDATA[Verfügbare Login-Methoden]]></de>
+            <en><![CDATA[Available login methods]]></en>
+        </locale>
+        <locale name="settings.authenticators.description" html="true">
+            <de><![CDATA[Legen Sie fest, welche Login-Methoden für Benutzer zur Verfügung stehen. Der Login mittels Benutzername/E-Mail-Adresse und Passwort ist <b>immer</b> aktiv.]]></de>
+            <en><![CDATA[Determine which login methods are available for users. Login via username/email and password is <b>always</b> active.]]></en>
+        </locale>
+        
         <locale name="settings.category.login.title">
             <de><![CDATA[Login]]></de>
             <en><![CDATA[Login]]></en>
