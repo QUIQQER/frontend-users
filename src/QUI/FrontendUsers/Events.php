@@ -241,6 +241,9 @@ class Events
             return;
         }
 
+        // Clear cache
+        QUI\Cache\Manager::clear('package/quiqqer/frontendUsers');
+
         self::setAddressDefaultSettings();
         self::setRegistrarsDefaultSettings();
         self::setAuthenticatorsDefaultSettings();
