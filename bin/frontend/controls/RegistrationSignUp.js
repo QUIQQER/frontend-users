@@ -1323,11 +1323,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }, {
                     callback: function () {
                         if (!infoMarginSet) {
-                            RegistrationInfo.setStyle('margin-left', width);
+                            if (RegistrationInfo) {
+                                RegistrationInfo.setStyle('margin-left', width);
+                            }
+
                             infoMarginSet = true;
                         }
 
-                        RegistrationElm.setStyle('display', 'none');
+                        if (RegistrationElm) {
+                            RegistrationElm.setStyle('display', 'none');
+                        }
                     }
                 });
 
@@ -1340,7 +1345,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             LoginControlElm.setStyle('display', null);
                             LoginControlElm.addClass('quiqqer-fu-login-container-width');
 
-                            RegistrationInfo.setStyle('margin-left', null);
+                            if (RegistrationInfo) {
+                                RegistrationInfo.setStyle('margin-left', null);
+                            }
+
                             infoMarginSet = true;
 
                             loginHeight = LoginControlElm.getElement('.quiqqer-fu-login-container').getComputedSize().height;
