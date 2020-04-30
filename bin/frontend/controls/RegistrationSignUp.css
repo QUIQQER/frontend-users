@@ -22,3 +22,7 @@
         width: 100%;
     }
 }
+
+.content-message-information:before {
+    content: "\f05a";
+}
