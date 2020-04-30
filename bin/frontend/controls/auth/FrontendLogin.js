@@ -105,7 +105,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
 
             this.Loader.show();
 
-            this.$existsUnverifiedActivationVerification(userId).then(function (userUnverified) {
+            this.$existsUnverifiedActivationVerification(userId).then(function (userEmail) {
                 self.Loader.hide();
 
                 var InfoElm = new Element('div', {
@@ -113,7 +113,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                     html   : QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.user_not_active')
                 }).inject(MsgElm);
 
-                if (!userUnverified) {
+                if (!userEmail) {
                     new Element('p', {
                         html: QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.manual_activation')
                     }).inject(InfoElm);
@@ -135,7 +135,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                 }).inject(ResendBtnElm);
 
                 new ResendActivationLinkBtn({
-                    userId: userId,
+                    email : userEmail,
                     events: {
                         onResendSuccess: function () {
                             ResendMsgElm.set(

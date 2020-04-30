@@ -181,3 +181,15 @@
     position: absolute;
     right: 0;
 }
+
+.quiqqer-fu-login-activation-info {
+    margin: 20px 0 20px 0;
+}
+
+.quiqqer-fu-login-activation-info-message {
+    margin-bottom: 10px;
+}
+
+.quiqqer-fu-login-activation-info button {
+    float: none !important;
+}

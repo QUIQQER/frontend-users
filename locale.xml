@@ -1531,6 +1531,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Profil]]></de>
             <en><![CDATA[Profile]]></en>
         </locale>
+        <locale name="controls.frontend.Login.resend_activation_mail_info">
+            <de><![CDATA[Dieses Benutzerkonto wurde noch nicht aktiviert. Bitte bestätige dafür deine Registrierung über den Link in der Aktivierungs-Mail.]]></de>
+            <en><![CDATA[This user account has not yet been activated. Please confirm your registration using the link in the activation email.]]></en>
+        </locale>
 
         <!-- Control: settings/Registars -->
         <locale name="controls.settings.registrars.template.labelActivationMode">
