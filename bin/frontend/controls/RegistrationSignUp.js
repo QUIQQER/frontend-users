@@ -355,7 +355,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                             QUI.parse(Section).then(function () {
                                 if (Section.getElement('.content-message-success') ||
-                                    Section.getElement('.content-message-attention')) {
+                                    Section.getElement('.content-message-information')) {
 
                                     self.fireEvent('register', [self]);
                                     QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self]);
@@ -559,6 +559,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                         require(['qui/controls/loader/Loader'], function (Loader) {
                             self.Loader = new Loader({
+                                type  : 'fa-spinner',
                                 styles: {
                                     background: 'transparent'
                                 }

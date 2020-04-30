@@ -30,7 +30,7 @@
 {template_event name="quiqqer::frontendUsers::registrationSuccess"}
 
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
-<div class="content-message-attention">
+<div class="content-message-information">
     {$Registrar->getPendingMessage()}
 </div>
 
