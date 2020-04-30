@@ -490,7 +490,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 self.$sendForm(Form).then(resolve);
                             });
                         }).then(function () {
-                            self.Loader.hide();
+                            //self.Loader.hide();
 
                             moofx(Terms).animate({
                                 left   : 0,
@@ -559,6 +559,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                         require(['qui/controls/loader/Loader'], function (Loader) {
                             self.Loader = new Loader({
+                                type  : 'fa-spinner',
                                 styles: {
                                     background: 'transparent'
                                 }
