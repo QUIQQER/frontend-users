@@ -265,8 +265,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             var FormData = QUIFormUtils.getFormData(Form);
 
-            console.log(FormData);
-
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('ajax_users_login', function (result) {
                     window.QUIQQER_USER = result.user;
@@ -517,7 +515,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                     ActivationInfoBox.set('html', '');
 
-                    new Element('div', {
+                    var MsgElm = new Element('div', {
                         'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
                         html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
                     }).inject(ActivationInfoBox);
@@ -525,11 +523,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     new ResendActivationLinkBtn({
                         email : this.getAttribute('emailAddress'),
                         events: {
-                            onResendSuccess: function () {
-                                console.log("success");
+                            onResendSuccess: function (Btn) {
+                                Btn.disable();
                             },
-                            onResendFail   : function () {
-                                console.log("fail");
+                            onResendFail   : function (Btn) {
+                                MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
+                                MsgElm.removeClass('content-message-attention');
+                                MsgElm.addClass('content-message-error');
+
+                                Btn.enable();
                             }
                         }
                     }).inject(ActivationInfoBox);
