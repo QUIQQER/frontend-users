@@ -5,57 +5,122 @@
 
     {template_event name="quiqqer::frontend-users::user-address-create-begin" User=$User}
 
+    {if $settings.salutation.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-salutation">
-        <span>{locale group="quiqqer/frontend-users" var="salutation"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="salutation"}
+            {if $settings.salutation.required}*{/if}
+        </span>
         <input type="text"
                name="salutation"
         />
     </label>
+    {/if}
 
+    {if $settings.firstname.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-firstname">
-        <span>{locale group="quiqqer/frontend-users" var="firstname"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="firstname"}
+            {if $settings.firstname.required}*{/if}
+        </span>
         <input type="text"
                autocomplete="given-name"
                name="firstname"
         />
     </label>
+    {/if}
 
+    {if $settings.lastname.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-lastname">
-        <span>{locale group="quiqqer/frontend-users" var="lastname"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="lastname"}
+            {if $settings.lastname.required}*{/if}
+        </span>
         <input type="text"
                autocomplete="family-name"
                name="lastname"
         />
     </label>
+    {/if}
 
+    {if $settings.street_no.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-street_no">
-        <span>{locale group="quiqqer/frontend-users" var="street_no"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="street_no"}
+            {if $settings.street_no.required}*{/if}
+        </span>
         <input type="text"
                autocomplete="street-address"
                name="street_no"
         />
     </label>
+    {/if}
 
+    {if $settings.zip.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-zip">
-        <span>{locale group="quiqqer/frontend-users" var="zip"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="zip"}
+            {if $settings.zip.required}*{/if}
+        </span>
         <input type="text"
                autocomplete="postal-code"
                name="zip"
         />
     </label>
+    {/if}
 
+    {if $settings.city.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-city">
-        <span>{locale group="quiqqer/frontend-users" var="city"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="city"}
+            {if $settings.city.required}*{/if}
+        </span>
         <input type="text"
                autocomplete="address-level2"
                name="city"
         />
     </label>
+    {/if}
 
+    {if $settings.country.show}
     <label class="quiqqer-frontendUsers-userdata-create-address-country">
-        <span>{locale group="quiqqer/frontend-users" var="country"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="country"}
+            {if $settings.country.required}*{/if}
+        </span>
         {control name="country" control="QUI\Countries\Controls\Select"}
     </label>
+    {/if}
+
+    {if $settings.phone.show}
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users" var="phone"}
+            {if $settings.phone.required}*{/if}
+        </span>
+        <input type="tel" name="phone"/>
+    </label>
+    {/if}
+
+    {if $settings.mobile.show}
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users" var="mobile"}
+            {if $settings.mobile.required}*{/if}
+        </span>
+        <input type="tel" name="mobile"/>
+    </label>
+    {/if}
+
+    {if $settings.fax.show}
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users" var="fax"}
+            {if $settings.fax.required}*{/if}
+        </span>
+        <input type="tel" name="fax"/>
+    </label>
+    {/if}
 
     {template_event name="quiqqer::frontend-users::user-address-create-end" User=$User}
 

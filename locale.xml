@@ -214,6 +214,11 @@
                 <![CDATA[Image that is shown as the default avatar icon in the user bar if the user has <b>no</b> image assigned. If there is <b>no image selected here</b> the <b>first letter</b> of the username will be shown.]]></en>
         </locale>
 
+        <locale name="settings.section.profileAddress.title">
+            <de><![CDATA[Addresse in der Profilverwaltung]]></de>
+            <en><![CDATA[Address in the user profile management]]></en>
+        </locale>
+
         <!-- Settings: Registration -->
         <locale name="settings.section.registration.title">
             <de><![CDATA[Allgemeine Registrierungs-Einstellungen]]></de>
@@ -343,7 +348,8 @@
             <en><![CDATA[Full name input]]></en>
         </locale>
         <locale name="settings.fullnameInput.description">
-            <de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Vor- und Nachnamen festzulegen]]></de>
+            <de>
+                <![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Vor- und Nachnamen festzulegen]]></de>
             <en><![CDATA[Users have the option to set their first and last name when registering]]></en>
         </locale>
         <locale name="settings.fullnameInput.option.none">
@@ -423,10 +429,12 @@
             <en><![CDATA[Available login methods]]></en>
         </locale>
         <locale name="settings.authenticators.description" html="true">
-            <de><![CDATA[Legen Sie fest, welche Login-Methoden für Benutzer zur Verfügung stehen. Der Login mittels Benutzername/E-Mail-Adresse und Passwort ist <b>immer</b> aktiv.]]></de>
-            <en><![CDATA[Determine which login methods are available for users. Login via username/email and password is <b>always</b> active.]]></en>
+            <de>
+                <![CDATA[Legen Sie fest, welche Login-Methoden für Benutzer zur Verfügung stehen. Der Login mittels Benutzername/E-Mail-Adresse und Passwort ist <b>immer</b> aktiv.]]></de>
+            <en>
+                <![CDATA[Determine which login methods are available for users. Login via username/email and password is <b>always</b> active.]]></en>
         </locale>
-        
+
         <locale name="settings.category.login.title">
             <de><![CDATA[Login]]></de>
             <en><![CDATA[Login]]></en>
@@ -523,8 +531,8 @@
             <en><![CDATA[Address input on registration]]></en>
         </locale>
         <locale name="settings.category.registrationAddress.title">
-            <de><![CDATA[Adresse bei Registrierung]]></de>
-            <en><![CDATA[Address on Registration]]></en>
+            <de><![CDATA[Adressen]]></de>
+            <en><![CDATA[Addresses]]></en>
         </locale>
 
         <!-- Settings: Mail -->
@@ -561,8 +569,10 @@
             <en><![CDATA[Address]]></en>
         </locale>
         <locale name="control.registration.auto_redirect" html="true">
-            <de><![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
-            <en><![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
+            <de>
+                <![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
+            <en>
+                <![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
         </locale>
         <locale name="control.registration.registration_disabled">
             <de><![CDATA[Eine Registrierung ist zur Zeit nicht möglich.]]></de>
@@ -616,16 +626,20 @@
             <en><![CDATA[Please accept the Terms Of Use to register.]]></en>
         </locale>
         <locale name="exception.registration.username_too_long">
-            <de><![CDATA[Der Benutzername bzw. E-Mail-Adresse ist zu lang. Bitte geben Sie einen Benutzernamen oder E-Mail-Adresse an, die maximal [maxLength] Zeichen lang ist.]]></de>
-            <en><![CDATA[The username or e-mail address is too long. Please enter a username or e-mail address that is no longer than [maxLength] characters.]]></en>
+            <de>
+                <![CDATA[Der Benutzername bzw. E-Mail-Adresse ist zu lang. Bitte geben Sie einen Benutzernamen oder E-Mail-Adresse an, die maximal [maxLength] Zeichen lang ist.]]></de>
+            <en>
+                <![CDATA[The username or e-mail address is too long. Please enter a username or e-mail address that is no longer than [maxLength] characters.]]></en>
         </locale>
         <locale name="control.registration.success">
             <de><![CDATA[Erfolg!]]></de>
             <en><![CDATA[Success!]]></en>
         </locale>
         <locale name="controls.Registation.general_error">
-            <de><![CDATA[Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte wiederholen Sie den Registrierungsvorgang oder probieren Sie es später noch einmal.]]></de>
-            <en><![CDATA[An unexpected error occurred during registration. Please repeat the registration process or try again later.]]></en>
+            <de>
+                <![CDATA[Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte wiederholen Sie den Registrierungsvorgang oder probieren Sie es später noch einmal.]]></de>
+            <en>
+                <![CDATA[An unexpected error occurred during registration. Please repeat the registration process or try again later.]]></en>
         </locale>
 
         <!-- Registrar: E-Mail -->
@@ -650,7 +664,8 @@
             <en><![CDATA[Please provide your first and last name.]]></en>
         </locale>
         <locale name="exception.registrars.email.user_attribute_too_long">
-            <de><![CDATA[Die Angabe für "[label]" ist zu lang. Bitte geben Sie für "[label]" maximal [maxLength] Zeichen an.]]></de>
+            <de>
+                <![CDATA[Die Angabe für "[label]" ist zu lang. Bitte geben Sie für "[label]" maximal [maxLength] Zeichen an.]]></de>
             <en><![CDATA["[label]" is too long. Please enter a maximum of [maxLength] characters for "[label]".]]></en>
         </locale>
 
@@ -797,6 +812,14 @@
             <de><![CDATA[Tel]]></de>
             <en><![CDATA[Phone]]></en>
         </locale>
+        <locale name="mobile">
+            <de><![CDATA[Handy]]></de>
+            <en><![CDATA[Mobile]]></en>
+        </locale>
+        <locale name="fax">
+            <de><![CDATA[Fax]]></de>
+            <en><![CDATA[Fax]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -811,8 +834,10 @@
             <en><![CDATA[Your user account has been activated successfully!]]></en>
         </locale>
         <locale name="verification.ActivationVerification.success_send_password">
-            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert! Sie erhalten nun Ihre Zugangsdaten per E-Mail .]]></de>
-            <en><![CDATA[Your user account has been activated successfully! You will now receive your login credentaisl via e-mail.]]></en>
+            <de>
+                <![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert! Sie erhalten nun Ihre Zugangsdaten per E-Mail .]]></de>
+            <en>
+                <![CDATA[Your user account has been activated successfully! You will now receive your login credentaisl via e-mail.]]></en>
         </locale>
 
         <!-- Control: RegistrationSignUp -->
@@ -829,24 +854,34 @@
             <en><![CDATA[Your e-mail address has been confirmed successfully.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.success.userdelete">
-            <de><![CDATA[Ihr Benutzerkonto wurde erfolgreich gelöscht.<br/><br/><a href="[startUrl]">Zurück zur Startseite</a>]]></de>
-            <en><![CDATA[Your user account has been successfully deleted.<br/><br/><a href="[startUrl]">Back to the start page</a>]]></en>
+            <de>
+                <![CDATA[Ihr Benutzerkonto wurde erfolgreich gelöscht.<br/><br/><a href="[startUrl]">Zurück zur Startseite</a>]]></de>
+            <en>
+                <![CDATA[Your user account has been successfully deleted.<br/><br/><a href="[startUrl]">Back to the start page</a>]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.activation">
-            <de><![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
-            <en><![CDATA[Unfortunately an error occurred during the activation of your user account. Please repeat the process.]]></en>
+            <de>
+                <![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en>
+                <![CDATA[Unfortunately an error occurred during the activation of your user account. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.emailconfirm">
-            <de><![CDATA[Leider ist bei der Bestätigung Ihres E-Mail-Adresse ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
-            <en><![CDATA[Unfortunately, an error occurred when confirming your e-mail address. Please repeat the process.]]></en>
+            <de>
+                <![CDATA[Leider ist bei der Bestätigung Ihres E-Mail-Adresse ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en>
+                <![CDATA[Unfortunately, an error occurred when confirming your e-mail address. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.userdelete">
-            <de><![CDATA[Leider ist beim Löschen Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
-            <en><![CDATA[Unfortunately an error occurred when deleting your user account. Please repeat the process.]]></en>
+            <de>
+                <![CDATA[Leider ist beim Löschen Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en>
+                <![CDATA[Unfortunately an error occurred when deleting your user account. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.redirect">
-            <de><![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
-            <en><![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
+            <de>
+                <![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
+            <en>
+                <![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
         </locale>
 
         <locale name="message.UserDeleteConfirmVerification.success">
@@ -1512,8 +1547,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Fullscreen view]]></en>
         </locale>
         <locale name="admin.types.registrationSignUp.setting.fullscreen.description">
-            <de><![CDATA[Die Registrierung soll im gesamten Viewport angezeigt werden und alle anderen Elemente der Seite überdecken. Ein Login-Button wird oben rechts angezeigt.]]></de>
-            <en><![CDATA[The registration should be displayed in the entire viewport and cover all other elements of the page. A login button will be shown at the top right.]]></en>
+            <de>
+                <![CDATA[Die Registrierung soll im gesamten Viewport angezeigt werden und alle anderen Elemente der Seite überdecken. Ein Login-Button wird oben rechts angezeigt.]]></de>
+            <en>
+                <![CDATA[The registration should be displayed in the entire viewport and cover all other elements of the page. A login button will be shown at the top right.]]></en>
         </locale>
 
         <locale name="control.login.forgotten.password">
@@ -1532,12 +1569,16 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Profile]]></en>
         </locale>
         <locale name="controls.frontend.Login.resend_activation_mail_info">
-            <de><![CDATA[Dieses Benutzerkonto wurde noch nicht aktiviert. Bitte bestätige dafür deine Registrierung über den Link in der Aktivierungs-Mail.]]></de>
-            <en><![CDATA[This user account has not yet been activated. Please confirm your registration using the link in the activation email.]]></en>
+            <de>
+                <![CDATA[Dieses Benutzerkonto wurde noch nicht aktiviert. Bitte bestätige dafür deine Registrierung über den Link in der Aktivierungs-Mail.]]></de>
+            <en>
+                <![CDATA[This user account has not yet been activated. Please confirm your registration using the link in the activation email.]]></en>
         </locale>
         <locale name="controls.frontend.Login.resend_activation_mail_error">
-            <de><![CDATA[Die Aktivierungs-Mail konnte leider nicht erneut versendet werden. Bitte wende dich an den Betreiber der Website.]]></de>
-            <en><![CDATA[Unfortunately, the activation mail could not be sent again. Please contact the operator of the website.]]></en>
+            <de>
+                <![CDATA[Die Aktivierungs-Mail konnte leider nicht erneut versendet werden. Bitte wende dich an den Betreiber der Website.]]></de>
+            <en>
+                <![CDATA[Unfortunately, the activation mail could not be sent again. Please contact the operator of the website.]]></en>
         </locale>
 
         <!-- Control: settings/Registars -->
@@ -1680,7 +1721,8 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Create Account]]></en>
         </locale>
         <locale name="control.registration.sign.up.email_already_exists">
-            <de><![CDATA[Es existiert bereits ein Benutzerkonto mit dieser E-Mail-Adresse. Bitte loggen Sie sich ein.]]></de>
+            <de>
+                <![CDATA[Es existiert bereits ein Benutzerkonto mit dieser E-Mail-Adresse. Bitte loggen Sie sich ein.]]></de>
             <en><![CDATA[A user account with this e-mail address already exists. Please sign in.]]></en>
         </locale>
         <locale name="control.registration.sign.up.full_name_required">
