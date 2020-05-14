@@ -155,7 +155,7 @@ class Address extends QUI\Control
      * @param array $settings
      * @return mixed
      */
-    protected function checkSettingsArray($settings)
+    public static function checkSettingsArray($settings)
     {
         if (!\is_array($settings)) {
             $settings = [];

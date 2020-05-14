@@ -108,7 +108,7 @@
             {locale group="quiqqer/frontend-users" var="mobile"}
             {if $settings.mobile.required}*{/if}
         </span>
-        <input type="tel" name="mobile"/>
+        <input type="tel" name="mobile" autocomplete="mobile"/>
     </label>
     {/if}
 
@@ -118,7 +118,7 @@
             {locale group="quiqqer/frontend-users" var="fax"}
             {if $settings.fax.required}*{/if}
         </span>
-        <input type="tel" name="fax"/>
+        <input type="tel" name="fax" autocomplete="fax"/>
     </label>
     {/if}
 
