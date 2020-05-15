@@ -1112,7 +1112,7 @@
         <!-- Generic registration messages -->
         <locale name="message.registration_pending">
             <de><![CDATA[
-            Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen sie noch Ihr Benutzerkonto aktivieren.
+            Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen Sie noch Ihr Benutzerkonto aktivieren.
             Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail zugesandt wurde.
             ]]></de>
             <en><![CDATA[
