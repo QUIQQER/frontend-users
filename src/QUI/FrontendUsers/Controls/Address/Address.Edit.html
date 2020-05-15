@@ -5,70 +5,134 @@
 
     {template_event name="quiqqer::frontend-users::user-address-edit-begin" User=$User Address=$Address}
 
+    {if $settings.salutation.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="salutation"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="salutation"}
+            {if $settings.salutation.required}*{/if}
+        </span>
         <input type="text"
                name="salutation"
                value="{$Address->getAttribute('salutation')|escape:'html'}"
         />
     </label>
+    {/if}
 
+    {if $settings.firstname.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="firstname"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="firstname"}
+            {if $settings.firstname.required}*{/if}
+        </span>
         <input type="text"
                name="firstname"
                value="{$Address->getAttribute('firstname')|escape:'html'}"
         />
     </label>
+    {/if}
 
+    {if $settings.lastname.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="lastname"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="lastname"}
+            {if $settings.lastname.required}*{/if}
+        </span>
         <input type="text"
                name="lastname"
                value="{$Address->getAttribute('lastname')|escape:'html'}"
         />
     </label>
+    {/if}
 
+    {if $settings.street_no.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="street_no"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="street_no"}
+            {if $settings.street_no.required}*{/if}
+        </span>
         <input type="text"
                name="street_no"
                value="{$Address->getAttribute('street_no')|escape:'html'}"
         />
     </label>
+    {/if}
 
+    {if $settings.zip.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="zip"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="zip"}
+            {if $settings.zip.required}*{/if}
+        </span>
         <input type="text"
                name="zip"
                value="{$Address->getAttribute('zip')|escape:'html'}"
         />
     </label>
+    {/if}
 
+    {if $settings.city.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="city"}</span>
+        <span>
+            {locale group="quiqqer/frontend-users" var="city"}
+            {if $settings.city.required}*{/if}
+        </span>
         <input type="text"
                name="city"
                value="{$Address->getAttribute('city')|escape:'html'}"
         />
     </label>
+    {/if}
 
+    {if $settings.country.show}
     <label>
-        <span>{locale group="quiqqer/system" var="country"}</span>
-        {control
-        name="country"
-        control="QUI\Countries\Controls\Select"
-        selected=$Address->getAttribute('country')
-        }
+        <span>
+            {locale group="quiqqer/system" var="country"}
+            {if $settings.country.required}*{/if}
+        </span>
+        {control name="country" control="QUI\Countries\Controls\Select" selected=$Address->getAttribute('country')}
     </label>
+    {/if}
 
+    {if $settings.phone.show}
     <label>
-        <span>{locale group="quiqqer/frontend-users" var="phone"}</span>
-        <input type="text"
+        <span>
+            {locale group="quiqqer/frontend-users" var="phone"}
+            {if $settings.phone.required}*{/if}
+        </span>
+        <input type="tel"
                name="phone"
                value="{$phone|escape:'html'}"
         />
     </label>
+    {/if}
+
+    {if $settings.mobile.show}
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users" var="mobile"}
+            {if $settings.mobile.required}*{/if}
+        </span>
+        <input type="tel"
+               name="mobile"
+               autocomplete="mobile"
+               value="{$mobile|escape:'html'}"
+        />
+    </label>
+    {/if}
+
+    {if $settings.fax.show}
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users" var="fax"}
+            {if $settings.fax.required}*{/if}
+        </span>
+        <input type="tel"
+               name="fax"
+               autocomplete="fax"
+               value="{$fax|escape:'html'}"
+        />
+    </label>
+    {/if}
 
     {template_event name="quiqqer::frontend-users::user-address-edit-end" User=$User Address=$Address}
 

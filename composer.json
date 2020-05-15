@@ -1,5 +1,5 @@
 {
-  "name": "quiqqer/frontend-users",
+  "name": "quiqqer\/frontend-users",
   "type": "quiqqer-module",
   "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
   "version": "dev-master",
@@ -8,13 +8,13 @@
     {
       "name": "Henning Leutz",
       "email": "support@pcsg.de",
-      "homepage": "http://www.pcsg.de",
+      "homepage": "http:\/\/www.pcsg.de",
       "role": "Developer"
     },
     {
-      "name": "Patrick Müller",
+      "name": "Patrick M\u00fcller",
       "email": "support@pcsg.de",
-      "homepage": "http://www.pcsg.de",
+      "homepage": "http:\/\/www.pcsg.de",
       "role": "Developer"
     }
   ],
@@ -22,15 +22,14 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer/quiqqer": ">=1.1|dev-master|dev-dev",
-    "quiqqer/watcher": ">1.0|dev-master|dev-dev",
-    "quiqqer/countries": ">1.1|dev-master|dev-dev",
-    "quiqqer/verification": ">=1.1|dev-master|dev-dev",
-    "quiqqer/tooltips": "1.*|dev-master|dev-dev"
+    "quiqqer\/quiqqer": "^1.1|*@dev",
+    "quiqqer\/countries": "^1.1|*@dev",
+    "quiqqer\/verification": "^1.1|*@dev",
+    "quiqqer\/tooltips": "^1|*@dev"
   },
   "autoload": {
     "psr-4": {
-      "QUI\\FrontendUsers\\": "src/QUI/FrontendUsers"
+      "QUI\\FrontendUsers\\": "src\/QUI\/FrontendUsers"
     }
   }
 }

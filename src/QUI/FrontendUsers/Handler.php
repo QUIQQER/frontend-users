@@ -48,6 +48,15 @@ class Handler extends Singleton
     const USERNAME_INPUT_REQUIRED = 'required';
 
     /**
+     * Full name input types
+     */
+    const FULLNAME_INPUT_NONE               = 'none';
+    const FULLNAME_INPUT_FIRSTNAME_OPTIONAL = 'firstname_optional';
+    const FULLNAME_INPUT_FIRSTNAME_REQUIRED = 'firstname_required';
+    const FULLNAME_INPUT_FULLNAME_OPTIONAL  = 'fullname_optional';
+    const FULLNAME_INPUT_FULLNAME_REQUIRED  = 'fullname_required';
+
+    /**
      * Site types
      */
     const SITE_TYPE_REGISTRATION        = 'quiqqer/frontend-users:types/registration';
@@ -292,6 +301,12 @@ class Handler extends Singleton
 
         $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
 
+        if (empty($settings['authenticators'])) {
+            $settings['authenticators'] = [];
+        } else {
+            $settings['authenticators']  = json_decode($settings['authenticators'], true);
+        }
+
         return $settings;
     }
 
@@ -422,6 +437,8 @@ class Handler extends Singleton
                         'host'           => $host,
                         'userId'         => $User->getId(),
                         'username'       => $User->getUsername(),
+                        'userFirstName'  => $User->getAttribute('firstname') ?: '',
+                        'userLastName'   => $User->getAttribute('lastname') ?: '',
                         'email'          => $User->getAttribute('email'),
                         'date'           => $L->formatDate(time()),
                         'activationLink' => $activationLink
@@ -477,10 +494,12 @@ class Handler extends Singleton
                 $tplDir.'mail.registration_welcome.html',
                 [
                     'body' => $L->get($lg, 'mail.registration_welcome.body', [
-                        'host'         => $host,
-                        'username'     => $User->getUsername(),
-                        'loginUrl'     => $loginUrl,
-                        'userPassword' => is_null($userPassword) ? ''
+                        'host'          => $host,
+                        'username'      => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName'  => $User->getAttribute('lastname') ?: '',
+                        'loginUrl'      => $loginUrl,
+                        'userPassword'  => is_null($userPassword) ? ''
                             : $L->get($lg, 'mail.registration_welcome.body.password', [
                                 'username' => $User->getUsername(),
                                 'password' => $userPassword
@@ -592,12 +611,14 @@ class Handler extends Singleton
                 $tplDir.'mail.change_email_address.html',
                 [
                     'body' => $L->get($lg, 'mail.change_email_address.body', [
-                        'host'        => $host,
-                        'userId'      => $User->getId(),
-                        'username'    => $User->getUsername(),
-                        'newEmail'    => $newEmail,
-                        'date'        => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'host'          => $host,
+                        'userId'        => $User->getId(),
+                        'username'      => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName'  => $User->getAttribute('lastname') ?: '',
+                        'newEmail'      => $newEmail,
+                        'date'          => $L->formatDate(time()),
+                        'confirmLink'   => $confirmLink
                     ])
                 ]
             );
@@ -862,5 +883,29 @@ class Handler extends Singleton
         $this->registrationIds[] = $registrationId;
 
         return $registrationId;
+    }
+
+    /**
+     * Get max length for each user attribute
+     *
+     * @return array
+     */
+    public function getUserAttributeLengthRestrictions()
+    {
+        return [
+            'firstname'  => 40,
+            'lastname'   => 40,
+            'email'      => 255,
+            'salutation' => 10,
+            'company'    => 100,
+            'street_no'  => 200,
+            'zip'        => 200,
+            'city'       => 200,
+            'country'    => 100,
+            'phone'      => 200,
+            'mobile'     => 200,
+            'fax'        => 200,
+            'password'   => 200
+        ];
     }
 }

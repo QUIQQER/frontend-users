@@ -451,4 +451,61 @@ class Utils
         $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
         $User->save(QUI::getUsers()->getSystemUser());
     }
+
+
+    public static function getMissingAddressFields(QUI\Users\Address $Address)
+    {
+        $missing = [];
+
+        try {
+            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $settings = $Conf->getValue('profile', 'addressFields');
+
+            if (!empty($settings)) {
+                $settings = \json_decode($settings, true);
+            }
+        } catch (QUI\Exception $Exception) {
+            return $missing;
+        }
+
+        if (empty($settings)) {
+            return $missing;
+        }
+
+        foreach ($settings as $setting => $data) {
+            if (empty($data['required'])) {
+                continue;
+            }
+
+            if ($setting === 'mobile') {
+                if ($Address->getMobile() === '') {
+                    $missing[] = $setting;
+                }
+
+                continue;
+            }
+
+            if ($setting === 'fax') {
+                if ($Address->getFax() === '') {
+                    $missing[] = $setting;
+                }
+
+                continue;
+            }
+
+            if ($setting === 'tel') {
+                if ($Address->getPhone() === '') {
+                    $missing[] = $setting;
+                }
+
+                continue;
+            }
+
+            if (!$Address->getAttribute($setting)) {
+                $missing[] = $setting;
+            }
+        }
+
+        return $missing;
+    }
 }

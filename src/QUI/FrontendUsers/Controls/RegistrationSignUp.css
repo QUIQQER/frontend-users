@@ -184,7 +184,8 @@
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-email-passwordSection {
+.quiqqer-fu-registrationSignUp-email-passwordSection,
+.quiqqer-fu-registrationSignUp-email-fullnameSection {
     display: none;
     position: absolute;
     width: 100%;
@@ -242,4 +243,16 @@
     .quiqqer-fu-registrationSignUp-registration {
         width: 100%;
     }
+}
+
+/** messages
+ ========================================== */
+
+.quiqqer-fu-registrationSignUp-registration .message-success,
+.quiqqer-fu-registrationSignUp-registration .message-error {
+    padding: 2rem;
+}
+
+.quiqqer-fu-registrationSignUp-registration-nextlinks {
+    margin: 10px 0 0 0 !important;
 }

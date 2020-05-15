@@ -95,15 +95,9 @@ class Address extends QUI\Control
         }
 
         $UserAddress = null;
-        $addresses   = [];
 
         try {
             $UserAddress = $User->getStandardAddress();
-        } catch (QUI\Exception $Exception) {
-        }
-
-        try {
-            $addresses = $User->getAddressList();
         } catch (QUI\Exception $Exception) {
         }
 
@@ -111,7 +105,7 @@ class Address extends QUI\Control
             'this'        => $this,
             'User'        => $User,
             'UserAddress' => $UserAddress,
-            'addresses'   => $addresses
+            'addresses'   => $User->getAddressList()
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Address.html');
@@ -129,15 +123,79 @@ class Address extends QUI\Control
         $Engine  = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress((int)$_REQUEST['edit']);
 
+        try {
+            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $settings = $Conf->getValue('profile', 'addressFields');
+
+            if (!empty($settings)) {
+                $settings = \json_decode($settings, true);
+            } else {
+                $settings = [];
+            }
+
+            $Engine->assign('settings', $this->checkSettingsArray($settings));
+        } catch (QUI\Exception $Exception) {
+            $Engine->assign('settings', $this->checkSettingsArray([]));
+        }
+
         $Engine->assign([
             'this'      => $this,
             'Address'   => $Address,
             'User'      => $User,
             'phone'     => $Address->getPhone(),
+            'fax'       => $Address->getFax(),
+            'mobile'    => $Address->getMobile(),
             'countries' => QUI\Countries\Manager::getList()
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Address.Edit.html');
+        return $Engine->fetch(\dirname(__FILE__).'/Address.Edit.html');
+    }
+
+    /**
+     * @param array $settings
+     * @return mixed
+     */
+    public static function checkSettingsArray($settings)
+    {
+        if (!\is_array($settings)) {
+            $settings = [];
+        }
+
+        $fields = [
+            'company',
+            'salutation',
+            'firstname',
+            'lastname',
+            'street_no',
+            'zip',
+            'city',
+            'country',
+            'company',
+            'phone',
+            'mobile',
+            'fax'
+        ];
+
+        foreach ($fields as $field) {
+            if (!isset($settings[$field])) {
+                $settings[$field] = [
+                    'show'     => true,
+                    'required' => true
+                ];
+
+                continue;
+            }
+
+            if (!isset($settings[$field]['required'])) {
+                $settings[$field]['required'] = true;
+            }
+
+            if (!isset($settings[$field]['show'])) {
+                $settings[$field]['show'] = true;
+            }
+        }
+
+        return $settings;
     }
 
     /**
@@ -158,7 +216,7 @@ class Address extends QUI\Control
             'User'    => $User
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Address.Delete.html');
+        return $Engine->fetch(\dirname(__FILE__).'/Address.Delete.html');
     }
 
     /**
@@ -179,6 +237,21 @@ class Address extends QUI\Control
             $currentCountry = $Country->getCode();
         }
 
+        try {
+            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $settings = $Conf->getValue('profile', 'addressFields');
+
+            if (!empty($settings)) {
+                $settings = \json_decode($settings, true);
+            } else {
+                $settings = [];
+            }
+
+            $Engine->assign('settings', $this->checkSettingsArray($settings));
+        } catch (QUI\Exception $Exception) {
+            $Engine->assign('settings', $this->checkSettingsArray([]));
+        }
+
         $Engine->assign([
             'this'           => $this,
             'currentCountry' => $currentCountry,
@@ -186,7 +259,7 @@ class Address extends QUI\Control
             'User'           => $User
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Address.Create.html');
+        return $Engine->fetch(\dirname(__FILE__).'/Address.Create.html');
     }
 
     /**
@@ -226,6 +299,30 @@ class Address extends QUI\Control
             if (isset($data[$field])) {
                 $Address->setAttribute($field, $data[$field]);
             }
+        }
+
+        if (isset($data['phone'])) {
+            $Address->editPhone(0, $data['phone']);
+        }
+
+        if (isset($data['fax'])) {
+            $Address->editFax($data['fax']);
+        }
+
+        if (isset($data['mobile'])) {
+            $Address->editMobile($data['mobile']);
+        }
+
+        // check required fields
+        $missing = QUI\FrontendUsers\Utils::getMissingAddressFields($Address);
+
+        if (\count($missing)) {
+            $Address->delete();
+
+            throw new QUI\Exception([
+                'quiqqer/frontend-users',
+                'exception.controls.profile.address.required_fields_empty'
+            ]);
         }
 
         $Address->save();
@@ -271,6 +368,23 @@ class Address extends QUI\Control
 
         if (isset($data['phone'])) {
             $Address->editPhone(0, $data['phone']);
+        }
+
+        if (isset($data['fax'])) {
+            $Address->editFax($data['fax']);
+        }
+
+        if (isset($data['mobile'])) {
+            $Address->editMobile($data['mobile']);
+        }
+
+        $missing = QUI\FrontendUsers\Utils::getMissingAddressFields($Address);
+
+        if (\count($missing)) {
+            throw new QUI\Exception([
+                'quiqqer/frontend-users',
+                'exception.controls.profile.address.required_fields_empty'
+            ]);
         }
 
         $Address->save();

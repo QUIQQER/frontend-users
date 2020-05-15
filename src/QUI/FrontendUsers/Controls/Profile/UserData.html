@@ -9,19 +9,19 @@
 {template_event name="quiqqer::frontend-users::profile::user-data-begin" User=$User Address=$Address}
 
 {if $changeMailRequest}
-<div class="quiqqer-frontendUsers-info">
+<div class="content-message-information">
     {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_request"}
 </div>
 {/if}
 
 {if $action == 'change_email_success'}
-<div class="quiqqer-frontendUsers-success">
+<div class="content-message-success">
     {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_success"}
 </div>
 {/if}
 
 {if $action == 'change_email_error'}
-<div class="quiqqer-frontendUsers-error">
+<div class="content-message-error">
     {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_error"}
 </div>
 {/if}

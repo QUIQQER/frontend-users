@@ -1,26 +1,22 @@
 <?php
 
-/**
- * This file contains package_quiqqer_frontend-users_ajax_frontend_auth_existsUnverifiedActivation
- */
-
 use QUI\Verification\Verifier;
 use QUI\FrontendUsers\ActivationVerification;
 
 /**
- *
- * @return bool
+ * @return string - User e-mail address
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_auth_existsUnverifiedActivation',
     function ($userId) {
         try {
-            Verifier::getVerificationByIdentifier((int)$userId, ActivationVerification::getType());
+            $User = QUI::getUsers()->get((int)$userId);
+            Verifier::getVerificationByIdentifier($User->getId(), ActivationVerification::getType());
         } catch (\Exception $Exception) {
             return false;
         }
 
-        return true;
+        return $User->getAttribute('email');
     },
     ['userId']
 );

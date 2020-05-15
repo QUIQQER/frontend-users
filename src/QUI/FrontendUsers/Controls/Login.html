@@ -49,7 +49,11 @@
             {locale group="quiqqer/frontend-users" var="control.login.message.between"}
         </div>
         {/if}
+    {/if}
 
+    <div class="quiqqer-fu-login-activation-info"></div>
+
+    {if $this->getAttribute('mail')}
         <form name="quiqqer-fu-login-email" class="quiqqer-fu-login-email">
             <section class="quiqqer-fu-login-email-mailSection">
                 <label>

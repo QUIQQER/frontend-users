@@ -36,7 +36,7 @@ class Login extends QUI\Control
 
         $this->setAttributes($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Login.css');
+        $this->addCSSFile(dirname(__FILE__).'/Login.css');
         $this->addCSSClass('quiqqer-fu-login');
 
         $this->setJavaScriptControl(
@@ -57,7 +57,7 @@ class Login extends QUI\Control
             return '';
         }
 
-        $authenticators = $this->getAuthenticator();
+        $authenticators = $this->getAuthenticators();
         $instances      = [];
 
         $socialAuth = array_filter($authenticators, function ($authenticator) {
@@ -125,18 +125,40 @@ class Login extends QUI\Control
             'showPasswordReset' => $showPasswordReset
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Login.html');
+        return $Engine->fetch(dirname(__FILE__).'/Login.html');
     }
 
     /**
      * Get all Authenticators that are displayed
      *
-     * @return array
+     * @return string[] - Authenticator class paths
      */
-    protected function getAuthenticator()
+    protected function getAuthenticators()
     {
         $authenticators   = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();
         $filterRegistrars = $this->getAttribute('authenticators');
+
+        // Parse allowed authenticators
+        try {
+            $loginSettings         = QUI\FrontendUsers\Handler::getInstance()->getLoginSettings();
+            $authenticatorSettings = $loginSettings['authenticators'];
+            $allowed               = [
+                'QUI\Users\Auth\QUIQQER'
+            ];
+
+            foreach ($authenticatorSettings as $authenticatorHash => $active) {
+                if ($active) {
+                    $allowed[] = \base64_decode($authenticatorHash);
+                }
+            }
+
+            $authenticators = array_filter($authenticators, function ($authenticator) use ($allowed) {
+                /** @var QUI\Users\AuthenticatorInterface $Authenticator */
+                return in_array($authenticator, $allowed);
+            });
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+        }
 
         if (empty($filterRegistrars)) {
             return $authenticators;

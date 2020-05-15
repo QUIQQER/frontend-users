@@ -169,8 +169,10 @@
 
 .quiqqer-frontend-users-address-create input,
 .quiqqer-frontend-users-address-create select,
+.quiqqer-frontend-users-address-create .qui-select,
 .quiqqer-frontend-users-address-edit input,
-.quiqqer-frontend-users-address-edit select {
+.quiqqer-frontend-users-address-edit select,
+.quiqqer-frontend-users-address-edit .qui-select {
     float: left;
     width: 50%
 }

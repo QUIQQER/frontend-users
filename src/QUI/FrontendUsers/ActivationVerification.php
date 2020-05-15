@@ -66,7 +66,15 @@ class ActivationVerification extends AbstractVerification
      */
     public function getSuccessMessage()
     {
-        return '';
+        $registrationSetting = Handler::getInstance()->getRegistrationSettings();
+
+        if (!empty($registrationSetting['sendPassword'])) {
+            $var = 'verification.ActivationVerification.success_send_password';
+        } else {
+            $var = 'verification.ActivationVerification.success';
+        }
+
+        return QUI::getLocale()->get('quiqqer/frontend-users', $var);
     }
 
     /**
@@ -94,11 +102,20 @@ class ActivationVerification extends AbstractVerification
         );
 
         if (empty($RegistrationSite)) {
-            return false;
+            $RegistrationSite = $RegistrarHandler->getRegistrationSite(
+                $this->getProject()
+            );
+
+            if (empty($RegistrationSite)) {
+                return false;
+            }
         }
 
-        return $RegistrationSite->getUrlRewritten([], [
-            'success' => 'activation'
+        return $RegistrationSite->getUrlRewritten([
+            'success'
+        ], [
+            'success'   => 'activation',
+            'registrar' => $this->getRegistrarHash()
         ]);
     }
 
@@ -106,19 +123,30 @@ class ActivationVerification extends AbstractVerification
      * Automatically redirect the user to this URL on unsuccessful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws \QUI\Exception
      */
     public function getOnErrorRedirectUrl()
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
-            QUI::getRewrite()->getProject()
+        $RegistrarHandler = Handler::getInstance();
+        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
+            $this->getProject()
         );
 
-        if (!$RegistrationSite) {
-            return false;
+        if (empty($RegistrationSite)) {
+            $RegistrationSite = $RegistrarHandler->getRegistrationSite(
+                $this->getProject()
+            );
+
+            if (empty($RegistrationSite)) {
+                return false;
+            }
         }
 
-        return $RegistrationSite->getUrlRewritten([], [
-            'error' => 'activation'
+        return $RegistrationSite->getUrlRewritten([
+            'error'
+        ], [
+            'error'     => 'activation',
+            'registrar' => $this->getRegistrarHash()
         ]);
     }
 

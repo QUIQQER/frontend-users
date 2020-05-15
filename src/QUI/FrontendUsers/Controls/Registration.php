@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
+use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Projects\Site\Utils as QUISiteUtils;
 use QUI\FrontendUsers\RegistrarCollection;
 
@@ -95,8 +96,13 @@ class Registration extends QUI\Control
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\FrontendUsers\Exception $Exception) {
                 $Engine->assign('error', $Exception->getMessage());
+            } catch (\Exception $Exception) {
+                $Engine->assign(
+                    'error',
+                    QUI::getLocale()->get('quiqqer/frontend-user', 'controls.Registation.general_error')
+                );
             }
         }
 
@@ -156,6 +162,29 @@ class Registration extends QUI\Control
                 } catch (\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
+            }
+        }
+
+        // Behaviour if user is already logged in
+        $loggedIn = boolval(QUI::getUserBySession()->getId());
+
+        if (!$success && $loggedIn) {
+            switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
+                case 'showProfile':
+                    $ProfileSite = $RegistrarHandler->getProfileSite(QUI::getRewrite()->getProject());
+
+                    if ($ProfileSite) {
+                        header('Location: '.$ProfileSite->getUrlRewritten());
+                        exit;
+                    }
+                    break;
+
+                case 'showMessage':
+                    $Engine->assign('error', QUI::getLocale()->get(
+                        'quiqqer/frontend-users',
+                        'message.types.registration.already_registered'
+                    ));
+                    break;
             }
         }
 
@@ -262,7 +291,8 @@ class Registration extends QUI\Control
             'termsOfUseRequired'  => $termsOfUseRequired,
             'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
             'registrationId'      => $this->id,
-            'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle')
+            'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle'),
+            'nextLinksText'       => $success ? RegistrationUtils::getFurtherLinksText() : false
         ]);
 
         return $Engine->fetch(dirname(__FILE__).'/Registration.html');
@@ -325,15 +355,15 @@ class Registration extends QUI\Control
             return $Registrar;
         }
 
-        if (!isset($_POST['registration'])) {
+//        if (!isset($_POST['registration'])) {
+//            return false;
+//        }
+
+        if (empty($_REQUEST['registrar'])) {
             return false;
         }
 
-        if (!isset($_POST['registrar'])) {
-            return false;
-        }
-
-        $Registrar = $FrontendUsers->getRegistrarByHash($_POST['registrar']);
+        $Registrar = $FrontendUsers->getRegistrarByHash($_REQUEST['registrar']);
 
         if (!$Registrar) {
             return false;
@@ -387,7 +417,22 @@ class Registration extends QUI\Control
 
         $Registrar->validate();
 
-        // create user
+        // Check user data
+        $username = $Registrar->getUsername();
+
+        if (\mb_strlen($username) > 40) {
+            throw new QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users',
+                'exception.registration.username_too_long',
+                [
+                    'maxLength' => 40
+                ]
+            ]);
+        }
+
+        $Registrar->checkUserAttributes();
+
+        // Create user if everything is valid
         $NewUser = $Registrar->createUser();
 
         // add user to default groups

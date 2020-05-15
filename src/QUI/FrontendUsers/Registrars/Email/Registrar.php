@@ -24,6 +24,8 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * @param QUI\Interfaces\Users\User $User
      * @return void
+     *
+     * @throws FrontendUsers\Exception
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
@@ -33,6 +35,16 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $useAddress           = boolval($registrationSettings['addressInput']);
 
         /** @var QUI\Users\User $User */
+        $firstname = $this->getAttribute('firstname');
+        $lastname  = $this->getAttribute('lastname');
+
+        if (!empty($firstname)) {
+            $User->setAttribute('firstname', $firstname);
+        }
+
+        if (!empty($lastname)) {
+            $User->setAttribute('lastname', $lastname);
+        }
 
         // set e-mail address
         $User->setAttribute('email', $this->getAttribute('email'));
@@ -101,6 +113,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $Handler        = FrontendUsers\Handler::getInstance();
         $settings       = $Handler->getRegistrationSettings();
         $usernameInput  = $settings['usernameInput'];
+        $fullnameInput  = $settings['fullnameInput'];
         $usernameExists = QUI::getUsers()->usernameExists($username);
 
         $lg       = 'quiqqer/frontend-users';
@@ -133,6 +146,23 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             }
         }
 
+        // Fullname check
+        $firstname = $this->getAttribute('firstname');
+        $lastname  = $this->getAttribute('lastname');
+
+        switch ($fullnameInput) {
+            case $Handler::FULLNAME_INPUT_FIRSTNAME_REQUIRED:
+                if (empty($firstname)) {
+                    throw new FrontendUsers\Exception([$lg, $lgPrefix.'first_name_required']);
+                }
+                break;
+
+            case $Handler::FULLNAME_INPUT_FULLNAME_REQUIRED:
+                if (empty($firstname) || empty($lastname)) {
+                    throw new FrontendUsers\Exception([$lg, $lgPrefix.'full_name_required']);
+                }
+        }
+
         try {
             QUI::getUsers()->getUserByName($username);
 
@@ -163,10 +193,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         // Address validation
         if ((int)$settings['addressInput']) {
-            foreach ($Handler->getAddressFieldSettings() as $field => $settings) {
+            foreach ($Handler->getAddressFieldSettings() as $field => $addressSettings) {
                 $val = $this->getAttribute($field);
 
-                if ($settings['required'] && empty($val)) {
+                if ($addressSettings['required'] && empty($val)) {
                     throw new FrontendUsers\Exception([
                         $lg,
                         $lgPrefix.'missing_address_fields'

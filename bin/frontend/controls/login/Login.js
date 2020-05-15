@@ -3,6 +3,7 @@
  * @author www.pcsg.de (Henning Leutz)
  *
  * @event onLoad [self]
+ * @event onLoadNoAnimation [self]
  * @event onAuthBegin [self]
  * @event onAuthNext [self]
  * @event onSuccess [self]
@@ -20,12 +21,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
     'qui/controls/Control',
     'qui/controls/loader/Loader',
     'qui/utils/Form',
+
+    'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
+
     'Ajax',
     'Locale'
 
-], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUIAjax, QUILocale) {
+], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, QUIAjax, QUILocale) {
     "use strict";
 
+    var lg      = 'quiqqer/frontend-users';
     var clicked = false;
 
     return new Class({
@@ -37,7 +42,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             'onImport',
             'onInject',
             '$auth',
-            '$authBySocial'
+            '$authBySocial',
+            '$onUserLoginError'
         ],
 
         options: {
@@ -47,6 +53,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             header            : true,
             authenticators    : [],  // fixed list of authenticators shown
             mail              : true,
+            emailAddress      : '',
             passwordReset     : true,
             reload            : true,
             ownRedirectOnLogin: false // function
@@ -59,8 +66,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             this.Loader = new QUILoader();
 
             this.addEvents({
-                onImport: this.$onImport,
-                onInject: this.$onInject
+                onImport        : this.$onImport,
+                onInject        : this.$onInject,
+                onUserLoginError: this.$onUserLoginError
             });
         },
 
@@ -168,9 +176,22 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     .getElements('form[name="quiqqer-fu-login-email"]')
                     .addEvent('submit', function (event) {
                         event.stop();
-                        self.authByEmail();
+                        self.authByEmail().catch(function (e) {
+                            // nothing
+                        });
                     });
 
+                var emailAddress = self.getAttribute('emailAddress');
+
+                if (emailAddress) {
+                    self.getElm()
+                        .getElement('form[name="quiqqer-fu-login-email"]')
+                        .getElement('input[name="username"]').value = emailAddress;
+
+                    self.getElm()
+                        .getElement('form[name="quiqqer-fu-login-email"]')
+                        .getElement('input[name="password"]').focus();
+                }
 
                 self.getElm()
                     .getElements('.quiqqer-fu-login-social-entry')
@@ -223,6 +244,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                         QUI.fireEvent('quiqqerUserAuthLoginLoad', [self]);
                     }
                 });
+
+                self.fireEvent('loadNoAnimation', [self]);
             });
         },
 
@@ -239,6 +262,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             this.fireEvent('authBegin', [this]);
             QUI.fireEvent('quiqqerUserAuthLoginAuthBegin', [this]);
+
+            var FormData = QUIFormUtils.getFormData(Form);
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('ajax_users_login', function (result) {
@@ -266,9 +291,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     showLogin    : false,
                     authenticator: 'QUI\\Users\\Auth\\QUIQQER',
                     globalauth   : 1,
-                    params       : JSON.encode(
-                        QUIFormUtils.getFormData(Form)
-                    ),
+                    params       : JSON.encode(FormData),
                     onError      : function (e) {
                         self.Loader.hide();
                         self.fireEvent('userLoginError', [self, e]);
@@ -476,6 +499,44 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 }
             });
+        },
+
+        /**
+         * Event: onUserLoginError
+         *
+         * @param {Object} error
+         */
+        $onUserLoginError: function (Control, error) {
+            switch (error.getAttribute('reason')) {
+                case 'auth_error_user_not_active':
+                    var ActivationInfoBox = this.$Elm.getElement(
+                        '.quiqqer-fu-login-activation-info'
+                    );
+
+                    ActivationInfoBox.set('html', '');
+
+                    var MsgElm = new Element('div', {
+                        'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
+                        html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
+                    }).inject(ActivationInfoBox);
+
+                    new ResendActivationLinkBtn({
+                        email : this.getAttribute('emailAddress'),
+                        events: {
+                            onResendSuccess: function (Btn) {
+                                Btn.disable();
+                            },
+                            onResendFail   : function (Btn) {
+                                MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
+                                MsgElm.removeClass('content-message-attention');
+                                MsgElm.addClass('content-message-error');
+
+                                Btn.enable();
+                            }
+                        }
+                    }).inject(ActivationInfoBox);
+                    break;
+            }
         },
 
         /**

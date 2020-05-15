@@ -7,6 +7,8 @@
 namespace QUI\FrontendUsers\Controls;
 
 use QUI;
+use QUI\FrontendUsers\RegistrationUtils;
+use QUI\Utils\Security\Orthos;
 
 /**
  * Class RegistrationSignUp
@@ -183,13 +185,39 @@ class RegistrationSignUp extends QUI\Control
                     break;
                 case 'emailconfirm':
                 case 'userdelete':
+                    $startUrl = QUI::getRewrite()->getProject()->get(1)->getUrlRewrittenWithHost();
+
                     $msgSuccess = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
-                        'RegistrationSignUp.message.success.'.$_GET['success']
+                        'RegistrationSignUp.message.success.'.$_GET['success'],
+                        [
+                            'startUrl' => $startUrl
+                        ]
                     );
 
                     $showLoggedInWarning = false;
                     break;
+            }
+        }
+
+        // If this is not an activation process, determine what happens if the user is already
+        // logged in.
+        // Determine what happens if the user is already logged in
+        if (!$activationSuccess && $isLoggedIn) {
+            try {
+                $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
+                $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
+
+                if ($registrationSettings['visitRegistrationSiteBehaviour'] === 'showProfile') {
+                    $ProfileSite = $FrontendUsersHandler->getProfileSite(QUI::getRewrite()->getProject());
+
+                    if ($ProfileSite) {
+                        header('Location: '.$ProfileSite->getUrlRewritten());
+                        exit;
+                    }
+                }
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::writeDebugException($Exception);
             }
         }
 
@@ -211,7 +239,8 @@ class RegistrationSignUp extends QUI\Control
         // Auto-redirect
         $redirect             = false;
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $projectLang          = $Project = QUI::getRewrite()->getProject()->getLang();
+        $Project              = QUI::getRewrite()->getProject();
+        $projectLang          = $Project->getLang();
 
         if ($activationSuccess && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -219,6 +248,13 @@ class RegistrationSignUp extends QUI\Control
             );
 
             $redirect = $RedirectSite->getUrlRewrittenWithHost();
+        }
+
+        // Check values given via $_GET
+        $valueEmail = false;
+
+        if (!empty($_GET['email'])) {
+            $valueEmail = Orthos::clear($_GET['email']);
         }
 
         $Engine->assign([
@@ -230,7 +266,13 @@ class RegistrationSignUp extends QUI\Control
             'showLoggedInWarning' => $showLoggedInWarning,
             'msgSuccess'          => $msgSuccess,
             'msgError'            => $msgError,
-            'redirect'            => $redirect
+            'redirect'            => $redirect,
+            'isLoggedIn'          => $isLoggedIn,
+            'nextLinksText'       => $activationSuccess ? RegistrationUtils::getFurtherLinksText() : false,
+            'showContent'         => !$msgSuccess && !$msgError,
+            'fullnameInput'       => $registrationSettings['fullnameInput'],
+            'passwordInput'       => $registrationSettings['passwordInput'],
+            'valueEmail'          => $valueEmail
         ]);
 
         return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');

@@ -13,6 +13,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
                 </conf>
+                <conf name="showToProfile">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
                 <conf name="defaultAvatar">
                     <type><![CDATA[string]]></type>
                 </conf>
@@ -78,6 +82,10 @@
                     <type><![CDATA[string]]></type>
                     <defaultvalue><![CDATA[none]]></defaultvalue>
                 </conf>
+                <conf name="fullnameInput">
+                    <type><![CDATA[string]]></type>
+                    <defaultvalue><![CDATA[none]]></defaultvalue>
+                </conf>
                 <conf name="addressInput">
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
@@ -124,6 +132,12 @@
                 </conf>
             </section>
 
+            <section name="profile">
+                <conf name="addressFields">
+                    <type><![CDATA[string]]></type>
+                </conf>
+            </section>
+
             <section name="registrars">
                 <conf name="registrarSettings">
                     <type><![CDATA[String]]></type>
@@ -132,6 +146,9 @@
 
             <section name="login">
                 <conf name="redirectOnLogin">
+                    <type><![CDATA[String]]></type>
+                </conf>
+                <conf name="authenticators">
                     <type><![CDATA[String]]></type>
                 </conf>
             </section>
@@ -189,7 +206,17 @@
                             </description>
                         </input>
 
-                        <input conf="profileBar.defaultAvatar" type="string" data-qui="controls/projects/project/media/Input" data-qui-options-cssclasses="1">
+                        <input conf="profileBar.showToProfile" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showToProfile.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.showToProfile.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="profileBar.defaultAvatar" type="string"
+                               data-qui="controls/projects/project/media/Input" data-qui-options-cssclasses="1">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.title"/>
                             </text>
@@ -206,10 +233,12 @@
 
                         <input conf="userProfile.categoryViewDefaultPermission" type="checkbox">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.categoryViewDefaultPermission.title"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.categoryViewDefaultPermission.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.categoryViewDefaultPermission.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.categoryViewDefaultPermission.description"/>
                             </description>
                         </input>
 
@@ -233,10 +262,12 @@
 
                         <input conf="userProfile.useGravatarUserDefaultValue" type="checkbox">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.useGravatarUserDefaultValue.title"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.useGravatarUserDefaultValue.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.useGravatarUserDefaultValue.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.useGravatarUserDefaultValue.description"/>
                             </description>
                         </input>
 
@@ -272,12 +303,23 @@
                             <locale group="quiqqer/frontend-users" var="settings.section.login.title"/>
                         </title>
 
-                        <input conf="login.redirectOnLogin" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
+                        <input conf="login.redirectOnLogin" type="text"
+                               data-qui="controls/projects/project/site/MultiLangSelect">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.title"/>
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="login.authenticators" type="text"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/Authenticators">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.authenticators.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.authenticators.description"/>
                             </description>
                         </input>
 
@@ -304,12 +346,15 @@
                             </description>
                         </input>
 
-                        <input conf="registration.sendInfoMailOnRegistrationTo" type="text" data-qui="controls/email/Select">
+                        <input conf="registration.sendInfoMailOnRegistrationTo" type="text"
+                               data-qui="controls/email/Select">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.sendInfoMailOnRegistrationTo.title"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.sendInfoMailOnRegistrationTo.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.sendInfoMailOnRegistrationTo.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.sendInfoMailOnRegistrationTo.description"/>
                             </description>
                         </input>
 
@@ -328,6 +373,34 @@
                             </option>
                             <option value="required">
                                 <locale group="quiqqer/frontend-users" var="settings.usernameInput.option.required"/>
+                            </option>
+                        </select>
+
+                        <select conf="registration.fullnameInput">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.description"/>
+                            </description>
+                            <option value="none">
+                                <locale group="quiqqer/frontend-users" var="settings.fullnameInput.option.none"/>
+                            </option>
+                            <option value="firstname_optional">
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.fullnameInput.option.firstname_optional"/>
+                            </option>
+                            <option value="firstname_required">
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.fullnameInput.option.firstname_required"/>
+                            </option>
+                            <option value="fullname_optional">
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.fullnameInput.option.fullname_optional"/>
+                            </option>
+                            <option value="fullname_required">
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.fullnameInput.option.fullname_required"/>
                             </option>
                         </select>
 
@@ -381,34 +454,42 @@
                                 <locale group="quiqqer/frontend-users" var="settings.autoLoginOnActivation.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.autoLoginOnActivation.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.autoLoginOnActivation.description"/>
                             </description>
                         </input>
 
                         <select conf="registration.visitRegistrationSiteBehaviour">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.title"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.visitRegistrationSiteBehaviour.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.visitRegistrationSiteBehaviour.description"/>
                             </description>
                             <option value="nothing">
-                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.option.nothing"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.visitRegistrationSiteBehaviour.option.nothing"/>
                             </option>
                             <option value="showProfile">
-                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.option.showProfile"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.visitRegistrationSiteBehaviour.option.showProfile"/>
                             </option>
                             <option value="showMessage">
-                                <locale group="quiqqer/frontend-users" var="settings.visitRegistrationSiteBehaviour.option.showMessage"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.visitRegistrationSiteBehaviour.option.showMessage"/>
                             </option>
                         </select>
 
-                        <input conf="registration.autoRedirectOnSuccess" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
+                        <input conf="registration.autoRedirectOnSuccess" type="text"
+                               data-qui="controls/projects/project/site/MultiLangSelect">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.autoRedirectOnSuccess.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.autoRedirectOnSuccess.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.autoRedirectOnSuccess.description"/>
                             </description>
                         </input>
 
@@ -423,10 +504,12 @@
 
                         <input conf="registration.deleteInactiveUserAfterDays" type="number">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.deleteInactiveUserAfterDays.title"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.deleteInactiveUserAfterDays.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.deleteInactiveUserAfterDays.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.deleteInactiveUserAfterDays.description"/>
                             </description>
                         </input>
 
@@ -439,7 +522,8 @@
                             </description>
                         </input>
 
-                        <input conf="registration.termsOfUseSite" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
+                        <input conf="registration.termsOfUseSite" type="text"
+                               data-qui="controls/projects/project/site/MultiLangSelect">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.termsOfUseSite.title"/>
                             </text>
@@ -448,7 +532,8 @@
                             </description>
                         </input>
 
-                        <input conf="registration.privacyPolicySite" type="text" data-qui="controls/projects/project/site/MultiLangSelect">
+                        <input conf="registration.privacyPolicySite" type="text"
+                               data-qui="controls/projects/project/site/MultiLangSelect">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.privacyPolicySite.title"/>
                             </text>
@@ -480,7 +565,25 @@
                             </description>
                         </input>
 
-                        <input conf="registration.addressFields" type="text" data-qui="package/quiqqer/frontend-users/bin/controls/settings/AddressFields" label="false">
+                        <input conf="registration.addressFields" type="text"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/AddressFields"
+                               label="false">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.addressFields.title"/>
+                            </text>
+                        </input>
+
+                    </settings>
+
+                    <settings title="profileAddress_section" name="profileAddress_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.profileAddress.title"/>
+                        </title>
+
+                        <input conf="profile.addressFields" type="text"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/AddressFields"
+                               label="false"
+                        >
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.addressFields.title"/>
                             </text>
@@ -500,7 +603,8 @@
                             <locale group="quiqqer/frontend-users" var="settings.section.registrars.title"/>
                         </title>
 
-                        <input conf="registrars.registrarSettings" type="text" data-qui="package/quiqqer/frontend-users/bin/controls/settings/Registrars" label="false">
+                        <input conf="registrars.registrarSettings" type="text"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/Registrars" label="false">
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.registrarSettings.title"/>
                             </text>
@@ -522,10 +626,12 @@
 
                         <input conf="mail.verificationValidityDuration" type="number">
                             <text>
-                                <locale group="quiqqer/frontend-users" var="settings.verificationValidityDuration.title"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.verificationValidityDuration.title"/>
                             </text>
                             <description>
-                                <locale group="quiqqer/frontend-users" var="settings.verificationValidityDuration.description"/>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.verificationValidityDuration.description"/>
                             </description>
                         </input>
 
