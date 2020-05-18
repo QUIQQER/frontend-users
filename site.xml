@@ -20,6 +20,7 @@
                 <attribute>quiqqer.sign.up.registrars</attribute>
                 <attribute>quiqqer.sign.up.logo</attribute>
                 <attribute>quiqqer.sign.up.logoUrl</attribute>
+                <attribute default="1">quiqqer.sign.up.fullscreen</attribute>
             </attributes>
 
             <!-- list settings -->
@@ -32,6 +33,21 @@
                                     var="quiqqer.sign.up.settings.title"
                             />
                         </title>
+
+                        <input conf="quiqqer.sign.up.fullscreen"
+                               type="checkbox"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.fullscreen"
+                                />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.fullscreen.description"
+                                />
+                            </description>
+                        </input>
 
                         <input conf="quiqqer.sign.up.background" class="media-image">
                             <text>

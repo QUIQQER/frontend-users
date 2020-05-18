@@ -221,7 +221,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     self.refresh();
                 }, {
                     'package': 'quiqqer/frontend-users',
-                    data     : JSON.encode(formData)
+                    data     : JSON.encode(formData),
+                    onError  : function (err) {
+                        QUI.getMessageHandler().then(function (MH) {
+                            MH.addError(err.getMessage());
+                        });
+
+                        self.Loader.hide();
+                    }
                 });
             });
         },
@@ -407,7 +414,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 }, {
                     'package': 'quiqqer/frontend-users',
                     data     : JSON.encode(formData),
-                    addressId: formData.addressId
+                    addressId: formData.addressId,
+                    onError  : function (err) {
+                        QUI.getMessageHandler().then(function (MH) {
+                            MH.addError(err.getMessage());
+                        });
+
+                        self.Loader.hide();
+                    }
                 });
             });
         },
@@ -440,7 +454,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             var Container = new Element('div', {
                 'class' : 'quiqqer-frontend-users-address-container',
                 html    : '<div class="quiqqer-frontend-users-address-container-header"></div>' +
-                '<div class="quiqqer-frontend-users-address-container-content"></div>',
+                    '<div class="quiqqer-frontend-users-address-container-content"></div>',
                 tabIndex: -1
             }).inject(Parent);
 

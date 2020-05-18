@@ -4,33 +4,38 @@
     </div>
 </noscript>
 
-<section class="quiqqer-fu-registrationSignUp-registration{if $hasNoContent} quiqqer-fu-registrationSignUp-registration-content{/if}"
-         style="display: none"
+<section
+        class="quiqqer-fu-registrationSignUp-registration{if $hasNoContent} quiqqer-fu-registrationSignUp-registration-content{/if}"
+        style="display: none"
 >
     {if $showLoggedInWarning}
     <div class="quiqqer-fu-registrationSignUp-registration-logged-in message-information">
         {locale group="quiqqer/frontend-users" var="message.types.registration.already_registered"}
     </div>
     {else}
+
+    {if $msgSuccess}
+    <div class="content-message-success">
+        {$msgSuccess}
+        {if $redirect}
+        <span data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect">
+            {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.redirect" url=$redirect}
+            </span>
+        {elseif $nextLinksText}
+        <p class="quiqqer-fu-registrationSignUp-registration-nextlinks">
+            {$nextLinksText}
+        </p>
+        {/if}
+
+    </div>
+    {elseif $msgError}
+    <div class="content-message-error">
+        {$msgError}
+    </div>
+    {else}
     {if $this->getAttribute('header')}
         <h2>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}</h2>
     {/if}
-
-    {if $msgSuccess}
-    <div class="message-success">
-        {$msgSuccess}
-        {if $redirect}
-            <span data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect">
-            {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.redirect"}
-            </span>
-        {/if}
-    </div>
-    {elseif $msgError}
-    <div class="message-error">
-        {$msgError}
-    </div>
-    {/if}
-
     <div class="quiqqer-fu-registrationSignUp-registration-social">
         {foreach $Registrars as $Registrar}
         <form action=""
@@ -47,71 +52,110 @@
         {/foreach}
     </div>
 
-    {if $Email}
-    {if $Registrars->count()}
-    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.message.between"}
-    {/if}
-
-    <form name="quiqqer-fu-registrationSignUp-email"
-          class="quiqqer-fu-registrationSignUp-registration-email"
-          data-registrar="{$Email->getHash()}"
-          data-registration_id="{$registrationId}"
-    >
-        <section class="quiqqer-fu-registrationSignUp-email-mailSection">
-            <label>
-                <span class="label">
-                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.email.title"}
-                </span>
-                <span class="field">
-                <span class="icon fa fa-envelope"></span>
-                    <input type="email" name="email" required autocomplete="email"/>
-                </span>
-            </label>
-
-            {if $useCaptcha && $isCaptchaInvisible}
-            <div class="visible">
-                {$captchaHTML}
-            </div>
-            {/if}
-
-            <div class="quiqqer-fu-registrationSignUp-email-buttons">
-                {if $RegistrationTrial && $this->getAttribute('registration-trial')}
-                <button type="submit" name="trial-account">
-                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.try"}
-                </button>
-                <input type="hidden"
-                       name="registration-trial-registrator"
-                       value="{$RegistrationTrial->getHash()}"
-                />
-                {/if}
-                <button type="submit" name="go-to-password">
-                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
-                </button>
-            </div>
-        </section>
-
-        {if $useCaptcha && $isCaptchaInvisible === false}
-        {$captchaHTML}
+    {if !$msgSuccess && $Email}
+        {if $Registrars->count()}
+            {locale group="quiqqer/frontend-users" var="control.registration.sign.up.message.between"}
         {/if}
 
-        <section class="quiqqer-fu-registrationSignUp-email-passwordSection">
-            <label>
-                <span class="label">
-                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.title"}
-                </span>
-                <span class="field">
-                <span class="icon fa fa-key"></span>
-                    <input type="password" name="password" required autocomplete="off"/>
-                </span>
-            </label>
+        <form name="quiqqer-fu-registrationSignUp-email"
+              class="quiqqer-fu-registrationSignUp-registration-email"
+              data-registrar="{$Email->getHash()}"
+              data-registration_id="{$registrationId}"
+        >
+            <section class="quiqqer-fu-registrationSignUp-email-mailSection">
+                <label>
+                    <span class="label">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.email.title"}
+                    </span>
+                    <span class="field">
+                    <span class="icon fa fa-envelope"></span>
+                        <input type="email"
+                               name="email"
+                               {if $valueEmail}value="{$valueEmail}"{/if}
+                               required
+                               {if $this->getAttribute('autocomplete')}autocomplete="email"{else}autocomplete="false"{/if}
+                        />
+                    </span>
+                </label>
 
-            <div class="quiqqer-fu-registrationSignUp-email-buttons">
-                <button type="submit" name="create-account">
-                    {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
-                </button>
-            </div>
-        </section>
-    </form>
+                {if $useCaptcha && $isCaptchaInvisible}
+                <div class="visible">
+                    {$captchaHTML}
+                </div>
+                {/if}
+
+                <div class="quiqqer-fu-registrationSignUp-email-buttons">
+                    {if $RegistrationTrial && $this->getAttribute('registration-trial')}
+                    <button type="submit" name="trial-account">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.try"}
+                    </button>
+                    <input type="hidden"
+                           name="registration-trial-registrator"
+                           value="{$RegistrationTrial->getHash()}"
+                    />
+                    {/if}
+                    <button type="submit" name="email-next">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
+                    </button>
+                </div>
+            </section>
+
+            {if $useCaptcha && $isCaptchaInvisible === false}
+                {$captchaHTML}
+            {/if}
+
+            {if $fullnameInput !== 'none'}
+            <section class="quiqqer-fu-registrationSignUp-email-fullnameSection">
+                <label>
+                    <span class="label">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.firstname.title"}
+                    </span>
+                    <span class="field">
+                    <span class="icon fa fa-user"></span>
+                        <input type="text" name="firstname"{if $fullnameInput === 'firstname_required' || $fullnameInput === 'fullname_required'} data-required="1"{/if}/>
+                    </span>
+                </label>
+
+                {if $fullnameInput === 'fullname_optional' || fullname_optional === 'fullname_required'}
+                <label>
+                    <span class="label">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.lastname.title"}
+                    </span>
+                    <span class="field">
+                    <span class="icon fa fa-user"></span>
+                        <input type="text" name="lastname"{if $fullnameInput === 'fullname_required'} data-required="1"{/if}/>
+                    </span>
+                </label>
+                {/if}
+
+                <div class="quiqqer-fu-registrationSignUp-email-buttons">
+                    <button type="submit" name="fullname-next">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.fullname.next"}
+                    </button>
+                </div>
+            </section>
+            {/if}
+
+            {if $passwordInput !== 'none'}
+            <section class="quiqqer-fu-registrationSignUp-email-passwordSection">
+                <label>
+                    <span class="label">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.title"}
+                    </span>
+                    <span class="field">
+                    <span class="icon fa fa-key"></span>
+                        <input type="password" name="password" required autocomplete="off"/>
+                    </span>
+                </label>
+
+                <div class="quiqqer-fu-registrationSignUp-email-buttons">
+                    <button type="submit" name="create-account">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
+                    </button>
+                </div>
+            </section>
+            {/if}
+        </form>
     {/if}
 
     <div class="quiqqer-fu-registrationSignUp-terms">
@@ -127,9 +171,10 @@
         <div class="quiqqer-fu-registrationSignUp-terms-buttons"></div>
     </div>
     {/if}
+    {/if}
 </section>
 
-{if $this->getAttribute('content') !== false}
+{if !empty($this->getAttribute('content')) && $showContent && !$msgSuccess && !$msgError}
 <section class="quiqqer-fu-registrationSignUp-info" style="display: none">
     {$this->getAttribute('content')}
 </section>

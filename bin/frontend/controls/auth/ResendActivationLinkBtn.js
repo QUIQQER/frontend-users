@@ -29,7 +29,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
         ],
 
         options: {
-            userId   : false,   // the QUIQQER user to send the activation link to
+            email    : false,   // User e-mail address
             text     : QUILocale.get(lg, 'controls.frontend.auth.resendactivationlinkbtn.resend_activation_mail'),
             textimage: 'fa fa-envelope'
         },
@@ -49,9 +49,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
             this.disable();
             this.setAttribute('textimage', 'fa fa-spinner fa-spin');
 
-            this.$resendActivationMail(
-                this.getAttribute('userId')
-            ).then(function (success) {
+            this.$resendActivationMail().then(function (success) {
                 if (!success) {
                     this.enable();
                     this.setAttribute('textimage', 'fa fa-envelope');
@@ -72,14 +70,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
         /**
          * Resend activation mail
          *
-         * @param {Number} userId
          * @return {Promise}
          */
-        $resendActivationMail: function (userId) {
+        $resendActivationMail: function () {
+            var self = this;
+
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    userId   : userId,
+                    email    : self.getAttribute('email'),
                     onError  : reject
                 })
             });

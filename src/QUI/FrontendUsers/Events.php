@@ -241,9 +241,51 @@ class Events
             return;
         }
 
+        // Clear cache
+        QUI\Cache\Manager::clear('package/quiqqer/frontendUsers');
+
         self::setAddressDefaultSettings();
         self::setRegistrarsDefaultSettings();
+        self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();
+        self::setProfileAddressDefaultSettings();
+    }
+
+    /**
+     * Set default settings for all frontend authenticators
+     *
+     * @return void
+     */
+    protected static function setAuthenticatorsDefaultSettings()
+    {
+        try {
+            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $settings = $Conf->getSection('login');
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+
+            return;
+        }
+
+        if (!empty($settings['authenticators'])) {
+            return;
+        }
+
+        $settings['authenticators'] = [];
+
+        foreach (QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators() as $class) {
+            // Some authenticators are always available and cannot be switched off
+            switch ($class) {
+                case 'QUI\Users\Auth\QUIQQER':
+                    continue 2;
+                    break;
+            }
+
+            $settings['authenticators'][\base64_encode($class)] = true;
+        }
+
+        $Conf->setValue('login', 'authenticators', \json_encode($settings['authenticators']));
+        $Conf->save();
     }
 
     /**
@@ -276,14 +318,14 @@ class Events
      * Set address fields default settings
      *
      * @return void
+     * @throws QUI\Exception
      */
     protected static function setAddressDefaultSettings()
     {
-        $Conf          = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        $addressFields = $Conf->getValue('registration', 'addressFields');
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
         // do not set default settings if manual settings have already been set
-        if (!empty($addressFields)) {
+        if ($Conf->existValue('registration', 'addressFields')) {
             return;
         }
 
@@ -331,6 +373,63 @@ class Events
     }
 
     /**
+     * Set profile address fields default settings
+     *
+     * @throws QUI\Exception
+     */
+    protected static function setProfileAddressDefaultSettings()
+    {
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+
+        // do not set default settings if manual settings have already been set
+        if ($Conf->existValue('registration', 'addressFields')) {
+            return;
+        }
+
+        $addressFields = [
+            'salutation' => [
+                'show'     => true,
+                'required' => false
+            ],
+            'firstname'  => [
+                'show'     => true,
+                'required' => true
+            ],
+            'lastname'   => [
+                'show'     => true,
+                'required' => true
+            ],
+            'street_no'  => [
+                'show'     => true,
+                'required' => true
+            ],
+            'zip'        => [
+                'show'     => true,
+                'required' => true
+            ],
+            'city'       => [
+                'show'     => true,
+                'required' => true
+            ],
+            'country'    => [
+                'show'     => true,
+                'required' => true
+            ],
+            'company'    => [
+                'show'     => true,
+                'required' => false
+            ],
+            'phone'      => [
+                'show'     => true,
+                'required' => false
+            ]
+        ];
+
+        $Conf->setValue('profile', 'addressFields', json_encode($addressFields));
+        $Conf->save();
+    }
+
+    /**
      * quiqqer/quiqqer: onTemplateGetHeader
      *
      * @param QUI\Template $TemplateManager
@@ -352,7 +451,6 @@ class Events
                                     reload: false,
                                     events: {
                                         onCancel: function() {
-                                            console.log('cancel');
                                             window.location.reload();
                                         },
                                         
@@ -374,7 +472,16 @@ class Events
                     }
                     
                     clearInterval(waitForRequireEventRegister);
-                    registerNewLogin();
+                    
+                    var loadQUI = function () {
+                        return Promise.resolve();
+                    };
+            
+                    if (typeof whenQuiLoaded === 'function') {
+                        loadQUI = whenQuiLoaded;
+                    }
+                    
+                    loadQUI().then(registerNewLogin);
                 }, 200);
             })();
         </script>";

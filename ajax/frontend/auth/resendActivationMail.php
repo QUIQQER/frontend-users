@@ -7,6 +7,7 @@
 use QUI\Verification\Verifier;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\ActivationVerification;
+use QUI\Utils\Security\Orthos;
 
 /**
  * Resend an activation mail
@@ -15,16 +16,16 @@ use QUI\FrontendUsers\ActivationVerification;
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail',
-    function ($userId) {
+    function ($email) {
         try {
-            Verifier::getVerificationByIdentifier((int)$userId, ActivationVerification::getType());
+            $User = QUI::getUsers()->getUserByMail(Orthos::clear($email));
+            Verifier::getVerificationByIdentifier($User->getId(), ActivationVerification::getType());
         } catch (\Exception $Exception) {
             // if the verification does not exist -> do not resend mail
             return false;
         }
 
         try {
-            $User           = QUI::getUsers()->get((int)$userId);
             $registrarClass = $User->getAttribute(Handler::USER_ATTR_REGISTRAR);
 
             /** @var \QUI\FrontendUsers\RegistrarInterface $Registrar */
@@ -38,5 +39,5 @@ QUI::$Ajax->registerFunction(
 
         return true;
     },
-    ['userId']
+    ['email']
 );

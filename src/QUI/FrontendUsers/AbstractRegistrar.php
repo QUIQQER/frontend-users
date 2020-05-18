@@ -222,4 +222,35 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
 
         return boolval($registrarSettings[$type]['active']);
     }
+
+    /**
+     * Validates all user attributes
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function checkUserAttributes()
+    {
+        $Handler = Handler::getInstance();
+
+        // Length check
+        foreach ($Handler->getUserAttributeLengthRestrictions() as $attribute => $maxLength) {
+            $value = $this->getAttribute($attribute);
+
+            if (empty($value)) {
+                continue;
+            }
+
+            if (\mb_strlen($value) > $maxLength) {
+                throw new Exception([
+                    'quiqqer/frontend-users',
+                    'exception.registrars.email.user_attribute_too_long',
+                    [
+                        'label'     => QUI::getLocale()->get('quiqqer/system', $attribute),
+                        'maxLength' => $maxLength
+                    ]
+                ]);
+            }
+        }
+    }
 }

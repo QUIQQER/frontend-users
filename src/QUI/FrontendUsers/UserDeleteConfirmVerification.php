@@ -66,6 +66,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
 
             $User->logout();
         } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+
             QUI\System\Log::addError(
                 self::class.' :: onSuccess -> Could not find/delete user #'.$userId
             );
@@ -146,7 +148,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
         }
 
         return $RegistrationSite->getUrlRewritten([], [
-            'error' => 'emailconfirm'
+            'error' => 'userdelete'
         ]);
     }
 

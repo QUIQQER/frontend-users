@@ -3,33 +3,35 @@ function signUpOnLoad() {
 
     var Button = document.getElement('button[name="registration-sign-in-login-button"]');
 
-    require([
-        'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
-    ], function (Login) {
-        Button.addEvent('click', function () {
-            new Login({
-                events: {
-                    onClose: function () {
-                        window.location.hash = '';
-                    },
+    if (Button) {
+        require([
+            'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
+        ], function (Login) {
+            Button.addEvent('click', function () {
+                new Login({
+                    events: {
+                        onClose: function () {
+                            window.location.hash = '';
+                        },
 
-                    onOpen: function () {
-                        window.location.hash = '#login';
+                        onOpen: function () {
+                            window.location.hash = '#login';
+                        }
                     }
-                }
-            }).open();
+                }).open();
+            });
+
+            Button.set('disabled', false);
+
+            if (window.QUIQQER_USER.id) {
+                Button.setStyle('display', 'none');
+            }
+
+            if (window.location.hash === '#login') {
+                Button.click();
+            }
         });
-
-        Button.set('disabled', false);
-
-        if (window.QUIQQER_USER.id) {
-            Button.setStyle('display', 'none');
-        }
-
-        if (window.location.hash === '#login') {
-            Button.click();
-        }
-    });
+    }
 
     require(['qui/QUI'], function (QUI) {
         var Container        = document.getElement('.registration-sign-in-container');
@@ -79,31 +81,39 @@ function signUpOnLoad() {
         }
     });
 
-    document.getElements('.registration-sign-in-links a').addEvent('click', function (event) {
-        event.stop();
+    var SignInLinks = document.getElements('.registration-sign-in-links');
 
-        var Target = event.target;
+    if (SignInLinks && SignInLinks.getElements('a').length) {
+        var socialClick = function (event) {
+            event.stop();
 
-        if (Target.nodeName !== 'A') {
-            Target = Target.getParent('a');
-        }
+            var Target = event.target;
 
-        require([
-            'package/quiqqer/controls/bin/site/Window',
-            'Locale'
-        ], function (QUISiteWindow, QUILocale) {
-            var lg     = 'quiqqer/frontend-users',
-                sideId = Target.get('data-id');
+            if (Target.nodeName !== 'A') {
+                Target = Target.getParent('a');
+            }
 
-            new QUISiteWindow({
-                closeButtonText: QUILocale.get(lg, 'btn.close'),
-                showTitle      : true,
-                project        : QUIQQER_PROJECT.name,
-                lang           : QUIQQER_PROJECT.lang,
-                id             : sideId
-            }).open();
+            require([
+                'package/quiqqer/controls/bin/site/Window',
+                'Locale'
+            ], function (QUISiteWindow, QUILocale) {
+                var lg     = 'quiqqer/frontend-users',
+                    sideId = Target.get('data-id');
+
+                new QUISiteWindow({
+                    closeButtonText: QUILocale.get(lg, 'btn.close'),
+                    showTitle      : true,
+                    project        : QUIQQER_PROJECT.name,
+                    lang           : QUIQQER_PROJECT.lang,
+                    id             : sideId
+                }).open();
+            });
+        };
+
+        SignInLinks.getElements('a').forEach(function(Link) {
+            Link.addEvent('click', socialClick);
         });
-    });
+    }
 }
 
 if (typeof window.whenQuiLoaded !== 'undefined') {
