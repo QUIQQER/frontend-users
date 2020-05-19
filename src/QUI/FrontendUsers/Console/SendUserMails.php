@@ -583,6 +583,7 @@ class SendUserMails extends QUI\System\Console\Tool
         } else {
             $recipients = [
                 0 => [
+                    'id'       => 0,
                     'username' => 'Test-User',
                     'email'    => $testMailAddress
                 ]
@@ -596,25 +597,27 @@ class SendUserMails extends QUI\System\Console\Tool
             $this->writeLn("### User $userId ###");
 
             // Check if user already got an e-mail
-            $userInfo = $this->getUserInfo($userId);
+            if (!$testMailAddress) {
+                $userInfo = $this->getUserInfo($userId);
 
-            if (!$testMailAddress && !empty($userInfo['sent'])) {
-                $this->writeLn("Mail already sent at ".$userInfo['sent_date']." -> Skipping user.");
-                continue;
-            }
-
-            // Check if mail limit(s) apply
-            do {
-                $mailAllowed = $this->isMailAllowed();
-
-                if ($mailAllowed) {
-                    break;
+                if (!empty($userInfo['sent'])) {
+                    $this->writeLn("Mail already sent at ".$userInfo['sent_date']." -> Skipping user.");
+                    continue;
                 }
 
-                $this->writeLn("[".\date('Y-m-d H:i:s')."] Current mail limit reached. Waiting 60s and then retry...");
+                // Check if mail limit(s) apply
+                do {
+                    $mailAllowed = $this->isMailAllowed();
 
-                sleep(60);
-            } while (!$mailAllowed);
+                    if ($mailAllowed) {
+                        break;
+                    }
+
+                    $this->writeLn("[".\date('Y-m-d H:i:s')."] Current mail limit reached. Waiting 60s and then retry...");
+
+                    sleep(60);
+                } while (!$mailAllowed);
+            }
 
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
                 $name = $recipient['firstname'].' '.$recipient['lastname'];
