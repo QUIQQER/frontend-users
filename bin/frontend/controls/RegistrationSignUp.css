@@ -16,6 +16,11 @@
 .quiqqer-fu-login-container-width {
     width: 40%;
 }
+.quiqqer-fu-registrationSignUp-back {
+    color: #1d1d1d;
+    display: block;
+    margin-top: 20px;
+}
 
 @media (max-width: 769px) {
     .quiqqer-fu-login-container-width {
