@@ -10,9 +10,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
     'qui/QUI',
     'qui/controls/Control',
+    'qui/controls/loader/Loader',
     'qui/utils/Form',
     'Ajax',
     'Locale',
+    'URI',
 
     'package/quiqqer/frontend-users/bin/Registration',
     'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
@@ -21,7 +23,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp.css'
 
-], function (QUI, QUIControl, QUIFormUtils, QUIAjax, QUILocale, Registration, QUILogin, QUISiteWindow) {
+], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUIAjax, QUILocale, URI, Registration, QUILogin, QUISiteWindow) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -50,7 +52,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader  = null;
+            this.Loader  = new QUILoader();
             this.$loaded = false;
 
             this.$RegistrationSection = null;
@@ -71,6 +73,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         $onImport: function (onInject) {
             var self = this,
                 Node = this.getElm();
+
+            this.Loader.inject(Node);
+            this.Loader.show();
 
             QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
 
@@ -165,6 +170,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             if (typeof onInject !== 'undefined' && onInject) {
                 this.$loaded = true;
                 this.fireEvent('loaded', [this]);
+
+                this.Loader.hide();
             }
         },
 
@@ -547,6 +554,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         $submitRegistrar: function (registrar) {
             var self = this;
 
+            this.Loader.show();
+
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
                     var Section = self.$RegistrationSection;
@@ -604,10 +613,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                     window.location = Redirect.get('data-url');
                                 }
 
-                                if (Section.getElement('.content-message-error')) {
-                                    //(function () {
-                                    //    self.$onInject();
-                                    //}).delay(5000);
+                                var ErrorBox = Section.getElement('.content-message-error');
+
+                                if (ErrorBox) {
+                                    new Element('a', {
+                                        'class': 'quiqqer-fu-registrationSignUp-back',
+                                        href   : '#',
+                                        html   : QUILocale.get(lg, 'controls.RegistrationSignUp.error.back'),
+                                        events : {
+                                            click: function (event) {
+                                                event.stop();
+
+                                                var Url = URI(window.location);
+
+                                                window.location = Url.origin() + Url.pathname();
+                                            }
+                                        }
+                                    }).inject(ErrorBox);
                                 }
 
                                 self.hideTextSection().then(function () {
@@ -617,6 +639,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                         callback: resolve
                                     });
                                 });
+
+                                self.Loader.hide();
                             }, reject);
                         }
                     });

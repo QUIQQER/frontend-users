@@ -1574,6 +1574,11 @@ The deletion of your user account on [host] was requested on [date]. Please conf
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
+        <locale name="controls.RegistrationSignUp.error.back">
+            <de><![CDATA[Zurück]]></de>
+            <en><![CDATA[Back]]></en>
+        </locale>
+
         <locale name="control.profile.window.title">
             <de><![CDATA[Profil]]></de>
             <en><![CDATA[Profile]]></en>
