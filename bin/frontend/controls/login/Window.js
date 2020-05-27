@@ -23,11 +23,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
         ],
 
         options: {
-            maxHeight: 640,
-            maxWidth : 500,
-            buttons  : false,
-            logo     : false,
-            reload   : true
+            maxHeight : 640,
+            maxWidth  : 500,
+            buttons   : false,
+            logo      : false,
+            reload    : true,
+            submitauth: false   // md5sum of classname of authenticator that is *immediately* submitted upon control load
         },
 
         initialize: function (options) {
@@ -80,6 +81,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
             this.$Login = new Login({
                 showLoader: false,
                 reload    : this.getAttribute('reload'),
+                submitauth: this.getAttribute('submitauth'),
                 onSuccess : function () {
                     self.close();
                     self.fireEvent('success', [self]);
