@@ -89,7 +89,7 @@ class Registration extends QUI\Control
 
         // execute registration process
         if (isset($_POST['registration'])
-            && ($_POST['registration_id'] === $this->id || $this->isAsync)) {
+            && ($this->isAsync || $_POST['registration_id'] === $this->id)) {
             try {
                 $registrationStatus = $this->register();
 
@@ -97,8 +97,12 @@ class Registration extends QUI\Control
                     'registrationStatus' => $registrationStatus
                 ]);
             } catch (QUI\FrontendUsers\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+
                 $Engine->assign('error', $Exception->getMessage());
             } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+
                 $Engine->assign(
                     'error',
                     QUI::getLocale()->get('quiqqer/frontend-user', 'controls.Registation.general_error')
@@ -500,7 +504,9 @@ class Registration extends QUI\Control
                 break;
 
             case $RegistrarHandler::ACTIVATION_MODE_AUTO:
-                $NewUser->activate(false, $SystemUser);
+                if (!$NewUser->isActive()) {
+                    $NewUser->activate(false, $SystemUser);
+                }
                 break;
         }
 

@@ -24,10 +24,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
     'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
 
+    'URI',
     'Ajax',
     'Locale'
 
-], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, QUIAjax, QUILocale) {
+], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, URI, QUIAjax, QUILocale) {
     "use strict";
 
     var lg      = 'quiqqer/frontend-users';
@@ -43,7 +44,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             'onInject',
             '$auth',
             '$authBySocial',
-            '$onUserLoginError'
+            '$onUserLoginError',
+            '$parseQuiControls'
         ],
 
         options: {
@@ -56,7 +58,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             emailAddress      : '',
             passwordReset     : true,
             reload            : true,
-            ownRedirectOnLogin: false // function
+            ownRedirectOnLogin: false, // function
+            submitauth        : false   // md5sum of classname of authenticator that is *immediately* submitted upon control load
         },
 
         initialize: function (options) {
@@ -246,6 +249,29 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 });
 
                 self.fireEvent('loadNoAnimation', [self]);
+
+                // Immediately submit an authentication form
+                // This is used for asynchronous authentication requests via third-party site
+                var submitauth = false;
+
+                if (self.getAttribute('submitauth')) {
+                    submitauth = self.getAttribute('submitauth');
+                } else {
+                    var Url   = URI(window.location),
+                        query = Url.query(true);
+
+                    if ("submitauth" in query) {
+                        submitauth = query.submitauth;
+                    }
+                }
+
+                if (submitauth) {
+                    var Form = self.getElm().getElement('form[data-authenticator-hash="' + self.getAttribute('submitauth') + '"]');
+
+                    if (Form) {
+                        self.$authBySocial(Form);
+                    }
+                }
             });
         },
 

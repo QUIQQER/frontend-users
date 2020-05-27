@@ -25,6 +25,7 @@
               method="POST"
               class="quiqqer-fu-login-social-entry"
               data-authenticator="{$entry.class}"
+              data-authenticator-hash="{$entry.class|md5}"
         >
             <span class="quiqqer-fu-login-social-entry-icon">
                 {if $entry.icon}

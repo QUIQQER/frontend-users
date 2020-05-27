@@ -226,6 +226,8 @@ class RegistrationSignUp extends QUI\Control
                 case 'activation':
                 case 'emailconfirm':
                 case 'userdelete':
+                case 'registration':
+                case 'login':
                     $msgError = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
                         'RegistrationSignUp.message.error.'.$_GET['error']
@@ -255,6 +257,11 @@ class RegistrationSignUp extends QUI\Control
 
         if (!empty($_GET['email'])) {
             $valueEmail = Orthos::clear($_GET['email']);
+        }
+
+        // Check if a registrar has to be submitted instantly
+        if (!empty($_GET['submitregistrar'])) {
+            $this->setJavaScriptControlOption('submitregistrar', $_GET['submitregistrar']);
         }
 
         $Engine->assign([
