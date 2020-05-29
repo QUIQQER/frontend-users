@@ -394,6 +394,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 }
 
                                 self.hideTextSection().then(function () {
+                                    self.Loader.hide();
+
                                     moofx(Section).animate({
                                         opacity: 1
                                     }, {
