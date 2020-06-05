@@ -111,6 +111,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     }
                 });
 
+                this.Loader.hide();
+
                 return;
             }
 
@@ -756,6 +758,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 );
 
             if (!EmailField) {
+                this.Loader.hide();
                 return;
             }
 
