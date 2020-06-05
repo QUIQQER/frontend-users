@@ -533,30 +533,46 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param {Object} error
          */
         $onUserLoginError: function (Control, error) {
+            var ActivationInfoBox = this.$Elm.getElement(
+                '.quiqqer-fu-login-activation-info'
+            );
+
+            ActivationInfoBox.set('html', '');
+
+            var MsgElm = new Element('div', {
+                'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
+                html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
+            }).inject(ActivationInfoBox);
+
+            var showResendError = function () {
+                MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
+                MsgElm.removeClass('content-message-attention');
+                MsgElm.addClass('content-message-error');
+            };
+
             switch (error.getAttribute('reason')) {
                 case 'auth_error_user_not_active':
-                    var ActivationInfoBox = this.$Elm.getElement(
-                        '.quiqqer-fu-login-activation-info'
-                    );
+                    var email = this.getAttribute('emailAddress');
 
-                    ActivationInfoBox.set('html', '');
+                    if (!email) {
+                        var Form = this.getElm().getElement('form[name="quiqqer-fu-login-email"]');
 
-                    var MsgElm = new Element('div', {
-                        'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
-                        html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
-                    }).inject(ActivationInfoBox);
+                        if (!Form) {
+                            showResendError();
+                            return;
+                        }
+
+                        email = Form.getElement('input[name="username"]').value.trim();
+                    }
 
                     new ResendActivationLinkBtn({
-                        email : this.getAttribute('emailAddress'),
+                        email : email,
                         events: {
                             onResendSuccess: function (Btn) {
                                 Btn.disable();
                             },
                             onResendFail   : function (Btn) {
-                                MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
-                                MsgElm.removeClass('content-message-attention');
-                                MsgElm.addClass('content-message-error');
-
+                                showResendError();
                                 Btn.enable();
                             }
                         }
