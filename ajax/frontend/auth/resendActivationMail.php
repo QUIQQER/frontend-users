@@ -22,6 +22,7 @@ QUI::$Ajax->registerFunction(
             Verifier::getVerificationByIdentifier($User->getId(), ActivationVerification::getType());
         } catch (\Exception $Exception) {
             // if the verification does not exist -> do not resend mail
+            QUI\System\Log::writeException($Exception);
             return false;
         }
 
@@ -34,6 +35,7 @@ QUI::$Ajax->registerFunction(
 
             Handler::getInstance()->sendActivationMail($User, $Registrar);
         } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
             return false;
         }
 
