@@ -1779,5 +1779,9 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Your password was changed successfully.]]></en>
         </locale>
 
+        <locale name="registration.control.registration.link">
+            <de><![CDATA[Zur Registrierung]]></de>
+            <en><![CDATA[To the Sign up]]></en>
+        </locale>
     </groups>
 </locales>
