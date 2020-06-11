@@ -7,10 +7,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
     'qui/QUI',
     'qui/controls/windows/Popup',
     'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
+    'Locale',
+    'Ajax',
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/login/Window.css'
 
-], function (QUI, QUIPopup, Login) {
+], function (QUI, QUIPopup, Login, QUILocale, QUIAjax) {
     "use strict";
 
     return new Class({
@@ -23,12 +25,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
         ],
 
         options: {
-            maxHeight : 640,
-            maxWidth  : 500,
-            buttons   : false,
-            logo      : false,
-            reload    : true,
-            submitauth: false   // md5sum of classname of authenticator that is *immediately* submitted upon control load
+            maxHeight: 640,
+            maxWidth : 500,
+            buttons  : false,
+            logo     : false,
+            reload   : true,
+
+            'show-registration-link': false
         },
 
         initialize: function (options) {
@@ -78,34 +81,54 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
                 }).inject(Content);
             }
 
-            this.$Login = new Login({
-                showLoader: false,
-                reload    : this.getAttribute('reload'),
-                submitauth: this.getAttribute('submitauth'),
-                onSuccess : function () {
-                    self.close();
-                    self.fireEvent('success', [self]);
-                },
-                events    : {
-                    onAuthBegin: function () {
-                        self.Loader.show();
-                    },
-                    onAuthNext : function () {
-                        self.Loader.hide();
-                    },
+            var Prom = window.Promise.resolve();
 
-                    onLoad: function () {
-                        self.Loader.hide();
-                    },
+            if (this.getAttribute('show-registration-link')) {
+                Prom = new window.Promise(function (resolve) {
+                    QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_getRegistrationLink', resolve, {
+                        'package': 'quiqqer/frontend-users'
+                    });
+                });
+            }
 
-                    userLoginError: function () {
-                        self.Loader.hide();
+            Prom.then(function (registrationLink) {
+                self.$Login = new Login({
+                    showLoader: false,
+                    reload    : self.getAttribute('reload'),
+                    onSuccess : function () {
+                        self.close();
+                        self.fireEvent('success', [self]);
+                    },
+                    events    : {
+                        onAuthBegin: function () {
+                            self.Loader.show();
+                        },
+                        onAuthNext : function () {
+                            self.Loader.hide();
+                        },
+
+                        onLoad: function () {
+                            self.Loader.hide();
+                            self.fireEvent('load', [self]);
+                        },
+
+                        userLoginError: function () {
+                            self.Loader.hide();
+                        }
+                    },
+                    styles    : {
+                        height: 'calc(100% - 80px)'
                     }
-                },
-                styles    : {
-                    height: 'calc(100% - 80px)'
+                }).inject(Content);
+
+                if (self.getAttribute('show-registration-link')) {
+                    new Element('a', {
+                        'class': 'quiqqer-frontendUsers-loginWindow-registration-link',
+                        href   : registrationLink,
+                        html   : QUILocale.get('quiqqer/frontend-users', 'registration.control.registration.link')
+                    }).inject(Content);
                 }
-            }).inject(Content);
+            });
         }
     });
 });
