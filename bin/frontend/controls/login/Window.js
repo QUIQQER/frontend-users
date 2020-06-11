@@ -82,8 +82,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
             }
 
             var Prom = window.Promise.resolve();
+            var height = 80;
 
             if (this.getAttribute('show-registration-link')) {
+                height = 110;
+
                 Prom = new window.Promise(function (resolve) {
                     QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_getRegistrationLink', resolve, {
                         'package': 'quiqqer/frontend-users'
@@ -117,7 +120,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
                         }
                     },
                     styles    : {
-                        height: 'calc(100% - 80px)'
+                        height: 'calc(100% - '+ height +'px)'
                     }
                 }).inject(Content);
 
