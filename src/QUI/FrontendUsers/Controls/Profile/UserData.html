@@ -150,6 +150,17 @@
     </label>
     {/if}
 
+    {if $showLanguageChangeInProfile}
+    <label>
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.language"}
+        </span>
+        <div class="quiqqer-frontendUsers-userdata-language">
+            <input data-qui="controls/lang/Select" name="language" value="{$User->getLang()}"/>
+        </div>
+    </label>
+    {/if}
+
     <label>
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.email"}

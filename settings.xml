@@ -43,6 +43,10 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
                 </conf>
+                <conf name="showLanguageChangeInProfile">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue><![CDATA[1]]></defaultvalue>
+                </conf>
             </section>
 
             <section name="disable">
@@ -481,6 +485,16 @@
                                         var="settings.visitRegistrationSiteBehaviour.option.showMessage"/>
                             </option>
                         </select>
+
+                        <input type="checkbox" conf="userProfile.showLanguageChangeInProfile">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showLanguageChangeInProfile"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.showLanguageChangeInProfile.description"/>
+                            </description>
+                        </input>
 
                         <input conf="registration.autoRedirectOnSuccess" type="text"
                                data-qui="controls/projects/project/site/MultiLangSelect">

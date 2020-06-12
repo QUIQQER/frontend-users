@@ -218,6 +218,14 @@
             <de><![CDATA[Addresse in der Profilverwaltung]]></de>
             <en><![CDATA[Address in the user profile management]]></en>
         </locale>
+        <locale name="settings.showLanguageChangeInProfile">
+            <de><![CDATA[Benutzer Sprache im Profil]]></de>
+            <en><![CDATA[User language in profile]]></en>
+        </locale>
+        <locale name="settings.showLanguageChangeInProfile.description">
+            <de><![CDATA[Legt fest ob der Benutzer im Profil seine Sprache ändern kann.]]></de>
+            <en><![CDATA[Defines whether the user can change his language in the profile.]]></en>
+        </locale>
 
         <!-- Settings: Registration -->
         <locale name="settings.section.registration.title">
@@ -884,7 +892,8 @@
                 <![CDATA[Unfortunately an error occurred while registering your user account. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.userdelete.login">
-            <de><![CDATA[Leider ist beim Login-Vorgang ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <de>
+                <![CDATA[Leider ist beim Login-Vorgang ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
             <en><![CDATA[Unfortunately an error occurred while signing in. Please repeat the process.]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.redirect">
@@ -948,6 +957,10 @@
         <locale name="profile.userdata.username">
             <de><![CDATA[Benutzername]]></de>
             <en><![CDATA[Benutzername]]></en>
+        </locale>
+        <locale name="profile.userdata.language">
+            <de><![CDATA[Sprache]]></de>
+            <en><![CDATA[Language]]></en>
         </locale>
         <locale name="profile.userdata.email">
             <de><![CDATA[E-Mail-Adresse]]></de>
