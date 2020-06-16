@@ -112,6 +112,37 @@
             <de><![CDATA[Benuterkonto-Aktionen]]></de>
             <en><![CDATA[User account actions]]></en>
         </locale>
+        <locale name="settings.section.userAccount.avatar.title">
+            <de><![CDATA[Avatar]]></de>
+            <en><![CDATA[Avatar]]></en>
+        </locale>
+        <locale name="settings.maxAvatarUploadSize.title">
+            <de><![CDATA[Maximale Größe]]></de>
+            <en><![CDATA[Max size]]></en>
+        </locale>
+        <locale name="settings.maxAvatarUploadSize.description">
+            <de><![CDATA[Legt die maximale Größe (in byte) eines Avatar fest.]]></de>
+            <en><![CDATA[Defines the maximum size (in byte) of an avatar.]]></en>
+        </locale>
+
+        <locale name="settings.maxAvatarUploadHeight.title">
+            <de><![CDATA[Maximale Höhe]]></de>
+            <en><![CDATA[Max height]]></en>
+        </locale>
+        <locale name="settings.maxAvatarUploadHeight.description">
+            <de><![CDATA[Legt die maximale Höhe (in px) eines Avatar fest.]]></de>
+            <en><![CDATA[Defines the maximum height (in px) of an avatar.]]></en>
+        </locale>
+
+        <locale name="settings.maxAvatarUploadWidth.title">
+            <de><![CDATA[Maximale Breite]]></de>
+            <en><![CDATA[Max width]]></en>
+        </locale>
+        <locale name="settings.maxAvatarUploadWidth.description">
+            <de><![CDATA[Legt die maximale Width (in px) eines Avatar fest.]]></de>
+            <en><![CDATA[Defines the maximum width (in px) of an avatar.]]></en>
+        </locale>
+
         <locale name="settings.userDeleteMode.title">
             <de><![CDATA[Verhalten, wenn Benuterkonto gelöscht wird]]></de>
             <en><![CDATA[Behvaiour on user account deletion]]></en>
@@ -208,10 +239,12 @@
             <en><![CDATA[Default avatar image]]></en>
         </locale>
         <locale name="settings.defaultAvatar.description" html="true">
-            <de>
-                <![CDATA[Bild, welches standardmäßig als Avatar-Icon in der Benutzer-Leise angezeigt wird, wenn im Benutzer <b>kein</b> Bild hinterlegt ist. Ist hier <b>kein Bild ausgewählt</b>, wird der <b>erste Buchstabe</b> des Benutzernamens angezeigt.]]></de>
-            <en>
-                <![CDATA[Image that is shown as the default avatar icon in the user bar if the user has <b>no</b> image assigned. If there is <b>no image selected here</b> the <b>first letter</b> of the username will be shown.]]></en>
+            <de><![CDATA[
+            Bild, welches standardmäßig als Avatar-Icon in der Benutzer-Leise angezeigt wird, wenn im Benutzer <b>kein</b> Bild hinterlegt ist. Ist hier <b>kein Bild ausgewählt</b>, wird der <b>erste Buchstabe</b> des Benutzernamens angezeigt.
+            ]]></de>
+            <en><![CDATA[
+            Image that is shown as the default avatar icon in the user bar if the user has <b>no</b> image assigned. If there is <b>no image selected here</b> the <b>first letter</b> of the username will be shown.
+            ]]></en>
         </locale>
 
         <locale name="settings.section.profileAddress.title">
@@ -739,8 +772,16 @@
 
         <!-- Category titles -->
         <locale name="profile.avatar.title">
-            <de><![CDATA[Benutzerbild]]></de>
-            <en><![CDATA[Avatar]]></en>
+            <de><![CDATA[Aktuelles Benutzerbild]]></de>
+            <en><![CDATA[Current Avatar]]></en>
+        </locale>
+        <locale name="profile.no.avatar.message">
+            <de><![CDATA[Kein Bild festgelegt]]></de>
+            <en><![CDATA[Kein Bild festgelegt]]></en>
+        </locale>
+        <locale name="profile.avatar.upload.title">
+            <de><![CDATA[Neues Benutzerbild hochladen]]></de>
+            <en><![CDATA[Upload new avatar]]></en>
         </locale>
         <locale name="profile.changepassword.title">
             <de><![CDATA[Passwort ändern]]></de>
@@ -761,6 +802,10 @@
         <locale name="profile.data.title">
             <de><![CDATA[Meine Daten]]></de>
             <en><![CDATA[My data]]></en>
+        </locale>
+        <locale name="profile.avatar.gravatar.title">
+            <de><![CDATA[Gravatar]]></de>
+            <en><![CDATA[Gravatar]]></en>
         </locale>
 
         <locale name="dialog.frontend-users.delete.address">
@@ -1096,6 +1141,19 @@
         <locale name="profile.useravatar.gravatar_option">
             <de><![CDATA[Gravatar benutzen ([email])]]></de>
             <en><![CDATA[Use Gravatar ([email])]]></en>
+        </locale>
+
+        <locale name="settings.userAvatarUploadAllowed.title">
+            <de><![CDATA[Upload eines Benutezrsbildes erlauben]]></de>
+            <en><![CDATA[Allow upload of a user image]]></en>
+        </locale>
+        <locale name="settings.userAvatarUploadAllowed.description">
+            <de><![CDATA[
+            Der Benutzer kann ein eigenes Benutzerbild hochladen. Benutzerbilder werden im Standardmedibereich unter .users abgelegt.
+            ]]></de>
+            <en><![CDATA[
+            The user can upload his own user picture. User pictures are stored in the standard media area under .users.
+            ]]></en>
         </locale>
 
         <!-- Class: Handler -->
