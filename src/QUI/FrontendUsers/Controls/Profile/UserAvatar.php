@@ -65,8 +65,8 @@ class UserAvatar extends AbstractProfileControl
                     $AvatarImage = QUIMediaUtils::getImageByUrl($avatarMediaUrl);
 
                     $Engine->assign([
-                        'avatarImageUrl' => ' style="background-image: url(\''.$AvatarImage->getSizeCacheUrl(100,
-                                100).'\')"'
+                        'avatarImageUrl' => ' style="background-image: url(\''.
+                                            $AvatarImage->getSizeCacheUrl(100, 100).'\')"'
                     ]);
                 } catch (QUI\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
