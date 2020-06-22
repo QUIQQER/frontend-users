@@ -11,11 +11,24 @@
 }
 
 .quiqqer-frontendUsers-userAvatar-icon-none {
-    border: 2px solid #000;
     display: block;
-    height: 100px;
-    text-align: center;
-    width: 100px;
+}
+
+.quiqqer-frontendUsers-userAvatar-upload {
+    margin-top: 2rem;
+}
+
+.quiqqer-frontendUsers-userAvatar-upload h3 {
+    font-size: 1.4rem;
+}
+
+.quiqqer-frontendUsers-userAvatar-upload-control {
+    height: 30px;
+    margin-bottom: 2rem;
+}
+
+.quiqqer-frontendUsers-userAvatar-gravatar-section {
+    clear: both;
 }
 
 .quiqqer-frontendUsers-userAvatar-gravatar input {

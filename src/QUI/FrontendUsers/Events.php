@@ -249,6 +249,7 @@ class Events
         self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();
         self::setProfileAddressDefaultSettings();
+        self::checkUserMediaFolder();
     }
 
     /**
@@ -581,6 +582,37 @@ class Events
                     'defaultvalue' => $defaultViewPermission
                 ]);
             }
+        }
+    }
+
+    /**
+     * Create the user upload folder
+     * -> for avatars
+     *
+     * @throws QUI\Exception
+     */
+    public static function checkUserMediaFolder()
+    {
+        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $folder = $Config->getValue('userProfile', 'userAvatarFolder');
+
+        try {
+            QUI\Projects\Media\Utils::getMediaItemByUrl($folder);
+        } catch (QUI\Exception $Exception) {
+            $Standard   = QUI::getProjectManager()->getStandard();
+            $Media      = $Standard->getMedia();
+            $MainFolder = $Media->firstChild();
+
+            try {
+                $Folder = $MainFolder->getChildByName('user');
+            } catch (QUI\Exception $Exception) {
+                $Folder = $MainFolder->createFolder('users');
+                $Folder->setHidden();
+                $Folder->save();
+            }
+
+            $Config->setValue('userProfile', 'userAvatarFolder', $Folder->getUrl());
+            $Config->save();
         }
     }
 }

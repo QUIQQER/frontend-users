@@ -21,7 +21,7 @@ class UserData extends AbstractProfileControl
      * UserData constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -41,8 +41,10 @@ class UserData extends AbstractProfileControl
         $action               = false;
         $emailChangeRequested = true;
 
-        $User             = QUI::getUserBySession();
-        $Engine           = QUI::getTemplateManager()->getEngine();
+        $User   = QUI::getUserBySession();
+        $Engine = QUI::getTemplateManager()->getEngine();
+        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
         if (!empty($_REQUEST['action'])) {
@@ -66,13 +68,15 @@ class UserData extends AbstractProfileControl
             $Address = $User->addAddress([]);
         }
 
-        $Engine->assign(array(
+        $Engine->assign([
             'User'              => $User,
             'Address'           => $Address,
             'action'            => $action,
             'changeMailRequest' => $emailChangeRequested,
-            'username'          => $RegistrarHandler->isUsernameInputAllowed()
-        ));
+            'username'          => $RegistrarHandler->isUsernameInputAllowed(),
+
+            'showLanguageChangeInProfile' => $Config->getValue('userProfile', 'showLanguageChangeInProfile')
+        ]);
 
         return $Engine->fetch(dirname(__FILE__).'/UserData.html');
     }
@@ -97,24 +101,24 @@ class UserData extends AbstractProfileControl
 
         if (!empty($newEmail)) {
             if (!Orthos::checkMailSyntax($newEmail)) {
-                throw new QUI\FrontendUsers\Exception(array(
+                throw new QUI\FrontendUsers\Exception([
                     'quiqqer/frontend-users',
                     'exception.controls.profile.userdata.invalid_new_email_address'
-                ));
+                ]);
             }
 
             if (QUI::getUsers()->emailExists($newEmail)) {
-                throw new QUI\FrontendUsers\Exception(array(
+                throw new QUI\FrontendUsers\Exception([
                     'quiqqer/frontend-users',
                     'exception.controls.profile.userdata.new_email_address_already_exists'
-                ));
+                ]);
             }
 
             if ($newEmail === $User->getAttribute('email')) {
-                throw new QUI\FrontendUsers\Exception(array(
+                throw new QUI\FrontendUsers\Exception([
                     'quiqqer/frontend-users',
                     'exception.controls.profile.userdata.new_email_address_no_change'
-                ));
+                ]);
             }
 
             FrontendUsersHandler::getInstance()->sendChangeEmailAddressMail(
@@ -124,14 +128,30 @@ class UserData extends AbstractProfileControl
             );
         }
 
+        // language
+        $Config     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $changeLang = (int)$Config->getValue('userProfile', 'showLanguageChangeInProfile');
+
+        if ($changeLang && $Request->get('language')) {
+            $Project   = QUI::getRewrite()->getProject();
+            $languages = $Project->getLanguages();
+
+            if (\in_array($Request->get('language'), $languages)) {
+                $User->setAttribute('lang', $Request->get('language'));
+                $User->save();
+
+                $User->getLang();
+            }
+        }
+
         // user data
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
-        $allowedFields = array(
+        $allowedFields = [
             'firstname',
             'lastname',
             'birthday'
-        );
+        ];
 
         // allow edit of username if username can be set on registration
         if ($RegistrarHandler->isUsernameInputAllowed()) {
