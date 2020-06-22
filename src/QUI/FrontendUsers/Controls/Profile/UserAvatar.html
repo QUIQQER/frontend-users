@@ -1,28 +1,55 @@
-{if $AvatarImage}
-<div class="quiqqer-frontendUsers-userAvatar-icon"
-     title="{$User->getName()}"
-     {if isset($avatarImageUrl)}style="background-image: url('{$avatarImageUrl}');" {/if}
-></div>
-{else}
-<span class="quiqqer-frontendUsers-userAvatar-icon-none">
-    Kein Bild festgelegt
-</span>
-{/if}
+<section class="quiqqer-frontendUsers-userAvatar-section">
+    <header>
+        <h2>
+            {locale group="quiqqer/frontend-users" var="profile.avatar.title"}
+        </h2>
+    </header>
+
+    {if $AvatarImage}
+    <div class="quiqqer-frontendUsers-userAvatar-icon"
+         title="{$User->getName()}"
+         {$avatarImageUrl}></div>
+    {else}
+    <span class="quiqqer-frontendUsers-userAvatar-icon-none content-message-information">
+        {locale group="quiqqer/frontend-users" var="profile.no.avatar.message"}
+    </span>
+    {/if}
+
+    {if $uploadEnabled}
+    <div class="quiqqer-frontendUsers-userAvatar-upload">
+        <h3>
+            {locale group="quiqqer/frontend-users" var="profile.avatar.upload.title"}
+        </h3>
+
+        <div class="quiqqer-frontendUsers-userAvatar-upload-control">
+            {$AvatarUpload->create()}
+        </div>
+    </div>
+    {/if}
+</section>
 
 {if $gravatarEnabled}
-<div class="quiqqer-frontendUsers-userAvatar-gravatar">
-    <label>
+<section class="quiqqer-frontendUsers-userAvatar-gravatar-section">
+    <header>
+        <h2>
+            {locale group="quiqqer/frontend-users" var="profile.avatar.gravatar.title"}
+        </h2>
+    </header>
+
+    <div class="quiqqer-frontendUsers-userAvatar-gravatar">
+        <label>
         <span>
             {locale group="quiqqer/frontend-users"
                     var="profile.useravatar.gravatar_option"
                     email=$User->getAttribute('email')
             }
         </span>
-        <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
-    </label>
-</div>
+            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
+        </label>
+    </div>
 
-<button type="submit" class="quiqqer-frontendUsers-userAvatar-saveButton">
-    {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
-</button>
+    <button type="submit" class="quiqqer-frontendUsers-userAvatar-saveButton">
+        {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
+    </button>
+</section>
 {/if}

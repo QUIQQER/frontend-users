@@ -424,12 +424,12 @@ class Registration extends QUI\Control
         // Check user data
         $username = $Registrar->getUsername();
 
-        if (\mb_strlen($username) > 40) {
+        if (\mb_strlen($username) > 50) {
             throw new QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.registration.username_too_long',
                 [
-                    'maxLength' => 40
+                    'maxLength' => 50
                 ]
             ]);
         }
