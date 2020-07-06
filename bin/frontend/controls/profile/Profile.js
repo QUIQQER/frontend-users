@@ -188,7 +188,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                 self.save().then(function () {
                     self.Loader.hide();
-                    
+
                     self.openSetting(self.$category, self.$settings).then(function () {
                         self.fireEvent('saveEnd', [self]);
                     });
@@ -318,17 +318,34 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         }
 
                         var styles  = Ghost.getElements('style');
+                        var scripts = Ghost.getElements('script');
+
                         var Content = Ghost.getElement(
                             '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
                         );
 
                         Form.setStyle('height', height);
 
+                        if (!Content) {
+                            return;
+                        }
+
                         Animation.set({
                             html: Content.get('html')
                         });
 
                         styles.inject(Animation);
+
+                        for (var i = 0, len = scripts.length; i < len; i++) {
+                            if (scripts[i].src) {
+                                scripts[i].inject(Animation);
+                                continue;
+                            }
+
+                            new Element('script', {
+                                html: scripts[i].get('html')
+                            }).inject(Animation);
+                        }
 
                         self.$setMenuItemActive(category, settings);
 

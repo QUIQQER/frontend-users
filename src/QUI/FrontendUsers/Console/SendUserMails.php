@@ -163,6 +163,22 @@ class SendUserMails extends QUI\System\Console\Tool
             $recipients[] = $row;
         }
 
+        // DELETE USER STATISTICS?
+        $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails';
+
+        if (\file_exists($infoFile)) {
+            $this->writeLn(
+                "Statistics of e-mails aready sent to user found. Delete statistics and start from scratch? (y/N): "
+            );
+
+            $deleteStatistics = mb_strtolower($this->readInput()) === 'y';
+
+            if ($deleteStatistics) {
+                \unlink($infoFile);
+                $this->writeLn("Statistics file deleted.");
+            }
+        }
+
         // EMAIL SETTINGS
         $this->writeLn("E-Mail subject?: ");
         $subject = $this->readInput();
@@ -179,6 +195,47 @@ class SendUserMails extends QUI\System\Console\Tool
 
         if (empty($senderName)) {
             $senderName = QUI::conf('mail', 'MAILFromText');
+        }
+
+        // LIMITS CONFIGURATION
+        $limits    = $this->getLimits();
+        $setLimits = true;
+
+        if (!empty($limits)) {
+            $this->writeLn("The following mailing limits have been found:\n");
+
+            $this->writeLn("Mails / 24 hours: ".($limits['per24h'] ?: 'unlimited'));
+            $this->writeLn("Mails / hour: ".($limits['perHour'] ?: 'unlimited'));
+            $this->writeLn("Mails / minute: ".($limits['perMinute'] ?: 'unlimited'));
+
+            $this->writeLn("\nDo you want to set new limits? (y/N)");
+            $input     = $this->readInput();
+            $setLimits = !empty($input) && mb_strtolower($input) === 'y';
+        }
+
+        if ($setLimits) {
+            $this->writeLn("(Limit) Mails / 24 hours? [unlimited]: ");
+            $limitPer24h = $this->readInput();
+
+            $this->writeLn("(Limit) Mails / hour? [unlimited]: ");
+            $limitPerHour = $this->readInput();
+
+            $this->writeLn("(Limit) Mails / minute? [unlimited]: ");
+            $limitPerMinute = $this->readInput();
+
+            $limits = [
+                'per24h'        => !empty($limitPer24h) ? (int)$limitPer24h : false,
+                'perHour'       => !empty($limitPerHour) ? (int)$limitPerHour : false,
+                'perMinute'     => !empty($limitPerMinute) ? (int)$limitPerMinute : false,
+                'start24h'      => false,
+                'startHour'     => false,
+                'startMinute'   => false,
+                'current24h'    => 0,
+                'currentHour'   => 0,
+                'currentMinute' => 0
+            ];
+
+            $this->setLimits($limits);
         }
 
         // SUMMARY
@@ -198,6 +255,11 @@ class SendUserMails extends QUI\System\Console\Tool
             "\nE-Mail will be sent to ".count($recipients)." out of ".count($result)." selected users."
             ." ".(count($result) - count($recipients))." users have no e-mail address and are ignored."
         );
+
+        $this->writeLn("\nLimits:");
+        $this->writeLn("Mails / 24 hours: ".($limits['per24h'] ?: 'unlimited'));
+        $this->writeLn("Mails / hour: ".($limits['perHour'] ?: 'unlimited'));
+        $this->writeLn("Mails / minute: ".($limits['perMinute'] ?: 'unlimited'));
 
         $this->mail['body']       = $body;
         $this->mail['senderMail'] = $senderMail;
@@ -237,6 +299,277 @@ class SendUserMails extends QUI\System\Console\Tool
     }
 
     /**
+     * Get mail status info for a specific user
+     *
+     * @param int $userId
+     * @return array
+     */
+    protected function getUserInfo(int $userId)
+    {
+        try {
+            $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails';
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            return [];
+        }
+
+        $userInfo = [];
+
+        if (\file_exists($infoFile)) {
+            $userInfo = \json_decode(\file_get_contents($infoFile), true);
+        }
+
+        if (empty($userInfo[$userId])) {
+            $user = [
+                'sent'      => false,
+                'sent_date' => false
+            ];
+
+            $this->writeUserInfo($userId, $user);
+        } else {
+            $user = $userInfo[$userId];
+        }
+
+        return $user;
+    }
+
+    /**
+     * Write mail status info for a specific user to a file
+     *
+     * @param int $userId
+     * @param array $info
+     * @return void
+     */
+    protected function writeUserInfo(int $userId, array $info)
+    {
+        try {
+            $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails';
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            return;
+        }
+
+        $userInfo = [];
+
+        if (\file_exists($infoFile)) {
+            $userInfo = \json_decode(\file_get_contents($infoFile), true);
+        }
+
+        $userInfo[$userId] = $info;
+
+        \file_put_contents($infoFile, \json_encode($userInfo));
+    }
+
+    /**
+     * Check if the sending of a mail is currently within the configured limits
+     *
+     * @param array $limits - Limits config
+     * @return void
+     */
+    protected function setLimits(array $limits)
+    {
+        try {
+            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails_limits';
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            return;
+        }
+
+        \file_put_contents($limitsFile, \json_encode($limits));
+    }
+
+    /**
+     * Get current limits configuration
+     *
+     * @return array|false - Limit config or false if limits not yet configured
+     */
+    protected function getLimits()
+    {
+        try {
+            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails_limits';
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            return false;
+        }
+
+        if (!\file_exists($limitsFile)) {
+            return false;
+        }
+
+        return \json_decode(\file_get_contents($limitsFile), true);
+    }
+
+    /**
+     * Update limits
+     *
+     * This assumes that ONE e-mail has been successfully sent.
+     *
+     * @return void
+     */
+    protected function updateLimits()
+    {
+        $limits = $this->getLimits();
+        $Now    = \date_create();
+
+        // Update minute limit
+        if (!empty($limits['perMinute'])) {
+            if (empty($limits['startMinute'])) {
+                $Start                 = \date_create();
+                $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
+            } else {
+                $Start = \date_create($limits['startMinute']);
+            }
+
+            $End = clone $Start;
+            $End->add(\date_interval_create_from_date_string('1 minutes'));
+
+            // Reset limit
+            if ($Now > $End) {
+                $Start                   = \date_create();
+                $limits['startMinute']   = $Start->format('Y-m-d H:i:s');
+                $limits['currentMinute'] = 0;
+            }
+
+            $limits['currentMinute']++;
+        }
+
+        // Update hour limit
+        if (!empty($limits['perHour'])) {
+            if (empty($limits['startHour'])) {
+                $Start               = \date_create();
+                $limits['startHour'] = $Start->format('Y-m-d H:i:s');
+            } else {
+                $Start = \date_create($limits['startHour']);
+            }
+
+            $End = clone $Start;
+            $End->add(\date_interval_create_from_date_string('1 hours'));
+
+            // Reset limit
+            if ($Now > $End) {
+                $Start                 = \date_create();
+                $limits['startHour']   = $Start->format('Y-m-d H:i:s');
+                $limits['currentHour'] = 0;
+            }
+
+            $limits['currentHour']++;
+        }
+
+        // Update 24 hour limit
+        if (!empty($limits['per24h'])) {
+            if (empty($limits['start24h'])) {
+                $Start              = \date_create();
+                $limits['start24h'] = $Start->format('Y-m-d H:i:s');
+            } else {
+                $Start = \date_create($limits['start24h']);
+            }
+
+            $End = clone $Start;
+            $End->add(\date_interval_create_from_date_string('24 hours'));
+
+            // Reset limit
+            if ($Now > $End) {
+                $Start                = \date_create();
+                $limits['start24h']   = $Start->format('Y-m-d H:i:s');
+                $limits['current24h'] = 0;
+            }
+
+            $limits['current24h']++;
+        }
+
+        try {
+            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails_limits';
+            \file_put_contents($limitsFile, \json_encode($limits));
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            $this->writeLn("ERROR on writing limits file: ".$Exception->getMessage());
+        }
+    }
+
+    /**
+     * Check if the sending of a mail is currently within the configured limits
+     *
+     * @return bool
+     */
+    protected function isMailAllowed()
+    {
+        $limits = $this->getLimits();
+        $Now    = \date_create();
+
+        // Check minute limit
+        if (!empty($limits['perMinute'])) {
+            if (empty($limits['startMinute'])) {
+                $Start = \date_create();
+            } else {
+                $Start = \date_create($limits['startMinute']);
+            }
+
+            $End = clone $Start;
+            $End->add(\date_interval_create_from_date_string('1 minutes'));
+
+            // Limit applies
+            if ($Now < $End) {
+                $mailCountMax = $limits['perMinute'];
+                $mailCount    = $limits['currentMinute'];
+
+                if ($mailCount >= $mailCountMax) {
+                    return false;
+                }
+            }
+        }
+
+        // Check hour limit
+        if (!empty($limits['perHour'])) {
+            if (empty($limits['startHour'])) {
+                $Start = \date_create();
+            } else {
+                $Start = \date_create($limits['startHour']);
+            }
+
+            $End = clone $Start;
+            $End->add(\date_interval_create_from_date_string('1 hours'));
+
+            // Limit applies
+            if ($Now < $End) {
+                $mailCountMax = $limits['perHour'];
+                $mailCount    = $limits['currentHour'];
+
+                if ($mailCount >= $mailCountMax) {
+                    return false;
+                }
+            }
+        }
+
+        // Check 24 hour limit
+        if (!empty($limits['per24h'])) {
+            if (empty($limits['start24h'])) {
+                $Start = \date_create();
+            } else {
+                $Start = \date_create($limits['start24h']);
+            }
+
+            $End = clone $Start;
+            $End->add(\date_interval_create_from_date_string('24 hours'));
+
+            // Limit applies
+            if ($Now < $End) {
+                $mailCountMax = $limits['per24h'];
+                $mailCount    = $limits['current24h'];
+
+                if ($mailCount >= $mailCountMax) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @param string $testMailAddress (optional) - If set, a single test mail will be sent to this address
      * @return void
      */
@@ -250,6 +583,7 @@ class SendUserMails extends QUI\System\Console\Tool
         } else {
             $recipients = [
                 0 => [
+                    'id'       => 0,
                     'username' => 'Test-User',
                     'email'    => $testMailAddress
                 ]
@@ -258,6 +592,33 @@ class SendUserMails extends QUI\System\Console\Tool
 
         // Queue mails
         foreach ($recipients as $recipient) {
+            $userId = $recipient['id'];
+
+            $this->writeLn("### User $userId ###");
+
+            // Check if user already got an e-mail
+            if (!$testMailAddress) {
+                $userInfo = $this->getUserInfo($userId);
+
+                if (!empty($userInfo['sent'])) {
+                    $this->writeLn("Mail already sent at ".$userInfo['sent_date']." -> Skipping user.");
+                    continue;
+                }
+
+                // Check if mail limit(s) apply
+                do {
+                    $mailAllowed = $this->isMailAllowed();
+
+                    if ($mailAllowed) {
+                        break;
+                    }
+
+                    $this->writeLn("[".\date('Y-m-d H:i:s')."] Current mail limit reached. Waiting 60s and then retry...");
+
+                    sleep(60);
+                } while (!$mailAllowed);
+            }
+
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
                 $name = $recipient['firstname'].' '.$recipient['lastname'];
             } else {
@@ -271,7 +632,7 @@ class SendUserMails extends QUI\System\Console\Tool
                 $this->writeLn("Generating new password for $email...");
 
                 try {
-                    $User        = $Users->get($recipient['id']);
+                    $User        = $Users->get($userId);
                     $newPassword = QUI\Security\Password::generateRandom();
 
                     $User->setPassword($newPassword, $SystemUser);
@@ -318,6 +679,13 @@ class SendUserMails extends QUI\System\Console\Tool
             }
 
             $this->write(" OK!");
+
+            $this->writeUserInfo($userId, [
+                'sent'      => true,
+                'sent_date' => \date('Y-m-d H:i:s')
+            ]);
+
+            $this->updateLimits();
         }
     }
 

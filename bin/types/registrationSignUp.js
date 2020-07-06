@@ -5,11 +5,21 @@ function signUpOnLoad() {
 
     if (Button) {
         require([
-            'package/quiqqer/frontend-users/bin/frontend/controls/login/Window'
-        ], function (Login) {
+            'package/quiqqer/frontend-users/bin/frontend/controls/login/Window',
+            'URI'
+        ], function (Login, URI) {
+            var Url        = URI(window.location),
+                query      = Url.query(true),
+                submitauth = false;
+
+            if ("submitauth" in query) {
+                submitauth = query.submitauth;
+            }
+
             Button.addEvent('click', function () {
                 new Login({
-                    events: {
+                    submitauth: submitauth,
+                    events    : {
                         onClose: function () {
                             window.location.hash = '';
                         },
@@ -27,7 +37,7 @@ function signUpOnLoad() {
                 Button.setStyle('display', 'none');
             }
 
-            if (window.location.hash === '#login') {
+            if (window.location.hash === '#login' || submitauth) {
                 Button.click();
             }
         });
@@ -110,7 +120,7 @@ function signUpOnLoad() {
             });
         };
 
-        SignInLinks.getElements('a').forEach(function(Link) {
+        SignInLinks.getElements('a').forEach(function (Link) {
             Link.addEvent('click', socialClick);
         });
     }

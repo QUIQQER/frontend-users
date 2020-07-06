@@ -24,10 +24,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
     'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
 
+    'URI',
     'Ajax',
     'Locale'
 
-], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, QUIAjax, QUILocale) {
+], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, URI, QUIAjax, QUILocale) {
     "use strict";
 
     var lg      = 'quiqqer/frontend-users';
@@ -43,7 +44,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             'onInject',
             '$auth',
             '$authBySocial',
-            '$onUserLoginError'
+            '$onUserLoginError',
+            '$parseQuiControls'
         ],
 
         options: {
@@ -56,7 +58,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             emailAddress      : '',
             passwordReset     : true,
             reload            : true,
-            ownRedirectOnLogin: false // function
+            ownRedirectOnLogin: false, // function
+            submitauth        : false   // md5sum of classname of authenticator that is *immediately* submitted upon control load
         },
 
         initialize: function (options) {
@@ -246,6 +249,29 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 });
 
                 self.fireEvent('loadNoAnimation', [self]);
+
+                // Immediately submit an authentication form
+                // This is used for asynchronous authentication requests via third-party site
+                var submitauth = false;
+
+                if (self.getAttribute('submitauth')) {
+                    submitauth = self.getAttribute('submitauth');
+                } else {
+                    var Url   = URI(window.location),
+                        query = Url.query(true);
+
+                    if ("submitauth" in query) {
+                        submitauth = query.submitauth;
+                    }
+                }
+
+                if (submitauth) {
+                    var Form = self.getElm().getElement('form[data-authenticator-hash="' + self.getAttribute('submitauth') + '"]');
+
+                    if (Form) {
+                        self.$authBySocial(Form);
+                    }
+                }
             });
         },
 
@@ -507,30 +533,46 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param {Object} error
          */
         $onUserLoginError: function (Control, error) {
+            var ActivationInfoBox = this.$Elm.getElement(
+                '.quiqqer-fu-login-activation-info'
+            );
+
+            ActivationInfoBox.set('html', '');
+
+            var MsgElm = new Element('div', {
+                'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
+                html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
+            }).inject(ActivationInfoBox);
+
+            var showResendError = function () {
+                MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
+                MsgElm.removeClass('content-message-attention');
+                MsgElm.addClass('content-message-error');
+            };
+
             switch (error.getAttribute('reason')) {
                 case 'auth_error_user_not_active':
-                    var ActivationInfoBox = this.$Elm.getElement(
-                        '.quiqqer-fu-login-activation-info'
-                    );
+                    var email = this.getAttribute('emailAddress');
 
-                    ActivationInfoBox.set('html', '');
+                    if (!email) {
+                        var Form = this.getElm().getElement('form[name="quiqqer-fu-login-email"]');
 
-                    var MsgElm = new Element('div', {
-                        'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
-                        html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
-                    }).inject(ActivationInfoBox);
+                        if (!Form) {
+                            showResendError();
+                            return;
+                        }
+
+                        email = Form.getElement('input[name="username"]').value.trim();
+                    }
 
                     new ResendActivationLinkBtn({
-                        email : this.getAttribute('emailAddress'),
+                        email : email,
                         events: {
                             onResendSuccess: function (Btn) {
                                 Btn.disable();
                             },
                             onResendFail   : function (Btn) {
-                                MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
-                                MsgElm.removeClass('content-message-attention');
-                                MsgElm.addClass('content-message-error');
-
+                                showResendError();
                                 Btn.enable();
                             }
                         }

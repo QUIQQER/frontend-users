@@ -33,15 +33,38 @@
                 </conf>
                 <conf name="useGravatar">
                     <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
+                    <defaultvalue>0</defaultvalue>
                 </conf>
                 <conf name="useGravatarUserDefaultValue">
                     <type><![CDATA[bool]]></type>
-                    <defaultvalue>1</defaultvalue>
+                    <defaultvalue>0</defaultvalue>
                 </conf>
                 <conf name="useAddressManagement">
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>1</defaultvalue>
+                </conf>
+                <conf name="showLanguageChangeInProfile">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue><![CDATA[1]]></defaultvalue>
+                </conf>
+                <conf name="userAvatarFolder">
+                    <type><![CDATA[string]]></type>
+                </conf>
+                <conf name="userAvatarUploadAllowed">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>1</defaultvalue>
+                </conf>
+                <conf name="maxAvatarUploadSize">
+                    <type><![CDATA[int]]></type>
+                    <defaultvalue>500000</defaultvalue>
+                </conf>
+                <conf name="maxAvatarUploadHeight">
+                    <type><![CDATA[int]]></type>
+                    <defaultvalue>200</defaultvalue>
+                </conf>
+                <conf name="maxAvatarUploadWidth">
+                    <type><![CDATA[int]]></type>
+                    <defaultvalue>200</defaultvalue>
                 </conf>
             </section>
 
@@ -214,9 +237,17 @@
                                 <locale group="quiqqer/frontend-users" var="settings.showToProfile.description"/>
                             </description>
                         </input>
+                    </settings>
+
+                    <settings title="user_avatar_section" name="user_avatar_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.userAccount.avatar.title"/>
+                        </title>
 
                         <input conf="profileBar.defaultAvatar" type="string"
-                               data-qui="controls/projects/project/media/Input" data-qui-options-cssclasses="1">
+                               data-qui="controls/projects/project/media/Input"
+                               data-qui-options-cssclasses="1"
+                        >
                             <text>
                                 <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.title"/>
                             </text>
@@ -224,6 +255,70 @@
                                 <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.description"/>
                             </description>
                         </input>
+
+                        <input conf="userProfile.userAvatarUploadAllowed" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.userAvatarUploadAllowed.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.userAvatarUploadAllowed.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.maxAvatarUploadSize"
+                               data-qui="controls/projects/project/settings/FileFormat"
+                               type="number"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadSize.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.maxAvatarUploadSize.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.maxAvatarUploadHeight">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadHeight.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.maxAvatarUploadHeight.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.maxAvatarUploadWidth">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadWidth.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.maxAvatarUploadWidth.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.useGravatar" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.useGravatarUserDefaultValue" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.useGravatarUserDefaultValue.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.useGravatarUserDefaultValue.description"/>
+                            </description>
+                        </input>
+
                     </settings>
 
                     <settings title="user_account_section" name="user_account_section">
@@ -248,26 +343,6 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.useGravatar" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.useGravatarUserDefaultValue" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.useGravatarUserDefaultValue.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.useGravatarUserDefaultValue.description"/>
                             </description>
                         </input>
 
@@ -481,6 +556,16 @@
                                         var="settings.visitRegistrationSiteBehaviour.option.showMessage"/>
                             </option>
                         </select>
+
+                        <input type="checkbox" conf="userProfile.showLanguageChangeInProfile">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showLanguageChangeInProfile"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.showLanguageChangeInProfile.description"/>
+                            </description>
+                        </input>
 
                         <input conf="registration.autoRedirectOnSuccess" type="text"
                                data-qui="controls/projects/project/site/MultiLangSelect">
