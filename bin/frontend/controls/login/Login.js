@@ -541,8 +541,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             var MsgElm = new Element('div', {
                 'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
-                html   : QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info')
-            }).inject(ActivationInfoBox);
+                html   : error.getMessage()
+            });
 
             var showResendError = function () {
                 MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
@@ -577,8 +577,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                             }
                         }
                     }).inject(ActivationInfoBox);
+
+                    MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_info'));
                     break;
             }
+
+            MsgElm.inject(ActivationInfoBox);
         },
 
         /**
