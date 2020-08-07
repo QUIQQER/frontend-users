@@ -96,6 +96,9 @@ class Registration extends QUI\Control
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
+            } catch (QUI\FrontendUsers\Exception\UserAlreadyExistsException $Exception) {
+                QUI\System\Log::writeDebugException($Exception);
+                $Engine->assign('error', $Exception->getMessage());
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
@@ -385,6 +388,7 @@ class Registration extends QUI\Control
     /**
      * Execute the Registration
      *
+     * @throws QUI\FrontendUsers\Exception\UserAlreadyExistsException
      * @throws QUI\FrontendUsers\Exception
      * @throws QUI\Exception
      */
@@ -435,6 +439,11 @@ class Registration extends QUI\Control
         }
 
         $Registrar->checkUserAttributes();
+
+        // Check if user already exists
+        if (QUI::getUsers()->usernameExists($username)) {
+            throw new QUI\FrontendUsers\Exception\UserAlreadyExistsException();
+        }
 
         // Create user if everything is valid
         $NewUser = $Registrar->createUser();
