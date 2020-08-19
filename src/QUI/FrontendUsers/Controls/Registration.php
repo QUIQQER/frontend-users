@@ -287,6 +287,19 @@ class Registration extends QUI\Control
             return $displayPositionA - $displayPositionB;
         });
 
+        if (!empty($_REQUEST['registrar'])) {
+            $Registrar = $RegistrarHandler->getRegistrarByHash($_REQUEST['registrar']);
+
+            if ($Registrar) {
+                $Engine->assign([
+                    'fireUserActivationEvent' => true,
+                    'User'                    => QUI::getUserBySession(),
+                    'registrarHash'           => $Registrar->getHash(),
+                    'registrarType'           => \str_replace('\\', '\\\\', $Registrar->getType())
+                ]);
+            }
+        }
+
         $Engine->assign([
             'Registrars'          => $Registrars,
             'Registrar'           => $CurrentRegistrar,
@@ -520,6 +533,8 @@ class Registration extends QUI\Control
         }
 
         $this->RegisteredUser = $NewUser;
+
+        QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRegister', [$NewUser, $Registrar, $registrationStatus]);
 
         return $registrationStatus;
     }

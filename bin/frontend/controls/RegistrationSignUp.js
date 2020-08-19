@@ -333,8 +333,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             var self = this;
 
             return new Promise(function (resolve, reject) {
-                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
+                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (Data) {
                     var Section = self.$RegistrationSection;
+
+                    if (Data.userActivated) {
+                        QUI.fireEvent('quiqqerFrontendUsersUserActivate', [
+                            Data.userId,
+                            Data.registrarHash,
+                            Data.registrarType
+                        ]);
+                    }
 
                     moofx(Section).animate({
                         opacity: 0
@@ -342,7 +350,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         duration: 250,
                         callback: function () {
                             var Ghost = new Element('div', {
-                                html: html
+                                html: Data.html
                             });
 
                             var Registration = Ghost.getElement(

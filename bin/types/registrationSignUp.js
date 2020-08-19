@@ -1,6 +1,22 @@
 function signUpOnLoad() {
     "use strict";
 
+    /**
+     * Registers a JavaScript callback which is called when a site is deleted
+     */
+    require(['qui/QUI', 'Ajax'], function (QUI, QUIAjax) {
+        QUIAjax.registerGlobalJavaScriptCallback(
+            'quiqqerFrontendUsersUserRegisterCallback',
+            function (Response, Data) {
+                QUI.fireEvent('quiqqerFrontendUsersUserRegister', [
+                    Data.userId,
+                    Data.registrarHash,
+                    Data.registrarType
+                ]);
+            }
+        );
+    });
+
     var Button = document.getElement('button[name="registration-sign-in-login-button"]');
 
     if (Button) {
