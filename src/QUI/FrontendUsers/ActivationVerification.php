@@ -40,6 +40,14 @@ class ActivationVerification extends AbstractVerification
             $User->activate(false, QUI::getUsers()->getSystemUser());
 
             Utils::setUserEmailVerified($User);
+
+            QUI::getEvents()->fireEvent(
+                'quiqqerFrontendUsersUserActivate',
+                [
+                    $User,
+                    Handler::getInstance()->getRegistrar($User->getAttribute(Handler::USER_ATTR_REGISTRAR))
+                ]
+            );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
                 self::class.' :: onSuccess -> Could not find user #'.$userId

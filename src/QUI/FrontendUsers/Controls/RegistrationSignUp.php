@@ -180,6 +180,19 @@ class RegistrationSignUp extends QUI\Control
                         );
                     }
 
+                    if (!empty($_REQUEST['registrar'])) {
+                        $Registrar = $RegistrarHandler->getRegistrarByHash($_REQUEST['registrar']);
+
+                        if ($Registrar) {
+                            $Engine->assign([
+                                'fireUserActivationEvent' => true,
+                                'User'                    => QUI::getUserBySession(),
+                                'registrarHash'           => $Registrar->getHash(),
+                                'registrarType'           => \str_replace('\\', '\\\\', $Registrar->getType())
+                            ]);
+                        }
+                    }
+
                     $activationSuccess   = true;
                     $showLoggedInWarning = false;
                     break;
