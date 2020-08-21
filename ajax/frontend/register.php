@@ -63,8 +63,8 @@ QUI::$Ajax->registerFunction(
 
         return [
             'html'          => $status,
-            'userActivated' => $User->isActive(),
-            'userId'        => $User->getId(),
+            'userActivated' => $User ? $User->isActive() : false,
+            'userId'        => $User ? $User->getId() : false,
             'registrarHash' => $registrar,
             'registrarType' => $Registrar ? $Registrar->getType() : ''
         ];
