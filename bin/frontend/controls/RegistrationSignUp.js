@@ -234,7 +234,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         loadSocialRegistration: function (registrar) {
             var self = this;
 
-            return this.showTerms(registrar).catch(function () {
+            return this.showTerms(registrar, true).catch(function () {
                 self.Loader.hide();
                 return self.hideTerms();
             });
@@ -435,9 +435,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * - success if accepted
          *
          * @param {String} registrar - registrar id
+         * @param {Boolean} [isSocial] - is social registrar
          * @return {Promise}
          */
-        showTerms: function (registrar) {
+        showTerms: function (registrar, isSocial) {
             var self     = this,
                 Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms'),
                 children = this.$RegistrationSection.getChildren();
@@ -511,7 +512,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                             Form.addEvent('submit', function (event) {
                                 event.stop();
-                                self.$sendForm(Form).then(resolve);
+
+                                if (!isSocial) {
+                                    self.$sendForm(Form).then(resolve);
+                                }
                             });
                         }).then(function () {
                             self.Loader.hide();
