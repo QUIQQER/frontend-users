@@ -513,9 +513,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             Form.addEvent('submit', function (event) {
                                 event.stop();
 
-                                if (!isSocial) {
+                                //if (!isSocial) {
                                     self.$sendForm(Form).then(resolve);
-                                }
+                                //}
                             });
                         }).then(function () {
                             self.Loader.hide();
