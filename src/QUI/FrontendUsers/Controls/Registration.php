@@ -96,6 +96,9 @@ class Registration extends QUI\Control
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
+            } catch (QUI\FrontendUsers\Exception\UserAlreadyExistsException $Exception) {
+                QUI\System\Log::writeDebugException($Exception);
+                $Engine->assign('error', $Exception->getMessage());
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
@@ -284,6 +287,19 @@ class Registration extends QUI\Control
             return $displayPositionA - $displayPositionB;
         });
 
+        if (!empty($_REQUEST['registrar'])) {
+            $Registrar = $RegistrarHandler->getRegistrarByHash($_REQUEST['registrar']);
+
+            if ($Registrar) {
+                $Engine->assign([
+                    'fireUserActivationEvent' => true,
+                    'User'                    => QUI::getUserBySession(),
+                    'registrarHash'           => $Registrar->getHash(),
+                    'registrarType'           => \str_replace('\\', '\\\\', $Registrar->getType())
+                ]);
+            }
+        }
+
         $Engine->assign([
             'Registrars'          => $Registrars,
             'Registrar'           => $CurrentRegistrar,
@@ -385,6 +401,7 @@ class Registration extends QUI\Control
     /**
      * Execute the Registration
      *
+     * @throws QUI\FrontendUsers\Exception\UserAlreadyExistsException
      * @throws QUI\FrontendUsers\Exception
      * @throws QUI\Exception
      */
@@ -435,6 +452,11 @@ class Registration extends QUI\Control
         }
 
         $Registrar->checkUserAttributes();
+
+        // Check if user already exists
+        if (QUI::getUsers()->usernameExists($username)) {
+            throw new QUI\FrontendUsers\Exception\UserAlreadyExistsException();
+        }
 
         // Create user if everything is valid
         $NewUser = $Registrar->createUser();
@@ -511,6 +533,8 @@ class Registration extends QUI\Control
         }
 
         $this->RegisteredUser = $NewUser;
+
+        QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRegister', [$NewUser, $Registrar, $registrationStatus]);
 
         return $registrationStatus;
     }

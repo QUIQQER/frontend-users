@@ -6,6 +6,20 @@
     </style>
 </noscript>
 
+{if isset($fireUserActivationEvent)}
+<script>
+    require(['qui/QUI'], function(QUI) {
+        (function() {
+            QUI.fireEvent('quiqqerFrontendUsersUserActivate', [
+                {$User->getId()},
+                '{$registrarHash}',
+                '{$registrarType}'
+            ]);
+        }).delay(200);
+    });
+</script>
+{/if}
+
 {if $success}
 <div class="content-message-success">
     {if !$instantRedirect}

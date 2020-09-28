@@ -141,11 +141,19 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             }
 
             return new Promise(function (resolve, reject) {
-                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (html) {
+                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (Data) {
                     var Elm = self.getElm();
 
+                    if (Data.userActivated) {
+                        QUI.fireEvent('quiqqerFrontendUsersUserActivate', [
+                            Data.userId,
+                            Data.registrarHash,
+                            Data.registrarType
+                        ]);
+                    }
+
                     var Container = new Element('div', {
-                        html: html
+                        html: Data.html
                     });
 
                     var Registration = Container.getElement(

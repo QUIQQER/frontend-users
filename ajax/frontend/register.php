@@ -1,15 +1,11 @@
 <?php
 
 /**
- * This file contains package_quiqqer_frontend-users_ajax_frontend_register
- */
-
-/**
  * Start registration process
  *
  * @param string $registrar - Registrar name
  * @param array $data - Registrar attributes
- * @return string - Registrar status message
+ * @return array - Registrar status HTML and user activation status
  *
  * @throws QUI\Exception
  */
@@ -32,8 +28,25 @@ QUI::$Ajax->registerFunction(
         $_POST['registration'] = 1;
         $_POST['registrar']    = $registrar;
 
+        $Registrar = \QUI\FrontendUsers\Handler::getInstance()->getRegistrarByHash($registrar);
+
         try {
             $status = $Registration->create();
+
+            if ($Registration->getRegisteredUser()) {
+                try {
+                    QUI::getAjax()->triggerGlobalJavaScriptCallback(
+                        'quiqqerFrontendUsersUserRegisterCallback',
+                        [
+                            'userId'        => $Registration->getRegisteredUser()->getId(),
+                            'registrarHash' => $registrar,
+                            'registrarType' => $Registrar ? $Registrar->getType() : ''
+                        ]
+                    );
+                } catch (\Exception $Exception) {
+                    QUI\System\Log::writeException($Exception);
+                }
+            }
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
@@ -46,7 +59,15 @@ QUI::$Ajax->registerFunction(
         // do not show user edit messages
         QUI::getMessagesHandler()->clear();
 
-        return $status;
+        $User = $Registration->getRegisteredUser();
+
+        return [
+            'html'          => $status,
+            'userActivated' => $User ? $User->isActive() : false,
+            'userId'        => $User ? $User->getId() : false,
+            'registrarHash' => $registrar,
+            'registrarType' => $Registrar ? $Registrar->getType() : ''
+        ];
     },
     ['registrar', 'data', 'registrars']
 );

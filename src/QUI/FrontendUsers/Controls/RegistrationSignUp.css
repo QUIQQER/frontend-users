@@ -51,6 +51,22 @@
     display: none;
 }
 
+.quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon > span {
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 70%;
+    width: 70%;
+}
+
 .quiqqer-fu-registrationSignUp-registration-email {
     margin-top: 3rem;
     min-height: 140px;
