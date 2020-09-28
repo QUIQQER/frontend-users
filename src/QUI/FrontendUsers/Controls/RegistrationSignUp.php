@@ -406,4 +406,27 @@ class RegistrationSignUp extends QUI\Control
 
         $Engine->assign('termsPrivacyMessage', $termsPrivacyMessage);
     }
+
+    /**
+     * Return the icon html for a registrar
+     *
+     * @param $Registrar
+     * @return string
+     */
+    public function getRegistrarIcon($Registrar)
+    {
+        $icon = $Registrar->getIcon();
+
+        if (strpos($icon, '.png') !== false
+            || strpos($icon, '.jpg') === false
+            || strpos($icon, '.gif') === false
+            || strpos($icon, '.svg') === false
+        ) {
+            return '<span class="quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon">
+                <span style="background-image: url(\''.$icon.'\')"></span>
+            </span>';
+        }
+
+        return '<span class="'.$icon.'"></span>';
+    }
 }
