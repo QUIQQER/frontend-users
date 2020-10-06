@@ -46,7 +46,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             registrars     : [],    // list of registrar that are displayed in this controls
             useCaptcha     : false,
             emailIsUsername: false,
-            submitregistrar: false  // instantly submit the registration form of this registrar if provided
+            submitregistrar: false, // instantly submit the registration form of this registrar if provided
+            reloadOnSuccess: true   // reload the page, if the user successfully registrated
         },
 
         initialize: function (options) {
@@ -372,28 +373,28 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             } else if (Registration) {
                                 Section.set('html', Registration.get('html'));
                             } else {
-                                Section.set('html', html);
+                                Section.set('html', '');
                             }
 
                             QUI.parse(Section).then(function () {
                                 if (Section.getElement('.content-message-success') ||
                                     Section.getElement('.content-message-information')) {
 
-                                    self.fireEvent('register', [self]);
-                                    QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self]);
+                                    self.fireEvent('register', [self, Data]);
+                                    QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [self, Data]);
                                 }
 
                                 if (Section.getElement('.content-message-success')) {
                                     var html = Section.getElement('.content-message-success').get('html').trim();
 
-                                    if (html === '') {
+                                    if (html === '' && self.getAttribute('reloadOnSuccess')) {
                                         window.location.reload();
                                     }
                                 }
 
                                 var Redirect = Section.getElement('.quiqqer-frontendUsers-redirect');
 
-                                if (Redirect && Redirect.get('data-instant')) {
+                                if (Redirect && Redirect.get('data-instant') && self.getAttribute('reloadOnSuccess')) {
                                     window.location = Redirect.get('data-url');
                                 }
 
@@ -514,7 +515,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 event.stop();
 
                                 //if (!isSocial) {
-                                    self.$sendForm(Form).then(resolve);
+                                self.$sendForm(Form).then(resolve);
                                 //}
                             });
                         }).then(function () {
