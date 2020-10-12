@@ -99,7 +99,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
             this.$ErrorContainer.set('html', msg);
             this.$ErrorContainer.setStyle('display', 'block');
 
-            this.$ProfileControl.resize()
+            this.$ProfileControl.resize();
         },
 
         /**
@@ -107,7 +107,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
          */
         $hideError: function () {
             this.$ErrorContainer.setStyle('display', 'none');
-            this.$ProfileControl.resize()
+            this.$ProfileControl.resize();
         },
 
         /**
@@ -122,7 +122,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
             );
 
             this.$SuccessContainer.setStyle('display', 'block');
-            this.$ProfileControl.resize()
+            this.$ProfileControl.resize();
         },
 
         /**
@@ -130,7 +130,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
          */
         $hideSuccess: function () {
             this.$SuccessContainer.setStyle('display', 'none');
-            this.$ProfileControl.resize()
+            this.$ProfileControl.resize();
         }
     });
 });
