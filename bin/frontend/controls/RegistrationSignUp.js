@@ -1014,6 +1014,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 MailInput = this.getElm().getElement('[name="email"]');
 
             if (MailInput.value === '') {
+                self.fireEvent('error', [self, 'Mail empty']);
                 return;
             }
 
@@ -1071,6 +1072,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 if (ButtonTrial) {
                     ButtonTrial.set('disabled', false);
                 }
+
+                self.fireEvent('error', [self, err]);
             });
         },
 
