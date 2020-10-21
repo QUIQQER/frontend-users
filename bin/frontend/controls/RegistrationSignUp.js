@@ -47,7 +47,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             useCaptcha     : false,
             emailIsUsername: false,
             submitregistrar: false, // instantly submit the registration form of this registrar if provided
-            reloadOnSuccess: true   // reload the page, if the user successfully registrated
+            reloadOnSuccess: true,  // reload the page, if the user successfully registrated
+            termsAccepted  : false
         },
 
         initialize: function (options) {
@@ -440,6 +441,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         showTerms: function (registrar, isSocial) {
+            console.log('show terms', this.getAttribute('termsAccepted'));
+
+            if (this.getAttribute('termsAccepted')) {
+                return Promise.resolve();
+            }
+
             var self     = this,
                 Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms'),
                 children = this.$RegistrationSection.getChildren();
@@ -544,6 +551,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return !Child.hasClass('quiqqer-fu-registrationSignUp-terms') &&
                     !Child.hasClass('qui-loader');
             });
+
+            if (!Terms) {
+                return Promise.resolve();
+            }
 
             return new Promise(function (resolve) {
                 moofx(Terms).animate({
