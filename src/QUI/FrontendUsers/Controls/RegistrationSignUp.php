@@ -418,9 +418,9 @@ class RegistrationSignUp extends QUI\Control
         $icon = $Registrar->getIcon();
 
         if (strpos($icon, '.png') !== false
-            || strpos($icon, '.jpg') === false
-            || strpos($icon, '.gif') === false
-            || strpos($icon, '.svg') === false
+            || strpos($icon, '.jpg') !== false
+            || strpos($icon, '.gif') !== false
+            || strpos($icon, '.svg') !== false
         ) {
             return '<span class="quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon">
                 <span style="background-image: url(\''.$icon.'\')"></span>
