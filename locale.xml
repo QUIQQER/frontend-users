@@ -1666,6 +1666,12 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en>
                 <![CDATA[Unfortunately, the activation mail could not be sent again. Please contact the operator of the website.]]></en>
         </locale>
+        <locale name="controls.frontend.Login.user_deleted_error">
+            <de>
+                <![CDATA[Dieses Benutzerkonto wurde dauerhaft deaktiviert. Bitte wenden Sie sich an den Betreiber der Website.]]></de>
+            <en>
+                <![CDATA[This user account has been permanently deactivated. Please contact the operator of the website.]]></en>
+        </locale>
 
         <!-- Control: settings/Registars -->
         <locale name="controls.settings.registrars.template.labelActivationMode">
