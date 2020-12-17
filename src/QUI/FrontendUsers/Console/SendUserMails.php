@@ -632,7 +632,13 @@ class SendUserMails extends QUI\System\Console\Tool
                 $this->writeLn("Generating new password for $email...");
 
                 try {
-                    $User        = $Users->get($userId);
+                    $User = $Users->get($userId);
+
+                    if ($User->isSU()) {
+                        $this->writeLn("User is SuperUser. Skipping...");
+                        continue;
+                    }
+
                     $newPassword = QUI\Security\Password::generateRandom();
 
                     $User->setPassword($newPassword, $SystemUser);
@@ -650,6 +656,8 @@ class SendUserMails extends QUI\System\Console\Tool
                 } catch (\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                     $this->write(" Error: ".$Exception->getMessage());
+
+                    continue;
                 }
             }
 
