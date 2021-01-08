@@ -30,7 +30,7 @@ class UserIcon extends Control
 
         parent::__construct($attributes);
 
-        $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
+        $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
 
         $this->addCSSClass('quiqqer-frontendUsers-userIcon');
         $this->addCSSFile(dirname(__FILE__).'/UserIcon.css');
