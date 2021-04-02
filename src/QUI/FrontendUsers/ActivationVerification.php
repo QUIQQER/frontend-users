@@ -48,11 +48,11 @@ class ActivationVerification extends AbstractVerification
                     Handler::getInstance()->getRegistrar($User->getAttribute(Handler::USER_ATTR_REGISTRAR))
                 ]
             );
-        } catch (\Exception $Exception) {
-            QUI\System\Log::addError(
-                self::class.' :: onSuccess -> Could not find user #'.$userId
+        } catch (QUI\Users\Exception $Exception) {
+            QUI\System\Log::addWarning(
+                'quiqqer/frontend-users -> ActivationVerification :: '.$Exception->getMessage()
             );
-
+        } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
         }
     }

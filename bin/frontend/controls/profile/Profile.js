@@ -56,6 +56,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$settings = null;
             this.Loader    = new QUILoader();
 
+            this.$FX = null;
+
             this.addEvents({
                 onInject: this.$onInject,
                 onImport: this.$onImport
@@ -95,7 +97,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             );
 
             return new Promise(function (resolve) {
-                moofx(self.$Elm).animate({
+                if (self.$FX === null) {
+                    self.$FX = moofx(self.$Elm)
+                }
+
+                self.$FX.animate({
                     height: newHeight
                 }, {
                     duration: 100,
@@ -107,6 +113,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             duration: 100,
                             callback: function () {
                                 self.$parseContent().then(resolve);
+                                self.$FX = null;
                             }
                         });
                     }
@@ -310,9 +317,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                                 '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
                             );
 
-                            Form = self.$Elm.getElement(
-                                '.quiqqer-frontendUsers-controls-profile-categoryContent'
-                            );
+                            // Form = self.$Elm.getElement(
+                            //     '.quiqqer-frontendUsers-controls-profile-categoryContent'
+                            // );
 
                             self.$bindCategoriesEvents();
                         }
@@ -324,7 +331,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
                         );
 
-                        Form.setStyle('height', height);
+                        //Form.setStyle('height', height);
 
                         if (!Content) {
                             return;

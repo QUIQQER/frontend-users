@@ -539,8 +539,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             ActivationInfoBox.set('html', '');
 
+            var msgBoxStyle = 'content-message-attention';
+
+            switch (error.getCode()) {
+                case 429:
+                    msgBoxStyle = 'content-message-error';
+                    break;
+            }
+
             var MsgElm = new Element('div', {
-                'class': 'quiqqer-fu-login-activation-info-message content-message-attention',
+                'class': 'quiqqer-fu-login-activation-info-message ' + msgBoxStyle,
                 html   : error.getMessage()
             });
 
@@ -551,6 +559,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             };
 
             switch (error.getAttribute('reason')) {
+                case 'auth_error_user_deleted':
+                    MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.user_deleted_error'));
+                    MsgElm.removeClass('content-message-attention');
+                    MsgElm.addClass('content-message-error');
+                    break;
+
                 case 'auth_error_user_not_active':
                     var email = this.getAttribute('emailAddress');
 
