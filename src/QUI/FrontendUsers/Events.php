@@ -229,6 +229,25 @@ class Events
     }
 
     /**
+     * quiqqer/quiqqer: onPackageInstall
+     *
+     * @param QUI\Package\Package $Package
+     * @return void
+     */
+    public static function onPackageInstall(QUI\Package\Package $Package)
+    {
+        if ($Package->getName() !== 'quiqqer/frontend-users') {
+            return;
+        }
+
+        try {
+            self::setAddressDefaultSettings();
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
      * quiqqer/quiqqer: onPackageSetup
      *
      * @param QUI\Package\Package $Package
@@ -244,7 +263,6 @@ class Events
         // Clear cache
         QUI\Cache\Manager::clear('package/quiqqer/frontendUsers');
 
-        self::setAddressDefaultSettings();
         self::setRegistrarsDefaultSettings();
         self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();
@@ -325,11 +343,6 @@ class Events
     {
         $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
-        // do not set default settings if manual settings have already been set
-        if ($Conf->existValue('registration', 'addressFields')) {
-            return;
-        }
-
         $addressFields = [
             'salutation' => [
                 'show'     => true,
@@ -366,10 +379,19 @@ class Events
             'phone'      => [
                 'show'     => true,
                 'required' => false
-            ]
+            ],
+            'mobile'     => [
+                'show'     => true,
+                'required' => false
+            ],
+            'fax'        => [
+                'show'     => true,
+                'required' => false
+            ],
         ];
 
-        $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
+        $Conf->setValue('registration', 'addressFields', \json_encode($addressFields));
+        $Conf->setValue('profile', 'addressFields', \json_encode($addressFields));
         $Conf->save();
     }
 
