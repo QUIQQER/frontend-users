@@ -304,7 +304,7 @@ class Handler extends Singleton
         if (empty($settings['authenticators'])) {
             $settings['authenticators'] = [];
         } else {
-            $settings['authenticators']  = json_decode($settings['authenticators'], true);
+            $settings['authenticators'] = json_decode($settings['authenticators'], true);
         }
 
         return $settings;
@@ -666,11 +666,13 @@ class Handler extends Singleton
                 $tplDir.'mail.delete_user_confirm.html',
                 [
                     'body' => $L->get($lg, 'mail.delete_user_confirm.body', [
-                        'host'        => $host,
-                        'userId'      => $User->getId(),
-                        'username'    => $User->getUsername(),
-                        'date'        => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'host'          => $host,
+                        'userId'        => $User->getId(),
+                        'username'      => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName'  => $User->getAttribute('lastname') ?: '',
+                        'date'          => $L->formatDate(time()),
+                        'confirmLink'   => $confirmLink
                     ])
                 ]
             );
