@@ -82,6 +82,17 @@
 
 /** Address listing
  ================================================== */
+address {
+    font-style: normal;
+}
+
+address .adr:not(:last-child) {
+    margin-bottom: 0.75rem;
+}
+
+address .fa {
+    width: 1.5rem;
+}
 
 .quiqqer-frontend-users-address-list {
     display: flex;
@@ -118,7 +129,6 @@
 
 .quiqqer-frontend-users-address-list-entry header {
     background: rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
     padding: 10px;
     width: 100%;
 }
