@@ -418,11 +418,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         }
                     });
                 }, {
-                    'package'      : 'quiqqer/frontend-users',
-                    registrar      : registrar,
-                    registration_id: registration_id,
-                    data           : JSON.encode(formData),
-                    onError        : function (err) {
+                    'package'           : 'quiqqer/frontend-users',
+                    registrar           : registrar,
+                    registration_id     : registration_id,
+                    data                : JSON.encode(formData),
+                    isSignUpRegistration: 1,
+                    onError             : function (err) {
                         console.error(err);
                         reject(err);
                     }

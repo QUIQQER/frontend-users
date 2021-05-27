@@ -54,11 +54,15 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes([
-            'async'      => false,
-            'data-qui'   => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
-            'status'     => false,
-            'Registrar'  => false,    // currently executed Registrar
-            'registrars' => []  // if empty load all default Registrars, otherwise load the ones provided here
+            'async'             => false,
+            'data-qui'          => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+            'status'            => false,
+            'Registrar'         => false,
+            // currently executed Registrar
+            'registrars'        => [],
+            // if empty load all default Registrars, otherwise load the ones provided here
+            'addressValidation' => true
+            // validate address fields (if option is selected in settings; false NEVER validates address data)
         ]);
 
         $this->setAttributes($attributes);
@@ -435,6 +439,11 @@ class Registration extends QUI\Control
                 'exception.registration.terms_of_use_not_accepted'
             ]);
         }
+
+        // Set validation settings
+        $Registrar->setAttributes([
+            'addressValidation' => $this->getAttribute('addressValidation')
+        ]);
 
         $Registrar->validate();
 
