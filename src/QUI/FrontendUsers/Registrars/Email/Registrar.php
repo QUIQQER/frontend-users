@@ -192,7 +192,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         // Address validation
-        if ((int)$settings['addressInput']) {
+        if ($this->getAttribute('addressValidation') && (int)$settings['addressInput']) {
             foreach ($Handler->getAddressFieldSettings() as $field => $addressSettings) {
                 $val = $this->getAttribute($field);
 

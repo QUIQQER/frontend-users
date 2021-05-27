@@ -107,7 +107,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
                             'input[name="' + n + '"].quiqqer-frontendusers-settings-addressfields-show'
                         ).checked = true;
 
-                        self.$Settings[n].show = false;
+                        self.$Settings[n].show = true;
                     } else {
                         self.$Content.getElement(
                             'input[name="' + n + '"].quiqqer-frontendusers-settings-addressfields-required'

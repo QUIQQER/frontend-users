@@ -5,13 +5,14 @@
  *
  * @param string $registrar - Registrar name
  * @param array $data - Registrar attributes
+ * @param bool $isSignUpRegistration (optional) - Request stems from RegistrationSignUp control
  * @return array - Registrar status HTML and user activation status
  *
  * @throws QUI\Exception
  */
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_register',
-    function ($registrar, $data, $registrars) {
+    function ($registrar, $data, $registrars, $isSignUpRegistration = false) {
         if (!empty($registrars)) {
             $registrars = json_decode($registrars, true);
         } else {
@@ -19,8 +20,9 @@ QUI::$Ajax->registerFunction(
         }
 
         $Registration = new QUI\FrontendUsers\Controls\Registration([
-            'async'      => true,
-            'registrars' => $registrars
+            'async'             => true,
+            'registrars'        => $registrars,
+            'addressValidation' => !empty($isSignUpRegistration)
         ]);
 
         $_POST = array_merge($_POST, json_decode($data, true));
@@ -69,5 +71,5 @@ QUI::$Ajax->registerFunction(
             'registrarType' => $Registrar ? $Registrar->getType() : ''
         ];
     },
-    ['registrar', 'data', 'registrars']
+    ['registrar', 'data', 'registrars', 'isSignUpRegistration']
 );
