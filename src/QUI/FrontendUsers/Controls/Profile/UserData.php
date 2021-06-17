@@ -200,6 +200,11 @@ class UserData extends AbstractProfileControl
                 $addressData['street_no'] = $Request->get('street_no');
             }
 
+            if ($Request->get('street')) {
+                $addressData['street_no'] = \trim($Request->get('street')).' '.\trim($Request->get('street_number'));
+                $addressData['street_no'] = \trim($addressData['street_no']);
+            }
+
             if ($Request->get('zip')) {
                 $addressData['zip'] = $Request->get('zip');
             }

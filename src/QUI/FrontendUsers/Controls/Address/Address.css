@@ -187,6 +187,19 @@ address .fa {
     width: 50%
 }
 
+.quiqqer-frontend-users-address-create [name="street"],
+.quiqqer-frontend-users-address-edit [name="street"] {
+    float: left;
+    width: 30%;
+}
+
+.quiqqer-frontend-users-address-create [name="street_number"],
+.quiqqer-frontend-users-address-edit [name="street_number"] {
+    float: left;
+    margin-left: 10px;
+    width: calc(20% - 10px);
+}
+
 .quiqqer-frontend-users-address-edit-create,
 .quiqqer-frontend-users-address-edit-button {
     margin-left: 50%;

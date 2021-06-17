@@ -32,7 +32,7 @@ class Address extends QUI\Control
      * @param null|QUI\Locale $Locale
      * @return string
      */
-    public function getName($Locale = null)
+    public function getName($Locale = null): string
     {
         return 'Address';
     }
@@ -40,7 +40,7 @@ class Address extends QUI\Control
     /**
      * @return string
      */
-    public function getIcon()
+    public function getIcon(): string
     {
         return 'fa-address-card';
     }
@@ -49,7 +49,7 @@ class Address extends QUI\Control
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         /* @var $User QUI\Users\User */
         $User   = QUI::getUserBySession();
@@ -117,7 +117,7 @@ class Address extends QUI\Control
      * @return string
      * @throws QUI\Exception
      */
-    protected function getBodyForEdit()
+    protected function getBodyForEdit(): string
     {
         $User    = QUI::getUserBySession();
         $Engine  = QUI::getTemplateManager()->getEngine();
@@ -155,7 +155,7 @@ class Address extends QUI\Control
      * @param array $settings
      * @return mixed
      */
-    public static function checkSettingsArray($settings)
+    public static function checkSettingsArray(array $settings)
     {
         if (!\is_array($settings)) {
             $settings = [];
@@ -195,6 +195,16 @@ class Address extends QUI\Control
             }
         }
 
+        if ($settings['street_no']['required']) {
+            $settings['street']['required']        = true;
+            $settings['street_number']['required'] = true;
+        }
+
+        if ($settings['street_no']['show']) {
+            $settings['street']['show']        = true;
+            $settings['street_number']['show'] = true;
+        }
+
         return $settings;
     }
 
@@ -204,7 +214,7 @@ class Address extends QUI\Control
      * @return string
      * @throws QUI\Exception
      */
-    protected function getBodyForDelete()
+    protected function getBodyForDelete(): string
     {
         $User    = QUI::getUserBySession();
         $Engine  = QUI::getTemplateManager()->getEngine();
@@ -225,7 +235,7 @@ class Address extends QUI\Control
      * @return string
      * @throws QUI\Exception
      */
-    protected function getBodyForCreate()
+    protected function getBodyForCreate(): string
     {
         $User   = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
@@ -270,7 +280,7 @@ class Address extends QUI\Control
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
      */
-    public function createAddress($data = [])
+    public function createAddress(array $data = [])
     {
         if (!isset($_REQUEST['createSave'])) {
             return;
@@ -294,6 +304,20 @@ class Address extends QUI\Control
             'city',
             'country'
         ];
+
+        if (!empty($data['street']) || !empty($data['street_number'])) {
+            $street = '';
+
+            if (!empty($data['street'])) {
+                $street .= \trim($data['street']);
+            }
+
+            if (!empty($data['street_number'])) {
+                $street .= ' '.\trim($data['street']);
+            }
+
+            $data['street_no'] = \trim($street);
+        }
 
         foreach ($fields as $field) {
             if (isset($data[$field])) {
@@ -336,7 +360,7 @@ class Address extends QUI\Control
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
      */
-    public function editAddress($data = [])
+    public function editAddress(array $data = [])
     {
         if (!isset($_REQUEST['addressId']) || !isset($_REQUEST['editSave'])) {
             return;
@@ -348,6 +372,20 @@ class Address extends QUI\Control
 
         $User    = QUI::getUserBySession();
         $Address = $User->getAddress($_REQUEST['addressId']);
+
+        if (!empty($data['street']) || !empty($data['street_number'])) {
+            $street = '';
+
+            if (!empty($data['street'])) {
+                $street .= \trim($data['street']);
+            }
+
+            if (!empty($data['street_number'])) {
+                $street .= ' '.\trim($data['street']);
+            }
+
+            $data['street_no'] = \trim($street);
+        }
 
         $fields = [
             'company',
@@ -421,10 +459,25 @@ class Address extends QUI\Control
 
         $firstName = $Address->getAttribute('firstname');
         $lastName  = $Address->getAttribute('lastname');
-        $street_no = $Address->getAttribute('street_no');
         $zip       = $Address->getAttribute('zip');
         $city      = $Address->getAttribute('city');
         $country   = $Address->getAttribute('country');
+
+        $street_no = $Address->getAttribute('street_no');
+
+        if (empty($street_no)) {
+            $street_no = '';
+
+            if (!empty($Address->getAttribute('street'))) {
+                $street_no .= $Address->getAttribute('street');
+            }
+
+            if (!empty($Address->getAttribute('street_number'))) {
+                $street_no .= ' '.$Address->getAttribute('street_number');
+            }
+
+            $street_no = \trim($street_no);
+        }
 
         if (empty($firstName)) {
             throw new QUI\ERP\Order\Exception($exception);

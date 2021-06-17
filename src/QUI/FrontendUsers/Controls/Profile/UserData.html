@@ -59,11 +59,17 @@
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="street_no"}
         </span>
+
+        {if $Address->getAttribute('street_no') === ''}
+        <input type="text" name="street" value="" autocomplete="street-address"/>
+        <input type="text" name="street_number" value=""/>
+        {else}
         <input type="text"
                name="street_no"
                autocomplete="street-address"
                value="{$Address->getAttribute('street_no')|escape:'html'}"
         />
+        {/if}
     </label>
 
     <label class="quiqqer-frontendUsers-userdata-address-zip">
