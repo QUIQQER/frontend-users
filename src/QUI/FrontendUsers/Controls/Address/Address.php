@@ -313,7 +313,7 @@ class Address extends QUI\Control
             }
 
             if (!empty($data['street_number'])) {
-                $street .= ' '.\trim($data['street']);
+                $street .= ' '.\trim($data['street_number']);
             }
 
             $data['street_no'] = \trim($street);
@@ -339,6 +339,13 @@ class Address extends QUI\Control
 
         // check required fields
         $missing = QUI\FrontendUsers\Utils::getMissingAddressFields($Address);
+
+        if (isset($data['businessType']) && $data['businessType'] === 'b2c') {
+            // company is no requirement
+            if (($key = \array_search('company', $missing)) !== false) {
+                unset($missing[$key]);
+            }
+        }
 
         if (\count($missing)) {
             $Address->delete();
@@ -418,6 +425,13 @@ class Address extends QUI\Control
 
         $missing = QUI\FrontendUsers\Utils::getMissingAddressFields($Address);
 
+        if (isset($data['businessType']) && $data['businessType'] === 'b2c') {
+            // company is no requirement
+            if (($key = \array_search('company', $missing)) !== false) {
+                unset($missing[$key]);
+            }
+        }
+        
         if (\count($missing)) {
             throw new QUI\Exception([
                 'quiqqer/frontend-users',

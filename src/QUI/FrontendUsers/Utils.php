@@ -21,7 +21,7 @@ class Utils
      *
      * @return array
      */
-    public static function getFrontendUsersPackages()
+    public static function getFrontendUsersPackages(): array
     {
         $packages = QUI::getPackageManager()->getInstalled();
         $list     = [];
@@ -54,7 +54,7 @@ class Utils
      *
      * @return array
      */
-    public static function getProfileCategories()
+    public static function getProfileCategories(): array
     {
         $cache = 'package/quiqqer/frontendUsers/profileCategories';
 
@@ -136,7 +136,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileSetting($category, $settings = false)
+    public static function getProfileSetting($category, $settings = false): array
     {
         if ($category) {
             $categories = [self::getProfileCategory($category)];
@@ -167,7 +167,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileSettingControl($category, $settings = false)
+    public static function getProfileSettingControl($category, $settings = false): ?Controls\Profile\AbstractProfileControl
     {
         $setting = self::getProfileSetting($category, $settings);
         $Control = null;
@@ -191,7 +191,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileCategory($category)
+    public static function getProfileCategory($category): array
     {
         $categories = self::getProfileCategories();
 
@@ -210,7 +210,7 @@ class Utils
      *
      * @return array
      */
-    public static function getProfileCategorySettings()
+    public static function getProfileCategorySettings(): array
     {
         $categories = Utils::getProfileCategories();
 
@@ -254,7 +254,7 @@ class Utils
      *
      * @return array
      */
-    public static function getProfileBarCategorySettings()
+    public static function getProfileBarCategorySettings(): array
     {
         $categories = Utils::getProfileCategories();
 
@@ -289,7 +289,7 @@ class Utils
      * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
      * @return bool
      */
-    public static function hasPermissionToViewCategory($category, $setting = false, $User = null)
+    public static function hasPermissionToViewCategory($category, $setting = false, $User = null): bool
     {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -311,7 +311,7 @@ class Utils
      * @param array $categories
      * @return array
      */
-    public static function loadTranslationForCategories($categories = [])
+    public static function loadTranslationForCategories($categories = []): array
     {
         // load the translations
         foreach ($categories as $key => $category) {
@@ -343,7 +343,7 @@ class Utils
      * @param null|QUI\Projects\Project $Project
      * @return array
      */
-    public static function setUrlsToCategorySettings($categories = [], $Project = null)
+    public static function setUrlsToCategorySettings($categories = [], $Project = null): array
     {
         try {
             if ($Project === null) {
@@ -388,7 +388,7 @@ class Utils
      *
      * @return bool
      */
-    public static function isCaptchaModuleInstalled()
+    public static function isCaptchaModuleInstalled(): bool
     {
         try {
             QUI::getPackage('quiqqer/captcha');
@@ -406,7 +406,7 @@ class Utils
      * @param int $s [default] - Size [default: 80x80 px]
      * @return string
      */
-    public static function getGravatarUrl($email, $s = 80)
+    public static function getGravatarUrl($email, $s = 80): string
     {
         if ($s < 1) {
             $s = 1;
@@ -427,7 +427,7 @@ class Utils
      * @param QUI\Users\User $User
      * @return bool
      */
-    public static function isUserEmailVerified(QUI\Users\User $User)
+    public static function isUserEmailVerified(QUI\Users\User $User): bool
     {
         $email = $User->getAttribute('email');
 
@@ -453,7 +453,7 @@ class Utils
     }
 
 
-    public static function getMissingAddressFields(QUI\Users\Address $Address)
+    public static function getMissingAddressFields(QUI\Users\Address $Address): array
     {
         $missing = [];
 
