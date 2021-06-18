@@ -48,6 +48,17 @@
     width: 70%;
 }
 
+.quiqqer-frontendUsers-controls-profile-userdata input[name="street"] {
+    float: left;
+    width: 50%;
+}
+
+.quiqqer-frontendUsers-controls-profile-userdata input[name="street_number"] {
+    float: left;
+    margin-left: 10px;
+    width: calc(20% - 10px);
+}
+
 .quiqqer-frontendUsers-controls-profile-userdata select[name="country"] {
     display: none;
 }

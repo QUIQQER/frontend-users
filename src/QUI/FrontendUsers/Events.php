@@ -229,6 +229,25 @@ class Events
     }
 
     /**
+     * quiqqer/quiqqer: onPackageInstall
+     *
+     * @param QUI\Package\Package $Package
+     * @return void
+     */
+    public static function onPackageInstall(QUI\Package\Package $Package)
+    {
+        if ($Package->getName() !== 'quiqqer/frontend-users') {
+            return;
+        }
+
+        try {
+            self::setAddressDefaultSettings();
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
      * quiqqer/quiqqer: onPackageSetup
      *
      * @param QUI\Package\Package $Package
@@ -244,11 +263,9 @@ class Events
         // Clear cache
         QUI\Cache\Manager::clear('package/quiqqer/frontendUsers');
 
-        self::setAddressDefaultSettings();
         self::setRegistrarsDefaultSettings();
         self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();
-        self::setProfileAddressDefaultSettings();
         self::checkUserMediaFolder();
     }
 
@@ -325,11 +342,6 @@ class Events
     {
         $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
-        // do not set default settings if manual settings have already been set
-        if ($Conf->existValue('registration', 'addressFields')) {
-            return;
-        }
-
         $addressFields = [
             'salutation' => [
                 'show'     => true,
@@ -366,67 +378,19 @@ class Events
             'phone'      => [
                 'show'     => true,
                 'required' => false
-            ]
+            ],
+            'mobile'     => [
+                'show'     => true,
+                'required' => false
+            ],
+            'fax'        => [
+                'show'     => true,
+                'required' => false
+            ],
         ];
 
-        $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
-        $Conf->save();
-    }
-
-    /**
-     * Set profile address fields default settings
-     *
-     * @throws QUI\Exception
-     */
-    protected static function setProfileAddressDefaultSettings()
-    {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-
-        // do not set default settings if manual settings have already been set
-        if ($Conf->existValue('registration', 'addressFields')) {
-            return;
-        }
-
-        $addressFields = [
-            'salutation' => [
-                'show'     => true,
-                'required' => false
-            ],
-            'firstname'  => [
-                'show'     => true,
-                'required' => true
-            ],
-            'lastname'   => [
-                'show'     => true,
-                'required' => true
-            ],
-            'street_no'  => [
-                'show'     => true,
-                'required' => true
-            ],
-            'zip'        => [
-                'show'     => true,
-                'required' => true
-            ],
-            'city'       => [
-                'show'     => true,
-                'required' => true
-            ],
-            'country'    => [
-                'show'     => true,
-                'required' => true
-            ],
-            'company'    => [
-                'show'     => true,
-                'required' => false
-            ],
-            'phone'      => [
-                'show'     => true,
-                'required' => false
-            ]
-        ];
-
-        $Conf->setValue('profile', 'addressFields', json_encode($addressFields));
+        $Conf->setValue('registration', 'addressFields', \json_encode($addressFields));
+        $Conf->setValue('profile', 'addressFields', \json_encode($addressFields));
         $Conf->save();
     }
 
