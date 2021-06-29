@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\Permissions;
+use QUI\FrontendUsers\Controls\Profile\ControlInterface;
 
 /**
  * Class Utils
@@ -163,11 +164,11 @@ class Utils
      *
      * @param string $category
      * @param bool|string $settings
-     * @return QUI\FrontendUsers\Controls\Profile\AbstractProfileControl
+     * @return ControlInterface|null
      *
      * @throws Exception
      */
-    public static function getProfileSettingControl($category, $settings = false): ?Controls\Profile\AbstractProfileControl
+    public static function getProfileSettingControl($category, $settings = false): ?ControlInterface
     {
         $setting = self::getProfileSetting($category, $settings);
         $Control = null;
@@ -175,7 +176,7 @@ class Utils
         if (isset($setting['control'])) {
             $cls = $setting['control'];
 
-            if (class_exists($cls)) {
+            if (\class_exists($cls) && \is_a($cls, ControlInterface::class, true)) {
                 $Control = new $cls();
             }
         }
