@@ -877,6 +877,47 @@
 
     <groups name="quiqqer/frontend-users" datatype="php">
 
+        <locale name="GdprDataProvider.title">
+            <de><![CDATA[Daten aus Benutzerregistrierung]]></de>
+            <en><![CDATA[Data from user registration]]></en>
+        </locale>
+        <locale name="GdprDataProvider.purpose">
+            <de><![CDATA[Ausführung der Website-Funktionen, die grundlegende Benutzerdaten erfordern (z.B. Zusendung angeforderter Dokumente, Zuordnung und Speicherung von benutzerspezifischen Daten zu einem Benutzerkonto).]]></de>
+            <en><![CDATA[Execution of website functions that require basic user data (e.g., sending of requested documents, assigning and saving user-specific data to a user account etc.).]]></en>
+        </locale>
+        <locale name="GdprDataProvider.recipients">
+            <de><![CDATA[Eine Weitergabe dieser personenbezogenen Daten an Dritte erfolgt nicht.]]></de>
+            <en><![CDATA[This personal data is not passed on to third parties.]]></en>
+        </locale>
+        <locale name="GdprDataProvider.storageDuration">
+            <de><![CDATA[Die Daten aus der Benutzerregistrierung werden solange gespeichert, wie Sie das Angebot nutzen möchten, für welches ein Benutzerkonto erforderlich ist. Sie haben jederzeit die Möglichkeit Ihr Benutzerkonto zu löschen.]]></de>
+            <en><![CDATA[The data from the user registration will be stored as long as you want to use the offer, for which a user account is required. You have the option to delete your user account at any time.]]></en>
+        </locale>
+        <locale name="GdprDataProvider.origin.defaultRegistrarTitle">
+            <de><![CDATA[Registrierungsformular]]></de>
+            <en><![CDATA[Registration form]]></en>
+        </locale>
+        <locale name="GdprDataProvider.origin">
+            <de><![CDATA[Die Daten stammen aus der von Ihnen durchgeführten Registrierung per [registrarTitle]. Sofern Sie sich über ein Konto bei einem Drittanbieter (z.B. Facebook, Google) registriert haben, stammen die Daten von diesem Drittanbieter (in dem von Ihnen freigegebenen Umfang). Die Benutzer-ID ist eine automatisch generierte Zahl, die Ihr Benutzerkonto in unserem System eindeutig identifiziert.]]></de>
+            <en><![CDATA[The data originates from your registration via [registrarTitle]. If you have registered via an account with a third-party provider (e.g. Facebook, Google), the data originates from this third-party provider (as approved by you). The user ID is an automatically generated number that uniquely identifies your user account in our system.]]></en>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.userId">
+            <de><![CDATA[Benutzer-ID]]></de>
+            <en><![CDATA[User ID]]></en>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.email">
+            <de><![CDATA[E-Mail-Adresse]]></de>
+            <en><![CDATA[Email address]]></en>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.firstName">
+            <de><![CDATA[Vorname]]></de>
+            <en><![CDATA[First name]]></en>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.lastName">
+            <de><![CDATA[Name]]></de>
+            <en><![CDATA[Name]]></en>
+        </locale>
+
         <locale name="profilebar.to_profile">
             <de><![CDATA[Benutzerprofil]]></de>
             <en><![CDATA[User profile]]></en>
