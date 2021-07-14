@@ -21,7 +21,7 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer\/quiqqer": "^1.1|*@dev",
+    "quiqqer\/quiqqer": ">=1.6|*@dev",
     "quiqqer\/countries": "^1.1|*@dev",
     "quiqqer\/verification": "^1.1|*@dev",
     "quiqqer\/tooltips": "^1|*@dev"
