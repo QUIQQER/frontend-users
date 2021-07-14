@@ -11,7 +11,7 @@
 
 require.config({
     paths: {
-        'HistoryEvents': URL_OPT_DIR + 'bin/history-events/dist/history-events.min'
+        'HistoryEvents': URL_OPT_DIR + 'bin/quiqqer-asset/history-events/history-events/dist/history-events.min'
     }
 });
 
