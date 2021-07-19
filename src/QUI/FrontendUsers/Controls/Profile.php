@@ -139,6 +139,14 @@ class Profile extends Control
                     $currentSetting
                 );
 
+                if (!$Control) {
+                    QUI\System\Log::addError('Control not found', [
+                        'current-category' => $currentCategory,
+                        'current-setting'  => $currentSetting
+                    ]);
+                    continue;
+                }
+
                 $Control->setAttribute('User', $this->getUser());
 
                 if ($Request->request->get('profile-save')) {
