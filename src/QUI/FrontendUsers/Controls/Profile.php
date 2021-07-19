@@ -144,7 +144,8 @@ class Profile extends Control
                         'current-category' => $currentCategory,
                         'current-setting'  => $currentSetting
                     ]);
-                    continue;
+
+                    return '';
                 }
 
                 $Control->setAttribute('User', $this->getUser());
