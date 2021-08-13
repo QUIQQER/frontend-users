@@ -104,7 +104,17 @@ class Registration extends QUI\Control
                 QUI\System\Log::writeDebugException($Exception);
                 $Engine->assign('error', $Exception->getMessage());
             } catch (QUI\FrontendUsers\Exception $Exception) {
-                QUI\System\Log::writeException($Exception);
+                QUI\System\Log::write(
+                    $Exception->getMessage(),
+                    QUI\System\Log::LEVEL_WARNING,
+                    [
+                        'process'   => 'registration',
+                        'registrar' => $CurrentRegistrar ? $CurrentRegistrar->getTitle() : 'unknown'
+                    ],
+                    'frontend-users'
+                );
+
+                QUI\System\Log::writeDebugException($Exception);
 
                 $Engine->assign('error', $Exception->getMessage());
             } catch (\Exception $Exception) {
