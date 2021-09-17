@@ -557,7 +557,7 @@
                             </option>
                             <option value="asRedirectOnActivation">
                                 <locale group="quiqqer/frontend-users"
-                                        var="settings.visitRegistrationSiteBehaviour.option.loginRedirect"/>
+                                        var="settings.visitRegistrationSiteBehaviour.option.asRedirectOnActivation"/>
                             </option>
                         </select>
 
