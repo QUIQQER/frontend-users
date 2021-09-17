@@ -839,6 +839,29 @@ class Handler extends Singleton
     }
 
     /**
+     * Get Site that is redirected to after activation success.
+     *
+     * @return false|QUI\Projects\Site
+     */
+    public function getRedirectOnActivationSite()
+    {
+        try {
+            $registrationSettings = $this->getRegistrationSettings();
+            $projectLang          = QUI::getRewrite()->getProject()->getLang();
+            
+            if (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+                return QUI\Projects\Site\Utils::getSiteByLink(
+                    $registrationSettings['autoRedirectOnSuccess'][$projectLang]
+                );
+            }
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+        }
+
+        return false;
+    }
+
+    /**
      * Checks the current configuration of quiqqer/frontend-users
      * and throws Exceptions if a misconfiguration is detected
      *
