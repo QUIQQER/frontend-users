@@ -352,6 +352,10 @@
             <de><![CDATA[Kein besonderes Verhalten (zeige normale Registrierungs-Seite)]]></de>
             <en><![CDATA[No special behaviour (show default registration site)]]></en>
         </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.asRedirectOnActivation">
+            <de><![CDATA[Weiterleiten zur selben Seite wie unter "Automatische Weiterleitung nach Aktivierung" festgelegt]]></de>
+            <en><![CDATA[Redirect to same Site as configured at "Auto redirect on activation"]]></en>
+        </locale>
         <locale name="settings.addressInput.title">
             <de><![CDATA[Adress-Eingabe]]></de>
             <en><![CDATA[Address input]]></en>

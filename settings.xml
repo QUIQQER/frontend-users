@@ -470,7 +470,7 @@
                                         var="settings.fullnameInput.option.firstname_required"/>
                             </option>
                             <option value="fullname_optional">
-                                <locale group="quiqqer/frontend-users"
+                                <locale group="quiqqer/frontend-users"autoRedirectOnSuccess
                                         var="settings.fullnameInput.option.fullname_optional"/>
                             </option>
                             <option value="fullname_required">
@@ -554,6 +554,10 @@
                             <option value="showMessage">
                                 <locale group="quiqqer/frontend-users"
                                         var="settings.visitRegistrationSiteBehaviour.option.showMessage"/>
+                            </option>
+                            <option value="asRedirectOnActivation">
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.visitRegistrationSiteBehaviour.option.loginRedirect"/>
                             </option>
                         </select>
 

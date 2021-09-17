@@ -221,13 +221,24 @@ class RegistrationSignUp extends QUI\Control
                 $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
                 $registrationSettings = $FrontendUsersHandler->getRegistrationSettings();
 
-                if ($registrationSettings['visitRegistrationSiteBehaviour'] === 'showProfile') {
-                    $ProfileSite = $FrontendUsersHandler->getProfileSite(QUI::getRewrite()->getProject());
+                switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
+                    case 'showProfile':
+                        $ProfileSite = $FrontendUsersHandler->getProfileSite(QUI::getRewrite()->getProject());
 
-                    if ($ProfileSite) {
-                        header('Location: '.$ProfileSite->getUrlRewritten());
-                        exit;
-                    }
+                        if ($ProfileSite) {
+                            header('Location: '.$ProfileSite->getUrlRewritten());
+                            exit;
+                        }
+                        break;
+
+                    case 'asRedirectOnActivation':
+                        $RedirectSite = $FrontendUsersHandler->getRedirectOnActivationSite();
+
+                        if ($RedirectSite) {
+                            header('Location: '.$RedirectSite->getUrlRewritten());
+                            exit;
+                        }
+                        break;
                 }
             } catch (QUI\Exception $Exception) {
                 QUI\System\Log::writeDebugException($Exception);
