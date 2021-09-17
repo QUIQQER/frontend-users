@@ -470,7 +470,7 @@
                                         var="settings.fullnameInput.option.firstname_required"/>
                             </option>
                             <option value="fullname_optional">
-                                <locale group="quiqqer/frontend-users"autoRedirectOnSuccess
+                                <locale group="quiqqer/frontend-users"
                                         var="settings.fullnameInput.option.fullname_optional"/>
                             </option>
                             <option value="fullname_required">
