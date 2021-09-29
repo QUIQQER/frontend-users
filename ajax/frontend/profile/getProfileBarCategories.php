@@ -11,6 +11,12 @@ use QUI\FrontendUsers\Handler;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getProfileBarCategories',
     function () {
+        $ProfileSite = Handler::getInstance()->getProfileSite();
+
+        if (!$ProfileSite) {
+            return [];
+        }
+
         $categories = Utils::getProfileBarCategorySettings();
 
         foreach ($categories as $k => $data) {
@@ -27,9 +33,8 @@ QUI::$Ajax->registerFunction(
         // Check if "go to profile" button is added
         try {
             $profileBarSettings = Handler::getInstance()->getProfileBarSettings();
-            $ProfileSite        = Handler::getInstance()->getProfileSite();
 
-            if ($ProfileSite && !empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
+            if (!empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
                 \array_unshift($categories['user']['items'], [
                     'name'             => 'toprofile',
                     'title'            => QUI::getLocale()->get(
