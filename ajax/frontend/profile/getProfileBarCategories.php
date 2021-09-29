@@ -27,8 +27,9 @@ QUI::$Ajax->registerFunction(
         // Check if "go to profile" button is added
         try {
             $profileBarSettings = Handler::getInstance()->getProfileBarSettings();
+            $ProfileSite        = Handler::getInstance()->getProfileSite();
 
-            if (!empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
+            if ($ProfileSite && !empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
                 \array_unshift($categories['user']['items'], [
                     'name'             => 'toprofile',
                     'title'            => QUI::getLocale()->get(
@@ -40,7 +41,7 @@ QUI::$Ajax->registerFunction(
                     'control'          => false,
                     'showinprofilebar' => true,
                     'content'          => false,
-                    'url'              => Handler::getInstance()->getProfileSite()->getUrlRewritten()
+                    'url'              => $ProfileSite->getUrlRewritten()
                 ]);
             }
         } catch (\Exception $Exception) {

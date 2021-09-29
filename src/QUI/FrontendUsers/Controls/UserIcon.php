@@ -30,8 +30,6 @@ class UserIcon extends Control
 
         parent::__construct($attributes);
 
-        $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
-
         $this->addCSSClass('quiqqer-frontendUsers-userIcon');
         $this->addCSSFile(dirname(__FILE__).'/UserIcon.css');
     }
@@ -54,6 +52,15 @@ class UserIcon extends Control
             return '';
         }
 
+        $ProfileSite = QUI\FrontendUsers\Handler::getInstance()->getProfileSite(
+            QUI::getRewrite()->getProject()
+        );
+
+        if (!$ProfileSite) {
+            return '';
+        }
+
+        $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
         $this->setAttribute('data-qui-options-showlogout', $this->getAttribute('showLogout'));
 
         $Engine = QUI::getTemplateManager()->getEngine();
@@ -112,17 +119,11 @@ class UserIcon extends Control
         }
 
         $Engine->assign([
-            'User'       => $User,
-            'iconHeight' => $iconHeight,
-            'iconWidth'  => $iconWidth
+            'User'        => $User,
+            'iconHeight'  => $iconHeight,
+            'iconWidth'   => $iconWidth,
+            'ProfileSite' => $ProfileSite
         ]);
-
-        $Engine->assign(
-            'ProfileSite',
-            QUI\FrontendUsers\Handler::getInstance()->getProfileSite(
-                QUI::getRewrite()->getProject()
-            )
-        );
 
         return $Engine->fetch(dirname(__FILE__).'/UserIcon.html');
     }
