@@ -31,6 +31,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
             logo     : false,
             reload   : true,
 
+            ownRedirectOnLogin: false, // redirect function
+
             'show-registration-link': false
         },
 
@@ -93,13 +95,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
             Prom.then(function (registrationLink) {
                 self.$Login = new Login({
-                    showLoader: false,
-                    reload    : self.getAttribute('reload'),
-                    onSuccess : function () {
+                    showLoader        : false,
+                    reload            : self.getAttribute('reload'),
+                    ownRedirectOnLogin: self.getAttribute('ownRedirectOnLogin'),
+                    onSuccess         : function () {
                         self.close();
                         self.fireEvent('success', [self]);
                     },
-                    events    : {
+                    events            : {
                         onAuthBegin: function () {
                             self.Loader.show();
                         },
