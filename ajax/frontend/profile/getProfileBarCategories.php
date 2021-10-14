@@ -11,6 +11,12 @@ use QUI\FrontendUsers\Handler;
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getProfileBarCategories',
     function () {
+        $ProfileSite = Handler::getInstance()->getProfileSite();
+
+        if (!$ProfileSite) {
+            return [];
+        }
+
         $categories = Utils::getProfileBarCategorySettings();
 
         foreach ($categories as $k => $data) {
@@ -40,7 +46,7 @@ QUI::$Ajax->registerFunction(
                     'control'          => false,
                     'showinprofilebar' => true,
                     'content'          => false,
-                    'url'              => Handler::getInstance()->getProfileSite()->getUrlRewritten()
+                    'url'              => $ProfileSite->getUrlRewritten()
                 ]);
             }
         } catch (\Exception $Exception) {
