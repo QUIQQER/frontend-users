@@ -870,7 +870,7 @@
             <en><![CDATA[Phone]]></en>
         </locale>
         <locale name="mobile">
-            <de><![CDATA[Handy]]></de>
+            <de><![CDATA[Mobil]]></de>
             <en><![CDATA[Mobile]]></en>
         </locale>
         <locale name="fax">
