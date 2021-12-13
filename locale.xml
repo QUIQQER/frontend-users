@@ -866,11 +866,11 @@
             <en><![CDATA[Country]]></en>
         </locale>
         <locale name="phone">
-            <de><![CDATA[Mobil]]></de>
+            <de><![CDATA[Tel]]></de>
             <en><![CDATA[Phone]]></en>
         </locale>
         <locale name="mobile">
-            <de><![CDATA[Handy]]></de>
+            <de><![CDATA[Mobil]]></de>
             <en><![CDATA[Mobile]]></en>
         </locale>
         <locale name="fax">
