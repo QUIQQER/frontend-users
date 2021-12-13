@@ -866,7 +866,7 @@
             <en><![CDATA[Country]]></en>
         </locale>
         <locale name="phone">
-            <de><![CDATA[Tel]]></de>
+            <de><![CDATA[Mobil]]></de>
             <en><![CDATA[Phone]]></en>
         </locale>
         <locale name="mobile">
