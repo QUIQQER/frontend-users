@@ -2,6 +2,7 @@
 
 namespace QUI\FrontendUsers;
 
+use QUI\ERP\Products\Handler\Fields;
 use QUI\GDPR\DataRequest\AbstractDataProvider;
 
 /**
@@ -160,8 +161,14 @@ class GdprDataProvider extends AbstractDataProvider
      */
     public function deleteUserData(): array
     {
-        // @TODO: Implement deleteUserData() method.
+        $this->User->disable(); // anonymize user
 
-        return [];
+        return [
+            'username',
+            'firstname',
+            'lastname',
+            'birthday',
+            'email'
+        ];
     }
 }
