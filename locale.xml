@@ -353,7 +353,8 @@
             <en><![CDATA[No special behaviour (show default registration site)]]></en>
         </locale>
         <locale name="settings.visitRegistrationSiteBehaviour.option.asRedirectOnActivation">
-            <de><![CDATA[Weiterleiten zur selben Seite wie unter "Automatische Weiterleitung nach Aktivierung" festgelegt]]></de>
+            <de>
+                <![CDATA[Weiterleiten zur selben Seite wie unter "Automatische Weiterleitung nach Aktivierung" festgelegt]]></de>
             <en><![CDATA[Redirect to same Site as configured at "Auto redirect on activation"]]></en>
         </locale>
         <locale name="settings.addressInput.title">
@@ -886,24 +887,30 @@
             <en><![CDATA[Data from user registration]]></en>
         </locale>
         <locale name="GdprDataProvider.purpose">
-            <de><![CDATA[Ausführung der Website-Funktionen, die grundlegende Benutzerdaten erfordern (z.B. Zusendung angeforderter Dokumente, Zuordnung und Speicherung von benutzerspezifischen Daten zu einem Benutzerkonto).]]></de>
-            <en><![CDATA[Execution of website functions that require basic user data (e.g., sending of requested documents, assigning and saving user-specific data to a user account etc.).]]></en>
+            <de>
+                <![CDATA[Ausführung der Website-Funktionen, die grundlegende Benutzerdaten erfordern (z.B. Zusendung angeforderter Dokumente, Zuordnung und Speicherung von benutzerspezifischen Daten zu einem Benutzerkonto).]]></de>
+            <en>
+                <![CDATA[Execution of website functions that require basic user data (e.g., sending of requested documents, assigning and saving user-specific data to a user account etc.).]]></en>
         </locale>
         <locale name="GdprDataProvider.recipients">
             <de><![CDATA[Eine Weitergabe dieser personenbezogenen Daten an Dritte erfolgt nicht.]]></de>
             <en><![CDATA[This personal data is not passed on to third parties.]]></en>
         </locale>
         <locale name="GdprDataProvider.storageDuration">
-            <de><![CDATA[Die Daten aus der Benutzerregistrierung werden solange gespeichert, wie Sie das Angebot nutzen möchten, für welches ein Benutzerkonto erforderlich ist. Sie haben jederzeit die Möglichkeit Ihr Benutzerkonto zu löschen.]]></de>
-            <en><![CDATA[The data from the user registration will be stored as long as you want to use the offer, for which a user account is required. You have the option to delete your user account at any time.]]></en>
+            <de>
+                <![CDATA[Die Daten aus der Benutzerregistrierung werden solange gespeichert, wie Sie das Angebot nutzen möchten, für welches ein Benutzerkonto erforderlich ist. Sie haben jederzeit die Möglichkeit Ihr Benutzerkonto zu löschen.]]></de>
+            <en>
+                <![CDATA[The data from the user registration will be stored as long as you want to use the offer, for which a user account is required. You have the option to delete your user account at any time.]]></en>
         </locale>
         <locale name="GdprDataProvider.origin.defaultRegistrarTitle">
             <de><![CDATA[Registrierungsformular]]></de>
             <en><![CDATA[Registration form]]></en>
         </locale>
         <locale name="GdprDataProvider.origin">
-            <de><![CDATA[Die Daten stammen aus der von Ihnen durchgeführten Registrierung per [registrarTitle]. Sofern Sie sich über ein Konto bei einem Drittanbieter (z.B. Facebook, Google) registriert haben, stammen die Daten von diesem Drittanbieter (in dem von Ihnen freigegebenen Umfang). Die Benutzer-ID ist eine automatisch generierte Zahl, die Ihr Benutzerkonto in unserem System eindeutig identifiziert.]]></de>
-            <en><![CDATA[The data originates from your registration via [registrarTitle]. If you have registered via an account with a third-party provider (e.g. Facebook, Google), the data originates from this third-party provider (as approved by you). The user ID is an automatically generated number that uniquely identifies your user account in our system.]]></en>
+            <de>
+                <![CDATA[Die Daten stammen aus der von Ihnen durchgeführten Registrierung per [registrarTitle]. Sofern Sie sich über ein Konto bei einem Drittanbieter (z.B. Facebook, Google) registriert haben, stammen die Daten von diesem Drittanbieter (in dem von Ihnen freigegebenen Umfang). Die Benutzer-ID ist eine automatisch generierte Zahl, die Ihr Benutzerkonto in unserem System eindeutig identifiziert.]]></de>
+            <en>
+                <![CDATA[The data originates from your registration via [registrarTitle]. If you have registered via an account with a third-party provider (e.g. Facebook, Google), the data originates from this third-party provider (as approved by you). The user ID is an automatically generated number that uniquely identifies your user account in our system.]]></en>
         </locale>
         <locale name="GdprDataProvider.userDataField.userId">
             <de><![CDATA[Benutzer-ID]]></de>
@@ -1687,6 +1694,225 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Passwort zurücksetzen]]></de>
             <en><![CDATA[Reset password]]></en>
         </locale>
+
+        <locale name="mail.text.registrationWelcome.title">
+            <de><![CDATA[Frontend Users: Registrierung - Willkommens-E-Mail]]></de>
+            <en><![CDATA[Frontend Users: Registration - Welcome e-mail]]></en>
+        </locale>
+        <locale name="mail.text.registrationWelcome.description">
+            <de><![CDATA[
+            Frontend Users: Registrierung - E-Mail welche der Benutzer erhält wenn er sich erfolgreich registriert hat.
+            ]]></de>
+            <en><![CDATA[
+            Frontend Users: Registration - E-mail which the user receives when he/she has successfully registered.
+            ]]></en>
+        </locale>
+        <locale name="order.registrationWelcome.subject.description">
+            <de><![CDATA[
+            <p>Betreff der Willkommens-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Subject of the welcome e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+            </ul>
+            ]]></en>
+        </locale>
+        <locale name="order.registrationWelcome.body.description">
+            <de><![CDATA[
+            <p>Inhalt der Willkommens-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[loginUrl]:</b> URL (Link) für den Login</li>
+                <li><b>[userPassword]:</b> Gesetztes Passwort für den Benutzer</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Content of the welcome e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+                <li><b>[loginUrl]:</b> URL (link) for the login</li>
+                <li><b>[userPassword]:</b> Set password for the user</li>
+                <li><b>[username]:</b> Username</li>
+                <li><b>[userFirstName]:</b> First name of the user (if available)</li>
+                <li><b>[userLastName]:</b> Last name of the user (if available)</li>
+            </ul>
+            ]]></en>
+        </locale>
+
+
+        <locale name="mail.text.activation.title">
+            <de><![CDATA[Frontend Users: Registrierung - Aktivierungs-E-Mail]]></de>
+            <en><![CDATA[Frontend Users: Registration - Activation e-mail]]></en>
+        </locale>
+        <locale name="mail.text.activation.description">
+            <de><![CDATA[
+            Frontend Users: Registrierung - E-Mail welche der Benutzer erhält für seine Aktivierung.
+            ]]></de>
+            <en><![CDATA[
+            Frontend Users: Registration - E-mail which the user receives for his activation.
+            ]]></en>
+        </locale>
+        <locale name="order.activation.subject.description">
+            <de><![CDATA[
+            <p>Betreff der Aktivierungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Subject of the activation e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+            </ul>
+            ]]></en>
+        </locale>
+        <locale name="order.activation.body.description">
+            <de><![CDATA[
+            <p>Inhalt der Aktivierungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[date]:</b> Datum der Registrierung</li>
+                <li><b>[email]:</b> E-Mail des Benutzers</li>
+                <li><b>[activationLink]:</b> Aktivierungslink</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Content of the activation e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+                <li><b>[userId]:</b> User id of the user</li>
+                <li><b>[date]:</b> Date of the registration</li>
+                <li><b>[email]:</b> E mail of the user</li>
+                <li><b>[activationLink]:</b> Activation link</li>
+                <li><b>[username]:</b> Username</li>
+                <li><b>[userFirstName]:</b> First name of the user (if available)</li>
+                <li><b>[userLastName]:</b> Last name of the user (if available)</li>
+            </ul>
+            ]]></en>
+        </locale>
+
+
+        <locale name="mail.text.changeEmail.title">
+            <de><![CDATA[Frontend Users: E-Mail ändern]]></de>
+            <en><![CDATA[Frontend Users: Change e-mail]]></en>
+        </locale>
+        <locale name="mail.text.changeEmail.description">
+            <de><![CDATA[
+            Frontend Users: E-Mail welche der Benutzer erhält wenn er seine E-Mail Adresse ändern möchte.
+            ]]></de>
+            <en><![CDATA[
+            Frontend Users: E-mail the user receives when he wants to change his e-mail address.
+            ]]></en>
+        </locale>
+        <locale name="order.changeEmail.subject.description">
+            <de><![CDATA[
+            <p>Betreff der E-Mail Adressänderungen. Verfügbare Variablen:</p>
+            <ul>
+                <li>Besitzt keine Variablen</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Subject of the e-mail address changes. Available variables:</p>
+            <ul>
+                <li>has no variables</li>
+            </ul>
+            ]]></en>
+        </locale>
+        <locale name="order.changeEmail.body.description">
+            <de><![CDATA[
+            <p>Inhalt der E-Mail Adressänderungen. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[newEmail]:</b> Neue E-Mail des Benutzers</li>
+                <li><b>[date]:</b> Datum der Änderungsanfrage</li>
+                <li><b>[confirmLink]:</b> Link für die Bestätigungs</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Content of the e-mail address changes. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+                <li><b>[userId]:</b> User id of the user</li>
+                <li><b>[newEmail]:</b> New E mail of the user</li>
+                <li><b>[date]:</b> Date of the change request</li>
+                <li><b>[confirmLink]:</b> Link for the conformation</li>
+                <li><b>[username]:</b> Username</li>
+                <li><b>[userFirstName]:</b> First name of the user (if available)</li>
+                <li><b>[userLastName]:</b> Last name of the user (if available)</li>
+            </ul>
+            ]]></en>
+        </locale>
+
+
+        <locale name="mail.text.deleteUserConfirmation.title">
+            <de><![CDATA[Frontend Users: Benutzer löschen]]></de>
+            <en><![CDATA[Frontend Users: Delete user]]></en>
+        </locale>
+        <locale name="mail.text.deleteUserConfirmation.description">
+            <de><![CDATA[
+            Frontend Users: E-Mail welche der Benutzer erhält wenn er seinen Account löschen möchte.
+            ]]></de>
+            <en><![CDATA[
+            Frontend Users: E-mail which the user receives when he wants to delete his account
+            ]]></en>
+        </locale>
+        <locale name="order.deleteUserConfirmation.subject.description">
+            <de><![CDATA[
+            <p>Betreff der Benutzer löschen E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li>Besitzt keine Variablen</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Subject of the user delete e-mail. Available variables:</p>
+            <ul>
+                <li>has no variables</li>
+            </ul>
+            ]]></en>
+        </locale>
+        <locale name="order.deleteUserConfirmation.body.description">
+            <de><![CDATA[
+            <p>Inhalt der Benutzer löschen E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[date]:</b> Datum des Löschantrages</li>
+                <li><b>[confirmLink]:</b> Link für die Bestätigung</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Content of the user deletion e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+                <li><b>[userId]:</b> User id of the user</li>
+                <li><b>[date]:</b> Date of the deletion request</li>
+                <li><b>[confirmLink]:</b> Link for the conformation</li>
+                <li><b>[username]:</b> Username</li>
+                <li><b>[userFirstName]:</b> First name of the user (if available)</li>
+                <li><b>[userLastName]:</b> Last name of the user (if available)</li>
+            </ul>
+            ]]></en>
+        </locale>
+
+
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
