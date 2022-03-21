@@ -36,6 +36,7 @@
         </copyright>
 
         <provider>
+            <erp src="\QUI\FrontendUsers\ErpProvider"/>
             <registrar src="\QUI\FrontendUsers\Registrars\Email\Registrar"/>
             <gdprDataProvider src="\QUI\FrontendUsers\GdprDataProvider"/>
         </provider>
