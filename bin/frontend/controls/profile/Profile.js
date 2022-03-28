@@ -83,40 +83,33 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         resize: function () {
             var self      = this,
                 Elm       = this.getElm(),
-                Animation = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'),
-                Menu      = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categories');
-
-            if (!Menu) {
-                Menu = new Element('div'); // workaround
-            }
-
-            var newHeight = Math.max(
-                Animation.getSize().y,
-                Animation.getScrollSize().y,
-                Menu.getSize().y
-            );
+                Animation = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation');
 
             return new Promise(function (resolve) {
-                if (self.$FX === null) {
-                    self.$FX = moofx(self.$Elm)
-                }
-
-                self.$FX.animate({
-                    height: newHeight
-                }, {
-                    duration: 100,
-                    callback: function () {
-                        moofx(Animation).animate({
-                            opacity: 1,
-                            left   : 0
-                        }, {
-                            duration: 100,
-                            callback: function () {
-                                self.$parseContent().then(resolve);
-                                self.$FX = null;
-                            }
-                        });
+                self.$parseContent().then(() => {
+                    if (self.$FX === null) {
+                        self.$FX = moofx(self.$Elm);
                     }
+
+                    self.$FX.animate({
+                        height: self.$Elm.getSize().y
+                    }, {
+                        duration: 100,
+                        callback: function () {
+                            moofx(Animation).animate({
+                                opacity: 1,
+                                left   : 0
+                            }, {
+                                duration: 100,
+                                callback: function () {
+                                    self.$Elm.setStyle('height', null);
+
+                                    resolve();
+                                    self.$FX = null;
+                                }
+                            });
+                        }
+                    });
                 });
             });
         },
