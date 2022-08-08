@@ -143,7 +143,7 @@ function signUpOnLoad() {
 }
 
 if (typeof window.whenQuiLoaded !== 'undefined') {
-    window.whenQuiLoaded.then(signUpOnLoad);
+    window.whenQuiLoaded().then(signUpOnLoad);
 } else {
     document.addEvent('domready', signUpOnLoad);
 }
