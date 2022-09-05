@@ -570,7 +570,7 @@ class Events
             try {
                 $Folder = $MainFolder->getChildByName('user');
             } catch (QUI\Exception $Exception) {
-                $Folder = $MainFolder->createFolder('users');
+                $Folder = $MainFolder->createFolder('user');
                 $Folder->setHidden();
                 $Folder->save();
             }
