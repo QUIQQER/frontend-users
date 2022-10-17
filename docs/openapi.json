@@ -1,0 +1,99 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Frontend-Users API",
+    "description": "API of the quiqqer/frontend-users module",
+    "contact": {
+      "email": "kunden@pcsg.de",
+      "name": "PCSG",
+      "url": "https://pcsg.de"
+    },
+    "license": {
+      "name": "PCSG QL-1.0"
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/frontend-users/register": {
+      "post": {
+        "summary": "Registers a new User",
+        "operationId": "register",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+
+                ],
+                "properties": {
+                  "Salepoint": {
+                    "type": "string",
+                    "description": "Automaton ID",
+                    "example": "4711"
+                  },
+                  "ReusableContainer": {
+                    "$ref": "#/components/schemas/ReusableContainer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Container return result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Response": {
+        "type": "object",
+        "required": [
+          "ID_Error",
+          "Message"
+        ],
+        "properties": {
+          "ID_Error": {
+            "type": "integer",
+            "format": "int32",
+            "enum": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "example": "0",
+            "description": "See 'Message' enum for meaning of numbers"
+          },
+          "Message": {
+            "type": "string",
+            "enum": [
+              "OK",
+              "INVALID",
+              "LOCKED",
+              "UNKNOWN"
+            ],
+            "example": "OK",
+            "description": "Further info about the ID_Error"
+          }
+        }
+      },
+      "ReusableContainer": {
+        "type": "string",
+        "description": "Barcode scanned from container"
+      }
+    }
+  }
+}

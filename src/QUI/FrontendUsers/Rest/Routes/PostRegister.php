@@ -1,0 +1,364 @@
+<?php
+
+namespace QUI\FrontendUsers\Rest\Routes;
+
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface as SlimResponse;
+use Psr\Http\Message\ServerRequestInterface as SlimRequest;
+
+use QUI;
+use QUI\FrontendUsers\Exception;
+use QUI\Utils\Security\Orthos;
+
+use function boolval;
+use function explode;
+use function json_encode;
+
+class PostRegister
+{
+    /**
+     * To be called by the REST Server (Slim)
+     *
+     * @param SlimRequest $Request
+     * @param SlimResponse $Response
+     * @param array $args
+     *
+     * @return SlimResponse
+     */
+    public static function call(SlimRequest $Request, SlimResponse $Response, array $args): SlimResponse
+    {
+        $RegistrationData = new QUI\FrontendUsers\Rest\RegistrationData();
+        $RegistrationData->setAttributes($Request->getParsedBody());
+
+        $ResponseFactory = new QUI\REST\ResponseFactory();
+
+        try {
+            static::registerUser($RegistrationData);
+        } catch (Exception $Exception) {
+            return new \GuzzleHttp\Psr7\Response(
+                400,
+                ['Content-Type' => 'application/json'],
+                json_encode([
+                    'message' => $Exception->getMessage()
+                ])
+            );
+            return $ResponseFactory->createResponse(400, $Exception->getMessage());
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+
+            return $ResponseFactory->createResponse(500, $Exception->getMessage());
+        }
+
+        return $ResponseFactory->createResponse();
+    }
+
+    /**
+     * Creates a new User from the given RegistrationData
+     *
+     * @param \QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+     *
+     * @return \QUI\Interfaces\Users\User
+     *
+     * @throws \QUI\Exception
+     * @throws \QUI\FrontendUsers\Exception
+     * @throws \QUI\Permissions\Exception
+     * @throws \QUI\Users\Exception
+     */
+    protected static function registerUser(
+        QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+    ): QUI\Interfaces\Users\User {
+        static::checkRegistrationData($RegistrationData);
+
+        $SystemUser = QUI::getUsers()->getSystemUser();
+
+        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+
+        $username = $RegistrationData->getAttribute('username');
+        $email    = $RegistrationData->getAttribute('email');
+
+        if (QUI\FrontendUsers\Handler::USERNAME_INPUT_NONE) {
+            $username = $email;
+        }
+
+        if (\mb_strlen($username) > 50) {
+            throw new QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users',
+                'exception.registration.username_too_long',
+                [
+                    'maxLength' => 50
+                ]
+            ]);
+        }
+
+        // Create user if everything is valid
+        $NewUser = QUI::getUsers()->createChild($username, $SystemUser);
+
+        // Add the given data to the User
+        static::addRegistrationDataToUser($NewUser, $RegistrationData);
+
+        // add user to default groups
+        $defaultGroupIds = explode(",", $registrationSettings['defaultGroups']);
+
+        foreach ($defaultGroupIds as $groupId) {
+            $NewUser->addToGroup($groupId);
+        }
+
+        // determine if the user has to set a new password on first login
+        if ($registrationSettings['forcePasswordReset']) {
+            $NewUser->setAttribute('quiqqer.set.new.password', true);
+        }
+
+        // TODO: send registration notice to admins
+//        $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
+
+        $NewUser->save($SystemUser);
+
+        $password = $RegistrationData->getAttribute('password');
+
+        if (!$password) {
+            $password = QUI\Security\Password::generateRandom();
+        }
+
+        $NewUser->setPassword($password, $SystemUser);
+
+        // TODO: send registration mail to user
+//        $sendMailSuccess = $RegistrarHandler->sendActivationMail($NewUser, $Registrar);
+
+        if (!$NewUser->isActive()) {
+            $NewUser->activate(false, $SystemUser);
+        }
+
+        // TODO: Event feuern
+//        QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRegister', [$NewUser]);
+
+        return $NewUser;
+    }
+
+    /**
+     * Checks if the given RegistrationData object contains all required and valid data.
+     * If there is something wrong, an Exception will be thrown.
+     *
+     * @param QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+     *
+     * @return void
+     *
+     * @throws QUI\Exception
+     * @throws QUI\FrontendUsers\Exception
+     */
+    protected static function checkRegistrationData(QUI\FrontendUsers\Rest\RegistrationData $RegistrationData): void
+    {
+        $username = $RegistrationData->getAttribute('username');
+
+        $Handler = QUI\FrontendUsers\Handler::getInstance();
+
+        $registrationSettings = $Handler->getRegistrationSettings();
+
+        $usernameSetting = $registrationSettings['usernameInput'];
+        $passwordSetting = $registrationSettings['passwordInput'];
+        $fullNameSetting = $registrationSettings['fullnameInput'];
+
+        $usernameExists = QUI::getUsers()->usernameExists($username);
+
+        $lg       = 'quiqqer/frontend-users';
+        $lgPrefix = 'exception.registrars.email.';
+
+        // Username check
+        if ($usernameSetting !== $Handler::USERNAME_INPUT_NONE) {
+            // Check if username input is enabled
+            if (empty($username)
+                && $usernameSetting === $Handler::USERNAME_INPUT_REQUIRED) {
+                throw new QUI\FrontendUsers\Exception([
+                    $lg,
+                    $lgPrefix . 'empty_username'
+                ]);
+            }
+
+            if ($usernameExists) {
+                throw new QUI\FrontendUsers\Exception([
+                    $lg,
+                    $lgPrefix . 'username_already_exists'
+                ]);
+            }
+        } else {
+            // Check if username input is not enabled
+            if ($usernameExists) {
+                throw new QUI\FrontendUsers\Exception([
+                    $lg,
+                    $lgPrefix . 'email_already_exists'
+                ]);
+            }
+        }
+
+        // Password check
+        if ($passwordSetting != $Handler::PASSWORD_INPUT_NONE && !$RegistrationData->getAttribute('password')) {
+            throw new QUI\FrontendUsers\Exception([
+                $lg,
+                $lgPrefix . 'password_missing'
+            ]);
+        }
+
+        // Fullname check
+        $firstname = $RegistrationData->getAttribute('firstname');
+        $lastname  = $RegistrationData->getAttribute('lastname');
+
+        switch ($fullNameSetting) {
+            case $Handler::FULLNAME_INPUT_FIRSTNAME_REQUIRED:
+                if (empty($firstname)) {
+                    throw new QUI\FrontendUsers\Exception([$lg, $lgPrefix . 'first_name_required']);
+                }
+                break;
+
+            case $Handler::FULLNAME_INPUT_FULLNAME_REQUIRED:
+                if (empty($firstname) || empty($lastname)) {
+                    throw new QUI\FrontendUsers\Exception([$lg, $lgPrefix . 'full_name_required']);
+                }
+        }
+
+        try {
+            QUI::getUsers()->getUserByName($username);
+
+            // Username already exists
+            throw new QUI\FrontendUsers\Exception([
+                $lg,
+                $lgPrefix . 'username_already_exists'
+            ]);
+        } catch (\Exception $Exception) {
+            // Username does not exist
+        }
+
+        $email = $RegistrationData->getAttribute('email');
+
+        if (QUI::getUsers()->emailExists($email)) {
+            throw new QUI\FrontendUsers\Exception([
+                $lg,
+                $lgPrefix . 'email_already_exists'
+            ]);
+        }
+
+        if (!Orthos::checkMailSyntax($email)) {
+            throw new QUI\FrontendUsers\Exception([
+                $lg,
+                $lgPrefix . 'email_invalid'
+            ]);
+        }
+
+        // Address validation
+        if ((int)$registrationSettings['addressInput']) {
+            foreach ($Handler->getAddressFieldSettings() as $field => $addressSettings) {
+                $val = $RegistrationData->getAttribute($field);
+
+                if ($addressSettings['required'] && empty($val)) {
+                    throw new QUI\FrontendUsers\Exception([
+                        $lg,
+                        $lgPrefix . 'missing_address_fields'
+                    ]);
+                }
+            }
+        }
+
+        // Length check
+        foreach ($Handler->getUserAttributeLengthRestrictions() as $attribute => $maxLength) {
+            $value = $RegistrationData->getAttribute($attribute);
+
+            if (empty($value)) {
+                continue;
+            }
+
+            if (\mb_strlen($value) > $maxLength) {
+                throw new Exception([
+                    'quiqqer/frontend-users',
+                    'exception.registrars.email.user_attribute_too_long',
+                    [
+                        'label'     => QUI::getLocale()->get('quiqqer/system', $attribute),
+                        'maxLength' => $maxLength
+                    ]
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Writes the data from the given RegistrationData object to the given User
+     *
+     * @param \QUI\Interfaces\Users\User $User
+     * @param \QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+     *
+     * @return void
+     *
+     * @throws \QUI\Exception
+     */
+    protected static function addRegistrationDataToUser(
+        QUI\Interfaces\Users\User $User,
+        QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+    ): void {
+        $SystemUser = QUI::getUsers()->getSystemUser();
+
+        $firstname = $RegistrationData->getAttribute('firstname');
+        if ($firstname) {
+            $User->setAttribute('firstname', $firstname);
+        }
+
+        $lastname = $RegistrationData->getAttribute('lastname');
+        if (!empty($lastname)) {
+            $User->setAttribute('lastname', $lastname);
+        }
+
+        // set e-mail address
+        $User->setAttribute('email', $RegistrationData->getAttribute('email'));
+
+        $registrationSettings = QUI\FrontendUsers\Handler::getInstance()->getRegistrationSettings();
+
+        $useAddress = boolval($registrationSettings['addressInput']);
+
+        // set address data
+        if ($useAddress) {
+            $UserAddress = $User->addAddress([
+                'salutation' => $RegistrationData->getAttribute('salutation'),
+                'firstname'  => $RegistrationData->getAttribute('firstname'),
+                'lastname'   => $RegistrationData->getAttribute('lastname'),
+                'mail'       => $RegistrationData->getAttribute('email'),
+                'company'    => $RegistrationData->getAttribute('company'),
+                'street_no'  => $RegistrationData->getAttribute('street_no'),
+                'zip'        => $RegistrationData->getAttribute('zip'),
+                'city'       => $RegistrationData->getAttribute('city'),
+                'country'    => mb_strtolower($RegistrationData->getAttribute('country'))
+            ], $SystemUser);
+
+            $User->setAttributes([
+                'firstname' => $RegistrationData->getAttribute('firstname'),
+                'lastname'  => $RegistrationData->getAttribute('lastname'),
+                'address'   => $UserAddress->getId()    // set as main address
+            ]);
+
+            $tel    = $RegistrationData->getAttribute('phone');
+            $mobile = $RegistrationData->getAttribute('mobile');
+            $fax    = $RegistrationData->getAttribute('fax');
+
+            if (!empty($tel)) {
+                $UserAddress->addPhone([
+                    'type' => 'tel',
+                    'no'   => $tel
+                ]);
+            }
+
+            if (!empty($mobile)) {
+                $UserAddress->addPhone([
+                    'type' => 'mobile',
+                    'no'   => $mobile
+                ]);
+            }
+
+            if (!empty($fax)) {
+                $UserAddress->addPhone([
+                    'type' => 'fax',
+                    'no'   => $fax
+                ]);
+            }
+
+            $UserAddress->save($SystemUser);
+        }
+
+        $User->save($SystemUser);
+    }
+}
