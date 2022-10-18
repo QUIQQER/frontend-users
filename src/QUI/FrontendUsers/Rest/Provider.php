@@ -24,6 +24,7 @@ class Provider implements QUI\REST\ProviderInterface
 
         $Slim->group('/frontend-users', function (RouteCollectorProxy $RouteCollector) {
             $RouteCollector->post('/register', 'QUI\FrontendUsers\Rest\Routes\PostRegister::call');
+            $RouteCollector->get('/register/required-fields', 'QUI\FrontendUsers\Rest\Routes\GetRegisterRequiredFields::call');
         });
     }
 

@@ -54,6 +54,42 @@
           }
         }
       }
+    },
+    "/frontend-users/register/required-fields": {
+      "get": {
+        "summary": "Returns the required fields for registration and their maximum length",
+        "description": "The result contains an object whose keys are the required fields. Their values contain the maximum allowed length. See result example.",
+        "operationId": "getRegisterRequiredFields",
+        "responses": {
+          "200": {
+            "description": "Required fields successfully returned.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "email": {
+                    "max_length": 255
+                  },
+                  "firstname": {
+                    "max_length": 40
+                  },
+                  "city": {
+                    "max_length": 200
+                  },
+                  "country": {
+                    "max_length": 100
+                  },
+                  "phone": {
+                    "max_length": 200
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong on the server, try again later."
+          }
+        }
+      }
     }
   },
   "components": {
