@@ -8,12 +8,16 @@ use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 
 use QUI;
+use QUI\FrontendUsers\ActivationVerification;
 use QUI\FrontendUsers\Exception;
 use QUI\Utils\Security\Orthos;
+
+use QUI\Verification\Verifier;
 
 use function boolval;
 use function explode;
 use function json_encode;
+use function time;
 
 class PostRegister
 {
@@ -119,8 +123,12 @@ class PostRegister
             $NewUser->setAttribute('quiqqer.set.new.password', true);
         }
 
-        // TODO: send registration notice to admins
-//        $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
+        $Project = QUI::getProject(
+            $RegistrationData->getAttribute('project_name'),
+            $RegistrationData->getAttribute('project_language')
+        );
+
+        $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
 
         $NewUser->save($SystemUser);
 
@@ -132,15 +140,9 @@ class PostRegister
 
         $NewUser->setPassword($password, $SystemUser);
 
-        // TODO: send registration mail to user
-//        $sendMailSuccess = $RegistrarHandler->sendActivationMail($NewUser, $Registrar);
+        static::sendActivationMail($NewUser, $Project);
 
-        if (!$NewUser->isActive()) {
-            $NewUser->activate(false, $SystemUser);
-        }
-
-        // TODO: Event feuern
-//        QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRegister', [$NewUser]);
+        QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRestRegister', [$NewUser]);
 
         return $NewUser;
     }
@@ -172,6 +174,15 @@ class PostRegister
 
         $lg       = 'quiqqer/frontend-users';
         $lgPrefix = 'exception.registrars.email.';
+
+        try {
+            QUI::getProject(
+                $RegistrationData->getAttribute('project_name'),
+                $RegistrationData->getAttribute('project_language')
+            );
+        } catch (QUI\Exception $e) {
+            throw new QUI\FrontendUsers\Exception([$lg, 'exception.registration.rest.project_required']);
+        }
 
         // Username check
         if ($usernameSetting !== $Handler::USERNAME_INPUT_NONE) {
@@ -370,5 +381,61 @@ class PostRegister
         }
 
         $User->save($SystemUser);
+    }
+
+    protected static function sendActivationMail(
+        QUI\Interfaces\Users\User $User,
+        QUI\Projects\Project $Project
+    ): bool {
+        // TODO: Verification uses Project from QUI::getRewrite instead of the parameter, therefore the default project is always used (see quiqqer/verification#5)
+        $ActivationVerification = new ActivationVerification($User->getId(), [
+            'project'     => $Project->getName(),
+            'projectLang' => $Project->getLang()
+        ]);
+
+        $activationLink = Verifier::startVerification($ActivationVerification, true);
+
+        $L      = QUI::getLocale();
+        $lg     = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
+        $host   = $Project->getVHost();
+
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+
+        try {
+            $RegistrarHandler->sendMail(
+                [
+                    'subject' => $L->get($lg, 'mail.registration_activation.subject', [
+                        'host' => $host
+                    ])
+                ],
+                [
+                    $User->getAttribute('email')
+                ],
+                $tplDir.'mail.registration_activation.html',
+                [
+                    'body' => $L->get($lg, 'mail.registration_activation.body', [
+                        'host'           => $host,
+                        'userId'         => $User->getId(),
+                        'username'       => $User->getUsername(),
+                        'userFirstName'  => $User->getAttribute('firstname') ?: '',
+                        'userLastName'   => $User->getAttribute('lastname') ?: '',
+                        'email'          => $User->getAttribute('email'),
+                        'date'           => $L->formatDate(time()),
+                        'activationLink' => $activationLink
+                    ])
+                ]
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class.' :: sendActivationMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+
+            return false;
+        }
+
+        return true;
     }
 }

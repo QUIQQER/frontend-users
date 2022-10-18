@@ -688,6 +688,11 @@
                 <![CDATA[An unexpected error occurred during registration. Please repeat the registration process or try again later.]]></en>
         </locale>
 
+        <locale name="exception.registration.rest.project_required">
+            <de><![CDATA[Bitte geben Sie einen gültigen Projektnamen und eine gültige Projektsprache an.]]></de>
+            <en><![CDATA[Please provide a valid project name and project language.]]></en>
+        </locale>
+
         <!-- Registrar: E-Mail -->
         <locale name="exception.registrars.email.username_already_exists">
             <de><![CDATA[Der Benutzername exisitert bereits.]]></de>
