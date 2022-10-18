@@ -3,6 +3,7 @@
 namespace QUI\FrontendUsers\Rest\Routes;
 
 use GuzzleHttp\Psr7\Response;
+
 use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 
@@ -30,26 +31,35 @@ class PostRegister
         $RegistrationData = new QUI\FrontendUsers\Rest\RegistrationData();
         $RegistrationData->setAttributes($Request->getParsedBody());
 
-        $ResponseFactory = new QUI\REST\ResponseFactory();
-
         try {
             static::registerUser($RegistrationData);
         } catch (Exception $Exception) {
-            return new \GuzzleHttp\Psr7\Response(
+            return new Response(
                 400,
                 ['Content-Type' => 'application/json'],
                 json_encode([
                     'message' => $Exception->getMessage()
                 ])
             );
-            return $ResponseFactory->createResponse(400, $Exception->getMessage());
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
-            return $ResponseFactory->createResponse(500, $Exception->getMessage());
+            return new Response(
+                500,
+                ['Content-Type' => 'application/json'],
+                json_encode([
+                    'message' => $Exception->getMessage()
+                ])
+            );
         }
 
-        return $ResponseFactory->createResponse();
+        return new Response(
+            200,
+            ['Content-Type' => 'application/json'],
+            json_encode([
+                'message' => 'OK'
+            ])
+        );
     }
 
     /**
