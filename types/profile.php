@@ -11,7 +11,11 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
     $siteUrl = $Site->getLocation();
     $url     = trim($_REQUEST['_url'], '/');
 
-    $requestPart = str_replace($siteUrl, '', $url);
+    // $requestPart = str_replace($siteUrl, '', $url);
+    if (substr($url, 0, strlen($siteUrl)) == $siteUrl) { // remove only the first part
+        $requestPart = substr($url, strlen($siteUrl));
+    }
+
     $requestPart = trim($requestPart, '/');
     $requestPart = explode('/', $requestPart);
 
