@@ -123,10 +123,13 @@ class PostRegister
             $NewUser->setAttribute('quiqqer.set.new.password', true);
         }
 
-        $Project = QUI::getProject(
-            $RegistrationData->getAttribute('project_name'),
-            $RegistrationData->getAttribute('project_language')
-        );
+        $projectName = $RegistrationData->getAttribute('project_name');
+
+        if ($projectName) {
+            $Project = QUI::getProject($projectName, $RegistrationData->getAttribute('project_language'));
+        } else {
+            $Project = QUI::getProjectManager()->getStandard();
+        }
 
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
 
@@ -174,15 +177,6 @@ class PostRegister
 
         $lg       = 'quiqqer/frontend-users';
         $lgPrefix = 'exception.registrars.email.';
-
-        try {
-            QUI::getProject(
-                $RegistrationData->getAttribute('project_name'),
-                $RegistrationData->getAttribute('project_language')
-            );
-        } catch (QUI\Exception $e) {
-            throw new QUI\FrontendUsers\Exception([$lg, 'exception.registration.rest.project_required']);
-        }
 
         // Username check
         if ($usernameSetting !== $Handler::USERNAME_INPUT_NONE) {

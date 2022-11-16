@@ -17,20 +17,33 @@
     "/frontend-users/register": {
       "post": {
         "summary": "Registers a new User",
-        "description": "The request body should contain an object with all required fields for the registration. All required fields can be queried via '/frontend-users/register/required-fields'.",
+        "description": "The request body should contain an object with all required fields for the registration. All required fields can be queried via '/frontend-users/register/required-fields'. By default the standard project and language will be used to send registration mails. To change that, you may specify the optional parameters 'project_name' and 'project_language'.",
         "operationId": "register",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                  "project_name": {
+                    "type": "string",
+                    "description": "Optional, by default the standard project will be used."
+                  },
+                  "project_language": {
+                    "type": "string",
+                    "description": "Optional, by default the standard project's standard language will be used."
+                  }
+                },
+                "additionalProperties": true
               },
               "example": {
                 "email": "info@pcsg.de",
                 "password": "worlds-best-password",
                 "city": "Solingen",
-                "country": "Germany"
+                "country": "Germany",
+                "project_name":  "Mainproject",
+                "project_language": "de"
               }
             }
           }

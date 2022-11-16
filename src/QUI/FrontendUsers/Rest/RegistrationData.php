@@ -18,10 +18,7 @@ class RegistrationData extends QDOM
      */
     public static function getRequiredFields(): array
     {
-        $requiredFields = [
-            'project_name',
-            'project_language'
-        ];
+        $requiredFields = [];
 
         $Handler = Handler::getInstance();
 
