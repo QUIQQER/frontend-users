@@ -7,6 +7,7 @@ use QUI;
 use QUI\FrontendUsers\Exception;
 use QUI\FrontendUsers\Handler;
 use QUI\QDOM;
+use QUI\Utils\Security\Orthos;
 
 class RegistrationData extends QDOM
 {
