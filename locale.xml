@@ -688,6 +688,11 @@
                 <![CDATA[An unexpected error occurred during registration. Please repeat the registration process or try again later.]]></en>
         </locale>
 
+        <locale name="exception.registration.rest.project_required">
+            <de><![CDATA[Bitte geben Sie einen gültigen Projektnamen und eine gültige Projektsprache an.]]></de>
+            <en><![CDATA[Please provide a valid project name and project language.]]></en>
+        </locale>
+
         <!-- Registrar: E-Mail -->
         <locale name="exception.registrars.email.username_already_exists">
             <de><![CDATA[Der Benutzername exisitert bereits.]]></de>
@@ -708,6 +713,10 @@
         <locale name="exception.registrars.email.full_name_required">
             <de><![CDATA[Bitte geben Sie Ihren Vor- und Nachnamen an.]]></de>
             <en><![CDATA[Please provide your first and last name.]]></en>
+        </locale>
+        <locale name="exception.registrars.email.password_missing">
+            <de><![CDATA[Bitte geben Sie ein Passwort an.]]></de>
+            <en><![CDATA[Please provide a password.]]></en>
         </locale>
         <locale name="exception.registrars.email.user_attribute_too_long">
             <de>
@@ -1912,6 +1921,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             ]]></en>
         </locale>
 
+        <locale name="rest.provider.title">
+            <de><![CDATA[QUIQQER - Frontend-Users]]></de>
+            <en><![CDATA[QUIQQER - Frontend-Users]]></en>
+        </locale>
 
     </groups>
 

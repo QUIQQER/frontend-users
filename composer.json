@@ -15,6 +15,12 @@
       "email": "support@pcsg.de",
       "homepage": "http:\/\/www.pcsg.de",
       "role": "Developer"
+    },
+    {
+      "name": "Jan Wennrich",
+      "email": "support@pcsg.de",
+      "homepage": "https:\/\/www.pcsg.de",
+      "role": "Developer"
     }
   ],
   "support": {
@@ -25,6 +31,9 @@
     "quiqqer\/countries": "^1.1|*@dev",
     "quiqqer\/verification": "^1.1|*@dev",
     "quiqqer\/tooltips": "^1|*@dev"
+  },
+  "suggest": {
+    "quiqqer\/rest": "User registration via REST API"
   },
   "autoload": {
     "psr-4": {
