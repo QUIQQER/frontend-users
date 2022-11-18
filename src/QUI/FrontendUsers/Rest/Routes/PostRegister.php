@@ -32,10 +32,8 @@ class PostRegister
      */
     public static function call(SlimRequest $Request, SlimResponse $Response, array $args): SlimResponse
     {
-        $RegistrationData = new QUI\FrontendUsers\Rest\RegistrationData();
-        $RegistrationData->setAttributes($Request->getParsedBody());
-
         try {
+            $RegistrationData = QUI\FrontendUsers\Rest\RegistrationData::buildFromRequest($Request);
             static::registerUser($RegistrationData);
         } catch (Exception $Exception) {
             return new Response(
