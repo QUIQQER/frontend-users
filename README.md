@@ -24,6 +24,7 @@ Features
 * Frontend Profile: Lets users manage their account information
   * Completely customizable via permissions for each profile category
   * Profile categories and sub-categories can be added via `frontend-user.xml` API
+* User registration via REST API (optional via `quiqqer/rest`)
 
 
 Provided site types:
