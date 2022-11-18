@@ -930,7 +930,8 @@ class Handler extends Singleton
             'phone'      => 200,
             'mobile'     => 200,
             'fax'        => 200,
-            'password'   => 200
+            'password'   => 200,
+            'username'   => 50
         ];
     }
 }

@@ -10,7 +10,6 @@ use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 use QUI;
 use QUI\FrontendUsers\ActivationVerification;
 use QUI\FrontendUsers\Exception;
-use QUI\Utils\Security\Orthos;
 
 use QUI\Verification\Verifier;
 
@@ -32,10 +31,8 @@ class PostRegister
      */
     public static function call(SlimRequest $Request, SlimResponse $Response, array $args): SlimResponse
     {
-        $RegistrationData = new QUI\FrontendUsers\Rest\RegistrationData();
-        $RegistrationData->setAttributes($Request->getParsedBody());
-
         try {
+            $RegistrationData = QUI\FrontendUsers\Rest\RegistrationData::buildFromRequest($Request);
             static::registerUser($RegistrationData);
         } catch (Exception $Exception) {
             return new Response(
@@ -81,32 +78,14 @@ class PostRegister
     protected static function registerUser(
         QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
     ): QUI\Interfaces\Users\User {
-        static::checkRegistrationData($RegistrationData);
+        $RegistrationData->validate();
 
         $SystemUser = QUI::getUsers()->getSystemUser();
 
         $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
-        $username = $RegistrationData->getAttribute('username');
-        $email    = $RegistrationData->getAttribute('email');
-
-        if (QUI\FrontendUsers\Handler::USERNAME_INPUT_NONE) {
-            $username = $email;
-        }
-
-        if (\mb_strlen($username) > 50) {
-            throw new QUI\FrontendUsers\Exception([
-                'quiqqer/frontend-users',
-                'exception.registration.username_too_long',
-                [
-                    'maxLength' => 50
-                ]
-            ]);
-        }
-
-        // Create user if everything is valid
-        $NewUser = QUI::getUsers()->createChild($username, $SystemUser);
+        $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
 
         // Add the given data to the User
         static::addRegistrationDataToUser($NewUser, $RegistrationData);
@@ -148,149 +127,6 @@ class PostRegister
         QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRestRegister', [$NewUser]);
 
         return $NewUser;
-    }
-
-    /**
-     * Checks if the given RegistrationData object contains all required and valid data.
-     * If there is something wrong, an Exception will be thrown.
-     *
-     * @param QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
-     *
-     * @return void
-     *
-     * @throws QUI\Exception
-     * @throws QUI\FrontendUsers\Exception
-     */
-    protected static function checkRegistrationData(QUI\FrontendUsers\Rest\RegistrationData $RegistrationData): void
-    {
-        $username = $RegistrationData->getAttribute('username');
-
-        $Handler = QUI\FrontendUsers\Handler::getInstance();
-
-        $registrationSettings = $Handler->getRegistrationSettings();
-
-        $usernameSetting = $registrationSettings['usernameInput'];
-        $passwordSetting = $registrationSettings['passwordInput'];
-        $fullNameSetting = $registrationSettings['fullnameInput'];
-
-        $usernameExists = QUI::getUsers()->usernameExists($username);
-
-        $lg       = 'quiqqer/frontend-users';
-        $lgPrefix = 'exception.registrars.email.';
-
-        // Username check
-        if ($usernameSetting !== $Handler::USERNAME_INPUT_NONE) {
-            // Check if username input is enabled
-            if (empty($username)
-                && $usernameSetting === $Handler::USERNAME_INPUT_REQUIRED) {
-                throw new QUI\FrontendUsers\Exception([
-                    $lg,
-                    $lgPrefix . 'empty_username'
-                ]);
-            }
-
-            if ($usernameExists) {
-                throw new QUI\FrontendUsers\Exception([
-                    $lg,
-                    $lgPrefix . 'username_already_exists'
-                ]);
-            }
-        } else {
-            // Check if username input is not enabled
-            if ($usernameExists) {
-                throw new QUI\FrontendUsers\Exception([
-                    $lg,
-                    $lgPrefix . 'email_already_exists'
-                ]);
-            }
-        }
-
-        // Password check
-        if ($passwordSetting != $Handler::PASSWORD_INPUT_NONE && !$RegistrationData->getAttribute('password')) {
-            throw new QUI\FrontendUsers\Exception([
-                $lg,
-                $lgPrefix . 'password_missing'
-            ]);
-        }
-
-        // Fullname check
-        $firstname = $RegistrationData->getAttribute('firstname');
-        $lastname  = $RegistrationData->getAttribute('lastname');
-
-        switch ($fullNameSetting) {
-            case $Handler::FULLNAME_INPUT_FIRSTNAME_REQUIRED:
-                if (empty($firstname)) {
-                    throw new QUI\FrontendUsers\Exception([$lg, $lgPrefix . 'first_name_required']);
-                }
-                break;
-
-            case $Handler::FULLNAME_INPUT_FULLNAME_REQUIRED:
-                if (empty($firstname) || empty($lastname)) {
-                    throw new QUI\FrontendUsers\Exception([$lg, $lgPrefix . 'full_name_required']);
-                }
-        }
-
-        try {
-            QUI::getUsers()->getUserByName($username);
-
-            // Username already exists
-            throw new QUI\FrontendUsers\Exception([
-                $lg,
-                $lgPrefix . 'username_already_exists'
-            ]);
-        } catch (\Exception $Exception) {
-            // Username does not exist
-        }
-
-        $email = $RegistrationData->getAttribute('email');
-
-        if (QUI::getUsers()->emailExists($email)) {
-            throw new QUI\FrontendUsers\Exception([
-                $lg,
-                $lgPrefix . 'email_already_exists'
-            ]);
-        }
-
-        if (!Orthos::checkMailSyntax($email)) {
-            throw new QUI\FrontendUsers\Exception([
-                $lg,
-                $lgPrefix . 'email_invalid'
-            ]);
-        }
-
-        // Address validation
-        if ((int)$registrationSettings['addressInput']) {
-            foreach ($Handler->getAddressFieldSettings() as $field => $addressSettings) {
-                $val = $RegistrationData->getAttribute($field);
-
-                if ($addressSettings['required'] && empty($val)) {
-                    throw new QUI\FrontendUsers\Exception([
-                        $lg,
-                        $lgPrefix . 'missing_address_fields'
-                    ]);
-                }
-            }
-        }
-
-        // Length check
-        foreach ($Handler->getUserAttributeLengthRestrictions() as $attribute => $maxLength) {
-            $value = $RegistrationData->getAttribute($attribute);
-
-            if (empty($value)) {
-                continue;
-            }
-
-            if (\mb_strlen($value) > $maxLength) {
-                throw new Exception([
-                    'quiqqer/frontend-users',
-                    'exception.registrars.email.user_attribute_too_long',
-                    [
-                        'label'     => QUI::getLocale()->get('quiqqer/system', $attribute),
-                        'maxLength' => $maxLength
-                    ]
-                ]);
-            }
-        }
     }
 
     /**
