@@ -31,7 +31,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 ], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, URI, QUIAjax, QUILocale) {
     "use strict";
 
-    var lg      = 'quiqqer/frontend-users';
+    var lg = 'quiqqer/frontend-users';
     var clicked = false;
 
     return new Class({
@@ -65,7 +65,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$Elm   = null;
+            this.$Elm = null;
             this.Loader = new QUILoader();
 
             this.addEvents({
@@ -228,7 +228,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 for (i = 0, len = container.length; i < len; i++) {
                     ControlDom = container[i].getFirst();
-                    Control    = QUI.Controls.getById(ControlDom.get('data-quiid'));
+                    Control = QUI.Controls.getById(ControlDom.get('data-quiid'));
 
                     //Control.addEvent('');
                 }
@@ -266,7 +266,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 }
 
                 if (submitauth) {
-                    var Form = self.getElm().getElement('form[data-authenticator-hash="' + self.getAttribute('submitauth') + '"]');
+                    var Form = self.getElm().getElement('form[data-authenticator-hash="' +
+                                                        self.getAttribute('submitauth') + '"]');
 
                     if (Form) {
                         self.$authBySocial(Form);
@@ -320,8 +321,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     params       : JSON.encode(FormData),
                     onError      : function (e) {
                         self.Loader.hide();
-                        self.fireEvent('userLoginError', [self, e]);
-                        QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self, e]);
+                        self.fireEvent('userLoginError', [
+                            self,
+                            e
+                        ]);
+                        QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [
+                            self,
+                            e
+                        ]);
 
                         reject(e);
                     }
@@ -357,7 +364,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 }
 
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (redirect) {
-                    if (self.getAttribute('reload') === false) {
+                    if (!self.getAttribute('reload')) {
                         return;
                     }
 
@@ -385,8 +392,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 onError      : function (e) {
                     self.$hideSocialLoader(Form);
                     self.Loader.hide();
-                    self.fireEvent('userLoginError', [self, e]);
-                    QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [self, e]);
+                    self.fireEvent('userLoginError', [
+                        self,
+                        e
+                    ]);
+                    QUI.fireEvent('onQuiqqerUserAuthLoginUserLoginError', [
+                        self,
+                        e
+                    ]);
                 }
             });
         },
@@ -397,7 +410,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param Form
          */
         $showSocialLoader: function (Form) {
-            var Icon   = Form.getElement('.quiqqer-fu-login-social-entry-icon');
+            var Icon = Form.getElement('.quiqqer-fu-login-social-entry-icon');
             var Loader = Form.getElement('.quiqqer-fu-login-social-entry-loader');
 
             Loader.setStyle('opacity', 0);
@@ -425,7 +438,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param Form
          */
         $hideSocialLoader: function (Form) {
-            var Icon   = Form.getElement('.quiqqer-fu-login-social-entry-icon');
+            var Icon = Form.getElement('.quiqqer-fu-login-social-entry-icon');
             var Loader = Form.getElement('.quiqqer-fu-login-social-entry-loader');
 
             Icon.setStyle('opacity', 0);
@@ -461,9 +474,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 Target = Target.getParent('.quiqqer-fu-login-social-entry');
             }
 
-            var Container  = Target.getElement('.quiqqer-fu-login-social-entry-control');
+            var Container = Target.getElement('.quiqqer-fu-login-social-entry-control');
             var ControlDom = Container.getFirst();
-            var Control    = QUI.Controls.getById(ControlDom.get('data-quiid'));
+            var Control = QUI.Controls.getById(ControlDom.get('data-quiid'));
 
             Control.click();
             clicked = true; // we need that because of control click
@@ -477,14 +490,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * on success
          */
         $onSuccess: function () {
-            if (this.getAttribute('redirect') === false) {
+            if (!this.getAttribute('redirect')) {
                 return;
             }
 
             var self = this;
 
             QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (result) {
-                if (self.getAttribute('reload') === false) {
+                if (!self.getAttribute('reload')) {
                     return;
                 }
 
@@ -634,7 +647,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             }
 
             EmailInput.disabled = true;
-            SubmitBtn.disabled  = true;
+            SubmitBtn.disabled = true;
 
             var showHideMessage = function (Message) {
                 moofx(Section).animate({
@@ -694,7 +707,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 showHideMessage(Message);
 
                 EmailInput.disabled = false;
-                SubmitBtn.disabled  = false;
+                SubmitBtn.disabled = false;
             }, function (e) {
                 self.Loader.hide();
 
@@ -717,7 +730,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 showHideMessage(Message);
 
                 EmailInput.disabled = false;
-                SubmitBtn.disabled  = false;
+                SubmitBtn.disabled = false;
             });
         },
 
