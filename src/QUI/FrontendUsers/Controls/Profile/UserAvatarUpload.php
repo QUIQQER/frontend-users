@@ -3,6 +3,10 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
+use QUI\Projects\Media\Utils as MediaUtils;
+use QUI\Utils\System\File as FileUtils;
+
+use function rename;
 
 /**
  * Class UserAvatarUpload
@@ -85,21 +89,19 @@ class UserAvatarUpload extends \QUI\Upload\Form
         } catch (QUI\Exception) {
         }
 
+        // rename file to user file
+        $fileInfo = FileUtils::getInfo($file);
+        $fileName = $fileInfo['dirname'] . '/' . $SessionUser->getUniqueId() . '.' . $fileInfo['extension'];
+
+        rename($file, $fileName);
+
         $File = $UserFolder->uploadFile(
-            $file,
-            QUI\Projects\Media\Folder::FILE_OVERWRITE_NONE,
+            $fileName,
+            QUI\Projects\Media\Folder::FILE_OVERWRITE_TRUE,
             $PermissionUser
         );
 
-        if ($UserFolder->childWithNameExists($SessionUser->getUniqueId())) {
-            $UserAvatar = $UserFolder->getChildByName($SessionUser->getUniqueId());
-            $UserAvatar->deactivate($PermissionUser);
-            $UserAvatar->delete($PermissionUser);
-            $UserAvatar->destroy($PermissionUser);
-        }
-
         $File->activate(QUI::getUsers()->getSystemUser());
-        $File->rename($SessionUser->getUniqueId(), $PermissionUser);
         $File->setTitle($SessionUser->getUsername());
 
         $SessionUser->setAttribute('avatar', $File->getUrl());
