@@ -56,10 +56,14 @@ class UserAvatarUpload extends \QUI\Upload\Form
         $error       = ['quiqqer/frontend-users', 'exception.upload.avatar.error'];
         $SessionUser = QUI::getUserBySession();
 
+        if ($this->getAttribute('User') instanceof QUI\Interfaces\Users\User) {
+            $SessionUser = $this->getAttribute('User');
+        }
+
         try {
             $UserFolder = QUI\Projects\Media\Utils::getMediaItemByUrl($folder);
         } catch (QUI\Exception $Exception) {
-            QUI\System\Log::addError('Upload Error: '.$Exception->getMessage());
+            QUI\System\Log::addError('Upload Error: ' . $Exception->getMessage());
 
             throw new QUI\Exception($error);
         }
@@ -78,7 +82,7 @@ class UserAvatarUpload extends \QUI\Upload\Form
             if ($Avatar->getParent()->getId() === $UserFolder->getId()) {
                 $Avatar->delete($PermissionUser);
             }
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
         }
 
         $File = $UserFolder->uploadFile(
@@ -86,6 +90,13 @@ class UserAvatarUpload extends \QUI\Upload\Form
             QUI\Projects\Media\Folder::FILE_OVERWRITE_NONE,
             $PermissionUser
         );
+
+        if ($UserFolder->childWithNameExists($SessionUser->getUniqueId())) {
+            $UserAvatar = $UserFolder->getChildByName($SessionUser->getUniqueId());
+            $UserAvatar->deactivate($PermissionUser);
+            $UserAvatar->delete($PermissionUser);
+            $UserAvatar->destroy($PermissionUser);
+        }
 
         $File->activate(QUI::getUsers()->getSystemUser());
         $File->rename($SessionUser->getUniqueId(), $PermissionUser);
