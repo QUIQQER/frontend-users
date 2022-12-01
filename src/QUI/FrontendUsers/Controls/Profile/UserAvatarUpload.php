@@ -91,6 +91,12 @@ class UserAvatarUpload extends \QUI\Upload\Form
 
         // rename file to user file
         $fileInfo = FileUtils::getInfo($file);
+
+        if (empty($fileInfo['extension'])) {
+            $fileInfo['extension'] = QUI\Utils\System\File::getEndingByMimeType($fileInfo['mime_type']);
+            $fileInfo['extension'] = trim($fileInfo['extension'], '.');
+        }
+
         $fileName = $fileInfo['dirname'] . '/' . $SessionUser->getUniqueId() . '.' . $fileInfo['extension'];
 
         rename($file, $fileName);
