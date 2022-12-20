@@ -887,6 +887,63 @@
             <de><![CDATA[Fax]]></de>
             <en><![CDATA[Fax]]></en>
         </locale>
+
+        <locale name="brick.AuthContent.title">
+            <de><![CDATA[Frontend-Benutzer: Inhalt abh. v. Auth-Status u. Gruppe(n)]]></de>
+            <en><![CDATA[Frontend-Users: Content by auth status and group(s)]]></en>
+        </locale>
+        <locale name="brick.AuthContent.description">
+            <de><![CDATA[Zeigt jeweils spezifischen Content, wenn ein Benutzer nicht eingeloggt, nicht in einer Gruppe oder in einer Gruppe ist.]]></de>
+            <en><![CDATA[Shows specific content each time a user is not logged in, not in a group, or in a group.]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_guest.title">
+            <de><![CDATA[Inhalt (Gast)]]></de>
+            <en><![CDATA[Content (Guest)]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_guest.description">
+            <de><![CDATA[Inhalt, der angezeigt wird, wenn der Benutzer nicht eingeloggt ist.]]></de>
+            <en><![CDATA[Content that is shown if the user is not logged in.]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_not_in_groups.title">
+            <de><![CDATA[Inhalt (nicht in Gruppe(n))]]></de>
+            <en><![CDATA[Content (not in group(s))]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_not_in_groups.description" html="true">
+            <de><![CDATA[Inhalt, der angezeigt wird, wenn der Benutzer sich nicht in mindestens einer der festgelegten Gruppen befindet.<br/><br/>
+Verfügbare Platzhalter:
+<ul>
+<li><b>[username]</b> - Name des Benutzers
+</ul>]]></de>
+            <en><![CDATA[Content that is shown if the user is not in at least one of the specified groups.<br/><br/>
+Available placeholders:
+<ul>
+<li><b>[username]</b> - Name of the user
+</ul>]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_in_groups.title">
+            <de><![CDATA[Inhalt (in Gruppe(n))]]></de>
+            <en><![CDATA[Content (in group(s))]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_in_groups.description" html="true">
+            <de><![CDATA[Inhalt, der angezeigt wird, wenn der Benutzer sich in mindestens einer der festgelegten Gruppen befindet.<br/><br/>
+Verfügbare Platzhalter:
+<ul>
+<li><b>[username]</b> - Name des Benutzers
+</ul>]]></de>
+            <en><![CDATA[Content that is shown if the user is in at least one of the specified groups.<br/><br/>
+Available placeholders:
+<ul>
+<li><b>[username]</b> - Name of the user
+</ul>]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.groups.title">
+            <de><![CDATA[Gruppen]]></de>
+            <en><![CDATA[Groups]]></en>
+        </locale>
+        <locale name="brick.AuthContent.settings.groups.description">
+            <de><![CDATA[Liste der Gruppe, von denen sich der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
+            <en><![CDATA[List of groups from which the user must be assigned to at least one to see the "Content (in group(s))" content.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -1929,6 +1986,7 @@ The deletion of your user account on [host] was requested on [date]. Please conf
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
+
         <locale name="controls.RegistrationSignUp.error.back">
             <de><![CDATA[Zurück]]></de>
             <en><![CDATA[Back]]></en>

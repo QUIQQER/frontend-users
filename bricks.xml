@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiqqer>
+    <bricks>
+
+        <!-- author -->
+        <brick control="\QUI\FrontendUsers\Controls\Bricks\AuthContent">
+
+            <title>
+                <locale group="quiqqer/frontend-users" var="brick.AuthContent.title"/>
+            </title>
+            <description>
+                <locale group="quiqqer/frontend-users" var="brick.AuthContent.description"/>
+            </description>
+
+            <settings>
+
+                <setting name="content_guest" type="hidden"
+                       data-qui="controls/lang/ContentMultiLang"
+                >
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.content_guest.title"/>
+                    </text>
+                    <description>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.content_guest.description"/>
+                    </description>
+                </setting>
+
+                <setting name="groups" type="hidden"
+                         data-qui="controls/groups/Select"
+                >
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.groups.title"/>
+                    </text>
+                    <description>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.groups.description"/>
+                    </description>
+                </setting>
+
+                <setting name="content_not_in_groups" type="hidden"
+                       data-qui="controls/lang/ContentMultiLang"
+                >
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.content_not_in_groups.title"/>
+                    </text>
+                    <description>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.content_not_in_groups.description"/>
+                    </description>
+                </setting>
+
+                <setting name="content_in_groups" type="hidden"
+                         data-qui="controls/lang/ContentMultiLang"
+                >
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.content_in_groups.title"/>
+                    </text>
+                    <description>
+                        <locale group="quiqqer/frontend-users" var="brick.AuthContent.settings.content_in_groups.description"/>
+                    </description>
+                </setting>
+
+            </settings>
+        </brick>
+    </bricks>
+</quiqqer>
