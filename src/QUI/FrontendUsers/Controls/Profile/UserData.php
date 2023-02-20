@@ -10,6 +10,9 @@ use QUI;
 use QUI\Utils\Security\Orthos;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 
+use function in_array;
+use function trim;
+
 /**
  * Class UserData
  *
@@ -27,7 +30,7 @@ class UserData extends AbstractProfileControl
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-userdata');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__).'/UserData.css');
+        $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData');
     }
@@ -65,7 +68,7 @@ class UserData extends AbstractProfileControl
         try {
             $Address = $User->getStandardAddress();
         } catch (QUI\Users\Exception $Exception) {
-            $Address = $User->addAddress([]);
+            $Address = $User->addAddress();
         }
 
         $Engine->assign([
@@ -74,11 +77,16 @@ class UserData extends AbstractProfileControl
             'action'            => $action,
             'changeMailRequest' => $emailChangeRequested,
             'username'          => $RegistrarHandler->isUsernameInputAllowed(),
+            'registrationText'  => QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'quiqqer.profile.registration.date.text',
+                ['date' => QUI::getLocale()->formatDate($User->getAttribute('regdate'))]
+            ),
 
             'showLanguageChangeInProfile' => $Config->getValue('userProfile', 'showLanguageChangeInProfile')
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/UserData.html');
+        return $Engine->fetch(dirname(__FILE__) . '/UserData.html');
     }
 
     /**
@@ -136,7 +144,7 @@ class UserData extends AbstractProfileControl
             $Project   = QUI::getRewrite()->getProject();
             $languages = $Project->getLanguages();
 
-            if (\in_array($Request->get('language'), $languages)) {
+            if (in_array($Request->get('language'), $languages)) {
                 $User->setAttribute('lang', $Request->get('language'));
                 $User->save();
 
@@ -165,8 +173,8 @@ class UserData extends AbstractProfileControl
             && $Request->get('birth_month')
             && $Request->get('birth_day')) {
             $bday .= $Request->get('birth_year');
-            $bday .= '-'.$Request->get('birth_month');
-            $bday .= '-'.$Request->get('birth_day');
+            $bday .= '-' . $Request->get('birth_month');
+            $bday .= '-' . $Request->get('birth_day');
             $Request->set('birthday', $bday);
         }
 
@@ -201,8 +209,8 @@ class UserData extends AbstractProfileControl
             }
 
             if ($Request->get('street')) {
-                $addressData['street_no'] = \trim($Request->get('street')).' '.\trim($Request->get('street_number'));
-                $addressData['street_no'] = \trim($addressData['street_no']);
+                $addressData['street_no'] = trim($Request->get('street')) . ' ' . trim($Request->get('street_number'));
+                $addressData['street_no'] = trim($addressData['street_no']);
             }
 
             if ($Request->get('zip')) {
