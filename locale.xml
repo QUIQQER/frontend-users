@@ -1983,6 +1983,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[QUIQQER - Frontend-Users]]></en>
         </locale>
 
+        <locale name="quiqqer.profile.registration.date.text">
+            <de><![CDATA[Angemeldet seit: [date]]]></de>
+            <en><![CDATA[Registered since: [date]]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">
