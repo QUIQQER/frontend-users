@@ -67,15 +67,17 @@ class Login extends QUI\Control
         foreach ($socialAuth as $class) {
             try {
                 /* @var $Auth QUI\Users\AbstractAuthenticator */
-                $Auth = new $class([
-                    'onlyIcon' => true
-                ]);
+                $Auth = new $class();
 
                 $Login = $Auth->getLoginControl();
+                $Login->setAttributes([
+                    'onlyIcon' => true
+                ]);
 
                 if (!$Login) {
                     continue;
                 }
+
 
                 $icon  = false;
                 $image = false;
