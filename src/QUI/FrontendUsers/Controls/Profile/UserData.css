@@ -42,6 +42,7 @@
 .quiqqer-frontendUsers-controls-profile-userdata input[name="street_no"],
 .quiqqer-frontendUsers-controls-profile-userdata input[name="zip"],
 .quiqqer-frontendUsers-controls-profile-userdata input[name="city"],
+.quiqqer-frontendUsers-controls-profile-userdata input[name="tel"],
 .quiqqer-frontendUsers-userdata-address-country-select,
 .quiqqer-frontendUsers-userdata-field {
     float: left;

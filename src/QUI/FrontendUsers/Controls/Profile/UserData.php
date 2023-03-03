@@ -7,10 +7,11 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Utils\Security\Orthos;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
+use QUI\Utils\Security\Orthos;
 
 use function in_array;
+use function json_encode;
 use function trim;
 
 /**
@@ -223,6 +224,28 @@ class UserData extends AbstractProfileControl
 
             if ($Request->get('country')) {
                 $addressData['country'] = $Request->get('country');
+            }
+
+            if ($Request->get('tel')) {
+                $phones  = $Address->getPhoneList();
+                $updated = false;
+
+                foreach ($phones as $k => $entry) {
+                    if ($entry['type'] === 'tel') {
+                        $phones[$k]['no'] = $Request->get('tel');
+                        $updated          = true;
+                        break;
+                    }
+                }
+
+                if (!$updated) {
+                    $Address->addPhone([
+                        'no'   => $Request->get('tel'),
+                        'type' => 'tel'
+                    ]);
+                } else {
+                    $Address->setAttribute('phone', json_encode($phones));
+                }
             }
 
             $Address->setAttributes($addressData);
