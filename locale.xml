@@ -944,6 +944,101 @@ Available placeholders:
             <de><![CDATA[Liste der Gruppe, von denen sich der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
             <en><![CDATA[List of groups from which the user must be assigned to at least one to see the "Content (in group(s))" content.]]></en>
         </locale>
+
+        <locale name="mail.delete_user_confirm.subject.description">
+            <de><![CDATA[Keine Platzhalter verfügbar.]]></de>
+            <en><![CDATA[No placeholders available.]]></en>
+        </locale>
+        <locale name="mail.delete_user_confirm.body.description" html="true">
+            <de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[confirmLink]</b> <i>(muss enthalten sein)</i> - Link zur Bestätigung der Kündigung des Benutzerkontos</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[date]</b> - Datum der Beantragung der Löschung des Benutzerkontos</li>
+</ul>]]></de>
+            <en><![CDATA[Available placeholders:
+<ul>
+    <li><b>[confirmLink]</b> <i>(required)</i> - Link to confirm account cancellation</li>
+    <li><b>[username]</b> - Name of the user</li>
+    <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
+    <li><b>[date]</b> - Date of the request for deletion of the user account</li>
+</ul>]]></en>
+        </locale>
+        <locale name="mail.change_email_address.subject.description">
+            <de><![CDATA[Keine Platzhalter verfügbar.]]></de>
+            <en><![CDATA[No placeholders available.]]></en>
+        </locale>
+        <locale name="mail.change_email_address.body.description" html="true">
+            <de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[confirmLink]</b> <i>(muss enthalten sein)</i> - Link zur Bestätigung der neuen E-Mail-Adresse</li>
+    <li><b>[newEmail]</b> - Neue E-Mail-Adresse des Benutzers</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[date]</b> - Datum der Änderung der E-Mail-Adresse</li>
+</ul>]]></de>
+            <en><![CDATA[Available placeholders:
+<ul>
+    <li><b>[confirmLink]</b> <i>(required)</i> - Link to confirm new email address</li>
+    <li><b>[newEmail]</b> - New email address of the user</li>
+    <li><b>[username]</b> - Name of the user</li>
+    <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
+    <li><b>[date]</b> - Date of the request for changing the email address</li>
+</ul>]]></en>
+        </locale>
+        <locale name="mail.registration_activation.subject.description" html="true">
+            <de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+</ul>]]></de>
+            <en><![CDATA[Available placeholders:
+<ul>
+    <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
+</ul>]]></en>
+        </locale>
+        <locale name="mail.registration_activation.body.description">
+            <de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[activationLink]</b> <i>(muss enthalten sein)</i> - Link zur Aktivierung des Benutzerkontos</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[date]</b> - Datum der Registrierung</li>
+</ul>]]></de>
+            <en><![CDATA[Available placeholders:
+<ul>
+    <li><b>[activationLink]</b> <i>(required)</i> - Link to activate account</li>
+    <li><b>[username]</b> - Name of the user</li>
+    <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
+    <li><b>[date]</b> - Date of registration</li>
+</ul>]]></en>
+        </locale>
+        <locale name="mail.registration_welcome.subject.description" html="true">
+            <de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+</ul>]]></de>
+            <en><![CDATA[Available placeholders:
+<ul>
+    <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
+</ul>]]></en>
+        </locale>
+        <locale name="mail.registration_welcome.body.description" html="true">
+            <de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[loginUrl]</b> - Link zum Login (Startseite)</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[userPassword]</b> - Textabschnitt, der das Login-Passwort enthält. Wird nur eingefügt, wenn das Passwort zufällig generiert wurde und nicht, wenn der Benutzer das Passwort selbst festgelegt hat.</li>
+</ul>]]></de>
+            <en><![CDATA[Available placeholders:
+<ul>
+    <li><b>[loginUrl]</b> - Link to login (startpage)</li>
+    <li><b>[username]</b> - Name of the user</li>
+    <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
+    <li><b>[userPassword]</b> - Text section containing the login password. Inserted only if the password was randomly generated and not if the user set the password himself.</li>
+</ul>]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -1983,10 +2078,6 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[QUIQQER - Frontend-Users]]></en>
         </locale>
 
-        <locale name="quiqqer.profile.registration.date.text">
-            <de><![CDATA[Angemeldet seit: [date]]]></de>
-            <en><![CDATA[Registered since: [date]]]></en>
-        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="js">

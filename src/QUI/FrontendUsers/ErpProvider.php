@@ -34,8 +34,8 @@ class ErpProvider extends AbstractErpProvider
                 'subject'     => ['quiqqer/frontend-users', 'mail.registration_welcome.subject'],
                 'content'     => ['quiqqer/frontend-users', 'mail.registration_welcome.body'],
 
-                'subject.description' => ['quiqqer/frontend-users', 'order.registrationWelcome.subject.description'],
-                'content.description' => ['quiqqer/frontend-users', 'order.registrationWelcome.body.description']
+                'subject.description' => ['quiqqer/frontend-users', 'mail.registration_welcome.subject.description'],
+                'content.description' => ['quiqqer/frontend-users', 'mail.registration_welcome.body.description']
             ],
 
             [
@@ -50,8 +50,8 @@ class ErpProvider extends AbstractErpProvider
                 'subject'     => ['quiqqer/frontend-users', 'mail.registration_activation.subject'],
                 'content'     => ['quiqqer/frontend-users', 'mail.registration_activation.body'],
 
-                'subject.description' => ['quiqqer/frontend-users', 'order.activation.subject.description'],
-                'content.description' => ['quiqqer/frontend-users', 'order.activation.body.description']
+                'subject.description' => ['quiqqer/frontend-users', 'mail.registration_activation.subject.description'],
+                'content.description' => ['quiqqer/frontend-users', 'mail.registration_activation.body.description']
             ],
 
             [
@@ -66,8 +66,8 @@ class ErpProvider extends AbstractErpProvider
                 'subject'     => ['quiqqer/frontend-users', 'mail.change_email_address.subject'],
                 'content'     => ['quiqqer/frontend-users', 'mail.change_email_address.body'],
 
-                'subject.description' => ['quiqqer/frontend-users', 'order.changeEmail.subject.description'],
-                'content.description' => ['quiqqer/frontend-users', 'order.changeEmail.body.description']
+                'subject.description' => ['quiqqer/frontend-users', 'mail.change_email_address.subject.description'],
+                'content.description' => ['quiqqer/frontend-users', 'mail.change_email_address.body.description']
             ],
 
             [
@@ -82,8 +82,8 @@ class ErpProvider extends AbstractErpProvider
                 'subject'     => ['quiqqer/frontend-users', 'mail.delete_user_confirm.subject'],
                 'content'     => ['quiqqer/frontend-users', 'mail.delete_user_confirm.body'],
 
-                'subject.description' => ['quiqqer/frontend-users', 'order.deleteUserConfirmation.subject.description'],
-                'content.description' => ['quiqqer/frontend-users', 'order.deleteUserConfirmation.body.description']
+                'subject.description' => ['quiqqer/frontend-users', 'mail.delete_user_confirm.subject.description'],
+                'content.description' => ['quiqqer/frontend-users', 'mail.delete_user_confirm.body.description']
             ]
         ];
     }
