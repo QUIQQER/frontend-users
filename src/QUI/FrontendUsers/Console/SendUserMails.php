@@ -94,7 +94,7 @@ class SendUserMails extends QUI\System\Console\Tool
         // RESTRICT TO GROUPS
         $this->writeLn(
             "Send mail to users in the following GROUPS only (comma separated list of group ids;"
-            ." leave empty to ignore groups): "
+            . " leave empty to ignore groups): "
         );
 
         $groupIds = $this->readInput();
@@ -108,7 +108,7 @@ class SendUserMails extends QUI\System\Console\Tool
         // GENERATE NEW PASSWORD?
         $this->writeLn(
             "Shall a new password be generated for each user? The new password will be available via the"
-            ." [password] placeholder in the e-mail body. (y/N): "
+            . " [password] placeholder in the e-mail body. (y/N): "
         );
 
         $generatePassword   = mb_strtolower($this->readInput()) === 'y';
@@ -117,7 +117,7 @@ class SendUserMails extends QUI\System\Console\Tool
         if ($generatePassword) {
             $this->writeLn(
                 "Shall users be forced to set a new password immediately after logging in with their"
-                ." generated password? (Y/n): "
+                . " generated password? (Y/n): "
             );
 
             $input              = $this->readInput();
@@ -129,8 +129,8 @@ class SendUserMails extends QUI\System\Console\Tool
         $orderBy = $this->readInput();
 
         // Get all users
-        $sql     = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM ".QUI::getUsers()::table();
-        $where[] = "`lang` IN ('".implode("','", $languages)."')";
+        $sql     = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . QUI::getUsers()::table();
+        $where[] = "`lang` IN ('" . implode("','", $languages) . "')";
 
         if (!$inactiveUsers) {
             $where[] = "`active` = 1";
@@ -143,10 +143,10 @@ class SendUserMails extends QUI\System\Console\Tool
                 $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
             }
 
-            $where[] = "(".implode(" OR ", $whereOR).")";
+            $where[] = "(" . implode(" OR ", $whereOR) . ")";
         }
 
-        $sql .= " WHERE ".implode(" AND ", $where);
+        $sql .= " WHERE " . implode(" AND ", $where);
 
         if (!empty($orderBy)) {
             $sql .= " ORDER BY $orderBy";
@@ -164,7 +164,7 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         // DELETE USER STATISTICS?
-        $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails';
+        $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails';
 
         if (\file_exists($infoFile)) {
             $this->writeLn(
@@ -204,9 +204,9 @@ class SendUserMails extends QUI\System\Console\Tool
         if (!empty($limits)) {
             $this->writeLn("The following mailing limits have been found:\n");
 
-            $this->writeLn("Mails / 24 hours: ".($limits['per24h'] ?: 'unlimited'));
-            $this->writeLn("Mails / hour: ".($limits['perHour'] ?: 'unlimited'));
-            $this->writeLn("Mails / minute: ".($limits['perMinute'] ?: 'unlimited'));
+            $this->writeLn("Mails / 24 hours: " . ($limits['per24h'] ?: 'unlimited'));
+            $this->writeLn("Mails / hour: " . ($limits['perHour'] ?: 'unlimited'));
+            $this->writeLn("Mails / minute: " . ($limits['perMinute'] ?: 'unlimited'));
 
             $this->writeLn("\nDo you want to set new limits? (y/N)");
             $input     = $this->readInput();
@@ -241,25 +241,25 @@ class SendUserMails extends QUI\System\Console\Tool
         // SUMMARY
         $this->writeLn("\nSUMMARY\n===============================================\n");
 
-        $this->writeLn("LOCALE language: ".$lang);
-        $this->writeLn("Include INACTIVE users: ".($inactiveUsers ? "YES" : "NO"));
-        $this->writeLn("User languages: ".implode(', ', $languages));
-        $this->writeLn("User groups: ".(empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
-        $this->writeLn("Generate new password: ".($generatePassword ? "YES" : "NO"));
-        $this->writeLn("Force password reset: ".($forcePasswordReset ? "YES" : "NO"));
-        $this->writeLn("ORDER BY: ".(empty($orderBy) ? "DEFAULT" : $orderBy));
-        $this->writeLn("\nE-Mail subject: ".$subject);
-        $this->writeLn("\nE-Mail sender mail: ".$senderMail);
-        $this->writeLn("\nE-Mail sender name: ".$senderName);
+        $this->writeLn("LOCALE language: " . $lang);
+        $this->writeLn("Include INACTIVE users: " . ($inactiveUsers ? "YES" : "NO"));
+        $this->writeLn("User languages: " . implode(', ', $languages));
+        $this->writeLn("User groups: " . (empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
+        $this->writeLn("Generate new password: " . ($generatePassword ? "YES" : "NO"));
+        $this->writeLn("Force password reset: " . ($forcePasswordReset ? "YES" : "NO"));
+        $this->writeLn("ORDER BY: " . (empty($orderBy) ? "DEFAULT" : $orderBy));
+        $this->writeLn("\nE-Mail subject: " . $subject);
+        $this->writeLn("\nE-Mail sender mail: " . $senderMail);
+        $this->writeLn("\nE-Mail sender name: " . $senderName);
         $this->writeLn(
-            "\nE-Mail will be sent to ".count($recipients)." out of ".count($result)." selected users."
-            ." ".(count($result) - count($recipients))." users have no e-mail address and are ignored."
+            "\nE-Mail will be sent to " . count($recipients) . " out of " . count($result) . " selected users."
+            . " " . (count($result) - count($recipients)) . " users have no e-mail address and are ignored."
         );
 
         $this->writeLn("\nLimits:");
-        $this->writeLn("Mails / 24 hours: ".($limits['per24h'] ?: 'unlimited'));
-        $this->writeLn("Mails / hour: ".($limits['perHour'] ?: 'unlimited'));
-        $this->writeLn("Mails / minute: ".($limits['perMinute'] ?: 'unlimited'));
+        $this->writeLn("Mails / 24 hours: " . ($limits['per24h'] ?: 'unlimited'));
+        $this->writeLn("Mails / hour: " . ($limits['perHour'] ?: 'unlimited'));
+        $this->writeLn("Mails / minute: " . ($limits['perMinute'] ?: 'unlimited'));
 
         $this->mail['body']       = $body;
         $this->mail['senderMail'] = $senderMail;
@@ -307,10 +307,10 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function getUserInfo(int $userId)
     {
         try {
-            $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails';
+            $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            $this->writeLn("ERROR on reading user info file: " . $Exception->getMessage());
             return [];
         }
 
@@ -344,10 +344,10 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function writeUserInfo(int $userId, array $info)
     {
         try {
-            $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails';
+            $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            $this->writeLn("ERROR on reading user info file: " . $Exception->getMessage());
             return;
         }
 
@@ -371,10 +371,10 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function setLimits(array $limits)
     {
         try {
-            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails_limits';
+            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            $this->writeLn("ERROR on reading user info file: " . $Exception->getMessage());
             return;
         }
 
@@ -389,10 +389,10 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function getLimits()
     {
         try {
-            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails_limits';
+            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-            $this->writeLn("ERROR on reading user info file: ".$Exception->getMessage());
+            $this->writeLn("ERROR on reading user info file: " . $Exception->getMessage());
             return false;
         }
 
@@ -482,11 +482,11 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         try {
-            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir().'send_user_mails_limits';
+            $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
             \file_put_contents($limitsFile, \json_encode($limits));
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-            $this->writeLn("ERROR on writing limits file: ".$Exception->getMessage());
+            $this->writeLn("ERROR on writing limits file: " . $Exception->getMessage());
         }
     }
 
@@ -601,7 +601,7 @@ class SendUserMails extends QUI\System\Console\Tool
                 $userInfo = $this->getUserInfo($userId);
 
                 if (!empty($userInfo['sent'])) {
-                    $this->writeLn("Mail already sent at ".$userInfo['sent_date']." -> Skipping user.");
+                    $this->writeLn("Mail already sent at " . $userInfo['sent_date'] . " -> Skipping user.");
                     continue;
                 }
 
@@ -613,19 +613,32 @@ class SendUserMails extends QUI\System\Console\Tool
                         break;
                     }
 
-                    $this->writeLn("[".\date('Y-m-d H:i:s')."] Current mail limit reached. Waiting 60s and then retry...");
+                    $this->writeLn("[" . \date('Y-m-d H:i:s') . "] Current mail limit reached. Waiting 60s and then retry...");
 
                     sleep(60);
                 } while (!$mailAllowed);
             }
 
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {
-                $name = $recipient['firstname'].' '.$recipient['lastname'];
+                $name = $recipient['firstname'] . ' ' . $recipient['lastname'];
             } else {
                 $name = $recipient['username'];
             }
 
-            $email       = $recipient['email'];
+            $email = $recipient['email'];
+
+            if (!QUI\Utils\Security\Orthos::checkMailSyntax($email)) {
+                $this->writeLn("Email address \"$email\" is invalid and can therefore not be used. Skipping.");
+
+                $this->writeUserInfo($userId, [
+                    'sent'      => true,
+                    'sent_date' => \date('Y-m-d H:i:s'),
+                    'error'     => $email . " is no valid email syntax. email was not sent."
+                ]);
+
+                continue;
+            }
+
             $newPassword = '';
 
             if (!$testMailAddress && $this->settings['setNewPassword']) {
@@ -655,7 +668,7 @@ class SendUserMails extends QUI\System\Console\Tool
                     }
                 } catch (\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
-                    $this->write(" Error: ".$Exception->getMessage());
+                    $this->write(" Error: " . $Exception->getMessage());
 
                     continue;
                 }
@@ -682,7 +695,7 @@ class SendUserMails extends QUI\System\Console\Tool
                 $Mailer->send();
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
-                $this->write(" Error: ".$Exception->getMessage());
+                $this->write(" Error: " . $Exception->getMessage());
                 continue;
             }
 
