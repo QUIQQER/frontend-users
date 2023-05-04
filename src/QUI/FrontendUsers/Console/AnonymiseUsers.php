@@ -20,6 +20,13 @@ class AnonymiseUsers extends QUI\System\Console\Tool
             ->setDescription(
                 "Anonymise users in the system"
             );
+
+        $this->addArgument(
+            'email_only',
+            'Anonymise email addresses only and leave all other user data as is.',
+            false,
+            true
+        );
     }
 
     /**
@@ -32,7 +39,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         // RESTRICT TO GROUPS
         $this->writeLn(
             "Anonymise users in the following GROUPS only (comma separated list of group ids;"
-            ." leave empty to anonymise all users): "
+            . " leave empty to anonymise all users): "
         );
 
         $groupIds = $this->readInput();
@@ -58,8 +65,8 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         // SUMMARY
         $this->writeLn("\nSUMMARY\n===============================================\n");
 
-        $this->writeLn("User groups: ".(empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
-        $this->writeLn("E-Mail handle: ".$emailHandle);
+        $this->writeLn("User groups: " . (empty($groupIds) ? "ALL" : implode(', ', $groupIds)));
+        $this->writeLn("E-Mail handle: " . $emailHandle);
 
         // CONFIRM
         $this->writeLn("\n\nIs everything correct? Anonymise NOW? (Y/n): ");
@@ -89,7 +96,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         $tblAddresses = QUI::getDBTableName('users_address');
 
         // Get all users
-        $sql   = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM ".$tbl;
+        $sql   = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . $tbl;
         $where = [];
 
         if (!empty($groupIds)) {
@@ -99,10 +106,10 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                 $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
             }
 
-            $where[] = "(".implode(" OR ", $whereOR).")";
+            $where[] = "(" . implode(" OR ", $whereOR) . ")";
         }
 
-        $sql .= " WHERE ".implode(" AND ", $where);
+        $sql .= " WHERE " . implode(" AND ", $where);
 
         if (!empty($orderBy)) {
             $sql .= " ORDER BY $orderBy";
@@ -110,23 +117,30 @@ class AnonymiseUsers extends QUI\System\Console\Tool
 
         $result = QUI::getDataBase()->fetchSQL($sql);
 
+        $anonymiseEmailOnly = !empty($this->getArgument('email_only'));
+
         foreach ($result as $row) {
             $user   = $row;
             $userId = $row['id'];
 
-            $this->write("Anonymise user #".$userId."...");
+            $this->write("Anonymise user #" . $userId . "...");
 
             try {
+                $userData = [
+                    'email' => $userId . $settings['emailHandle']
+                ];
+
+                if (!$anonymiseEmailOnly) {
+                    $userData['username']   = 'user_' . $userId;
+                    $userData['firstname']  = $this->anonymiseString($user['firstname']);
+                    $userData['lastname']   = $this->anonymiseString($user['lastname']);
+                    $userData['user_agent'] = '';
+                    $userData['birthday']   = '1970-01-01';
+                }
+
                 QUI::getDataBase()->update(
                     $tbl,
-                    [
-                        'username'   => 'user_'.$userId,
-                        'email'      => $userId.$settings['emailHandle'],
-                        'firstname'  => $this->anonymiseString($user['firstname']),
-                        'lastname'   => $this->anonymiseString($user['lastname']),
-                        'user_agent' => '',
-                        'birthday'   => '1970-01-01'
-                    ],
+                    $userData,
                     [
                         'id' => $userId
                     ]
@@ -134,39 +148,41 @@ class AnonymiseUsers extends QUI\System\Console\Tool
 
                 $this->write(" OK!");
 
-                $this->writeLn("Anonymise user address(es)...");
+                if (!$anonymiseEmailOnly) {
+                    $this->writeLn("Anonymise user address(es)...");
 
-                $addressResult = QUI::getDataBase()->fetch([
-                    'from'  => $tblAddresses,
-                    'where' => [
-                        'uid' => $userId
-                    ]
-                ]);
-
-                foreach ($addressResult as $address) {
-                    QUI::getDataBase()->update(
-                        $tblAddresses,
-                        [
-                            'salutation' => $this->anonymiseString($address['salutation']),
-                            'firstname'  => $this->anonymiseString($address['firstname']),
-                            'lastname'   => $this->anonymiseString($address['lastname']),
-                            'company'    => $this->anonymiseString($address['company']),
-                            'street_no'  => $this->anonymiseString($address['street_no']),
-                            'zip'        => $this->anonymiseString($address['zip']),
-                            'city'       => $this->anonymiseString($address['city']),
-                            'phone'      => '[]',
-                            'mail'       => '["'.$userId.$settings['emailHandle'].'"]'
-                        ],
-                        [
-                            'id' => $address['id']
+                    $addressResult = QUI::getDataBase()->fetch([
+                        'from'  => $tblAddresses,
+                        'where' => [
+                            'uid' => $userId
                         ]
-                    );
+                    ]);
+
+                    foreach ($addressResult as $address) {
+                        QUI::getDataBase()->update(
+                            $tblAddresses,
+                            [
+                                'salutation' => $this->anonymiseString($address['salutation']),
+                                'firstname'  => $this->anonymiseString($address['firstname']),
+                                'lastname'   => $this->anonymiseString($address['lastname']),
+                                'company'    => $this->anonymiseString($address['company']),
+                                'street_no'  => $this->anonymiseString($address['street_no']),
+                                'zip'        => $this->anonymiseString($address['zip']),
+                                'city'       => $this->anonymiseString($address['city']),
+                                'phone'      => '[]',
+                                'mail'       => '["' . $userId . $settings['emailHandle'] . '"]'
+                            ],
+                            [
+                                'id' => $address['id']
+                            ]
+                        );
+                    }
                 }
 
                 $this->write(" OK!");
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
-                $this->write("ERROR: ".$Exception->getMessage());
+                $this->write("ERROR: " . $Exception->getMessage());
             }
         }
     }
@@ -183,7 +199,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         $anonStrParts = [];
 
         foreach ($parts as $part) {
-            $anonStrParts[] = \mb_substr($part, 0, 1).'*';
+            $anonStrParts[] = \mb_substr($part, 0, 1) . '*';
         }
 
         return \implode(' ', $anonStrParts);
