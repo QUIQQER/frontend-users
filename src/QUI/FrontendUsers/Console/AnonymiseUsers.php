@@ -3,6 +3,7 @@
 namespace QUI\FrontendUsers\Console;
 
 use QUI;
+use function implode;
 
 /**
  * Console tool to anonymise users
@@ -109,7 +110,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
             $where[] = "(" . implode(" OR ", $whereOR) . ")";
         }
 
-        $sql .= " WHERE " . implode(" AND ", $where);
+        if (!empty($where)) {
+            $sql .= " WHERE " . implode(" AND ", $where);
+        }
 
         if (!empty($orderBy)) {
             $sql .= " ORDER BY $orderBy";
