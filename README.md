@@ -34,6 +34,16 @@ Provided site types:
 
 *Hint*: All e-mails sent in the registration process currently use the default QUIQQER e-mail templates.
 
+Console Tool for anonymising users
+------------
+```bash
+# Anonymise all user data (except SU)
+$ ./console frontend-users:anonymiseUsers
+
+# Anonymise all user email addresses (only) (except SU)
+$ ./console frontend-users:anonymiseUsers --email_only 
+```
+
 Installation
 ------------
 The Package Name is: quiqqer/frontend-users
