@@ -98,7 +98,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
 
         // Get all users
         $sql   = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . $tbl;
-        $where = [];
+        $where = [
+            'su' => 0
+        ];
 
         if (!empty($groupIds)) {
             $whereOR = [];
@@ -126,7 +128,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
             $user   = $row;
             $userId = $row['id'];
 
-            $this->write("Anonymise user #" . $userId . "...");
+            $this->writeLn("Anonymise user #" . $userId . "...");
 
             try {
                 $userData = [
