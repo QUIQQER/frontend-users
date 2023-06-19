@@ -1,6 +1,7 @@
 {
   "name": "quiqqer\/frontend-users",
   "type": "quiqqer-module",
+  "version": "1.9.0",
   "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
   "license": "GPL-3.0+",
   "authors": [
