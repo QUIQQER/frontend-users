@@ -189,6 +189,14 @@ class Events
             ],
             ['id' => $User->getId()]
         );
+
+        QUI::getEvents()->fireEvent(
+            'quiqqerFrontendUsersUserAutoLogin',
+            [
+                $User,
+                $Registrar ?? false
+            ]
+        );
     }
 
     /**
