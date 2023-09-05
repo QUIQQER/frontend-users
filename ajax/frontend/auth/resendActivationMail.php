@@ -8,6 +8,7 @@ use QUI\Verification\Verifier;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\ActivationVerification;
 use QUI\Utils\Security\Orthos;
+use QUI\FrontendUsers\Registrars\Email\Registrar as EmailRegistrar;
 
 /**
  * Resend an activation mail
@@ -28,6 +29,10 @@ QUI::$Ajax->registerFunction(
 
         try {
             $registrarClass = $User->getAttribute(Handler::USER_ATTR_REGISTRAR);
+
+            if (empty($registrarClass)) {
+                $registrarClass = EmailRegistrar::class;
+            }
 
             /** @var \QUI\FrontendUsers\RegistrarInterface $Registrar */
             $Registrar = new $registrarClass();
