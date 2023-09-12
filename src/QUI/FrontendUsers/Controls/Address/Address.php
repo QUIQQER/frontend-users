@@ -25,7 +25,7 @@ class Address extends QUI\Control
     {
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Address.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Address.css');
     }
 
     /**
@@ -52,7 +52,7 @@ class Address extends QUI\Control
     public function getBody(): string
     {
         /* @var $User QUI\Users\User */
-        $User   = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
 
         if (isset($_REQUEST['create'])) {
@@ -102,13 +102,13 @@ class Address extends QUI\Control
         }
 
         $Engine->assign([
-            'this'        => $this,
-            'User'        => $User,
+            'this' => $this,
+            'User' => $User,
             'UserAddress' => $UserAddress,
-            'addresses'   => $User->getAddressList()
+            'addresses' => $User->getAddressList()
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Address.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Address.html');
     }
 
     /**
@@ -119,12 +119,12 @@ class Address extends QUI\Control
      */
     protected function getBodyForEdit(): string
     {
-        $User    = QUI::getUserBySession();
-        $Engine  = QUI::getTemplateManager()->getEngine();
+        $User = QUI::getUserBySession();
+        $Engine = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress((int)$_REQUEST['edit']);
 
         try {
-            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
@@ -139,16 +139,16 @@ class Address extends QUI\Control
         }
 
         $Engine->assign([
-            'this'      => $this,
-            'Address'   => $Address,
-            'User'      => $User,
-            'phone'     => $Address->getPhone(),
-            'fax'       => $Address->getFax(),
-            'mobile'    => $Address->getMobile(),
+            'this' => $this,
+            'Address' => $Address,
+            'User' => $User,
+            'phone' => $Address->getPhone(),
+            'fax' => $Address->getFax(),
+            'mobile' => $Address->getMobile(),
             'countries' => QUI\Countries\Manager::getList()
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__).'/Address.Edit.html');
+        return $Engine->fetch(\dirname(__FILE__) . '/Address.Edit.html');
     }
 
     /**
@@ -179,7 +179,7 @@ class Address extends QUI\Control
         foreach ($fields as $field) {
             if (!isset($settings[$field])) {
                 $settings[$field] = [
-                    'show'     => true,
+                    'show' => true,
                     'required' => true
                 ];
 
@@ -196,12 +196,12 @@ class Address extends QUI\Control
         }
 
         if ($settings['street_no']['required']) {
-            $settings['street']['required']        = true;
+            $settings['street']['required'] = true;
             $settings['street_number']['required'] = true;
         }
 
         if ($settings['street_no']['show']) {
-            $settings['street']['show']        = true;
+            $settings['street']['show'] = true;
             $settings['street_number']['show'] = true;
         }
 
@@ -216,17 +216,17 @@ class Address extends QUI\Control
      */
     protected function getBodyForDelete(): string
     {
-        $User    = QUI::getUserBySession();
-        $Engine  = QUI::getTemplateManager()->getEngine();
+        $User = QUI::getUserBySession();
+        $Engine = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress((int)$_REQUEST['delete']);
 
         $Engine->assign([
-            'this'    => $this,
+            'this' => $this,
             'Address' => $Address,
-            'User'    => $User
+            'User' => $User
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__).'/Address.Delete.html');
+        return $Engine->fetch(\dirname(__FILE__) . '/Address.Delete.html');
     }
 
     /**
@@ -237,18 +237,18 @@ class Address extends QUI\Control
      */
     protected function getBodyForCreate(): string
     {
-        $User   = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
 
         $currentCountry = '';
-        $Country        = $User->getCountry();
+        $Country = $User->getCountry();
 
         if ($Country) {
             $currentCountry = $Country->getCode();
         }
 
         try {
-            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
@@ -263,13 +263,13 @@ class Address extends QUI\Control
         }
 
         $Engine->assign([
-            'this'           => $this,
+            'this' => $this,
             'currentCountry' => $currentCountry,
-            'countries'      => QUI\Countries\Manager::getList(),
-            'User'           => $User
+            'countries' => QUI\Countries\Manager::getList(),
+            'User' => $User
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__).'/Address.Create.html');
+        return $Engine->fetch(\dirname(__FILE__) . '/Address.Create.html');
     }
 
     /**
@@ -291,7 +291,7 @@ class Address extends QUI\Control
         }
 
         /* @var $User QUI\Users\User */
-        $User    = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
         $Address = $User->addAddress();
 
         $fields = [
@@ -313,7 +313,7 @@ class Address extends QUI\Control
             }
 
             if (!empty($data['street_number'])) {
-                $street .= ' '.\trim($data['street_number']);
+                $street .= ' ' . \trim($data['street_number']);
             }
 
             $data['street_no'] = \trim($street);
@@ -377,7 +377,7 @@ class Address extends QUI\Control
             $data = $_REQUEST;
         }
 
-        $User    = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
         $Address = $User->getAddress($_REQUEST['addressId']);
 
         if (!empty($data['street']) || !empty($data['street_number'])) {
@@ -388,7 +388,7 @@ class Address extends QUI\Control
             }
 
             if (!empty($data['street_number'])) {
-                $street .= ' '.\trim($data['street']);
+                $street .= ' ' . \trim($data['street']);
             }
 
             $data['street_no'] = \trim($street);
@@ -431,7 +431,7 @@ class Address extends QUI\Control
                 unset($missing[$key]);
             }
         }
-        
+
         if (\count($missing)) {
             throw new QUI\Exception([
                 'quiqqer/frontend-users',
@@ -453,7 +453,7 @@ class Address extends QUI\Control
             return;
         }
 
-        $User    = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
         $Address = $User->getAddress($_REQUEST['addressId']);
         $Address->delete();
     }
@@ -472,10 +472,10 @@ class Address extends QUI\Control
         ];
 
         $firstName = $Address->getAttribute('firstname');
-        $lastName  = $Address->getAttribute('lastname');
-        $zip       = $Address->getAttribute('zip');
-        $city      = $Address->getAttribute('city');
-        $country   = $Address->getAttribute('country');
+        $lastName = $Address->getAttribute('lastname');
+        $zip = $Address->getAttribute('zip');
+        $city = $Address->getAttribute('city');
+        $country = $Address->getAttribute('country');
 
         $street_no = $Address->getAttribute('street_no');
 
@@ -487,7 +487,7 @@ class Address extends QUI\Control
             }
 
             if (!empty($Address->getAttribute('street_number'))) {
-                $street_no .= ' '.$Address->getAttribute('street_number');
+                $street_no .= ' ' . $Address->getAttribute('street_number');
             }
 
             $street_no = \trim($street_no);
