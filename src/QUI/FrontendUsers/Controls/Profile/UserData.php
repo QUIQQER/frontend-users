@@ -10,7 +10,10 @@ use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
 
+use function array_filter;
+use function array_keys;
 use function in_array;
+use function json_decode;
 use function json_encode;
 use function trim;
 
@@ -42,10 +45,10 @@ class UserData extends AbstractProfileControl
      */
     public function getBody()
     {
-        $action               = false;
+        $action = false;
         $emailChangeRequested = true;
 
-        $User   = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
@@ -73,12 +76,12 @@ class UserData extends AbstractProfileControl
         }
 
         $Engine->assign([
-            'User'              => $User,
-            'Address'           => $Address,
-            'action'            => $action,
+            'User' => $User,
+            'Address' => $Address,
+            'action' => $action,
             'changeMailRequest' => $emailChangeRequested,
-            'username'          => $RegistrarHandler->isUsernameInputAllowed(),
-            'registrationText'  => QUI::getLocale()->get(
+            'username' => $RegistrarHandler->isUsernameInputAllowed(),
+            'registrationText' => QUI::getLocale()->get(
                 'quiqqer/frontend-users',
                 'quiqqer.profile.registration.date.text',
                 ['date' => QUI::getLocale()->formatDate($User->getAttribute('regdate'))]
@@ -98,9 +101,9 @@ class UserData extends AbstractProfileControl
      */
     public function onSave()
     {
-        $Request  = QUI::getRequest()->request;
+        $Request = QUI::getRequest()->request;
         $newEmail = $Request->get('emailNew');
-        $User     = QUI::getUserBySession();
+        $User = QUI::getUserBySession();
 
         if (QUI::getUsers()->isNobodyUser($User)) {
             return;
@@ -137,12 +140,41 @@ class UserData extends AbstractProfileControl
             );
         }
 
+        // require fields
+        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $settings = $Config->getValue('profile', 'addressFields');
+
+        if (!empty($settings)) {
+            $settings = json_decode($settings, true);
+        } else {
+            $settings = [];
+        }
+
+        $required = array_filter($settings, function ($field) {
+            return $field['required'];
+        });
+
+        $required = array_keys($required);
+
+        $checkFields = function ($fieldName) use ($settings, $required, $Request) {
+            // wenn kein required, kann auch geleert werden
+            if ($Request->has($fieldName) && !in_array($fieldName, $required)) {
+                return true;
+            }
+
+            if ($Request->get($fieldName)) {
+                return true;
+            }
+
+            return false;
+        };
+
+
         // language
-        $Config     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $changeLang = (int)$Config->getValue('userProfile', 'showLanguageChangeInProfile');
 
         if ($changeLang && $Request->has('language')) {
-            $Project   = QUI::getRewrite()->getProject();
+            $Project = QUI::getRewrite()->getProject();
             $languages = $Project->getLanguages();
 
             if (in_array($Request->get('language'), $languages)) {
@@ -182,7 +214,7 @@ class UserData extends AbstractProfileControl
         }
 
         foreach ($allowedFields as $field) {
-            if ($Request->has($field)) {
+            if ($checkFields($field)) {
                 $User->setAttribute($field, $Request->get($field));
             }
         }
@@ -192,57 +224,58 @@ class UserData extends AbstractProfileControl
 
         // update first address
         try {
-            $Address     = $User->getStandardAddress();
+            $Address = $User->getStandardAddress();
             $addressData = [];
 
-            if ($Request->has('firstname')) {
+            if ($checkFields('firstname')) {
                 $addressData['firstname'] = $Request->get('firstname');
             }
 
-            if ($Request->has('lastname')) {
+            if ($checkFields('lastname')) {
                 $addressData['lastname'] = $Request->get('lastname');
             }
 
-            if ($Request->has('company')) {
+            if ($checkFields('company')) {
                 $addressData['company'] = $Request->get('company');
             }
 
-            if ($Request->has('street_no')) {
+            if ($checkFields('street_no')) {
                 $addressData['street_no'] = $Request->get('street_no');
             }
 
-            if ($Request->has('street')) {
+            // street kommt manchmal als ganzes, dann dies zulassen
+            if ($Request->get('street')) {
                 $addressData['street_no'] = trim($Request->get('street')) . ' ' . trim($Request->get('street_number'));
                 $addressData['street_no'] = trim($addressData['street_no']);
             }
 
-            if ($Request->has('zip')) {
+            if ($checkFields('zip')) {
                 $addressData['zip'] = $Request->get('zip');
             }
 
-            if ($Request->has('city')) {
+            if ($checkFields('city')) {
                 $addressData['city'] = $Request->get('city');
             }
 
-            if ($Request->has('country')) {
+            if ($checkFields('country')) {
                 $addressData['country'] = $Request->get('country');
             }
 
-            if ($Request->has('tel')) {
-                $phones  = $Address->getPhoneList();
+            if ($checkFields('tel')) {
+                $phones = $Address->getPhoneList();
                 $updated = false;
 
                 foreach ($phones as $k => $entry) {
                     if ($entry['type'] === 'tel') {
                         $phones[$k]['no'] = $Request->get('tel');
-                        $updated          = true;
+                        $updated = true;
                         break;
                     }
                 }
 
                 if (!$updated) {
                     $Address->addPhone([
-                        'no'   => $Request->get('tel'),
+                        'no' => $Request->get('tel'),
                         'type' => 'tel'
                     ]);
                 } else {
