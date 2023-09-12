@@ -141,7 +141,7 @@ class UserData extends AbstractProfileControl
         $Config     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $changeLang = (int)$Config->getValue('userProfile', 'showLanguageChangeInProfile');
 
-        if ($changeLang && $Request->get('language')) {
+        if ($changeLang && $Request->has('language')) {
             $Project   = QUI::getRewrite()->getProject();
             $languages = $Project->getLanguages();
 
@@ -170,9 +170,9 @@ class UserData extends AbstractProfileControl
         // special case: birthday
         $bday = '';
 
-        if ($Request->get('birth_year')
-            && $Request->get('birth_month')
-            && $Request->get('birth_day')) {
+        if ($Request->has('birth_year')
+            && $Request->has('birth_month')
+            && $Request->has('birth_day')) {
             $bday .= $Request->get('birth_year');
             $bday .= '-' . $Request->get('birth_month');
             $bday .= '-' . $Request->get('birth_day');
@@ -180,7 +180,7 @@ class UserData extends AbstractProfileControl
         }
 
         foreach ($allowedFields as $field) {
-            if ($Request->get($field)) {
+            if ($Request->has($field)) {
                 $User->setAttribute($field, $Request->get($field));
             }
         }
@@ -193,40 +193,40 @@ class UserData extends AbstractProfileControl
             $Address     = $User->getStandardAddress();
             $addressData = [];
 
-            if ($Request->get('firstname')) {
+            if ($Request->has('firstname')) {
                 $addressData['firstname'] = $Request->get('firstname');
             }
 
-            if ($Request->get('lastname')) {
+            if ($Request->has('lastname')) {
                 $addressData['lastname'] = $Request->get('lastname');
             }
 
-            if ($Request->get('company')) {
+            if ($Request->has('company')) {
                 $addressData['company'] = $Request->get('company');
             }
 
-            if ($Request->get('street_no')) {
+            if ($Request->has('street_no')) {
                 $addressData['street_no'] = $Request->get('street_no');
             }
 
-            if ($Request->get('street')) {
+            if ($Request->has('street')) {
                 $addressData['street_no'] = trim($Request->get('street')) . ' ' . trim($Request->get('street_number'));
                 $addressData['street_no'] = trim($addressData['street_no']);
             }
 
-            if ($Request->get('zip')) {
+            if ($Request->has('zip')) {
                 $addressData['zip'] = $Request->get('zip');
             }
 
-            if ($Request->get('city')) {
+            if ($Request->has('city')) {
                 $addressData['city'] = $Request->get('city');
             }
 
-            if ($Request->get('country')) {
+            if ($Request->has('country')) {
                 $addressData['country'] = $Request->get('country');
             }
 
-            if ($Request->get('tel')) {
+            if ($Request->has('tel')) {
                 $phones  = $Address->getPhoneList();
                 $updated = false;
 
