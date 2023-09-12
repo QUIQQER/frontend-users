@@ -170,9 +170,11 @@ class UserData extends AbstractProfileControl
         // special case: birthday
         $bday = '';
 
-        if ($Request->has('birth_year')
+        if (
+            $Request->has('birth_year')
             && $Request->has('birth_month')
-            && $Request->has('birth_day')) {
+            && $Request->has('birth_day')
+        ) {
             $bday .= $Request->get('birth_year');
             $bday .= '-' . $Request->get('birth_month');
             $bday .= '-' . $Request->get('birth_day');
