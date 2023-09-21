@@ -14,6 +14,7 @@
         <input type="text"
                name="salutation"
                value="{$Address->getAttribute('salutation')|escape:'html'}"
+               {if $settings.salutation.required}required{/if}
         />
     </label>
     {/if}
@@ -27,6 +28,7 @@
         <input type="text"
                name="firstname"
                value="{$Address->getAttribute('firstname')|escape:'html'}"
+               {if $settings.firstname.required}required{/if}
         />
     </label>
     {/if}
@@ -40,6 +42,7 @@
         <input type="text"
                name="lastname"
                value="{$Address->getAttribute('lastname')|escape:'html'}"
+               {if $settings.lastname.required}required{/if}
         />
     </label>
     {/if}
@@ -51,12 +54,13 @@
             {if $settings.street_no.required}*{/if}
         </span>
         {if $Address->getAttribute('street_no') === ''}
-        <input type="text" name="street" value="" autocomplete="shipping street-address"/>
+        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}/>
         <input type="text" name="street_number" value=""/>
         {else}
         <input type="text"
                name="street_no"
                value="{$Address->getAttribute('street_no')|escape:'html'}"
+               {if $settings.street_no.required}required{/if}
         />
         {/if}
     </label>
@@ -71,6 +75,7 @@
         <input type="text"
                name="zip"
                value="{$Address->getAttribute('zip')|escape:'html'}"
+               {if $settings.zip.required}required{/if}
         />
     </label>
     {/if}
@@ -84,6 +89,7 @@
         <input type="text"
                name="city"
                value="{$Address->getAttribute('city')|escape:'html'}"
+               {if $settings.city.required}required{/if}
         />
     </label>
     {/if}
@@ -107,6 +113,7 @@
         <input type="tel"
                name="phone"
                value="{$phone|escape:'html'}"
+               {if $settings.phone.required}required{/if}
         />
     </label>
     {/if}
@@ -121,6 +128,7 @@
                name="mobile"
                autocomplete="mobile"
                value="{$mobile|escape:'html'}"
+               {if $settings.mobile.required}required{/if}
         />
     </label>
     {/if}
@@ -135,6 +143,7 @@
                name="fax"
                autocomplete="fax"
                value="{$fax|escape:'html'}"
+               {if $settings.fax.required}required{/if}
         />
     </label>
     {/if}
