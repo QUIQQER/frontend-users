@@ -1,11 +1,12 @@
 <?php
 
-use QUI\Verification\Verifier;
-use QUI\FrontendUsers\ActivationVerification;
-
 /**
  * @return string - User e-mail address
  */
+
+use QUI\FrontendUsers\ActivationVerification;
+use QUI\Verification\Verifier;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_auth_existsUnverifiedActivation',
     function ($userId) {

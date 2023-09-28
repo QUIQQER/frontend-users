@@ -7,8 +7,8 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
-use QUI\Permissions;
 use QUI\FrontendUsers\Controls\Profile\ControlInterface;
+use QUI\Permissions;
 
 /**
  * Class Utils
@@ -25,7 +25,7 @@ class Utils
     public static function getFrontendUsersPackages(): array
     {
         $packages = QUI::getPackageManager()->getInstalled();
-        $list     = [];
+        $list = [];
 
         /* @var $Package \QUI\Package\Package */
         foreach ($packages as $package) {
@@ -41,7 +41,7 @@ class Utils
 
             $dir = $Package->getDir();
 
-            if (file_exists($dir.'/frontend-users.xml')) {
+            if (file_exists($dir . '/frontend-users.xml')) {
                 $list[] = $Package;
             }
         }
@@ -64,7 +64,7 @@ class Utils
         } catch (QUI\Exception $exception) {
         }
 
-        $result   = [];
+        $result = [];
         $packages = self::getFrontendUsersPackages();
 
         try {
@@ -80,14 +80,14 @@ class Utils
             $Parser = new QUI\Utils\XML\Settings();
             $Parser->setXMLPath('//quiqqer/frontend-users/profile');
 
-            $Collection = $Parser->getCategories($Package->getDir().'/frontend-users.xml');
+            $Collection = $Parser->getCategories($Package->getDir() . '/frontend-users.xml');
 
             foreach ($Collection as $entry) {
                 $categoryName = $entry['name'];
-                $items        = $entry['items']->toArray();
+                $items = $entry['items']->toArray();
 
                 if (!isset($result[$categoryName])) {
-                    $result[$categoryName]['name']  = $entry['name'];
+                    $result[$categoryName]['name'] = $entry['name'];
                     $result[$categoryName]['title'] = $entry['title'];
                     $result[$categoryName]['items'] = [];
                 }
@@ -95,9 +95,11 @@ class Utils
                 foreach ($items as $item) {
                     $item['content'] = '';
 
-                    if (empty($item['items'])
+                    if (
+                        empty($item['items'])
                         && empty($item['template'])
-                        && empty($item['control'])) {
+                        && empty($item['control'])
+                    ) {
                         continue;
                     }
 
@@ -260,7 +262,7 @@ class Utils
         $categories = Utils::getProfileCategories();
 
         foreach ($categories as $key => $category) {
-            $items    = $category['items'];
+            $items = $category['items'];
             $newItems = [];
 
             foreach ($items as $iKey => $setting) {
@@ -297,10 +299,10 @@ class Utils
         }
 
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $permission       = $permissionPrefix.$category;
+        $permission = $permissionPrefix . $category;
 
         if ($setting) {
-            $permission = $permission.'.'.$setting;
+            $permission = $permission . '.' . $setting;
         }
 
         return Permissions\Permission::hasPermission($permission, $User);
@@ -374,8 +376,8 @@ class Utils
         // load the translations
         foreach ($categories as $key => $category) {
             foreach ($category['items'] as $itemKey => $item) {
-                $itemUrl = $url.'/'.$category['name'];
-                $itemUrl = $itemUrl.'/'.$item['name'];
+                $itemUrl = $url . '/' . $category['name'];
+                $itemUrl = $itemUrl . '/' . $item['name'];
 
                 $categories[$key]['items'][$itemKey]['url'] = $itemUrl;
             }
@@ -459,7 +461,7 @@ class Utils
         $missing = [];
 
         try {
-            $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {

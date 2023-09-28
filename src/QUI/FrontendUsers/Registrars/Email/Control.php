@@ -25,12 +25,12 @@ class Control extends QUI\Control
     {
         $this->setAttributes([
             'invalidFields' => [],
-            'fields'        => $_POST
+            'fields' => $_POST
         ]);
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Control.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Control.css');
         $this->addCSSClass('quiqqer-registration');
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email');
     }
@@ -40,17 +40,17 @@ class Control extends QUI\Control
      */
     public function getBody()
     {
-        $Engine               = QUI::getTemplateManager()->getEngine();
-        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $Engine = QUI::getTemplateManager()->getEngine();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $addressTemplate      = false;
-        $showAddress          = false;
-        $usernameSetting      = $registrationSettings['usernameInput'];
-        $fields               = $this->getAttribute('fields');
+        $addressTemplate = false;
+        $showAddress = false;
+        $usernameSetting = $registrationSettings['usernameInput'];
+        $fields = $this->getAttribute('fields');
 
         $Engine->assign([
             'invalidFields' => $this->getAttribute('invalidFields'),
-            'fields'        => $fields
+            'fields' => $fields
         ]);
 
         // check if email is username
@@ -72,15 +72,18 @@ class Control extends QUI\Control
                     $selectedCountry = $fields['country'];
                 }
 
-                $Engine->assign('CountrySelect', new CountrySelect([
-                    'selected' => $selectedCountry,
-                    'required' => $addressFields['country']['required'],
-                    'class'    => 'quiqqer-registration-field-element',
-                    'name'     => 'country'
-                ]));
+                $Engine->assign(
+                    'CountrySelect',
+                    new CountrySelect([
+                        'selected' => $selectedCountry,
+                        'required' => $addressFields['country']['required'],
+                        'class' => 'quiqqer-registration-field-element',
+                        'name' => 'country'
+                    ])
+                );
             }
 
-            $addressTemplate = $Engine->fetch(dirname(__FILE__).'/Registration.Address.html');
+            $addressTemplate = $Engine->fetch(dirname(__FILE__) . '/Registration.Address.html');
 
             foreach ($addressFields as $field) {
                 if ($field['required']) {
@@ -90,12 +93,12 @@ class Control extends QUI\Control
             }
         }
 
-        $Captcha    = false;
+        $Captcha = false;
         $jsRequired = false;
         $useCaptcha = false;
 
         if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
-            $Captcha    = new QUI\Captcha\Controls\CaptchaDisplay();
+            $Captcha = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
             $useCaptcha = boolval($registrationSettings['useCaptcha']);
         }
@@ -104,14 +107,14 @@ class Control extends QUI\Control
 
         $Engine->assign([
             'addressTemplate' => $addressTemplate,
-            'showAddress'     => $showAddress,
+            'showAddress' => $showAddress,
             'usernameSetting' => $usernameSetting,
-            'passwordInput'   => $registrationSettings['passwordInput'],
-            'Captcha'         => $Captcha,
-            'useCaptcha'      => $useCaptcha,
-            'jsRequired'      => $jsRequired
+            'passwordInput' => $registrationSettings['passwordInput'],
+            'Captcha' => $Captcha,
+            'useCaptcha' => $useCaptcha,
+            'jsRequired' => $jsRequired
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Control.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Control.html');
     }
 }

@@ -37,8 +37,8 @@ class EmailConfirmVerification extends AbstractVerification
 
         try {
             $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-            $User             = QUI::getUsers()->get($userId);
-            $newEmail         = $this->additionalData['newEmail'];
+            $User = QUI::getUsers()->get($userId);
+            $newEmail = $this->additionalData['newEmail'];
 
             // if users cannot set their own username -> change username as well
             // if it equals the old email-address
@@ -55,7 +55,7 @@ class EmailConfirmVerification extends AbstractVerification
             $User->save(QUI::getUsers()->getSystemUser());
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: onSuccess -> Could not find user #'.$userId
+                self::class . ' :: onSuccess -> Could not find user #' . $userId
             );
 
             QUI\System\Log::writeException($Exception);

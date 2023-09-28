@@ -19,7 +19,7 @@ class ChangePassword extends AbstractProfileControl
      * ChangePassword constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -37,9 +37,9 @@ class ChangePassword extends AbstractProfileControl
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 
-        $Engine->assign(array(
+        $Engine->assign([
             'User' => QUI::getUserBySession()
-        ));
+        ]);
 
         $this->addCSSFile(dirname(__FILE__) . '/ChangePassword.css');
 
@@ -54,7 +54,7 @@ class ChangePassword extends AbstractProfileControl
     public function onSave()
     {
         $Request = QUI::getRequest()->request;
-        $User    = $this->getAttribute('User');
+        $User = $this->getAttribute('User');
 
         $passwordOld = $Request->get('passwordOld');
         $passwordNew = $Request->get('passwordNew');

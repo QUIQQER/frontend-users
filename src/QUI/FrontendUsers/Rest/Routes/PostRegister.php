@@ -3,14 +3,11 @@
 namespace QUI\FrontendUsers\Rest\Routes;
 
 use GuzzleHttp\Psr7\Response;
-
 use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
-
 use QUI;
 use QUI\FrontendUsers\ActivationVerification;
 use QUI\FrontendUsers\Exception;
-
 use QUI\Verification\Verifier;
 
 use function boolval;
@@ -82,7 +79,7 @@ class PostRegister
 
         $SystemUser = QUI::getUsers()->getSystemUser();
 
-        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
         $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
@@ -166,44 +163,44 @@ class PostRegister
         if ($useAddress) {
             $UserAddress = $User->addAddress([
                 'salutation' => $RegistrationData->getAttribute('salutation'),
-                'firstname'  => $RegistrationData->getAttribute('firstname'),
-                'lastname'   => $RegistrationData->getAttribute('lastname'),
-                'mail'       => $RegistrationData->getAttribute('email'),
-                'company'    => $RegistrationData->getAttribute('company'),
-                'street_no'  => $RegistrationData->getAttribute('street_no'),
-                'zip'        => $RegistrationData->getAttribute('zip'),
-                'city'       => $RegistrationData->getAttribute('city'),
-                'country'    => mb_strtolower($RegistrationData->getAttribute('country'))
+                'firstname' => $RegistrationData->getAttribute('firstname'),
+                'lastname' => $RegistrationData->getAttribute('lastname'),
+                'mail' => $RegistrationData->getAttribute('email'),
+                'company' => $RegistrationData->getAttribute('company'),
+                'street_no' => $RegistrationData->getAttribute('street_no'),
+                'zip' => $RegistrationData->getAttribute('zip'),
+                'city' => $RegistrationData->getAttribute('city'),
+                'country' => mb_strtolower($RegistrationData->getAttribute('country'))
             ], $SystemUser);
 
             $User->setAttributes([
                 'firstname' => $RegistrationData->getAttribute('firstname'),
-                'lastname'  => $RegistrationData->getAttribute('lastname'),
-                'address'   => $UserAddress->getId()    // set as main address
+                'lastname' => $RegistrationData->getAttribute('lastname'),
+                'address' => $UserAddress->getId()    // set as main address
             ]);
 
-            $tel    = $RegistrationData->getAttribute('phone');
+            $tel = $RegistrationData->getAttribute('phone');
             $mobile = $RegistrationData->getAttribute('mobile');
-            $fax    = $RegistrationData->getAttribute('fax');
+            $fax = $RegistrationData->getAttribute('fax');
 
             if (!empty($tel)) {
                 $UserAddress->addPhone([
                     'type' => 'tel',
-                    'no'   => $tel
+                    'no' => $tel
                 ]);
             }
 
             if (!empty($mobile)) {
                 $UserAddress->addPhone([
                     'type' => 'mobile',
-                    'no'   => $mobile
+                    'no' => $mobile
                 ]);
             }
 
             if (!empty($fax)) {
                 $UserAddress->addPhone([
                     'type' => 'fax',
-                    'no'   => $fax
+                    'no' => $fax
                 ]);
             }
 
@@ -219,16 +216,16 @@ class PostRegister
     ): bool {
         // TODO: Verification uses Project from QUI::getRewrite instead of the parameter, therefore the default project is always used (see quiqqer/verification#5)
         $ActivationVerification = new ActivationVerification($User->getId(), [
-            'project'     => $Project->getName(),
+            'project' => $Project->getName(),
             'projectLang' => $Project->getLang()
         ]);
 
         $activationLink = Verifier::startVerification($ActivationVerification, true);
 
-        $L      = QUI::getLocale();
-        $lg     = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
-        $host   = $Project->getVHost();
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
 
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
@@ -242,23 +239,23 @@ class PostRegister
                 [
                     $User->getAttribute('email')
                 ],
-                $tplDir.'mail.registration_activation.html',
+                $tplDir . 'mail.registration_activation.html',
                 [
                     'body' => $L->get($lg, 'mail.registration_activation.body', [
-                        'host'           => $host,
-                        'userId'         => $User->getId(),
-                        'username'       => $User->getUsername(),
-                        'userFirstName'  => $User->getAttribute('firstname') ?: '',
-                        'userLastName'   => $User->getAttribute('lastname') ?: '',
-                        'email'          => $User->getAttribute('email'),
-                        'date'           => $L->formatDate(time()),
+                        'host' => $host,
+                        'userId' => $User->getId(),
+                        'username' => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'email' => $User->getAttribute('email'),
+                        'date' => $L->formatDate(time()),
                         'activationLink' => $activationLink
                     ])
                 ]
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: sendActivationMail -> Send mail failed'
+                self::class . ' :: sendActivationMail -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);

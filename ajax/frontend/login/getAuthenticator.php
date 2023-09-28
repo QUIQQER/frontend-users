@@ -1,12 +1,11 @@
 <?php
 
-use QUI\FrontendUsers\Handler;
-
 /**
  * return the authenticator control
  *
  * @return string
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_login_getAuthenticator',
     function ($authenticator) {
@@ -17,7 +16,8 @@ QUI::$Ajax->registerFunction(
             return '';
         }
 
-        $Authenticator = new $authenticator();
+        new $authenticator();
+        return $authenticator;
     },
     ['authenticator']
 );

@@ -8,9 +8,9 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
+use QUI\FrontendUsers\RegistrarCollection;
 use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Projects\Site\Utils as QUISiteUtils;
-use QUI\FrontendUsers\RegistrarCollection;
 
 /**
  * Class Registration
@@ -54,12 +54,12 @@ class Registration extends QUI\Control
         parent::__construct($attributes);
 
         $this->setAttributes([
-            'async'             => false,
-            'data-qui'          => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
-            'status'            => false,
-            'Registrar'         => false,
+            'async' => false,
+            'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+            'status' => false,
+            'Registrar' => false,
             // currently executed Registrar
-            'registrars'        => [],
+            'registrars' => [],
             // if empty load all default Registrars, otherwise load the ones provided here
             'addressValidation' => true
             // validate address fields (if option is selected in settings; false NEVER validates address data)
@@ -68,9 +68,9 @@ class Registration extends QUI\Control
         $this->setAttributes($attributes);
 
         $this->setJavaScriptControlOption('registrars', json_encode($this->getAttribute('registrars')));
-        $this->addCSSFile(dirname(__FILE__).'/Registration.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
 
-        $this->id      = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
+        $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
         $this->isAsync = $this->getAttribute('async');
     }
 
@@ -83,17 +83,19 @@ class Registration extends QUI\Control
      */
     public function getBody()
     {
-        $Engine               = QUI::getTemplateManager()->getEngine();
-        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
-        $Registrars           = $this->getRegistrars();
+        $Engine = QUI::getTemplateManager()->getEngine();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+        $Registrars = $this->getRegistrars();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $CurrentRegistrar     = $this->isCurrentlyExecuted();
-        $registrationStatus   = false;
-        $projectLang          = QUI::getRewrite()->getProject()->getLang();
+        $CurrentRegistrar = $this->isCurrentlyExecuted();
+        $registrationStatus = false;
+        $projectLang = QUI::getRewrite()->getProject()->getLang();
 
         // execute registration process
-        if (isset($_POST['registration'])
-            && ($this->isAsync || $_POST['registration_id'] === $this->id)) {
+        if (
+            isset($_POST['registration'])
+            && ($this->isAsync || $_POST['registration_id'] === $this->id)
+        ) {
             try {
                 $registrationStatus = $this->register();
 
@@ -108,7 +110,7 @@ class Registration extends QUI\Control
                     $Exception->getMessage(),
                     QUI\System\Log::LEVEL_WARNING,
                     [
-                        'process'   => 'registration',
+                        'process' => 'registration',
                         'registrar' => $CurrentRegistrar ? $CurrentRegistrar->getTitle() : 'unknown'
                     ],
                     'frontend-users'
@@ -134,7 +136,7 @@ class Registration extends QUI\Control
             $Engine->assign('error', $CurrentRegistrar->getErrorMessage());
         } elseif ($status === 'error') {
             $Engine->assign([
-                'error'          => QUI::getLocale()->get(
+                'error' => QUI::getLocale()->get(
                     'quiqqer/frontend-users',
                     'control.registration.general_error'
                 ),
@@ -144,28 +146,29 @@ class Registration extends QUI\Control
 
         // determine success
         $success = $CurrentRegistrar
-                   && ($status === 'success'
-                       || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
+            && ($status === 'success'
+                || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
 
         // redirect directives
-        $redirectUrl     = false;
+        $redirectUrl = false;
         $instantRedirect = false;
 
         if ($success) {
-            if ($this->RegisteredUser
+            if (
+                $this->RegisteredUser
                 && $this->RegisteredUser->isActive()
                 && $registrationSettings['autoLoginOnActivation']
             ) {
                 // instantly redirect (only used on auto-login)
-                $loginSettings   = $RegistrarHandler->getLoginSettings();
+                $loginSettings = $RegistrarHandler->getLoginSettings();
                 $redirectOnLogin = $loginSettings['redirectOnLogin'];
-                $Project         = $this->getProject();
-                $projectLang     = $Project->getLang();
+                $Project = $this->getProject();
+                $projectLang = $Project->getLang();
 
                 try {
                     if (!empty($redirectOnLogin[$projectLang])) {
                         $RedirectSite = QUISiteUtils::getSiteByLink($redirectOnLogin[$projectLang]);
-                        $redirectUrl  = $RedirectSite->getUrlRewrittenWithHost();
+                        $redirectUrl = $RedirectSite->getUrlRewrittenWithHost();
                     }
 
                     $instantRedirect = true;
@@ -195,16 +198,19 @@ class Registration extends QUI\Control
                     $ProfileSite = $RegistrarHandler->getProfileSite(QUI::getRewrite()->getProject());
 
                     if ($ProfileSite) {
-                        header('Location: '.$ProfileSite->getUrlRewritten());
+                        header('Location: ' . $ProfileSite->getUrlRewritten());
                         exit;
                     }
                     break;
 
                 case 'showMessage':
-                    $Engine->assign('error', QUI::getLocale()->get(
-                        'quiqqer/frontend-users',
-                        'message.types.registration.already_registered'
-                    ));
+                    $Engine->assign(
+                        'error',
+                        QUI::getLocale()->get(
+                            'quiqqer/frontend-users',
+                            'message.types.registration.already_registered'
+                        )
+                    );
                     break;
             }
         }
@@ -220,12 +226,14 @@ class Registration extends QUI\Control
 
         // Terms Of Use
         $termsOfUseRequired = false;
-        $termsOfUseLabel    = '';
+        $termsOfUseLabel = '';
 
-        if ($registrationSettings['termsOfUseRequired']
-            && (!empty($registrationSettings['termsOfUseSite'][$projectLang]) || !empty($registrationSettings['privacyPolicySite'][$projectLang]))) {
+        if (
+            $registrationSettings['termsOfUseRequired']
+            && (!empty($registrationSettings['termsOfUseSite'][$projectLang]) || !empty($registrationSettings['privacyPolicySite'][$projectLang]))
+        ) {
             try {
-                $TermsOfUseSite    = false;
+                $TermsOfUseSite = false;
                 $PrivacyPolicySite = false;
 
                 if (!empty($registrationSettings['termsOfUseSite'][$projectLang])) {
@@ -246,15 +254,15 @@ class Registration extends QUI\Control
                         'quiqqer/frontend-users',
                         'control.registration.terms_of_use_and_privacy_policy.label',
                         [
-                            'termsOfUseUrl'          => $TermsOfUseSite->getUrlRewrittenWithHost(),
-                            'termsOfUseSiteTitle'    => $TermsOfUseSite->getAttribute('title'),
-                            'privacyPolicyUrl'       => $PrivacyPolicySite->getUrlRewrittenWithHost(),
+                            'termsOfUseUrl' => $TermsOfUseSite->getUrlRewrittenWithHost(),
+                            'termsOfUseSiteTitle' => $TermsOfUseSite->getAttribute('title'),
+                            'privacyPolicyUrl' => $PrivacyPolicySite->getUrlRewrittenWithHost(),
                             'privacyPolicySiteTitle' => $PrivacyPolicySite->getAttribute('title')
                         ]
                     );
 
                     $Engine->assign([
-                        'termsOfUseSiteId'    => $TermsOfUseSite->getId(),
+                        'termsOfUseSiteId' => $TermsOfUseSite->getId(),
                         'privacyPolicySiteId' => $PrivacyPolicySite->getId()
                     ]);
                 } elseif ($TermsOfUseSite) {
@@ -262,7 +270,7 @@ class Registration extends QUI\Control
                         'quiqqer/frontend-users',
                         'control.registration.terms_of_use.label',
                         [
-                            'termsOfUseUrl'       => $TermsOfUseSite->getUrlRewrittenWithHost(),
+                            'termsOfUseUrl' => $TermsOfUseSite->getUrlRewrittenWithHost(),
                             'termsOfUseSiteTitle' => $TermsOfUseSite->getAttribute('title')
                         ]
                     );
@@ -275,7 +283,7 @@ class Registration extends QUI\Control
                         'quiqqer/frontend-users',
                         'control.registration.privacy_policy.label',
                         [
-                            'privacyPolicyUrl'       => $PrivacyPolicySite->getUrlRewrittenWithHost(),
+                            'privacyPolicyUrl' => $PrivacyPolicySite->getUrlRewrittenWithHost(),
                             'privacyPolicySiteTitle' => $PrivacyPolicySite->getAttribute('title')
                         ]
                     );
@@ -293,8 +301,8 @@ class Registration extends QUI\Control
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA        = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
-            $settingsB        = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+            $settingsA = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
+            $settingsB = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -307,29 +315,29 @@ class Registration extends QUI\Control
             if ($Registrar) {
                 $Engine->assign([
                     'fireUserActivationEvent' => true,
-                    'User'                    => QUI::getUserBySession(),
-                    'registrarHash'           => $Registrar->getHash(),
-                    'registrarType'           => \str_replace('\\', '\\\\', $Registrar->getType())
+                    'User' => QUI::getUserBySession(),
+                    'registrarHash' => $Registrar->getHash(),
+                    'registrarType' => \str_replace('\\', '\\\\', $Registrar->getType())
                 ]);
             }
         }
 
         $Engine->assign([
-            'Registrars'          => $Registrars,
-            'Registrar'           => $CurrentRegistrar,
-            'success'             => $success,
-            'redirectUrl'         => $redirectUrl,
-            'instantRedirect'     => $instantRedirect,
-            'Login'               => $Login,
-            'termsOfUseLabel'     => $termsOfUseLabel,
-            'termsOfUseRequired'  => $termsOfUseRequired,
+            'Registrars' => $Registrars,
+            'Registrar' => $CurrentRegistrar,
+            'success' => $success,
+            'redirectUrl' => $redirectUrl,
+            'instantRedirect' => $instantRedirect,
+            'Login' => $Login,
+            'termsOfUseLabel' => $termsOfUseLabel,
+            'termsOfUseRequired' => $termsOfUseRequired,
             'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
-            'registrationId'      => $this->id,
-            'showRegistrarTitle'  => $this->getAttribute('showRegistrarTitle'),
-            'nextLinksText'       => $success ? RegistrationUtils::getFurtherLinksText() : false
+            'registrationId' => $this->id,
+            'showRegistrarTitle' => $this->getAttribute('showRegistrarTitle'),
+            'nextLinksText' => $success ? RegistrationUtils::getFurtherLinksText() : false
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Registration.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Registration.html');
     }
 
     /**
@@ -342,13 +350,13 @@ class Registration extends QUI\Control
     {
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $filterRegistrars = $this->getAttribute('registrars');
-        $Registrars       = $RegistrarHandler->getRegistrars();
+        $Registrars = $RegistrarHandler->getRegistrars();
 
         if (empty($filterRegistrars)) {
             return $Registrars;
         }
 
-        $registrars         = $Registrars->toArray();
+        $registrars = $Registrars->toArray();
         $FilteredRegistrars = new RegistrarCollection();
 
         $registrars = array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
@@ -381,11 +389,13 @@ class Registration extends QUI\Control
     protected function isCurrentlyExecuted()
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
-        $Registrar     = $this->getAttribute('Registrar');
+        $Registrar = $this->getAttribute('Registrar');
 
-        if ($Registrar
+        if (
+            $Registrar
             && $Registrar instanceof QUI\FrontendUsers\RegistrarInterface
-            && $Registrar->isActive()) {
+            && $Registrar->isActive()
+        ) {
             return $Registrar;
         }
 
@@ -435,15 +445,17 @@ class Registration extends QUI\Control
             ]);
         }
 
-        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $Project              = QUI::getRewrite()->getProject();
+        $Project = QUI::getRewrite()->getProject();
         $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);
 
         // check Terms Of Use
-        if (!empty($registrationSettings['termsOfUseRequired'])
-            && empty($_POST['termsOfUseAccepted'])) {
+        if (
+            !empty($registrationSettings['termsOfUseRequired'])
+            && empty($_POST['termsOfUseAccepted'])
+        ) {
             throw new QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.registration.terms_of_use_not_accepted'
@@ -489,15 +501,15 @@ class Registration extends QUI\Control
 
         // set registration/registrar data to user
         $NewUser->setAttributes([
-            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT      => $Project->getName(),
+            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT => $Project->getName(),
             $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT_LANG => $Project->getLang(),
-            $RegistrarHandler::USER_ATTR_REGISTRAR                 => $Registrar->getType(),
-            $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED  => true
+            $RegistrarHandler::USER_ATTR_REGISTRAR => $Registrar->getType(),
+            $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED => true
         ]);
 
         // handle onRegistered from Registrar
         $Registrar->onRegistered($NewUser);
-        $settings          = $RegistrarHandler->getRegistrationSettings();
+        $settings = $RegistrarHandler->getRegistrationSettings();
         $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
 
         // determine if the user has to set a new password on first login
@@ -513,11 +525,11 @@ class Registration extends QUI\Control
         // check if the user has a password
         $result = QUI::getDataBase()->fetch([
             'select' => 'password',
-            'from'   => QUI::getDBTableName('users'),
-            'where'  => [
+            'from' => QUI::getDBTableName('users'),
+            'where' => [
                 'id' => $NewUser->getId()
             ],
-            'limit'  => 1
+            'limit' => 1
         ]);
 
         $SystemUser = QUI::getUsers()->getSystemUser();

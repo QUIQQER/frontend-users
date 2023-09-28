@@ -34,7 +34,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      */
     public function onSuccess()
     {
-        $userId              = (int)$this->getIdentifier();
+        $userId = (int)$this->getIdentifier();
         $userProfileSettings = Handler::getInstance()->getUserProfileSettings();
 
         try {
@@ -69,7 +69,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
             QUI\System\Log::writeException($Exception);
 
             QUI\System\Log::addError(
-                self::class.' :: onSuccess -> Could not find/delete user #'.$userId
+                self::class . ' :: onSuccess -> Could not find/delete user #' . $userId
             );
 
             QUI\System\Log::writeException($Exception);

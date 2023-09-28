@@ -37,18 +37,18 @@ class RegistrationSignUp extends QUI\Control
             // if empty load all default Registrars, otherwise load the ones provided here
             'registrars' => [],
 
-            'Registrar'          => false, // currently executed Registrar
-            'content'            => '',    // right content
+            'Registrar' => false, // currently executed Registrar
+            'content' => '',    // right content
             'registration-trial' => false, // use registration trial
-            'header'             => true,   // how header title
-            'autofill'           => true
+            'header' => true,   // how header title
+            'autofill' => true
         ]);
 
         $this->setAttributes($attributes);
 
         $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
 
-        $this->addCSSFile(\dirname(__FILE__).'/RegistrationSignUp.css');
+        $this->addCSSFile(\dirname(__FILE__) . '/RegistrationSignUp.css');
         $this->addCSSClass('quiqqer-fu-registrationSignUp');
 
         $this->setJavaScriptControl(
@@ -68,10 +68,10 @@ class RegistrationSignUp extends QUI\Control
 
         $this->siteTermsPrivacy($Engine);
 
-        $Registrars        = $this->getRegistrars();
+        $Registrars = $this->getRegistrars();
         $RegistrationTrial = null;
 
-        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
         // get email registrar
@@ -91,21 +91,23 @@ class RegistrationSignUp extends QUI\Control
         }
 
         // captcha usage
-        $Captcha            = false;
-        $jsRequired         = false;
-        $useCaptcha         = false;
+        $Captcha = false;
+        $jsRequired = false;
+        $useCaptcha = false;
         $isCaptchaInvisible = false;
 
         if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
-            $Captcha    = new QUI\Captcha\Controls\CaptchaDisplay();
+            $Captcha = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
             $useCaptcha = \boolval($registrationSettings['useCaptcha']);
 
-            $Default            = QUI\Captcha\Handler::getDefaultCaptchaModuleControl();
+            $Default = QUI\Captcha\Handler::getDefaultCaptchaModuleControl();
             $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
 
-            if (\class_exists('QUI\Captcha\Modules\Google')
-                && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class) {
+            if (
+                \class_exists('QUI\Captcha\Modules\Google')
+                && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class
+            ) {
                 $Engine->assign('googleSideKey', QUI\Captcha\Modules\Google::getSiteKey());
             }
         }
@@ -113,20 +115,20 @@ class RegistrationSignUp extends QUI\Control
         $this->setJavaScriptControlOption('usecaptcha', $useCaptcha);
 
         $Engine->assign([
-            'Captcha'            => $Captcha,
-            'useCaptcha'         => $useCaptcha,
-            'jsRequired'         => $jsRequired,
+            'Captcha' => $Captcha,
+            'useCaptcha' => $useCaptcha,
+            'jsRequired' => $jsRequired,
             'isCaptchaInvisible' => $isCaptchaInvisible,
-            'hasNoContent'       => $this->getAttribute('content') === false
+            'hasNoContent' => $this->getAttribute('content') === false
         ]);
 
         $Engine->assign([
-            'captchaHTML' => $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.Captcha.html')
+            'captchaHTML' => $Engine->fetch(\dirname(__FILE__) . '/RegistrationSignUp.Captcha.html')
         ]);
 
         // default stuff
         $Registrars = $Registrars->filter(function ($Registrar) {
-            $class    = \get_class($Registrar);
+            $class = \get_class($Registrar);
             $haystack = [
                 QUI\FrontendUsers\Registrars\Email\Registrar::class
             ];
@@ -142,8 +144,8 @@ class RegistrationSignUp extends QUI\Control
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA        = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarA));
-            $settingsB        = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarB));
+            $settingsA = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarA));
+            $settingsB = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarB));
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -159,11 +161,11 @@ class RegistrationSignUp extends QUI\Control
         }
 
         // messages
-        $isLoggedIn          = QUI::getUsers()->isAuth(QUI::getUserBySession());
+        $isLoggedIn = QUI::getUsers()->isAuth(QUI::getUserBySession());
         $showLoggedInWarning = $isLoggedIn;
-        $msgSuccess          = false;
-        $msgError            = false;
-        $activationSuccess   = false;
+        $msgSuccess = false;
+        $msgError = false;
+        $activationSuccess = false;
 
         if (!empty($_GET['success'])) {
             switch ($_GET['success']) {
@@ -186,14 +188,14 @@ class RegistrationSignUp extends QUI\Control
                         if ($Registrar) {
                             $Engine->assign([
                                 'fireUserActivationEvent' => true,
-                                'User'                    => QUI::getUserBySession(),
-                                'registrarHash'           => $Registrar->getHash(),
-                                'registrarType'           => \str_replace('\\', '\\\\', $Registrar->getType())
+                                'User' => QUI::getUserBySession(),
+                                'registrarHash' => $Registrar->getHash(),
+                                'registrarType' => \str_replace('\\', '\\\\', $Registrar->getType())
                             ]);
                         }
                     }
 
-                    $activationSuccess   = true;
+                    $activationSuccess = true;
                     $showLoggedInWarning = false;
                     break;
                 case 'emailconfirm':
@@ -202,7 +204,7 @@ class RegistrationSignUp extends QUI\Control
 
                     $msgSuccess = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
-                        'RegistrationSignUp.message.success.'.$_GET['success'],
+                        'RegistrationSignUp.message.success.' . $_GET['success'],
                         [
                             'startUrl' => $startUrl
                         ]
@@ -226,7 +228,7 @@ class RegistrationSignUp extends QUI\Control
                         $ProfileSite = $FrontendUsersHandler->getProfileSite(QUI::getRewrite()->getProject());
 
                         if ($ProfileSite) {
-                            header('Location: '.$ProfileSite->getUrlRewritten());
+                            header('Location: ' . $ProfileSite->getUrlRewritten());
                             exit;
                         }
                         break;
@@ -235,7 +237,7 @@ class RegistrationSignUp extends QUI\Control
                         $RedirectSite = $FrontendUsersHandler->getRedirectOnActivationSite();
 
                         if ($RedirectSite) {
-                            header('Location: '.$RedirectSite->getUrlRewritten());
+                            header('Location: ' . $RedirectSite->getUrlRewritten());
                             exit;
                         }
                         break;
@@ -254,7 +256,7 @@ class RegistrationSignUp extends QUI\Control
                 case 'login':
                     $msgError = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
-                        'RegistrationSignUp.message.error.'.$_GET['error']
+                        'RegistrationSignUp.message.error.' . $_GET['error']
                     );
 
                     $showLoggedInWarning = false;
@@ -263,10 +265,10 @@ class RegistrationSignUp extends QUI\Control
         }
 
         // Auto-redirect
-        $redirect             = false;
+        $redirect = false;
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $Project              = QUI::getRewrite()->getProject();
-        $projectLang          = $Project->getLang();
+        $Project = QUI::getRewrite()->getProject();
+        $projectLang = $Project->getLang();
 
         if ($activationSuccess && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -289,24 +291,24 @@ class RegistrationSignUp extends QUI\Control
         }
 
         $Engine->assign([
-            'this'                => $this,
-            'Registrars'          => $Registrars,
-            'Email'               => $Email,
-            'registrationId'      => $this->id,
-            'RegistrationTrial'   => $RegistrationTrial,
+            'this' => $this,
+            'Registrars' => $Registrars,
+            'Email' => $Email,
+            'registrationId' => $this->id,
+            'RegistrationTrial' => $RegistrationTrial,
             'showLoggedInWarning' => $showLoggedInWarning,
-            'msgSuccess'          => $msgSuccess,
-            'msgError'            => $msgError,
-            'redirect'            => $redirect,
-            'isLoggedIn'          => $isLoggedIn,
-            'nextLinksText'       => $activationSuccess ? RegistrationUtils::getFurtherLinksText() : false,
-            'showContent'         => !$msgSuccess && !$msgError,
-            'fullnameInput'       => $registrationSettings['fullnameInput'],
-            'passwordInput'       => $registrationSettings['passwordInput'],
-            'valueEmail'          => $valueEmail
+            'msgSuccess' => $msgSuccess,
+            'msgError' => $msgError,
+            'redirect' => $redirect,
+            'isLoggedIn' => $isLoggedIn,
+            'nextLinksText' => $activationSuccess ? RegistrationUtils::getFurtherLinksText() : false,
+            'showContent' => !$msgSuccess && !$msgError,
+            'fullnameInput' => $registrationSettings['fullnameInput'],
+            'passwordInput' => $registrationSettings['passwordInput'],
+            'valueEmail' => $valueEmail
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__).'/RegistrationSignUp.html');
+        return $Engine->fetch(\dirname(__FILE__) . '/RegistrationSignUp.html');
     }
 
     /**
@@ -318,13 +320,13 @@ class RegistrationSignUp extends QUI\Control
     {
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $filterRegistrars = $this->getAttribute('registrars');
-        $Registrars       = $RegistrarHandler->getRegistrars();
+        $Registrars = $RegistrarHandler->getRegistrars();
 
         if (empty($filterRegistrars)) {
             return $Registrars;
         }
 
-        $registrars         = $Registrars->toArray();
+        $registrars = $Registrars->toArray();
         $FilteredRegistrars = new QUI\FrontendUsers\RegistrarCollection();
 
         $registrars = \array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
@@ -352,7 +354,7 @@ class RegistrationSignUp extends QUI\Control
         // privacy and terms of use message
         /* @var $SiteTerms QUI\Projects\Site */
         /* @var $SitePrivacy QUI\Projects\Site */
-        $SiteTerms   = null;
+        $SiteTerms = null;
         $SitePrivacy = null;
 
         // AGB
@@ -389,9 +391,9 @@ class RegistrationSignUp extends QUI\Control
                 'quiqqer/frontend-users',
                 'control.sign.up.terms_of_use_and_privacy_policy.label',
                 [
-                    'termsOfUseUrl'          => $SiteTerms->getUrlRewritten(),
-                    'termsOfUseSiteTitle'    => $SiteTerms->getAttribute('title'),
-                    'privacyPolicyUrl'       => $SitePrivacy->getUrlRewritten(),
+                    'termsOfUseUrl' => $SiteTerms->getUrlRewritten(),
+                    'termsOfUseSiteTitle' => $SiteTerms->getAttribute('title'),
+                    'privacyPolicyUrl' => $SitePrivacy->getUrlRewritten(),
                     'privacyPolicySiteTitle' => $SitePrivacy->getAttribute('title')
                 ]
             );
@@ -400,7 +402,7 @@ class RegistrationSignUp extends QUI\Control
                 'quiqqer/frontend-users',
                 'control.sign.up.terms_of_use.label',
                 [
-                    'termsOfUseUrl'       => $SiteTerms->getUrlRewritten(),
+                    'termsOfUseUrl' => $SiteTerms->getUrlRewritten(),
                     'termsOfUseSiteTitle' => $SiteTerms->getAttribute('title')
                 ]
             );
@@ -409,7 +411,7 @@ class RegistrationSignUp extends QUI\Control
                 'quiqqer/frontend-users',
                 'control.sign.up.privacy_policy.label',
                 [
-                    'privacyPolicyUrl'       => $SitePrivacy->getUrlRewritten(),
+                    'privacyPolicyUrl' => $SitePrivacy->getUrlRewritten(),
                     'privacyPolicySiteTitle' => $SitePrivacy->getAttribute('title')
                 ]
             );
@@ -428,16 +430,17 @@ class RegistrationSignUp extends QUI\Control
     {
         $icon = $Registrar->getIcon();
 
-        if (strpos($icon, '.png') !== false
+        if (
+            strpos($icon, '.png') !== false
             || strpos($icon, '.jpg') !== false
             || strpos($icon, '.gif') !== false
             || strpos($icon, '.svg') !== false
         ) {
             return '<span class="quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon">
-                <span style="background-image: url(\''.$icon.'\')"></span>
+                <span style="background-image: url(\'' . $icon . '\')"></span>
             </span>';
         }
 
-        return '<span class="'.$icon.'"></span>';
+        return '<span class="' . $icon . '"></span>';
     }
 }

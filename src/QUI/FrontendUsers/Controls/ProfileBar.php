@@ -22,7 +22,7 @@ class ProfileBar extends Control
      *
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -32,7 +32,7 @@ class ProfileBar extends Control
         );
 
         $this->addCSSClass('quiqqer-frontendUsers-profileBar');
-        $this->addCSSFile(dirname(__FILE__).'/ProfileBar.css');
+        $this->addCSSFile(dirname(__FILE__) . '/ProfileBar.css');
     }
 
     /**
@@ -42,24 +42,24 @@ class ProfileBar extends Control
      */
     public function getBody()
     {
-        $Engine  = QUI::getTemplateManager()->getEngine();
-        $User    = QUI::getUserBySession();
+        $Engine = QUI::getTemplateManager()->getEngine();
+        $User = QUI::getUserBySession();
         $Project = QUI::getRewrite()->getProject();
 
-        $Handler  = Handler::getInstance();
+        $Handler = Handler::getInstance();
         $settings = $Handler->getProfileBarSettings();
 
-        $Engine->assign(array(
-            'isAuth'           => boolval($User->getId()),
-            'UserIcon'         => new UserIcon(array(
+        $Engine->assign([
+            'isAuth' => boolval($User->getId()),
+            'UserIcon' => new UserIcon([
                 'User' => $User
-            )),
-            'showLogin'        => boolval($settings['showLogin']),
+            ]),
+            'showLogin' => boolval($settings['showLogin']),
             'showRegistration' => boolval($settings['showRegistration']),
-            'LoginSite'        => $Handler->getLoginSite($Project),
+            'LoginSite' => $Handler->getLoginSite($Project),
             'RegistrationSite' => $Handler->getRegistrationSite($Project)
-        ));
+        ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/ProfileBar.html');
+        return $Engine->fetch(dirname(__FILE__) . '/ProfileBar.html');
     }
 }

@@ -29,12 +29,12 @@ class Profile extends Control
         $this->setAttributes([
             'category' => false,
             'settings' => false,
-            'menu'     => true
+            'menu' => true
         ]);
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Profile.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
 
         $this->setAttribute(
@@ -58,11 +58,11 @@ class Profile extends Control
             return '';
         }
 
-        $Request    = QUI::getRequest();
+        $Request = QUI::getRequest();
         $categories = Utils::getProfileCategorySettings();
 
         $currentCategory = $this->getAttribute('category');
-        $currentSetting  = $this->getAttribute('settings');
+        $currentSetting = $this->getAttribute('settings');
 
         if (empty($categories)) {
             return '';
@@ -107,8 +107,10 @@ class Profile extends Control
                 if (!Utils::hasPermissionToViewCategory($category['name'], $setting['name'])) {
                     unset($categories[$key]['items'][$k]);
 
-                    if ($currentCategory === $category['name']
-                        && $currentSetting === $setting['name']) {
+                    if (
+                        $currentCategory === $category['name']
+                        && $currentSetting === $setting['name']
+                    ) {
                         $currentSetting = false;
                     }
                 }
@@ -142,7 +144,7 @@ class Profile extends Control
                 if (!$Control) {
                     QUI\System\Log::addError('Control not found', [
                         'current-category' => $currentCategory,
-                        'current-setting'  => $currentSetting
+                        'current-setting' => $currentSetting
                     ]);
 
                     return '';
@@ -166,15 +168,15 @@ class Profile extends Control
         $categories = Utils::loadTranslationForCategories($categories);
 
         $Engine->assign([
-            'categories'      => $categories,
+            'categories' => $categories,
             'currentCategory' => $currentCategory,
-            'currentSetting'  => $currentSetting,
-            'Category'        => $Control,
-            'Site'            => $this->getSite(),
-            'this'            => $this
+            'currentSetting' => $currentSetting,
+            'Category' => $Control,
+            'Site' => $this->getSite(),
+            'this' => $this
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Profile.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
     }
 
     /**

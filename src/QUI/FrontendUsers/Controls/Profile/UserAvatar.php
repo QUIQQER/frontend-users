@@ -8,9 +8,9 @@ namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
 use QUI\FrontendUsers\Handler;
-use QUI\Projects\Media\Utils as QUIMediaUtils;
-use QUI\Projects\Media\ExternalImage;
 use QUI\FrontendUsers\Utils;
+use QUI\Projects\Media\ExternalImage;
+use QUI\Projects\Media\Utils as QUIMediaUtils;
 
 /**
  * Class UserAvatar
@@ -26,7 +26,7 @@ class UserAvatar extends AbstractProfileControl
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/profile/UserAvatar');
 
         $this->addCSSClass('quiqqer-frontendUsers-UserAvatar');
-        $this->addCSSFile(dirname(__FILE__).'/UserAvatar.css');
+        $this->addCSSFile(dirname(__FILE__) . '/UserAvatar.css');
     }
 
     /**
@@ -37,13 +37,13 @@ class UserAvatar extends AbstractProfileControl
      */
     public function getBody()
     {
-        $settings         = Handler::getInstance()->getUserProfileSettings();
-        $User             = QUI::getUserBySession();
+        $settings = Handler::getInstance()->getUserProfileSettings();
+        $User = QUI::getUserBySession();
         $userGravatarIcon = $User->getAttribute('quiqqer.frontendUsers.useGravatarIcon');
-        $userEmail        = $User->getAttribute('email');
-        $gravatarEnabled  = \boolval($settings['useGravatar']);
-        $AvatarImage      = false;
-        $Engine           = QUI::getTemplateManager()->getEngine();
+        $userEmail = $User->getAttribute('email');
+        $gravatarEnabled = \boolval($settings['useGravatar']);
+        $AvatarImage = false;
+        $Engine = QUI::getTemplateManager()->getEngine();
 
         $Engine->assign([
             'avatarImageUrl' => ''
@@ -51,10 +51,11 @@ class UserAvatar extends AbstractProfileControl
 
         if (!empty($userGravatarIcon) && $gravatarEnabled && !empty($userEmail)) {
             $userGravatarIcon = true;
-            $AvatarImage      = new ExternalImage(Utils::getGravatarUrl($userEmail, 100));
+            $AvatarImage = new ExternalImage(Utils::getGravatarUrl($userEmail, 100));
+            $url = $AvatarImage->getSizeCacheUrl(100, 100);
 
             $Engine->assign([
-                'avatarImageUrl' => ' style="background-image: url(\''.$AvatarImage->getSizeCacheUrl(100, 100).'\')"'
+                'avatarImageUrl' => ' style="background-image: url(\'' . $url . '\')"'
             ]);
         } else {
             $avatarMediaUrl = $User->getAttribute('avatar');
@@ -65,8 +66,8 @@ class UserAvatar extends AbstractProfileControl
                     $AvatarImage = QUIMediaUtils::getImageByUrl($avatarMediaUrl);
 
                     $Engine->assign([
-                        'avatarImageUrl' => ' style="background-image: url(\''.
-                                            $AvatarImage->getSizeCacheUrl(100, 100).'\')"'
+                        'avatarImageUrl' => ' style="background-image: url(\'' .
+                            $AvatarImage->getSizeCacheUrl(100, 100) . '\')"'
                     ]);
                 } catch (QUI\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
@@ -74,20 +75,22 @@ class UserAvatar extends AbstractProfileControl
             }
         }
 
-        $uploadEnabled = \boolval(QUI::getPackage('quiqqer/frontend-users')
-            ->getConfig()
-            ->get('userProfile', 'userAvatarUploadAllowed'));
+        $uploadEnabled = \boolval(
+            QUI::getPackage('quiqqer/frontend-users')
+                ->getConfig()
+                ->get('userProfile', 'userAvatarUploadAllowed')
+        );
 
         if ($uploadEnabled) {
             $Engine->assign('AvatarUpload', new UserAvatarUpload());
         }
 
         $Engine->assign([
-            'AvatarImage'      => $AvatarImage,
-            'User'             => $User,
+            'AvatarImage' => $AvatarImage,
+            'User' => $User,
             'userGravatarIcon' => $userGravatarIcon,
-            'gravatarEnabled'  => $gravatarEnabled,
-            'uploadEnabled'    => $uploadEnabled
+            'gravatarEnabled' => $gravatarEnabled,
+            'uploadEnabled' => $uploadEnabled
         ]);
 
         $Engine->assign(
@@ -97,7 +100,7 @@ class UserAvatar extends AbstractProfileControl
             )
         );
 
-        return $Engine->fetch(\dirname(__FILE__).'/UserAvatar.html');
+        return $Engine->fetch(\dirname(__FILE__) . '/UserAvatar.html');
     }
 
     /**
@@ -107,11 +110,11 @@ class UserAvatar extends AbstractProfileControl
      */
     public function onSave()
     {
-        $Request         = QUI::getRequest()->request;
-        $settings        = Handler::getInstance()->getUserProfileSettings();
+        $Request = QUI::getRequest()->request;
+        $settings = Handler::getInstance()->getUserProfileSettings();
         $gravatarEnabled = \boolval($settings['useGravatar']);
-        $User            = QUI::getUserBySession();
-        $useGravatar     = boolval($Request->get('useGravatar'));
+        $User = QUI::getUserBySession();
+        $useGravatar = boolval($Request->get('useGravatar'));
 
         if ($gravatarEnabled) {
             $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $useGravatar);
