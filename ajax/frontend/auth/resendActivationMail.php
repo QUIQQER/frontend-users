@@ -4,11 +4,11 @@
  * This file contains package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail
  */
 
-use QUI\Verification\Verifier;
-use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\ActivationVerification;
-use QUI\Utils\Security\Orthos;
+use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Registrars\Email\Registrar as EmailRegistrar;
+use QUI\Utils\Security\Orthos;
+use QUI\Verification\Verifier;
 
 /**
  * Resend an activation mail

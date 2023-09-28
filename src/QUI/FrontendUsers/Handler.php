@@ -7,9 +7,9 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Mail\Mailer;
 use QUI\Utils\Singleton;
 use QUI\Verification\Verifier;
-use QUI\Mail\Mailer;
 
 /**
  * Class Registration Handling
@@ -22,58 +22,58 @@ class Handler extends Singleton
     /**
      * Registration statuses
      */
-    const REGISTRATION_STATUS_ERROR   = 0;
+    const REGISTRATION_STATUS_ERROR = 0;
     const REGISTRATION_STATUS_SUCCESS = 1;
     const REGISTRATION_STATUS_PENDING = 2;
 
     /**
      * Activation modes
      */
-    const ACTIVATION_MODE_MAIL   = 'mail';
-    const ACTIVATION_MODE_AUTO   = 'auto';
+    const ACTIVATION_MODE_MAIL = 'mail';
+    const ACTIVATION_MODE_AUTO = 'auto';
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
      * Password input types
      */
-    const PASSWORD_INPUT_DEFAULT  = 'default';
+    const PASSWORD_INPUT_DEFAULT = 'default';
     const PASSWORD_INPUT_VALIDATE = 'validation';
-    const PASSWORD_INPUT_NONE     = 'none';
+    const PASSWORD_INPUT_NONE = 'none';
 
     /**
      * Username input types
      */
-    const USERNAME_INPUT_NONE     = 'none';
+    const USERNAME_INPUT_NONE = 'none';
     const USERNAME_INPUT_OPTIONAL = 'optional';
     const USERNAME_INPUT_REQUIRED = 'required';
 
     /**
      * Full name input types
      */
-    const FULLNAME_INPUT_NONE               = 'none';
+    const FULLNAME_INPUT_NONE = 'none';
     const FULLNAME_INPUT_FIRSTNAME_OPTIONAL = 'firstname_optional';
     const FULLNAME_INPUT_FIRSTNAME_REQUIRED = 'firstname_required';
-    const FULLNAME_INPUT_FULLNAME_OPTIONAL  = 'fullname_optional';
-    const FULLNAME_INPUT_FULLNAME_REQUIRED  = 'fullname_required';
+    const FULLNAME_INPUT_FULLNAME_OPTIONAL = 'fullname_optional';
+    const FULLNAME_INPUT_FULLNAME_REQUIRED = 'fullname_required';
 
     /**
      * Site types
      */
-    const SITE_TYPE_REGISTRATION        = 'quiqqer/frontend-users:types/registration';
+    const SITE_TYPE_REGISTRATION = 'quiqqer/frontend-users:types/registration';
     const SITE_TYPE_REGISTRATION_SIGNUP = 'quiqqer/frontend-users:types/registrationSignUp';
-    const SITE_TYPE_LOGIN               = 'quiqqer/frontend-users:types/login';
-    const SITE_TYPE_PROFILE             = 'quiqqer/frontend-users:types/profile';
+    const SITE_TYPE_LOGIN = 'quiqqer/frontend-users:types/login';
+    const SITE_TYPE_PROFILE = 'quiqqer/frontend-users:types/profile';
 
     /**
      * User attributes
      */
-    const USER_ATTR_WELCOME_MAIL_SENT         = 'quiqqer.frontendUsers.welcomeMailSent';
-    const USER_ATTR_REGISTRATION_PROJECT      = 'quiqqer.frontendUsers.registrationProject';
+    const USER_ATTR_WELCOME_MAIL_SENT = 'quiqqer.frontendUsers.welcomeMailSent';
+    const USER_ATTR_REGISTRATION_PROJECT = 'quiqqer.frontendUsers.registrationProject';
     const USER_ATTR_REGISTRATION_PROJECT_LANG = 'quiqqer.frontendUsers.registrationProjectLang';
-    const USER_ATTR_REGISTRAR                 = 'quiqqer.frontendUsers.registrar';
+    const USER_ATTR_REGISTRAR = 'quiqqer.frontendUsers.registrar';
     const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
-    const USER_ATTR_EMAIL_VERIFIED            = 'quiqqer.frontendUsers.emailVerified';
-    const USER_ATTR_USER_ACTIVATION_REQUIRED  = 'quiqqer.frontendUsers.userActivationRequired';
+    const USER_ATTR_EMAIL_VERIFIED = 'quiqqer.frontendUsers.emailVerified';
+    const USER_ATTR_USER_ACTIVATION_REQUIRED = 'quiqqer.frontendUsers.userActivationRequired';
 
     /**
      * Misc
@@ -105,8 +105,8 @@ class Handler extends Singleton
      */
     public function getRegistrars()
     {
-        $Registrars        = new RegistrarCollection();
-        $Available         = $this->getAvailableRegistrars();
+        $Registrars = new RegistrarCollection();
+        $Available = $this->getAvailableRegistrars();
         $registrarSettings = $this->getRegistrarSettings();
 
         /** @var RegistrarInterface $Registrar */
@@ -191,7 +191,7 @@ class Handler extends Singleton
             return $this->Registrar;
         }
 
-        $list      = [];
+        $list = [];
         $installed = QUI::getPackageManager()->getInstalled();
 
         foreach ($installed as $package) {
@@ -210,11 +210,11 @@ class Handler extends Singleton
 
         // default registrar has to be first
         usort($list, function ($a, $b) {
-            if ($a === '\\'.Registrars\Email\Registrar::class) {
+            if ($a === '\\' . Registrars\Email\Registrar::class) {
                 return -1;
             }
 
-            if ($b === '\\'.Registrars\Email\Registrar::class) {
+            if ($b === '\\' . Registrars\Email\Registrar::class) {
                 return 1;
             }
 
@@ -270,7 +270,7 @@ class Handler extends Singleton
      */
     public function getRegistrationSettings()
     {
-        $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $settings = $Conf->getSection('registration');
 
         if (!empty($settings['termsOfUseSite'])) {
@@ -296,7 +296,7 @@ class Handler extends Singleton
      */
     public function getLoginSettings()
     {
-        $Conf     = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $settings = $Conf->getSection('login');
 
         $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
@@ -364,12 +364,14 @@ class Handler extends Singleton
         foreach ($registrarSettings as $type => $settings) {
             unset($registrarSettings[$type]);
 
-            $type                     = base64_decode($type);
+            $type = base64_decode($type);
             $registrarSettings[$type] = $settings;
         }
 
-        if (!is_null($registrarClass)
-            && isset($registrarSettings[$registrarClass])) {
+        if (
+            !is_null($registrarClass)
+            && isset($registrarSettings[$registrarClass])
+        ) {
             return $registrarSettings[$registrarClass];
         }
 
@@ -385,7 +387,7 @@ class Handler extends Singleton
      */
     public function setRegistrarSettings($settings)
     {
-        $Conf          = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $writeSettings = [];
 
         foreach ($settings as $registrarType => $settingsData) {
@@ -409,17 +411,17 @@ class Handler extends Singleton
         $Project = $Registrar->getProject();
 
         $ActivationVerification = new ActivationVerification($User->getId(), [
-            'project'     => $Project->getName(),
+            'project' => $Project->getName(),
             'projectLang' => $Project->getLang(),
-            'registrar'   => $Registrar->getHash()
+            'registrar' => $Registrar->getHash()
         ]);
 
         $activationLink = Verifier::startVerification($ActivationVerification, true);
 
-        $L      = QUI::getLocale();
-        $lg     = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
-        $host   = $Project->getVHost();
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
 
         try {
             $this->sendMail(
@@ -431,23 +433,23 @@ class Handler extends Singleton
                 [
                     $User->getAttribute('email')
                 ],
-                $tplDir.'mail.registration_activation.html',
+                $tplDir . 'mail.registration_activation.html',
                 [
                     'body' => $L->get($lg, 'mail.registration_activation.body', [
-                        'host'           => $host,
-                        'userId'         => $User->getId(),
-                        'username'       => $User->getUsername(),
-                        'userFirstName'  => $User->getAttribute('firstname') ?: '',
-                        'userLastName'   => $User->getAttribute('lastname') ?: '',
-                        'email'          => $User->getAttribute('email'),
-                        'date'           => $L->formatDate(time()),
+                        'host' => $host,
+                        'userId' => $User->getId(),
+                        'username' => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'email' => $User->getAttribute('email'),
+                        'date' => $L->formatDate(time()),
                         'activationLink' => $activationLink
                     ])
                 ]
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: sendActivationMail -> Send mail failed'
+                self::class . ' :: sendActivationMail -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);
@@ -469,13 +471,13 @@ class Handler extends Singleton
      */
     public function sendWelcomeMail(QUI\Users\User $User, QUI\Projects\Project $Project, $userPassword = null)
     {
-        $L      = QUI::getLocale();
-        $lg     = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
-        $host   = $Project->getVHost();
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
 
         $LoginSite = $this->getLoginSite($Project);
-        $loginUrl  = $Project->getVHost(true);
+        $loginUrl = $Project->getVHost(true);
 
         if ($LoginSite) {
             $loginUrl = $LoginSite->getUrlRewritten();
@@ -491,15 +493,15 @@ class Handler extends Singleton
                 [
                     $User->getAttribute('email')
                 ],
-                $tplDir.'mail.registration_welcome.html',
+                $tplDir . 'mail.registration_welcome.html',
                 [
                     'body' => $L->get($lg, 'mail.registration_welcome.body', [
-                        'host'          => $host,
-                        'username'      => $User->getUsername(),
+                        'host' => $host,
+                        'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
-                        'userLastName'  => $User->getAttribute('lastname') ?: '',
-                        'loginUrl'      => $loginUrl,
-                        'userPassword'  => is_null($userPassword) ? ''
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'loginUrl' => $loginUrl,
+                        'userPassword' => is_null($userPassword) ? ''
                             : $L->get($lg, 'mail.registration_welcome.body.password', [
                                 'username' => $User->getUsername(),
                                 'password' => $userPassword
@@ -513,7 +515,7 @@ class Handler extends Singleton
             $User->save(QUI::getUsers()->getSystemUser());
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: sendWelcomeMail -> Send mail failed'
+                self::class . ' :: sendWelcomeMail -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);
@@ -538,10 +540,10 @@ class Handler extends Singleton
 
         $recipients = explode(",", $registrationSettings['sendInfoMailOnRegistrationTo']);
 
-        $L      = QUI::getLocale();
-        $lg     = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
-        $host   = $Project->getVHost();
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
 
         $Registrar = self::getRegistrar(
             $User->getAttribute(self::USER_ATTR_REGISTRAR)
@@ -555,21 +557,21 @@ class Handler extends Singleton
                     ])
                 ],
                 $recipients,
-                $tplDir.'mail.registration_notice.html',
+                $tplDir . 'mail.registration_notice.html',
                 [
                     'body' => $L->get($lg, 'mail.registration_notice.body', [
-                        'host'      => $host,
-                        'userId'    => $User->getId(),
-                        'username'  => $User->getUsername(),
-                        'email'     => $User->getAttribute('email'),
-                        'date'      => $L->formatDate(time()),
+                        'host' => $host,
+                        'userId' => $User->getId(),
+                        'username' => $User->getUsername(),
+                        'email' => $User->getAttribute('email'),
+                        'date' => $L->formatDate(time()),
                         'registrar' => $Registrar ? $Registrar->getTitle() : '-'
                     ])
                 ]
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: sendRegistrationNotice -> Send mail failed'
+                self::class . ' :: sendRegistrationNotice -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);
@@ -588,17 +590,17 @@ class Handler extends Singleton
     public function sendChangeEmailAddressMail(QUI\Users\User $User, $newEmail, $Project)
     {
         $EmailConfirmVerification = new EmailConfirmVerification($User->getId(), [
-            'project'     => $Project->getName(),
+            'project' => $Project->getName(),
             'projectLang' => $Project->getLang(),
-            'newEmail'    => $newEmail
+            'newEmail' => $newEmail
         ]);
 
         $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
 
-        $L      = QUI::getLocale();
-        $lg     = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
-        $host   = $Project->getVHost();
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
 
         try {
             $this->sendMail(
@@ -608,23 +610,23 @@ class Handler extends Singleton
                 [
                     $newEmail
                 ],
-                $tplDir.'mail.change_email_address.html',
+                $tplDir . 'mail.change_email_address.html',
                 [
                     'body' => $L->get($lg, 'mail.change_email_address.body', [
-                        'host'          => $host,
-                        'userId'        => $User->getId(),
-                        'username'      => $User->getUsername(),
+                        'host' => $host,
+                        'userId' => $User->getId(),
+                        'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
-                        'userLastName'  => $User->getAttribute('lastname') ?: '',
-                        'newEmail'      => $newEmail,
-                        'date'          => $L->formatDate(time()),
-                        'confirmLink'   => $confirmLink
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'newEmail' => $newEmail,
+                        'date' => $L->formatDate(time()),
+                        'confirmLink' => $confirmLink
                     ])
                 ]
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: sendChangeEmailAddressMail -> Send mail failed'
+                self::class . ' :: sendChangeEmailAddressMail -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);
@@ -644,16 +646,16 @@ class Handler extends Singleton
     public function sendDeleteUserConfirmationMail(QUI\Users\User $User, $Project)
     {
         $DeleteUserVerification = new UserDeleteConfirmVerification($User->getId(), [
-            'project'     => $Project->getName(),
+            'project' => $Project->getName(),
             'projectLang' => $Project->getLang()
         ]);
 
         $confirmLink = Verifier::startVerification($DeleteUserVerification, true);
 
-        $L      = QUI::getLocale();
-        $lg     = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir().'templates/';
-        $host   = $Project->getVHost();
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
 
         try {
             $this->sendMail(
@@ -663,22 +665,22 @@ class Handler extends Singleton
                 [
                     $User->getAttribute('email')
                 ],
-                $tplDir.'mail.delete_user_confirm.html',
+                $tplDir . 'mail.delete_user_confirm.html',
                 [
                     'body' => $L->get($lg, 'mail.delete_user_confirm.body', [
-                        'host'          => $host,
-                        'userId'        => $User->getId(),
-                        'username'      => $User->getUsername(),
+                        'host' => $host,
+                        'userId' => $User->getId(),
+                        'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
-                        'userLastName'  => $User->getAttribute('lastname') ?: '',
-                        'date'          => $L->formatDate(time()),
-                        'confirmLink'   => $confirmLink
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'date' => $L->formatDate(time()),
+                        'confirmLink' => $confirmLink
                     ])
                 ]
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class.' :: sendDeleteUserConfirmationMail -> Send mail failed'
+                self::class . ' :: sendDeleteUserConfirmationMail -> Send mail failed'
             );
 
             QUI\System\Log::writeException($Exception);
@@ -703,12 +705,12 @@ class Handler extends Singleton
         }
 
         $mailSettings = self::getMailSettings();
-        $Engine       = QUI::getTemplateManager()->getEngine();
+        $Engine = QUI::getTemplateManager()->getEngine();
 
         $Engine->assign($templateVars);
 
         $template = $Engine->fetch($templateFile);
-        $Mailer   = new Mailer();
+        $Mailer = new Mailer();
 
         foreach ($recipients as $recipient) {
             $Mailer->addRecipient($recipient);
@@ -847,8 +849,8 @@ class Handler extends Singleton
     {
         try {
             $registrationSettings = $this->getRegistrationSettings();
-            $projectLang          = QUI::getRewrite()->getProject()->getLang();
-            
+            $projectLang = QUI::getRewrite()->getProject()->getLang();
+
             if (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 return QUI\Projects\Site\Utils::getSiteByLink(
                     $registrationSettings['autoRedirectOnSuccess'][$projectLang]
@@ -871,11 +873,13 @@ class Handler extends Singleton
      */
     public function checkConfiguration()
     {
-        $lg       = 'quiqqer/frontend-users';
+        $lg = 'quiqqer/frontend-users';
         $settings = $this->getRegistrationSettings();
 
-        if (boolval($settings['sendPassword'])
-            && !(int)$settings['userWelcomeMail']) {
+        if (
+            boolval($settings['sendPassword'])
+            && !(int)$settings['userWelcomeMail']
+        ) {
             throw new Exception([
                 $lg,
                 'exception.handler.check_config.no_welcome_mail_for_password_send'
@@ -904,7 +908,7 @@ class Handler extends Singleton
      */
     public function createRegistrationId()
     {
-        $registrationId          = 'registration-'.(count($this->registrationIds) + 1);
+        $registrationId = 'registration-' . (count($this->registrationIds) + 1);
         $this->registrationIds[] = $registrationId;
 
         return $registrationId;
@@ -918,20 +922,20 @@ class Handler extends Singleton
     public function getUserAttributeLengthRestrictions()
     {
         return [
-            'firstname'  => 40,
-            'lastname'   => 40,
-            'email'      => 255,
+            'firstname' => 40,
+            'lastname' => 40,
+            'email' => 255,
             'salutation' => 10,
-            'company'    => 100,
-            'street_no'  => 200,
-            'zip'        => 200,
-            'city'       => 200,
-            'country'    => 100,
-            'phone'      => 200,
-            'mobile'     => 200,
-            'fax'        => 200,
-            'password'   => 200,
-            'username'   => 50
+            'company' => 100,
+            'street_no' => 200,
+            'zip' => 200,
+            'city' => 200,
+            'country' => 100,
+            'phone' => 200,
+            'mobile' => 200,
+            'fax' => 200,
+            'password' => 200,
+            'username' => 50
         ];
     }
 }

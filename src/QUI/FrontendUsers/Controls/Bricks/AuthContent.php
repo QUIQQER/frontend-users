@@ -3,12 +3,13 @@
 namespace QUI\FrontendUsers\Controls\Bricks;
 
 use QUI;
-use QUI\Exception;
+
 use function array_walk;
 use function explode;
 use function json_decode;
 use function json_last_error;
 use function str_replace;
+
 use const JSON_ERROR_NONE;
 
 /**
@@ -27,11 +28,11 @@ class AuthContent extends QUI\Control
     {
         // default options
         $this->setAttributes([
-            'class'                 => 'quiqqer-frontendusers-AuthContent',
-            'content_guest'         => '',
-            'groups'                => '',
+            'class' => 'quiqqer-frontendusers-AuthContent',
+            'content_guest' => '',
+            'groups' => '',
             'content_not_in_groups' => '',
-            'content_in_groups'     => ''
+            'content_in_groups' => ''
         ]);
 
 //        $this->addCSSFile(dirname(__FILE__).'/Author.css');
@@ -48,10 +49,10 @@ class AuthContent extends QUI\Control
      */
     public function getBody()
     {
-        $lang   = QUI::getLocale()->getCurrent();
+        $lang = QUI::getLocale()->getCurrent();
         $Engine = QUI::getTemplateManager()->getEngine();
 
-        $groups   = $this->getAttribute('groups');
+        $groups = $this->getAttribute('groups');
         $groupIds = [];
 
         if (!empty($groups)) {
@@ -109,6 +110,6 @@ class AuthContent extends QUI\Control
 
         $Engine->assign('content', $content);
 
-        return $Engine->fetch(dirname(__FILE__).'/AuthContent.html');
+        return $Engine->fetch(dirname(__FILE__) . '/AuthContent.html');
     }
 }

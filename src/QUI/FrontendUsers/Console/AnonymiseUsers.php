@@ -3,6 +3,7 @@
 namespace QUI\FrontendUsers\Console;
 
 use QUI;
+
 use function implode;
 
 /**
@@ -79,7 +80,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         }
 
         $this->anonymiseUsers([
-            'groupIds'    => $groupIds,
+            'groupIds' => $groupIds,
             'emailHandle' => $emailHandle
         ]);
 
@@ -92,12 +93,12 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      */
     protected function anonymiseUsers($settings)
     {
-        $groupIds     = $settings['groupIds'];
-        $tbl          = QUI::getDBTableName('users');
+        $groupIds = $settings['groupIds'];
+        $tbl = QUI::getDBTableName('users');
         $tblAddresses = QUI::getDBTableName('users_address');
 
         // Get all users
-        $sql   = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . $tbl;
+        $sql = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . $tbl;
         $where = [
             'su' => 0
         ];
@@ -125,7 +126,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         $anonymiseEmailOnly = !empty($this->getArgument('email_only'));
 
         foreach ($result as $row) {
-            $user   = $row;
+            $user = $row;
             $userId = $row['id'];
 
             $this->writeLn("Anonymise user #" . $userId . "...");
@@ -136,11 +137,11 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                 ];
 
                 if (!$anonymiseEmailOnly) {
-                    $userData['username']   = 'user_' . $userId;
-                    $userData['firstname']  = $this->anonymiseString($user['firstname']);
-                    $userData['lastname']   = $this->anonymiseString($user['lastname']);
+                    $userData['username'] = 'user_' . $userId;
+                    $userData['firstname'] = $this->anonymiseString($user['firstname']);
+                    $userData['lastname'] = $this->anonymiseString($user['lastname']);
                     $userData['user_agent'] = '';
-                    $userData['birthday']   = '1970-01-01';
+                    $userData['birthday'] = '1970-01-01';
                 }
 
                 QUI::getDataBase()->update(
@@ -157,7 +158,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                     $this->writeLn("Anonymise user address(es)...");
 
                     $addressResult = QUI::getDataBase()->fetch([
-                        'from'  => $tblAddresses,
+                        'from' => $tblAddresses,
                         'where' => [
                             'uid' => $userId
                         ]
@@ -168,14 +169,14 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                             $tblAddresses,
                             [
                                 'salutation' => $this->anonymiseString($address['salutation']),
-                                'firstname'  => $this->anonymiseString($address['firstname']),
-                                'lastname'   => $this->anonymiseString($address['lastname']),
-                                'company'    => $this->anonymiseString($address['company']),
-                                'street_no'  => $this->anonymiseString($address['street_no']),
-                                'zip'        => $this->anonymiseString($address['zip']),
-                                'city'       => $this->anonymiseString($address['city']),
-                                'phone'      => '[]',
-                                'mail'       => '["' . $userId . $settings['emailHandle'] . '"]'
+                                'firstname' => $this->anonymiseString($address['firstname']),
+                                'lastname' => $this->anonymiseString($address['lastname']),
+                                'company' => $this->anonymiseString($address['company']),
+                                'street_no' => $this->anonymiseString($address['street_no']),
+                                'zip' => $this->anonymiseString($address['zip']),
+                                'city' => $this->anonymiseString($address['city']),
+                                'phone' => '[]',
+                                'mail' => '["' . $userId . $settings['emailHandle'] . '"]'
                             ],
                             [
                                 'id' => $address['id']
@@ -200,7 +201,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      */
     protected function anonymiseString(string $str)
     {
-        $parts        = \explode(' ', $str);
+        $parts = \explode(' ', $str);
         $anonStrParts = [];
 
         foreach ($parts as $part) {

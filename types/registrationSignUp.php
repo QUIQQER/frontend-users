@@ -29,7 +29,7 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
  * Registration / Sign up
  */
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
-    'content'    => $Site->getAttribute('content'),
+    'content' => $Site->getAttribute('content'),
     'registrars' => $registrars
 ]);
 
@@ -46,7 +46,7 @@ if ($Site->getAttribute('quiqqer.sign.up.logoUrl')) {
     if (QUI\Projects\Site\Utils::isSiteLink($siteUrl)) {
         try {
             $InternalSite = QUI\Projects\Site\Utils::getSiteByLink($siteUrl);
-            $logoUrl      = $InternalSite->getUrlRewritten();
+            $logoUrl = $InternalSite->getUrlRewritten();
         } catch (QUI\Exception $Exception) {
             QUI\System\Log::writeDebugException($Exception);
         }
@@ -75,10 +75,10 @@ if (!$Logo) {
 
 $Engine->assign([
     'Registration' => $Registration,
-    'Background'   => $Background,
-    'Logo'         => $Logo,
-    'logoUrl'      => $logoUrl,
-    'fullscreen'   => !!$Site->getAttribute('quiqqer.sign.up.fullscreen')
+    'Background' => $Background,
+    'Logo' => $Logo,
+    'logoUrl' => $logoUrl,
+    'fullscreen' => !!$Site->getAttribute('quiqqer.sign.up.fullscreen')
 ]);
 
 /**

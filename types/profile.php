@@ -9,7 +9,7 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
     $_REQUEST['_url'] = urldecode($_REQUEST['_url']);
 
     $siteUrl = $Site->getLocation();
-    $url     = trim($_REQUEST['_url'], '/');
+    $url = trim($_REQUEST['_url'], '/');
 
     $requestPart = '';
 
@@ -35,7 +35,7 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
     $Control->setAttribute('settings', $settings);
 }
 
-$Engine->assign(array(
+$Engine->assign([
     'SessionUser' => $SessionUser,
-    'Control'     => $Control
-));
+    'Control' => $Control
+]);

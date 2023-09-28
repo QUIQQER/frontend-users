@@ -1,7 +1,5 @@
 <?php
 
-use QUI\FrontendUsers\Handler;
-
 /**
  * return the authenticator control
  *
@@ -17,7 +15,8 @@ QUI::$Ajax->registerFunction(
             return '';
         }
 
-        $Authenticator = new $authenticator();
+        new $authenticator();
+        return $authenticator;
     },
     ['authenticator']
 );

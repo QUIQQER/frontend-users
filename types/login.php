@@ -1,16 +1,18 @@
 <?php
 
-use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
-use QUI\Utils\Security\Orthos;
 use QUI\FrontendUsers;
+use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\Projects\Site\Utils as SiteUtils;
+use QUI\Utils\Security\Orthos;
 
 $error = false;
 
 // Standard login via POST requests (this most likely means that JavaScript is disabled)
-if (!empty($_POST['username'])
+if (
+    !empty($_POST['username'])
     && !empty($_POST['password'])
-    && !empty($_POST['login'])) {
+    && !empty($_POST['login'])
+) {
     $Users = QUI::getUsers();
 
     try {
@@ -35,13 +37,13 @@ if (!empty($_POST['username'])
 }
 
 $SessionUser = QUI::getUserBySession();
-$isAuth      = boolval($SessionUser->getId());
+$isAuth = boolval($SessionUser->getId());
 
 if ($isAuth) {
     // check for redirection
     $loginSettings = FrontendUsers\Handler::getInstance()->getLoginSettings();
-    $RedirectSite  = false;
-    $projectLang   = $Project->getLang();
+    $RedirectSite = false;
+    $projectLang = $Project->getLang();
 
     if (!empty($loginSettings['redirectOnLogin'][$projectLang])) {
         $RedirectSite = SiteUtils::getSiteByLink($loginSettings['redirectOnLogin'][$projectLang]);
@@ -59,9 +61,9 @@ if ($isAuth) {
     }
 }
 
-$Engine->assign(array(
-    'isAuth'        => $isAuth,
-    'SessionUser'   => $SessionUser,
+$Engine->assign([
+    'isAuth' => $isAuth,
+    'SessionUser' => $SessionUser,
     'FrontendLogin' => new FrontendLogin(),
-    'error'         => $error
-));
+    'error' => $error
+]);

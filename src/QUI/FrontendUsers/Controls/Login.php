@@ -28,15 +28,15 @@ class Login extends QUI\Control
         $this->setAttributes([
             // if empty load all default Registrars, otherwise load the ones provided here
             'authenticators' => [],
-            'Authenticator'  => false,  // currently executed Registrar
-            'mail'           => true,   // show mail authenticator
-            'passwordReset'  => true,   // show password reset
-            'header'         => true    // show header title
+            'Authenticator' => false,  // currently executed Registrar
+            'mail' => true,   // show mail authenticator
+            'passwordReset' => true,   // show password reset
+            'header' => true    // show header title
         ]);
 
         $this->setAttributes($attributes);
 
-        $this->addCSSFile(dirname(__FILE__).'/Login.css');
+        $this->addCSSFile(dirname(__FILE__) . '/Login.css');
         $this->addCSSClass('quiqqer-fu-login');
 
         $this->setJavaScriptControl(
@@ -58,7 +58,7 @@ class Login extends QUI\Control
         }
 
         $authenticators = $this->getAuthenticators();
-        $instances      = [];
+        $instances = [];
 
         $socialAuth = array_filter($authenticators, function ($authenticator) {
             return $authenticator !== QUI\Users\Auth\QUIQQER::class;
@@ -79,12 +79,13 @@ class Login extends QUI\Control
                 }
 
 
-                $icon  = false;
+                $icon = false;
                 $image = false;
 
                 $iconAttribute = $Login->getAttribute('icon');
 
-                if (\strpos($iconAttribute, 'fa ') !== false
+                if (
+                    \strpos($iconAttribute, 'fa ') !== false
                     || \strpos($iconAttribute, 'fab ') !== false
                     || \strpos($iconAttribute, 'fas ') !== false
                 ) {
@@ -94,10 +95,10 @@ class Login extends QUI\Control
                 }
 
                 $instances[] = [
-                    'Auth'  => $Auth,
+                    'Auth' => $Auth,
                     'Login' => $Login,
                     'class' => $class,
-                    'icon'  => $icon,
+                    'icon' => $icon,
                     'image' => $image
                 ];
             } catch (\Exception $Exception) {
@@ -121,13 +122,13 @@ class Login extends QUI\Control
         }
 
         $Engine->assign([
-            'this'              => $this,
-            'authenticators'    => $instances,
-            'SessionUser'       => QUI::getUserBySession(),
+            'this' => $this,
+            'authenticators' => $instances,
+            'SessionUser' => QUI::getUserBySession(),
             'showPasswordReset' => $showPasswordReset
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Login.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Login.html');
     }
 
     /**
@@ -137,14 +138,14 @@ class Login extends QUI\Control
      */
     protected function getAuthenticators()
     {
-        $authenticators   = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();
+        $authenticators = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();
         $filterRegistrars = $this->getAttribute('authenticators');
 
         // Parse allowed authenticators
         try {
-            $loginSettings         = QUI\FrontendUsers\Handler::getInstance()->getLoginSettings();
+            $loginSettings = QUI\FrontendUsers\Handler::getInstance()->getLoginSettings();
             $authenticatorSettings = $loginSettings['authenticators'];
-            $allowed               = [
+            $allowed = [
                 'QUI\Users\Auth\QUIQQER'
             ];
 

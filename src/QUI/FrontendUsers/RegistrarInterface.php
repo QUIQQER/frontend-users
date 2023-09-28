@@ -49,6 +49,7 @@ interface RegistrarInterface
     public function getAttribute($key);
 
     //endregion attributes
+
     /**
      * @param QUI\Interfaces\Users\User $User
      * @return void

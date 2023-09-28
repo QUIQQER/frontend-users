@@ -28,13 +28,16 @@ class RegistrationUtils
 
             $nextLinks = [];
 
-            $StartSite   = $Project->get(1);
-            $nextLinks[] = '<a href="'.$StartSite->getUrlRewrittenWithHost().'">'.$StartSite->getAttribute('title').'</a>';
+            $StartSite = $Project->get(1);
+            $nextLinks[] = '<a href="' . $StartSite->getUrlRewrittenWithHost() . '">' . $StartSite->getAttribute(
+                    'title'
+                ) . '</a>';
 
             $ProfileSite = QUI\FrontendUsers\Handler::getInstance()->getProfileSite($Project);
 
             if ($ProfileSite) {
-                $nextLinks[] = '<a href="'.$ProfileSite->getUrlRewrittenWithHost().'">'.$ProfileSite->getAttribute('title').'</a>';
+                $nextLinks[] = '<a href="' . $ProfileSite->getUrlRewrittenWithHost(
+                    ) . '">' . $ProfileSite->getAttribute('title') . '</a>';
             }
 
             return implode(' | ', $nextLinks);

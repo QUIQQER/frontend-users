@@ -10,6 +10,7 @@
  *
  * @throws QUI\Exception
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_register',
     function ($registrar, $data, $registrars, $isSignUpRegistration = false) {
@@ -20,15 +21,15 @@ QUI::$Ajax->registerFunction(
         }
 
         $Registration = new QUI\FrontendUsers\Controls\Registration([
-            'async'             => true,
-            'registrars'        => $registrars,
+            'async' => true,
+            'registrars' => $registrars,
             'addressValidation' => !empty($isSignUpRegistration)
         ]);
 
         $_POST = array_merge($_POST, json_decode($data, true));
 
         $_POST['registration'] = 1;
-        $_POST['registrar']    = $registrar;
+        $_POST['registrar'] = $registrar;
 
         $Registrar = \QUI\FrontendUsers\Handler::getInstance()->getRegistrarByHash($registrar);
 
@@ -40,7 +41,7 @@ QUI::$Ajax->registerFunction(
                     QUI::getAjax()->triggerGlobalJavaScriptCallback(
                         'quiqqerFrontendUsersUserRegisterCallback',
                         [
-                            'userId'        => $Registration->getRegisteredUser()->getId(),
+                            'userId' => $Registration->getRegisteredUser()->getId(),
                             'registrarHash' => $registrar,
                             'registrarType' => $Registrar ? $Registrar->getType() : ''
                         ]
@@ -64,9 +65,9 @@ QUI::$Ajax->registerFunction(
         $User = $Registration->getRegisteredUser();
 
         return [
-            'html'          => $status,
+            'html' => $status,
             'userActivated' => $User ? $User->isActive() : false,
-            'userId'        => $User ? $User->getId() : false,
+            'userId' => $User ? $User->getId() : false,
             'registrarHash' => $registrar,
             'registrarType' => $Registrar ? $Registrar->getType() : ''
         ];

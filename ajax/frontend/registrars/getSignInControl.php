@@ -5,6 +5,7 @@
  *
  * @return string
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_getSignInControl',
     function () {

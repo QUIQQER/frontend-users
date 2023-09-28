@@ -123,11 +123,11 @@ class RegistrationData extends QDOM
         $passwordSetting = $registrationSettings['passwordInput'];
         $fullNameSetting = $registrationSettings['fullnameInput'];
 
-        $lg       = 'quiqqer/frontend-users';
+        $lg = 'quiqqer/frontend-users';
         $lgPrefix = 'exception.registrars.email.';
 
 
-        $email    = $this->getAttribute('email');
+        $email = $this->getAttribute('email');
 
         // Email check
         if (empty($email)) {
@@ -177,7 +177,7 @@ class RegistrationData extends QDOM
 
         // Fullname check
         $firstname = $this->getAttribute('firstname');
-        $lastname  = $this->getAttribute('lastname');
+        $lastname = $this->getAttribute('lastname');
 
         switch ($fullNameSetting) {
             case $Handler::FULLNAME_INPUT_FIRSTNAME_REQUIRED:
@@ -231,7 +231,7 @@ class RegistrationData extends QDOM
                     'quiqqer/frontend-users',
                     'exception.registrars.email.user_attribute_too_long',
                     [
-                        'label'     => QUI::getLocale()->get('quiqqer/system', $attribute),
+                        'label' => QUI::getLocale()->get('quiqqer/system', $attribute),
                         'maxLength' => $maxLength
                     ]
                 ]);

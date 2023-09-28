@@ -34,7 +34,7 @@ class InvalidFormField
     public function __construct($name, $msg)
     {
         $this->name = $name;
-        $this->msg  = $msg;
+        $this->msg = $msg;
     }
 
     /**

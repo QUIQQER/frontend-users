@@ -50,7 +50,7 @@ class ActivationVerification extends AbstractVerification
             );
         } catch (QUI\Users\Exception $Exception) {
             QUI\System\Log::addWarning(
-                'quiqqer/frontend-users -> ActivationVerification :: '.$Exception->getMessage()
+                'quiqqer/frontend-users -> ActivationVerification :: ' . $Exception->getMessage()
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
@@ -122,7 +122,7 @@ class ActivationVerification extends AbstractVerification
         return $RegistrationSite->getUrlRewritten([
             'success'
         ], [
-            'success'   => 'activation',
+            'success' => 'activation',
             'registrar' => $this->getRegistrarHash()
         ]);
     }
@@ -153,7 +153,7 @@ class ActivationVerification extends AbstractVerification
         return $RegistrationSite->getUrlRewritten([
             'error'
         ], [
-            'error'     => 'activation',
+            'error' => 'activation',
             'registrar' => $this->getRegistrarHash()
         ]);
     }

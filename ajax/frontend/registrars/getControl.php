@@ -1,23 +1,24 @@
 <?php
 
-use QUI\FrontendUsers\Handler;
-
 /**
  * return the registrar control
  *
  * @param string $registrar
  * @return string
  */
+
+use QUI\FrontendUsers\Handler;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_getControl',
     function ($registrar) {
         $Registrar = Handler::getInstance()->getRegistrarByHash($registrar);
 
-        $Output  = new QUI\Output();
+        $Output = new QUI\Output();
         $control = $Registrar->getControl()->create();
-        $css     = QUI\Control\Manager::getCSS();
+        $css = QUI\Control\Manager::getCSS();
 
-        return $Output->parse($css.$control);
+        return $Output->parse($css . $control);
     },
     ['registrar']
 );

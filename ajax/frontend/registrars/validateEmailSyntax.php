@@ -1,13 +1,14 @@
 <?php
 
-use QUI\Utils\Security\Orthos;
-
 /**
  * check, if this is a username which can be used
  *
  * @param string $email
  * @return boolean - true: valid; false: invalid
  */
+
+use QUI\Utils\Security\Orthos;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_validateEmailSyntax',
     function ($email) {
