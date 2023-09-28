@@ -61,7 +61,7 @@ class SetUserGroups extends QUI\System\Console\Tool
         // RESTRICT TO GROUPS
         $this->writeLn(
             "Select users in the following GROUPS only (comma separated list of group ids;"
-            ." leave empty to ignore groups): "
+            . " leave empty to ignore groups): "
         );
 
         $userGroupIds = $this->readInput();
@@ -73,11 +73,11 @@ class SetUserGroups extends QUI\System\Console\Tool
         }
 
         // Get all users
-        $sql   = "SELECT `id` FROM ".QUI::getUsers()::table();
+        $sql = "SELECT `id` FROM " . QUI::getUsers()::table();
         $where = [];
 
         if (!empty($languages)) {
-            $where[] = "`lang` IN ('".implode("','", $languages)."')";
+            $where[] = "`lang` IN ('" . implode("','", $languages) . "')";
         }
 
         if (!$inactiveUsers) {
@@ -91,11 +91,11 @@ class SetUserGroups extends QUI\System\Console\Tool
                 $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
             }
 
-            $where[] = "(".implode(" OR ", $whereOR).")";
+            $where[] = "(" . implode(" OR ", $whereOR) . ")";
         }
 
         if (!empty($where)) {
-            $sql .= " WHERE ".implode(" AND ", $where);
+            $sql .= " WHERE " . implode(" AND ", $where);
         }
 
         $result = QUI::getDataBase()->fetchSQL($sql);
@@ -103,11 +103,11 @@ class SetUserGroups extends QUI\System\Console\Tool
         // SUMMARY
         $this->writeLn("\nSUMMARY\n===============================================\n");
 
-        $this->writeLn("Add users to groups: ".implode(', ', $groupIds));
-        $this->writeLn("Include INACTIVE users: ".($inactiveUsers ? "YES" : "NO"));
-        $this->writeLn("User languages: ".(empty($languages) ? 'ALL' : implode(', ', $languages)));
+        $this->writeLn("Add users to groups: " . implode(', ', $groupIds));
+        $this->writeLn("Include INACTIVE users: " . ($inactiveUsers ? "YES" : "NO"));
+        $this->writeLn("User languages: " . (empty($languages) ? 'ALL' : implode(', ', $languages)));
         $this->writeLn(
-            "Select users in this groups only: ".(empty($userGroupIds) ? "ALL" : implode(', ', $userGroupIds))
+            "Select users in this groups only: " . (empty($userGroupIds) ? "ALL" : implode(', ', $userGroupIds))
         );
 
         $this->writeLn("\n\nIs everything correct? (Y/n): ");
@@ -121,13 +121,13 @@ class SetUserGroups extends QUI\System\Console\Tool
         // Set groups
         $this->writeLn("\n\nSTART SETTING GROUPS\n");
 
-        $Users      = QUI::getUsers();
+        $Users = QUI::getUsers();
         $SystemUser = QUI::getUsers()->getSystemUser();
 
         foreach ($result as $row) {
             $User = $Users->get($row['id']);
 
-            $this->writeLn("Add groups for User #".$User->getId()." (".$User->getUsername().")...");
+            $this->writeLn("Add groups for User #" . $User->getId() . " (" . $User->getUsername() . ")...");
 
             foreach ($groupIds as $groupId) {
                 try {
@@ -137,7 +137,7 @@ class SetUserGroups extends QUI\System\Console\Tool
                     $this->write(" OK!");
                 } catch (\Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
-                    $this->write(" ERROR: ".$Exception->getMessage());
+                    $this->write(" ERROR: " . $Exception->getMessage());
                 }
             }
         }

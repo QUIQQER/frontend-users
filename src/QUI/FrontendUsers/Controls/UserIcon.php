@@ -9,9 +9,9 @@ namespace QUI\FrontendUsers\Controls;
 use QUI;
 use QUI\Control;
 use QUI\FrontendUsers\Handler;
-use QUI\Projects\Media\Utils as QUIMediaUtils;
-use QUI\Projects\Media\ExternalImage;
 use QUI\FrontendUsers\Utils;
+use QUI\Projects\Media\ExternalImage;
+use QUI\Projects\Media\Utils as QUIMediaUtils;
 
 /**
  * Class UserIcon
@@ -23,7 +23,7 @@ class UserIcon extends Control
     public function __construct(array $attributes = [])
     {
         $this->setAttributes([
-            'iconWidth'  => 50,
+            'iconWidth' => 50,
             'iconHeight' => 50,
             'showLogout' => true
         ]);
@@ -32,7 +32,7 @@ class UserIcon extends Control
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon');
         $this->addCSSClass('quiqqer-frontendUsers-userIcon');
-        $this->addCSSFile(dirname(__FILE__).'/UserIcon.css');
+        $this->addCSSFile(dirname(__FILE__) . '/UserIcon.css');
     }
 
     /**
@@ -65,13 +65,13 @@ class UserIcon extends Control
             'User' => $User
         ]);
 
-        $settings         = Handler::getInstance()->getUserProfileSettings();
-        $User             = QUI::getUserBySession();
+        $settings = Handler::getInstance()->getUserProfileSettings();
+        $User = QUI::getUserBySession();
         $userGravatarIcon = $User->getAttribute('quiqqer.frontendUsers.useGravatarIcon');
-        $userEmail        = $User->getAttribute('email');
-        $gravatarEnabled  = boolval($settings['useGravatar']);
-        $iconWidth        = (int)$this->getAttribute('iconWidth');
-        $iconHeight       = (int)$this->getAttribute('iconHeight');
+        $userEmail = $User->getAttribute('email');
+        $gravatarEnabled = boolval($settings['useGravatar']);
+        $iconWidth = (int)$this->getAttribute('iconWidth');
+        $iconHeight = (int)$this->getAttribute('iconHeight');
 
         if (!empty($userGravatarIcon) && $gravatarEnabled && !empty($userEmail)) {
             $AvatarImage = new ExternalImage(Utils::getGravatarUrl($userEmail, $iconHeight));
@@ -81,7 +81,7 @@ class UserIcon extends Control
             ]);
         } else {
             $avatarMediaUrl = $User->getAttribute('avatar');
-            $AvatarImage    = false;
+            $AvatarImage = false;
 
             // if empty, us first Letter of the username
             if (!empty($avatarMediaUrl)) {
@@ -107,7 +107,7 @@ class UserIcon extends Control
             }
 
             if ($AvatarImage === false) {
-                $username    = $User->getUsername();
+                $username = $User->getUsername();
                 $firstLetter = mb_substr($username, 0, 1);
                 $firstLetter = mb_strtoupper($firstLetter);
                 $Engine->assign('firstLetter', $firstLetter);
@@ -115,13 +115,13 @@ class UserIcon extends Control
         }
 
         $Engine->assign([
-            'User'        => $User,
-            'iconHeight'  => $iconHeight,
-            'iconWidth'   => $iconWidth,
+            'User' => $User,
+            'iconHeight' => $iconHeight,
+            'iconWidth' => $iconWidth,
             'ProfileSite' => $ProfileSite
         ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/UserIcon.html');
+        return $Engine->fetch(dirname(__FILE__) . '/UserIcon.html');
     }
 
     /**
@@ -132,7 +132,7 @@ class UserIcon extends Control
     protected function getDefaultAvatarImage()
     {
         try {
-            $Conf               = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $defaultAvatarImage = $Conf->get('profileBar', 'defaultAvatar');
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);

@@ -17,10 +17,10 @@ class SendUserMails extends QUI\System\Console\Tool
      * @var array
      */
     protected $mail = [
-        'body'       => '',
+        'body' => '',
         'senderMail' => '',
         'senderName' => '',
-        'subject'    => ''
+        'subject' => ''
     ];
 
     /**
@@ -34,7 +34,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * @var array
      */
     protected $settings = [
-        'setNewPassword'     => false,
+        'setNewPassword' => false,
         'forcePasswordReset' => true
     ];
 
@@ -111,7 +111,7 @@ class SendUserMails extends QUI\System\Console\Tool
             . " [password] placeholder in the e-mail body. (y/N): "
         );
 
-        $generatePassword   = mb_strtolower($this->readInput()) === 'y';
+        $generatePassword = mb_strtolower($this->readInput()) === 'y';
         $forcePasswordReset = false;
 
         if ($generatePassword) {
@@ -120,7 +120,7 @@ class SendUserMails extends QUI\System\Console\Tool
                 . " generated password? (Y/n): "
             );
 
-            $input              = $this->readInput();
+            $input = $this->readInput();
             $forcePasswordReset = empty($input) || mb_strtolower($input) !== 'n';
         }
 
@@ -129,7 +129,7 @@ class SendUserMails extends QUI\System\Console\Tool
         $orderBy = $this->readInput();
 
         // Get all users
-        $sql     = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . QUI::getUsers()::table();
+        $sql = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . QUI::getUsers()::table();
         $where[] = "`lang` IN ('" . implode("','", $languages) . "')";
 
         if (!$inactiveUsers) {
@@ -152,7 +152,7 @@ class SendUserMails extends QUI\System\Console\Tool
             $sql .= " ORDER BY $orderBy";
         }
 
-        $result     = QUI::getDataBase()->fetchSQL($sql);
+        $result = QUI::getDataBase()->fetchSQL($sql);
         $recipients = [];
 
         foreach ($result as $row) {
@@ -198,7 +198,7 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         // LIMITS CONFIGURATION
-        $limits    = $this->getLimits();
+        $limits = $this->getLimits();
         $setLimits = true;
 
         if (!empty($limits)) {
@@ -209,7 +209,7 @@ class SendUserMails extends QUI\System\Console\Tool
             $this->writeLn("Mails / minute: " . ($limits['perMinute'] ?: 'unlimited'));
 
             $this->writeLn("\nDo you want to set new limits? (y/N)");
-            $input     = $this->readInput();
+            $input = $this->readInput();
             $setLimits = !empty($input) && mb_strtolower($input) === 'y';
         }
 
@@ -224,14 +224,14 @@ class SendUserMails extends QUI\System\Console\Tool
             $limitPerMinute = $this->readInput();
 
             $limits = [
-                'per24h'        => !empty($limitPer24h) ? (int)$limitPer24h : false,
-                'perHour'       => !empty($limitPerHour) ? (int)$limitPerHour : false,
-                'perMinute'     => !empty($limitPerMinute) ? (int)$limitPerMinute : false,
-                'start24h'      => false,
-                'startHour'     => false,
-                'startMinute'   => false,
-                'current24h'    => 0,
-                'currentHour'   => 0,
+                'per24h' => !empty($limitPer24h) ? (int)$limitPer24h : false,
+                'perHour' => !empty($limitPerHour) ? (int)$limitPerHour : false,
+                'perMinute' => !empty($limitPerMinute) ? (int)$limitPerMinute : false,
+                'start24h' => false,
+                'startHour' => false,
+                'startMinute' => false,
+                'current24h' => 0,
+                'currentHour' => 0,
                 'currentMinute' => 0
             ];
 
@@ -261,14 +261,14 @@ class SendUserMails extends QUI\System\Console\Tool
         $this->writeLn("Mails / hour: " . ($limits['perHour'] ?: 'unlimited'));
         $this->writeLn("Mails / minute: " . ($limits['perMinute'] ?: 'unlimited'));
 
-        $this->mail['body']       = $body;
+        $this->mail['body'] = $body;
         $this->mail['senderMail'] = $senderMail;
         $this->mail['senderName'] = $senderName;
-        $this->mail['subject']    = $subject;
+        $this->mail['subject'] = $subject;
 
-        $this->recipients                     = $recipients;
+        $this->recipients = $recipients;
         $this->settings['forcePasswordReset'] = $forcePasswordReset;
-        $this->settings['setNewPassword']     = $generatePassword;
+        $this->settings['setNewPassword'] = $generatePassword;
 
         // TEST MAIL
         $this->writeLn("\n\nSend test mail? (Y/n): ");
@@ -322,7 +322,7 @@ class SendUserMails extends QUI\System\Console\Tool
 
         if (empty($userInfo[$userId])) {
             $user = [
-                'sent'      => false,
+                'sent' => false,
                 'sent_date' => false
             ];
 
@@ -413,12 +413,12 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function updateLimits()
     {
         $limits = $this->getLimits();
-        $Now    = \date_create();
+        $Now = \date_create();
 
         // Update minute limit
         if (!empty($limits['perMinute'])) {
             if (empty($limits['startMinute'])) {
-                $Start                 = \date_create();
+                $Start = \date_create();
                 $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
             } else {
                 $Start = \date_create($limits['startMinute']);
@@ -429,8 +429,8 @@ class SendUserMails extends QUI\System\Console\Tool
 
             // Reset limit
             if ($Now > $End) {
-                $Start                   = \date_create();
-                $limits['startMinute']   = $Start->format('Y-m-d H:i:s');
+                $Start = \date_create();
+                $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
                 $limits['currentMinute'] = 0;
             }
 
@@ -440,7 +440,7 @@ class SendUserMails extends QUI\System\Console\Tool
         // Update hour limit
         if (!empty($limits['perHour'])) {
             if (empty($limits['startHour'])) {
-                $Start               = \date_create();
+                $Start = \date_create();
                 $limits['startHour'] = $Start->format('Y-m-d H:i:s');
             } else {
                 $Start = \date_create($limits['startHour']);
@@ -451,8 +451,8 @@ class SendUserMails extends QUI\System\Console\Tool
 
             // Reset limit
             if ($Now > $End) {
-                $Start                 = \date_create();
-                $limits['startHour']   = $Start->format('Y-m-d H:i:s');
+                $Start = \date_create();
+                $limits['startHour'] = $Start->format('Y-m-d H:i:s');
                 $limits['currentHour'] = 0;
             }
 
@@ -462,7 +462,7 @@ class SendUserMails extends QUI\System\Console\Tool
         // Update 24 hour limit
         if (!empty($limits['per24h'])) {
             if (empty($limits['start24h'])) {
-                $Start              = \date_create();
+                $Start = \date_create();
                 $limits['start24h'] = $Start->format('Y-m-d H:i:s');
             } else {
                 $Start = \date_create($limits['start24h']);
@@ -473,8 +473,8 @@ class SendUserMails extends QUI\System\Console\Tool
 
             // Reset limit
             if ($Now > $End) {
-                $Start                = \date_create();
-                $limits['start24h']   = $Start->format('Y-m-d H:i:s');
+                $Start = \date_create();
+                $limits['start24h'] = $Start->format('Y-m-d H:i:s');
                 $limits['current24h'] = 0;
             }
 
@@ -498,7 +498,7 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function isMailAllowed()
     {
         $limits = $this->getLimits();
-        $Now    = \date_create();
+        $Now = \date_create();
 
         // Check minute limit
         if (!empty($limits['perMinute'])) {
@@ -514,7 +514,7 @@ class SendUserMails extends QUI\System\Console\Tool
             // Limit applies
             if ($Now < $End) {
                 $mailCountMax = $limits['perMinute'];
-                $mailCount    = $limits['currentMinute'];
+                $mailCount = $limits['currentMinute'];
 
                 if ($mailCount >= $mailCountMax) {
                     return false;
@@ -536,7 +536,7 @@ class SendUserMails extends QUI\System\Console\Tool
             // Limit applies
             if ($Now < $End) {
                 $mailCountMax = $limits['perHour'];
-                $mailCount    = $limits['currentHour'];
+                $mailCount = $limits['currentHour'];
 
                 if ($mailCount >= $mailCountMax) {
                     return false;
@@ -558,7 +558,7 @@ class SendUserMails extends QUI\System\Console\Tool
             // Limit applies
             if ($Now < $End) {
                 $mailCountMax = $limits['per24h'];
-                $mailCount    = $limits['current24h'];
+                $mailCount = $limits['current24h'];
 
                 if ($mailCount >= $mailCountMax) {
                     return false;
@@ -575,7 +575,7 @@ class SendUserMails extends QUI\System\Console\Tool
      */
     protected function sendMails($testMailAddress = null)
     {
-        $Users      = QUI::getUsers();
+        $Users = QUI::getUsers();
         $SystemUser = $Users->getSystemUser();
 
         if ($testMailAddress === null) {
@@ -583,9 +583,9 @@ class SendUserMails extends QUI\System\Console\Tool
         } else {
             $recipients = [
                 0 => [
-                    'id'       => 0,
+                    'id' => 0,
                     'username' => 'Test-User',
-                    'email'    => $testMailAddress
+                    'email' => $testMailAddress
                 ]
             ];
         }
@@ -613,7 +613,9 @@ class SendUserMails extends QUI\System\Console\Tool
                         break;
                     }
 
-                    $this->writeLn("[" . \date('Y-m-d H:i:s') . "] Current mail limit reached. Waiting 60s and then retry...");
+                    $this->writeLn(
+                        "[" . \date('Y-m-d H:i:s') . "] Current mail limit reached. Waiting 60s and then retry..."
+                    );
 
                     sleep(60);
                 } while (!$mailAllowed);
@@ -631,9 +633,9 @@ class SendUserMails extends QUI\System\Console\Tool
                 $this->writeLn("Email address \"$email\" is invalid and can therefore not be used. Skipping.");
 
                 $this->writeUserInfo($userId, [
-                    'sent'      => true,
+                    'sent' => true,
                     'sent_date' => \date('Y-m-d H:i:s'),
-                    'error'     => $email . " is no valid email syntax. email was not sent."
+                    'error' => $email . " is no valid email syntax. email was not sent."
                 ]);
 
                 continue;
@@ -702,7 +704,7 @@ class SendUserMails extends QUI\System\Console\Tool
             $this->write(" OK!");
 
             $this->writeUserInfo($userId, [
-                'sent'      => true,
+                'sent' => true,
                 'sent_date' => \date('Y-m-d H:i:s')
             ]);
 

@@ -21,7 +21,7 @@ class Address extends AbstractProfileControl
      * Address constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -36,17 +36,17 @@ class Address extends AbstractProfileControl
     public function getBody()
     {
         $Package = QUI::getPackage('quiqqer/frontend-users');
-        $Config  = $Package->getConfig();
+        $Config = $Package->getConfig();
 
         if ($Config->get('userProfile', 'useAddressManagement')) {
             $Engine = QUI::getTemplateManager()->getEngine();
 
-            $Engine->assign(array(
-                'User'    => QUI::getUserBySession(),
+            $Engine->assign([
+                'User' => QUI::getUserBySession(),
                 'manager' => true
-            ));
+            ]);
 
-            return $Engine->fetch(dirname(__FILE__).'/Address.html');
+            return $Engine->fetch(dirname(__FILE__) . '/Address.html');
         }
 
         /** @var QUI\Users\User $User */
@@ -58,17 +58,17 @@ class Address extends AbstractProfileControl
             // if no user address exist -> create one
             $SystemUser = QUI::getUsers()->getSystemUser();
 
-            $UserAddress = $User->addAddress(array(
+            $UserAddress = $User->addAddress([
                 'firstname' => $User->getAttribute('firstname'),
-                'lastname'  => $User->getAttribute('lastname')
-            ), $SystemUser);
+                'lastname' => $User->getAttribute('lastname')
+            ], $SystemUser);
 
             $User->setAttribute('address', $UserAddress->getId());
             $User->save($SystemUser);
         }
 
         $userPhoneList = $UserAddress->getPhoneList();
-        $Engine        = QUI::getTemplateManager()->getEngine();
+        $Engine = QUI::getTemplateManager()->getEngine();
         $addressFields = QUI\FrontendUsers\Handler::getInstance()->getAddressFieldSettings();
 
         foreach ($addressFields as $field => $options) {
@@ -79,18 +79,21 @@ class Address extends AbstractProfileControl
                     $countryCode = false;
 
                     try {
-                        $Country     = $UserAddress->getCountry();
+                        $Country = $UserAddress->getCountry();
                         $countryCode = mb_strtoupper($Country->getCode());
                     } catch (\Exception $Exception) {
                         // nothing, user has no country
                     }
 
-                    $Engine->assign('CountrySelect', new CountrySelect(array(
-                        'selected' => $countryCode,
-                        'required' => $options['required'],
-                        'class'    => 'quiqqer-registration-field-element',
-                        'name'     => 'country'
-                    )));
+                    $Engine->assign(
+                        'CountrySelect',
+                        new CountrySelect([
+                            'selected' => $countryCode,
+                            'required' => $options['required'],
+                            'class' => 'quiqqer-registration-field-element',
+                            'name' => 'country'
+                        ])
+                    );
                     break;
 
                 case 'phone':
@@ -117,12 +120,12 @@ class Address extends AbstractProfileControl
             $addressFields[$field] = $options;
         }
 
-        $Engine->assign(array(
-            'User'          => QUI::getUserBySession(),
+        $Engine->assign([
+            'User' => QUI::getUserBySession(),
             'addressFields' => $addressFields
-        ));
+        ]);
 
-        return $Engine->fetch(dirname(__FILE__).'/Address.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Address.html');
     }
 
     /**
@@ -135,7 +138,7 @@ class Address extends AbstractProfileControl
     public function onSave()
     {
         $Package = QUI::getPackage('quiqqer/frontend-users');
-        $Config  = $Package->getConfig();
+        $Config = $Package->getConfig();
 
         if (!$Config->get('userProfile', 'useAddressManagement')) {
             return;
@@ -143,7 +146,7 @@ class Address extends AbstractProfileControl
 
 
         $Request = QUI::getRequest()->request;
-        $User    = $this->getAttribute('User');
+        $User = $this->getAttribute('User');
 
         if (!$User) {
             $User = QUI::getUserBySession();
@@ -177,7 +180,7 @@ class Address extends AbstractProfileControl
     protected function saveAddress(QUI\Users\User $User)
     {
         $Request = QUI::getRequest()->request;
-        $User    = $this->getAttribute('User');
+        $User = $this->getAttribute('User');
 
         if (!$User) {
             $User = QUI::getUserBySession();
@@ -188,7 +191,7 @@ class Address extends AbstractProfileControl
         }
 
         /** @var QUI\Users\User $User */
-        $UserAddress   = $User->getStandardAddress();
+        $UserAddress = $User->getStandardAddress();
         $userPhoneList = $UserAddress->getPhoneList();
         $addressFields = QUI\FrontendUsers\Handler::getInstance()->getAddressFieldSettings();
 
@@ -196,10 +199,10 @@ class Address extends AbstractProfileControl
             $value = Orthos::clear($Request->get($field));
 
             if (empty($value) && $options['required']) {
-                throw new QUI\FrontendUsers\Exception(array(
+                throw new QUI\FrontendUsers\Exception([
                     'quiqqer/frontend-users',
                     'exception.controls.profile.address.required_fields_empty'
-                ));
+                ]);
             }
 
             switch ($field) {
@@ -218,10 +221,10 @@ class Address extends AbstractProfileControl
                     }
 
                     if ($index !== false) {
-                        $UserAddress->editPhone($index, array(
-                            'no'   => $value,
+                        $UserAddress->editPhone($index, [
+                            'no' => $value,
                             'type' => 'tel'
-                        ));
+                        ]);
                     }
                     break;
                 case 'mobile':
@@ -236,10 +239,10 @@ class Address extends AbstractProfileControl
                     }
 
                     if ($index !== false) {
-                        $UserAddress->editPhone($index, array(
-                            'no'   => $value,
+                        $UserAddress->editPhone($index, [
+                            'no' => $value,
                             'type' => $field
-                        ));
+                        ]);
                     }
                     break;
 

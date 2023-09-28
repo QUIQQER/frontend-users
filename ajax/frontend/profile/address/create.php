@@ -13,7 +13,7 @@ QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_address_create',
     function ($data) {
         $Package = QUI::getPackage('quiqqer/frontend-users');
-        $Config  = $Package->getConfig();
+        $Config = $Package->getConfig();
 
         if ($Config->get('userProfile', 'useAddressManagement') === false) {
             throw new QUI\Exception([

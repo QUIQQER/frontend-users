@@ -2,7 +2,6 @@
 
 namespace QUI\FrontendUsers;
 
-use QUI\ERP\Products\Handler\Fields;
 use QUI\GDPR\DataRequest\AbstractDataProvider;
 
 /**
@@ -93,7 +92,7 @@ class GdprDataProvider extends AbstractDataProvider
 
         if (\class_exists($registrarClass)) {
             /** @var AbstractRegistrar $Registrar */
-            $Registrar      = new $registrarClass();
+            $Registrar = new $registrarClass();
             $registrarTitle = $Registrar->getTitle($this->Locale);
         } else {
             $registrarTitle = $this->Locale->get(
@@ -106,7 +105,7 @@ class GdprDataProvider extends AbstractDataProvider
             'quiqqer/frontend-users',
             'GdprDataProvider.origin',
             [
-                'registrarTitle'   => $registrarTitle,
+                'registrarTitle' => $registrarTitle,
                 'registrationDate' => $this->Locale->formatDate((int)$this->User->getAttribute('regdate'))
             ]
         );
@@ -129,23 +128,23 @@ class GdprDataProvider extends AbstractDataProvider
      */
     public function getUserDataFields(): array
     {
-        $lg     = 'quiqqer/frontend-users';
+        $lg = 'quiqqer/frontend-users';
         $prefix = 'GdprDataProvider.userDataField.';
 
         $dataFields = [
-            $this->Locale->get($lg, $prefix.'userId') => $this->User->getId(),
-            $this->Locale->get($lg, $prefix.'email')  => $this->User->getAttribute('email')
+            $this->Locale->get($lg, $prefix . 'userId') => $this->User->getId(),
+            $this->Locale->get($lg, $prefix . 'email') => $this->User->getAttribute('email')
         ];
 
         $firstname = $this->User->getAttribute('firstname');
-        $lastname  = $this->User->getAttribute('lastname');
+        $lastname = $this->User->getAttribute('lastname');
 
         if (!empty($firstname)) {
-            $dataFields[$this->Locale->get($lg, $prefix.'firstName')] = $firstname;
+            $dataFields[$this->Locale->get($lg, $prefix . 'firstName')] = $firstname;
         }
 
         if (!empty($lastname)) {
-            $dataFields[$this->Locale->get($lg, $prefix.'lastName')] = $lastname;
+            $dataFields[$this->Locale->get($lg, $prefix . 'lastName')] = $lastname;
         }
 
         return $dataFields;

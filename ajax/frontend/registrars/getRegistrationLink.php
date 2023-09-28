@@ -5,6 +5,7 @@
  *
  * @return string
  */
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_getRegistrationLink',
     function ($project) {
@@ -18,7 +19,7 @@ QUI::$Ajax->registerFunction(
         $registerSite = $Project->getSites([
             'where' => [
                 'type' => [
-                    'type'  => 'IN',
+                    'type' => 'IN',
                     'value' => $types
                 ]
             ],

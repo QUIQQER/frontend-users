@@ -79,7 +79,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     public function getSuccessMessage()
     {
         $registrarSettings = $this->getSettings();
-        $settings          = Handler::getInstance()->getRegistrationSettings();
+        $settings = Handler::getInstance()->getRegistrationSettings();
 
         switch ($registrarSettings['activationMode']) {
             case Handler::ACTIVATION_MODE_MANUAL:
@@ -108,9 +108,9 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
         }
 
         if (boolval($settings['sendPassword']) && $this->canSendPassword()) {
-            $msg .= "<p>".
-                    QUI::getLocale()->get('quiqqer/frontend-users', 'registrars.password_auto_generate').
-                    "</p>";
+            $msg .= "<p>" .
+                QUI::getLocale()->get('quiqqer/frontend-users', 'registrars.password_auto_generate') .
+                "</p>";
         }
 
         return $msg;
@@ -212,9 +212,9 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      */
     public function isActive()
     {
-        $Handler           = Handler::getInstance();
+        $Handler = Handler::getInstance();
         $registrarSettings = $Handler->getRegistrarSettings();
-        $type              = $this->getType();
+        $type = $this->getType();
 
         if (empty($registrarSettings[$type]['active'])) {
             return false;
@@ -246,7 +246,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
                     'quiqqer/frontend-users',
                     'exception.registrars.email.user_attribute_too_long',
                     [
-                        'label'     => QUI::getLocale()->get('quiqqer/system', $attribute),
+                        'label' => QUI::getLocale()->get('quiqqer/system', $attribute),
                         'maxLength' => $maxLength
                     ]
                 ]);

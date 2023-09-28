@@ -2,15 +2,10 @@
 
 namespace QUI\FrontendUsers\Rest\Routes;
 
-use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
-
 use QUI;
-use QUI\FrontendUsers\Exception;
 
-use function boolval;
-use function explode;
 use function json_encode;
 
 class GetRegisterRequiredFields

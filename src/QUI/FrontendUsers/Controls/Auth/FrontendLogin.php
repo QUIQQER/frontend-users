@@ -7,9 +7,9 @@
 namespace QUI\FrontendUsers\Controls\Auth;
 
 use QUI;
-use QUI\Users\Controls\Login;
 use QUI\FrontendUsers\Controls\Registration;
 use QUI\FrontendUsers\Handler;
+use QUI\Users\Controls\Login;
 
 /**
  * Class FrontendLogin
@@ -23,11 +23,11 @@ class FrontendLogin extends QUI\Control
      *
      * @param array $attributes
      */
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
-        $this->setAttributes(array(
+        $this->setAttributes([
             'showRegistration' => true
-        ));
+        ]);
 
         parent::__construct($attributes);
 
@@ -41,11 +41,11 @@ class FrontendLogin extends QUI\Control
      */
     public function getBody()
     {
-        $Engine          = QUI::getTemplateManager()->getEngine();
-        $Handler         = Handler::getInstance();
-        $settings        = $Handler->getLoginSettings();
+        $Engine = QUI::getTemplateManager()->getEngine();
+        $Handler = Handler::getInstance();
+        $settings = $Handler->getLoginSettings();
         $redirectOnLogin = $settings['redirectOnLogin'];
-        $projectLang     = QUI::getRewrite()->getProject()->getLang();
+        $projectLang = QUI::getRewrite()->getProject()->getLang();
 
         $dataRedirect = false;
 
@@ -60,11 +60,11 @@ class FrontendLogin extends QUI\Control
             $Registration = new Registration();
         }
 
-        $Engine->assign(array(
-            'Login'        => new Login(),
+        $Engine->assign([
+            'Login' => new Login(),
             'Registration' => $Registration,
             'dataRedirect' => $dataRedirect
-        ));
+        ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/FrontendLogin.html');
     }

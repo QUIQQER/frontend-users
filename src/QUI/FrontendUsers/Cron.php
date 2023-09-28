@@ -14,21 +14,21 @@ class Cron
      */
     public static function deleteUnverifiedInactiveUsers()
     {
-        $result = QUI::getDataBase()->fetch(array(
-            'select' => array(
+        $result = QUI::getDataBase()->fetch([
+            'select' => [
                 'id'
-            ),
-            'from'   => QUI::getDBTableName('users'),
-            'where'  => array(
+            ],
+            'from' => QUI::getDBTableName('users'),
+            'where' => [
                 'active' => 0
-            )
-        ));
+            ]
+        ]);
 
-        $Users           = QUI::getUsers();
-        $Handler         = Handler::getInstance();
-        $settings        = $Handler->getRegistrationSettings();
+        $Users = QUI::getUsers();
+        $Handler = Handler::getInstance();
+        $settings = $Handler->getRegistrationSettings();
         $maxInactiveDays = (int)$settings['deleteInactiveUserAfterDays'];
-        $Now             = new \DateTime();
+        $Now = new \DateTime();
 
         foreach ($result as $row) {
             $User = $Users->get($row['id']);

@@ -19,11 +19,11 @@ class RegistrarCollection extends QUI\Collection
      * RegistrarCollection constructor.
      * @param array $children
      */
-    public function __construct(array $children = array())
+    public function __construct(array $children = [])
     {
-        $this->allowed = array(
+        $this->allowed = [
             AbstractRegistrar::class
-        );
+        ];
 
         parent::__construct($children);
     }

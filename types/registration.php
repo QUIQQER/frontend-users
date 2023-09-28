@@ -34,19 +34,22 @@ try {
     $FrontendUsersHandler->checkConfiguration();
 } catch (\QUI\FrontendUsers\Exception $Exception) {
     QUI\System\Log::addError(
-        'quiqqer/frontend-users is misconfigured: '.$Exception->getMessage()
+        'quiqqer/frontend-users is misconfigured: ' . $Exception->getMessage()
     );
 
-    $Engine->assign('msg', QUI::getLocale()->get(
-        'quiqqer/frontend-users',
-        'message.types.registration.configuration_error'
-    ));
+    $Engine->assign(
+        'msg',
+        QUI::getLocale()->get(
+            'quiqqer/frontend-users',
+            'message.types.registration.configuration_error'
+        )
+    );
 
     exit;
 }
 
 $urlParams = QUI::getRewrite()->getUrlParamsList();
-$status    = false;
+$status = false;
 
 if (!empty($urlParams)) {
     $status = current($urlParams);
@@ -58,10 +61,13 @@ if (!empty($_REQUEST['registrar'])) {
     try {
         $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['registrar']);
     } catch (\Exception $Exception) {
-        $Engine->assign('msg', QUI::getLocale()->get(
-            'quiqqer/frontend-users',
-            'message.types.registration.configuration_error'
-        ));
+        $Engine->assign(
+            'msg',
+            QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.types.registration.configuration_error'
+            )
+        );
     }
 }
 
@@ -69,11 +75,11 @@ if (!empty($_REQUEST['registrar'])) {
  * User Registration
  */
 $Registration = new QUI\FrontendUsers\Controls\Registration([
-    'status'    => $status,
+    'status' => $status,
     'Registrar' => $Registrar
 ]);
 
 $Engine->assign([
     'Registration' => $Registration,
-    'User'         => QUI::getUserBySession()
+    'User' => QUI::getUserBySession()
 ]);

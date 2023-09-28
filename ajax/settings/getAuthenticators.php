@@ -1,12 +1,13 @@
 <?php
 
-use QUI\FrontendUsers\AbstractRegistrar;
-
 /**
  * Return list of title, description and class of all authenticators
  *
  * @return array
  */
+
+use QUI\FrontendUsers\AbstractRegistrar;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_settings_getAuthenticators',
     function () {
@@ -25,9 +26,9 @@ QUI::$Ajax->registerFunction(
             }
 
             $authenticators[] = [
-                'title'       => $Authenticator->getTitle(),
+                'title' => $Authenticator->getTitle(),
                 'description' => $Authenticator->getDescription(),
-                'class'       => $class
+                'class' => $class
             ];
         }
 

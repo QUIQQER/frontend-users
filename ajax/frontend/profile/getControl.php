@@ -4,8 +4,8 @@
  * This file contains package_quiqqer_frontend-users_ajax_frontend_profile_getControl
  */
 
-use QUI\Utils\Security\Orthos;
 use QUI\FrontendUsers\Utils;
+use QUI\Utils\Security\Orthos;
 
 /**
  * Get profile control by category

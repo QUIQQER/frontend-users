@@ -7,10 +7,10 @@
 namespace QUI\FrontendUsers\Registrars\Email;
 
 use QUI;
+use QUI\Captcha\Handler as CaptchaHandler;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\Utils\Security\Orthos;
-use QUI\Captcha\Handler as CaptchaHandler;
 
 /**
  * Class Email\Registrar
@@ -29,14 +29,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function onRegistered(QUI\Interfaces\Users\User $User)
     {
-        $SystemUser           = QUI::getUsers()->getSystemUser();
-        $RegistrarHandler     = QUI\FrontendUsers\Handler::getInstance();
+        $SystemUser = QUI::getUsers()->getSystemUser();
+        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $useAddress           = boolval($registrationSettings['addressInput']);
+        $useAddress = boolval($registrationSettings['addressInput']);
 
         /** @var QUI\Users\User $User */
         $firstname = $this->getAttribute('firstname');
-        $lastname  = $this->getAttribute('lastname');
+        $lastname = $this->getAttribute('lastname');
 
         if (!empty($firstname)) {
             $User->setAttribute('firstname', $firstname);
@@ -53,44 +53,44 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if ($useAddress) {
             $UserAddress = $User->addAddress([
                 'salutation' => $this->getAttribute('salutation'),
-                'firstname'  => $this->getAttribute('firstname'),
-                'lastname'   => $this->getAttribute('lastname'),
-                'mail'       => $this->getAttribute('email'),
-                'company'    => $this->getAttribute('company'),
-                'street_no'  => $this->getAttribute('street_no'),
-                'zip'        => $this->getAttribute('zip'),
-                'city'       => $this->getAttribute('city'),
-                'country'    => mb_strtolower($this->getAttribute('country'))
+                'firstname' => $this->getAttribute('firstname'),
+                'lastname' => $this->getAttribute('lastname'),
+                'mail' => $this->getAttribute('email'),
+                'company' => $this->getAttribute('company'),
+                'street_no' => $this->getAttribute('street_no'),
+                'zip' => $this->getAttribute('zip'),
+                'city' => $this->getAttribute('city'),
+                'country' => mb_strtolower($this->getAttribute('country'))
             ], $SystemUser);
 
             $User->setAttributes([
                 'firstname' => $this->getAttribute('firstname'),
-                'lastname'  => $this->getAttribute('lastname'),
-                'address'   => $UserAddress->getId()    // set as main address
+                'lastname' => $this->getAttribute('lastname'),
+                'address' => $UserAddress->getId()    // set as main address
             ]);
 
-            $tel    = $this->getAttribute('phone');
+            $tel = $this->getAttribute('phone');
             $mobile = $this->getAttribute('mobile');
-            $fax    = $this->getAttribute('fax');
+            $fax = $this->getAttribute('fax');
 
             if (!empty($tel)) {
                 $UserAddress->addPhone([
                     'type' => 'tel',
-                    'no'   => $tel
+                    'no' => $tel
                 ]);
             }
 
             if (!empty($mobile)) {
                 $UserAddress->addPhone([
                     'type' => 'mobile',
-                    'no'   => $mobile
+                    'no' => $mobile
                 ]);
             }
 
             if (!empty($fax)) {
                 $UserAddress->addPhone([
                     'type' => 'fax',
-                    'no'   => $fax
+                    'no' => $fax
                 ]);
             }
 
@@ -109,31 +109,33 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function validate()
     {
-        $username       = $this->getUsername();
-        $Handler        = FrontendUsers\Handler::getInstance();
-        $settings       = $Handler->getRegistrationSettings();
-        $usernameInput  = $settings['usernameInput'];
-        $fullnameInput  = $settings['fullnameInput'];
+        $username = $this->getUsername();
+        $Handler = FrontendUsers\Handler::getInstance();
+        $settings = $Handler->getRegistrationSettings();
+        $usernameInput = $settings['usernameInput'];
+        $fullnameInput = $settings['fullnameInput'];
         $usernameExists = QUI::getUsers()->usernameExists($username);
 
-        $lg       = 'quiqqer/frontend-users';
+        $lg = 'quiqqer/frontend-users';
         $lgPrefix = 'exception.registrars.email.';
 
         // Username check
         if ($usernameInput !== $Handler::USERNAME_INPUT_NONE) {
             // Check if username input is enabled
-            if (empty($username)
-                && $usernameInput === $Handler::USERNAME_INPUT_REQUIRED) {
+            if (
+                empty($username)
+                && $usernameInput === $Handler::USERNAME_INPUT_REQUIRED
+            ) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix.'empty_username'
+                    $lgPrefix . 'empty_username'
                 ]);
             }
 
             if ($usernameExists) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix.'username_already_exists'
+                    $lgPrefix . 'username_already_exists'
                 ]);
             }
         } else {
@@ -141,25 +143,25 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if ($usernameExists) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix.'email_already_exists'
+                    $lgPrefix . 'email_already_exists'
                 ]);
             }
         }
 
         // Fullname check
         $firstname = $this->getAttribute('firstname');
-        $lastname  = $this->getAttribute('lastname');
+        $lastname = $this->getAttribute('lastname');
 
         switch ($fullnameInput) {
             case $Handler::FULLNAME_INPUT_FIRSTNAME_REQUIRED:
                 if (empty($firstname)) {
-                    throw new FrontendUsers\Exception([$lg, $lgPrefix.'first_name_required']);
+                    throw new FrontendUsers\Exception([$lg, $lgPrefix . 'first_name_required']);
                 }
                 break;
 
             case $Handler::FULLNAME_INPUT_FULLNAME_REQUIRED:
                 if (empty($firstname) || empty($lastname)) {
-                    throw new FrontendUsers\Exception([$lg, $lgPrefix.'full_name_required']);
+                    throw new FrontendUsers\Exception([$lg, $lgPrefix . 'full_name_required']);
                 }
         }
 
@@ -169,7 +171,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             // Username already exists
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'username_already_exists'
+                $lgPrefix . 'username_already_exists'
             ]);
         } catch (\Exception $Exception) {
             // Username does not exist
@@ -180,14 +182,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (QUI::getUsers()->emailExists($email)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'email_already_exists'
+                $lgPrefix . 'email_already_exists'
             ]);
         }
 
         if (!Orthos::checkMailSyntax($email)) {
             throw new FrontendUsers\Exception([
                 $lg,
-                $lgPrefix.'email_invalid'
+                $lgPrefix . 'email_invalid'
             ]);
         }
 
@@ -199,7 +201,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 if ($addressSettings['required'] && empty($val)) {
                     throw new FrontendUsers\Exception([
                         $lg,
-                        $lgPrefix.'missing_address_fields'
+                        $lgPrefix . 'missing_address_fields'
                     ]);
                 }
             }
@@ -212,14 +214,14 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if (empty($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix.'captcha_empty'
+                    $lgPrefix . 'captcha_empty'
                 ]);
             }
 
             if (!CaptchaHandler::isResponseValid($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
-                    $lgPrefix.'captcha_invalid_response'
+                    $lgPrefix . 'captcha_invalid_response'
                 ]);
             }
         }
@@ -232,33 +234,35 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      */
     public function getInvalidFields()
     {
-        $username         = $this->getUsername();
-        $invalidFields    = [];
+        $username = $this->getUsername();
+        $invalidFields = [];
         $RegistrarHandler = FrontendUsers\Handler::getInstance();
-        $settings         = $RegistrarHandler->getRegistrationSettings();
-        $usernameInput    = $settings['usernameInput'];
-        $Users            = QUI::getUsers();
-        $usernameExists   = $Users->usernameExists($username);
+        $settings = $RegistrarHandler->getRegistrationSettings();
+        $usernameInput = $settings['usernameInput'];
+        $Users = QUI::getUsers();
+        $usernameExists = $Users->usernameExists($username);
 
-        $L        = QUI::getLocale();
-        $lg       = 'quiqqer/frontend-users';
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
         $lgPrefix = 'exception.registrars.email.';
 
         // Username check
         if ($usernameInput !== $RegistrarHandler::USERNAME_INPUT_NONE) {
             // Check if username input is enabled
-            if (empty($username)
-                && $usernameInput === $RegistrarHandler::USERNAME_INPUT_REQUIRED) {
+            if (
+                empty($username)
+                && $usernameInput === $RegistrarHandler::USERNAME_INPUT_REQUIRED
+            ) {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
-                    $L->get($lg, $lgPrefix.'empty_username')
+                    $L->get($lg, $lgPrefix . 'empty_username')
                 );
             }
 
             if ($usernameExists) {
                 $invalidFields['username'] = new InvalidFormField(
                     'username',
-                    $L->get($lg, $lgPrefix.'username_already_exists')
+                    $L->get($lg, $lgPrefix . 'username_already_exists')
                 );
             }
         } else {
@@ -266,7 +270,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             if ($usernameExists) {
                 $invalidFields['email'] = new InvalidFormField(
                     'email',
-                    $L->get($lg, $lgPrefix.'email_already_exists')
+                    $L->get($lg, $lgPrefix . 'email_already_exists')
                 );
             }
         }
@@ -277,21 +281,21 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         if (empty($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, $lgPrefix.'empty_email')
+                $L->get($lg, $lgPrefix . 'empty_email')
             );
         }
 
         if ($Users->emailExists($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, $lgPrefix.'email_already_exists')
+                $L->get($lg, $lgPrefix . 'email_already_exists')
             );
         }
 
         if (!Orthos::checkMailSyntax($email)) {
             $invalidFields['email'] = new InvalidFormField(
                 'email',
-                $L->get($lg, $lgPrefix.'email_invalid')
+                $L->get($lg, $lgPrefix . 'email_invalid')
             );
         }
 
@@ -303,7 +307,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 if ($settings['required'] && empty($val)) {
                     $invalidFields[$field] = new InvalidFormField(
                         $field,
-                        $L->get($lg, $lgPrefix.'missing_field')
+                        $L->get($lg, $lgPrefix . 'missing_field')
                     );
                 }
             }
@@ -337,9 +341,11 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     {
         $invalidFields = [];
 
-        if (!empty($_POST['registration'])
+        if (
+            !empty($_POST['registration'])
             && !empty($_POST['registrar'])
-            && $_POST['registrar'] === $this->getHash()) {
+            && $_POST['registrar'] === $this->getHash()
+        ) {
             $invalidFields = $this->getInvalidFields();
         }
 

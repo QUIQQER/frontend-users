@@ -1,15 +1,16 @@
 <?php
 
-use QUI\FrontendUsers\Utils;
-
 /**
  * @return string
  * @throws \QUI\FrontendUsers\Exception
  */
+
+use QUI\FrontendUsers\Utils;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_save',
     function ($category, $settings, $data) {
-        $data    = json_decode($data);
+        $data = json_decode($data);
         $Request = QUI::getRequest();
 
         foreach ($data as $key => $value) {
