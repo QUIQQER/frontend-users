@@ -13,6 +13,7 @@
         </span>
         <input type="text"
                name="salutation"
+               {if $settings.salutation.required}required{/if}
         />
     </label>
     {/if}
@@ -26,6 +27,7 @@
         <input type="text"
                autocomplete="given-name"
                name="firstname"
+               {if $settings.firstname.required}required{/if}
         />
     </label>
     {/if}
@@ -39,6 +41,7 @@
         <input type="text"
                autocomplete="family-name"
                name="lastname"
+               {if $settings.lastname.required}required{/if}
         />
     </label>
     {/if}
@@ -49,7 +52,7 @@
             {locale group="quiqqer/frontend-users" var="street_no"}
             {if $settings.street_no.required}*{/if}
         </span>
-        <input type="text" name="street" value="" autocomplete="shipping street-address"/>
+        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}/>
         <input type="text" name="street_number" value=""/>
     </label>
     {/if}
@@ -63,6 +66,7 @@
         <input type="text"
                autocomplete="postal-code"
                name="zip"
+               {if $settings.zip.required}required{/if}
         />
     </label>
     {/if}
@@ -76,6 +80,7 @@
         <input type="text"
                autocomplete="address-level2"
                name="city"
+               {if $settings.city.required}required{/if}
         />
     </label>
     {/if}
@@ -96,7 +101,7 @@
             {locale group="quiqqer/frontend-users" var="phone"}
             {if $settings.phone.required}*{/if}
         </span>
-        <input type="tel" name="phone"/>
+        <input type="tel" name="phone" {if $settings.phone.required}required{/if}/>
     </label>
     {/if}
 
@@ -106,7 +111,7 @@
             {locale group="quiqqer/frontend-users" var="mobile"}
             {if $settings.mobile.required}*{/if}
         </span>
-        <input type="tel" name="mobile" autocomplete="mobile"/>
+        <input type="tel" name="mobile" autocomplete="mobile" {if $settings.mobile.required}required{/if}/>
     </label>
     {/if}
 
@@ -116,7 +121,7 @@
             {locale group="quiqqer/frontend-users" var="fax"}
             {if $settings.fax.required}*{/if}
         </span>
-        <input type="tel" name="fax" autocomplete="fax"/>
+        <input type="tel" name="fax" autocomplete="fax" {if $settings.fax.required}required{/if}/>
     </label>
     {/if}
 

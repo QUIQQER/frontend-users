@@ -3,10 +3,11 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
-use QUI\Projects\Media\Utils as MediaUtils;
 use QUI\Utils\System\File as FileUtils;
 
 use function rename;
+use function strtolower;
+use function trim;
 
 /**
  * Class UserAvatarUpload
@@ -27,21 +28,21 @@ class UserAvatarUpload extends \QUI\Upload\Form
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
         $this->setAttributes([
-            'contextMenu'       => false,
-            'multiple'          => false,
-            'sendbutton'        => false,
-            'uploads'           => 1,
-            'hasFile'           => false,
-            'deleteFile'        => true,
+            'contextMenu' => false,
+            'multiple' => false,
+            'sendbutton' => false,
+            'uploads' => 1,
+            'hasFile' => false,
+            'deleteFile' => true,
 
             // eq: ['image/jpeg', 'image/png'] - nur nutzbar mit eigener Klasse
-            'allowedFileTypes'  => ['image/*'],
+            'allowedFileTypes' => ['image/*'],
 
             // eq: ['.gif', '.jpg']  - nur nutzbar mit eigener Klasse
             'allowedFileEnding' => ['*.gif', '*.jpg', '*.png', '*.jpeg'],
 
-            'maxFileSize'    => $Config->getValue('userProfile', 'maxAvatarUploadSize'),
-            'typeOfLook'     => 'Single',
+            'maxFileSize' => $Config->getValue('userProfile', 'maxAvatarUploadSize'),
+            'typeOfLook' => 'Single',
             'typeOfLookIcon' => 'fa fa-upload'
         ]);
     }
@@ -57,7 +58,7 @@ class UserAvatarUpload extends \QUI\Upload\Form
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $folder = $Config->getValue('userProfile', 'userAvatarFolder');
 
-        $error       = ['quiqqer/frontend-users', 'exception.upload.avatar.error'];
+        $error = ['quiqqer/frontend-users', 'exception.upload.avatar.error'];
         $SessionUser = QUI::getUserBySession();
 
         if ($this->getAttribute('User') instanceof QUI\Interfaces\Users\User) {
@@ -83,10 +84,13 @@ class UserAvatarUpload extends \QUI\Upload\Form
                 $SessionUser->getAttribute('avatar')
             );
 
-            if ($Avatar->getParent()->getId() === $UserFolder->getId()) {
+            $Placeholder = $UserFolder->getMedia()->getPlaceholderImage();
+
+            // if avatar is not the placeholder image, we can delete it
+            if ($Placeholder && $Avatar->getId() !== $Placeholder->getId()) {
                 $Avatar->delete($PermissionUser);
             }
-        } catch (QUI\Exception) {
+        } catch (QUI\Exception $exception) {
         }
 
         // rename file to user file
@@ -97,7 +101,8 @@ class UserAvatarUpload extends \QUI\Upload\Form
             $fileInfo['extension'] = trim($fileInfo['extension'], '.');
         }
 
-        $fileName = $fileInfo['dirname'] . '/' . $SessionUser->getUniqueId() . '.' . $fileInfo['extension'];
+        $uuid = QUI\Utils\Uuid::get();
+        $fileName = $fileInfo['dirname'] . '/' . $uuid . '.' . strtolower($fileInfo['extension']);
 
         rename($file, $fileName);
 

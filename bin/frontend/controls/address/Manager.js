@@ -9,15 +9,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
     'Locale',
     'Ajax'
 
-], function (QUI, QUIControl, QUILoader, QUILocale, QUIAjax) {
-    "use strict";
+], function(QUI, QUIControl, QUILoader, QUILocale, QUIAjax) {
+    'use strict';
 
-    var lg = 'quiqqer/frontend-users';
+    const lg = 'quiqqer/frontend-users';
 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/address/Manager',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/address/Manager',
 
         Binds: [
             '$onImport',
@@ -30,10 +30,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             '$clickEditSave'
         ],
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.parent(options);
 
-            this.Loader   = new QUILoader();
+            this.Loader = new QUILoader();
             this.$Profile = null;
 
             this.$imported = false;
@@ -48,7 +48,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * event: on import
          */
-        $onImport: function () {
+        $onImport: function() {
             if (this.$imported) {
                 return;
             }
@@ -56,7 +56,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             this.$imported = true;
             this.getElm().set('data-quiid', this.getId());
 
-            var entries = this.getElm().getElements(
+            const entries = this.getElm().getElements(
                 '.quiqqer-frontend-users-address-list-entry'
             );
 
@@ -77,7 +77,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             });
 
             // profile
-            var Parent = this.getElm().getParent('.quiqqer-frontendUsers-controls-profile');
+            const Parent = this.getElm().getParent('.quiqqer-frontendUsers-controls-profile');
 
             if (Parent && Parent.get('data-quiid')) {
                 this.$Profile = QUI.Controls.getById(Parent.get('data-quiid'));
@@ -89,7 +89,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * event: on inject
          */
-        $onInject: function () {
+        $onInject: function() {
             if (this.$imported || this.$injected) {
                 return;
             }
@@ -101,33 +101,32 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * resize the control
          */
-        resize: function () {
+        resize: function() {
             if (!this.$Profile) {
                 return;
             }
 
-            var self      = this;
-            var Container = this.getElm().getElement('.quiqqer-frontend-users-address-container');
+            const Container = this.getElm().getElement('.quiqqer-frontend-users-address-container');
 
             if (!Container) {
                 this.$Profile.resize();
                 return;
             }
 
-            var Content = this.getElm().getElement('.quiqqer-frontend-users-address-container-content');
+            const Content = this.getElm().getElement('.quiqqer-frontend-users-address-container-content');
 
             Container.setStyle('overflow', 'hidden');
             Container.setStyle('marginBottom', 20);
             Content.setStyle('height', 'initial');
 
-            self.$Profile.getElm().setStyle('overflow', 'hidden');
+            this.$Profile.getElm().setStyle('overflow', 'hidden');
 
             moofx(this.getElm()).animate({
                 height: Container.getScrollSize().y
             }, {
                 duration: 200,
-                callback: function () {
-                    self.$Profile.resize();
+                callback: () => {
+                    this.$Profile.resize();
                 }
             });
         },
@@ -135,16 +134,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * Refresh the display
          */
-        refresh: function () {
-            var self = this;
+        refresh: function() {
+            const self = this;
 
             this.Loader.show();
 
             this.$injected = false;
             this.$imported = false;
 
-            return new Promise(function (resolve, reject) {
-                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_control', function (control) {
+            return new Promise(function(resolve, reject) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_control', function(control) {
                     self.getElm().set('html', control);
                     self.resize();
                     self.$onImport();
@@ -153,7 +152,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     resolve();
                 }, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -165,23 +164,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param event
          */
-        $addClick: function (event) {
+        $addClick: function(event) {
             event.stop();
 
-            var self = this;
+            const self = this;
 
             // open delete dialog
-            this.$openContainer(this.getElm()).then(function (Container) {
-                return self.getCreateTemplate().then(function (result) {
-                    var Content = Container.getElement(
+            this.$openContainer(this.getElm()).then(function(Container) {
+                return self.getCreateTemplate().then(function(result) {
+                    const Content = Container.getElement(
                         '.quiqqer-frontend-users-address-container-content'
                     );
 
                     new Element('form', {
                         'class': 'quiqqer-frontend-users-address-container-create',
-                        html   : result,
-                        events : {
-                            submit: function (event) {
+                        html: result,
+                        events: {
+                            submit: function(event) {
                                 event.stop();
                             }
                         }
@@ -203,31 +202,44 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param {DOMEvent} event
          */
-        $clickCreateSubmit: function (event) {
+        $clickCreateSubmit: function(event) {
             event.stop();
 
-            var self      = this,
-                Target    = event.target,
+            const Target = event.target,
                 Container = Target.getParent('.quiqqer-frontend-users-address-container'),
-                Form      = Container.getElement('form');
+                Form = Container.getElement('form');
 
             this.Loader.show();
 
-            require(['qui/utils/Form'], function (FormUtils) {
-                var formData = FormUtils.getFormData(Form);
+            require(['qui/utils/Form'], (FormUtils) => {
+                const formData = FormUtils.getFormData(Form);
+                const requiredFields = Form.getElements('[required]');
 
-                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_create', function () {
-                    self.$closeContainer(Container);
-                    self.refresh();
+                for (let i = 0, len = requiredFields.length; i < len; i++) {
+                    if ('reportValidity' in requiredFields[i]) {
+                        requiredFields[i].reportValidity();
+
+                        if ('checkValidity' in requiredFields[i]) {
+                            if (requiredFields[i].checkValidity() === false) {
+                                this.Loader.hide();
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_create', () => {
+                    this.$closeContainer(Container);
+                    this.refresh();
                 }, {
                     'package': 'quiqqer/frontend-users',
-                    data     : JSON.encode(formData),
-                    onError  : function (err) {
-                        QUI.getMessageHandler().then(function (MH) {
+                    data: JSON.encode(formData),
+                    onError: (err) => {
+                        QUI.getMessageHandler().then(function(MH) {
                             MH.addError(err.getMessage());
                         });
 
-                        self.Loader.hide();
+                        this.Loader.hide();
                     }
                 });
             });
@@ -238,11 +250,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @return {Promise}
          */
-        getCreateTemplate: function () {
-            return new Promise(function (resolve, reject) {
+        getCreateTemplate: function() {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_getCreate', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -255,37 +267,37 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param event
          */
-        $deleteClick: function (event) {
+        $deleteClick: function(event) {
             event.stop();
 
-            var self   = this,
-                Target = event.event.target;
+            const self = this;
+            let Target = event.event.target;
 
             if (!Target.hasClass('quiqqer-frontend-users-address-list-entry')) {
                 Target = Target.getParent('.quiqqer-frontend-users-address-list-entry');
             }
 
-            var Address = Target;
+            const Address = Target;
 
             // open delete dialog
-            this.$openContainer(Target).then(function (Container) {
+            this.$openContainer(Target).then(function(Container) {
                 Container.addClass(
                     'quiqqer-frontend-users-address-container-delete'
                 );
 
-                var Content = Container.getElement('.quiqqer-frontend-users-address-container-content');
+                const Content = Container.getElement('.quiqqer-frontend-users-address-container-content');
 
                 new Element('div', {
                     'class': 'quiqqer-frontend-users-address-container-delete-message',
-                    html   : QUILocale.get(lg, 'dialog.frontend-users.delete.address')
+                    html: QUILocale.get(lg, 'dialog.frontend-users.delete.address')
                 }).inject(Content);
 
                 new Element('button', {
                     'class': 'quiqqer-frontend-users-address-container-delete-button',
-                    html   : QUILocale.get('quiqqer/system', 'delete'),
-                    events : {
-                        click: function (event) {
-                            var Target = event.target;
+                    html: QUILocale.get('quiqqer/system', 'delete'),
+                    events: {
+                        click: function(event) {
+                            let Target = event.target;
 
                             if (Target.nodeName !== 'BUTTON') {
                                 Target = Target.getParent('button');
@@ -298,26 +310,26 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                             self.Loader.show();
 
                             self.deleteAddress(
-                                Target.getParent('.quiqqer-frontend-users-address-list-entry')
-                                      .getElement('[name="address"]').value
-                            ).then(function () {
+                                Target.getParent('.quiqqer-frontend-users-address-list-entry').getElement(
+                                    '[name="address"]').value
+                            ).then(function() {
                                 return self.$closeContainer(Container);
-                            }).then(function () {
+                            }).then(function() {
                                 Address.setStyles({
                                     overflow: 'hidden',
-                                    height  : Address.getSize().y
+                                    height: Address.getSize().y
                                 });
 
                                 moofx(Address).animate({
-                                    height : 0,
+                                    height: 0,
                                     opacity: 0
                                 }, {
                                     duration: 250,
-                                    callback: function () {
+                                    callback: function() {
                                         self.refresh();
                                     }
                                 });
-                            }).catch(function () {
+                            }).catch(function() {
                                 self.$closeContainer(Container);
                                 self.Loader.hide();
                             });
@@ -332,12 +344,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param {Integer} addressId
          */
-        deleteAddress: function (addressId) {
-            return new Promise(function (resolve, reject) {
+        deleteAddress: function(addressId) {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_delete', resolve, {
                     'package': 'quiqqer/frontend-users',
                     addressId: addressId,
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -350,30 +362,30 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param event
          */
-        $editClick: function (event) {
+        $editClick: function(event) {
             event.stop();
 
-            var self   = this,
-                Target = event.target;
+            const self = this;
+            let Target = event.target;
 
             if (Target.nodeName !== 'BUTTON') {
                 Target = Target.getParent('button');
             }
 
-            var addressId = Target.getParent('.quiqqer-frontend-users-address-list-entry')
-                                  .getElement('[name="address"]').value;
+            const addressId = Target.getParent('.quiqqer-frontend-users-address-list-entry').getElement(
+                '[name="address"]').value;
 
-            this.$openContainer(this.getElm()).then(function (Container) {
-                return self.getEditTemplate(addressId).then(function (result) {
-                    var Content = Container.getElement(
+            this.$openContainer(this.getElm()).then(function(Container) {
+                return self.getEditTemplate(addressId).then(function(result) {
+                    const Content = Container.getElement(
                         '.quiqqer-frontend-users-address-container-content'
                     );
 
                     new Element('form', {
                         'class': 'quiqqer-frontend-users-address-container-edit',
-                        html   : result,
-                        events : {
-                            submit: function (event) {
+                        html: result,
+                        events: {
+                            submit: function(event) {
                                 event.stop();
                             }
                         }
@@ -395,32 +407,45 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param {DOMEvent} event
          */
-        $clickEditSave: function (event) {
+        $clickEditSave: function(event) {
             event.stop();
 
-            var self      = this,
-                Target    = event.target,
+            const Target = event.target,
                 Container = Target.getParent('.quiqqer-frontend-users-address-container'),
-                Form      = Container.getElement('form');
+                Form = Container.getElement('form');
 
             this.Loader.show();
 
-            require(['qui/utils/Form'], function (FormUtils) {
-                var formData = FormUtils.getFormData(Form);
+            require(['qui/utils/Form'], (FormUtils) => {
+                const formData = FormUtils.getFormData(Form);
+                const requiredFields = Form.getElements('[required]');
 
-                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_edit', function () {
-                    self.$closeContainer(Container);
-                    self.refresh();
+                for (let i = 0, len = requiredFields.length; i < len; i++) {
+                    if ('reportValidity' in requiredFields[i]) {
+                        requiredFields[i].reportValidity();
+
+                        if ('checkValidity' in requiredFields[i]) {
+                            if (requiredFields[i].checkValidity() === false) {
+                                this.Loader.hide();
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_edit', () => {
+                    this.$closeContainer(Container);
+                    this.refresh();
                 }, {
                     'package': 'quiqqer/frontend-users',
-                    data     : JSON.encode(formData),
+                    data: JSON.encode(formData),
                     addressId: formData.addressId,
-                    onError  : function (err) {
-                        QUI.getMessageHandler().then(function (MH) {
+                    onError: (err) => {
+                        QUI.getMessageHandler().then((MH) => {
                             MH.addError(err.getMessage());
                         });
 
-                        self.Loader.hide();
+                        this.Loader.hide();
                     }
                 });
             });
@@ -431,11 +456,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @return {Promise}
          */
-        getEditTemplate: function (addressId) {
-            return new Promise(function (resolve, reject) {
+        getEditTemplate: function(addressId) {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_getEdit', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject,
+                    onError: reject,
                     addressId: addressId
                 });
             });
@@ -448,32 +473,32 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @return {Promise}
          */
-        $openContainer: function (Parent) {
-            var self = this;
+        $openContainer: function(Parent) {
+            const self = this;
 
-            var Container = new Element('div', {
-                'class' : 'quiqqer-frontend-users-address-container',
-                html    : '<div class="quiqqer-frontend-users-address-container-header"></div>' +
+            const Container = new Element('div', {
+                'class': 'quiqqer-frontend-users-address-container',
+                html: '<div class="quiqqer-frontend-users-address-container-header"></div>' +
                     '<div class="quiqqer-frontend-users-address-container-content"></div>',
                 tabIndex: -1
             }).inject(Parent);
 
             new Element('span', {
                 'class': 'fa fa-close quiqqer-frontend-users-address-container-close',
-                events : {
-                    click: function () {
+                events: {
+                    click: function() {
                         self.$closeContainer(Container);
                     }
                 }
             }).inject(Container, 'top');
 
-            return new Promise(function (resolve) {
+            return new Promise(function(resolve) {
                 moofx(Container).animate({
-                    left   : 0,
+                    left: 0,
                     opacity: 1
                 }, {
                     duration: 250,
-                    callback: function () {
+                    callback: function() {
                         Container.focus();
                         resolve(Container);
                     }
@@ -487,16 +512,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          * @param {HTMLDivElement} Container
          * @return {Promise}
          */
-        $closeContainer: function (Container) {
-            var self = this;
+        $closeContainer: function(Container) {
+            const self = this;
 
-            return new Promise(function (resolve) {
+            return new Promise(function(resolve) {
                 moofx(Container).animate({
-                    left   : -50,
+                    left: -50,
                     opacity: 0
                 }, {
                     duration: 250,
-                    callback: function () {
+                    callback: function() {
                         Container.destroy();
                         self.getElm().setStyle('height', null);
 
