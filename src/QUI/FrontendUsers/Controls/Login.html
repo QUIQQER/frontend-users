@@ -4,7 +4,7 @@
     </div>
 </noscript>
 
-{if $SessionUser->getId()}
+{if $SessionUser->getId() && $SessionUser->getId() >= 100}
 <div class="quiqqer-fu-login-logged-in message-information">
     {locale
     group="quiqqer/frontend-users"
