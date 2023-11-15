@@ -11,6 +11,8 @@ use QUI\Mail\Mailer;
 use QUI\Utils\Singleton;
 use QUI\Verification\Verifier;
 
+use function array_filter;
+
 /**
  * Class Registration Handling
  * - Main Registration Handler
@@ -471,6 +473,12 @@ class Handler extends Singleton
      */
     public function sendWelcomeMail(QUI\Users\User $User, QUI\Projects\Project $Project, $userPassword = null)
     {
+        $email = $User->getAttribute('email');
+
+        if (empty($email)) {
+            return;
+        }
+
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
         $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
@@ -491,7 +499,7 @@ class Handler extends Singleton
                     ])
                 ],
                 [
-                    $User->getAttribute('email')
+                    $email
                 ],
                 $tplDir . 'mail.registration_welcome.html',
                 [
@@ -700,6 +708,12 @@ class Handler extends Singleton
      */
     public function sendMail($mailData, $recipients, $templateFile, $templateVars = [])
     {
+        if (empty($recipients)) {
+            return;
+        }
+
+        $recipients = array_filter($recipients);
+
         if (empty($recipients)) {
             return;
         }
