@@ -40,6 +40,7 @@
     margin: 0 0.25rem;
     text-align: center;
     width: 50px;
+    vertical-align: middle;
 }
 
 .quiqqer-fu-registrationSignUp-registration-social-entry:hover {
