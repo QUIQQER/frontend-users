@@ -5,6 +5,7 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Users\User;
 use QUI\Verification\Verifier;
+use Quiqqer\Engine\Collector;
 
 /**
  * Class Events
@@ -593,5 +594,14 @@ class Events
             $Config->setValue('userProfile', 'userAvatarFolder', $Folder->getUrl());
             $Config->save();
         }
+    }
+
+    public static function onTemplateEnd(
+        Collector $Collection,
+        QUI\Template $Template
+    ) {
+        $Collection->append(
+            '<script src="' . URL_OPT_DIR . 'quiqqer/frontend-users/bin/dataLayerTracking.js"></script>'
+        );
     }
 }
