@@ -10,4 +10,5 @@
 
     <event on="onSiteInit" fire="\QUI\FrontendUsers\Events::onSiteInit"/>
     <event on="onSiteSave" fire="\QUI\FrontendUsers\Events::onSiteSave"/>
+    <event on="onQuiqqer::template::header::end" fire="\QUI\FrontendUsers\Events::onTemplateEnd"/>
 </events>
