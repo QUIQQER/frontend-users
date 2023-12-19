@@ -60,8 +60,6 @@ window.whenQuiLoaded().then(function() {
                     method: authenticator
                 });
             }
-
-            console.log('Instance', authenticator);
         });
     });
 });
