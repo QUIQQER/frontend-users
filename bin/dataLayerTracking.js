@@ -1,6 +1,6 @@
 window.whenQuiLoaded().then(function() {
     'use strict';
-    console.log(3333);
+    
     require(['qui/QUI'], function(QUI) {
         /**
          * tracks the start of a deletion process from an user
@@ -26,6 +26,7 @@ window.whenQuiLoaded().then(function() {
 
         QUI.addEvent('onQuiqqerFrontendUsersRegisterSuccess', function() {
             window.qTrack('event', 'user_register_success');
+            window.qTrack('event', 'sign_up');
         });
 
 
@@ -55,8 +56,13 @@ window.whenQuiLoaded().then(function() {
         QUI.addEvent('quiqqerUserAuthLoginSuccess', function(Instance, authenticator) {
             if (typeof authenticator === 'undefined' || authenticator === '') {
                 window.qTrack('event', 'user_register_success');
+                window.qTrack('event', 'sign_up');
             } else {
                 window.qTrack('event', 'user_register_success', {
+                    method: authenticator
+                });
+
+                window.qTrack('event', 'sign_up', {
                     method: authenticator
                 });
             }
