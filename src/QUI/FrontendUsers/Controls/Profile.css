@@ -69,13 +69,13 @@
 
 .quiqqer-frontendUsers-saveButton {
     cursor: pointer;
-    margin-left: 33%;
-    padding: 10px;
-    width: 66%;
 }
 
 /** category content
  ==================================== */
+/*.quiqqer-frontendUsers-controls-profile-control > header:first-of-type > h2 {*/
+/*    margin-bottom: 2rem;*/
+/*}*/
 
 .quiqqer-frontendUsers-controls-profile-categoryContent {
     float: left;
@@ -93,19 +93,16 @@
 .quiqqer-frontendUsers-controls-profile-control label {
     clear: both;
     float: left;
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
     width: 100%;
 }
 
-.quiqqer-frontendUsers-label {
-    float: left;
-    width: 33%;
+@media screen and (min-width: 768px) {
+    .quiqqer-frontendUsers-label {
+        float: left;
+        width: 30%;
+    }
 }
-
-/*.quiqqer-frontendUsers-controls-profile-control input {*/
-/*padding: 10px;*/
-/*width: 50%;*/
-/*}*/
 
 /** user
  ==================================== */
@@ -134,7 +131,29 @@
     display: none;
 }
 
-@media (max-width: 768px) {
+
+@media (max-width: 767px) {
+    .quiqqer-frontendUsers-userdata-label {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+
+    /*.quiqqer-frontendUsers-controls-profile-userdata input[name="firstname"],*/
+    /*.quiqqer-frontendUsers-controls-profile-userdata input[name="lastname"],*/
+    /*.quiqqer-frontendUsers-controls-profile-userdata input[name="street_no"],*/
+    /*.quiqqer-frontendUsers-controls-profile-userdata input[name="zip"],*/
+    /*.quiqqer-frontendUsers-controls-profile-userdata input[name="city"],*/
+    .quiqqer-frontendUsers-controls-profile-control input,
+    .quiqqer-frontendUsers-userdata-address-country-select,
+    .package-intranet-profile-birthday,
+    .quiqqer-frontendUsers-userdata-email,
+    .quiqqer-frontendUsers-userdata-field {
+        display: block;
+        width: 100%;
+    }
+
+
     .quiqqer-frontendUsers-controls-profile-categories-mobile {
         clear: both;
         display: inline;
@@ -151,18 +170,12 @@
         display: none;
     }
 
-    .quiqqer-frontendUsers-label,
-    .quiqqer-frontendUsers-controls-profile-categoryContent,
-    .quiqqer-frontendUsers-controls-profile-control input {
+    .quiqqer-frontendUsers-controls-profile-categoryContent {
+        padding: 0;
         width: 100%;
     }
 
-    .quiqqer-frontendUsers-controls-profile-categoryContent {
-        padding: 0;
-    }
-
     .quiqqer-frontendUsers-saveButton {
-        margin: 0 auto;
         width: 100%;
     }
 }
