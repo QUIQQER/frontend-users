@@ -15,6 +15,7 @@
                name="salutation"
                value="{$Address->getAttribute('salutation')|escape:'html'}"
                {if $settings.salutation.required}required{/if}
+                placeholder="{locale group='quiqqer/frontend-users' var='salutation'}"
         />
     </label>
     {/if}
@@ -29,6 +30,7 @@
                name="firstname"
                value="{$Address->getAttribute('firstname')|escape:'html'}"
                {if $settings.firstname.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='firstname'}"
         />
     </label>
     {/if}
@@ -43,6 +45,7 @@
                name="lastname"
                value="{$Address->getAttribute('lastname')|escape:'html'}"
                {if $settings.lastname.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='lastname'}"
         />
     </label>
     {/if}
@@ -54,8 +57,12 @@
             {if $settings.street_no.required}*{/if}
         </span>
         {if $Address->getAttribute('street_no') === ''}
-        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}/>
-        <input type="text" name="street_number" value=""/>
+        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='street'}"
+        />
+        <input type="text" name="street_number" value=""
+               placeholder="{locale group='quiqqer/frontend-users' var='house_no'}"
+        />
         {else}
         <input type="text"
                name="street_no"
@@ -76,6 +83,7 @@
                name="zip"
                value="{$Address->getAttribute('zip')|escape:'html'}"
                {if $settings.zip.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='zip'}"
         />
     </label>
     {/if}
@@ -90,6 +98,7 @@
                name="city"
                value="{$Address->getAttribute('city')|escape:'html'}"
                {if $settings.city.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='city'}"
         />
     </label>
     {/if}
@@ -114,6 +123,7 @@
                name="phone"
                value="{$phone|escape:'html'}"
                {if $settings.phone.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='phone_no'}"
         />
     </label>
     {/if}
@@ -129,6 +139,7 @@
                autocomplete="mobile"
                value="{$mobile|escape:'html'}"
                {if $settings.mobile.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='mobile'}"
         />
     </label>
     {/if}
@@ -144,6 +155,7 @@
                autocomplete="fax"
                value="{$fax|escape:'html'}"
                {if $settings.fax.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='fax'}"
         />
     </label>
     {/if}

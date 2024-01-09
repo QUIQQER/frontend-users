@@ -863,6 +863,14 @@
             <de><![CDATA[Strasse und Hausnummer]]></de>
             <en><![CDATA[Street and house number]]></en>
         </locale>
+        <locale name="street">
+            <de><![CDATA[Strasse]]></de>
+            <en><![CDATA[Street]]></en>
+        </locale>
+        <locale name="house_no">
+            <de><![CDATA[Hausnummer]]></de>
+            <en><![CDATA[house number]]></en>
+        </locale>
         <locale name="zip">
             <de><![CDATA[PLZ]]></de>
             <en><![CDATA[Zip]]></en>
@@ -878,6 +886,10 @@
         <locale name="phone">
             <de><![CDATA[Tel]]></de>
             <en><![CDATA[Phone]]></en>
+        </locale>
+        <locale name="phone_no">
+            <de><![CDATA[Telefonnummer]]></de>
+            <en><![CDATA[Phone number]]></en>
         </locale>
         <locale name="mobile">
             <de><![CDATA[Mobil]]></de>
