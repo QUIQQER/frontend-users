@@ -14,6 +14,7 @@
         <input type="text"
                name="salutation"
                {if $settings.salutation.required}required{/if}
+                placeholder="{locale group='quiqqer/frontend-users' var='salutation'}"
         />
     </label>
     {/if}
@@ -28,6 +29,7 @@
                autocomplete="given-name"
                name="firstname"
                {if $settings.firstname.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='firstname'}"
         />
     </label>
     {/if}
@@ -42,6 +44,7 @@
                autocomplete="family-name"
                name="lastname"
                {if $settings.lastname.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='lastname'}"
         />
     </label>
     {/if}
@@ -52,8 +55,12 @@
             {locale group="quiqqer/frontend-users" var="street_no"}
             {if $settings.street_no.required}*{/if}
         </span>
-        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}/>
-        <input type="text" name="street_number" value=""/>
+        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='street'}"
+        />
+        <input type="text" name="street_number" value=""
+               placeholder="{locale group='quiqqer/frontend-users' var='house_no'}"
+        />
     </label>
     {/if}
 
@@ -67,6 +74,7 @@
                autocomplete="postal-code"
                name="zip"
                {if $settings.zip.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='zip'}"
         />
     </label>
     {/if}
@@ -81,6 +89,7 @@
                autocomplete="address-level2"
                name="city"
                {if $settings.city.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='city'}"
         />
     </label>
     {/if}
@@ -101,7 +110,9 @@
             {locale group="quiqqer/frontend-users" var="phone"}
             {if $settings.phone.required}*{/if}
         </span>
-        <input type="tel" name="phone" {if $settings.phone.required}required{/if}/>
+        <input type="tel" name="phone" {if $settings.phone.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='phone_no'}"
+        />
     </label>
     {/if}
 
@@ -111,7 +122,9 @@
             {locale group="quiqqer/frontend-users" var="mobile"}
             {if $settings.mobile.required}*{/if}
         </span>
-        <input type="tel" name="mobile" autocomplete="mobile" {if $settings.mobile.required}required{/if}/>
+        <input type="tel" name="mobile" autocomplete="mobile" {if $settings.mobile.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='mobile'}"
+        />
     </label>
     {/if}
 
@@ -121,7 +134,9 @@
             {locale group="quiqqer/frontend-users" var="fax"}
             {if $settings.fax.required}*{/if}
         </span>
-        <input type="tel" name="fax" autocomplete="fax" {if $settings.fax.required}required{/if}/>
+        <input type="tel" name="fax" autocomplete="fax" {if $settings.fax.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='fax'}"
+        />
     </label>
     {/if}
 
