@@ -126,6 +126,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             }, {
                 duration: 200,
                 callback: () => {
+                    this.getElm().style.height = null;
                     this.$Profile.resize();
                 }
             });
@@ -499,7 +500,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 }, {
                     duration: 250,
                     callback: function() {
-                        Container.focus();
+                        // no scroll animation because after address edit is open
+                        // there may be an animation depend on selected option in "businessType" select
+                        self.getElm().scrollIntoView()
                         resolve(Container);
                     }
                 });

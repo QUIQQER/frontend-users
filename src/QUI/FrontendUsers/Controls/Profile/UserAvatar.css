@@ -34,3 +34,9 @@
 .quiqqer-frontendUsers-userAvatar-gravatar input {
     float: left;
 }
+
+@media screen and (max-width: 767px) {
+    .quiqqer-frontendUsers-userAvatar-saveButton {
+        width: 100%;
+    }
+}

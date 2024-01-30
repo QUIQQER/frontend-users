@@ -99,9 +99,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
 
         // Get all users
         $sql = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . $tbl;
-        $where = [
-            'su' => 0
-        ];
+
+        $where = [];
+        $where[] = 'su = 0';
 
         if (!empty($groupIds)) {
             $whereOR = [];

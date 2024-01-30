@@ -18,17 +18,19 @@
 }
 
 .quiqqer-frontend-users-address-description-button {
-    float: right;
-    font-size: 14px;
-    line-height: 20px !important;
-    margin-top: 20px;
-    max-width: 200px;
-    padding: 10px !important;
-    text-transform: inherit !important;
+    margin-top: 1rem;
 }
 
-.quiqqer-frontend-users-address-description-button span {
-    font-size: 14px;
+@media screen and (min-width: 768px) {
+    .quiqqer-frontend-users-address-description-button {
+        float: right;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .quiqqer-frontend-users-address-description-button {
+        width: 100%;
+    }
 }
 
 /** container
@@ -110,8 +112,10 @@ address .fa {
     width: calc(50% - 5px);
 }
 
-.quiqqer-frontend-users-address-list-entry:hover {
-    background: rgba(0, 0, 0, 0.1);
+@media screen and (hover: hover) {
+    .quiqqer-frontend-users-address-list-entry:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
 }
 
 .quiqqer-frontend-users-address-list-entry:nth-child(odd) {
@@ -171,42 +175,73 @@ address .fa {
     width: 100%;
 }
 
-.quiqqer-frontend-users-address-create label span,
-.quiqqer-frontend-users-address-edit label span {
-    float: left;
-    width: 50%
+@media screen and (min-width: 768px) {
+    .quiqqer-frontend-users-address-create label span,
+    .quiqqer-frontend-users-address-edit label span {
+        float: left;
+        width: 50%
+    }
+
+    .quiqqer-frontend-users-address-create input,
+    .quiqqer-frontend-users-address-create select,
+    .quiqqer-frontend-users-address-create .qui-select,
+    .quiqqer-frontend-users-address-edit input,
+    .quiqqer-frontend-users-address-edit select,
+    .quiqqer-frontend-users-address-edit .qui-select {
+        float: left;
+        width: 50%
+    }
 }
 
-.quiqqer-frontend-users-address-create input,
-.quiqqer-frontend-users-address-create select,
-.quiqqer-frontend-users-address-create .qui-select,
-.quiqqer-frontend-users-address-edit input,
-.quiqqer-frontend-users-address-edit select,
-.quiqqer-frontend-users-address-edit .qui-select {
-    float: left;
-    width: 50%
+@media screen and (max-width: 767px) {
+    .quiqqer-frontend-users-address-edit select {
+        width: 100%;
+    }
+
+    .quiqqer-frontend-users-address-create select,
+    .quiqqer-frontend-users-address-create .qui-select,
+    .quiqqer-frontend-users-address-edit .qui-select {
+        float: none;
+        width: 100%;
+    }
 }
 
 .quiqqer-frontend-users-address-create [name="street"],
 .quiqqer-frontend-users-address-edit [name="street"] {
-    float: left;
-    width: 30%;
+    margin-bottom: 0.5rem;
 }
 
-.quiqqer-frontend-users-address-create [name="street_number"],
-.quiqqer-frontend-users-address-edit [name="street_number"] {
-    float: left;
-    margin-left: 10px;
-    width: calc(20% - 10px);
+@media screen and (min-width: 768px) {
+    .quiqqer-frontend-users-address-create [name="street"],
+    .quiqqer-frontend-users-address-edit [name="street"] {
+        width: 30%;
+    }
+
+    .quiqqer-frontend-users-address-create [name="street_number"],
+    .quiqqer-frontend-users-address-edit [name="street_number"] {
+        margin-left: 10px;
+        width: calc(20% - 10px);
+    }
+
+    .quiqqer-frontend-users-address-create [name="street"],
+    .quiqqer-frontend-users-address-edit [name="street"],
+    .quiqqer-frontend-users-address-create [name="street_number"],
+    .quiqqer-frontend-users-address-edit [name="street_number"] {
+        float: left;
+    }
+
+    .quiqqer-frontend-users-address-edit-create,
+    .quiqqer-frontend-users-address-edit-button {
+        margin-left: 50%;
+        width: 50%;
+    }
 }
 
-.quiqqer-frontend-users-address-edit-create,
-.quiqqer-frontend-users-address-edit-button {
-    margin-left: 50%;
-    width: 50%;
-
-    padding: 10px !important;
-    font-size: 14px !important;
+@media screen and (max-width: 767px) {
+    .quiqqer-frontend-users-address-edit-create,
+    .quiqqer-frontend-users-address-edit-button {
+        width: 100%;
+    }
 }
 
 .quiqqer-frontend-users-address-container-edit,
