@@ -41,7 +41,7 @@ class UserIcon extends Control
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $User = $this->getAttribute('User');
 

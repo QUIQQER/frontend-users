@@ -40,7 +40,7 @@ class ProfileBar extends Control
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $User = QUI::getUserBySession();

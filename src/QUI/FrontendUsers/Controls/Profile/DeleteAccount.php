@@ -35,9 +35,8 @@ class DeleteAccount extends AbstractProfileControl
 
     /**
      * @return string
-     * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $action = false;
@@ -76,7 +75,7 @@ class DeleteAccount extends AbstractProfileControl
      *
      * @throws \Exception
      */
-    public function onSave()
+    public function onSave(): void
     {
         self::checkDeleteAccount();
 

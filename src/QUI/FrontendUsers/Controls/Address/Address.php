@@ -8,6 +8,12 @@ namespace QUI\FrontendUsers\Controls\Address;
 
 use QUI;
 
+use function array_search;
+use function count;
+use function dirname;
+use function json_decode;
+use function trim;
+
 /**
  * Class Address
  * - Tab / Panel for the address
@@ -21,7 +27,7 @@ class Address extends QUI\Control
      *
      * @param array $attributes
      */
-    public function __construct($attributes = [])
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
 
@@ -32,7 +38,7 @@ class Address extends QUI\Control
      * @param null|QUI\Locale $Locale
      * @return string
      */
-    public function getName($Locale = null): string
+    public function getName(QUI\Locale $Locale = null): string
     {
         return 'Address';
     }
@@ -62,35 +68,35 @@ class Address extends QUI\Control
         if (isset($_REQUEST['edit'])) {
             try {
                 return $this->getBodyForEdit();
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
         }
 
         if (isset($_REQUEST['createSave'])) {
             try {
                 $this->createAddress();
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
         }
 
         if (isset($_REQUEST['editSave'])) {
             try {
                 $this->editAddress();
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
         }
 
         if (isset($_REQUEST['delete'])) {
             try {
                 return $this->getBodyForDelete();
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
         }
 
         if (isset($_REQUEST['executeDeletion'])) {
             try {
                 $this->delete();
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
             }
         }
 
@@ -98,7 +104,7 @@ class Address extends QUI\Control
 
         try {
             $UserAddress = $User->getStandardAddress();
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
         }
 
         $Engine->assign([
@@ -112,7 +118,7 @@ class Address extends QUI\Control
     }
 
     /**
-     * Return the body for a address edit
+     * Return the body for an address edit
      *
      * @return string
      * @throws QUI\Exception
@@ -128,13 +134,13 @@ class Address extends QUI\Control
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
-                $settings = \json_decode($settings, true);
+                $settings = json_decode($settings, true);
             } else {
                 $settings = [];
             }
 
             $Engine->assign('settings', $this->checkSettingsArray($settings));
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             $Engine->assign('settings', $this->checkSettingsArray([]));
         }
 
@@ -148,19 +154,15 @@ class Address extends QUI\Control
             'countries' => QUI\Countries\Manager::getList()
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__) . '/Address.Edit.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Address.Edit.html');
     }
 
     /**
      * @param array $settings
-     * @return mixed
+     * @return array
      */
-    public static function checkSettingsArray(array $settings)
+    public static function checkSettingsArray(array $settings): array
     {
-        if (!\is_array($settings)) {
-            $settings = [];
-        }
-
         $fields = [
             'company',
             'salutation',
@@ -209,7 +211,7 @@ class Address extends QUI\Control
     }
 
     /**
-     * Return the body for a address deletion
+     * Return the body for an address deletion
      *
      * @return string
      * @throws QUI\Exception
@@ -226,14 +228,13 @@ class Address extends QUI\Control
             'User' => $User
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__) . '/Address.Delete.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Address.Delete.html');
     }
 
     /**
-     * Return the body for a address creation
+     * Return the body for an address creation
      *
      * @return string
-     * @throws QUI\Exception
      */
     protected function getBodyForCreate(): string
     {
@@ -252,13 +253,13 @@ class Address extends QUI\Control
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
-                $settings = \json_decode($settings, true);
+                $settings = json_decode($settings, true);
             } else {
                 $settings = [];
             }
 
             $Engine->assign('settings', $this->checkSettingsArray($settings));
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             $Engine->assign('settings', $this->checkSettingsArray([]));
         }
 
@@ -269,7 +270,7 @@ class Address extends QUI\Control
             'User' => $User
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__) . '/Address.Create.html');
+        return $Engine->fetch(dirname(__FILE__) . '/Address.Create.html');
     }
 
     /**
@@ -280,7 +281,7 @@ class Address extends QUI\Control
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
      */
-    public function createAddress(array $data = [])
+    public function createAddress(array $data = []): void
     {
         if (!isset($_REQUEST['createSave'])) {
             return;
@@ -309,14 +310,14 @@ class Address extends QUI\Control
             $street = '';
 
             if (!empty($data['street'])) {
-                $street .= \trim($data['street']);
+                $street .= trim($data['street']);
             }
 
             if (!empty($data['street_number'])) {
-                $street .= ' ' . \trim($data['street_number']);
+                $street .= ' ' . trim($data['street_number']);
             }
 
-            $data['street_no'] = \trim($street);
+            $data['street_no'] = trim($street);
         }
 
         foreach ($fields as $field) {
@@ -342,12 +343,12 @@ class Address extends QUI\Control
 
         if (isset($data['businessType']) && $data['businessType'] === 'b2c') {
             // company is no requirement
-            if (($key = \array_search('company', $missing)) !== false) {
+            if (($key = array_search('company', $missing)) !== false) {
                 unset($missing[$key]);
             }
         }
 
-        if (\count($missing)) {
+        if (count($missing)) {
             $Address->delete();
 
             throw new QUI\Exception([
@@ -367,7 +368,7 @@ class Address extends QUI\Control
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
      */
-    public function editAddress(array $data = [])
+    public function editAddress(array $data = []): void
     {
         if (!isset($_REQUEST['addressId']) || !isset($_REQUEST['editSave'])) {
             return;
@@ -384,14 +385,14 @@ class Address extends QUI\Control
             $street = '';
 
             if (!empty($data['street'])) {
-                $street .= \trim($data['street']);
+                $street .= trim($data['street']);
             }
 
             if (!empty($data['street_number'])) {
-                $street .= ' ' . \trim($data['street']);
+                $street .= ' ' . trim($data['street']);
             }
 
-            $data['street_no'] = \trim($street);
+            $data['street_no'] = trim($street);
         }
 
         $fields = [
@@ -427,12 +428,12 @@ class Address extends QUI\Control
 
         if (isset($data['businessType']) && $data['businessType'] === 'b2c') {
             // company is no requirement
-            if (($key = \array_search('company', $missing)) !== false) {
+            if (($key = array_search('company', $missing)) !== false) {
                 unset($missing[$key]);
             }
         }
 
-        if (\count($missing)) {
+        if (count($missing)) {
             throw new QUI\Exception([
                 'quiqqer/frontend-users',
                 'exception.controls.profile.address.required_fields_empty'
@@ -447,7 +448,7 @@ class Address extends QUI\Control
      *
      * @throws QUI\Exception
      */
-    protected function delete()
+    protected function delete(): void
     {
         if (!isset($_REQUEST['addressId']) || !isset($_REQUEST['executeDeletion'])) {
             return;
@@ -464,7 +465,7 @@ class Address extends QUI\Control
      * @param QUI\Users\Address $Address
      * @throws QUI\ERP\Order\Exception
      */
-    public function validate(QUI\Users\Address $Address)
+    public function validate(QUI\Users\Address $Address): void
     {
         $exception = [
             'quiqqer/order',
@@ -490,7 +491,7 @@ class Address extends QUI\Control
                 $street_no .= ' ' . $Address->getAttribute('street_number');
             }
 
-            $street_no = \trim($street_no);
+            $street_no = trim($street_no);
         }
 
         if (empty($firstName)) {

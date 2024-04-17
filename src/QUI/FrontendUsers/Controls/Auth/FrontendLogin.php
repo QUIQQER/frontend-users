@@ -39,7 +39,7 @@ class FrontendLogin extends QUI\Control
     /**
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $Handler = Handler::getInstance();

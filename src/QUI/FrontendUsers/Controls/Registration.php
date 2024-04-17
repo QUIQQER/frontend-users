@@ -81,7 +81,7 @@ class Registration extends QUI\Control
      *
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();

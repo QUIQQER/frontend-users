@@ -2,6 +2,8 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use Exception;
+use JetBrains\PhpStorm\NoReturn;
 use QUI;
 
 /**
@@ -25,7 +27,7 @@ class SetUserGroups extends QUI\System\Console\Tool
     /**
      * Execute the console tool
      */
-    public function execute()
+    public function execute(): void
     {
         QUI\Permissions\Permission::isAdmin();
 
@@ -127,7 +129,7 @@ class SetUserGroups extends QUI\System\Console\Tool
         foreach ($result as $row) {
             $User = $Users->get($row['id']);
 
-            $this->writeLn("Add groups for User #" . $User->getId() . " (" . $User->getUsername() . ")...");
+            $this->writeLn("Add groups for User #" . $User->getUUID() . " (" . $User->getUsername() . ")...");
 
             foreach ($groupIds as $groupId) {
                 try {
@@ -135,7 +137,7 @@ class SetUserGroups extends QUI\System\Console\Tool
                     $User->addToGroup($groupId);
                     $User->save($SystemUser);
                     $this->write(" OK!");
-                } catch (\Exception $Exception) {
+                } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                     $this->write(" ERROR: " . $Exception->getMessage());
                 }
@@ -150,10 +152,10 @@ class SetUserGroups extends QUI\System\Console\Tool
      *
      * @return void
      */
-    protected function exitSuccess()
+    #[NoReturn] protected function exitSuccess(): void
     {
         $this->writeLn("User groups have been successfully set.");
-        $this->writeLn("");
+        $this->writeLn();
 
         exit(0);
     }
@@ -164,13 +166,13 @@ class SetUserGroups extends QUI\System\Console\Tool
      * @param $msg
      * @return void
      */
-    protected function exitFail($msg)
+    #[NoReturn] protected function exitFail($msg): void
     {
         $this->writeLn("Script aborted due to an error:");
-        $this->writeLn("");
+        $this->writeLn();
         $this->writeLn($msg);
-        $this->writeLn("");
-        $this->writeLn("");
+        $this->writeLn();
+        $this->writeLn();
 
         exit(1);
     }

@@ -62,7 +62,7 @@ class RegistrationSignUp extends QUI\Control
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 
@@ -426,15 +426,15 @@ class RegistrationSignUp extends QUI\Control
      * @param $Registrar
      * @return string
      */
-    public function getRegistrarIcon($Registrar)
+    public function getRegistrarIcon($Registrar): string
     {
         $icon = $Registrar->getIcon();
 
         if (
-            strpos($icon, '.png') !== false
-            || strpos($icon, '.jpg') !== false
-            || strpos($icon, '.gif') !== false
-            || strpos($icon, '.svg') !== false
+            str_contains($icon, '.png')
+            || str_contains($icon, '.jpg')
+            || str_contains($icon, '.gif')
+            || str_contains($icon, '.svg')
         ) {
             return '<span class="quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon">
                 <span style="background-image: url(\'' . $icon . '\')"></span>

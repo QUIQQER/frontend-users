@@ -47,7 +47,7 @@ class AuthContent extends QUI\Control
      *
      * @see \QUI\Control::create()
      */
-    public function getBody()
+    public function getBody(): string
     {
         $lang = QUI::getLocale()->getCurrent();
         $Engine = QUI::getTemplateManager()->getEngine();

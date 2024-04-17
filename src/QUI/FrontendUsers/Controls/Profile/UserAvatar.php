@@ -35,7 +35,7 @@ class UserAvatar extends AbstractProfileControl
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $settings = Handler::getInstance()->getUserProfileSettings();
         $User = QUI::getUserBySession();

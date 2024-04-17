@@ -43,7 +43,7 @@ class UserData extends AbstractProfileControl
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $action = false;
         $emailChangeRequested = true;

@@ -2,9 +2,13 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use Exception;
+use JetBrains\PhpStorm\NoReturn;
 use QUI;
 
+use function explode;
 use function implode;
+use function mb_substr;
 
 /**
  * Console tool to anonymise users
@@ -33,8 +37,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
 
     /**
      * Execute the console tool
+     * @throws QUI\Database\Exception
      */
-    public function execute()
+    public function execute(): void
     {
         QUI\Permissions\Permission::isAdmin();
 
@@ -90,8 +95,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
     /**
      * @param array $settings
      * @return void
+     * @throws QUI\Database\Exception
      */
-    protected function anonymiseUsers($settings)
+    protected function anonymiseUsers(array $settings): void
     {
         $groupIds = $settings['groupIds'];
         $tbl = QUI::getDBTableName('users');
@@ -186,7 +192,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                 }
 
                 $this->write(" OK!");
-            } catch (\Exception $Exception) {
+            } catch (Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
                 $this->write("ERROR: " . $Exception->getMessage());
             }
@@ -199,16 +205,16 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      * @param string $str
      * @return string - Anonymised string
      */
-    protected function anonymiseString(string $str)
+    protected function anonymiseString(string $str): string
     {
-        $parts = \explode(' ', $str);
+        $parts = explode(' ', $str);
         $anonStrParts = [];
 
         foreach ($parts as $part) {
-            $anonStrParts[] = \mb_substr($part, 0, 1) . '*';
+            $anonStrParts[] = mb_substr($part, 0, 1) . '*';
         }
 
-        return \implode(' ', $anonStrParts);
+        return implode(' ', $anonStrParts);
     }
 
     /**
@@ -216,10 +222,10 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      *
      * @return void
      */
-    protected function exitSuccess()
+    #[NoReturn] protected function exitSuccess(): void
     {
         $this->writeLn("\n\nUsers have been successfully anonymised.");
-        $this->writeLn("");
+        $this->writeLn();
 
         exit(0);
     }
@@ -230,13 +236,13 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      * @param $msg
      * @return void
      */
-    protected function exitFail($msg)
+    #[NoReturn] protected function exitFail($msg): void
     {
         $this->writeLn("Script aborted due to an error:");
-        $this->writeLn("");
+        $this->writeLn();
         $this->writeLn($msg);
-        $this->writeLn("");
-        $this->writeLn("");
+        $this->writeLn();
+        $this->writeLn();
 
         exit(1);
     }

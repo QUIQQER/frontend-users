@@ -49,7 +49,7 @@ class Login extends QUI\Control
      *
      * @return string
      */
-    public function getBody()
+    public function getBody(): string
     {
         try {
             $Engine = QUI::getTemplateManager()->getEngine();
@@ -85,9 +85,9 @@ class Login extends QUI\Control
                 $iconAttribute = $Login->getAttribute('icon');
 
                 if (
-                    \strpos($iconAttribute, 'fa ') !== false
-                    || \strpos($iconAttribute, 'fab ') !== false
-                    || \strpos($iconAttribute, 'fas ') !== false
+                    str_contains($iconAttribute, 'fa ')
+                    || str_contains($iconAttribute, 'fab ')
+                    || str_contains($iconAttribute, 'fas ')
                 ) {
                     $icon = true;
                 } elseif ($iconAttribute !== '') {

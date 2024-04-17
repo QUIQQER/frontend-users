@@ -33,7 +33,7 @@ class Address extends AbstractProfileControl
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Package = QUI::getPackage('quiqqer/frontend-users');
         $Config = $Package->getConfig();
