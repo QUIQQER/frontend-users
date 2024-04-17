@@ -4,7 +4,6 @@ namespace QUI\FrontendUsers\Console;
 
 use JetBrains\PhpStorm\NoReturn;
 use QUI;
-
 use QUI\Exception;
 
 use function date;
