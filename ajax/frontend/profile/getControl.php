@@ -31,18 +31,18 @@ QUI::$Ajax->registerFunction(
         try {
             $Project = QUI::getProjectManager()->decode($project);
             $Control->setAttribute('Site', $Project->get((int)$siteId));
-        } catch (\Exception $Exception) {
+        } catch (Exception) {
             // nothing
         }
 
         $Control->setAttribute('User', QUI::getUserBySession());
         $Control->setAttribute('category', Orthos::clear($category));
         $Control->setAttribute('settings', Orthos::clear($settings));
-        $Control->setAttribute('menu', isset($menu) ? $menu : true);
+        $Control->setAttribute('menu', $menu ?? true);
 
         try {
             $html = $Control->create();
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
             return false;

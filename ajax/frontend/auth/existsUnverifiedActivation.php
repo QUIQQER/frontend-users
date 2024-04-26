@@ -13,7 +13,7 @@ QUI::$Ajax->registerFunction(
         try {
             $User = QUI::getUsers()->get((int)$userId);
             Verifier::getVerificationByIdentifier($User->getId(), ActivationVerification::getType());
-        } catch (\Exception $Exception) {
+        } catch (Exception) {
             return false;
         }
 

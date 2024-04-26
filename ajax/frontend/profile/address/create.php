@@ -25,7 +25,7 @@ QUI::$Ajax->registerFunction(
         $_REQUEST['createSave'] = true;
 
         $Address = new QUI\FrontendUsers\Controls\Address\Address();
-        $Address->createAddress(\json_decode($data, true));
+        $Address->createAddress(json_decode($data, true));
     },
     ['data'],
     ['Permission::checkUser']

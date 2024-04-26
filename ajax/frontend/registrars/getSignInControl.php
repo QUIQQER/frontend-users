@@ -19,6 +19,5 @@ QUI::$Ajax->registerFunction(
         }
 
         return $Registration->create();
-    },
-    []
+    }
 );

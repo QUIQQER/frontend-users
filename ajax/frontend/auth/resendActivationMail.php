@@ -6,6 +6,7 @@
 
 use QUI\FrontendUsers\ActivationVerification;
 use QUI\FrontendUsers\Handler;
+use QUI\FrontendUsers\RegistrarInterface;
 use QUI\FrontendUsers\Registrars\Email\Registrar as EmailRegistrar;
 use QUI\Utils\Security\Orthos;
 use QUI\Verification\Verifier;
@@ -21,7 +22,7 @@ QUI::$Ajax->registerFunction(
         try {
             $User = QUI::getUsers()->getUserByMail(Orthos::clear($email));
             Verifier::getVerificationByIdentifier($User->getId(), ActivationVerification::getType());
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             // if the verification does not exist -> do not resend mail
             QUI\System\Log::writeException($Exception);
             return false;
@@ -34,12 +35,12 @@ QUI::$Ajax->registerFunction(
                 $registrarClass = EmailRegistrar::class;
             }
 
-            /** @var \QUI\FrontendUsers\RegistrarInterface $Registrar */
+            /** @var RegistrarInterface $Registrar */
             $Registrar = new $registrarClass();
             $Registrar->setProject(QUI::getRewrite()->getProject());
 
             Handler::getInstance()->sendActivationMail($User, $Registrar);
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return false;
         }

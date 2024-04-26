@@ -100,7 +100,7 @@ class Events
 
         // set random password
         $randomPass = null;
-        $Registrar = $Handler->getReigstrarByUser($User);
+        $Registrar = $Handler->getRegistrarByUser($User);
 
         if (!$Registrar) {
             return;
