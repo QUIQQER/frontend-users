@@ -27,11 +27,11 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer\/quiqqer": ">=1.6|*@dev",
-    "quiqqer\/countries": "^1.1|*@dev",
-    "quiqqer\/verification": "^1.1|*@dev",
-    "quiqqer\/tooltips": "^1|*@dev",
-    "quiqqer\/data-layer": "^1.2|*@dev"
+    "quiqqer\/core": "^2",
+    "quiqqer\/countries": "^2",
+    "quiqqer\/verification": "^2",
+    "quiqqer\/tooltips": "^2",
+    "quiqqer\/data-layer": "^2"
   },
   "suggest": {
     "quiqqer\/rest": "User registration via REST API"
