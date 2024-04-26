@@ -6,12 +6,16 @@
 
 namespace QUI\FrontendUsers\Controls;
 
+use Exception;
 use QUI;
 use QUI\Control;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Utils;
 use QUI\Projects\Media\ExternalImage;
 use QUI\Projects\Media\Utils as QUIMediaUtils;
+
+use function is_string;
+use function mb_strpos;
 
 /**
  * Class UserIcon
@@ -97,7 +101,7 @@ class UserIcon extends Control
             } else {
                 $AvatarImage = $this->getDefaultAvatarImage();
 
-                if (\is_string($AvatarImage)) {
+                if (is_string($AvatarImage)) {
                     $Engine->assign('avatarImageIcon', $AvatarImage);
                 } elseif ($AvatarImage !== false) {
                     $Engine->assign([
@@ -129,12 +133,12 @@ class UserIcon extends Control
      *
      * @return false|QUI\Projects\Media\Image|string
      */
-    protected function getDefaultAvatarImage()
+    protected function getDefaultAvatarImage(): QUI\Projects\Media\Image|bool|string
     {
         try {
             $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $defaultAvatarImage = $Conf->get('profileBar', 'defaultAvatar');
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return false;
         }
@@ -144,13 +148,13 @@ class UserIcon extends Control
         }
 
         // Check if icon
-        if (\mb_strpos($defaultAvatarImage, 'image.php') === false) {
+        if (mb_strpos($defaultAvatarImage, 'image.php') === false) {
             return $defaultAvatarImage;
         }
 
         try {
             return QUIMediaUtils::getImageByUrl($defaultAvatarImage);
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return false;
         }

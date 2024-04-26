@@ -150,10 +150,10 @@ class Handler extends Singleton
     /**
      * Get ACTIVE Registrar by user
      *
-     * @param QUI\Users\User $User
+     * @param QUI\Interfaces\Users\User $User
      * @return RegistrarInterface|false
      */
-    public function getRegistrarByUser(QUI\Users\User $User): bool|RegistrarInterface
+    public function getRegistrarByUser(QUI\Interfaces\Users\User $User): bool|RegistrarInterface
     {
         $registrar = $User->getAttribute(self::USER_ATTR_REGISTRAR);
 

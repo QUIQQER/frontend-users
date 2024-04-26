@@ -7,6 +7,7 @@
 namespace QUI\FrontendUsers\Controls\Auth;
 
 use QUI;
+use QUI\Exception;
 use QUI\FrontendUsers\Controls\Registration;
 use QUI\FrontendUsers\Handler;
 use QUI\Users\Controls\Login;
@@ -38,6 +39,7 @@ class FrontendLogin extends QUI\Control
 
     /**
      * @return string
+     * @throws Exception
      */
     public function getBody(): string
     {

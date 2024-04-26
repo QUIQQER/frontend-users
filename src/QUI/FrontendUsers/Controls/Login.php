@@ -6,7 +6,10 @@
 
 namespace QUI\FrontendUsers\Controls;
 
+use Exception;
 use QUI;
+
+use function base64_decode;
 
 /**
  * Class Login
@@ -51,12 +54,7 @@ class Login extends QUI\Control
      */
     public function getBody(): string
     {
-        try {
-            $Engine = QUI::getTemplateManager()->getEngine();
-        } catch (QUI\Exception $Exception) {
-            return '';
-        }
-
+        $Engine = QUI::getTemplateManager()->getEngine();
         $authenticators = $this->getAuthenticators();
         $instances = [];
 
@@ -74,14 +72,8 @@ class Login extends QUI\Control
                     'onlyIcon' => true
                 ]);
 
-                if (!$Login) {
-                    continue;
-                }
-
-
                 $icon = false;
                 $image = false;
-
                 $iconAttribute = $Login->getAttribute('icon');
 
                 if (
@@ -101,7 +93,7 @@ class Login extends QUI\Control
                     'icon' => $icon,
                     'image' => $image
                 ];
-            } catch (\Exception $Exception) {
+            } catch (Exception $Exception) {
                 QUI\System\Log::writeDebugException($Exception);
             }
         }
@@ -136,7 +128,7 @@ class Login extends QUI\Control
      *
      * @return string[] - Authenticator class paths
      */
-    protected function getAuthenticators()
+    protected function getAuthenticators(): array
     {
         $authenticators = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();
         $filterRegistrars = $this->getAttribute('authenticators');
@@ -151,7 +143,7 @@ class Login extends QUI\Control
 
             foreach ($authenticatorSettings as $authenticatorHash => $active) {
                 if ($active) {
-                    $allowed[] = \base64_decode($authenticatorHash);
+                    $allowed[] = base64_decode($authenticatorHash);
                 }
             }
 
@@ -159,7 +151,7 @@ class Login extends QUI\Control
                 /** @var QUI\Users\AuthenticatorInterface $Authenticator */
                 return in_array($authenticator, $allowed);
             });
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
         }
 
@@ -167,11 +159,9 @@ class Login extends QUI\Control
             return $authenticators;
         }
 
-        $authenticators = array_filter($authenticators, function ($authenticator) use ($filterRegistrars) {
+        return array_filter($authenticators, function ($authenticator) use ($filterRegistrars) {
             /** @var QUI\Users\AuthenticatorInterface $Authenticator */
             return in_array($authenticator, $filterRegistrars);
         });
-
-        return $authenticators;
     }
 }

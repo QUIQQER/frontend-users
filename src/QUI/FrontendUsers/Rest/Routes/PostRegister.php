@@ -63,14 +63,14 @@ class PostRegister
     /**
      * Creates a new User from the given RegistrationData
      *
-     * @param \QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+     * @param QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
      *
-     * @return \QUI\Interfaces\Users\User
+     * @return QUI\Interfaces\Users\User
      *
-     * @throws \QUI\Exception
-     * @throws \QUI\FrontendUsers\Exception
-     * @throws \QUI\Permissions\Exception
-     * @throws \QUI\Users\Exception
+     * @throws QUI\Exception
+     * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Permissions\Exception
+     * @throws QUI\Users\Exception
      */
     protected static function registerUser(
         QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
@@ -129,12 +129,12 @@ class PostRegister
     /**
      * Writes the data from the given RegistrationData object to the given User
      *
-     * @param \QUI\Interfaces\Users\User $User
-     * @param \QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
+     * @param QUI\Interfaces\Users\User $User
+     * @param QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
      *
      * @return void
      *
-     * @throws \QUI\Exception
+     * @throws QUI\Exception
      */
     protected static function addRegistrationDataToUser(
         QUI\Interfaces\Users\User $User,

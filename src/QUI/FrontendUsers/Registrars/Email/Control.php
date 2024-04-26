@@ -61,7 +61,7 @@ class Control extends QUI\Control
         }
 
         // address input
-        if (boolval($registrationSettings['addressInput'])) {
+        if ($registrationSettings['addressInput']) {
             $addressFields = $RegistrarHandler->getAddressFieldSettings();
 
             $Engine->assign('addressFields', $addressFields);

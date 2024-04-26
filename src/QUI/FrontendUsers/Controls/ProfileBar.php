@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\Control;
+use QUI\Exception;
 use QUI\FrontendUsers\Handler;
 
 /**
@@ -39,6 +40,7 @@ class ProfileBar extends Control
      * Return the control body
      *
      * @return string
+     * @throws Exception
      */
     public function getBody(): string
     {

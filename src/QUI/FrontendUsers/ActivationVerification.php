@@ -3,6 +3,7 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Exception;
 use QUI\Verification\AbstractVerification;
 
 /**
@@ -19,8 +20,9 @@ class ActivationVerification extends AbstractVerification
      *
      * @return int|false - duration in minutes;
      * if this method returns false use the module setting default value
+     * @throws Exception
      */
-    public function getValidDuration()
+    public function getValidDuration(): bool|int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -31,7 +33,7 @@ class ActivationVerification extends AbstractVerification
      *
      * @return void
      */
-    public function onSuccess()
+    public function onSuccess(): void
     {
         $userId = (int)$this->getIdentifier();
 
@@ -71,8 +73,9 @@ class ActivationVerification extends AbstractVerification
      * This message is displayed to the user on successful verification
      *
      * @return string
+     * @throws Exception
      */
-    public function getSuccessMessage()
+    public function getSuccessMessage(): string
     {
         $registrationSetting = Handler::getInstance()->getRegistrationSettings();
 
@@ -91,7 +94,7 @@ class ActivationVerification extends AbstractVerification
      * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
      * @return string
      */
-    public function getErrorMessage($reason)
+    public function getErrorMessage($reason): string
     {
         return '';
     }
@@ -100,9 +103,9 @@ class ActivationVerification extends AbstractVerification
      * Automatically redirect the user to this URL on successful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
-     * @throws \QUI\Exception
+     * @throws Exception
      */
-    public function getOnSuccessRedirectUrl()
+    public function getOnSuccessRedirectUrl(): bool|string
     {
         $RegistrarHandler = Handler::getInstance();
         $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
@@ -131,9 +134,9 @@ class ActivationVerification extends AbstractVerification
      * Automatically redirect the user to this URL on unsuccessful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
-     * @throws \QUI\Exception
+     * @throws Exception
      */
-    public function getOnErrorRedirectUrl()
+    public function getOnErrorRedirectUrl(): bool|string
     {
         $RegistrarHandler = Handler::getInstance();
         $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
@@ -162,8 +165,9 @@ class ActivationVerification extends AbstractVerification
      * Get the Project this ActivationVerification is intended for
      *
      * @return QUI\Projects\Project
+     * @throws Exception
      */
-    protected function getProject()
+    protected function getProject(): QUI\Projects\Project
     {
         $additionalData = $this->getAdditionalData();
         return QUI::getProjectManager()->getProject($additionalData['project'], $additionalData['projectLang']);
@@ -174,7 +178,7 @@ class ActivationVerification extends AbstractVerification
      *
      * @return string
      */
-    protected function getRegistrarHash()
+    protected function getRegistrarHash(): string
     {
         $data = $this->getAdditionalData();
 

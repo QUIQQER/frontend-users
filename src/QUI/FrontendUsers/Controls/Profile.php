@@ -82,7 +82,7 @@ class Profile extends Control
          * @param bool $category
          * @return bool
          */
-        $getFirstCategorySetting = function ($array, $category = false) use ($getFirstCategory) {
+        $getFirstCategorySetting = function ($array, bool|string|int $category = false) use ($getFirstCategory) {
             if ($category === false) {
                 $category = $getFirstCategory($array);
             }

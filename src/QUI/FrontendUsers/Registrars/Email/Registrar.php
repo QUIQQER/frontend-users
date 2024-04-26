@@ -210,7 +210,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         // CAPTCHA validation
-        if (boolval($settings['useCaptcha'])) {
+        if ($settings['useCaptcha']) {
             $captchaResponse = $this->getAttribute('captchaResponse');
 
             if (empty($captchaResponse)) {
@@ -363,10 +363,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * Get title
      *
-     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getTitle($Locale = null): string
+    public function getTitle(?QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -378,10 +378,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * Get description
      *
-     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getDescription($Locale = null): string
+    public function getDescription(QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();

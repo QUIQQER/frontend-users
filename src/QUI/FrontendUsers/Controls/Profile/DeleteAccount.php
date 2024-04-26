@@ -6,8 +6,10 @@
 
 namespace QUI\FrontendUsers\Controls\Profile;
 
+use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler;
+use QUI\System\Log;
 use QUI\Verification\Verifier;
 
 /**
@@ -54,7 +56,7 @@ class DeleteAccount extends AbstractProfileControl
             } else {
                 Verifier::removeVerification($DeleteVerification);
             }
-        } catch (\Exception $Exception) {
+        } catch (Exception) {
             // nothing - no active user delete verification
         }
 
@@ -73,7 +75,7 @@ class DeleteAccount extends AbstractProfileControl
     /**
      * event: on save
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function onSave(): void
     {
@@ -84,9 +86,8 @@ class DeleteAccount extends AbstractProfileControl
                 QUI::getUserBySession(),
                 QUI::getRewrite()->getProject()
             );
-        } catch (\Exception $Exception) {
-            // nothing
-            \QUI\System\Log::writeException($Exception);
+        } catch (Exception $Exception) {
+            Log::writeException($Exception);
         }
     }
 
@@ -96,7 +97,7 @@ class DeleteAccount extends AbstractProfileControl
      * @throws QUI\Exception
      * @throws QUI\ExceptionStack
      */
-    public static function checkDeleteAccount()
+    public static function checkDeleteAccount(): void
     {
         QUI::getEvents()->fireEvent('quiqqerFrontendUsersDeleteAccountCheck', [QUI::getUserBySession()]);
     }

@@ -6,6 +6,7 @@
 
 namespace QUI\FrontendUsers\Controls\Profile;
 
+use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
@@ -64,14 +65,14 @@ class UserData extends AbstractProfileControl
                 QUI\FrontendUsers\EmailConfirmVerification::getType(),
                 true
             );
-        } catch (\Exception $Exception) {
+        } catch (Exception) {
             $emailChangeRequested = false;
         }
 
         /* @var $User QUI\Users\User */
         try {
             $Address = $User->getStandardAddress();
-        } catch (QUI\Users\Exception $Exception) {
+        } catch (QUI\Users\Exception) {
             $Address = $User->addAddress();
         }
 
@@ -99,7 +100,7 @@ class UserData extends AbstractProfileControl
      * @throws QUI\FrontendUsers\Exception
      * @throws QUI\Exception
      */
-    public function onSave()
+    public function onSave(): void
     {
         $Request = QUI::getRequest()->request;
         $newEmail = $Request->get('emailNew');

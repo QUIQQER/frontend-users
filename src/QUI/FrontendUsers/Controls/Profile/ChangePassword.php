@@ -6,6 +6,7 @@
 
 namespace QUI\FrontendUsers\Controls\Profile;
 
+use Exception;
 use QUI;
 
 /**
@@ -50,7 +51,7 @@ class ChangePassword extends AbstractProfileControl
      *
      * @throws QUI\FrontendUsers\Exception
      */
-    public function onSave()
+    public function onSave(): void
     {
         $Request = QUI::getRequest()->request;
         $User = $this->getAttribute('User');
@@ -65,7 +66,7 @@ class ChangePassword extends AbstractProfileControl
         try {
             /** @var QUI\Users\User $User */
             $User->changePassword($passwordNew, $passwordOld);
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             if ($Exception->getCode() === 401) {
                 $msg = QUI::getLocale()->get(
                     'quiqqer/frontend-users',

@@ -6,11 +6,15 @@
 
 namespace QUI\FrontendUsers\Controls;
 
+use Exception;
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\FrontendUsers\RegistrarCollection;
 use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Projects\Site\Utils as QUISiteUtils;
+
+use function mb_strlen;
+use function str_replace;
 
 /**
  * Class Registration
@@ -27,14 +31,14 @@ class Registration extends QUI\Control
      *
      * @var string
      */
-    protected $id;
+    protected string $id;
 
     /**
      * The User that is registered in the current runtime
      *
-     * @var QUI\Users\User
+     * @var ?QUI\Interfaces\Users\User
      */
-    protected $RegisteredUser = null;
+    protected ?QUI\Interfaces\Users\User $RegisteredUser = null;
 
     /**
      * Flag that indicates if the registration process is performed via async
@@ -42,7 +46,7 @@ class Registration extends QUI\Control
      *
      * @var bool
      */
-    protected $isAsync = false;
+    protected mixed $isAsync = false;
 
     /**
      * Registration constructor.
@@ -80,6 +84,7 @@ class Registration extends QUI\Control
      * @return string
      *
      * @throws QUI\Exception
+     * @throws Exception
      */
     public function getBody(): string
     {
@@ -119,7 +124,7 @@ class Registration extends QUI\Control
                 QUI\System\Log::writeDebugException($Exception);
 
                 $Engine->assign('error', $Exception->getMessage());
-            } catch (\Exception $Exception) {
+            } catch (Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
                 $Engine->assign(
@@ -172,7 +177,7 @@ class Registration extends QUI\Control
                     }
 
                     $instantRedirect = true;
-                } catch (\Exception $Exception) {
+                } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
             } elseif (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
@@ -183,7 +188,7 @@ class Registration extends QUI\Control
                     );
 
                     $redirectUrl = $RedirectSite->getUrlRewrittenWithHost();
-                } catch (\Exception $Exception) {
+                } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
             }
@@ -294,7 +299,7 @@ class Registration extends QUI\Control
                 }
 
                 $termsOfUseRequired = true;
-            } catch (\Exception $Exception) {
+            } catch (Exception) {
                 // nothing
             }
         }
@@ -317,7 +322,7 @@ class Registration extends QUI\Control
                     'fireUserActivationEvent' => true,
                     'User' => QUI::getUserBySession(),
                     'registrarHash' => $Registrar->getHash(),
-                    'registrarType' => \str_replace('\\', '\\\\', $Registrar->getType())
+                    'registrarType' => str_replace('\\', '\\\\', $Registrar->getType())
                 ]);
             }
         }
@@ -344,9 +349,8 @@ class Registration extends QUI\Control
      * Get all Registrars that are displayed
      *
      * @return RegistrarCollection
-     * @throws QUI\Exception
      */
-    protected function getRegistrars()
+    protected function getRegistrars(): RegistrarCollection
     {
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $filterRegistrars = $this->getAttribute('registrars');
@@ -374,9 +378,9 @@ class Registration extends QUI\Control
     /**
      * Get the user that registered in this instance
      *
-     * @return QUI\Users\User|null
+     * @return QUI\Interfaces\Users\User|null
      */
-    public function getRegisteredUser()
+    public function getRegisteredUser(): ?QUI\Interfaces\Users\User
     {
         return $this->RegisteredUser;
     }
@@ -386,22 +390,14 @@ class Registration extends QUI\Control
      *
      * @return bool|QUI\FrontendUsers\RegistrarInterface
      */
-    protected function isCurrentlyExecuted()
+    protected function isCurrentlyExecuted(): bool|QUI\FrontendUsers\RegistrarInterface
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
         $Registrar = $this->getAttribute('Registrar');
 
-        if (
-            $Registrar
-            && $Registrar instanceof QUI\FrontendUsers\RegistrarInterface
-            && $Registrar->isActive()
-        ) {
+        if ($Registrar instanceof QUI\FrontendUsers\RegistrarInterface && $Registrar->isActive()) {
             return $Registrar;
         }
-
-//        if (!isset($_POST['registration'])) {
-//            return false;
-//        }
 
         if (empty($_REQUEST['registrar'])) {
             return false;
@@ -435,7 +431,6 @@ class Registration extends QUI\Control
             return QUI\FrontendUsers\Handler::REGISTRATION_STATUS_ERROR;
         }
 
-        /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
         $Registrar = $this->isCurrentlyExecuted();
 
         if ($Registrar === false) {
@@ -472,7 +467,7 @@ class Registration extends QUI\Control
         // Check user data
         $username = $Registrar->getUsername();
 
-        if (\mb_strlen($username) > 50) {
+        if (mb_strlen($username) > 50) {
             throw new QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.registration.username_too_long',
@@ -513,7 +508,7 @@ class Registration extends QUI\Control
         $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
 
         // determine if the user has to set a new password on first login
-        if (boolval($settings['forcePasswordReset'])) {
+        if ($settings['forcePasswordReset']) {
             $NewUser->setAttribute('quiqqer.set.new.password', true);
         }
 
