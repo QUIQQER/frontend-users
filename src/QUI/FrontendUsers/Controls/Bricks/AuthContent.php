@@ -57,10 +57,6 @@ class AuthContent extends QUI\Control
 
         if (!empty($groups)) {
             $groupIds = explode(',', $groups);
-
-            array_walk($groupIds, function (&$groupId) {
-                $groupId = (int)$groupId;
-            });
         }
 
         // User is not authenticated

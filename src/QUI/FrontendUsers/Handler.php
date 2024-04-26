@@ -412,7 +412,7 @@ class Handler extends Singleton
     {
         $Project = $Registrar->getProject();
 
-        $ActivationVerification = new ActivationVerification($User->getId(), [
+        $ActivationVerification = new ActivationVerification($User->getUUID(), [
             'project' => $Project->getName(),
             'projectLang' => $Project->getLang(),
             'registrar' => $Registrar->getHash()
@@ -439,7 +439,7 @@ class Handler extends Singleton
                 [
                     'body' => $L->get($lg, 'mail.registration_activation.body', [
                         'host' => $host,
-                        'userId' => $User->getId(),
+                        'userId' => $User->getUUID(),
                         'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
@@ -572,7 +572,7 @@ class Handler extends Singleton
                 [
                     'body' => $L->get($lg, 'mail.registration_notice.body', [
                         'host' => $host,
-                        'userId' => $User->getId(),
+                        'userId' => $User->getUUID(),
                         'username' => $User->getUsername(),
                         'email' => $User->getAttribute('email'),
                         'date' => $L->formatDate(time()),
@@ -603,7 +603,7 @@ class Handler extends Singleton
         string $newEmail,
         QUI\Projects\Project $Project
     ): void {
-        $EmailConfirmVerification = new EmailConfirmVerification($User->getId(), [
+        $EmailConfirmVerification = new EmailConfirmVerification($User->getUUID(), [
             'project' => $Project->getName(),
             'projectLang' => $Project->getLang(),
             'newEmail' => $newEmail
@@ -628,7 +628,7 @@ class Handler extends Singleton
                 [
                     'body' => $L->get($lg, 'mail.change_email_address.body', [
                         'host' => $host,
-                        'userId' => $User->getId(),
+                        'userId' => $User->getUUID(),
                         'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
@@ -659,7 +659,7 @@ class Handler extends Singleton
      */
     public function sendDeleteUserConfirmationMail(QUI\Interfaces\Users\User $User, QUI\Projects\Project $Project): void
     {
-        $DeleteUserVerification = new UserDeleteConfirmVerification($User->getId(), [
+        $DeleteUserVerification = new UserDeleteConfirmVerification($User->getUUID(), [
             'project' => $Project->getName(),
             'projectLang' => $Project->getLang()
         ]);
@@ -683,7 +683,7 @@ class Handler extends Singleton
                 [
                     'body' => $L->get($lg, 'mail.delete_user_confirm.body', [
                         'host' => $host,
-                        'userId' => $User->getId(),
+                        'userId' => $User->getUUID(),
                         'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',

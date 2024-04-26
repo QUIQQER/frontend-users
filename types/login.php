@@ -18,7 +18,7 @@ if (
     try {
         $User = $Users->getUserByName(Orthos::clear($_POST['username']));
 
-        QUI::getSession()->set('uid', $User->getId());
+        QUI::getSession()->set('uid', $User->getUUID());
 
         // use QUIQQER default authenticator
         QUI::getUsers()->authenticate(
@@ -37,7 +37,7 @@ if (
 }
 
 $SessionUser = QUI::getUserBySession();
-$isAuth = boolval($SessionUser->getId());
+$isAuth = QUI::getUsers()->isAuth($SessionUser);
 
 if ($isAuth) {
     // check for redirection

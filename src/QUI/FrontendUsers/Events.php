@@ -155,7 +155,7 @@ class Events
             // do not log in if autoLogin is deactivated or user is already logged in!
             if (
                 !$registrationSettings['autoLoginOnActivation']
-                || QUI::getUserBySession()->getId()
+                || QUI::getUserBySession()->getUUID()
                 || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)
             ) {
                 return;
@@ -179,7 +179,7 @@ class Events
         $User->save(QUI::getUsers()->getSystemUser());
 
         $Session = QUI::getSession();
-        $Session->set('uid', $User->getId());
+        $Session->set('uid', $User->getUUID());
         $Session->set('auth', 1);
         $Session->set('secHash', $secHash);
 
@@ -196,7 +196,7 @@ class Events
                 'user_agent' => $useragent,
                 'secHash' => $secHash
             ],
-            ['id' => $User->getId()]
+            ['id' => $User->getUUID()]
         );
 
         QUI::getEvents()->fireEvent(
@@ -235,7 +235,7 @@ class Events
         // delete Verification for user (if not yet deleted by quiqqer/verification cron)
         try {
             $Verification = Verifier::getVerificationByIdentifier(
-                $User->getId(),
+                $User->getUUID(),
                 ActivationVerification::getType()
             );
 
@@ -480,7 +480,7 @@ class Events
                         'Locale'
                     ], function(Password, QUILocale) {
                         new Password({
-                            uid: '" . $User->getId() . "',
+                            uid: '" . $User->getUUID() . "',
                             mustChange: true,
                             message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
                             events: {

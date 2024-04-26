@@ -61,7 +61,7 @@ class UserData extends AbstractProfileControl
 
         try {
             QUI\Verification\Verifier::getVerificationByIdentifier(
-                $User->getId(),
+                $User->getUUID(),
                 QUI\FrontendUsers\EmailConfirmVerification::getType(),
                 true
             );

@@ -68,7 +68,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             $User->setAttributes([
                 'firstname' => $this->getAttribute('firstname'),
                 'lastname' => $this->getAttribute('lastname'),
-                'address' => $UserAddress->getId()    // set as main address
+                'address' => $UserAddress->getUUID()    // set as main address
             ]);
 
             $tel = $this->getAttribute('phone');

@@ -21,7 +21,7 @@ QUI::$Ajax->registerFunction(
     function ($email) {
         try {
             $User = QUI::getUsers()->getUserByMail(Orthos::clear($email));
-            Verifier::getVerificationByIdentifier($User->getId(), ActivationVerification::getType());
+            Verifier::getVerificationByIdentifier($User->getUUID(), ActivationVerification::getType());
         } catch (Exception $Exception) {
             // if the verification does not exist -> do not resend mail
             QUI\System\Log::writeException($Exception);

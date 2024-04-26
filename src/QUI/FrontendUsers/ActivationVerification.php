@@ -35,7 +35,7 @@ class ActivationVerification extends AbstractVerification
      */
     public function onSuccess(): void
     {
-        $userId = (int)$this->getIdentifier();
+        $userId = $this->getIdentifier();
 
         try {
             $User = QUI::getUsers()->get($userId);

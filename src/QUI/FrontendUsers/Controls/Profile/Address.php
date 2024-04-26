@@ -64,7 +64,7 @@ class Address extends AbstractProfileControl
                 'lastname' => $User->getAttribute('lastname')
             ], $SystemUser);
 
-            $User->setAttribute('address', $UserAddress->getId());
+            $User->setAttribute('address', $UserAddress->getUUID());
             $User->save($SystemUser);
         }
 

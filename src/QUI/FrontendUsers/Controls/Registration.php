@@ -195,7 +195,7 @@ class Registration extends QUI\Control
         }
 
         // Behaviour if user is already logged in
-        $loggedIn = boolval(QUI::getUserBySession()->getId());
+        $loggedIn = QUI::getUsers()->isAuth(QUI::getUserBySession());
 
         if (!$success && $loggedIn) {
             switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
@@ -223,7 +223,7 @@ class Registration extends QUI\Control
         // determine if Login control is shown
         $Login = false;
 
-        if (!QUI::getUserBySession()->getId()) {
+        if (!QUI::getUserBySession()->getUUID()) {
             $Login = new FrontendLogin([
                 'showRegistration' => false
             ]);
@@ -514,7 +514,6 @@ class Registration extends QUI\Control
 
         // send registration notice to admins
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
-
         $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // check if the user has a password
@@ -522,7 +521,7 @@ class Registration extends QUI\Control
             'select' => 'password',
             'from' => QUI::getDBTableName('users'),
             'where' => [
-                'id' => $NewUser->getId()
+                'uuid' => $NewUser->getUUID()
             ],
             'limit' => 1
         ]);

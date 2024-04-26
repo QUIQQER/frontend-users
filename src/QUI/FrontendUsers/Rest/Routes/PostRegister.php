@@ -176,7 +176,7 @@ class PostRegister
             $User->setAttributes([
                 'firstname' => $RegistrationData->getAttribute('firstname'),
                 'lastname' => $RegistrationData->getAttribute('lastname'),
-                'address' => $UserAddress->getId()    // set as main address
+                'address' => $UserAddress->getUUID()    // set as main address
             ]);
 
             $tel = $RegistrationData->getAttribute('phone');
@@ -210,12 +210,16 @@ class PostRegister
         $User->save($SystemUser);
     }
 
+    /**
+     * @throws QUI\Exception
+     * @throws QUI\Verification\Exception
+     */
     protected static function sendActivationMail(
         QUI\Interfaces\Users\User $User,
         QUI\Projects\Project $Project
     ): bool {
         // TODO: Verification uses Project from QUI::getRewrite instead of the parameter, therefore the default project is always used (see quiqqer/verification#5)
-        $ActivationVerification = new ActivationVerification($User->getId(), [
+        $ActivationVerification = new ActivationVerification($User->getUUID(), [
             'project' => $Project->getName(),
             'projectLang' => $Project->getLang()
         ]);

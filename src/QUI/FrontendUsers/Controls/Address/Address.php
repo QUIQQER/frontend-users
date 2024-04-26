@@ -127,7 +127,7 @@ class Address extends QUI\Control
     {
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
-        $Address = $User->getAddress((int)$_REQUEST['edit']);
+        $Address = $User->getAddress($_REQUEST['edit']);
 
         try {
             $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
@@ -220,7 +220,7 @@ class Address extends QUI\Control
     {
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
-        $Address = $User->getAddress((int)$_REQUEST['delete']);
+        $Address = $User->getAddress($_REQUEST['delete']);
 
         $Engine->assign([
             'this' => $this,

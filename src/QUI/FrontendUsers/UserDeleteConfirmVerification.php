@@ -47,12 +47,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
                 case 'delete':
                     QUI::getDataBase()->update(
                         QUI::getDBTableName('users'),
-                        [
-                            'active' => -1
-                        ],
-                        [
-                            'id' => $User->getId()
-                        ]
+                        ['active' => -1],
+                        ['uuid' => $User->getUUID()]
                     );
                     break;
 

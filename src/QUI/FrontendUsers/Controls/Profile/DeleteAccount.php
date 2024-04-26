@@ -45,7 +45,7 @@ class DeleteAccount extends AbstractProfileControl
 
         try {
             $DeleteVerification = Verifier::getVerificationByIdentifier(
-                QUI::getUserBySession()->getId(),
+                QUI::getUserBySession()->getUUID(),
                 QUI\FrontendUsers\UserDeleteConfirmVerification::getType(),
                 true
             );

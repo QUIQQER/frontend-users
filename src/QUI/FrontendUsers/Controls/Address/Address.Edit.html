@@ -166,6 +166,6 @@
         {locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.address.btn"}
     </button>
 
-    <input type="hidden" name="addressId" value="{$Address->getId()}"/>
+    <input type="hidden" name="addressId" value="{$Address->getUUID()}"/>
     <input type="hidden" name="step" value="{$this->getName()}"/>
 </section>

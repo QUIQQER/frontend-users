@@ -52,7 +52,7 @@ class ProfileBar extends Control
         $settings = $Handler->getProfileBarSettings();
 
         $Engine->assign([
-            'isAuth' => boolval($User->getId()),
+            'isAuth' => QUI::getUsers()->isAuth($User),
             'UserIcon' => new UserIcon([
                 'User' => $User
             ]),
