@@ -106,7 +106,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
      * @return string
      */
-    public function getErrorMessage($reason): string
+    public function getErrorMessage(string $reason): string
     {
         return '';
     }

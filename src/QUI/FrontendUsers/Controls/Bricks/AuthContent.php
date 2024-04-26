@@ -4,7 +4,6 @@ namespace QUI\FrontendUsers\Controls\Bricks;
 
 use QUI;
 
-use function array_walk;
 use function explode;
 use function json_decode;
 use function json_last_error;
