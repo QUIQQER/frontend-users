@@ -82,9 +82,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
      *
      * @return void
      */
-    public function onError()
+    public function onError(): void
     {
-        // nothing
     }
 
     /**
@@ -158,6 +157,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * Get the Project this Verification is intended for
      *
      * @return QUI\Projects\Project
+     * @throws Exception
      */
     protected function getProject(): QUI\Projects\Project
     {

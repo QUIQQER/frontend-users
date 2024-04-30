@@ -157,7 +157,7 @@ class UserData extends AbstractProfileControl
 
         $required = array_keys($required);
 
-        $checkFields = function ($fieldName) use ($settings, $required, $Request) {
+        $checkFields = function ($fieldName) use ($required, $Request) {
             // wenn kein required, kann auch geleert werden
             if ($Request->has($fieldName) && !in_array($fieldName, $required)) {
                 return true;
