@@ -3,7 +3,6 @@
 namespace QUI\FrontendUsers\Console;
 
 use Exception;
-use JetBrains\PhpStorm\NoReturn;
 use QUI;
 
 use function explode;
@@ -119,14 +118,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
             $where[] = "(" . implode(" OR ", $whereOR) . ")";
         }
 
-        if (!empty($where)) {
-            $sql .= " WHERE " . implode(" AND ", $where);
-        }
-
-        if (!empty($orderBy)) {
-            $sql .= " ORDER BY $orderBy";
-        }
-
+        $sql .= " WHERE " . implode(" AND ", $where);
         $result = QUI::getDataBase()->fetchSQL($sql);
 
         $anonymiseEmailOnly = !empty($this->getArgument('email_only'));
@@ -220,9 +212,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
     /**
      * Exits the console tool with a success msg and status 0
      *
-     * @return void
+     * @return never
      */
-    #[NoReturn] protected function exitSuccess(): void
+    protected function exitSuccess(): never
     {
         $this->writeLn("\n\nUsers have been successfully anonymised.");
         $this->writeLn();
@@ -234,9 +226,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      * Exits the console tool with an error msg and status 1
      *
      * @param $msg
-     * @return void
+     * @return never
      */
-    #[NoReturn] protected function exitFail($msg): void
+    protected function exitFail($msg): never
     {
         $this->writeLn("Script aborted due to an error:");
         $this->writeLn();

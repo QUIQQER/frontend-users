@@ -2,7 +2,6 @@
 
 namespace QUI\FrontendUsers\Console;
 
-use JetBrains\PhpStorm\NoReturn;
 use QUI;
 use QUI\Exception;
 
@@ -728,9 +727,9 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Exits the console tool with a success msg and status 0
      *
-     * @return void
+     * @return never
      */
-    #[NoReturn] protected function exitSuccess(): void
+    protected function exitSuccess(): never
     {
         $this->writeLn("\n\nMails have been successfully queued and will be sent via cron.");
         $this->writeLn();
@@ -742,9 +741,9 @@ class SendUserMails extends QUI\System\Console\Tool
      * Exits the console tool with an error msg and status 1
      *
      * @param $msg
-     * @return void
+     * @return never
      */
-    #[NoReturn] protected function exitFail($msg): void
+    protected function exitFail($msg): never
     {
         $this->writeLn("Script aborted due to an error:");
         $this->writeLn();
