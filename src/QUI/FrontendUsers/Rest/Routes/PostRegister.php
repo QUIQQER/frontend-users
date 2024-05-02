@@ -247,7 +247,7 @@ class PostRegister
                 [
                     'body' => $L->get($lg, 'mail.registration_activation.body', [
                         'host' => $host,
-                        'userId' => $User->getId(),
+                        'userId' => $User->getUUID(),
                         'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
