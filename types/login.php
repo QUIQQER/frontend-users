@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file contains the login site type
+ *
+ * @var QUI\Projects\Project $Project
+ * @var QUI\Projects\Site $Site
+ * @var QUI\Interfaces\Template\EngineInterface $Engine
+ * @var QUI\Template $Template
+ **/
+
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\Projects\Site\Utils as SiteUtils;

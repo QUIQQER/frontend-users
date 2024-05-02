@@ -1,5 +1,5 @@
 {
-  "name": "quiqqer\/frontend-users",
+  "name": "quiqqer/frontend-users",
   "type": "quiqqer-module",
   "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
   "license": "GPL-3.0+",
@@ -7,19 +7,19 @@
     {
       "name": "Henning Leutz",
       "email": "support@pcsg.de",
-      "homepage": "http:\/\/www.pcsg.de",
+      "homepage": "https://www.pcsg.de",
       "role": "Developer"
     },
     {
       "name": "Patrick M\u00fcller",
       "email": "support@pcsg.de",
-      "homepage": "http:\/\/www.pcsg.de",
+      "homepage": "https://www.pcsg.de",
       "role": "Developer"
     },
     {
       "name": "Jan Wennrich",
       "email": "support@pcsg.de",
-      "homepage": "https:\/\/www.pcsg.de",
+      "homepage": "https://www.pcsg.de",
       "role": "Developer"
     }
   ],
@@ -27,18 +27,18 @@
     "email": "support@pcsg.de"
   },
   "require": {
-    "quiqqer\/core": "^2",
-    "quiqqer\/countries": "^2",
-    "quiqqer\/verification": "^2",
-    "quiqqer\/tooltips": "^2",
-    "quiqqer\/data-layer": "^2"
+    "quiqqer/core": "^2",
+    "quiqqer/countries": "^2",
+    "quiqqer/verification": "^2",
+    "quiqqer/tooltips": "^2",
+    "quiqqer/data-layer": "^2"
   },
   "suggest": {
-    "quiqqer\/rest": "User registration via REST API"
+    "quiqqer/rest": "User registration via REST API"
   },
   "autoload": {
     "psr-4": {
-      "QUI\\FrontendUsers\\": "src\/QUI\/FrontendUsers"
+      "QUI\\FrontendUsers\\": "src/QUI/FrontendUsers"
     }
   }
 }

@@ -1,8 +1,13 @@
 <?php
 
 /**
- * Registration Sign Up Site Type
- */
+ * This file contains the registration signup site type
+ *
+ * @var QUI\Projects\Project $Project
+ * @var QUI\Projects\Site $Site
+ * @var QUI\Interfaces\Template\EngineInterface $Engine
+ * @var QUI\Template $Template
+ **/
 
 use QUI\Utils\Security\Orthos;
 
