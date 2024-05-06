@@ -2,6 +2,7 @@
 
 namespace QUI\FrontendUsers\Rest\Routes;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 use QUI;
@@ -25,7 +26,7 @@ class GetRegisterRequiredFields
 
         try {
             $requiredFields = QUI\FrontendUsers\Rest\RegistrationData::getRequiredFields();
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
 
             return $ResponseFactory->createResponse(500);

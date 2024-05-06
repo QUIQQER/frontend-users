@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\Control;
+use QUI\Exception;
 use QUI\FrontendUsers\Handler;
 
 /**
@@ -39,8 +40,9 @@ class ProfileBar extends Control
      * Return the control body
      *
      * @return string
+     * @throws Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $User = QUI::getUserBySession();
@@ -50,7 +52,7 @@ class ProfileBar extends Control
         $settings = $Handler->getProfileBarSettings();
 
         $Engine->assign([
-            'isAuth' => boolval($User->getId()),
+            'isAuth' => QUI::getUsers()->isAuth($User),
             'UserIcon' => new UserIcon([
                 'User' => $User
             ]),

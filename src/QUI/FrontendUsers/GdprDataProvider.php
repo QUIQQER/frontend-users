@@ -132,7 +132,7 @@ class GdprDataProvider extends AbstractDataProvider
         $prefix = 'GdprDataProvider.userDataField.';
 
         $dataFields = [
-            $this->Locale->get($lg, $prefix . 'userId') => $this->User->getId(),
+            $this->Locale->get($lg, $prefix . 'userId') => $this->User->getUUID(),
             $this->Locale->get($lg, $prefix . 'email') => $this->User->getAttribute('email')
         ];
 

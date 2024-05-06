@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file contains the login site type
+ *
+ * @var QUI\Projects\Project $Project
+ * @var QUI\Projects\Site $Site
+ * @var QUI\Interfaces\Template\EngineInterface $Engine
+ * @var QUI\Template $Template
+ **/
+
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\Projects\Site\Utils as SiteUtils;
@@ -18,7 +27,7 @@ if (
     try {
         $User = $Users->getUserByName(Orthos::clear($_POST['username']));
 
-        QUI::getSession()->set('uid', $User->getId());
+        QUI::getSession()->set('uid', $User->getUUID());
 
         // use QUIQQER default authenticator
         QUI::getUsers()->authenticate(
@@ -37,7 +46,7 @@ if (
 }
 
 $SessionUser = QUI::getUserBySession();
-$isAuth = boolval($SessionUser->getId());
+$isAuth = QUI::getUsers()->isAuth($SessionUser);
 
 if ($isAuth) {
     // check for redirection

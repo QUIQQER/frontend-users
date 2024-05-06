@@ -27,14 +27,14 @@
             <header>
                 <label>
                     <span class="fa fa-address-card-o"></span>
-                    {if $Address->getId() == $User->getAttribute('address')}
+                    {if $Address->getUUID() == $User->getAttribute('address')}
                     {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
                     {else}
                     {locale group="quiqqer/frontend-users" var="control.address.header.title"}
                     {/if}
                     <input type="hidden"
                            name="address"
-                           value="{$Address->getId()}"
+                           value="{$Address->getUUID()}"
                     >
                 </label>
             </header>
@@ -42,13 +42,13 @@
             {$Address->render()}
 
             <div class="quiqqer-frontend-users-address-list-entry-buttons">
-                <button type="submit" name="edit" value="{$Address->getId()}">
+                <button type="submit" name="edit" value="{$Address->getUUID()}">
                     <span class="fa fa-edit"></span>
                     <span>
                         {locale group="quiqqer/frontend-users" var="control.address.title.Address.editButton"}
                     </span>
                 </button>
-                <button type="submit" name="delete" value="{$Address->getId()}" class="btn btn-danger">
+                <button type="submit" name="delete" value="{$Address->getUUID()}" class="btn btn-danger">
                     <span class="fa fa-trash"></span>
                     <span>
                         {locale group="quiqqer/frontend-users" var="control.address.title.Address.deleteButton"}

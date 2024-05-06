@@ -6,9 +6,19 @@
 
 namespace QUI\FrontendUsers\Controls;
 
+use Exception;
 use QUI;
 use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Utils\Security\Orthos;
+
+use function array_filter;
+use function array_flip;
+use function boolval;
+use function class_exists;
+use function dirname;
+use function get_class;
+use function in_array;
+use function str_replace;
 
 /**
  * Class RegistrationSignUp
@@ -22,7 +32,7 @@ class RegistrationSignUp extends QUI\Control
      *
      * @var string
      */
-    protected $id;
+    protected string $id;
 
     /**
      * constructor.
@@ -48,7 +58,7 @@ class RegistrationSignUp extends QUI\Control
 
         $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
 
-        $this->addCSSFile(\dirname(__FILE__) . '/RegistrationSignUp.css');
+        $this->addCSSFile(dirname(__FILE__) . '/RegistrationSignUp.css');
         $this->addCSSClass('quiqqer-fu-registrationSignUp');
 
         $this->setJavaScriptControl(
@@ -62,7 +72,7 @@ class RegistrationSignUp extends QUI\Control
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
 
@@ -82,6 +92,10 @@ class RegistrationSignUp extends QUI\Control
         // trial registration
         if ($this->getAttribute('registration-trial')) {
             $registrationTrial = $Registrars->filter(function ($Registrar) {
+                if (!class_exists('QUI\Registration\Trial\Registrar')) {
+                    return false;
+                }
+
                 return $Registrar instanceof QUI\Registration\Trial\Registrar;
             });
 
@@ -99,13 +113,13 @@ class RegistrationSignUp extends QUI\Control
         if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
             $Captcha = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
-            $useCaptcha = \boolval($registrationSettings['useCaptcha']);
+            $useCaptcha = boolval($registrationSettings['useCaptcha']);
 
             $Default = QUI\Captcha\Handler::getDefaultCaptchaModuleControl();
             $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
 
             if (
-                \class_exists('QUI\Captcha\Modules\Google')
+                class_exists('QUI\Captcha\Modules\Google')
                 && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class
             ) {
                 $Engine->assign('googleSideKey', QUI\Captcha\Modules\Google::getSiteKey());
@@ -123,29 +137,32 @@ class RegistrationSignUp extends QUI\Control
         ]);
 
         $Engine->assign([
-            'captchaHTML' => $Engine->fetch(\dirname(__FILE__) . '/RegistrationSignUp.Captcha.html')
+            'captchaHTML' => $Engine->fetch(dirname(__FILE__) . '/RegistrationSignUp.Captcha.html')
         ]);
 
         // default stuff
         $Registrars = $Registrars->filter(function ($Registrar) {
-            $class = \get_class($Registrar);
+            $class = get_class($Registrar);
             $haystack = [
                 QUI\FrontendUsers\Registrars\Email\Registrar::class
             ];
 
-            if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
+            if (
+                QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')
+                && class_exists('QUI\Registration\Trial\Registrar')
+            ) {
                 $haystack[] = QUI\Registration\Trial\Registrar::class;
             }
 
-            $haystack = \array_flip($haystack);
+            $haystack = array_flip($haystack);
 
             return !isset($haystack[$class]);
         });
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarA));
-            $settingsB = $RegistrarHandler->getRegistrarSettings(\get_class($RegistrarB));
+            $settingsA = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
+            $settingsB = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -190,7 +207,7 @@ class RegistrationSignUp extends QUI\Control
                                 'fireUserActivationEvent' => true,
                                 'User' => QUI::getUserBySession(),
                                 'registrarHash' => $Registrar->getHash(),
-                                'registrarType' => \str_replace('\\', '\\\\', $Registrar->getType())
+                                'registrarType' => str_replace('\\', '\\\\', $Registrar->getType())
                             ]);
                         }
                     }
@@ -308,7 +325,7 @@ class RegistrationSignUp extends QUI\Control
             'valueEmail' => $valueEmail
         ]);
 
-        return $Engine->fetch(\dirname(__FILE__) . '/RegistrationSignUp.html');
+        return $Engine->fetch(dirname(__FILE__) . '/RegistrationSignUp.html');
     }
 
     /**
@@ -316,7 +333,7 @@ class RegistrationSignUp extends QUI\Control
      *
      * @return QUI\FrontendUsers\RegistrarCollection
      */
-    protected function getRegistrars()
+    protected function getRegistrars(): QUI\FrontendUsers\RegistrarCollection
     {
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $filterRegistrars = $this->getAttribute('registrars');
@@ -329,9 +346,9 @@ class RegistrationSignUp extends QUI\Control
         $registrars = $Registrars->toArray();
         $FilteredRegistrars = new QUI\FrontendUsers\RegistrarCollection();
 
-        $registrars = \array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
+        $registrars = array_filter($registrars, function ($Registrar) use ($filterRegistrars) {
             /** @var QUI\FrontendUsers\RegistrarInterface $Registrar */
-            return \in_array($Registrar->getType(), $filterRegistrars);
+            return in_array($Registrar->getType(), $filterRegistrars);
         });
 
         foreach ($registrars as $Registrar) {
@@ -346,8 +363,9 @@ class RegistrationSignUp extends QUI\Control
      *
      * @param QUI\Interfaces\Template\EngineInterface $Engine
      * @throws QUI\Exception
+     * @throws Exception
      */
-    protected function siteTermsPrivacy($Engine)
+    protected function siteTermsPrivacy(QUI\Interfaces\Template\EngineInterface $Engine): void
     {
         $Project = $this->getProject();
 
@@ -426,15 +444,15 @@ class RegistrationSignUp extends QUI\Control
      * @param $Registrar
      * @return string
      */
-    public function getRegistrarIcon($Registrar)
+    public function getRegistrarIcon($Registrar): string
     {
         $icon = $Registrar->getIcon();
 
         if (
-            strpos($icon, '.png') !== false
-            || strpos($icon, '.jpg') !== false
-            || strpos($icon, '.gif') !== false
-            || strpos($icon, '.svg') !== false
+            str_contains($icon, '.png')
+            || str_contains($icon, '.jpg')
+            || str_contains($icon, '.gif')
+            || str_contains($icon, '.svg')
         ) {
             return '<span class="quiqqer-fu-registrationSignUp-registration-social-entry-imageIcon">
                 <span style="background-image: url(\'' . $icon . '\')"></span>

@@ -18,7 +18,7 @@ class Provider implements QUI\REST\ProviderInterface
     /**
      * @param Server $Server
      */
-    public function register(Server $Server)
+    public function register(Server $Server): void
     {
         $Slim = $Server->getSlim();
 
@@ -31,7 +31,7 @@ class Provider implements QUI\REST\ProviderInterface
         });
     }
 
-    public function getOpenApiDefinitionFile()
+    public function getOpenApiDefinitionFile(): bool|string
     {
         try {
             $packageDirectory = QUI::getPackage('quiqqer/frontend-users')->getDir();

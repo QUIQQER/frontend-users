@@ -3,6 +3,7 @@
 namespace QUI\FrontendUsers\Controls\Profile;
 
 use QUI;
+use QUI\Upload\Form;
 use QUI\Utils\System\File as FileUtils;
 
 use function rename;
@@ -13,7 +14,7 @@ use function trim;
  * Class UserAvatarUpload
  * @package QUI\FrontendUsers\Controls\Profile
  */
-class UserAvatarUpload extends \QUI\Upload\Form
+class UserAvatarUpload extends Form
 {
     /**
      * UserAvatarUpload constructor.
@@ -21,7 +22,7 @@ class UserAvatarUpload extends \QUI\Upload\Form
      * @param array $params
      * @throws QUI\Exception
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         parent::__construct($params);
 
@@ -53,7 +54,7 @@ class UserAvatarUpload extends \QUI\Upload\Form
      *
      * @throws QUI\Exception
      */
-    public function onFileFinish($file, $params)
+    public function onFileFinish($file, $params): void
     {
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $folder = $Config->getValue('userProfile', 'userAvatarFolder');
@@ -90,7 +91,7 @@ class UserAvatarUpload extends \QUI\Upload\Form
             if ($Placeholder && $Avatar->getId() !== $Placeholder->getId()) {
                 $Avatar->delete($PermissionUser);
             }
-        } catch (QUI\Exception $exception) {
+        } catch (QUI\Exception) {
         }
 
         // rename file to user file

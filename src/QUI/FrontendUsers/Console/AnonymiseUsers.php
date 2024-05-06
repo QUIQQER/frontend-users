@@ -2,9 +2,12 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use Exception;
 use QUI;
 
+use function explode;
 use function implode;
+use function mb_substr;
 
 /**
  * Console tool to anonymise users
@@ -33,8 +36,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
 
     /**
      * Execute the console tool
+     * @throws QUI\Database\Exception
      */
-    public function execute()
+    public function execute(): void
     {
         QUI\Permissions\Permission::isAdmin();
 
@@ -90,8 +94,9 @@ class AnonymiseUsers extends QUI\System\Console\Tool
     /**
      * @param array $settings
      * @return void
+     * @throws QUI\Database\Exception
      */
-    protected function anonymiseUsers($settings)
+    protected function anonymiseUsers(array $settings): void
     {
         $groupIds = $settings['groupIds'];
         $tbl = QUI::getDBTableName('users');
@@ -113,14 +118,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
             $where[] = "(" . implode(" OR ", $whereOR) . ")";
         }
 
-        if (!empty($where)) {
-            $sql .= " WHERE " . implode(" AND ", $where);
-        }
-
-        if (!empty($orderBy)) {
-            $sql .= " ORDER BY $orderBy";
-        }
-
+        $sql .= " WHERE " . implode(" AND ", $where);
         $result = QUI::getDataBase()->fetchSQL($sql);
 
         $anonymiseEmailOnly = !empty($this->getArgument('email_only'));
@@ -186,7 +184,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                 }
 
                 $this->write(" OK!");
-            } catch (\Exception $Exception) {
+            } catch (Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
                 $this->write("ERROR: " . $Exception->getMessage());
             }
@@ -199,27 +197,27 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      * @param string $str
      * @return string - Anonymised string
      */
-    protected function anonymiseString(string $str)
+    protected function anonymiseString(string $str): string
     {
-        $parts = \explode(' ', $str);
+        $parts = explode(' ', $str);
         $anonStrParts = [];
 
         foreach ($parts as $part) {
-            $anonStrParts[] = \mb_substr($part, 0, 1) . '*';
+            $anonStrParts[] = mb_substr($part, 0, 1) . '*';
         }
 
-        return \implode(' ', $anonStrParts);
+        return implode(' ', $anonStrParts);
     }
 
     /**
      * Exits the console tool with a success msg and status 0
      *
-     * @return void
+     * @return never
      */
-    protected function exitSuccess()
+    protected function exitSuccess(): never
     {
         $this->writeLn("\n\nUsers have been successfully anonymised.");
-        $this->writeLn("");
+        $this->writeLn();
 
         exit(0);
     }
@@ -228,15 +226,15 @@ class AnonymiseUsers extends QUI\System\Console\Tool
      * Exits the console tool with an error msg and status 1
      *
      * @param $msg
-     * @return void
+     * @return never
      */
-    protected function exitFail($msg)
+    protected function exitFail($msg): never
     {
         $this->writeLn("Script aborted due to an error:");
-        $this->writeLn("");
+        $this->writeLn();
         $this->writeLn($msg);
-        $this->writeLn("");
-        $this->writeLn("");
+        $this->writeLn();
+        $this->writeLn();
 
         exit(1);
     }
