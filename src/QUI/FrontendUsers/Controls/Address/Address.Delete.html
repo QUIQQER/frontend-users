@@ -14,7 +14,7 @@
             {locale group="quiqqer/order" var="ordering.step.title.Address.delete.btn"}
         </button>
 
-        <input type="hidden" name="addressId" value="{$Address->getId()}"/>
+        <input type="hidden" name="addressId" value="{$Address->getUUID()}"/>
         <input type="hidden" name="executeDeletion" value="1"/>
     </div>
 </section>

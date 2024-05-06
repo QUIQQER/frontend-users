@@ -6,6 +6,7 @@
 
 namespace QUI\FrontendUsers\Controls\Profile;
 
+use Exception;
 use QUI;
 use QUI\Countries\Controls\Select as CountrySelect;
 use QUI\Utils\Security\Orthos;
@@ -33,7 +34,7 @@ class Address extends AbstractProfileControl
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Package = QUI::getPackage('quiqqer/frontend-users');
         $Config = $Package->getConfig();
@@ -54,7 +55,7 @@ class Address extends AbstractProfileControl
 
         try {
             $UserAddress = $User->getStandardAddress();
-        } catch (QUI\Users\Exception $Exception) {
+        } catch (QUI\Users\Exception) {
             // if no user address exist -> create one
             $SystemUser = QUI::getUsers()->getSystemUser();
 
@@ -63,7 +64,7 @@ class Address extends AbstractProfileControl
                 'lastname' => $User->getAttribute('lastname')
             ], $SystemUser);
 
-            $User->setAttribute('address', $UserAddress->getId());
+            $User->setAttribute('address', $UserAddress->getUUID());
             $User->save($SystemUser);
         }
 
@@ -81,7 +82,7 @@ class Address extends AbstractProfileControl
                     try {
                         $Country = $UserAddress->getCountry();
                         $countryCode = mb_strtoupper($Country->getCode());
-                    } catch (\Exception $Exception) {
+                    } catch (Exception) {
                         // nothing, user has no country
                     }
 
@@ -131,11 +132,13 @@ class Address extends AbstractProfileControl
     /**
      * Method is called, when on save is triggered
      *
-     * @return mixed|void
-     * @throws QUI\Users\Exception
+     * @return void
      * @throws QUI\Exception
+     * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Permissions\Exception
+     * @throws QUI\Users\Exception
      */
-    public function onSave()
+    public function onSave(): void
     {
         $Package = QUI::getPackage('quiqqer/frontend-users');
         $Config = $Package->getConfig();
@@ -171,13 +174,13 @@ class Address extends AbstractProfileControl
     }
 
     /**
-     * @param QUI\Users\User $User
+     * @param QUI\Interfaces\Users\User $User
      * @throws QUI\Exception
      * @throws QUI\FrontendUsers\Exception
      * @throws QUI\Permissions\Exception
      * @throws QUI\Users\Exception
      */
-    protected function saveAddress(QUI\Users\User $User)
+    protected function saveAddress(QUI\Interfaces\Users\User $User): void
     {
         $Request = QUI::getRequest()->request;
         $User = $this->getAttribute('User');

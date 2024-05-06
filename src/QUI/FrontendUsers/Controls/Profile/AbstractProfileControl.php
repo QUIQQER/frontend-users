@@ -2,6 +2,7 @@
 
 namespace QUI\FrontendUsers\Controls\Profile;
 
+use Exception;
 use QUI;
 
 /**
@@ -14,9 +15,9 @@ abstract class AbstractProfileControl extends QUI\Control implements ControlInte
     /**
      * Method is called, when on save is triggered
      *
-     * @return mixed|void
+     * @return void
      */
-    public function onSave()
+    public function onSave(): void
     {
         // nothing
     }
@@ -24,10 +25,10 @@ abstract class AbstractProfileControl extends QUI\Control implements ControlInte
     /**
      * Validate the send data
      *
-     * @return mixed|void
-     * @throws \Exception
+     * @return void
+     * @throws Exception
      */
-    public function validate()
+    public function validate(): void
     {
         // nothing
     }

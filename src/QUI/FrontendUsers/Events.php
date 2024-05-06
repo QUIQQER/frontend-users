@@ -3,9 +3,13 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
-use QUI\Users\User;
+use QUI\Exception;
+use QUI\Interfaces\Users\User;
 use QUI\Verification\Verifier;
-use Quiqqer\Engine\Collector;
+use QUI\Smarty\Collector;
+
+use function base64_encode;
+use function json_encode;
 
 /**
  * Class Events
@@ -19,12 +23,12 @@ class Events
     /**
      * quiqqer/quiqqer: onUserActivate
      *
-     * @param \QUI\Users\User $User
+     * @param User $User
      * @return void
      *
      * @throws QUI\Exception
      */
-    public static function onUserActivate(User $User)
+    public static function onUserActivate(User $User): void
     {
         self::sendWelcomeMail($User);
         self::autoLogin($User);
@@ -38,9 +42,9 @@ class Events
     /**
      * quiqqer/quiqqer: onSiteInit
      *
-     * @param QUI\Projects\Site $Site
+     * @param QUI\Interfaces\Projects\Site $Site
      */
-    public static function onSiteInit($Site)
+    public static function onSiteInit(QUI\Interfaces\Projects\Site $Site): void
     {
         switch ($Site->getAttribute('type')) {
             case Handler::SITE_TYPE_REGISTRATION:
@@ -52,9 +56,9 @@ class Events
     }
 
     /**
-     * @param \QUI\Projects\Site\Edit $Site
+     * @param QUI\Interfaces\Projects\Site $Site
      */
-    public static function onSiteSave($Site)
+    public static function onSiteSave(QUI\Interfaces\Projects\Site $Site): void
     {
         // register path
         if (
@@ -71,12 +75,12 @@ class Events
     /**
      * Send welcome mail to the user
      *
-     * @param User $User
+     * @param QUI\Interfaces\Users\User $User
      * @return void
      *
      * @throws QUI\Exception
      */
-    public static function sendWelcomeMail(User $User)
+    public static function sendWelcomeMail(QUI\Interfaces\Users\User $User): void
     {
         $Handler = Handler::getInstance();
         $registrationSettings = $Handler->getRegistrationSettings();
@@ -100,16 +104,13 @@ class Events
 
         // set random password
         $randomPass = null;
-        $Registrar = $Handler->getReigstrarByUser($User);
+        $Registrar = $Handler->getRegistrarByUser($User);
 
         if (!$Registrar) {
             return;
         }
 
-        if (
-            boolval($registrationSettings['sendPassword'])
-            && $Registrar->canSendPassword()
-        ) {
+        if ($registrationSettings['sendPassword'] && $Registrar->canSendPassword()) {
             $randomPass = QUI\Security\Password::generateRandom();
             $User->setPassword($randomPass, QUI::getUsers()->getSystemUser());
             $User->save(QUI::getUsers()->getSystemUser());
@@ -123,13 +124,13 @@ class Events
     /**
      * Auto-login user
      *
-     * @param User $User
+     * @param QUI\Interfaces\Users\User $User
      * @param bool $checkEligibility (optional) - Checks if the user is eligible for auto login
      * @return void
      *
      * @throws QUI\Exception
      */
-    public static function autoLogin(User $User, $checkEligibility = true)
+    public static function autoLogin(QUI\Interfaces\Users\User $User, bool $checkEligibility = true): void
     {
         $Handler = Handler::getInstance();
 
@@ -154,7 +155,7 @@ class Events
             // do not log in if autoLogin is deactivated or user is already logged in!
             if (
                 !$registrationSettings['autoLoginOnActivation']
-                || QUI::getUserBySession()->getId()
+                || QUI::getUserBySession()->getUUID()
                 || $User->getAttribute($Handler::USER_ATTR_ACTIVATION_LOGIN_EXECUTED)
             ) {
                 return;
@@ -178,7 +179,7 @@ class Events
         $User->save(QUI::getUsers()->getSystemUser());
 
         $Session = QUI::getSession();
-        $Session->set('uid', $User->getId());
+        $Session->set('uid', $User->getUUID());
         $Session->set('auth', 1);
         $Session->set('secHash', $secHash);
 
@@ -195,7 +196,7 @@ class Events
                 'user_agent' => $useragent,
                 'secHash' => $secHash
             ],
-            ['id' => $User->getId()]
+            ['id' => $User->getUUID()]
         );
 
         QUI::getEvents()->fireEvent(
@@ -210,11 +211,11 @@ class Events
     /**
      * quiqqer/quiqqer: onUserCreate
      *
-     * @param User $User
+     * @param QUI\Interfaces\Users\User $User
      * @return void
      * @throws QUI\Exception
      */
-    public static function onUserCreate(User $User)
+    public static function onUserCreate(QUI\Interfaces\Users\User $User): void
     {
         $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $userGravatarDefaultValue = $Conf->get('userProfile', 'useGravatarUserDefaultValue');
@@ -226,20 +227,20 @@ class Events
     /**
      * quiqqer/quiqqer: onUserDelete
      *
-     * @param \QUI\Users\User $User
+     * @param User $User
      * @return void
      */
-    public static function onUserDelete(User $User)
+    public static function onUserDelete(User $User): void
     {
         // delete Verification for user (if not yet deleted by quiqqer/verification cron)
         try {
             $Verification = Verifier::getVerificationByIdentifier(
-                $User->getId(),
+                $User->getUUID(),
                 ActivationVerification::getType()
             );
 
             Verifier::removeVerification($Verification);
-        } catch (\Exception $Exception) {
+        } catch (\Exception) {
             // nothing -> if Verification not found it does not have to be deleted
         }
     }
@@ -250,7 +251,7 @@ class Events
      * @param QUI\Package\Package $Package
      * @return void
      */
-    public static function onPackageInstall(QUI\Package\Package $Package)
+    public static function onPackageInstall(QUI\Package\Package $Package): void
     {
         if ($Package->getName() !== 'quiqqer/frontend-users') {
             return;
@@ -270,7 +271,7 @@ class Events
      * @return void
      * @throws QUI\Exception
      */
-    public static function onPackageSetup(QUI\Package\Package $Package)
+    public static function onPackageSetup(QUI\Package\Package $Package): void
     {
         if ($Package->getName() !== 'quiqqer/frontend-users') {
             return;
@@ -289,8 +290,9 @@ class Events
      * Set default settings for all frontend authenticators
      *
      * @return void
+     * @throws Exception
      */
-    protected static function setAuthenticatorsDefaultSettings()
+    protected static function setAuthenticatorsDefaultSettings(): void
     {
         try {
             $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
@@ -309,16 +311,14 @@ class Events
 
         foreach (QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators() as $class) {
             // Some authenticators are always available and cannot be switched off
-            switch ($class) {
-                case 'QUI\Users\Auth\QUIQQER':
-                    continue 2;
-                    break;
+            if ($class == 'QUI\Users\Auth\QUIQQER') {
+                continue;
             }
 
-            $settings['authenticators'][\base64_encode($class)] = true;
+            $settings['authenticators'][base64_encode($class)] = true;
         }
 
-        $Conf->setValue('login', 'authenticators', \json_encode($settings['authenticators']));
+        $Conf->setValue('login', 'authenticators', json_encode($settings['authenticators']));
         $Conf->save();
     }
 
@@ -326,8 +326,9 @@ class Events
      * Set default settings for all registrars
      *
      * @return void
+     * @throws Exception
      */
-    protected static function setRegistrarsDefaultSettings()
+    protected static function setRegistrarsDefaultSettings(): void
     {
         $RegistrarHandler = Handler::getInstance();
         $settings = $RegistrarHandler->getRegistrarSettings();
@@ -354,7 +355,7 @@ class Events
      * @return void
      * @throws QUI\Exception
      */
-    protected static function setAddressDefaultSettings()
+    protected static function setAddressDefaultSettings(): void
     {
         $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
 
@@ -405,8 +406,8 @@ class Events
             ],
         ];
 
-        $Conf->setValue('registration', 'addressFields', \json_encode($addressFields));
-        $Conf->setValue('profile', 'addressFields', \json_encode($addressFields));
+        $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
+        $Conf->setValue('profile', 'addressFields', json_encode($addressFields));
         $Conf->save();
     }
 
@@ -415,7 +416,7 @@ class Events
      *
      * @param QUI\Template $TemplateManager
      */
-    public static function onTemplateGetHeader(QUI\Template $TemplateManager)
+    public static function onTemplateGetHeader(QUI\Template $TemplateManager): void
     {
         $cssFile = URL_OPT_DIR . 'quiqqer/frontend-users/bin/style.css';
         $TemplateManager->extendHeader('<link rel="stylesheet" type="text/css" href="' . $cssFile . '">');
@@ -424,7 +425,7 @@ class Events
 
         echo "<script>
             (function() {
-                var registerNewLogin = function() {
+                const registerNewLogin = function() {
                     require(['qui/QUI'], function(QUI) {
                         QUI.addEvent('onAjaxLogin', function(QUIAjax, call, method, callback, params) {
                             require(['package/quiqqer/frontend-users/bin/frontend/controls/login/Window'], function(Window) {
@@ -447,14 +448,14 @@ class Events
                     });
                 };
                 
-                var waitForRequireEventRegister = setInterval(function() {
+                const waitForRequireEventRegister = setInterval(function() {
                     if (typeof require === 'undefined') {
                         return;
                     }
                     
                     clearInterval(waitForRequireEventRegister);
                     
-                    var loadQUI = function () {
+                    let loadQUI = function () {
                         return Promise.resolve();
                     };
             
@@ -473,13 +474,13 @@ class Events
 
         echo "<script>
             (function() {
-                var openChangePasswordWindow = function() {
+                const openChangePasswordWindow = function() {
                     require([
                         'controls/users/password/Window',
                         'Locale'
                     ], function(Password, QUILocale) {
                         new Password({
-                            uid: '" . $User->getId() . "',
+                            uid: '" . $User->getUUID() . "',
                             mustChange: true,
                             message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
                             events: {
@@ -491,7 +492,7 @@ class Events
                     });
                 };
            
-                var checkChangePasswordWindow = function() {
+                const checkChangePasswordWindow = function() {
                     require(['Locale'], function(QUILocale) {
                         if (!QUILocale.exists('quiqqer/quiqqer', 'message.set.new.password')) {
                             (function() {
@@ -504,7 +505,7 @@ class Events
                     });            
                 };
                 
-                var waitForRequire = setInterval(function() {
+                let waitForRequire = setInterval(function() {
                     if (typeof require === 'undefined') {
                         return;
                     }
@@ -522,7 +523,7 @@ class Events
      * @return void
      * @throws QUI\Exception
      */
-    protected static function createProfileCategoryViewPermissions()
+    protected static function createProfileCategoryViewPermissions(): void
     {
         $Permissions = new QUI\Permissions\Manager();
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
@@ -538,7 +539,7 @@ class Events
                 try {
                     $Permissions->getPermissionData($permission);
                     continue;
-                } catch (\Exception $Exception) {
+                } catch (\Exception) {
                     // if permission does not exist -> create it
                 }
 
@@ -571,21 +572,21 @@ class Events
      *
      * @throws QUI\Exception
      */
-    public static function checkUserMediaFolder()
+    public static function checkUserMediaFolder(): void
     {
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
         $folder = $Config->getValue('userProfile', 'userAvatarFolder');
 
         try {
             QUI\Projects\Media\Utils::getMediaItemByUrl($folder);
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             $Standard = QUI::getProjectManager()->getStandard();
             $Media = $Standard->getMedia();
             $MainFolder = $Media->firstChild();
 
             try {
                 $Folder = $MainFolder->getChildByName('user');
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
                 $Folder = $MainFolder->createFolder('user');
                 $Folder->setHidden();
                 $Folder->save();
@@ -599,7 +600,7 @@ class Events
     public static function onTemplateEnd(
         Collector $Collection,
         QUI\Template $Template
-    ) {
+    ): void {
         $Collection->append(
             '<script src="' . URL_OPT_DIR . 'quiqqer/frontend-users/bin/dataLayerTracking.js"></script>'
         );

@@ -4,7 +4,6 @@ namespace QUI\FrontendUsers\Controls\Bricks;
 
 use QUI;
 
-use function array_walk;
 use function explode;
 use function json_decode;
 use function json_last_error;
@@ -24,7 +23,7 @@ class AuthContent extends QUI\Control
      *
      * @param array $attributes
      */
-    public function __construct($attributes = [])
+    public function __construct(array $attributes = [])
     {
         // default options
         $this->setAttributes([
@@ -47,7 +46,7 @@ class AuthContent extends QUI\Control
      *
      * @see \QUI\Control::create()
      */
-    public function getBody()
+    public function getBody(): string
     {
         $lang = QUI::getLocale()->getCurrent();
         $Engine = QUI::getTemplateManager()->getEngine();
@@ -57,10 +56,6 @@ class AuthContent extends QUI\Control
 
         if (!empty($groups)) {
             $groupIds = explode(',', $groups);
-
-            array_walk($groupIds, function (&$groupId) {
-                $groupId = (int)$groupId;
-            });
         }
 
         // User is not authenticated

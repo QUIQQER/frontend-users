@@ -9,6 +9,8 @@ use QUI\FrontendUsers\Handler;
 use QUI\QDOM;
 use QUI\Utils\Security\Orthos;
 
+use function mb_strlen;
+
 class RegistrationData extends QDOM
 {
     /**
@@ -18,7 +20,7 @@ class RegistrationData extends QDOM
      *
      * @return array
      *
-     * @throws \QUI\Exception
+     * @throws QUI\Exception
      */
     public static function getRequiredFields(): array
     {
@@ -76,15 +78,14 @@ class RegistrationData extends QDOM
     /**
      * Creates a RegistrationData object from a given Request
      *
-     * @param \Psr\Http\Message\ServerRequestInterface $Request
+     * @param SlimRequest $Request
+     * @return QUI\FrontendUsers\Rest\RegistrationData
      *
-     * @return \QUI\FrontendUsers\Rest\RegistrationData
-     *
-     * @throws \QUI\Exception
+     * @throws QUI\Exception
      */
     public static function buildFromRequest(SlimRequest $Request): RegistrationData
     {
-        $RegistrationData = new static();
+        $RegistrationData = new RegistrationData();
         $RegistrationData->setAttributes($Request->getParsedBody());
 
         $Handler = QUI\FrontendUsers\Handler::getInstance();
@@ -146,7 +147,7 @@ class RegistrationData extends QDOM
         $username = $this->getAttribute('username');
 
         // Username check
-        if (\mb_strlen($username) > 50) {
+        if (mb_strlen($username) > 50) {
             throw new QUI\FrontendUsers\Exception([
                 $lg,
                 'exception.registration.username_too_long',
@@ -200,7 +201,7 @@ class RegistrationData extends QDOM
                 $lg,
                 $lgPrefix . 'username_already_exists'
             ]);
-        } catch (\Exception $Exception) {
+        } catch (\Exception) {
             // Username does not exist
         }
 
@@ -226,7 +227,7 @@ class RegistrationData extends QDOM
                 continue;
             }
 
-            if (\mb_strlen($value) > $maxLength) {
+            if (mb_strlen($value) > $maxLength) {
                 throw new Exception([
                     'quiqqer/frontend-users',
                     'exception.registrars.email.user_attribute_too_long',

@@ -6,6 +6,7 @@
 
 namespace QUI\FrontendUsers\Controls\Profile;
 
+use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
@@ -43,7 +44,7 @@ class UserData extends AbstractProfileControl
      * @return string
      * @throws QUI\Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $action = false;
         $emailChangeRequested = true;
@@ -60,18 +61,18 @@ class UserData extends AbstractProfileControl
 
         try {
             QUI\Verification\Verifier::getVerificationByIdentifier(
-                $User->getId(),
+                $User->getUUID(),
                 QUI\FrontendUsers\EmailConfirmVerification::getType(),
                 true
             );
-        } catch (\Exception $Exception) {
+        } catch (Exception) {
             $emailChangeRequested = false;
         }
 
         /* @var $User QUI\Users\User */
         try {
             $Address = $User->getStandardAddress();
-        } catch (QUI\Users\Exception $Exception) {
+        } catch (QUI\Users\Exception) {
             $Address = $User->addAddress();
         }
 
@@ -99,7 +100,7 @@ class UserData extends AbstractProfileControl
      * @throws QUI\FrontendUsers\Exception
      * @throws QUI\Exception
      */
-    public function onSave()
+    public function onSave(): void
     {
         $Request = QUI::getRequest()->request;
         $newEmail = $Request->get('emailNew');
@@ -156,7 +157,7 @@ class UserData extends AbstractProfileControl
 
         $required = array_keys($required);
 
-        $checkFields = function ($fieldName) use ($settings, $required, $Request) {
+        $checkFields = function ($fieldName) use ($required, $Request) {
             // wenn kein required, kann auch geleert werden
             if ($Request->has($fieldName) && !in_array($fieldName, $required)) {
                 return true;

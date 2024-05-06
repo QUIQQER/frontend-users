@@ -3,6 +3,17 @@
 namespace QUI\FrontendUsers\Console;
 
 use QUI;
+use QUI\Exception;
+
+use function date;
+use function date_create;
+use function date_interval_create_from_date_string;
+use function file_exists;
+use function file_get_contents;
+use function file_put_contents;
+use function json_decode;
+use function json_encode;
+use function unlink;
 
 /**
  * Console tool to send an e-mail to all (or a subset of) users in the system
@@ -16,7 +27,7 @@ class SendUserMails extends QUI\System\Console\Tool
      *
      * @var array
      */
-    protected $mail = [
+    protected array $mail = [
         'body' => '',
         'senderMail' => '',
         'senderName' => '',
@@ -26,14 +37,14 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * @var array
      */
-    protected $recipients = [];
+    protected array $recipients = [];
 
     /**
      * General settings
      *
      * @var array
      */
-    protected $settings = [
+    protected array $settings = [
         'setNewPassword' => false,
         'forcePasswordReset' => true
     ];
@@ -56,8 +67,9 @@ class SendUserMails extends QUI\System\Console\Tool
 
     /**
      * Execute the console tool
+     * @throws Exception
      */
-    public function execute()
+    public function execute(): void
     {
         QUI\Permissions\Permission::isAdmin();
 
@@ -166,7 +178,7 @@ class SendUserMails extends QUI\System\Console\Tool
         // DELETE USER STATISTICS?
         $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails';
 
-        if (\file_exists($infoFile)) {
+        if (file_exists($infoFile)) {
             $this->writeLn(
                 "Statistics of e-mails aready sent to user found. Delete statistics and start from scratch? (y/N): "
             );
@@ -174,7 +186,7 @@ class SendUserMails extends QUI\System\Console\Tool
             $deleteStatistics = mb_strtolower($this->readInput()) === 'y';
 
             if ($deleteStatistics) {
-                \unlink($infoFile);
+                unlink($infoFile);
                 $this->writeLn("Statistics file deleted.");
             }
         }
@@ -304,7 +316,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * @param int $userId
      * @return array
      */
-    protected function getUserInfo(int $userId)
+    protected function getUserInfo(int $userId): array
     {
         try {
             $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails';
@@ -316,8 +328,8 @@ class SendUserMails extends QUI\System\Console\Tool
 
         $userInfo = [];
 
-        if (\file_exists($infoFile)) {
-            $userInfo = \json_decode(\file_get_contents($infoFile), true);
+        if (file_exists($infoFile)) {
+            $userInfo = json_decode(file_get_contents($infoFile), true);
         }
 
         if (empty($userInfo[$userId])) {
@@ -341,7 +353,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * @param array $info
      * @return void
      */
-    protected function writeUserInfo(int $userId, array $info)
+    protected function writeUserInfo(int $userId, array $info): void
     {
         try {
             $infoFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails';
@@ -353,13 +365,13 @@ class SendUserMails extends QUI\System\Console\Tool
 
         $userInfo = [];
 
-        if (\file_exists($infoFile)) {
-            $userInfo = \json_decode(\file_get_contents($infoFile), true);
+        if (file_exists($infoFile)) {
+            $userInfo = json_decode(file_get_contents($infoFile), true);
         }
 
         $userInfo[$userId] = $info;
 
-        \file_put_contents($infoFile, \json_encode($userInfo));
+        file_put_contents($infoFile, json_encode($userInfo));
     }
 
     /**
@@ -368,7 +380,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * @param array $limits - Limits config
      * @return void
      */
-    protected function setLimits(array $limits)
+    protected function setLimits(array $limits): void
     {
         try {
             $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
@@ -378,7 +390,7 @@ class SendUserMails extends QUI\System\Console\Tool
             return;
         }
 
-        \file_put_contents($limitsFile, \json_encode($limits));
+        file_put_contents($limitsFile, json_encode($limits));
     }
 
     /**
@@ -386,7 +398,7 @@ class SendUserMails extends QUI\System\Console\Tool
      *
      * @return array|false - Limit config or false if limits not yet configured
      */
-    protected function getLimits()
+    protected function getLimits(): bool|array
     {
         try {
             $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
@@ -396,11 +408,11 @@ class SendUserMails extends QUI\System\Console\Tool
             return false;
         }
 
-        if (!\file_exists($limitsFile)) {
+        if (!file_exists($limitsFile)) {
             return false;
         }
 
-        return \json_decode(\file_get_contents($limitsFile), true);
+        return json_decode(file_get_contents($limitsFile), true);
     }
 
     /**
@@ -410,26 +422,26 @@ class SendUserMails extends QUI\System\Console\Tool
      *
      * @return void
      */
-    protected function updateLimits()
+    protected function updateLimits(): void
     {
         $limits = $this->getLimits();
-        $Now = \date_create();
+        $Now = date_create();
 
         // Update minute limit
         if (!empty($limits['perMinute'])) {
             if (empty($limits['startMinute'])) {
-                $Start = \date_create();
+                $Start = date_create();
                 $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
             } else {
-                $Start = \date_create($limits['startMinute']);
+                $Start = date_create($limits['startMinute']);
             }
 
             $End = clone $Start;
-            $End->add(\date_interval_create_from_date_string('1 minutes'));
+            $End->add(date_interval_create_from_date_string('1 minutes'));
 
             // Reset limit
             if ($Now > $End) {
-                $Start = \date_create();
+                $Start = date_create();
                 $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
                 $limits['currentMinute'] = 0;
             }
@@ -440,18 +452,18 @@ class SendUserMails extends QUI\System\Console\Tool
         // Update hour limit
         if (!empty($limits['perHour'])) {
             if (empty($limits['startHour'])) {
-                $Start = \date_create();
+                $Start = date_create();
                 $limits['startHour'] = $Start->format('Y-m-d H:i:s');
             } else {
-                $Start = \date_create($limits['startHour']);
+                $Start = date_create($limits['startHour']);
             }
 
             $End = clone $Start;
-            $End->add(\date_interval_create_from_date_string('1 hours'));
+            $End->add(date_interval_create_from_date_string('1 hours'));
 
             // Reset limit
             if ($Now > $End) {
-                $Start = \date_create();
+                $Start = date_create();
                 $limits['startHour'] = $Start->format('Y-m-d H:i:s');
                 $limits['currentHour'] = 0;
             }
@@ -462,18 +474,18 @@ class SendUserMails extends QUI\System\Console\Tool
         // Update 24 hour limit
         if (!empty($limits['per24h'])) {
             if (empty($limits['start24h'])) {
-                $Start = \date_create();
+                $Start = date_create();
                 $limits['start24h'] = $Start->format('Y-m-d H:i:s');
             } else {
-                $Start = \date_create($limits['start24h']);
+                $Start = date_create($limits['start24h']);
             }
 
             $End = clone $Start;
-            $End->add(\date_interval_create_from_date_string('24 hours'));
+            $End->add(date_interval_create_from_date_string('24 hours'));
 
             // Reset limit
             if ($Now > $End) {
-                $Start = \date_create();
+                $Start = date_create();
                 $limits['start24h'] = $Start->format('Y-m-d H:i:s');
                 $limits['current24h'] = 0;
             }
@@ -483,7 +495,7 @@ class SendUserMails extends QUI\System\Console\Tool
 
         try {
             $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
-            \file_put_contents($limitsFile, \json_encode($limits));
+            file_put_contents($limitsFile, json_encode($limits));
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             $this->writeLn("ERROR on writing limits file: " . $Exception->getMessage());
@@ -495,21 +507,21 @@ class SendUserMails extends QUI\System\Console\Tool
      *
      * @return bool
      */
-    protected function isMailAllowed()
+    protected function isMailAllowed(): bool
     {
         $limits = $this->getLimits();
-        $Now = \date_create();
+        $Now = date_create();
 
         // Check minute limit
         if (!empty($limits['perMinute'])) {
             if (empty($limits['startMinute'])) {
-                $Start = \date_create();
+                $Start = date_create();
             } else {
-                $Start = \date_create($limits['startMinute']);
+                $Start = date_create($limits['startMinute']);
             }
 
             $End = clone $Start;
-            $End->add(\date_interval_create_from_date_string('1 minutes'));
+            $End->add(date_interval_create_from_date_string('1 minutes'));
 
             // Limit applies
             if ($Now < $End) {
@@ -525,13 +537,13 @@ class SendUserMails extends QUI\System\Console\Tool
         // Check hour limit
         if (!empty($limits['perHour'])) {
             if (empty($limits['startHour'])) {
-                $Start = \date_create();
+                $Start = date_create();
             } else {
-                $Start = \date_create($limits['startHour']);
+                $Start = date_create($limits['startHour']);
             }
 
             $End = clone $Start;
-            $End->add(\date_interval_create_from_date_string('1 hours'));
+            $End->add(date_interval_create_from_date_string('1 hours'));
 
             // Limit applies
             if ($Now < $End) {
@@ -547,13 +559,13 @@ class SendUserMails extends QUI\System\Console\Tool
         // Check 24 hour limit
         if (!empty($limits['per24h'])) {
             if (empty($limits['start24h'])) {
-                $Start = \date_create();
+                $Start = date_create();
             } else {
-                $Start = \date_create($limits['start24h']);
+                $Start = date_create($limits['start24h']);
             }
 
             $End = clone $Start;
-            $End->add(\date_interval_create_from_date_string('24 hours'));
+            $End->add(date_interval_create_from_date_string('24 hours'));
 
             // Limit applies
             if ($Now < $End) {
@@ -570,10 +582,10 @@ class SendUserMails extends QUI\System\Console\Tool
     }
 
     /**
-     * @param string $testMailAddress (optional) - If set, a single test mail will be sent to this address
+     * @param string|null $testMailAddress (optional) - If set, a single test mail will be sent to this address
      * @return void
      */
-    protected function sendMails($testMailAddress = null)
+    protected function sendMails(string $testMailAddress = null): void
     {
         $Users = QUI::getUsers();
         $SystemUser = $Users->getSystemUser();
@@ -614,7 +626,7 @@ class SendUserMails extends QUI\System\Console\Tool
                     }
 
                     $this->writeLn(
-                        "[" . \date('Y-m-d H:i:s') . "] Current mail limit reached. Waiting 60s and then retry..."
+                        "[" . date('Y-m-d H:i:s') . "] Current mail limit reached. Waiting 60s and then retry..."
                     );
 
                     sleep(60);
@@ -634,7 +646,7 @@ class SendUserMails extends QUI\System\Console\Tool
 
                 $this->writeUserInfo($userId, [
                     'sent' => true,
-                    'sent_date' => \date('Y-m-d H:i:s'),
+                    'sent_date' => date('Y-m-d H:i:s'),
                     'error' => $email . " is no valid email syntax. email was not sent."
                 ]);
 
@@ -705,7 +717,7 @@ class SendUserMails extends QUI\System\Console\Tool
 
             $this->writeUserInfo($userId, [
                 'sent' => true,
-                'sent_date' => \date('Y-m-d H:i:s')
+                'sent_date' => date('Y-m-d H:i:s')
             ]);
 
             $this->updateLimits();
@@ -715,12 +727,12 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Exits the console tool with a success msg and status 0
      *
-     * @return void
+     * @return never
      */
-    protected function exitSuccess()
+    protected function exitSuccess(): never
     {
         $this->writeLn("\n\nMails have been successfully queued and will be sent via cron.");
-        $this->writeLn("");
+        $this->writeLn();
 
         exit(0);
     }
@@ -729,15 +741,15 @@ class SendUserMails extends QUI\System\Console\Tool
      * Exits the console tool with an error msg and status 1
      *
      * @param $msg
-     * @return void
+     * @return never
      */
-    protected function exitFail($msg)
+    protected function exitFail($msg): never
     {
         $this->writeLn("Script aborted due to an error:");
-        $this->writeLn("");
+        $this->writeLn();
         $this->writeLn($msg);
-        $this->writeLn("");
-        $this->writeLn("");
+        $this->writeLn();
+        $this->writeLn();
 
         exit(1);
     }
