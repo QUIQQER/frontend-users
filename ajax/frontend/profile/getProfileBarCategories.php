@@ -36,7 +36,7 @@ QUI::$Ajax->registerFunction(
             $profileBarSettings = Handler::getInstance()->getProfileBarSettings();
 
             if (!empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
-                \array_unshift($categories['user']['items'], [
+                array_unshift($categories['user']['items'], [
                     'name' => 'toprofile',
                     'title' => QUI::getLocale()->get(
                         'quiqqer/frontend-users',
@@ -50,7 +50,7 @@ QUI::$Ajax->registerFunction(
                     'url' => $ProfileSite->getUrlRewritten()
                 ]);
             }
-        } catch (\Exception $Exception) {
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
         }
 

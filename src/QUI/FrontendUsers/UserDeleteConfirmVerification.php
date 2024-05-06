@@ -3,6 +3,8 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Exception;
+use QUI\ExceptionStack;
 use QUI\Verification\AbstractVerification;
 
 /**
@@ -19,8 +21,9 @@ class UserDeleteConfirmVerification extends AbstractVerification
      *
      * @return int|false - duration in minutes;
      * if this method returns false use the module setting default value
+     * @throws Exception
      */
-    public function getValidDuration()
+    public function getValidDuration(): bool|int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -32,9 +35,9 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * @return void
      * @throws \Exception
      */
-    public function onSuccess()
+    public function onSuccess(): void
     {
-        $userId = (int)$this->getIdentifier();
+        $userId = $this->getIdentifier();
         $userProfileSettings = Handler::getInstance()->getUserProfileSettings();
 
         try {
@@ -44,12 +47,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
                 case 'delete':
                     QUI::getDataBase()->update(
                         QUI::getDBTableName('users'),
-                        [
-                            'active' => -1
-                        ],
-                        [
-                            'id' => $User->getId()
-                        ]
+                        ['active' => -1],
+                        ['uuid' => $User->getUUID()]
                     );
                     break;
 
@@ -83,9 +82,8 @@ class UserDeleteConfirmVerification extends AbstractVerification
      *
      * @return void
      */
-    public function onError()
+    public function onError(): void
     {
-        // nothing
     }
 
     /**
@@ -93,7 +91,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      *
      * @return string
      */
-    public function getSuccessMessage()
+    public function getSuccessMessage(): string
     {
         return QUI::getLocale()->get(
             'quiqqer/frontend-users',
@@ -107,7 +105,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
      * @return string
      */
-    public function getErrorMessage($reason)
+    public function getErrorMessage(string $reason): string
     {
         return '';
     }
@@ -116,8 +114,10 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * Automatically redirect the user to this URL on successful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws Exception
+     * @throws ExceptionStack
      */
-    public function getOnSuccessRedirectUrl()
+    public function getOnSuccessRedirectUrl(): bool|string
     {
         $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
             $this->getProject()
@@ -136,8 +136,9 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * Automatically redirect the user to this URL on unsuccessful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws Exception
      */
-    public function getOnErrorRedirectUrl()
+    public function getOnErrorRedirectUrl(): bool|string
     {
         $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
             $this->getProject()
@@ -156,8 +157,9 @@ class UserDeleteConfirmVerification extends AbstractVerification
      * Get the Project this Verification is intended for
      *
      * @return QUI\Projects\Project
+     * @throws Exception
      */
-    protected function getProject()
+    protected function getProject(): QUI\Projects\Project
     {
         $additionalData = $this->getAdditionalData();
 

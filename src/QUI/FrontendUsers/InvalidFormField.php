@@ -16,14 +16,14 @@ class InvalidFormField
      *
      * @var string
      */
-    protected $name;
+    protected string $name;
 
     /**
      * Error message
      *
      * @var string
      */
-    protected $msg;
+    protected string $msg;
 
     /**
      * InvalidFormField constructor.
@@ -31,7 +31,7 @@ class InvalidFormField
      * @param string $name
      * @param string $msg
      */
-    public function __construct($name, $msg)
+    public function __construct(string $name, string $msg)
     {
         $this->name = $name;
         $this->msg = $msg;
@@ -40,7 +40,7 @@ class InvalidFormField
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -48,7 +48,7 @@ class InvalidFormField
     /**
      * @return string
      */
-    public function getMsg()
+    public function getMsg(): string
     {
         return $this->msg;
     }

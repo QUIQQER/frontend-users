@@ -16,7 +16,7 @@ QUI::$Ajax->registerFunction(
         $_REQUEST['editSave'] = true;
 
         $Address = new QUI\FrontendUsers\Controls\Address\Address();
-        $Address->editAddress(\json_decode($data, true));
+        $Address->editAddress(json_decode($data, true));
     },
     ['addressId', 'data'],
     ['Permission::checkUser']

@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Controls;
 
 use QUI;
 use QUI\Control;
+use QUI\Exception;
 use QUI\FrontendUsers\Utils;
 use Tracy\Debugger;
 
@@ -47,17 +48,11 @@ class Profile extends Control
      * Return the control body
      *
      * @return string
+     * @throws Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
-        try {
-            $Engine = QUI::getTemplateManager()->getEngine();
-        } catch (QUI\Exception $Exception) {
-            QUI\System\Log::writeDebugException($Exception);
-
-            return '';
-        }
-
+        $Engine = QUI::getTemplateManager()->getEngine();
         $Request = QUI::getRequest();
         $categories = Utils::getProfileCategorySettings();
 
@@ -87,7 +82,7 @@ class Profile extends Control
          * @param bool $category
          * @return bool
          */
-        $getFirstCategorySetting = function ($array, $category = false) use ($getFirstCategory) {
+        $getFirstCategorySetting = function ($array, bool|string|int $category = false) use ($getFirstCategory) {
             if ($category === false) {
                 $category = $getFirstCategory($array);
             }
@@ -185,7 +180,7 @@ class Profile extends Control
      * @return QUI\Interfaces\Users\User
      * @throws QUI\FrontendUsers\Exception
      */
-    public function getUser()
+    public function getUser(): QUI\Interfaces\Users\User
     {
         $User = $this->getAttribute('User');
 
@@ -209,9 +204,10 @@ class Profile extends Control
     /**
      * Return the current site
      *
-     * @return QUI\Projects\Site
+     * @return QUI\Interfaces\Projects\Site
+     * @throws Exception
      */
-    public function getSite()
+    public function getSite(): QUI\Interfaces\Projects\Site
     {
         if ($this->getAttribute('Site')) {
             return $this->getAttribute('Site');

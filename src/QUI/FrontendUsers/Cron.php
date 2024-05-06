@@ -2,7 +2,10 @@
 
 namespace QUI\FrontendUsers;
 
+use DateTime;
 use QUI;
+use QUI\Database\Exception;
+use QUI\ExceptionStack;
 
 class Cron
 {
@@ -11,8 +14,13 @@ class Cron
      * activated yet after X days
      *
      * @return void
+     * @throws Exception
+     * @throws QUI\Exception
+     * @throws ExceptionStack
+     * @throws QUI\Permissions\Exception
+     * @throws \Exception
      */
-    public static function deleteUnverifiedInactiveUsers()
+    public static function deleteUnverifiedInactiveUsers(): void
     {
         $result = QUI::getDataBase()->fetch([
             'select' => [
@@ -28,7 +36,7 @@ class Cron
         $Handler = Handler::getInstance();
         $settings = $Handler->getRegistrationSettings();
         $maxInactiveDays = (int)$settings['deleteInactiveUserAfterDays'];
-        $Now = new \DateTime();
+        $Now = new DateTime();
 
         foreach ($result as $row) {
             $User = $Users->get($row['id']);
@@ -38,7 +46,7 @@ class Cron
                 continue;
             }
 
-            $RegistrationDate = new \DateTime("@" . $User->getAttribute('regdate'));
+            $RegistrationDate = new DateTime("@" . $User->getAttribute('regdate'));
 
             if ($Now->diff($RegistrationDate)->days > $maxInactiveDays) {
                 $User->delete();

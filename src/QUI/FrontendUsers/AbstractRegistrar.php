@@ -7,6 +7,9 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Exception;
+
+use function mb_strlen;
 
 /**
  * Class AbstractRegistrar
@@ -16,67 +19,67 @@ use QUI;
 abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
 {
     /**
-     * @var QUI\Projects\Project
+     * @var ?QUI\Projects\Project
      */
-    protected $Project = null;
+    protected ?QUI\Projects\Project $Project = null;
 
     /**
      * @return InvalidFormField[]
      */
-    abstract public function validate();
+    abstract public function validate(): array;
 
     /**
      * Get all invalid registration form fields
      *
      * @return InvalidFormField[]
      */
-    abstract public function getInvalidFields();
+    abstract public function getInvalidFields(): array;
 
     /**
      * @return mixed
      */
-    abstract public function getUsername();
+    abstract public function getUsername(): string;
 
     /**
-     * @return mixed
+     * @return QUI\Control
      */
-    abstract public function getControl();
+    abstract public function getControl(): QUI\Control;
 
     /**
      * @param QUI\Interfaces\Users\User $User
-     * @return integer
      */
-    abstract public function onRegistered(QUI\Interfaces\Users\User $User);
+    abstract public function onRegistered(QUI\Interfaces\Users\User $User): void;
 
     /**
      * Get title
      *
-     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    abstract public function getTitle($Locale = null);
+    abstract public function getTitle(QUI\Locale $Locale = null): string;
 
     /**
      * Get description
      *
-     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    abstract public function getDescription($Locale = null);
+    abstract public function getDescription(QUI\Locale $Locale = null): string;
 
     /**
-     * Return an icon for the registratar
+     * Return an icon for the registrar
      *
      * @return string
      */
-    abstract public function getIcon();
+    abstract public function getIcon(): string;
 
     /**
      * Return the success message
      *
      * @return string
+     * @throws Exception
      */
-    public function getSuccessMessage()
+    public function getSuccessMessage(): string
     {
         $registrarSettings = $this->getSettings();
         $settings = Handler::getInstance()->getRegistrationSettings();
@@ -107,7 +110,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
                 return $this->getPendingMessage();
         }
 
-        if (boolval($settings['sendPassword']) && $this->canSendPassword()) {
+        if ($settings['sendPassword'] && $this->canSendPassword()) {
             $msg .= "<p>" .
                 QUI::getLocale()->get('quiqqer/frontend-users', 'registrars.password_auto_generate') .
                 "</p>";
@@ -119,26 +122,16 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     /**
      * @return string
      */
-    public function getPendingMessage()
+    public function getPendingMessage(): string
     {
-        $msg = QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
-//        $settings = Handler::getInstance()->getRegistrationSettings();
-//
-//        if (boolval($settings['sendPassword'])) {
-//            $msg .= "<p>" . QUI::getLocale()->get(
-//                    'quiqqer/frontend-users',
-//                    'registrars.email.password_auto_generate'
-//                ) . "</p>";
-//        }
-
-        return $msg;
+        return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_pending');
     }
 
     /**
      * Get message for registration errors
      * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage(): string
     {
         return QUI::getLocale()->get('quiqqer/frontend-users', 'message.registration_error');
     }
@@ -146,10 +139,10 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     /**
      * Create a new user
      *
-     * @return QUI\Users\User
+     * @return QUI\Interfaces\Users\User
      * @throws QUI\Exception
      */
-    public function createUser()
+    public function createUser(): QUI\Interfaces\Users\User
     {
         return QUI::getUsers()->createChild(
             $this->getUsername(),
@@ -163,7 +156,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      * @param QUI\Projects\Project $Project
      * @return void
      */
-    public function setProject(QUI\Projects\Project $Project)
+    public function setProject(QUI\Projects\Project $Project): void
     {
         $this->Project = $Project;
     }
@@ -173,7 +166,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      *
      * @return QUI\Projects\Project|null
      */
-    public function getProject()
+    public function getProject(): ?QUI\Projects\Project
     {
         return $this->Project;
     }
@@ -183,7 +176,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      *
      * @return array
      */
-    public function getSettings()
+    public function getSettings(): array
     {
         return Handler::getInstance()->getRegistrarSettings($this->getType());
     }
@@ -193,7 +186,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      *
      * @return string
      */
-    public function getHash()
+    public function getHash(): string
     {
         return hash('sha256', $this->getType());
     }
@@ -203,14 +196,14 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      *
      * @return bool
      */
-    abstract public function canSendPassword();
+    abstract public function canSendPassword(): bool;
 
     /**
      * Check if this Registrar is activated in the settings
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         $Handler = Handler::getInstance();
         $registrarSettings = $Handler->getRegistrarSettings();
@@ -229,7 +222,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      * @return void
      * @throws Exception
      */
-    public function checkUserAttributes()
+    public function checkUserAttributes(): void
     {
         $Handler = Handler::getInstance();
 
@@ -241,7 +234,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
                 continue;
             }
 
-            if (\mb_strlen($value) > $maxLength) {
+            if (mb_strlen($value) > $maxLength) {
                 throw new Exception([
                     'quiqqer/frontend-users',
                     'exception.registrars.email.user_attribute_too_long',

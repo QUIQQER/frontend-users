@@ -16,10 +16,10 @@ class RegistrationUtils
      * Get the "further links" that are shown in the account activation success message box
      * if the user is NOT automatically redirected.
      *
-     * @param Project $Project (optional) - QUIQQER Project [default: QUI::getRewrite()->getProject()]
+     * @param Project|null $Project $Project (optional) - QUIQQER Project [default: QUI::getRewrite()->getProject()]
      * @return string
      */
-    public static function getFurtherLinksText(Project $Project = null)
+    public static function getFurtherLinksText(Project $Project = null): string
     {
         try {
             if (empty($Project)) {

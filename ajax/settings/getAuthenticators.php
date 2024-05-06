@@ -19,10 +19,8 @@ QUI::$Ajax->registerFunction(
             $Authenticator = new $class();
 
             // Some authenticators are always available and cannot be switched off
-            switch ($class) {
-                case 'QUI\Users\Auth\QUIQQER':
-                    continue 2;
-                    break;
+            if ($class == 'QUI\Users\Auth\QUIQQER') {
+                continue;
             }
 
             $authenticators[] = [

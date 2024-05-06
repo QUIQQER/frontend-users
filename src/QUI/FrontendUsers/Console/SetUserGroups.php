@@ -2,6 +2,7 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use Exception;
 use QUI;
 
 /**
@@ -25,7 +26,7 @@ class SetUserGroups extends QUI\System\Console\Tool
     /**
      * Execute the console tool
      */
-    public function execute()
+    public function execute(): void
     {
         QUI\Permissions\Permission::isAdmin();
 
@@ -127,7 +128,7 @@ class SetUserGroups extends QUI\System\Console\Tool
         foreach ($result as $row) {
             $User = $Users->get($row['id']);
 
-            $this->writeLn("Add groups for User #" . $User->getId() . " (" . $User->getUsername() . ")...");
+            $this->writeLn("Add groups for User #" . $User->getUUID() . " (" . $User->getUsername() . ")...");
 
             foreach ($groupIds as $groupId) {
                 try {
@@ -135,7 +136,7 @@ class SetUserGroups extends QUI\System\Console\Tool
                     $User->addToGroup($groupId);
                     $User->save($SystemUser);
                     $this->write(" OK!");
-                } catch (\Exception $Exception) {
+                } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                     $this->write(" ERROR: " . $Exception->getMessage());
                 }
@@ -148,12 +149,12 @@ class SetUserGroups extends QUI\System\Console\Tool
     /**
      * Exits the console tool with a success msg and status 0
      *
-     * @return void
+     * @return never
      */
-    protected function exitSuccess()
+    protected function exitSuccess(): never
     {
         $this->writeLn("User groups have been successfully set.");
-        $this->writeLn("");
+        $this->writeLn();
 
         exit(0);
     }
@@ -162,15 +163,15 @@ class SetUserGroups extends QUI\System\Console\Tool
      * Exits the console tool with an error msg and status 1
      *
      * @param $msg
-     * @return void
+     * @return never
      */
-    protected function exitFail($msg)
+    protected function exitFail($msg): never
     {
         $this->writeLn("Script aborted due to an error:");
-        $this->writeLn("");
+        $this->writeLn();
         $this->writeLn($msg);
-        $this->writeLn("");
-        $this->writeLn("");
+        $this->writeLn();
+        $this->writeLn();
 
         exit(1);
     }

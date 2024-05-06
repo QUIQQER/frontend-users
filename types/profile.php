@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * This file contains the profile site type
+ *
+ * @var QUI\Projects\Project $Project
+ * @var QUI\Projects\Site $Site
+ * @var QUI\Interfaces\Template\EngineInterface $Engine
+ * @var QUI\Template $Template
+ **/
+
 $SessionUser = QUI::getUserBySession();
 
 if (QUI::getUsers()->isNobodyUser($SessionUser)) {

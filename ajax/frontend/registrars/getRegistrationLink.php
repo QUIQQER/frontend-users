@@ -1,7 +1,7 @@
 <?php
 
 /**
- * return the sign up registration url
+ * return the sign-up registration url
  *
  * @return string
  */
@@ -27,7 +27,7 @@ QUI::$Ajax->registerFunction(
         ]);
 
 
-        if (\count($registerSite)) {
+        if (count($registerSite)) {
             return $registerSite[0]->getUrlRewritten();
         }
 

@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Registrars\Email;
 
 use QUI;
 use QUI\Countries\Controls\Select as CountrySelect;
+use QUI\Exception;
 
 /**
  * Class EMail
@@ -37,8 +38,9 @@ class Control extends QUI\Control
 
     /**
      * @return string
+     * @throws Exception
      */
-    public function getBody()
+    public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
@@ -59,7 +61,7 @@ class Control extends QUI\Control
         }
 
         // address input
-        if (boolval($registrationSettings['addressInput'])) {
+        if ($registrationSettings['addressInput']) {
             $addressFields = $RegistrarHandler->getAddressFieldSettings();
 
             $Engine->assign('addressFields', $addressFields);

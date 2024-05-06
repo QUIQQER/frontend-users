@@ -41,7 +41,7 @@ QUI::$Ajax->registerFunction(
                     QUI::getAjax()->triggerGlobalJavaScriptCallback(
                         'quiqqerFrontendUsersUserRegisterCallback',
                         [
-                            'userId' => $Registration->getRegisteredUser()->getId(),
+                            'userId' => $Registration->getRegisteredUser()->getUUID(),
                             'registrarHash' => $registrar,
                             'registrarType' => $Registrar ? $Registrar->getType() : ''
                         ]
@@ -66,8 +66,8 @@ QUI::$Ajax->registerFunction(
 
         return [
             'html' => $status,
-            'userActivated' => $User ? $User->isActive() : false,
-            'userId' => $User ? $User->getId() : false,
+            'userActivated' => $User && $User->isActive(),
+            'userId' => $User ? $User->getUUID() : false,
             'registrarHash' => $registrar,
             'registrarType' => $Registrar ? $Registrar->getType() : ''
         ];

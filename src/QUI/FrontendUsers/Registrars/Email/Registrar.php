@@ -8,6 +8,7 @@ namespace QUI\FrontendUsers\Registrars\Email;
 
 use QUI;
 use QUI\Captcha\Handler as CaptchaHandler;
+use QUI\Exception;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\Utils\Security\Orthos;
@@ -26,8 +27,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      * @return void
      *
      * @throws FrontendUsers\Exception
+     * @throws Exception
      */
-    public function onRegistered(QUI\Interfaces\Users\User $User)
+    public function onRegistered(QUI\Interfaces\Users\User $User): void
     {
         $SystemUser = QUI::getUsers()->getSystemUser();
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
@@ -66,7 +68,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             $User->setAttributes([
                 'firstname' => $this->getAttribute('firstname'),
                 'lastname' => $this->getAttribute('lastname'),
-                'address' => $UserAddress->getId()    // set as main address
+                'address' => $UserAddress->getUUID()    // set as main address
             ]);
 
             $tel = $this->getAttribute('phone');
@@ -105,9 +107,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     }
 
     /**
-     * @throws FrontendUsers\Exception
+     * @throws FrontendUsers\Exception|Exception
      */
-    public function validate()
+    public function validate(): array
     {
         $username = $this->getUsername();
         $Handler = FrontendUsers\Handler::getInstance();
@@ -173,7 +175,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 $lg,
                 $lgPrefix . 'username_already_exists'
             ]);
-        } catch (\Exception $Exception) {
+        } catch (\Exception) {
             // Username does not exist
         }
 
@@ -208,7 +210,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         }
 
         // CAPTCHA validation
-        if (boolval($settings['useCaptcha'])) {
+        if ($settings['useCaptcha']) {
             $captchaResponse = $this->getAttribute('captchaResponse');
 
             if (empty($captchaResponse)) {
@@ -225,14 +227,17 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 ]);
             }
         }
+
+        return [];
     }
 
     /**
      * Get all invalid registration form fields
      *
      * @return InvalidFormField[]
+     * @throws Exception
      */
-    public function getInvalidFields()
+    public function getInvalidFields(): array
     {
         $username = $this->getUsername();
         $invalidFields = [];
@@ -319,7 +324,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * @return string
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         $data = $this->getAttributes();
 
@@ -336,8 +341,9 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
     /**
      * @return Control
+     * @throws Exception
      */
-    public function getControl()
+    public function getControl(): Control
     {
         $invalidFields = [];
 
@@ -357,10 +363,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * Get title
      *
-     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getTitle($Locale = null)
+    public function getTitle(?QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -372,10 +378,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * Get description
      *
-     * @param QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
+     * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getDescription($Locale = null)
+    public function getDescription(QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();
@@ -387,7 +393,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
     /**
      * @return string
      */
-    public function getIcon()
+    public function getIcon(): string
     {
         return 'fa fa-envelope';
     }
@@ -398,7 +404,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      * @return bool
      * @throws QUI\Exception
      */
-    public function canSendPassword()
+    public function canSendPassword(): bool
     {
         // Can only send password if the user does not provide it himself
         $registrationSettings = FrontendUsers\Handler::getInstance()->getRegistrationSettings();

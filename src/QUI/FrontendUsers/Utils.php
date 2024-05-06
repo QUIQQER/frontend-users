@@ -8,7 +8,12 @@ namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Profile\ControlInterface;
+use QUI\Package\Package;
 use QUI\Permissions;
+
+use function class_exists;
+use function is_a;
+use function json_decode;
 
 /**
  * Class Utils
@@ -27,11 +32,11 @@ class Utils
         $packages = QUI::getPackageManager()->getInstalled();
         $list = [];
 
-        /* @var $Package \QUI\Package\Package */
+        /* @var $Package <Package */
         foreach ($packages as $package) {
             try {
                 $Package = QUI::getPackage($package['name']);
-            } catch (QUI\Exception $Exception) {
+            } catch (QUI\Exception) {
                 continue;
             }
 
@@ -61,21 +66,14 @@ class Utils
 
         try {
             return QUI\Cache\Manager::get($cache);
-        } catch (QUI\Exception $exception) {
+        } catch (QUI\Exception) {
         }
 
         $result = [];
         $packages = self::getFrontendUsersPackages();
+        $Engine = QUI::getTemplateManager()->getEngine();
 
-        try {
-            $Engine = QUI::getTemplateManager()->getEngine();
-        } catch (QUI\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
-
-            return [];
-        }
-
-        /** @var QUI\Package\Package $Package */
+        /** @var Package $Package */
         foreach ($packages as $Package) {
             $Parser = new QUI\Utils\XML\Settings();
             $Parser->setXMLPath('//quiqqer/frontend-users/profile');
@@ -139,7 +137,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileSetting($category, $settings = false): array
+    public static function getProfileSetting(string $category, bool|string $settings = false): array
     {
         if ($category) {
             $categories = [self::getProfileCategory($category)];
@@ -170,7 +168,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileSettingControl($category, $settings = false): ?ControlInterface
+    public static function getProfileSettingControl(string $category, bool|string $settings = false): ?ControlInterface
     {
         $setting = self::getProfileSetting($category, $settings);
         $Control = null;
@@ -178,7 +176,7 @@ class Utils
         if (isset($setting['control'])) {
             $cls = $setting['control'];
 
-            if (\class_exists($cls) && \is_a($cls, ControlInterface::class, true)) {
+            if (class_exists($cls) && is_a($cls, ControlInterface::class, true)) {
                 $Control = new $cls();
             }
         }
@@ -194,7 +192,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileCategory($category): array
+    public static function getProfileCategory(string $category): array
     {
         $categories = self::getProfileCategories();
 
@@ -236,14 +234,14 @@ class Utils
 
         // sort
         $sorting = function ($a, $b) {
-            $priority1 = isset($a['priority']) ? $a['priority'] : 0;
-            $priority2 = isset($b['priority']) ? $b['priority'] : 0;
+            $priority1 = $a['priority'] ?? 0;
+            $priority2 = $b['priority'] ?? 0;
 
             return $priority1 > $priority2 ? +1 : -1;
         };
 
         foreach ($categories as $key => $values) {
-            $items = $categories[$key]['items'];
+            $items = $values['items'];
             usort($items, $sorting);
 
             $categories[$key]['items'] = $items;
@@ -288,12 +286,15 @@ class Utils
      * Checks if the given User is allowed to view a category
      *
      * @param string $category - Name of the category
-     * @param string|bool $setting (optional) - category settings
-     * @param QUI\Users\User $User (optional) - If omitted use \QUI::getUserBySession()
+     * @param bool|string $setting (optional) - category settings
+     * @param QUI\Interfaces\Users\User|null $User (optional) - If omitted use \QUI::getUserBySession()
      * @return bool
      */
-    public static function hasPermissionToViewCategory($category, $setting = false, $User = null): bool
-    {
+    public static function hasPermissionToViewCategory(
+        string $category,
+        bool|string $setting = false,
+        QUI\Interfaces\Users\User $User = null
+    ): bool {
         if ($User === null) {
             $User = QUI::getUserBySession();
         }
@@ -314,7 +315,7 @@ class Utils
      * @param array $categories
      * @return array
      */
-    public static function loadTranslationForCategories($categories = []): array
+    public static function loadTranslationForCategories(array $categories = []): array
     {
         // load the translations
         foreach ($categories as $key => $category) {
@@ -346,7 +347,7 @@ class Utils
      * @param null|QUI\Projects\Project $Project
      * @return array
      */
-    public static function setUrlsToCategorySettings($categories = [], $Project = null): array
+    public static function setUrlsToCategorySettings(array $categories = [], QUI\Projects\Project $Project = null): array
     {
         try {
             if ($Project === null) {
@@ -395,7 +396,7 @@ class Utils
     {
         try {
             QUI::getPackage('quiqqer/captcha');
-        } catch (\Exception $Exception) {
+        } catch (\Exception) {
             return false;
         }
 
@@ -409,7 +410,7 @@ class Utils
      * @param int $s [default] - Size [default: 80x80 px]
      * @return string
      */
-    public static function getGravatarUrl($email, $s = 80): string
+    public static function getGravatarUrl(string $email, int $s = 80): string
     {
         if ($s < 1) {
             $s = 1;
@@ -449,7 +450,7 @@ class Utils
      *
      * @throws QUI\Exception
      */
-    public static function setUserEmailVerified(QUI\Users\User $User)
+    public static function setUserEmailVerified(QUI\Users\User $User): void
     {
         $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
         $User->save(QUI::getUsers()->getSystemUser());
@@ -465,9 +466,9 @@ class Utils
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
-                $settings = \json_decode($settings, true);
+                $settings = json_decode($settings, true);
             }
-        } catch (QUI\Exception $Exception) {
+        } catch (QUI\Exception) {
             return $missing;
         }
 

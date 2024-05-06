@@ -3,6 +3,7 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Exception;
 use QUI\Verification\AbstractVerification;
 
 /**
@@ -17,10 +18,11 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * Get the duration of a Verification (minutes)
      *
-     * @return int|false - duration in minutes;
+     * @return int - duration in minutes;
      * if this method returns false use the module setting default value
+     * @throws Exception
      */
-    public function getValidDuration()
+    public function getValidDuration(): int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -31,9 +33,9 @@ class EmailConfirmVerification extends AbstractVerification
      *
      * @return void
      */
-    public function onSuccess()
+    public function onSuccess(): void
     {
-        $userId = (int)$this->getIdentifier();
+        $userId = $this->getIdentifier();
 
         try {
             $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
@@ -67,7 +69,7 @@ class EmailConfirmVerification extends AbstractVerification
      *
      * @return void
      */
-    public function onError()
+    public function onError(): void
     {
         // nothing
     }
@@ -77,7 +79,7 @@ class EmailConfirmVerification extends AbstractVerification
      *
      * @return string
      */
-    public function getSuccessMessage()
+    public function getSuccessMessage(): string
     {
         return '';
     }
@@ -88,7 +90,7 @@ class EmailConfirmVerification extends AbstractVerification
      * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
      * @return string
      */
-    public function getErrorMessage($reason)
+    public function getErrorMessage(string $reason): string
     {
         return '';
     }
@@ -97,8 +99,9 @@ class EmailConfirmVerification extends AbstractVerification
      * Automatically redirect the user to this URL on successful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws Exception
      */
-    public function getOnSuccessRedirectUrl()
+    public function getOnSuccessRedirectUrl(): bool|string
     {
         $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
             $this->getProject()
@@ -117,8 +120,9 @@ class EmailConfirmVerification extends AbstractVerification
      * Automatically redirect the user to this URL on unsuccessful verification
      *
      * @return string|false - If this method returns false, no redirection takes place
+     * @throws Exception
      */
-    public function getOnErrorRedirectUrl()
+    public function getOnErrorRedirectUrl(): bool|string
     {
         $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
             $this->getProject()
@@ -137,8 +141,9 @@ class EmailConfirmVerification extends AbstractVerification
      * Get the Project this Verification is intended for
      *
      * @return QUI\Projects\Project
+     * @throws Exception
      */
-    protected function getProject()
+    protected function getProject(): QUI\Projects\Project
     {
         $additionalData = $this->getAdditionalData();
 
