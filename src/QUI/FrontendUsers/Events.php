@@ -21,7 +21,7 @@ use function json_encode;
 class Events
 {
     /**
-     * quiqqer/quiqqer: onUserActivate
+     * quiqqer/core: onUserActivate
      *
      * @param User $User
      * @return void
@@ -40,7 +40,7 @@ class Events
     }
 
     /**
-     * quiqqer/quiqqer: onSiteInit
+     * quiqqer/core: onSiteInit
      *
      * @param QUI\Interfaces\Projects\Site $Site
      */
@@ -209,7 +209,7 @@ class Events
     }
 
     /**
-     * quiqqer/quiqqer: onUserCreate
+     * quiqqer/core: onUserCreate
      *
      * @param QUI\Interfaces\Users\User $User
      * @return void
@@ -225,7 +225,7 @@ class Events
     }
 
     /**
-     * quiqqer/quiqqer: onUserDelete
+     * quiqqer/core: onUserDelete
      *
      * @param User $User
      * @return void
@@ -246,7 +246,7 @@ class Events
     }
 
     /**
-     * quiqqer/quiqqer: onPackageInstall
+     * quiqqer/core: onPackageInstall
      *
      * @param QUI\Package\Package $Package
      * @return void
@@ -265,7 +265,7 @@ class Events
     }
 
     /**
-     * quiqqer/quiqqer: onPackageSetup
+     * quiqqer/core: onPackageSetup
      *
      * @param QUI\Package\Package $Package
      * @return void
@@ -412,7 +412,7 @@ class Events
     }
 
     /**
-     * quiqqer/quiqqer: onTemplateGetHeader
+     * quiqqer/core: onTemplateGetHeader
      *
      * @param QUI\Template $TemplateManager
      */
@@ -482,7 +482,7 @@ class Events
                         new Password({
                             uid: '" . $User->getUUID() . "',
                             mustChange: true,
-                            message: QUILocale.get('quiqqer/quiqqer', 'message.set.new.password'),
+                            message: QUILocale.get('quiqqer/core', 'message.set.new.password'),
                             events: {
                                 onSuccess: function() {
                                     window.location.reload();
@@ -494,7 +494,7 @@ class Events
            
                 const checkChangePasswordWindow = function() {
                     require(['Locale'], function(QUILocale) {
-                        if (!QUILocale.exists('quiqqer/quiqqer', 'message.set.new.password')) {
+                        if (!QUILocale.exists('quiqqer/core', 'message.set.new.password')) {
                             (function() {
                                 openChangePasswordWindow();
                             }).delay(2000);
