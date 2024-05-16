@@ -7,11 +7,12 @@
 namespace QUI\FrontendUsers\Registrars\Email;
 
 use QUI;
-use QUI\Captcha\Handler as CaptchaHandler;
 use QUI\Exception;
 use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\Utils\Security\Orthos;
+
+use function class_exists;
 
 /**
  * Class Email\Registrar
@@ -220,7 +221,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 ]);
             }
 
-            if (!CaptchaHandler::isResponseValid($captchaResponse)) {
+            if (class_exists('QUI\Captcha\Handler') && !QUI\Captcha\Handler::isResponseValid($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
                     $lgPrefix . 'captcha_invalid_response'
