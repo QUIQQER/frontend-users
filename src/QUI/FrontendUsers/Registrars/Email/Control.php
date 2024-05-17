@@ -10,6 +10,8 @@ use QUI;
 use QUI\Countries\Controls\Select as CountrySelect;
 use QUI\Exception;
 
+use function class_exists;
+
 /**
  * Class EMail
  *
@@ -99,7 +101,11 @@ class Control extends QUI\Control
         $jsRequired = false;
         $useCaptcha = false;
 
-        if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
+        if (
+            QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()
+            && class_exists('QUI\Captcha\Controls\CaptchaDisplay')
+            && class_exists('QUI\Captcha\Handler')
+        ) {
             $Captcha = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
             $useCaptcha = boolval($registrationSettings['useCaptcha']);

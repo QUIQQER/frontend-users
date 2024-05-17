@@ -110,7 +110,11 @@ class RegistrationSignUp extends QUI\Control
         $useCaptcha = false;
         $isCaptchaInvisible = false;
 
-        if (QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()) {
+        if (
+            QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()
+            && class_exists('QUI\Captcha\Controls\CaptchaDisplay')
+            && class_exists('QUI\Captcha\Handler')
+        ) {
             $Captcha = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
             $useCaptcha = boolval($registrationSettings['useCaptcha']);
@@ -120,6 +124,7 @@ class RegistrationSignUp extends QUI\Control
 
             if (
                 class_exists('QUI\Captcha\Modules\Google')
+                && class_exists('QUI\Captcha\Modules\GoogleInvisible\Control')
                 && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class
             ) {
                 $Engine->assign('googleSideKey', QUI\Captcha\Modules\Google::getSiteKey());
