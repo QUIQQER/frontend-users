@@ -59,13 +59,13 @@ class AnonymiseUsers extends QUI\System\Console\Tool
         // EMAIL
 
         $this->writeLn(
-            "Use the following host handle for email-addresses [@foo.bar]: "
+            "Use the following host handle for email-addresses [@foobar.local]: "
         );
 
         $emailHandle = $this->readInput();
 
         if (empty($emailHandle)) {
-            $emailHandle = '@foo.bar';
+            $emailHandle = '@foobar.local';
         }
 
         // SUMMARY
