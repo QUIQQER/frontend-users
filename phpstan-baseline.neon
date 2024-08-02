@@ -1,0 +1,126 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Call to an undefined method QUI\\\\FrontendUsers\\\\Controls\\\\Profile\\\\ControlInterface\\:\\:setAttribute\\(\\)\\.$#"
+			count: 1
+			path: ajax/frontend/profile/save.php
+
+		-
+			message: "#^Parameter \\#2 \\$code of class QUI\\\\FrontendUsers\\\\Exception constructor expects int, string given\\.$#"
+			count: 1
+			path: ajax/frontend/profile/save.php
+
+		-
+			message: "#^Variable \\$Registrar in PHPDoc tag @var does not match any variable in the foreach loop\\: \\$class$#"
+			count: 1
+			path: ajax/settings/getAuthenticators.php
+
+		-
+			message: "#^PHPDoc tag @return with type mixed is not subtype of native type string\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/AbstractRegistrar.php
+
+		-
+			message: "#^Parameter \\#1 \\$User of static method QUI\\\\FrontendUsers\\\\Utils\\:\\:setUserEmailVerified\\(\\) expects QUI\\\\Users\\\\User, QUI\\\\Interfaces\\\\Users\\\\User given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/ActivationVerification.php
+
+		-
+			message: "#^Parameter \\#1 \\$code of method QUI\\\\Interfaces\\\\Users\\\\User\\:\\:activate\\(\\) expects string, false given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/ActivationVerification.php
+
+		-
+			message: "#^Negated boolean expression is always true\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Console/SendUserMails.php
+
+		-
+			message: "#^Parameter \\#1 \\$groupId of method QUI\\\\Interfaces\\\\Users\\\\User\\:\\:addToGroup\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Console/SetUserGroups.php
+
+		-
+			message: "#^Instantiated class QUI\\\\ERP\\\\Order\\\\Exception not found\\.$#"
+			count: 6
+			path: src/QUI/FrontendUsers/Controls/Address/Address.php
+
+		-
+			message: "#^PHPDoc tag @throws with type QUI\\\\ERP\\\\Order\\\\Exception is not subtype of Throwable$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Address/Address.php
+
+		-
+			message: "#^Throwing object of an unknown class QUI\\\\ERP\\\\Order\\\\Exception\\.$#"
+			count: 6
+			path: src/QUI/FrontendUsers/Controls/Address/Address.php
+
+		-
+			message: "#^Variable \\$Authenticator in PHPDoc tag @var does not exist\\.$#"
+			count: 2
+			path: src/QUI/FrontendUsers/Controls/Login.php
+
+		-
+			message: "#^Call to an undefined method QUI\\\\FrontendUsers\\\\Controls\\\\Profile\\\\ControlInterface\\:\\:setAttribute\\(\\)\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Profile.php
+
+		-
+			message: "#^Parameter \\#1 \\$maxWidth of method QUI\\\\Projects\\\\Media\\\\ExternalImage\\:\\:getSizeCacheUrl\\(\\) expects bool, int given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Profile/UserAvatar.php
+
+		-
+			message: "#^Parameter \\#2 \\$maxHeight of method QUI\\\\Projects\\\\Media\\\\ExternalImage\\:\\:getSizeCacheUrl\\(\\) expects bool, int given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Profile/UserAvatar.php
+
+		-
+			message: "#^Call to an undefined method QUI\\\\Interfaces\\\\Projects\\\\Media\\\\File\\:\\:setTitle\\(\\)\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Profile/UserAvatarUpload.php
+
+		-
+			message: "#^Parameter \\#1 \\$User of method QUI\\\\FrontendUsers\\\\Handler\\:\\:sendChangeEmailAddressMail\\(\\) expects QUI\\\\Users\\\\User, QUI\\\\Interfaces\\\\Users\\\\User given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Profile/UserData.php
+
+		-
+			message: "#^Parameter \\#1 \\$code of method QUI\\\\Interfaces\\\\Users\\\\User\\:\\:activate\\(\\) expects string, false given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Registration.php
+
+		-
+			message: "#^Parameter \\#1 \\$groupId of method QUI\\\\Interfaces\\\\Users\\\\User\\:\\:addToGroup\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/Registration.php
+
+		-
+			message: "#^Parameter \\#1 \\$maxWidth of method QUI\\\\Projects\\\\Media\\\\ExternalImage\\:\\:getSizeCacheUrl\\(\\) expects bool, int given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/UserIcon.php
+
+		-
+			message: "#^Parameter \\#2 \\$maxHeight of method QUI\\\\Projects\\\\Media\\\\ExternalImage\\:\\:getSizeCacheUrl\\(\\) expects bool, int given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Controls/UserIcon.php
+
+		-
+			message: "#^Call to an undefined method QUI\\\\Interfaces\\\\Projects\\\\Site\\:\\:getLocation\\(\\)\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Events.php
+
+		-
+			message: "#^Call to method createResponse\\(\\) on an unknown class QUI\\\\REST\\\\ResponseFactory\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Rest/Routes/GetRegisterRequiredFields.php
+
+		-
+			message: "#^Instantiated class QUI\\\\REST\\\\ResponseFactory not found\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Rest/Routes/GetRegisterRequiredFields.php
+
+		-
+			message: "#^Parameter \\#1 \\$groupId of method QUI\\\\Interfaces\\\\Users\\\\User\\:\\:addToGroup\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: src/QUI/FrontendUsers/Rest/Routes/PostRegister.php
