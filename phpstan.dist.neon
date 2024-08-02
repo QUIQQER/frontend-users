@@ -7,6 +7,11 @@ parameters:
         - src
         - ajax
         - types
+    excludePaths:
+        # Ignore files that use classes from optional packages
+        - src/QUI/FrontendUsers/ErpProvider.php
+        - src/QUI/FrontendUsers/Rest/Provider.php
+        - src/QUI/FrontendUsers/GdprDataProvider.php
     bootstrapFiles:
         - tests/phpstan-bootstrap.php
     treatPhpDocTypesAsCertain: false
