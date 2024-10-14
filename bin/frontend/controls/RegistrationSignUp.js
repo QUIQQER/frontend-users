@@ -836,7 +836,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             //        self.emailValidation(EmailField);
             //    }).delay(2000);
             //});
-
             EmailField.addEvent('keydown', function (event) {
                 if (event.key === 'enter') {
                     event.stop();
@@ -1026,7 +1025,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 ButtonTrial.set('disabled', true);
             }
 
-            this.emailValidation(MailInput).then(function (isValid) {
+            Registration.isEmailBlacklisted(MailInput.value).then((isBlacklisted) => {
+                if (isBlacklisted) {
+                    QUI.getMessageHandler((MH) => {
+                        MH.addAttention(QUILocale.get(lg, 'exception.registrars.email.email_blacklisted'), MailInput);
+                    });
+                    return false;
+                }
+
+                return this.emailValidation(MailInput);
+            }).then(function (isValid) {
                 if (!isValid) {
                     return Promise.reject('isInValid');
                 }
