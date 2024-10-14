@@ -157,6 +157,9 @@
                 <conf name="privacyPolicySite">
                     <type><![CDATA[string]]></type>
                 </conf>
+                <conf name="emailBlacklist">
+                    <type><![CDATA[string]]></type>
+                </conf>
             </section>
 
             <section name="profile">
@@ -644,6 +647,21 @@
                                 <locale group="quiqqer/frontend-users" var="settings.privacyPolicySite.description"/>
                             </description>
                         </input>
+
+                        <textarea
+                                conf="registration.emailBlacklist"
+                                data-qui="package/quiqqer/core/bin/QUI/controls/settings/Textarea"
+                                rows="15"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.registration.emailBlacklist"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.registration.emailBlacklist.description"/>
+                            </description>
+                        </textarea>
 
                     </settings>
                 </category>
