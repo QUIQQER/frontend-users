@@ -133,6 +133,13 @@ class UserData extends AbstractProfileControl
                 ]);
             }
 
+            if (QUI\FrontendUsers\Utils::isEmailBlacklisted($newEmail)) {
+                throw new QUI\FrontendUsers\Exception([
+                    'quiqqer/frontend-users',
+                    'exception.registrars.email.email_blacklisted'
+                ]);
+            }
+
             FrontendUsersHandler::getInstance()->sendChangeEmailAddressMail(
                 $User,
                 $newEmail,

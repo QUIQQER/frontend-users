@@ -96,12 +96,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
 
                 Promise.all([
                     Registration.emailSyntaxValidation(email),
-                    Registration.emailValidation(email)
+                    Registration.emailValidation(email),
+                    Registration.isEmailBlacklisted(email)
                 ]).then(function (result) {
-                    var emailSyntaxValid = result[0];
-                    var emailValid       = result[1];
+                    const emailSyntaxValid = result[0];
+                    const emailValid       = result[1];
+                    const isBlacklisted    = result[2];
 
-                    if (emailSyntaxValid && emailValid) {
+                    if (emailSyntaxValid && emailValid && !isBlacklisted) {
                         self.$clearEmailErrorMsg();
                         return;
                     }
@@ -115,6 +117,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
                     if (!emailValid) {
                         self.$showEmailErrorMsg(
                             QUILocale.get(lg, 'controls.profile.userdata.email_already_taken')
+                        );
+                    }
+
+                    if (isBlacklisted) {
+                        self.$showEmailErrorMsg(
+                            QUILocale.get(lg, 'exception.registrars.email.email_blacklisted')
                         );
                     }
                 });
