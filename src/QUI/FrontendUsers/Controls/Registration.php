@@ -551,8 +551,17 @@ class Registration extends QUI\Control
                 break;
 
             case $RegistrarHandler::ACTIVATION_MODE_AUTO:
+            case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
                 if (!$NewUser->isActive()) {
                     $NewUser->activate(false, $SystemUser);
+                }
+
+                if ($registrarSettings['activationMode'] == $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM) {
+                    $RegistrarHandler->sendEmailConfirmationMail(
+                        $NewUser,
+                        $NewUser->getAttribute('email'),
+                        $Registrar->getProject()
+                    );
                 }
                 break;
         }

@@ -7,7 +7,8 @@
         <attribute>quiqqer.frontendUsers.registrar</attribute>
         <attribute>quiqqer.frontendUsers.userActivationRequired</attribute>
         <attribute>quiqqer.frontendUsers.activationLoginExecuted</attribute>
-        <attribute>quiqqer.frontendUsers.emailVerified</attribute>
+        <attribute>quiqqer.frontendUsers.emailVerified</attribute> <!-- main email address -->
+        <attribute>quiqqer.frontendUsers.emailAddressesVerified</attribute> <!-- additional email addresses -->
         <attribute>quiqqer.frontendUsers.useGravatarIcon</attribute>
     </attributes>
 </user>

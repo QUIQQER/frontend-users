@@ -1,17 +1,15 @@
 <?php
 
-/**
- * This file contains QUI\FrontendUsers\Handler
- */
-
 namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\Mail\Mailer;
 use QUI\Utils\Singleton;
 use QUI\Verification\Verifier;
+use QUI\Interfaces\Users\User as QUIUserInterface;
 
 use function array_filter;
+use function time;
 
 /**
  * Class Registration Handling
@@ -33,6 +31,7 @@ class Handler extends Singleton
      */
     const ACTIVATION_MODE_MAIL = 'mail';
     const ACTIVATION_MODE_AUTO = 'auto';
+    const ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM = 'autoWithEmailConfirm';
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
@@ -75,6 +74,7 @@ class Handler extends Singleton
     const USER_ATTR_REGISTRAR = 'quiqqer.frontendUsers.registrar';
     const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
     const USER_ATTR_EMAIL_VERIFIED = 'quiqqer.frontendUsers.emailVerified';
+    const USER_ATTR_EMAIL_ADDRESSES_VERIFIED = 'quiqqer.frontendUsers.emailAddressesVerified';
     const USER_ATTR_USER_ACTIVATION_REQUIRED = 'quiqqer.frontendUsers.userActivationRequired';
 
     /**
@@ -632,7 +632,65 @@ class Handler extends Singleton
                         'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
-                        'newEmail' => $newEmail,
+                        'email' => $newEmail,
+                        'date' => $L->formatDate(time()),
+                        'confirmLink' => $confirmLink
+                    ])
+                ]
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendChangeEmailAddressMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+    /**
+     * Send email to confirm an email address.
+     *
+     * @param QUIUserInterface $User
+     * @param string $email - New E-Mail-Adress
+     * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
+     * @return void
+     *
+     * @throws QUI\Exception
+     */
+    public function sendEmailConfirmationMail(
+        QUIUserInterface $User,
+        string $email,
+        QUI\Projects\Project $Project
+    ): void {
+        $EmailConfirmVerification = new EmailVerification($User->getUUID(), [
+            'project' => $Project->getName(),
+            'projectLang' => $Project->getLang(),
+            'email' => $email
+        ]);
+
+        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
+
+        try {
+            $this->sendMail(
+                [
+                    'subject' => $L->get($lg, 'mail.confirm_email_address.subject')
+                ],
+                [
+                    $email
+                ],
+                $tplDir . 'mail.confirm_email_address.html',
+                [
+                    'body' => $L->get($lg, 'mail.confirm_email_address.body', [
+                        'host' => $host,
+                        'userId' => $User->getUUID(),
+                        'username' => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'email' => $email,
                         'date' => $L->formatDate(time()),
                         'confirmLink' => $confirmLink
                     ])
