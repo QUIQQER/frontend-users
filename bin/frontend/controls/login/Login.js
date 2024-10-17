@@ -512,15 +512,27 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * opens the password forgotten sheet
          */
         openForgottenPassword: function() {
+
             var Reset = this.getElm().getElement('.quiqqer-fu-login-forget-password-reset');
 
             if (!Reset) {
                 return;
             }
 
+            const Login = this.getElm().getElement('.quiqqer-fu-login-container');
+            Login.style.height = Login.offsetHeight + 'px';
+
+            const LoginInner = this.getElm().getElement('.quiqqer-fu-login-container__inner');
+
             Reset.setStyle('opacity', 0);
             Reset.setStyle('left', -50);
             Reset.setStyle('display', 'block');
+
+            if (LoginInner) {
+                moofx(LoginInner).animate({
+                    opacity: 0
+                });
+            }
 
             moofx(Reset).animate({
                 left: 0,
@@ -530,6 +542,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 }
             });
+
+            if (LoginInner) {
+                moofx(Login).animate({
+                    height: Reset.offsetHeight
+                });
+            }
         },
 
         /**
@@ -614,6 +632,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 return;
             }
 
+            const Login = this.getElm().getElement('.quiqqer-fu-login-container');
+            Login.style.height = Login.offsetHeight + 'px';
+
+            const LoginInner = this.getElm().getElement('.quiqqer-fu-login-container__inner');
+
+            if (LoginInner) {
+                moofx(LoginInner).animate({
+                    opacity: 1
+                });
+            }
+
             moofx(Reset).animate({
                 left: -50,
                 opacity: 0
@@ -622,6 +651,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     Reset.setStyle('display', 'none');
                 }
             });
+
+            if (LoginInner) {
+                moofx(Login).animate({
+                    height: LoginInner.offsetHeight
+                }, {
+                    callback: function() {
+                        Login.style.height = null;
+                    }
+                });
+            }
         },
 
         /**
