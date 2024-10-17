@@ -180,7 +180,9 @@ class Registration extends QUI\Control
                 } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
-            } elseif (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+            }
+
+            if (!$redirectUrl && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 // show success message and redirect after 10 seconds
                 try {
                     $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
