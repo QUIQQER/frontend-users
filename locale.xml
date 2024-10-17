@@ -1642,6 +1642,32 @@ The e-mail address for your user account on [host] has been changed to the addre
 </p>]]></en>
         </locale>
 
+        <!-- E-Mail-Address confirm mail -->
+        <locale name="mail.confirm_email_address.subject">
+            <de><![CDATA[Bestätigung Ihrer E-Mail-Adresse]]></de>
+            <en><![CDATA[Confirm your email address]]></en>
+        </locale>
+        <locale name="mail.confirm_email_address.body" html="true">
+            <de><![CDATA[<h1>Hallo [username]!</h1>
+<p>
+Bitte bestätigen Sie Ihre E-Mail-Adresse für Ihr Benutzerkonto auf [host]. Für die Bestätigung öffnen Sie bitte folgenden Link:
+<br><br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>
+<b>Hinweis:</b> Sollten Sie diese E-Mail nicht veranlasst haben, können Sie sie einfach ignorieren.
+</p>]]></de>
+            <en><![CDATA[<h1>Hello [username]!</h1>
+<p>
+Please confirm your e-mail address for your user account on [host]. To confirm your e-mail address, please click on the following link:
+<br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>
+<b>Note:</b> If you have not initiated this email, please ignore this it.
+</p>]]></en>
+        </locale>
+
         <!-- User delete confirm mail -->
         <locale name="mail.delete_user_confirm.subject">
             <de><![CDATA[Löschung Ihres Benutzerkontos]]></de>
@@ -1975,6 +2001,58 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             ]]></en>
         </locale>
 
+        <locale name="mail.text.confirmEmail.title">
+            <de><![CDATA[Frontend Users: Bestätigung der E-Mail-Adresse]]></de>
+            <en><![CDATA[Frontend Users: Confirmation of e-mail address]]></en>
+        </locale>
+        <locale name="mail.text.confirmEmail.description">
+            <de><![CDATA[
+            E-Mail zur Bestägigung einer E-Mail-Adresse.
+            ]]></de>
+            <en><![CDATA[
+            Email for confirmation of an email address.
+            ]]></en>
+        </locale>
+        <locale name="order.confirmEmail.subject.description">
+            <de><![CDATA[
+            <p>Betreff der Bestätigungs--E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (System)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Subject of the confirmation e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+            </ul>
+            ]]></en>
+        </locale>
+        <locale name="order.confirmEmail.body.description">
+            <de><![CDATA[
+            <p>Inhalt der Bestätigungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (System)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[email]:</b> E-Mail des Benutzers</li>
+                <li><b>[confirmLink]:</b> Bestätigungs-Link (muss enthalten sein!)</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Content of the confirmation e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+                <li><b>[userId]:</b> User id of the user</li>
+                <li><b>[email]:</b> E mail of the user</li>
+                <li><b>[confirmLink]:</b> Confirmation link (must be included!)</li>
+                <li><b>[username]:</b> Username</li>
+                <li><b>[userFirstName]:</b> First name of the user (if available)</li>
+                <li><b>[userLastName]:</b> Last name of the user (if available)</li>
+            </ul>
+            ]]></en>
+        </locale>
 
         <locale name="mail.text.changeEmail.title">
             <de><![CDATA[Frontend Users: E-Mail ändern]]></de>
@@ -2134,6 +2212,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="controls.settings.registrars.template.activationModeOptionAuto">
             <de><![CDATA[Automatische Aktivierung]]></de>
             <en><![CDATA[Auto activation]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionAutoWithEmailConfirm">
+            <de><![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
+            <en><![CDATA[Auto activation (link to confirm email address will be sent regardless)]]></en>
         </locale>
         <locale name="controls.settings.registrars.template.activationModeOptionManual">
             <de><![CDATA[Manuelle Aktivierung (über Benutzer-Verwaltung)]]></de>

@@ -19,7 +19,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
     'css!package/quiqqer/frontend-users/bin/controls/settings/Registrars.css'
 
 ], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUILocale, QUIAjax,
-             Mustache, entryTemplate) {
+    Mustache, entryTemplate) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -82,14 +82,15 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
                         'class'         : 'quiqqer-frontendusers-settings-registrars-entry',
                         'data-registrar': Registrar.type,
                         html            : Mustache.render(entryTemplate, {
-                            title                     : Registrar.title,
-                            description               : Registrar.description,
-                            labelActivationMode       : QUILocale.get(lg, lgPrefix + 'labelActivationMode'),
-                            activationModeOptionMail  : QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
-                            activationModeOptionAuto  : QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
-                            activationModeOptionManual: QUILocale.get(lg, lgPrefix + 'activationModeOptionManual'),
-                            labelActive               : QUILocale.get(lg, lgPrefix + 'labelActive'),
-                            labelDisplayPosition      : QUILocale.get(lg, lgPrefix + 'labelDisplayPosition')
+                            title                                   : Registrar.title,
+                            description                             : Registrar.description,
+                            labelActivationMode                     : QUILocale.get(lg, lgPrefix + 'labelActivationMode'),
+                            activationModeOptionMail                : QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
+                            activationModeOptionAuto                : QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
+                            activationModeOptionAutoWithEmailConfirm: QUILocale.get(lg, lgPrefix + 'activationModeOptionAutoWithEmailConfirm'),
+                            activationModeOptionManual              : QUILocale.get(lg, lgPrefix + 'activationModeOptionManual'),
+                            labelActive                             : QUILocale.get(lg, lgPrefix + 'labelActive'),
+                            labelDisplayPosition                    : QUILocale.get(lg, lgPrefix + 'labelDisplayPosition')
                         })
                     }).inject(self.$Content);
 

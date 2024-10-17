@@ -1,17 +1,16 @@
 <?php
 
-/**
- * This file contains QUI\FrontendUsers\Utils
- */
-
 namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Profile\ControlInterface;
 use QUI\Package\Package;
 use QUI\Permissions;
+use QUI\Interfaces\Users\User as QUIUserInterface;
+use QUI\FrontendUsers\Exception\EmailAddressNotVerifiableException;
 
 use function class_exists;
+use function in_array;
 use function is_a;
 use function json_decode;
 
@@ -347,8 +346,10 @@ class Utils
      * @param null|QUI\Projects\Project $Project
      * @return array
      */
-    public static function setUrlsToCategorySettings(array $categories = [], QUI\Projects\Project $Project = null): array
-    {
+    public static function setUrlsToCategorySettings(
+        array $categories = [],
+        QUI\Projects\Project $Project = null
+    ): array {
         try {
             if ($Project === null) {
                 $Project = QUI::getRewrite()->getProject();
@@ -426,12 +427,24 @@ class Utils
     }
 
     /**
-     * Check if the standard e-mail address of a user is verified
+     * Check if the STANDARD e-mail address of a user is verified
      *
-     * @param QUI\Users\User $User
+     * @param QUIUserInterface $User
+     * @return bool
+     * @deprecated use isDefaultUserEmailVerified
+     */
+    public static function isUserEmailVerified(QUIUserInterface $User): bool
+    {
+        return self::isDefaultUserEmailVerified($User);
+    }
+
+    /**
+     * Check if the STANDARD e-mail address of a user is verified
+     *
+     * @param QUIUserInterface $User
      * @return bool
      */
-    public static function isUserEmailVerified(QUI\Users\User $User): bool
+    public static function isDefaultUserEmailVerified(QUIUserInterface $User): bool
     {
         $email = $User->getAttribute('email');
 
@@ -443,19 +456,122 @@ class Utils
     }
 
     /**
-     * Set the standard e-mail address of a user to status "verified"
+     * Check if any e-mail address (user, user address) is verified for a specific user.
      *
-     * @param QUI\Users\User $User
+     * @param string $email
+     * @param QUIUserInterface $User
+     * @return bool
+     */
+    public static function isEmailAddressVerifiedForUser(string $email, QUIUserInterface $User): bool
+    {
+        $verifiedEmailAddresses = $User->getAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED);
+
+        if (empty($verifiedEmailAddresses)) {
+            return false;
+        }
+
+        return in_array($email, $verifiedEmailAddresses);
+    }
+
+    /**
+     * Set a specific email address as verified for a user.
+     *
+     * @param string $email
+     * @param QUIUserInterface $User
      * @return void
      *
-     * @throws QUI\Exception
+     * @throws EmailAddressNotVerifiableException
      */
-    public static function setUserEmailVerified(QUI\Users\User $User): void
+    public static function setEmailAddressAsVerfifiedForUser(string $email, QUIUserInterface $User): void
     {
-        $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
+        if (self::isEmailAddressVerifiedForUser($email, $User)) {
+            return;
+        }
+
+        if (empty($email)) {
+            throw new EmailAddressNotVerifiableException('Cannot verify empty email address.');
+        }
+
+        if (!QUI\Utils\Security\Orthos::checkMailSyntax($email)) {
+            throw new EmailAddressNotVerifiableException("Cannot verify invalid email address $email.");
+        }
+
+        if (!self::doesUserHaveEmailAddress($email, $User)) {
+            throw new EmailAddressNotVerifiableException(
+                "Cannot verify email address $email for user {$User->getId()}, because this email address"
+                . " is not associated with this user (neither saved in user or user addresses)."
+            );
+        }
+
+        $verifiedEmailAddresses = $User->getAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED);
+
+        if (empty($verifiedEmailAddresses)) {
+            $verifiedEmailAddresses = [];
+        }
+
+        $verifiedEmailAddresses[] = $email;
+
+        $User->setAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED, $verifiedEmailAddresses);
         $User->save(QUI::getUsers()->getSystemUser());
     }
 
+    /**
+     * Check if a user has a specific email address (either in user or one of user addresses).
+     *
+     * @param string $email
+     * @param QUIUserInterface $User
+     * @return bool
+     */
+    public static function doesUserHaveEmailAddress(string $email, QUIUserInterface $User): bool
+    {
+        $userEmail = $User->getAttribute('email');
+
+        if ($email === $userEmail) {
+            return true;
+        }
+
+        foreach ($User->getAddressList() as $Address) {
+            if (!($Address instanceof QUI\Users\Address)) {
+                continue;
+            }
+
+            $addressEmails = $Address->getMailList();
+
+            if (in_array($email, $addressEmails)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Set the standard e-mail address of a user to status "verified"
+     *
+     * @param QUIUserInterface $User
+     * @return void
+     * @throws EmailAddressNotVerifiableException
+     * @deprecated use setDefaultUserEmailVerified
+     */
+    public static function setUserEmailVerified(QUIUserInterface $User): void
+    {
+        self::setDefaultUserEmailVerified($User);
+    }
+
+    /**
+     * Set the standard e-mail address of a user to status "verified"
+     *
+     * @param QUIUserInterface $User
+     * @return void
+     * @throws EmailAddressNotVerifiableException
+     */
+    public static function setDefaultUserEmailVerified(QUIUserInterface $User): void
+    {
+        self::setEmailAddressAsVerfifiedForUser($User->getAttribute('email'), $User);
+
+        $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
+        $User->save(QUI::getUsers()->getSystemUser());
+    }
 
     public static function getMissingAddressFields(QUI\Users\Address $Address): array
     {

@@ -1331,7 +1331,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     duration: 250,
                     callback: function () {
                         Captcha.setStyle('display', 'none');
-                        Password.setStyle('display', 'none');
+
+                        if (Password) {
+                            Password.setStyle('display', 'none');
+                        }
 
                         Mail.setStyle('opacity', 0);
                         Mail.setStyle('display', 'inline');

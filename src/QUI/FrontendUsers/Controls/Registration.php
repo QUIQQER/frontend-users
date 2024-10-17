@@ -180,7 +180,9 @@ class Registration extends QUI\Control
                 } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
-            } elseif (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+            }
+
+            if (!$redirectUrl && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 // show success message and redirect after 10 seconds
                 try {
                     $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -551,8 +553,17 @@ class Registration extends QUI\Control
                 break;
 
             case $RegistrarHandler::ACTIVATION_MODE_AUTO:
+            case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
                 if (!$NewUser->isActive()) {
                     $NewUser->activate(false, $SystemUser);
+                }
+
+                if ($registrarSettings['activationMode'] == $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM) {
+                    $RegistrarHandler->sendEmailConfirmationMail(
+                        $NewUser,
+                        $NewUser->getAttribute('email'),
+                        $Registrar->getProject()
+                    );
                 }
                 break;
         }

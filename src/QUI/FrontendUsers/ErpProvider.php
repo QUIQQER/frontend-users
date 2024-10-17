@@ -57,6 +57,23 @@ class ErpProvider extends AbstractErpProvider
             [
                 'title' => QUI::getLocale()->get(
                     'quiqqer/frontend-users',
+                    'mail.text.confirmEmail.title'
+                ),
+                'description' => QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
+                    'mail.text.confirmEmail.description'
+                ),
+                'subject' => ['quiqqer/frontend-users', 'mail.confirm_email_address.subject'],
+                'content' => ['quiqqer/frontend-users', 'mail.confirm_email_address.body'],
+
+                'subject.description' => ['quiqqer/frontend-users', 'mail.confirm_email_address.subject.description'],
+                'content.description' => ['quiqqer/frontend-users', 'mail.confirm_email_address.body.description']
+            ],
+
+
+            [
+                'title' => QUI::getLocale()->get(
+                    'quiqqer/frontend-users',
                     'mail.text.changeEmail.title'
                 ),
                 'description' => QUI::getLocale()->get(
