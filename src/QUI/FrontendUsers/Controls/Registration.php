@@ -157,12 +157,16 @@ class Registration extends QUI\Control
         // redirect directives
         $redirectUrl = false;
         $instantRedirect = false;
+        $instantReload = false;
 
         if ($success) {
+            $instantReload = !empty($registrationSettings['reloadOnSuccess']);
+
             if (
-                $this->RegisteredUser
-                && $this->RegisteredUser->isActive()
-                && $registrationSettings['autoLoginOnActivation']
+                !$instantReload &&
+                $this->RegisteredUser &&
+                $this->RegisteredUser->isActive() &&
+                $registrationSettings['autoLoginOnActivation']
             ) {
                 // instantly redirect (only used on auto-login)
                 $loginSettings = $RegistrarHandler->getLoginSettings();
@@ -182,7 +186,7 @@ class Registration extends QUI\Control
                 }
             }
 
-            if (!$redirectUrl && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+            if (!$instantReload && !$redirectUrl && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 // show success message and redirect after 10 seconds
                 try {
                     $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -335,6 +339,7 @@ class Registration extends QUI\Control
             'success' => $success,
             'redirectUrl' => $redirectUrl,
             'instantRedirect' => $instantRedirect,
+            'instantReload' => $instantReload,
             'Login' => $Login,
             'termsOfUseLabel' => $termsOfUseLabel,
             'termsOfUseRequired' => $termsOfUseRequired,
