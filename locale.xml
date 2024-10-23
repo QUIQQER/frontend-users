@@ -460,6 +460,14 @@
             <en>
                 <![CDATA[Automatic redirect to the specified page after the user has been successfully activated. The automatic forwarding takes place after <b>10 seconds</b>. <b>Note:</b> Does not apply if users are required to be activated <b>manually</b> after a registration.]]></en>
         </locale>
+        <locale name="settings.reloadOnSuccess.title">
+            <de><![CDATA[Seite neu laden nach Registrierung]]></de>
+            <en><![CDATA[Reload page after registration]]></en>
+        </locale>
+        <locale name="settings.reloadOnSuccess.description">
+            <de><![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
+            <en><![CDATA[After successful registration the page should be reloaded. This setting overwrites the setting "Auto redirect on activation".]]></en>
+        </locale>
         <locale name="settings.redirectOnLogin.title">
             <de><![CDATA[Automatische Weiterleitung nach Login]]></de>
             <en><![CDATA[Auto redirect on log in]]></en>
