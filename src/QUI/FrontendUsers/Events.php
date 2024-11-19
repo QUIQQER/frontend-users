@@ -196,7 +196,7 @@ class Events
                 'user_agent' => $useragent,
                 'secHash' => $secHash
             ],
-            ['id' => $User->getUUID()]
+            ['uuid' => $User->getUUID()]
         );
 
         QUI::getEvents()->fireEvent(
