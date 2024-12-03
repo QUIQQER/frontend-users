@@ -10,7 +10,7 @@
          title="{$User->getName()}"
          {$avatarImageUrl}></div>
     {else}
-    <span class="quiqqer-frontendUsers-userAvatar-icon-none content-message-information">
+    <span class="content-message-information">
         {locale group="quiqqer/frontend-users" var="profile.no.avatar.message"}
     </span>
     {/if}
@@ -37,14 +37,14 @@
     </header>
 
     <div class="quiqqer-frontendUsers-userAvatar-gravatar">
-        <label>
-            <span>
+        <label class="qui-form-label">
+            <span class="qui-form-label__text">
                 {locale group="quiqqer/frontend-users"
                         var="profile.useravatar.gravatar_option"
                         email=$User->getAttribute('email')
                 }
             </span>
-            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
+            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if} class="qui-form-label__input"/>
         </label>
     </div>
 </section>

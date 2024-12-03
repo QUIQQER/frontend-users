@@ -12,15 +12,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
 
     'Locale'
 
-], function (QUIControl, QUIControlUtils, QUIFormUtils, QUILocale) {
-    "use strict";
+], function(QUIControl, QUIControlUtils, QUIFormUtils, QUILocale) {
+    'use strict';
 
     var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassword',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassword',
 
         Binds: [
             '$onInject',
@@ -30,12 +30,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
             '$hideSuccess'
         ],
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.parent(options);
 
-            this.$ErrorContainer   = null;
+            this.$ErrorContainer = null;
             this.$SuccessContainer = null;
-            this.$ProfileControl   = null;
+            this.$ProfileControl = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -45,9 +45,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
         /**
          * event: on import
          */
-        $onImport: function () {
-            var self             = this;
-            var Elm              = this.getElm();
+        $onImport: function() {
+            var self = this;
+            var Elm = this.getElm();
             var PasswordOldInput = Elm.getElement('input[name="passwordOld"]');
 
             if (PasswordOldInput) {
@@ -60,30 +60,30 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
                 return;
             }
 
-            this.$ErrorContainer   = Elm.getElement('.quiqqer-frontendUsers-changepassword-error');
-            this.$SuccessContainer = Elm.getElement('.quiqqer-frontendUsers-changepassword-success');
+            this.$ErrorContainer = Elm.querySelector('[data-name="msg-error"]');
+            this.$SuccessContainer = Elm.querySelector('[data-name="msg-success"]');
 
             QUIControlUtils.getControlByElement(
                 Elm.getParent('.quiqqer-frontendUsers-controls-profile')
-            ).then(function (ProfileControl) {
+            ).then(function(ProfileControl) {
                 self.$ProfileControl = ProfileControl;
 
                 self.$ProfileControl.addEvents({
-                    onSave     : function () {
+                    onSave: function() {
                         QUIFormUtils.setDataToForm({
-                            'passwordOld'       : '',
-                            'passwordNew'       : '',
+                            'passwordOld': '',
+                            'passwordNew': '',
                             'passwordNewConfirm': ''
                         }, Form);
                     },
-                    onSaveEnd  : function () {
+                    onSaveEnd: function() {
                         self.$showSuccess();
                     },
-                    onSaveError: function (Control, error) {
+                    onSaveError: function(Control, error) {
                         self.$showError(error.getMessage());
                     }
                 });
-            }, function () {
+            }, function() {
                 // nothing
             });
         },
@@ -93,7 +93,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
          *
          * @param {String} msg
          */
-        $showError: function (msg) {
+        $showError: function(msg) {
             this.$hideSuccess();
 
             this.$ErrorContainer.set('html', msg);
@@ -105,7 +105,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
         /**
          * Show error msg
          */
-        $hideError: function () {
+        $hideError: function() {
             this.$ErrorContainer.setStyle('display', 'none');
             this.$ProfileControl.resize();
         },
@@ -113,7 +113,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
         /**
          * Show success msg
          */
-        $showSuccess: function () {
+        $showSuccess: function() {
             this.$hideError();
 
             this.$SuccessContainer.set(
@@ -128,7 +128,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassw
         /**
          * Hide success msg
          */
-        $hideSuccess: function () {
+        $hideSuccess: function() {
             this.$SuccessContainer.setStyle('display', 'none');
             this.$ProfileControl.resize();
         }

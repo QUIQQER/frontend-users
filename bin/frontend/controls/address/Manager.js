@@ -56,14 +56,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             this.$imported = true;
             this.getElm().set('data-quiid', this.getId());
 
-            const entries = this.getElm().getElements(
-                '.quiqqer-frontend-users-address-list-entry'
-            );
-
-            entries.setStyles({
-                'position': 'relative'
-            });
-
             this.getElm().getElements('[name="create"]').addEvent('click', this.$addClick);
             this.getElm().getElements('[name="delete"]').addEvent('click', this.$deleteClick);
             this.getElm().getElements('[name="edit"]').addEvent('click', this.$editClick);
@@ -187,6 +179,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                         }
                     }).inject(Content);
 
+                    console.log(Content.getElement('header'))
+                    console.log(Container.getElement('.quiqqer-frontend-users-address-container-header'))
+
                     Content.getElement('header').inject(
                         Container.getElement('.quiqqer-frontend-users-address-container-header')
                     );
@@ -274,9 +269,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             const self = this;
             let Target = event.event.target;
 
-            if (!Target.hasClass('quiqqer-frontend-users-address-list-entry')) {
-                Target = Target.getParent('.quiqqer-frontend-users-address-list-entry');
+            if (!Target.hasAttribute('[data-name="address"]')) {
+                Target = Target.getParent('[data-name="address"]');
             }
+
+            Target.style.position = 'relative';
 
             const Address = Target;
 
@@ -311,7 +308,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                             self.Loader.show();
 
                             self.deleteAddress(
-                                Target.getParent('.quiqqer-frontend-users-address-list-entry').getElement(
+                                Target.getParent('[data-name="address"]').getElement(
                                     '[name="address"]').value
                             ).then(function() {
                                 return self.$closeContainer(Container);
@@ -373,8 +370,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 Target = Target.getParent('button');
             }
 
-            const addressId = Target.getParent('.quiqqer-frontend-users-address-list-entry').getElement(
-                '[name="address"]').value;
+            const addressId = Target.getParent('[data-name="address"]]').querySelector('[name="address"]').value;
 
             this.$openContainer(this.getElm()).then(function(Container) {
                 return self.getEditTemplate(addressId).then(function(result) {
