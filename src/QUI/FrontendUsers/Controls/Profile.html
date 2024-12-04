@@ -9,7 +9,7 @@
     {foreach $categories as $category}
     <div class="quiqqer-fupc-category quiqqer-fupc-category--open"
          data-category="{$category.name}"
-         data-name="category-nav-entry"
+         data-name="nav-category"
     >
         <div class="quiqqer-fupc-category-header" data-name="header">
             <span>{$category.title}</span>
@@ -18,20 +18,21 @@
         </div>
         <div class="quiqqer-fu-profile-categories-category-items">
             {foreach $category.items as $setting}
-
-            {assign var=active value=""}
-            {if $currentCategory == $category.name && $currentSetting == $setting.name}
-            {assign var=active value=" quiqqer-fupc-category-items-item--active"}
-            {/if}
-            <a href="{$Site->getUrlRewritten()}/{$category.name}/{$setting.name}"
-               class="quiqqer-fupc-category-items-item{$active}"
-               data-setting="{$setting.name}"
-            >
-                {if $setting.icon}
-                <span class="quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
+                {assign var=active value=false}
+                {if $currentCategory == $category.name && $currentSetting == $setting.name}
+                    {assign var=active value=true}
                 {/if}
-                <span>{$setting.title}</span>
-            </a>
+                <a href="{$Site->getUrlRewritten()}/{$category.name}/{$setting.name}"
+                    class="quiqqer-fupc-category-items-item"
+                    {if $active}data-active{/if}
+                    data-name="nav-category-item"
+                    data-setting="{$setting.name}"
+                >
+                    {if $setting.icon}
+                    <span class="quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
+                    {/if}
+                    <span>{$setting.title}</span>
+                </a>
             {/foreach}
         </div>
     </div>
@@ -40,7 +41,8 @@
 {/if}
 
 <form action="" method="post">
-    <label class="quiqqer-frontendUsers-controls-profile-categories-mobile">
+    <label class="quiqqer-frontendUsers-controls-profile-categories-mobile"
+        data-name="categories-mobile">
         <select name="profile-categories">
             {foreach $categories as $category}
             <optgroup label="{$category.title}">

@@ -363,17 +363,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * init category events
          */
         $bindCategoriesEvents: function () {
-            var i, len, Header;
-            var self       = this;
-            var Elm        = this.getElm();
-            var categories = Elm.querySelectorAll('[data-name="category-nav-entry"]');
+            let i, len, Header;
+            const self       = this;
+            const Elm        = this.getElm();
+            const categories = Elm.querySelectorAll('[data-name="nav-category"]');
             let Opener = null;
 
             var toggle = function () {
                 var Category = this;
 
-                if (this.getAttribute('data-name') !== 'category-nav-entry') {
-                    Category = this.getParent('[data-name="category-nav-entry"]');
+                if (this.getAttribute('data-name') !== 'nav-category') {
+                    Category = this.getParent('[data-name="nav-category"]');
                 }
 
                 Opener = Category.querySelector('[data-name="opener"]');
@@ -393,33 +393,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
             for (i = 0, len = categories.length; i < len; i++) {
                 Header = categories[i].querySelector('[data-name="header"]');
-                Opener = Header.querySelector('[data-name="opener"]');
-
-                //
-                if (!Opener) {
-                    new Element('span', {
-                        'class': 'fa fa-arrow-circle-o-down quiqqer-fupc-category-header-opener',
-                        'data-name: 'opener',
-                        'data-state: 'open'
-                    }).inject(Header);
-                }
 
                 Header.addEvent('click', toggle);
             }
 
             // category settings click
-            var items = Elm.getElements('.quiqqer-fupc-category-items-item');
+            const items = Elm.getElements('[data-name="nav-category-item"]');
 
             items.addEvent('click', function (event) {
                 event.stop();
 
-                var Target = event.target;
+                let Target = event.target;
 
-                if (!Target.hasClass('quiqqer-fupc-category-items-item')) {
-                    Target = Target.getParent('.quiqqer-fupc-category-items-item');
+                if (this.getAttribute('data-name') !== 'nav-category-item') {
+                    Target = Target.getParent('[data-name="nav-category-item"]');
                 }
 
-                var category = Target.getParent('.quiqqer-fupc-category').get('data-category'),
+                const category = Target.getParent('[data-name="nav-category"]').get('data-category'),
                     setting  = Target.get('data-setting');
 
                 self.$setMenuItemActive(category, setting);
@@ -429,9 +419,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
 
             // mobile
-            var MobileCategories = Elm.getElement(
-                '.quiqqer-frontendUsers-controls-profile-categories-mobile select'
-            );
+            const MobileCategories = Elm.getElement('[data-name="categories-mobile"]');
 
             if (MobileCategories) {
                 if (self.$category && self.$settings) {
@@ -460,7 +448,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * @return {Promise}
          */
         save: function () {
-            var self = this;
+            const self = this;
 
             this.fireEvent('saveBegin', [this]);
 
@@ -529,10 +517,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return;
             }
 
-            this.$Elm.getElements('.quiqqer-fupc-category-items-item--active')
-                .removeClass('quiqqer-fupc-category-items-item--active');
-
-            Item.addClass('quiqqer-fupc-category-items-item--active');
+            console.log( this.$Elm.getElements('[data-active]'));
+            this.$Elm.getElements('[data-active]').removeAttribute('data-active');
+            Item.setAttribute('data-active');
         }
     });
 });
