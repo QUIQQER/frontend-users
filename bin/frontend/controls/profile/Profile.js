@@ -503,7 +503,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         },
 
         /**
-         * Set an menu item active
+         * Set a menu item active
          *
          * @param {String} category
          * @param {String} settings
@@ -517,9 +517,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return;
             }
 
-            console.log( this.$Elm.getElements('[data-active]'));
-            this.$Elm.getElements('[data-active]').removeAttribute('data-active');
-            Item.setAttribute('data-active');
+            this.$Elm.querySelectorAll('[data-active]').forEach((ActiveItem) => {
+                ActiveItem.removeAttribute('data-active');
+            });
+
+            Item.setAttribute('data-active', 1);
         }
     });
 });

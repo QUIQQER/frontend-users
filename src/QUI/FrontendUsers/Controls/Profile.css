@@ -43,7 +43,7 @@
     width: 100%;
 }
 
-.quiqqer-fupc-category-items-item--active {
+.quiqqer-fupc-category-items-item[data-active] {
     background: rgba(0, 0, 0, 0.2);
 }
 
