@@ -1,19 +1,16 @@
 .quiqqer-frontendUsers-manager,
 .quiqqer-frontend-users-address {
-    float: left;
     position: relative;
     width: 100%;
 }
 
 .quiqqer-frontend-users-address-description {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    float: left;
     padding-bottom: 10px;
     width: 100%;
 }
 
 .quiqqer-frontend-users-address-description-text {
-    float: left;
     width: 100%;
 }
 
@@ -23,7 +20,7 @@
 
 @media screen and (min-width: 768px) {
     .quiqqer-frontend-users-address-description-button {
-        float: right;
+        margin-left: auto;
     }
 }
 
@@ -60,7 +57,6 @@
 }
 
 .quiqqer-frontend-users-address-container-header {
-    float: left;
     padding: 20px 40px 0 20px;
     width: 100%;
 }
@@ -75,7 +71,6 @@
 }
 
 .quiqqer-frontend-users-address-container-content {
-    float: left;
     height: calc(100% - 40px);
     margin-top: 40px;
     overflow: auto;
@@ -99,7 +94,6 @@ address .fa {
 .quiqqer-frontend-users-address-list {
     display: flex;
     flex-wrap: wrap;
-    float: left;
     padding-bottom: 20px;
     width: 100%;
 }
@@ -246,7 +240,6 @@ address .fa {
 
 .quiqqer-frontend-users-address-container-edit,
 .quiqqer-frontend-users-address-container-create {
-    float: left;
     padding: 0 20px 20px;
     width: 100%;
 }

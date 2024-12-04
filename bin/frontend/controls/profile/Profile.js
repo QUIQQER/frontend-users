@@ -83,7 +83,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         resize: function () {
             var self      = this,
                 Elm       = this.getElm(),
-                Animation = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation');
+                Animation = Elm.querySelector('[data-name="content-animated"]');
 
             return new Promise(function (resolve) {
                 self.$parseContent().then(() => {
@@ -128,7 +128,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$bindCategoriesEvents();
 
             this.openSetting().then(function () {
-                var Form     = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+                var Form     = Elm.querySelector('[data-name="form"]');
                 var category = Form.get('data-category');
                 var settings = Form.get('data-setting');
 
@@ -155,7 +155,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$parseContent().then(function () {
                 self.$addFormEvents();
 
-                var Form = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+                var Form = Elm.querySelector('[data-name="form"]');
 
                 if (!Form) {
                     return;
@@ -255,9 +255,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             category = category || false;
             settings = settings || false;
 
-            var Animation = Elm.getElement(
-                '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
-            );
+            var Animation = Elm.querySelector('[data-name="content-animated"]');
 
             var Animate = new Promise(function (resolve) {
                 if (!Animation) {
@@ -280,12 +278,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return new Promise(function (resolve, reject) {
                     QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_getControl', function (result) {
                         var height = self.$Elm.getSize().y;
-                        var Form   = self.$Elm.getElement(
-                            '.quiqqer-frontendUsers-controls-profile-categoryContent'
-                        );
+                        var Form   = self.$Elm.querySelector('[data-name="form"]');
 
                         if (!result) {
-                            result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">' +
+                            result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation" ' +
+                                'data-name="content-animated">' +
                                 QUILocale.get(lg, 'controls.profile.Profile.setting_error') +
                                 '</div>';
                         }
@@ -296,7 +293,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                         // build the form
                         if (!Form) {
-                            var Control = Ghost.getElement(
+                            var Control = Ghost.querySelector(
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
                             );
 
@@ -305,26 +302,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             }
 
                             self.$Elm.set('html', Control.get('html'));
-
-                            Animation = Elm.getElement(
-                                '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
-                            );
-
-                            // Form = self.$Elm.getElement(
-                            //     '.quiqqer-frontendUsers-controls-profile-categoryContent'
-                            // );
-
+                            Animation = Elm.querySelector('[data-name="content-animated"]');
                             self.$bindCategoriesEvents();
                         }
 
                         var styles  = Ghost.getElements('style');
                         var scripts = Ghost.getElements('script');
 
-                        var Content = Ghost.getElement(
-                            '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
-                        );
-
-                        //Form.setStyle('height', height);
+                        var Content = Ghost.querySelector('[data-name="content-animated"]');
 
                         if (!Content) {
                             return;
@@ -381,16 +366,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             var i, len, Header;
             var self       = this;
             var Elm        = this.getElm();
-            var categories = Elm.getElements('.quiqqer-fupc-category');
+            var categories = Elm.querySelectorAll('[data-name="category-nav-entry"]');
+            let Opener = null;
 
             var toggle = function () {
                 var Category = this;
 
-                if (!this.hasClass('quiqqer-fupc-category')) {
-                    Category = this.getParent('.quiqqer-fupc-category');
+                if (this.getAttribute('data-name') !== 'category-nav-entry') {
+                    Category = this.getParent('[data-name="category-nav-entry"]');
                 }
 
-                var Opener = Category.getElement('.quiqqer-fupc-category-header-opener');
+                Opener = Category.querySelector('[data-name="opener"]');
 
                 Opener.removeClass('fa-arrow-circle-o-right');
                 Opener.removeClass('fa-arrow-circle-o-down');
@@ -406,11 +392,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             };
 
             for (i = 0, len = categories.length; i < len; i++) {
-                Header = categories[i].getElement('.quiqqer-fupc-category-header');
+                Header = categories[i].querySelector('[data-name="header"]');
+                Opener = Header.querySelector('[data-name="opener"]');
 
-                new Element('span', {
-                    'class': 'fa fa-arrow-circle-o-down quiqqer-fupc-category-header-opener'
-                }).inject(Header);
+                //
+                if (!Opener) {
+                    new Element('span', {
+                        'class': 'fa fa-arrow-circle-o-down quiqqer-fupc-category-header-opener',
+                        'data-name: 'opener',
+                        'data-state: 'open'
+                    }).inject(Header);
+                }
 
                 Header.addEvent('click', toggle);
             }

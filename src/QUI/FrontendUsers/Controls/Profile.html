@@ -9,9 +9,12 @@
     {foreach $categories as $category}
     <div class="quiqqer-fupc-category quiqqer-fupc-category--open"
          data-category="{$category.name}"
+         data-name="category-nav-entry"
     >
-        <div class="quiqqer-fupc-category-header">
-            {$category.title}
+        <div class="quiqqer-fupc-category-header" data-name="header">
+            <span>{$category.title}</span>
+            <span class="fa fa-arrow-circle-o-down quiqqer-fupc-category-header-opener"
+                  data-name="opener" data-state="open"></span>
         </div>
         <div class="quiqqer-fu-profile-categories-category-items">
             {foreach $category.items as $setting}
@@ -57,12 +60,13 @@
 </form>
 
 <form class="quiqqer-frontendUsers-controls-profile-categoryContent"
+      data-name="form"
       method="post"
       action=""
       data-category="{$currentCategory}"
       data-setting="{$currentSetting}"
 >
-    <div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">
+    <div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation" data-name="content-animated">
         {$Category->create()}
         <input type="hidden" name="profile-save" value="1">
     </div>

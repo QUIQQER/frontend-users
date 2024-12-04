@@ -370,7 +370,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 Target = Target.getParent('button');
             }
 
-            const addressId = Target.getParent('[data-name="address"]]').querySelector('[name="address"]').value;
+            const addressId = Target.getParent('[data-name="address"]').querySelector('[name="address"]').value;
 
             this.$openContainer(this.getElm()).then(function(Container) {
                 return self.getEditTemplate(addressId).then(function(result) {
