@@ -14,10 +14,10 @@
 </div>
 {else}
 
-<section class="quiqqer-fu-login-container" style="display: none">
-    <div class="quiqqer-fu-login-container__inner">
+<section class="quiqqer-fu-login-container" style="display: none" data-name="login-container">
+    <div class="quiqqer-fu-login-container__inner" data-name="login-container-inner">
         {if $this->getAttribute('header')}
-            <h2>{locale group="quiqqer/frontend-users" var="control.login.title"}</h2>
+            <h2 data-name="header">{locale group="quiqqer/frontend-users" var="control.login.title"}</h2>
         {/if}
 
         <div class="quiqqer-fu-login-social">
@@ -25,20 +25,21 @@
             <form action=""
                   method="POST"
                   class="quiqqer-fu-login-social-entry"
+                  data-name="social-login-form"
                   data-authenticator="{$entry.class}"
                   data-authenticator-hash="{$entry.class|md5}"
             >
-                <span class="quiqqer-fu-login-social-entry-icon">
+                <span class="quiqqer-fu-login-social-entry-icon" data-name="social-login-entry-icon">
                     {if $entry.icon}
                     <span class="{$entry.Login->getAttribute('icon')}"></span>
                     {elseif $entry.image}
                     <img src="{$entry.Login->getAttribute('icon')}" alt="" />
                     {/if}
                 </span>
-                <span class="quiqqer-fu-login-social-entry-loader">
+                <span class="quiqqer-fu-login-social-entry-loader" data-name="social-login-entry-loader">
                     <span class="fa fa-spin fa-spinner fas fa-circle-notch"></span>
                 </span>
-                <div class="quiqqer-fu-login-social-entry-control">
+                <div class="quiqqer-fu-login-social-entry-control" data-name="social-login-controlContainer">
                     {$entry.Login->create()}
                 </div>
             </form>
@@ -53,7 +54,7 @@
             {/if}
         {/if}
 
-        <div class="quiqqer-fu-login-activation-info"></div>
+        <div class="quiqqer-fu-login-activation-info" data-name="activation-info"></div>
 
         {if $this->getAttribute('mail')}
             <form name="quiqqer-fu-login-email" class="quiqqer-fu-login-email">
@@ -88,7 +89,7 @@
         {/if}
 
         {if $showPasswordReset}
-        <div class="quiqqer-fu-login-forget-password-link">
+        <div class="quiqqer-fu-login-forget-password-link" data-name="forgot-password-link">
             <a href="#">
                 {locale group="quiqqer/frontend-users" var="control.login.forgotten.password"}
             </a>
@@ -97,8 +98,8 @@
     </div>
 
     {if $showPasswordReset}
-    <div class="quiqqer-fu-login-forget-password-reset" style="display: none;">
-        <section>
+    <div class="quiqqer-fu-login-forget-password-reset" style="display: none;" data-name="password-reset">
+        <section data-name="password-reset-inner">
             <h2>{locale group="quiqqer/frontend-users" var="quiqqer.auth.login.password.title"}</h2>
 
             <p>
