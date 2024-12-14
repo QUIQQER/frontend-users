@@ -1,0 +1,128 @@
+<noscript class="quiqqer-fu-login-noscript">
+    <div class="message-error">
+        {locale group="quiqqer/frontend-users" var="registrars.email.javascript_required"}
+    </div>
+</noscript>
+
+{if $SessionUser->getId() && $SessionUser->getId() >= 100}
+<div class="quiqqer-fu-login-logged-in message-information">
+    {locale
+    group="quiqqer/frontend-users"
+    var="message.already.loged.in"
+    username=$SessionUser->getName()
+    }
+</div>
+{else}
+
+<section class="quiqqer-fu-login-container" style="display: none" data-name="login-container">
+    <div class="quiqqer-fu-login-container__inner" data-name="login-container-inner">
+        {if $this->getAttribute('header')}
+            <h2 data-name="header">{locale group="quiqqer/frontend-users" var="control.login.title"}</h2>
+        {/if}
+
+        <div class="quiqqer-fu-login-social">
+            {foreach $authenticators as $entry}
+            <form action=""
+                  method="POST"
+                  class="quiqqer-fu-login-social-entry"
+                  data-name="social-login-form"
+                  data-authenticator="{$entry.class}"
+                  data-authenticator-hash="{$entry.class|md5}"
+            >
+                <span class="quiqqer-fu-login-social-entry-icon" data-name="social-login-entry-icon">
+                    {if $entry.icon}
+                    <span class="{$entry.Login->getAttribute('icon')}"></span>
+                    {elseif $entry.image}
+                    <img src="{$entry.Login->getAttribute('icon')}" alt="" />
+                    {/if}
+                </span>
+                <span class="quiqqer-fu-login-social-entry-loader" data-name="social-login-entry-loader">
+                    <span class="fa fa-spin fa-spinner fas fa-circle-notch"></span>
+                </span>
+                <div class="quiqqer-fu-login-social-entry-control" data-name="social-login-controlContainer">
+                    {$entry.Login->create()}
+                </div>
+            </form>
+            {/foreach}
+        </div>
+
+        {if $this->getAttribute('mail')}
+            {if count($authenticators)}
+            <div class="quiqqer-fu-login-between-text">
+                {locale group="quiqqer/frontend-users" var="control.login.message.between"}
+            </div>
+            {/if}
+        {/if}
+
+        <div class="quiqqer-fu-login-activation-info" data-name="activation-info"></div>
+
+        {if $this->getAttribute('mail')}
+            <form name="quiqqer-fu-login-email" class="quiqqer-fu-login-email">
+                <section class="quiqqer-fu-login-email-mailSection">
+                    <label>
+                        <span class="label">
+                            {locale group="quiqqer/frontend-users" var="control.registration.sign.up.email.title"}
+                        </span>
+                        <span class="field">
+                        <span class="icon fa fa-envelope"></span>
+                            <input type="text" name="username" required autocomplete="email"/>
+                        </span>
+                    </label>
+
+                    <label>
+                        <span class="label">
+                            {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.title"}
+                        </span>
+                        <span class="field">
+                        <span class="icon fa fa-key"></span>
+                            <input type="password" name="password" required autocomplete="off"/>
+                        </span>
+                    </label>
+
+                    <div class="quiqqer-fu-login-email-buttons">
+                        <button type="submit" name="mail-login">
+                            {locale group="quiqqer/frontend-users" var="control.login.button"}
+                        </button>
+                    </div>
+                </section>
+            </form>
+        {/if}
+
+        {if $showPasswordReset}
+        <div class="quiqqer-fu-login-forget-password-link" data-name="forgot-password-link">
+            <a href="#">
+                {locale group="quiqqer/frontend-users" var="control.login.forgotten.password"}
+            </a>
+        </div>
+        {/if}
+    </div>
+
+    {if $showPasswordReset}
+    <div class="quiqqer-fu-login-forget-password-reset" style="display: none;" data-name="password-reset">
+        <section data-name="password-reset-inner">
+            <h2>{locale group="quiqqer/frontend-users" var="quiqqer.auth.login.password.title"}</h2>
+
+            <p>
+                {locale group="quiqqer/system" var="quiqqer.auth.login.password.message"}
+            </p>
+
+            <label>
+            <span>
+                {locale group="quiqqer/system" var="quiqqer.auth.login.label.email"}
+            </span>
+                <input type="email" value="" name="email"/>
+            </label>
+
+            <button type="submit" class="login qui-button btn-green reset-password">
+                <span>{locale group='quiqqer/core' value='controls.users.auth.quiqqerlogin.btn.password_reset'}</span>
+            </button>
+
+            <button name="cancel" type="reset">
+                {locale group='quiqqer/core' value='cancel'}
+            </button>
+        </section>
+    </div>
+    {/if}
+</section>
+
+{/if}

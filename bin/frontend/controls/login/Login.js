@@ -177,6 +177,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 Login.setStyle('opacity', 0);
                 Login.setStyle('display', null);
+                Login.setStyle('positino', 'relative');
 
                 self.getElm().getElements('form[name="quiqqer-fu-login-email"]').addEvent('submit', function(event) {
                     event.stop();
@@ -516,18 +517,26 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * opens the password forgotten sheet
          */
         openForgottenPassword: function() {
-
             var Reset = this.getElm().querySelector('[data-name="password-reset"]');
 
             if (!Reset) {
                 return;
             }
 
+            // set these styles to make the animation work correctly when using _basic files
+            Reset.style.position = 'absolute';
+            Reset.style.left = 0;
+            Reset.style.top = 0;
+            Reset.style.width = '100%';
+            Reset.style.zIndex = 1;
+            Reset.style.opacity = 0;
+
             const Login = this.getElm().querySelector('[data-name="login-container"]');
             Login.style.height = Login.offsetHeight + 'px';
 
             const LoginInner = this.getElm().querySelector('[data-name="login-container-inner"]');
 
+            // set these styles to make the animation work correctly when using _basic files
             Reset.setStyle('opacity', 0);
             Reset.setStyle('left', -50);
             Reset.setStyle('display', 'block');
