@@ -405,7 +405,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                 let Target = event.target;
 
-                if (this.getAttribute('data-name') !== 'nav-category-item') {
+                if (Target.getAttribute('data-name') !== 'nav-category-item') {
                     Target = Target.getParent('[data-name="nav-category-item"]');
                 }
 
