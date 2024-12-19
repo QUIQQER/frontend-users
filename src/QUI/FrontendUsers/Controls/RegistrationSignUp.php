@@ -415,8 +415,10 @@ class RegistrationSignUp extends QUI\Control
                 'control.sign.up.terms_of_use_and_privacy_policy.label',
                 [
                     'termsOfUseUrl' => $SiteTerms->getUrlRewritten(),
+                    'termsOfUseSiteId' => $SiteTerms->getId(),
                     'termsOfUseSiteTitle' => $SiteTerms->getAttribute('title'),
                     'privacyPolicyUrl' => $SitePrivacy->getUrlRewritten(),
+                    'privacyPolicySiteId' => $SitePrivacy->getId(),
                     'privacyPolicySiteTitle' => $SitePrivacy->getAttribute('title')
                 ]
             );
@@ -426,6 +428,7 @@ class RegistrationSignUp extends QUI\Control
                 'control.sign.up.terms_of_use.label',
                 [
                     'termsOfUseUrl' => $SiteTerms->getUrlRewritten(),
+                    'termsOfUseSiteId' => $SiteTerms->getId(),
                     'termsOfUseSiteTitle' => $SiteTerms->getAttribute('title')
                 ]
             );
@@ -435,6 +438,7 @@ class RegistrationSignUp extends QUI\Control
                 'control.sign.up.privacy_policy.label',
                 [
                     'privacyPolicyUrl' => $SitePrivacy->getUrlRewritten(),
+                    'privacyPolicySiteId' => $SitePrivacy->getId(),
                     'privacyPolicySiteTitle' => $SitePrivacy->getAttribute('title')
                 ]
             );
