@@ -10,9 +10,9 @@
          title="{$User->getName()}"
          {$avatarImageUrl}></div>
     {else}
-    <span class="content-message-information">
+    <div class="content-message-information">
         {locale group="quiqqer/frontend-users" var="profile.no.avatar.message"}
-    </span>
+    </div>
     {/if}
 
     {if $uploadEnabled}

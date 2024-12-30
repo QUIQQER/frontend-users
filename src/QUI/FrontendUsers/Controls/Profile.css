@@ -1,30 +1,35 @@
 .quiqqer-frontendUsers-controls-profile {
-    float: left;
-    width: 100%;
+    display: flex;
+    gap: 4rem;
+}
+
+@media screen and (max-width: 767px) {
+    .quiqqer-frontendUsers-controls-profile {
+        flex-direction: column;
+        gap: 2rem;
+    }
 }
 
 /** categories / tabs
  ==================================== */
 
 .quiqqer-frontendUsers-controls-profile-categories {
-    float: left;
-    padding-right: 10px;
     width: 30%;
 }
 
 .quiqqer-fupc-category {
-    float: left;
-    width: 100%;
+    margin-bottom: 1rem;
 }
 
 .quiqqer-fupc-category-header {
-    padding: 5px;
+    padding-block: 0.25em;
+    padding-right: 30px;
     position: relative;
-    width: 100%;
+    cursor: pointer;
+    font-weight: bold;
 }
 
 .quiqqer-fupc-category-header-opener {
-    cursor: pointer;
     line-height: 30px;
     position: absolute;
     right: 0;
@@ -32,39 +37,36 @@
     width: 30px;
 }
 
-.quiqqer-fupc-category--open .quiqqer-fupc-category-header {
-    border-bottom: 1px solid #bebebe;
-    margin-bottom: 5px;
+[data-open="1"] .quiqqer-fupc-category-header-opener {
+    transform: rotate(90deg);
 }
 
 .quiqqer-fupc-category-items-item {
-    clear: both;
     display: none;
-    width: 100%;
+    text-decoration: none;
+    font-weight: normal;
+    padding-block: 0.25em;
 }
 
 .quiqqer-fupc-category-items-item[data-active] {
-    background: rgba(0, 0, 0, 0.2);
 }
 
-.quiqqer-fupc-category--open .quiqqer-fupc-category-items-item {
-    display: block;
-}
-
-.quiqqer-fupc-category-items-item:hover {
-    background: rgba(0, 0, 0, 0.2);
+[data-open="1"] .quiqqer-fupc-category-items-item {
+    display: flex;
 }
 
 .quiqqer-fupc-category-items-item-icon {
-    float: left;
     line-height: 30px;
-    text-align: center;
-    width: 50px;
+    width: 2rem;
+    flex-shrink: 0;
 }
 
+.quiqqer-fupc-category-items-item:hover {
+}
+
+
 .quiqqer-fupc-category-items-item-text {
-    float: left;
-    width: calc(100% - 50px);
+    flex-grow: 1;
 }
 
 .quiqqer-frontendUsers-saveButton {
@@ -78,8 +80,6 @@
 /*}*/
 
 .quiqqer-frontendUsers-controls-profile-categoryContent {
-    float: left;
-    padding-left: 10px;
     position: relative;
     width: 70%;
 }

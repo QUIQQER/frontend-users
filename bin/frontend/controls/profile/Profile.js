@@ -367,7 +367,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             const self       = this;
             const Elm        = this.getElm();
             const categories = Elm.querySelectorAll('[data-name="nav-category"]');
-            let Opener = null;
 
             var toggle = function () {
                 var Category = this;
@@ -376,19 +375,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     Category = this.getParent('[data-name="nav-category"]');
                 }
 
-                Opener = Category.querySelector('[data-name="opener"]');
-
-                Opener.removeClass('fa-arrow-circle-o-right');
-                Opener.removeClass('fa-arrow-circle-o-down');
-
-                if (Category.hasClass('quiqqer-fupc-category--open')) {
-                    Category.removeClass('quiqqer-fupc-category--open');
-                    Opener.addClass('fa-arrow-circle-o-right');
+                if (Category.getAttribute('data-open') === "1") {
+                    Category.setAttribute('data-open', 0);
                     return;
                 }
 
-                Category.addClass('quiqqer-fupc-category--open');
-                Opener.addClass('fa-arrow-circle-o-down');
+                Category.setAttribute('data-open', 1);
             };
 
             for (i = 0, len = categories.length; i < len; i++) {
