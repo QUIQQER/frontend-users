@@ -44,13 +44,14 @@ class DeleteAccount extends AbstractProfileControl
         $action = false;
 
         try {
-            $DeleteVerification = Verifier::getVerificationByIdentifier(
+            $verifier = new Verifier();
+            $DeleteVerification = $verifier->getVerificationByIdentifier(
                 QUI::getUserBySession()->getUUID(),
-                QUI\FrontendUsers\UserDeleteConfirmVerification::getType(),
+                new QUI\FrontendUsers\UserDeleteConfirmVerification(),
                 true
             );
 
-            if (Verifier::isVerificationValid($DeleteVerification)) {
+            if ($verifier->isVerificationValid($DeleteVerification)) {
                 $action = 'deleteaccount_confirm_wait';
                 $this->setJavaScriptControlOption('deletestarted', 1);
             } else {

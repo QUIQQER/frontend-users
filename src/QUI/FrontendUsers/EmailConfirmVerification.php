@@ -4,7 +4,9 @@ namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\Exception;
-use QUI\Verification\AbstractVerification;
+use QUI\Verification\AbstractVerificationHandler;
+use QUI\Verification\Entity\Verification;
+use QUI\Verification\Enum\VerificationErrorReason;
 
 /**
  * Class EmailConfirmVerification
@@ -13,7 +15,7 @@ use QUI\Verification\AbstractVerification;
  *
  * @package QUI\FrontendUsers
  */
-class EmailConfirmVerification extends AbstractVerification
+class EmailConfirmVerification extends AbstractVerificationHandler
 {
     /**
      * Get the duration of a Verification (minutes)
@@ -31,16 +33,16 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * Execute this method on successful verification
      *
+     * @param Verification $verification
      * @return void
      */
-    public function onSuccess(): void
+    public function onSuccess(Verification $verification): void
     {
-        $userId = $this->getIdentifier();
-
         try {
             $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-            $User = QUI::getUsers()->get($userId);
-            $newEmail = $this->additionalData['newEmail'];
+            $userUuid = $verification->identifier;
+            $User = QUI::getUsers()->get($userUuid);
+            $newEmail = $verification->getCustomDataEntry('newEmail');
 
             // if users cannot set their own username -> change username as well
             // if it equals the old email-address
@@ -57,7 +59,7 @@ class EmailConfirmVerification extends AbstractVerification
             $User->save(QUI::getUsers()->getSystemUser());
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find user #' . $userId
+                self::class . ' :: onSuccess -> Could not find user #' . $userUuid
             );
 
             QUI\System\Log::writeException($Exception);
@@ -67,9 +69,10 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * Execute this method on unsuccessful verification
      *
+     * @param Verification $verification
      * @return void
      */
-    public function onError(): void
+    public function onError(Verification $verification): void
     {
         // nothing
     }
@@ -77,9 +80,10 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * This message is displayed to the user on successful verification
      *
+     * @param Verification $verification
      * @return string
      */
-    public function getSuccessMessage(): string
+    public function getSuccessMessage(Verification $verification): string
     {
         return '';
     }
@@ -87,10 +91,11 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * This message is displayed to the user on unsuccessful verification
      *
-     * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
+     * @param Verification $verification
+     * @param VerificationErrorReason $reason
      * @return string
      */
-    public function getErrorMessage(string $reason): string
+    public function getErrorMessage(Verification $verification, VerificationErrorReason $reason): string
     {
         return '';
     }
@@ -98,17 +103,22 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * Automatically redirect the user to this URL on successful verification
      *
-     * @return string|false - If this method returns false, no redirection takes place
+     * @param Verification $verification
+     * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnSuccessRedirectUrl(): bool|string
+    public function getOnSuccessRedirectUrl(Verification $verification): ?string
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
-            $this->getProject()
-        );
+        $project = $this->getProject($verification);
+
+        if (!$project) {
+            return null;
+        }
+
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
 
         if (!$RegistrationSite) {
-            return false;
+            return null;
         }
 
         return $RegistrationSite->getUrlRewritten([], [
@@ -119,17 +129,18 @@ class EmailConfirmVerification extends AbstractVerification
     /**
      * Automatically redirect the user to this URL on unsuccessful verification
      *
-     * @return string|false - If this method returns false, no redirection takes place
+     * @param Verification $verification
+     * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnErrorRedirectUrl(): bool|string
+    public function getOnErrorRedirectUrl(Verification $verification): ?string
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
-            $this->getProject()
-        );
+        $project = $this->getProject($verification);
+
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
 
         if (!$RegistrationSite) {
-            return false;
+            return null;
         }
 
         return $RegistrationSite->getUrlRewritten([], [
@@ -138,18 +149,21 @@ class EmailConfirmVerification extends AbstractVerification
     }
 
     /**
-     * Get the Project this Verification is intended for
+     * Get the Project this ActivationVerification is intended for
      *
-     * @return QUI\Projects\Project
+     * @param Verification $verification
+     * @return QUI\Projects\Project|null
      * @throws Exception
      */
-    protected function getProject(): QUI\Projects\Project
+    protected function getProject(Verification $verification): ?QUI\Projects\Project
     {
-        $additionalData = $this->getAdditionalData();
+        $project = $verification->getCustomDataEntry('project');
+        $projectLang = $verification->getCustomDataEntry('projectLang');
 
-        return QUI::getProjectManager()->getProject(
-            $additionalData['project'],
-            $additionalData['projectLang']
-        );
+        if (empty($project) || empty($projectLang)) {
+            return null;
+        }
+
+        return QUI::getProjectManager()->getProject($project, $projectLang);
     }
 }

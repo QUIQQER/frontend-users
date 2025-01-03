@@ -5,7 +5,9 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Exception;
 use QUI\ExceptionStack;
-use QUI\Verification\AbstractVerification;
+use QUI\Verification\AbstractVerificationHandler;
+use QUI\Verification\Enum\VerificationErrorReason;
+use QUI\Verification\Entity\Verification;
 
 /**
  * Class UserDeleteConfirmVerification
@@ -14,16 +16,16 @@ use QUI\Verification\AbstractVerification;
  *
  * @package QUI\FrontendUsers
  */
-class UserDeleteConfirmVerification extends AbstractVerification
+class UserDeleteConfirmVerification extends AbstractVerificationHandler
 {
     /**
      * Get the duration of a Verification (minutes)
      *
-     * @return int|false - duration in minutes;
+     * @return int|null - duration in minutes;
      * if this method returns false use the module setting default value
      * @throws Exception
      */
-    public function getValidDuration(): bool|int
+    public function getValidDuration(): ?int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -32,16 +34,17 @@ class UserDeleteConfirmVerification extends AbstractVerification
     /**
      * Execute this method on successful verification
      *
+     * @param Verification $verification
      * @return void
      * @throws \Exception
      */
-    public function onSuccess(): void
+    public function onSuccess(Verification $verification): void
     {
-        $userId = $this->getIdentifier();
+        $userUuid = $verification->identifier;
         $userProfileSettings = Handler::getInstance()->getUserProfileSettings();
 
         try {
-            $User = QUI::getUsers()->get($userId);
+            $User = QUI::getUsers()->get($userUuid);
 
             switch ($userProfileSettings['userDeleteMode']) {
                 case 'delete':
@@ -68,7 +71,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
             QUI\System\Log::writeException($Exception);
 
             QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find/delete user #' . $userId
+                self::class . ' :: onSuccess -> Could not find/delete user #' . $userUuid
             );
 
             QUI\System\Log::writeException($Exception);
@@ -80,18 +83,20 @@ class UserDeleteConfirmVerification extends AbstractVerification
     /**
      * Execute this method on unsuccessful verification
      *
+     * @param Verification $verification
      * @return void
      */
-    public function onError(): void
+    public function onError(Verification $verification): void
     {
     }
 
     /**
      * This message is displayed to the user on successful verification
      *
+     * @param Verification $verification
      * @return string
      */
-    public function getSuccessMessage(): string
+    public function getSuccessMessage(Verification $verification): string
     {
         return QUI::getLocale()->get(
             'quiqqer/frontend-users',
@@ -102,10 +107,11 @@ class UserDeleteConfirmVerification extends AbstractVerification
     /**
      * This message is displayed to the user on unsuccessful verification
      *
-     * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
+     * @param Verification $verification
+     * @param VerificationErrorReason $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
      * @return string
      */
-    public function getErrorMessage(string $reason): string
+    public function getErrorMessage(Verification $verification, VerificationErrorReason $reason): string
     {
         return '';
     }
@@ -113,15 +119,20 @@ class UserDeleteConfirmVerification extends AbstractVerification
     /**
      * Automatically redirect the user to this URL on successful verification
      *
-     * @return string|false - If this method returns false, no redirection takes place
+     * @param Verification $verification
+     * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      * @throws ExceptionStack
      */
-    public function getOnSuccessRedirectUrl(): bool|string
+    public function getOnSuccessRedirectUrl(Verification $verification): ?string
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
-            $this->getProject()
-        );
+        $project = $this->getProject($verification);
+
+        if (!$project) {
+            return null;
+        }
+
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
 
         if (!$RegistrationSite) {
             return false;
@@ -135,14 +146,19 @@ class UserDeleteConfirmVerification extends AbstractVerification
     /**
      * Automatically redirect the user to this URL on unsuccessful verification
      *
-     * @return string|false - If this method returns false, no redirection takes place
+     * @param Verification $verification
+     * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnErrorRedirectUrl(): bool|string
+    public function getOnErrorRedirectUrl(Verification $verification): ?string
     {
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite(
-            $this->getProject()
-        );
+        $project = $this->getProject($verification);
+
+        if (!$project) {
+            return null;
+        }
+
+        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
 
         if (!$RegistrationSite) {
             return false;
@@ -154,18 +170,21 @@ class UserDeleteConfirmVerification extends AbstractVerification
     }
 
     /**
-     * Get the Project this Verification is intended for
+     * Get the Project this ActivationVerification is intended for
      *
-     * @return QUI\Projects\Project
+     * @param Verification $verification
+     * @return QUI\Projects\Project|null
      * @throws Exception
      */
-    protected function getProject(): QUI\Projects\Project
+    protected function getProject(Verification $verification): ?QUI\Projects\Project
     {
-        $additionalData = $this->getAdditionalData();
+        $project = $verification->getCustomDataEntry('project');
+        $projectLang = $verification->getCustomDataEntry('projectLang');
 
-        return QUI::getProjectManager()->getProject(
-            $additionalData['project'],
-            $additionalData['projectLang']
-        );
+        if (empty($project) || empty($projectLang)) {
+            return null;
+        }
+
+        return QUI::getProjectManager()->getProject($project, $projectLang);
     }
 }

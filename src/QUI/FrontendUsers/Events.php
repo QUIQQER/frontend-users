@@ -234,12 +234,13 @@ class Events
     {
         // delete Verification for user (if not yet deleted by quiqqer/verification cron)
         try {
-            $Verification = Verifier::getVerificationByIdentifier(
+            $verifier = new Verifier();
+            $Verification = $verifier->getVerificationByIdentifier(
                 $User->getUUID(),
-                ActivationVerification::getType()
+                new ActivationVerification()
             );
 
-            Verifier::removeVerification($Verification);
+            $verifier->removeVerification($Verification);
         } catch (\Exception) {
             // nothing -> if Verification not found it does not have to be deleted
         }

@@ -12,7 +12,8 @@ QUI::$Ajax->registerFunction(
     function ($userId) {
         try {
             $User = QUI::getUsers()->get($userId);
-            Verifier::getVerificationByIdentifier($User->getUUID(), ActivationVerification::getType());
+            $verifier = new Verifier();
+            $verifier->getVerificationByIdentifier($User->getUUID(), new ActivationVerification());
         } catch (Exception) {
             return false;
         }

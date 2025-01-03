@@ -4,7 +4,11 @@ namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\Exception;
-use QUI\Verification\AbstractVerification;
+use QUI\ExceptionStack;
+use QUI\Projects\Project;
+use QUI\Verification\AbstractVerificationHandler;
+use QUI\Verification\Entity\Verification;
+use QUI\Verification\Enum\VerificationErrorReason;
 
 /**
  * Class ActivationVerification
@@ -13,16 +17,16 @@ use QUI\Verification\AbstractVerification;
  *
  * @package QUI\FrontendUsers
  */
-class ActivationVerification extends AbstractVerification
+class ActivationVerification extends AbstractVerificationHandler
 {
     /**
      * Get the duration of a Verification (minutes)
      *
-     * @return int|false - duration in minutes;
+     * @return int|null - duration in minutes;
      * if this method returns false use the module setting default value
      * @throws Exception
      */
-    public function getValidDuration(): bool|int
+    public function getValidDuration(): ?int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -31,14 +35,14 @@ class ActivationVerification extends AbstractVerification
     /**
      * Execute this method on successful verification
      *
+     * @param Verification $verification
      * @return void
      */
-    public function onSuccess(): void
+    public function onSuccess(Verification $verification): void
     {
-        $userId = $this->getIdentifier();
-
         try {
-            $User = QUI::getUsers()->get($userId);
+            $userUuid = $verification->identifier;
+            $User = QUI::getUsers()->get($userUuid);
             $User->activate(false, QUI::getUsers()->getSystemUser());
 
             Utils::setUserEmailVerified($User);
@@ -62,9 +66,10 @@ class ActivationVerification extends AbstractVerification
     /**
      * Execute this method on unsuccessful verification
      *
+     * @param Verification $verification
      * @return void
      */
-    public function onError(): void
+    public function onError(Verification $verification): void
     {
         // nothing
     }
@@ -72,10 +77,11 @@ class ActivationVerification extends AbstractVerification
     /**
      * This message is displayed to the user on successful verification
      *
+     * @param Verification $verification
      * @return string
      * @throws Exception
      */
-    public function getSuccessMessage(): string
+    public function getSuccessMessage(Verification $verification): string
     {
         $registrationSetting = Handler::getInstance()->getRegistrationSettings();
 
@@ -91,10 +97,11 @@ class ActivationVerification extends AbstractVerification
     /**
      * This message is displayed to the user on unsuccessful verification
      *
-     * @param string $reason - The reason for the error (see \QUI\Verification\Verifier::REASON_)
+     * @param Verification $verification
+     * @param string $reason
      * @return string
      */
-    public function getErrorMessage(string $reason): string
+    public function getErrorMessage(Verification $verification, VerificationErrorReason $reason): string
     {
         return '';
     }
@@ -102,23 +109,26 @@ class ActivationVerification extends AbstractVerification
     /**
      * Automatically redirect the user to this URL on successful verification
      *
-     * @return string|false - If this method returns false, no redirection takes place
+     * @param Verification $verification
+     * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnSuccessRedirectUrl(): bool|string
+    public function getOnSuccessRedirectUrl(Verification $verification): ?string
     {
+        $project = $this->getProject($verification);
+
+        if (!$project) {
+            return null;
+        }
+
         $RegistrarHandler = Handler::getInstance();
-        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
-            $this->getProject()
-        );
+        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite($project);
 
         if (empty($RegistrationSite)) {
-            $RegistrationSite = $RegistrarHandler->getRegistrationSite(
-                $this->getProject()
-            );
+            $RegistrationSite = $RegistrarHandler->getRegistrationSite($project);
 
             if (empty($RegistrationSite)) {
-                return false;
+                return null;
             }
         }
 
@@ -126,30 +136,34 @@ class ActivationVerification extends AbstractVerification
             'success'
         ], [
             'success' => 'activation',
-            'registrar' => $this->getRegistrarHash()
+            'registrar' => $this->getRegistrarHash($verification)
         ]);
     }
 
     /**
      * Automatically redirect the user to this URL on unsuccessful verification
      *
-     * @return string|false - If this method returns false, no redirection takes place
+     * @param Verification $verification
+     * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
+     * @throws ExceptionStack
      */
-    public function getOnErrorRedirectUrl(): bool|string
+    public function getOnErrorRedirectUrl(Verification $verification): ?string
     {
         $RegistrarHandler = Handler::getInstance();
-        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite(
-            $this->getProject()
-        );
+        $project = $this->getProject($verification);
+
+        if (!$project) {
+            return null;
+        }
+
+        $RegistrationSite = $RegistrarHandler->getRegistrationSignUpSite($project);
 
         if (empty($RegistrationSite)) {
-            $RegistrationSite = $RegistrarHandler->getRegistrationSite(
-                $this->getProject()
-            );
+            $RegistrationSite = $RegistrarHandler->getRegistrationSite($project);
 
             if (empty($RegistrationSite)) {
-                return false;
+                return null;
             }
         }
 
@@ -157,35 +171,43 @@ class ActivationVerification extends AbstractVerification
             'error'
         ], [
             'error' => 'activation',
-            'registrar' => $this->getRegistrarHash()
+            'registrar' => $this->getRegistrarHash($verification)
         ]);
     }
 
     /**
      * Get the Project this ActivationVerification is intended for
      *
-     * @return QUI\Projects\Project
+     * @param Verification $verification
+     * @return Project|null
      * @throws Exception
      */
-    protected function getProject(): QUI\Projects\Project
+    protected function getProject(Verification $verification): ?QUI\Projects\Project
     {
-        $additionalData = $this->getAdditionalData();
-        return QUI::getProjectManager()->getProject($additionalData['project'], $additionalData['projectLang']);
+        $project = $verification->getCustomDataEntry('project');
+        $projectLang = $verification->getCustomDataEntry('projectLang');
+
+        if (empty($project) || empty($projectLang)) {
+            return null;
+        }
+
+        return QUI::getProjectManager()->getProject($project, $projectLang);
     }
 
     /**
      * Get hash of registrar used for this Verification
      *
+     * @param Verification $verification
      * @return string
      */
-    protected function getRegistrarHash(): string
+    protected function getRegistrarHash(Verification $verification): string
     {
-        $data = $this->getAdditionalData();
+        $registrar = $verification->getCustomDataEntry('registrar');
 
-        if (empty($data['registrar'])) {
+        if (empty($registrar)) {
             return '';
         }
 
-        return $data['registrar'];
+        return $registrar;
     }
 }
