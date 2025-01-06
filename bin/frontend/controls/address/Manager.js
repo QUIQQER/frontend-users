@@ -475,9 +475,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
             const Container = new Element('div', {
                 'class': 'quiqqer-frontend-users-address-container',
-                html: '<div class="quiqqer-frontend-users-address-container-header"></div>' +
-                    '<div class="quiqqer-frontend-users-address-container-content"></div>',
-                tabIndex: -1
+                html: '<div class="quiqqer-frontend-users-address-container-header" data-name="header"></div>' +
+                    '<div class="quiqqer-frontend-users-address-container-content" data-name="content"></div>',
+                tabIndex: -1,
+                dataName: 'address-container'
             }).inject(Parent);
 
             new Element('span', {

@@ -29,7 +29,7 @@
                     data-setting="{$setting.name}"
                 >
                     {if $setting.icon}
-                    <span class="quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
+                    <span class="fa-fw quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
                     {/if}
                     <span>{$setting.title}</span>
                 </a>
@@ -40,10 +40,9 @@
 </div>
 {/if}
 
-<form action="" method="post">
-    <label class="quiqqer-frontendUsers-controls-profile-categories-mobile"
-        data-name="categories-mobile">
-        <select name="profile-categories">
+<form action="" method="post" class="quiqqer-frontendUsers-controls-profile-categories-mobile">
+    <label class="quiqqer-frontendUsers-controls-profile-categories-mobile-label">
+        <select name="profile-categories-mobile">
             {foreach $categories as $category}
             <optgroup label="{$category.title}">
                 {foreach $category.items as $setting}
