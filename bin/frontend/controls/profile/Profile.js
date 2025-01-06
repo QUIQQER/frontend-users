@@ -411,8 +411,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
 
             // mobile
-            const MobileCategories = Elm.getElement('[data-name="categories-mobile"]');
-
+            const MobileCategories = Elm.getElement('[name="profile-categories-mobile"]');
             if (MobileCategories) {
                 if (self.$category && self.$settings) {
                     MobileCategories.value = self.$category + ':' + self.$settings;
