@@ -28,28 +28,27 @@
 
 {if $gravatarEnabled}
 <section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userAvatar-gravatar-section">
-    <header>
-        <h2>
-            {locale group="quiqqer/frontend-users" var="profile.avatar.gravatar.title"}
-        </h2>
-    </header>
+    <h2>
+        {locale group="quiqqer/frontend-users" var="profile.avatar.gravatar.title"}
+    </h2>
 
     <div class="quiqqer-frontendUsers-userAvatar-gravatar">
         <label>
+            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
+
             <span>
                 {locale group="quiqqer/frontend-users"
-                        var="profile.useravatar.gravatar_option"
-                        email=$User->getAttribute('email')
+                    var="profile.useravatar.gravatar_option"
+                    email=$User->getAttribute('email')
                 }
             </span>
-            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
         </label>
     </div>
 </section>
 {/if}
 
 {if $uploadEnabled || $gravatarEnabled}
-<button type="submit" class="btn btn-primary quiqqer-frontendUsers-userAvatar-saveButton">
+<button type="submit" class="btn btn-primary quiqqer-frontendUsers-saveButton">
     {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
 </button>
 {/if}

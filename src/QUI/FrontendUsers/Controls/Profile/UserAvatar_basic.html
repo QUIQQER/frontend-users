@@ -1,9 +1,7 @@
-<section class="quiqqer-frontendUsers-userAvatar-section">
-    <header>
-        <h2>
-            {locale group="quiqqer/frontend-users" var="profile.avatar.title"}
-        </h2>
-    </header>
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userAvatar-section">
+    <h2>
+        {locale group="quiqqer/frontend-users" var="profile.avatar.title"}
+    </h2>
 
     {if $AvatarImage}
     <div class="quiqqer-frontendUsers-userAvatar-icon"
@@ -29,29 +27,28 @@
 </section>
 
 {if $gravatarEnabled}
-<section class="quiqqer-frontendUsers-userAvatar-gravatar-section">
-    <header>
-        <h2>
-            {locale group="quiqqer/frontend-users" var="profile.avatar.gravatar.title"}
-        </h2>
-    </header>
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userAvatar-gravatar-section">
+    <h2>
+        {locale group="quiqqer/frontend-users" var="profile.avatar.gravatar.title"}
+    </h2>
 
     <div class="quiqqer-frontendUsers-userAvatar-gravatar">
-        <label class="qui-form-label">
-            <span class="qui-form-label__text">
+        <label>
+            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if}/>
+
+            <span>
                 {locale group="quiqqer/frontend-users"
-                        var="profile.useravatar.gravatar_option"
-                        email=$User->getAttribute('email')
+                    var="profile.useravatar.gravatar_option"
+                    email=$User->getAttribute('email')
                 }
             </span>
-            <input name="useGravatar" type="checkbox" {if $userGravatarIcon} checked{/if} class="qui-form-label__input"/>
         </label>
     </div>
 </section>
 {/if}
 
 {if $uploadEnabled || $gravatarEnabled}
-<button type="submit" class="btn btn-primary quiqqer-frontendUsers-userAvatar-saveButton">
+<button type="submit" class="btn btn-primary quiqqer-frontendUsers-saveButton">
     {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
 </button>
 {/if}

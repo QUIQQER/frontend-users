@@ -28,6 +28,7 @@ class UserAvatar extends AbstractProfileControl
 
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/profile/UserAvatar');
 
+        $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
         $this->addCSSClass('quiqqer-frontendUsers-UserAvatar');
 
         if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {

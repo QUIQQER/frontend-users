@@ -36,9 +36,3 @@
     text-align: center;
     width: 3em;
 }
-
-@media (max-width: 767px) {
-    .quiqqer-frontendUsers-userdata-saveButton {
-        width: 100%;
-    }
-}

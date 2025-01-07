@@ -120,7 +120,7 @@
     width: 100%;
 }
 
-.quiqqer-frontendUsers-controls-profile-control :where(input, select, textarea) {
+.quiqqer-frontendUsers-controls-profile-control :where(input:not([type="checkbox"], [type="radio"]), select, textarea) {
     width: 100%;
 }
 
