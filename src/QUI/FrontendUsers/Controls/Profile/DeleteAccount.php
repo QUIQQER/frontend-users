@@ -10,7 +10,8 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler;
 use QUI\System\Log;
-use QUI\Verification\Verifier;
+use QUI\Verification\Interface\VerificationRepositoryInterface;
+use QUI\Verification\VerificationRepository;
 
 /**
  * Class DeleteAccount
@@ -23,8 +24,14 @@ class DeleteAccount extends AbstractProfileControl
      * DeleteAccount constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = [])
-    {
+    public function __construct(
+        array $attributes = [],
+        private ?VerificationRepositoryInterface $verificationRepository = null
+    ) {
+        if (is_null($this->verificationRepository)) {
+            $this->verificationRepository = new VerificationRepository();
+        }
+
         parent::__construct($attributes);
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-deleteaccount');
@@ -44,18 +51,17 @@ class DeleteAccount extends AbstractProfileControl
         $action = false;
 
         try {
-            $verifier = new Verifier();
-            $DeleteVerification = $verifier->getVerificationByIdentifier(
-                QUI::getUserBySession()->getUUID(),
-                new QUI\FrontendUsers\UserDeleteConfirmVerification(),
-                true
+            $verification = $this->verificationRepository->findByIdentifier(
+                'confirmdelete-' . QUI::getUserBySession()->getUUID()
             );
 
-            if ($verifier->isVerificationValid($DeleteVerification)) {
-                $action = 'deleteaccount_confirm_wait';
-                $this->setJavaScriptControlOption('deletestarted', 1);
-            } else {
-                Verifier::removeVerification($DeleteVerification);
+            if ($verification) {
+                if ($verification->isValid()) {
+                    $action = 'deleteaccount_confirm_wait';
+                    $this->setJavaScriptControlOption('deletestarted', 1);
+                } else {
+                    $this->verificationRepository->delete($verification);
+                }
             }
         } catch (Exception) {
             // nothing - no active user delete verification

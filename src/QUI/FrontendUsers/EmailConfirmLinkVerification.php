@@ -4,8 +4,7 @@ namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\Exception;
-use QUI\Verification\AbstractVerificationHandler;
-use QUI\Verification\Entity\Verification;
+use QUI\Verification\Entity\LinkVerification;
 use QUI\Verification\Enum\VerificationErrorReason;
 
 /**
@@ -15,7 +14,7 @@ use QUI\Verification\Enum\VerificationErrorReason;
  *
  * @package QUI\FrontendUsers
  */
-class EmailConfirmVerification extends AbstractVerificationHandler
+class EmailConfirmLinkVerification extends AbstractFrontendUsersLinkVerificationHandler
 {
     /**
      * Get the duration of a Verification (minutes)
@@ -33,14 +32,14 @@ class EmailConfirmVerification extends AbstractVerificationHandler
     /**
      * Execute this method on successful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return void
      */
-    public function onSuccess(Verification $verification): void
+    public function onSuccess(LinkVerification $verification): void
     {
         try {
             $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-            $userUuid = $verification->identifier;
+            $userUuid = $verification->getCustomDataEntry('uuid');
             $User = QUI::getUsers()->get($userUuid);
             $newEmail = $verification->getCustomDataEntry('newEmail');
 
@@ -69,10 +68,11 @@ class EmailConfirmVerification extends AbstractVerificationHandler
     /**
      * Execute this method on unsuccessful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
+     * @param VerificationErrorReason $reason
      * @return void
      */
-    public function onError(Verification $verification): void
+    public function onError(LinkVerification $verification, VerificationErrorReason $reason): void
     {
         // nothing
     }
@@ -80,10 +80,10 @@ class EmailConfirmVerification extends AbstractVerificationHandler
     /**
      * This message is displayed to the user on successful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return string
      */
-    public function getSuccessMessage(Verification $verification): string
+    public function getSuccessMessage(LinkVerification $verification): string
     {
         return '';
     }
@@ -91,11 +91,11 @@ class EmailConfirmVerification extends AbstractVerificationHandler
     /**
      * This message is displayed to the user on unsuccessful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @param VerificationErrorReason $reason
      * @return string
      */
-    public function getErrorMessage(Verification $verification, VerificationErrorReason $reason): string
+    public function getErrorMessage(LinkVerification $verification, VerificationErrorReason $reason): string
     {
         return '';
     }
@@ -103,11 +103,11 @@ class EmailConfirmVerification extends AbstractVerificationHandler
     /**
      * Automatically redirect the user to this URL on successful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnSuccessRedirectUrl(Verification $verification): ?string
+    public function getOnSuccessRedirectUrl(LinkVerification $verification): ?string
     {
         $project = $this->getProject($verification);
 
@@ -129,11 +129,12 @@ class EmailConfirmVerification extends AbstractVerificationHandler
     /**
      * Automatically redirect the user to this URL on unsuccessful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
+     * @param VerificationErrorReason $reason
      * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnErrorRedirectUrl(Verification $verification): ?string
+    public function getOnErrorRedirectUrl(LinkVerification $verification, VerificationErrorReason $reason): ?string
     {
         $project = $this->getProject($verification);
 
@@ -146,24 +147,5 @@ class EmailConfirmVerification extends AbstractVerificationHandler
         return $RegistrationSite->getUrlRewritten([], [
             'error' => 'emailconfirm'
         ]);
-    }
-
-    /**
-     * Get the Project this ActivationVerification is intended for
-     *
-     * @param Verification $verification
-     * @return QUI\Projects\Project|null
-     * @throws Exception
-     */
-    protected function getProject(Verification $verification): ?QUI\Projects\Project
-    {
-        $project = $verification->getCustomDataEntry('project');
-        $projectLang = $verification->getCustomDataEntry('projectLang');
-
-        if (empty($project) || empty($projectLang)) {
-            return null;
-        }
-
-        return QUI::getProjectManager()->getProject($project, $projectLang);
     }
 }

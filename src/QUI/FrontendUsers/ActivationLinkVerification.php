@@ -6,8 +6,7 @@ use QUI;
 use QUI\Exception;
 use QUI\ExceptionStack;
 use QUI\Projects\Project;
-use QUI\Verification\AbstractVerificationHandler;
-use QUI\Verification\Entity\Verification;
+use QUI\Verification\Entity\LinkVerification;
 use QUI\Verification\Enum\VerificationErrorReason;
 
 /**
@@ -17,7 +16,7 @@ use QUI\Verification\Enum\VerificationErrorReason;
  *
  * @package QUI\FrontendUsers
  */
-class ActivationVerification extends AbstractVerificationHandler
+class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHandler
 {
     /**
      * Get the duration of a Verification (minutes)
@@ -35,17 +34,18 @@ class ActivationVerification extends AbstractVerificationHandler
     /**
      * Execute this method on successful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return void
+     * @throws \Exception
      */
-    public function onSuccess(Verification $verification): void
+    public function onSuccess(LinkVerification $verification): void
     {
         try {
-            $userUuid = $verification->identifier;
+            $userUuid = $verification->getCustomDataEntry('uuid');
             $User = QUI::getUsers()->get($userUuid);
             $User->activate(false, QUI::getUsers()->getSystemUser());
 
-            Utils::setUserEmailVerified($User);
+            Utils::setDefaultUserEmailVerified($User);
 
             QUI::getEvents()->fireEvent(
                 'quiqqerFrontendUsersUserActivate',
@@ -54,22 +54,20 @@ class ActivationVerification extends AbstractVerificationHandler
                     Handler::getInstance()->getRegistrar($User->getAttribute(Handler::USER_ATTR_REGISTRAR))
                 ]
             );
-        } catch (QUI\Users\Exception $Exception) {
-            QUI\System\Log::addWarning(
-                'quiqqer/frontend-users -> ActivationVerification :: ' . $Exception->getMessage()
-            );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
+            throw $Exception;
         }
     }
 
     /**
      * Execute this method on unsuccessful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
+     * @param VerificationErrorReason $reason
      * @return void
      */
-    public function onError(Verification $verification): void
+    public function onError(LinkVerification $verification, VerificationErrorReason $reason): void
     {
         // nothing
     }
@@ -77,11 +75,11 @@ class ActivationVerification extends AbstractVerificationHandler
     /**
      * This message is displayed to the user on successful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return string
      * @throws Exception
      */
-    public function getSuccessMessage(Verification $verification): string
+    public function getSuccessMessage(LinkVerification $verification): string
     {
         $registrationSetting = Handler::getInstance()->getRegistrationSettings();
 
@@ -97,11 +95,11 @@ class ActivationVerification extends AbstractVerificationHandler
     /**
      * This message is displayed to the user on unsuccessful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @param string $reason
      * @return string
      */
-    public function getErrorMessage(Verification $verification, VerificationErrorReason $reason): string
+    public function getErrorMessage(LinkVerification $verification, VerificationErrorReason $reason): string
     {
         return '';
     }
@@ -109,11 +107,11 @@ class ActivationVerification extends AbstractVerificationHandler
     /**
      * Automatically redirect the user to this URL on successful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      */
-    public function getOnSuccessRedirectUrl(Verification $verification): ?string
+    public function getOnSuccessRedirectUrl(LinkVerification $verification): ?string
     {
         $project = $this->getProject($verification);
 
@@ -143,12 +141,13 @@ class ActivationVerification extends AbstractVerificationHandler
     /**
      * Automatically redirect the user to this URL on unsuccessful verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
+     * @param VerificationErrorReason $reason
      * @return string|null - If this method returns false, no redirection takes place
      * @throws Exception
      * @throws ExceptionStack
      */
-    public function getOnErrorRedirectUrl(Verification $verification): ?string
+    public function getOnErrorRedirectUrl(LinkVerification $verification, VerificationErrorReason $reason): ?string
     {
         $RegistrarHandler = Handler::getInstance();
         $project = $this->getProject($verification);
@@ -176,31 +175,12 @@ class ActivationVerification extends AbstractVerificationHandler
     }
 
     /**
-     * Get the Project this ActivationVerification is intended for
-     *
-     * @param Verification $verification
-     * @return Project|null
-     * @throws Exception
-     */
-    protected function getProject(Verification $verification): ?QUI\Projects\Project
-    {
-        $project = $verification->getCustomDataEntry('project');
-        $projectLang = $verification->getCustomDataEntry('projectLang');
-
-        if (empty($project) || empty($projectLang)) {
-            return null;
-        }
-
-        return QUI::getProjectManager()->getProject($project, $projectLang);
-    }
-
-    /**
      * Get hash of registrar used for this Verification
      *
-     * @param Verification $verification
+     * @param LinkVerification $verification
      * @return string
      */
-    protected function getRegistrarHash(Verification $verification): string
+    protected function getRegistrarHash(LinkVerification $verification): string
     {
         $registrar = $verification->getCustomDataEntry('registrar');
 

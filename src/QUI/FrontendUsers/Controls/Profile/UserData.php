@@ -10,6 +10,8 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
+use QUI\Verification\Interface\VerificationRepositoryInterface;
+use QUI\Verification\VerificationRepository;
 
 use function array_filter;
 use function array_keys;
@@ -29,8 +31,14 @@ class UserData extends AbstractProfileControl
      * UserData constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = [])
-    {
+    public function __construct(
+        array $attributes = [],
+        private ?VerificationRepositoryInterface $verificationRepository = null
+    ) {
+        if (is_null($this->verificationRepository)) {
+            $this->verificationRepository = new VerificationRepository();
+        }
+
         parent::__construct($attributes);
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-userdata');
@@ -60,11 +68,13 @@ class UserData extends AbstractProfileControl
         }
 
         try {
-            QUI\Verification\Verifier::getVerificationByIdentifier(
-                $User->getUUID(),
-                QUI\FrontendUsers\EmailConfirmVerification::getType(),
-                true
+            $verification = $this->verificationRepository->findByIdentifier(
+                'confirmemail-' . $User->getUUID()
             );
+
+            if (is_null($verification)) {
+                $emailChangeRequested = false;
+            }
         } catch (Exception) {
             $emailChangeRequested = false;
         }
