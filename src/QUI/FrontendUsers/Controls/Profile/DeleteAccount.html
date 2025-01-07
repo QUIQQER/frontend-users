@@ -1,16 +1,24 @@
-<h2>{locale group="quiqqer/frontend-users" var="profile.deleteaccount.title"}</h2>
+<div class="quiqqer-frontendUsers-profile-section">
+    <h2>{locale group="quiqqer/frontend-users" var="profile.deleteaccount.title"}</h2>
 
-{if $action == 'deleteaccount_error'}
-    <div class="content-message-error">
-        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.error"}
-    </div>
-{/if}
+    {if $action == 'deleteaccount_error'}
+        <div class="content-message-error">
+            {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.error"}
+        </div>
+    {/if}
+
+    {if $action == 'deleteaccount_confirm_wait'}
+        <div class="content-message-information">
+            {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.confirm_wait"}
+        </div>
+    {else}
+        <p>
+            {locale group="quiqqer/frontend-users" var="profile.deleteaccount.info"}
+        </p>
+    {/if}
+</div>
 
 {if $action == 'deleteaccount_confirm_wait'}
-    <div class="content-message-information">
-        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.confirm_wait"}
-    </div>
-
     <button type="submit" class="quiqqer-frontendUsers-saveButton">
         <span class="fa fa-envelope"></span>
         {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit_again"}
@@ -23,10 +31,6 @@
         });
     </script>
 {else}
-    <p>
-        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.info"}
-    </p>
-
     <button type="submit" class="quiqqer-frontendUsers-saveButton btn btn-danger">
         <span class="fa fa-trash"></span>
         {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit"}

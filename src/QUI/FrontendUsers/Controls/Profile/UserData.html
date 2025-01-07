@@ -26,10 +26,8 @@
 </div>
 {/if}
 
-<section class="quiqqer-frontendUsers-userdata-address">
-    <header>
-        <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
-    </header>
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userdata-address">
+    <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
 
     {template_event name="quiqqer::frontend-users::profile::customer-data-begin" User=$User Address=$Address}
 
@@ -61,14 +59,16 @@
         </span>
 
         {if $Address->getAttribute('street_no') === ''}
-        <input type="text" name="street" value="" autocomplete="street-address"/>
-        <input type="text" name="street_number" value=""/>
+            <div class="quiqqer-frontendUsers-userdata-address-street-2-col">
+                <input type="text" name="street" value="" autocomplete="street-address"/>
+                <input type="text" name="street_number" value=""/>
+            </div>
         {else}
-        <input type="text"
-               name="street_no"
-               autocomplete="street-address"
-               value="{$Address->getAttribute('street_no')|escape:'html'}"
-        />
+            <input type="text"
+                   name="street_no"
+                   autocomplete="street-address"
+                   value="{$Address->getAttribute('street_no')|escape:'html'}"
+            />
         {/if}
     </label>
 
@@ -123,10 +123,8 @@
 
 {template_event name="quiqqer::frontend-users::profile::user-data-middle" User=$User Address=$Address}
 
-<section class="quiqqer-frontendUsers-userdata-address-additional quiqqer-frontendUsers-userdata-section">
-    <header>
-        <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.additional.title"}</h2>
-    </header>
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userdata-address-additional">
+    <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.additional.title"}</h2>
 
     <label>
         <span class="quiqqer-frontendUsers-userdata-label">
@@ -187,7 +185,11 @@
                    value="{$User->getAttribute('email')|escape:'html'}"
                    disabled
             />
-            <span class="fa fa-edit quiqqer-frontendUsers-userdata-email-edit" data-name="email-edit"></span>
+            <button type="button" data-name="email-edit"
+                    class="btn btn-secondary btn-icon quiqqer-frontendUsers-userdata-email-edit"
+            >
+                <span class="fa fa-edit"></span>
+            </button>
         </div>
     </label>
 

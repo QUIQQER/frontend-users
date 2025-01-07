@@ -1,53 +1,17 @@
-/**
-1. because children are floated and we don't want to set float: left on this element
-   we need to create a new stacking context
- */
-.quiqqer-frontendUsers-userdata-section,
-.quiqqer-frontendUsers-userdata-address,
-.quiqqer-frontendUsers-userdata-address-additional {
-    clear: both;
-    width: 100%;
-    max-width: 100%;
-    margin-bottom: 1rem;
-    display: flow-root; /* 1 */
-}
-
-.quiqqer-frontendUsers-userdata-saveButton {
-    clear: both;
-    display: block;
-}
-
 [data-hidden] {
     display: none;
 }
 
 .package-intranet-profile-birthday {
-    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 3fr 2fr;
+    gap: 1rem;
 }
 
-@media screen and (min-width: 768px) {
-    .quiqqer-frontendUsers-userdata-label {
-        float: left;
-        width: 30%;
-    }
-
-    .quiqqer-frontendUsers-controls-profile-userdata input,
-    .quiqqer-frontendUsers-userdata-address-country-select,
-    .quiqqer-frontendUsers-userdata-field {
-        float: left;
-        width: 70%;
-    }
-}
-
-.quiqqer-frontendUsers-controls-profile-userdata input[name="street"] {
-    float: left;
-    width: 50%;
-}
-
-.quiqqer-frontendUsers-controls-profile-userdata input[name="street_number"] {
-    float: left;
-    margin-left: 10px;
-    width: calc(20% - 10px);
+.quiqqer-frontendUsers-userdata-address-street-2-col {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    gap: 1rem;
 }
 
 .quiqqer-frontendUsers-controls-profile-userdata select[name="country"] {
@@ -63,29 +27,14 @@
 }
 
 .quiqqer-frontendUsers-userdata-email {
-    display: block;
-    width: 100%;
-}
-
-.quiqqer-frontendUsers-userdata-email input {
-    float: left;
-    width: calc(100% - 60px);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1rem;
 }
 
 .quiqqer-frontendUsers-userdata-email-edit {
-    border-width: 1px 1px 1px 0;
-    border-color: #ced9d9;
-    border-style: solid;
-    cursor: pointer;
-    float: left;
-    line-height: 38px;
     text-align: center;
-    width: 60px;
-}
-
-.quiqqer-order-customerData-edit-vatId > select {
-    width: 100%;
-    max-width: 100%;
+    width: 3em;
 }
 
 @media (max-width: 767px) {

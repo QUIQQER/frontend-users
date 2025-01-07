@@ -1,9 +1,7 @@
-<section class="quiqqer-frontendUsers-userAvatar-section">
-    <header>
-        <h2>
-            {locale group="quiqqer/frontend-users" var="profile.avatar.title"}
-        </h2>
-    </header>
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userAvatar-section">
+    <h2>
+        {locale group="quiqqer/frontend-users" var="profile.avatar.title"}
+    </h2>
 
     {if $AvatarImage}
     <div class="quiqqer-frontendUsers-userAvatar-icon"
@@ -29,7 +27,7 @@
 </section>
 
 {if $gravatarEnabled}
-<section class="quiqqer-frontendUsers-userAvatar-gravatar-section">
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userAvatar-gravatar-section">
     <header>
         <h2>
             {locale group="quiqqer/frontend-users" var="profile.avatar.gravatar.title"}

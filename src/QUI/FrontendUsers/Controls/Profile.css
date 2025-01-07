@@ -11,9 +11,9 @@
     }
 }
 
-/** categories / tabs
- ==================================== */
-
+/*********************/
+/* categories / tabs */
+/*********************/
 .quiqqer-frontendUsers-controls-profile-categories {
     min-width: 0;
 }
@@ -38,7 +38,7 @@
     width: 30px;
 }
 
-[data-open="1"] .quiqqer-fupc-category-header-opener {
+:where([data-open="1"]) .quiqqer-fupc-category-header-opener {
     transform: rotate(90deg);
 }
 
@@ -51,11 +51,11 @@
     outline-offset: -2px;
 }
 
-.quiqqer-fupc-category-items-item[data-active] {
+.quiqqer-fupc-category-items-item:where([data-active]) {
     background-color: #f5f5f5;
 }
 
-[data-open="1"] .quiqqer-fupc-category-items-item {
+:where([data-open="1"]) .quiqqer-fupc-category-items-item {
     display: flex;
 }
 
@@ -77,8 +77,9 @@
     cursor: pointer;
 }
 
-/** category content
- ==================================== */
+/********************/
+/* category content */
+/********************/
 /* mobile */
 .quiqqer-frontendUsers-controls-profile-categories-mobile {
     display: none;
@@ -94,7 +95,11 @@
     }
 }
 
-/* desktop */
+/* content */
+.quiqqer-frontendUsers-profile-section:not(:last-child) {
+    margin-bottom: 2rem;
+}
+
 .quiqqer-frontendUsers-controls-profile-categoryContent {
     position: relative;
     min-width: 0;
@@ -105,53 +110,28 @@
     width: 100%;
 }
 
-.quiqqer-frontendUsers-controls-profile-control label {
+/* form basic styling */
+.quiqqer-frontendUsers-controls-profile-control :where(h2) {
+    margin-top: 0;
+}
+
+.quiqqer-frontendUsers-controls-profile-control :where(label) {
     margin-bottom: 1rem;
     width: 100%;
 }
 
-@media screen and (min-width: 768px) {
-    .quiqqer-frontendUsers-label {
-        float: left;
-        width: 30%;
-    }
+.quiqqer-frontendUsers-controls-profile-control :where(input, select, textarea) {
+    width: 100%;
 }
 
-/** user
- ==================================== */
-
-.package-intranet-profile-birthday {
-    float: left;
-    width: 66%;
-}
-
-.package-intranet-profile-birthday [name="birth_day"],
-.package-intranet-profile-birthday [name="birth_year"] {
-    float: left;
-    width: calc(20% - 10px);
-}
-
-.package-intranet-profile-birthday [name="birth_month"] {
-    float: left;
-    margin: 0 10px;
-    width: 60%;
-}
-
-/** responsive
- ==================================== */
-
+/**************/
+/* responsive */
+/**************/
 .quiqqer-frontendUsers-controls-profile-categories-mobile {
     display: none;
 }
 
-
 @media (max-width: 767px) {
-    .quiqqer-frontendUsers-userdata-label {
-        display: block;
-        width: 100%;
-        margin-bottom: 0.25rem;
-    }
-
     .quiqqer-frontendUsers-controls-profile-control input,
     .quiqqer-frontendUsers-userdata-address-country-select,
     .package-intranet-profile-birthday,
@@ -168,17 +148,11 @@
     }
 
     .quiqqer-frontendUsers-controls-profile-categories-mobile select {
-        clear: both;
         width: 100%;
     }
 
     .quiqqer-frontendUsers-controls-profile-categories {
         display: none;
-    }
-
-    .quiqqer-frontendUsers-controls-profile-categoryContent {
-        padding: 0;
-        width: 100%;
     }
 
     .quiqqer-frontendUsers-saveButton {
