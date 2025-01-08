@@ -3,10 +3,11 @@
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Interfaces\Users\User as QUIUserInterface;
 use QUI\Mail\Mailer;
 use QUI\Utils\Singleton;
-use QUI\Verification\Verifier;
-use QUI\Interfaces\Users\User as QUIUserInterface;
+use QUI\Verification\Interface\VerificationFactoryInterface;
+use QUI\Verification\VerificationFactory;
 
 use function array_filter;
 use function time;
@@ -97,8 +98,13 @@ class Handler extends Singleton
     /**
      * Handler constructor.
      */
-    public function __construct()
-    {
+    public function __construct(
+        private ?VerificationFactoryInterface $verificationFactory = null
+    ) {
+        if (is_null($this->verificationFactory)) {
+            $this->verificationFactory = new VerificationFactory();
+        }
+
         $this->Registrar = new RegistrarCollection();
     }
 
@@ -412,13 +418,17 @@ class Handler extends Singleton
     {
         $Project = $Registrar->getProject();
 
-        $ActivationVerification = new ActivationVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang(),
-            'registrar' => $Registrar->getHash()
-        ]);
-
-        $activationLink = Verifier::startVerification($ActivationVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'activate-' . $User->getUUID(),
+            new ActivationLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang(),
+                'registrar' => $Registrar->getHash()
+            ],
+            true
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -445,7 +455,7 @@ class Handler extends Singleton
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'email' => $User->getAttribute('email'),
                         'date' => $L->formatDate(time()),
-                        'activationLink' => $activationLink
+                        'activationLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
@@ -603,13 +613,17 @@ class Handler extends Singleton
         string $newEmail,
         QUI\Projects\Project $Project
     ): void {
-        $EmailConfirmVerification = new EmailConfirmVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang(),
-            'newEmail' => $newEmail
-        ]);
-
-        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'confirmemail-' . $User->getUUID(),
+            new EmailConfirmLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang(),
+                'newEmail' => $newEmail
+            ],
+            true
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -634,7 +648,7 @@ class Handler extends Singleton
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'email' => $newEmail,
                         'date' => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'confirmLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
@@ -646,6 +660,7 @@ class Handler extends Singleton
             QUI\System\Log::writeException($Exception);
         }
     }
+
     /**
      * Send email to confirm an email address.
      *
@@ -661,13 +676,16 @@ class Handler extends Singleton
         string $email,
         QUI\Projects\Project $Project
     ): void {
-        $EmailConfirmVerification = new EmailVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang(),
-            'email' => $email
-        ]);
-
-        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'confirmemail-' . $User->getUUID(),
+            new EmailVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang(),
+                'email' => $email
+            ]
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -692,7 +710,7 @@ class Handler extends Singleton
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'email' => $email,
                         'date' => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'confirmLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
@@ -717,12 +735,15 @@ class Handler extends Singleton
      */
     public function sendDeleteUserConfirmationMail(QUI\Interfaces\Users\User $User, QUI\Projects\Project $Project): void
     {
-        $DeleteUserVerification = new UserDeleteConfirmVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang()
-        ]);
-
-        $confirmLink = Verifier::startVerification($DeleteUserVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'confirmdelete-' . $User->getUUID(),
+            new UserDeleteConfirmLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang()
+            ]
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -746,7 +767,7 @@ class Handler extends Singleton
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'date' => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'confirmLink' => $verification
                     ])
                 ]
             );

@@ -21,10 +21,10 @@ QUI::$Ajax->registerFunction(
 
         // Check permission
         if (!Utils::hasPermissionToViewCategory($category, $settings)) {
-            throw new \QUI\FrontendUsers\Exception(
+            throw new \QUI\FrontendUsers\Exception([
                 'quiqqer/frontend-users',
                 'exception.ajax.frontend.profile.save.no_category_permission'
-            );
+            ]);
         }
 
         $Control = QUI\FrontendUsers\Utils::getProfileSettingControl($category, $settings);

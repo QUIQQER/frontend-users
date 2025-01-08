@@ -4,12 +4,11 @@
  * This file contains package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail
  */
 
-use QUI\FrontendUsers\ActivationVerification;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\RegistrarInterface;
 use QUI\FrontendUsers\Registrars\Email\Registrar as EmailRegistrar;
 use QUI\Utils\Security\Orthos;
-use QUI\Verification\Verifier;
+use QUI\Verification\VerificationRepository;
 
 /**
  * Resend an activation mail
@@ -21,9 +20,16 @@ QUI::$Ajax->registerFunction(
     function ($email) {
         try {
             $User = QUI::getUsers()->getUserByMail(Orthos::clear($email));
-            Verifier::getVerificationByIdentifier($User->getUUID(), ActivationVerification::getType());
-        } catch (Exception $Exception) {
+            $verificationRepository = new VerificationRepository();
+            $verification = $verificationRepository->findByIdentifier(
+                'activate-' . $User->getUUID()
+            );
+
             // if the verification does not exist -> do not resend mail
+            if (empty($verification)) {
+                return false;
+            }
+        } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             return false;
         }

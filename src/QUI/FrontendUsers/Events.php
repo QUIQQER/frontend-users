@@ -5,8 +5,8 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Exception;
 use QUI\Interfaces\Users\User;
-use QUI\Verification\Verifier;
 use QUI\Smarty\Collector;
+use QUI\Verification\VerificationRepository;
 
 use function base64_encode;
 use function json_encode;
@@ -234,13 +234,16 @@ class Events
     {
         // delete Verification for user (if not yet deleted by quiqqer/verification cron)
         try {
-            $Verification = Verifier::getVerificationByIdentifier(
-                $User->getUUID(),
-                ActivationVerification::getType()
+            $repository = new VerificationRepository();
+            $verification = $repository->findByIdentifier(
+                'activate-' . $User->getUUID()
             );
 
-            Verifier::removeVerification($Verification);
-        } catch (\Exception) {
+            // if Verification not found it does not have to be deleted
+            if ($verification) {
+                $repository->delete($verification);
+            }
+        } catch (\Throwable) {
             // nothing -> if Verification not found it does not have to be deleted
         }
     }

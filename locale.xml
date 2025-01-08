@@ -1805,36 +1805,36 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="control.sign.up.terms_of_use_and_privacy_policy.label" html="true">
             <de><![CDATA[
             Durch das Erstellen eines Benutzerkontos versichere ich die
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> und
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> und
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>
             gelesen zu haben und erkläre mich mit diesen einverstanden.
             ]]></de>
             <en><![CDATA[
             By creating a user account, I confirm that I have read and agree to the
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> and
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>.
             ]]></en>
         </locale>
         <locale name="control.sign.up.terms_of_use.label" html="true">
             <de><![CDATA[
             Durch das Erstellen eines Benutzerkontos versichere ich die
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen zu haben
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> gelesen zu haben
             und erkläre mich mit diesen einverstanden.
             ]]></de>
             <en><![CDATA[
             By creating a user account, I confirm that I have read and agree to the
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a>.
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a>.
             ]]></en>
         </locale>
         <locale name="control.sign.up.privacy_policy.label" html="true">
             <de><![CDATA[
             Durch das Erstellen eines Benutzerkontos versichere ich die
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>
             gelesen zu haben und erkläre mich mit diesen einverstanden.
             ]]></de>
             <en><![CDATA[
             By creating a user account, I confirm that I have read and agree to the
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>.
             ]]></en>
         </locale>
         <locale name="control.sign.up.type.login.in.button">

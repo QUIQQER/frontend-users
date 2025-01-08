@@ -36,7 +36,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     abstract public function getInvalidFields(): array;
 
     /**
-     * @return mixed
+     * @return string
      */
     abstract public function getUsername(): string;
 
