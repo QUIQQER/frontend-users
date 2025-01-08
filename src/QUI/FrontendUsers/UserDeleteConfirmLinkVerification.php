@@ -5,6 +5,7 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Exception;
 use QUI\ExceptionStack;
+use QUI\Verification\Entity\AbstractVerification;
 use QUI\Verification\Entity\LinkVerification;
 use QUI\Verification\Enum\VerificationErrorReason;
 
@@ -20,11 +21,12 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
     /**
      * Get the duration of a Verification (minutes)
      *
+     * @param AbstractVerification $verification
      * @return int|null - duration in minutes;
      * if this method returns false use the module setting default value
      * @throws Exception
      */
-    public function getValidDuration(): ?int
+    public function getValidDuration(AbstractVerification $verification): ?int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -135,7 +137,7 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
         $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
 
         if (!$RegistrationSite) {
-            return false;
+            return null;
         }
 
         return $RegistrationSite->getUrlRewritten([], [
@@ -162,7 +164,7 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
         $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
 
         if (!$RegistrationSite) {
-            return false;
+            return null;
         }
 
         return $RegistrationSite->getUrlRewritten([], [

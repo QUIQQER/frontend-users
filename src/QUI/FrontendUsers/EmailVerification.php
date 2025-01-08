@@ -6,6 +6,7 @@ use QUI;
 use QUI\Exception;
 use QUI\Verification\Entity\LinkVerification;
 use QUI\Verification\Enum\VerificationErrorReason;
+use QUI\Verification\Entity\AbstractVerification;
 
 /**
  * User verification to confirm an e-mail-address
@@ -15,11 +16,12 @@ class EmailVerification extends AbstractFrontendUsersLinkVerificationHandler
     /**
      * Get the duration of a Verification (minutes)
      *
+     * @param AbstractVerification $verification
      * @return int - duration in minutes;
      * if this method returns false use the module setting default value
      * @throws Exception
      */
-    public function getValidDuration(): int
+    public function getValidDuration(AbstractVerification $verification): int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];

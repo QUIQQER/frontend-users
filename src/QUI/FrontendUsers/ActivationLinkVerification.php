@@ -8,6 +8,7 @@ use QUI\ExceptionStack;
 use QUI\Projects\Project;
 use QUI\Verification\Entity\LinkVerification;
 use QUI\Verification\Enum\VerificationErrorReason;
+use QUI\Verification\Entity\AbstractVerification;
 
 /**
  * Class ActivationVerification
@@ -21,11 +22,12 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
     /**
      * Get the duration of a Verification (minutes)
      *
+     * @param AbstractVerification $verification
      * @return int|null - duration in minutes;
      * if this method returns false use the module setting default value
      * @throws Exception
      */
-    public function getValidDuration(): ?int
+    public function getValidDuration(AbstractVerification $verification): ?int
     {
         $settings = Handler::getInstance()->getMailSettings();
         return (int)$settings['verificationValidityDuration'];
@@ -43,7 +45,7 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
         try {
             $userUuid = $verification->getCustomDataEntry('uuid');
             $User = QUI::getUsers()->get($userUuid);
-            $User->activate(false, QUI::getUsers()->getSystemUser());
+            $User->activate('', QUI::getUsers()->getSystemUser());
 
             Utils::setDefaultUserEmailVerified($User);
 
@@ -96,7 +98,7 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
      * This message is displayed to the user on unsuccessful verification
      *
      * @param LinkVerification $verification
-     * @param string $reason
+     * @param VerificationErrorReason $reason
      * @return string
      */
     public function getErrorMessage(LinkVerification $verification, VerificationErrorReason $reason): string
