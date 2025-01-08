@@ -132,22 +132,24 @@
 }
 
 @media (max-width: 767px) {
-    .quiqqer-frontendUsers-controls-profile-control input,
+    .quiqqer-frontendUsers-controls-profile-control input:not([type="checkbox"], [type="radio"]),
+    .quiqqer-frontendUsers-userdata-address-country-select,
+    .quiqqer-frontendUsers-controls-profile-categories-mobile select,
+    .package-intranet-profile-birthday,
+    .quiqqer-frontendUsers-userdata-email,
+    .quiqqer-frontendUsers-userdata-field {
+        width: 100%;
+    }
+
     .quiqqer-frontendUsers-userdata-address-country-select,
     .package-intranet-profile-birthday,
     .quiqqer-frontendUsers-userdata-email,
     .quiqqer-frontendUsers-userdata-field {
         display: block;
-        width: 100%;
     }
-
 
     .quiqqer-frontendUsers-controls-profile-categories-mobile {
         display: block;
-        width: 100%;
-    }
-
-    .quiqqer-frontendUsers-controls-profile-categories-mobile select {
         width: 100%;
     }
 

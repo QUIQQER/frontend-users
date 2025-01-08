@@ -44,17 +44,17 @@
     <label class="quiqqer-frontendUsers-controls-profile-categories-mobile-label">
         <select name="profile-categories-mobile">
             {foreach $categories as $category}
-            <optgroup label="{$category.title}">
-                {foreach $category.items as $setting}
-                {assign var=active value=""}
-                {if $currentCategory== $category.name}
-                {assign var=active value=" selected"}
-                {/if}
-                <option value="{$category.name}:{$setting.name}"{$active}>
-                    {$setting.title}
-                </option>
-                {/foreach}
-            </optgroup>
+                <optgroup label="{$category.title}">
+                    {foreach $category.items as $setting}
+                        {assign var=active value=""}
+                        {if $currentCategory == $category.name && $currentSetting == $setting.name}
+                            {assign var=active value="selected"}
+                        {/if}
+                        <option value="{$category.name}:{$setting.name}" {$active} data-test="{$currentCategory} - {$category.name}" >
+                            {$setting.title}
+                        </option>
+                    {/foreach}
+                </optgroup>
             {/foreach}
         </select>
     </label>
