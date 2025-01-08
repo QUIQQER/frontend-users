@@ -29,7 +29,7 @@
     "require": {
         "quiqqer/core": "^2",
         "quiqqer/countries": "^2",
-        "quiqqer/verification": "^2",
+        "quiqqer/verification": "^3",
         "quiqqer/tooltips": "^2",
         "quiqqer/data-layer": "^2"
     },
