@@ -8,24 +8,6 @@
     gap: 1rem;
 }
 
-.quiqqer-frontendUsers-userdata-address-street-2-col {
-    display: grid;
-    grid-template-columns: 5fr 1fr;
-    gap: 1rem;
-}
-
-.quiqqer-frontendUsers-controls-profile-userdata select[name="country"] {
-    display: none;
-}
-
-.quiqqer-frontendUsers-controls-profile-userdata .qui-select {
-    width: 100%;
-}
-
-.quiqqer-frontendUsers-controls-profile-userdata .qui-select .drop-icon {
-    height: 36px;
-}
-
 .quiqqer-frontendUsers-userdata-email {
     display: grid;
     grid-template-columns: 1fr auto;

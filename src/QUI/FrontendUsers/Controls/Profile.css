@@ -1,4 +1,7 @@
 .quiqqer-frontendUsers-controls-profile {
+    --_qui-frontend-users-profile-controls__bg-color: var(--qui-frontend-users-profile-controls__bg-color, #f5f5f5);
+    --_qui-frontend-users-profile-controls__radius: var(--qui-frontend-users-profile-controls__radius, 0.5rem);
+
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: clamp(2rem, 10vw - 4rem, 4rem);
@@ -47,12 +50,12 @@
     text-decoration: none;
     font-weight: normal;
     padding: 0.25em 0.5em;
-    border-radius: 0.5em;
+    border-radius: var(--_qui-frontend-users-profile-controls__radius);
     outline-offset: -2px;
 }
 
 .quiqqer-fupc-category-items-item:where([data-active]) {
-    background-color: #f5f5f5;
+    background-color: var(--_qui-frontend-users-profile-controls__bg-color);
 }
 
 :where([data-open="1"]) .quiqqer-fupc-category-items-item {
@@ -122,6 +125,25 @@
 
 .quiqqer-frontendUsers-controls-profile-control :where(input:not([type="checkbox"], [type="radio"]), select, textarea) {
     width: 100%;
+}
+
+/* form basic styling: user data */
+.quiqqer-frontendUsers-controls-profile-control :where(.address-street--2-col) {
+    display: grid;
+    grid-template-columns: 5fr minmax(5rem, 1fr);
+    gap: 1rem;
+}
+
+.quiqqer-frontendUsers-controls-profile-control select[name="country"] {
+    display: none;
+}
+
+.quiqqer-frontendUsers-controls-profile-control .qui-select {
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-controls-profile-control :where(.qui-select .drop-icon) {
+    height: 36px;
 }
 
 /**************/

@@ -830,6 +830,10 @@
             <en><![CDATA[Gravatar]]></en>
         </locale>
 
+        <locale name="dialog.frontend-users.btn.cancel">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
+        </locale>
         <locale name="dialog.frontend-users.delete.address">
             <de><![CDATA[Möchten Sie die Adresse wirklichen löschen?]]></de>
             <en><![CDATA[Do you really want to delete the address?]]></en>
