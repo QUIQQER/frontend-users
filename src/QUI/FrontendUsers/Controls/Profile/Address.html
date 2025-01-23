@@ -4,6 +4,8 @@
     ></div>
 {else}
     <section class="quiqqer-frontendUsers-profile-section">
+        <h2>{locale group="quiqqer/frontend-users" var="profile.address.category.title"}</h2>
+
         {foreach $addressFields as $field => $options}
             <label>
                 <span class="quiqqer-frontendUsers-label">
