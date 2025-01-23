@@ -2,6 +2,9 @@
     --_qui-frontend-users-profile-controls__bg-color: var(--qui-frontend-users-profile-controls__bg-color, #f5f5f5);
     --_qui-frontend-users-profile-controls__radius: var(--qui-frontend-users-profile-controls__radius, 0.5rem);
     --_qui-frontend-users-profile-controls__content-maxWidth: var(--qui-frontend-users-profile-controls__content-maxWidth, 600px);
+    --_qui-frontend-users-profile-controls__sidebar-width: var(--qui-frontend-users-profile-controls__sidebar-width, 300px);
+    --_qui-frontend-users-profile-controls__sidebar-nav-item-outline--hover: var(--qui-frontend-users-profile-controls__sidebar-nav-item-outline--hover, 2px solid currentColor);
+    --_qui-frontend-users-profile-controls__sidebar-nav-item-bg-color--hover: var(--qui-frontend-users-profile-controls__sidebar-nav-item-bg-color--hover, #f5f5f5);
 
     display: flex;
     gap: clamp(2rem, 10vw - 4rem, 4rem);
@@ -9,7 +12,7 @@
 
 .quiqqer-frontendUsers-controls-profile__sidebar {
     min-width: 0;
-    width: 300px;
+    width: var(--_qui-frontend-users-profile-controls__sidebar-width);
     flex-shrink: 0;
 }
 
@@ -28,6 +31,15 @@
     .quiqqer-frontendUsers-controls-profile__content {
         width: 100%
     }
+}
+
+/* general */
+address {
+    font-style: normal;
+}
+
+address :where(.adr:not(:last-child)) {
+    margin-bottom: 0.5rem;
 }
 
 /*********************/
@@ -70,7 +82,7 @@
 }
 
 .quiqqer-fupc-category-items-item:where([data-active]) {
-    background-color: var(--_qui-frontend-users-profile-controls__bg-color);
+    background-color: var(--_qui-frontend-users-profile-controls__sidebar-nav-item-bg-color--hover);
 }
 
 :where([data-open="1"]) .quiqqer-fupc-category-items-item {
@@ -83,8 +95,9 @@
     flex-shrink: 0;
 }
 
-.quiqqer-fupc-category-items-item:hover {
-    outline: currentColor solid 2px;
+:where(.quiqqer-fupc-category-items-item):hover {
+    outline: var(--_qui-frontend-users-profile-controls__sidebar-nav-item-outline--hover);
+    color: inherit;
 }
 
 .quiqqer-fupc-category-items-item-text {
@@ -140,7 +153,10 @@
     display: block;
 }
 
-.quiqqer-frontendUsers-userdata-address-country {
+/* todo fix in qui, no float: left  */
+.quiqqer-frontendUsers-userdata-address-country,
+.quiqqer-frontendUsers-userdata-language,
+.quiqqer-frontendUsers-userdata-invoiceaddress {
     display: flow-root;
 }
 
@@ -204,6 +220,10 @@
 
     .quiqqer-frontendUsers-controls-profile-categories {
         display: none;
+    }
+
+    .quiqqer-frontendUsers-controls-profile-categoryContent {
+        max-width: 100%;
     }
 
     .quiqqer-frontendUsers-saveButton {

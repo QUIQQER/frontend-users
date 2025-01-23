@@ -174,6 +174,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     self.$removeUnusedNodes(Form);
 
                     new QUIConfirm({
+                        'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-add',
                         maxHeight: 800,
                         maxWidth: 700,
                         autoclose: false,
@@ -278,74 +279,82 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         $deleteClick: function(event) {
             event.stop();
 
-            const self = this;
-            let Target = event.event.target;
+            let Target = event.target;
 
-            if (!Target.hasAttribute('[data-name="address"]')) {
-                Target = Target.getParent('[data-name="address"]');
+            if (Target.nodeName !== 'BUTTON') {
+                Target = Target.getParent('button');
             }
 
-            Target.style.position = 'relative';
+            const addressId = Target.getParent('[data-name="address"]').querySelector('[name="address"]').value;
+            const self = this;
 
-            const Address = Target;
+            self.getDeleteTemplate(addressId).then(function(result) {
 
-            // open delete dialog
-            this.$openContainer(Target).then(function(Container) {
-                Container.addClass(
-                    'quiqqer-frontend-users-address-container-delete'
-                );
+                const Form = new Element('form', {
+                    'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
+                    html: result,
+                    dataName: 'address-container'
+                });
 
-                const Content = Container.getElement('.quiqqer-frontend-users-address-container-content');
+                QUI.parse(Form).then(function() {
+                    self.$removeUnusedNodes(Form);
 
-                new Element('div', {
-                    'class': 'quiqqer-frontend-users-address-container-delete-message',
-                    html: QUILocale.get(lg, 'dialog.frontend-users.delete.address')
-                }).inject(Content);
+                    new QUIConfirm({
+                        'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-delete',
+                        maxHeight: 400,
+                        maxWidth: 500,
+                        autoclose: false,
+                        backgroundClosable: false,
 
-                new Element('button', {
-                    'class': 'quiqqer-frontend-users-address-container-delete-button',
-                    html: QUILocale.get('quiqqer/system', 'delete'),
-                    events: {
-                        click: function(event) {
-                            let Target = event.target;
+                        title: QUILocale.get(lg, 'dialog.frontend-users.address.delete.title'),
+                        icon: 'fa fa-address-card-o',
 
-                            if (Target.nodeName !== 'BUTTON') {
-                                Target = Target.getParent('button');
+                        ok_button: {
+                            text: QUILocale.get(lg, 'dialog.frontend-users.address.delete.btn')
+                        },
+                        cancel_button: {
+                            text: QUILocale.get(lg, 'dialog.frontend-users.btn.cancel')
+                        },
+
+                        events: {
+                            onOpen: function(Popup) {
+                                const Content = Popup.getContent();
+                                Content.innerHTML = '';
+                                Form.inject(Content);
+
+                                const ConfirmBtn = Popup.getElm().querySelector('[name="submit"]');
+
+                                ConfirmBtn.classList.remove('btn-success');
+                                ConfirmBtn.classList.add('btn-danger');
+                            },
+                            onSubmit: function(Popup) {
+                                Popup.Loader.show();
+
+                                self.deleteAddress(addressId).then(function() {
+                                    Popup.close();
+                                    self.refresh();
+                                }).catch(() => {
+                                    Popup.Loader.hide();
+                                });
                             }
-
-                            Target.disabled = true;
-                            Target.setStyle('width', Target.getSize().x);
-                            Target.set('html', '<span class="fa fa-spinner fa-spin"></span>');
-
-                            self.Loader.show();
-
-                            self.deleteAddress(
-                                Target.getParent('[data-name="address"]').getElement(
-                                    '[name="address"]').value
-                            ).then(function() {
-                                return self.$closeContainer(Container);
-                            }).then(function() {
-                                Address.setStyles({
-                                    overflow: 'hidden',
-                                    height: Address.getSize().y
-                                });
-
-                                moofx(Address).animate({
-                                    height: 0,
-                                    opacity: 0
-                                }, {
-                                    duration: 250,
-                                    callback: function() {
-                                        self.refresh();
-                                    }
-                                });
-                            }).catch(function() {
-                                self.$closeContainer(Container);
-                                self.Loader.hide();
-                            });
                         }
-                    }
-                }).inject(Content);
+                    }).open();
+                });
+            });
+        },
+
+        /**
+         * Return the address create template
+         *
+         * @return {Promise}
+         */
+        getDeleteTemplate: function(addressId) {
+            return new Promise(function(resolve, reject) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_getDelete', resolve, {
+                    'package': 'quiqqer/frontend-users',
+                    onError: reject,
+                    addressId: addressId
+                });
             });
         },
 
@@ -395,16 +404,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     self.$removeUnusedNodes(Form);
 
                     new QUIConfirm({
+                        'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-edit',
                         maxHeight: 800,
                         maxWidth: 700,
                         autoclose: false,
                         backgroundClosable: false,
 
-                        title: QUILocale.get(lg, 'dialog.frontend-users.title'),
+                        title: QUILocale.get(lg, 'dialog.frontend-users.edit.title'),
                         icon: 'fa fa-address-card-o',
 
                         ok_button: {
-                            text: QUILocale.get(lg, 'dialog.frontend-users.create.address.btn')
+                            text: QUILocale.get(lg, 'dialog.frontend-users.edit.address.btn')
                         },
                         cancel_button: {
                             text: QUILocale.get(lg, 'dialog.frontend-users.btn.cancel')
@@ -556,10 +566,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         },
 
         $removeUnusedNodes: function(Node) {
-            if (Node.querySelector('h2')) {
-                Node.querySelector('h2').destroy();
-            }
-
             if (Node.querySelector('button')) {
                 Node.querySelector('button').destroy();
             }
