@@ -1,10 +1,10 @@
 .quiqqer-frontendUsers-controls-profile {
-    --_qui-frontend-users-profile-controls__bg-color: var(--qui-frontend-users-profile-controls__bg-color, #f5f5f5);
-    --_qui-frontend-users-profile-controls__radius: var(--qui-frontend-users-profile-controls__radius, 0.5rem);
-    --_qui-frontend-users-profile-controls__content-maxWidth: var(--qui-frontend-users-profile-controls__content-maxWidth, 600px);
-    --_qui-frontend-users-profile-controls__sidebar-width: var(--qui-frontend-users-profile-controls__sidebar-width, 300px);
-    --_qui-frontend-users-profile-controls__sidebar-nav-item-outline--hover: var(--qui-frontend-users-profile-controls__sidebar-nav-item-outline--hover, 2px solid currentColor);
-    --_qui-frontend-users-profile-controls__sidebar-nav-item-bg-color--hover: var(--qui-frontend-users-profile-controls__sidebar-nav-item-bg-color--hover, #f5f5f5);
+    --_qui-frontend-users-profile__bg-color: var(--qui-frontend-users-profile__bg-color, #f5f5f5);
+    --_qui-frontend-users-profile__radius: var(--qui-frontend-users-profile__radius, 0.5rem);
+    --_qui-frontend-users-profile__content-maxWidth: var(--qui-frontend-users-profile__content-maxWidth, 600px);
+    --_qui-frontend-users-profile__sidebar-width: var(--qui-frontend-users-profile__sidebar-width, 300px);
+    --_qui-frontend-users-profile__sidebar-nav-item-outline--hover: var(--qui-frontend-users-profile__sidebar-nav-item-outline--hover, 2px solid currentColor);
+    --_qui-frontend-users-profile__sidebar-nav-item-bg-color--hover: var(--qui-frontend-users-profile__sidebar-nav-item-bg-color--hover, #f5f5f5);
 
     display: flex;
     gap: clamp(2rem, 10vw - 4rem, 4rem);
@@ -12,7 +12,7 @@
 
 .quiqqer-frontendUsers-controls-profile__sidebar {
     min-width: 0;
-    width: var(--_qui-frontend-users-profile-controls__sidebar-width);
+    width: var(--_qui-frontend-users-profile__sidebar-width);
     flex-shrink: 0;
 }
 
@@ -31,6 +31,12 @@
     .quiqqer-frontendUsers-controls-profile__content {
         width: 100%
     }
+}
+
+/* popup */
+.qui-window-popup--frontendUsers-profile {
+    --_qui-frontend-users-profile__popup__bg-color: var(--qui-frontend-users-profile__popup__bg-color, #f5f5f5);
+    --_qui-frontend-users-profile__popup__radius: var(--qui-frontend-users-profile__popup__radius, 0.5rem);
 }
 
 /* general */
@@ -75,14 +81,14 @@ address :where(.adr:not(:last-child)) {
     text-decoration: none;
     font-weight: normal;
     padding: 0.25em 0.5em;
-    border-radius: var(--_qui-frontend-users-profile-controls__radius);
+    border-radius: var(--_qui-frontend-users-profile__radius);
     outline-offset: -2px;
     color: inherit;
     align-items: baseline;
 }
 
 .quiqqer-fupc-category-items-item:where([data-active]) {
-    background-color: var(--_qui-frontend-users-profile-controls__sidebar-nav-item-bg-color--hover);
+    background-color: var(--_qui-frontend-users-profile__sidebar-nav-item-bg-color--hover);
 }
 
 :where([data-open="1"]) .quiqqer-fupc-category-items-item {
@@ -96,7 +102,7 @@ address :where(.adr:not(:last-child)) {
 }
 
 :where(.quiqqer-fupc-category-items-item):hover {
-    outline: var(--_qui-frontend-users-profile-controls__sidebar-nav-item-outline--hover);
+    outline: var(--_qui-frontend-users-profile__sidebar-nav-item-outline--hover);
     color: inherit;
 }
 
@@ -133,7 +139,7 @@ address :where(.adr:not(:last-child)) {
 
 .quiqqer-frontendUsers-controls-profile-categoryContent {
     position: relative;
-    max-width: var(--_qui-frontend-users-profile-controls__content-maxWidth);
+    max-width: var(--_qui-frontend-users-profile__content-maxWidth);
     margin-inline: auto;
 }
 
