@@ -27,6 +27,10 @@ class ChangePassword extends AbstractProfileControl
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-changepassword');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
 
+        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/ChangePassword.css');
+        }
+
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/ChangePassword');
     }
 
@@ -41,9 +45,7 @@ class ChangePassword extends AbstractProfileControl
             'User' => QUI::getUserBySession()
         ]);
 
-        $this->addCSSFile(dirname(__FILE__) . '/ChangePassword.css');
-
-        return $Engine->fetch(dirname(__FILE__) . '/ChangePassword.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**
