@@ -126,7 +126,7 @@ class Address extends AbstractProfileControl
             'addressFields' => $addressFields
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Address.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

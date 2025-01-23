@@ -1,19 +1,14 @@
 .quiqqer-frontendUsers-manager,
 .quiqqer-frontend-users-address {
-    float: left;
     position: relative;
     width: 100%;
 }
 
 .quiqqer-frontend-users-address-description {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    float: left;
-    padding-bottom: 10px;
-    width: 100%;
+    margin-bottom: 1.5rem;
 }
 
 .quiqqer-frontend-users-address-description-text {
-    float: left;
     width: 100%;
 }
 
@@ -23,7 +18,7 @@
 
 @media screen and (min-width: 768px) {
     .quiqqer-frontend-users-address-description-button {
-        float: right;
+        margin-left: auto;
     }
 }
 
@@ -33,97 +28,26 @@
     }
 }
 
-/** container
- ================================================== */
-
-.quiqqer-frontend-users-address-container {
-    background: #fff;
-    border: 1px solid #dedede;
-    height: 100%;
-    left: -50px;
-    outline: none;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
-.quiqqer-frontend-users-address-container-close {
-    cursor: pointer;
-    font-size: 20px;
-    line-height: 40px;
-    position: absolute;
-    right: 0;
-    text-align: center;
-    top: 0;
-    width: 40px;
-}
-
-.quiqqer-frontend-users-address-container-header {
-    float: left;
-    padding: 20px 40px 0 20px;
-    width: 100%;
-}
-
-.quiqqer-frontend-users-address-container-header header {
-    font-size: 22px;
-    padding: 0;
-}
-
-.quiqqer-frontend-users-address-container-header header h1 {
-    font-size: 22px;
-}
-
-.quiqqer-frontend-users-address-container-content {
-    float: left;
-    height: calc(100% - 40px);
-    margin-top: 40px;
-    overflow: auto;
-    width: 100%;
-}
-
 /** Address listing
  ================================================== */
-address {
-    font-style: normal;
-}
-
-address .adr:not(:last-child) {
-    margin-bottom: 0.75rem;
-}
-
-address .fa {
-    width: 1.5rem;
-}
-
 .quiqqer-frontend-users-address-list {
-    display: flex;
-    flex-wrap: wrap;
-    float: left;
-    padding-bottom: 20px;
-    width: 100%;
+    display: grid;
+    gap: 1rem;
 }
 
 .quiqqer-frontend-users-address-list-entry {
+    --_padding: 0.5rem 1rem;
+    --_radius: var(--radius, var(--_qui-frontend-users-profile__radius));
+    --_border: 1px solid #ddd;
+    --_bg: var(--bg, var(--_qui-frontend-users-profile__bg-color));
+
+    min-width: 0;
+    border-radius: var(--_radius);
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
     overflow: hidden;
-    width: calc(50% - 5px);
-}
-
-@media screen and (hover: hover) {
-    .quiqqer-frontend-users-address-list-entry:hover {
-        background: rgba(0, 0, 0, 0.1);
-    }
-}
-
-.quiqqer-frontend-users-address-list-entry:nth-child(odd) {
-    margin-right: 5px;
-}
-
-.quiqqer-frontend-users-address-list-entry:nth-child(even) {
-    margin-left: 5px;
+    font-size: 0.875rem;
+    border: var(--_border);
 }
 
 .quiqqer-frontend-users-address-list-entry [type="radio"] {
@@ -131,152 +55,67 @@ address .fa {
     margin: 7px;
 }
 
-.quiqqer-frontend-users-address-list-entry header {
-    background: rgba(0, 0, 0, 0.1);
-    padding: 10px;
-    width: 100%;
+.quiqqer-frontend-users-address-list-entry :where(header) {
+    padding: var(--_padding);
+    border-bottom: var(--_border);
+    font-weight: bold;
+    background: var(--_bg);
 }
 
-.quiqqer-frontend-users-address-list-entry header label {
+.quiqqer-frontend-users-address-list-entry :where(header label) {
     margin: 0;
     padding: 0;
 }
 
 .quiqqer-frontend-users-address-list-entry address {
     flex-grow: 1;
-    margin-bottom: 10px;
-    padding: 10px;
+    padding: var(--_padding);
+    font-style: normal;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.quiqqer-frontend-users-address-list-entry address .adr:not(:last-child) {
+    margin-bottom: 0.5em;
+}
+
+.quiqqer-frontend-users-address-list-entry address .fa {
+    width: 1.5rem;
 }
 
 .quiqqer-frontend-users-address-list-entry-buttons {
-    padding: 0 10px 10px 0;
     text-align: right;
+    border-top: var(--_border);
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 }
 
-/** address edit && create
- ================================================== */
-
-.quiqqer-frontend-users-address-create,
-.quiqqer-frontend-users-address-edit {
-    max-width: 600px;
-    width: 100%;
+/*****************/
+/* Address popup */
+/*****************/
+.qui-window-popup--frontendUsers-profile .quiqqer-frontend-users-address-create {
+    max-width: 500px;
 }
-
-.quiqqer-frontend-users-address-create header,
-.quiqqer-frontend-users-address-edit header {
-    margin-bottom: 20px;
-    padding: 0;
-}
-
-.quiqqer-frontend-users-address-create label,
-.quiqqer-frontend-users-address-edit label {
-    clear: both;
-    display: inline-block;
-    width: 100%;
-}
-
-@media screen and (min-width: 768px) {
-    .quiqqer-frontend-users-address-create label span,
-    .quiqqer-frontend-users-address-edit label span {
-        float: left;
-        width: 50%
-    }
-
-    .quiqqer-frontend-users-address-create input,
-    .quiqqer-frontend-users-address-create select,
-    .quiqqer-frontend-users-address-create .qui-select,
-    .quiqqer-frontend-users-address-edit input,
-    .quiqqer-frontend-users-address-edit select,
-    .quiqqer-frontend-users-address-edit .qui-select {
-        float: left;
-        width: 50%
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .quiqqer-frontend-users-address-edit select {
-        width: 100%;
-    }
-
-    .quiqqer-frontend-users-address-create select,
-    .quiqqer-frontend-users-address-create .qui-select,
-    .quiqqer-frontend-users-address-edit .qui-select {
-        float: none;
-        width: 100%;
-    }
-}
-
-.quiqqer-frontend-users-address-create [name="street"],
-.quiqqer-frontend-users-address-edit [name="street"] {
-    margin-bottom: 0.5rem;
-}
-
-@media screen and (min-width: 768px) {
-    .quiqqer-frontend-users-address-create [name="street"],
-    .quiqqer-frontend-users-address-edit [name="street"] {
-        width: 30%;
-    }
-
-    .quiqqer-frontend-users-address-create [name="street_number"],
-    .quiqqer-frontend-users-address-edit [name="street_number"] {
-        margin-left: 10px;
-        width: calc(20% - 10px);
-    }
-
-    .quiqqer-frontend-users-address-create [name="street"],
-    .quiqqer-frontend-users-address-edit [name="street"],
-    .quiqqer-frontend-users-address-create [name="street_number"],
-    .quiqqer-frontend-users-address-edit [name="street_number"] {
-        float: left;
-    }
-
-    .quiqqer-frontend-users-address-edit-create,
-    .quiqqer-frontend-users-address-edit-button {
-        margin-left: 50%;
-        width: 50%;
-    }
-}
-
-@media screen and (max-width: 767px) {
-    .quiqqer-frontend-users-address-edit-create,
-    .quiqqer-frontend-users-address-edit-button {
-        width: 100%;
-    }
-}
-
-.quiqqer-frontend-users-address-container-edit,
-.quiqqer-frontend-users-address-container-create {
-    float: left;
-    padding: 0 20px 20px;
-    width: 100%;
-}
-
-/** Rechnungsadresse löschen
- ================================================== */
-
-.quiqqer-frontend-users-address-delete {
+/************************/
+/* Address delete popup */
+/************************/
+.qui-window-popup--frontendUsers-profile-address-delete .quiqqer-frontend-users-address-delete {
     margin: 0 auto;
     max-width: 600px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.quiqqer-frontend-users-address-delete-container-deleteBtn {
-    padding: 10px !important;
-    font-size: 14px !important;
+.quiqqer-frontend-users-address-delete-container :where(address) {
+    margin-top: 2rem;
+    background: var(--_qui-frontend-users-profile__popup__bg-color);
+    border-radius: var(--_qui-frontend-users-profile__popup__radius);
+    padding: 1rem;
+    font-style: normal;
 }
 
-.quiqqer-frontend-users-address-delete-container address {
-    margin: 20px auto;
-}
-
-/** Rechnungsadresse löschen - js
- ================================================== */
-
-.quiqqer-frontend-users-address-container-delete {
-    text-align: center;
-}
-
-.quiqqer-frontend-users-address-container-delete-message {
-    margin-bottom: 20px;
-    padding: 0 10px;
-}

@@ -59,7 +59,7 @@
         </span>
 
         {if $Address->getAttribute('street_no') === ''}
-            <div class="address-street--2-col">
+            <div class="quiqqer-frontendUsers-userdata-address-street-2-col">
                 <input type="text" name="street" value="" autocomplete="street-address"/>
                 <input type="text" name="street_number" value=""/>
             </div>
@@ -123,7 +123,7 @@
 
 {template_event name="quiqqer::frontend-users::profile::user-data-middle" User=$User Address=$Address}
 
-<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userdata-address-additional">
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userdata-additional">
     <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.additional.title"}</h2>
 
     <label>
@@ -157,31 +157,31 @@
     </label>
 
     {if $username}
-    <label>
+        <label>
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.username"}
         </span>
-        <input name="username" value="{$User->getUsername()}"/>
-    </label>
+            <input name="username" value="{$User->getUsername()}"/>
+        </label>
     {/if}
 
     {if $showLanguageChangeInProfile}
-    <label>
+        <label>
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.language"}
         </span>
-        <div class="quiqqer-frontendUsers-userdata-language">
-            <input data-qui="controls/lang/Select" name="language" value="{$User->getLang()}"/>
-        </div>
-    </label>
+            <div class="quiqqer-frontendUsers-userdata-language">
+                <input data-qui="controls/lang/Select" name="language" value="{$User->getLang()}"/>
+            </div>
+        </label>
     {/if}
 
-    <label>
-        <span class="quiqqer-frontendUsers-userdata-label">
+    <label class="qui-form-label">
+        <span class="qui-form-label__text">
             {locale group="quiqqer/frontend-users" var="profile.userdata.email"}
         </span>
         <div class="quiqqer-frontendUsers-userdata-email">
-            <input name="email" autocomplete="email"
+            <input name="email" autocomplete="email" class="qui-form-label__input"
                    value="{$User->getAttribute('email')|escape:'html'}"
                    disabled
             />
@@ -193,7 +193,7 @@
         </div>
     </label>
 
-    <label class="quiqqer-frontendUsers-userdata-email-new" data-name="email-new" data-hidden>
+    <label class="qui-frontendUsers-userdata-email-new" data-name="email-new" data-hidden>
         <span class="quiqqer-frontendUsers-userdata-label">
             {locale group="quiqqer/frontend-users" var="profile.userdata.email_new"}
         </span>
@@ -206,7 +206,7 @@
 
 {template_event name="quiqqer::frontend-users::profile::user-data-end" User=$User Address=$Address}
 
-<button type="submit" class="btn btn-primary quiqqer-frontendUsers-saveButton">
+<button type="submit" class="quiqqer-frontendUsers-saveButton">
     {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
 </button>
 
