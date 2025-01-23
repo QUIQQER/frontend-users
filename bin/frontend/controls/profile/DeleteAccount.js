@@ -11,15 +11,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
     'Locale',
     'Ajax'
 
-], function (QUIControl, QUIConfirm, QUILocale, QUIAjax) {
-    "use strict";
+], function(QUIControl, QUIConfirm, QUILocale, QUIAjax) {
+    'use strict';
 
     var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount',
 
         Binds: [
             '$onImport',
@@ -27,11 +27,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         ],
 
         options: {
-            username     : '',
+            username: '',
             deletestarted: 0
         },
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.parent(options);
 
             this.addEvents({
@@ -42,24 +42,24 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         /**
          * event: on import
          */
-        $onImport: function () {
+        $onImport: function() {
             var Elm = this.getElm();
 
-            var SubmitBtn = Elm.getElement('button.quiqqer-frontendUsers-saveButton'),
+            var SubmitBtn = Elm.querySelector('[type="submit"]'),
                 confirmed = false;
 
             if (!SubmitBtn) {
                 return;
             }
 
-            var self     = this;
+            var self = this;
             var username = this.getAttribute('username');
 
             if (!username) {
                 username = '';
             }
 
-            SubmitBtn.addEvent('click', function (event) {
+            SubmitBtn.addEvent('click', function(event) {
                 if (confirmed || self.getAttribute('deletestarted')) {
                     return;
                 }
@@ -68,50 +68,51 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
 
                 new QUIConfirm({
                     maxHeight: 350,
+                    maxWidth: 600,
                     autoclose: true,
 
                     information: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information', {
                         username: username
                     }),
-                    title      : QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.title'),
-                    texticon   : 'fa fa-trash',
-                    text       : QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.text'),
-                    icon       : 'fa fa-trash',
+                    title: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.title'),
+                    texticon: 'fa fa-trash',
+                    text: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.text'),
+                    icon: 'fa fa-trash',
 
                     cancel_button: {
-                        text     : QUILocale.get('quiqqer/system', 'cancel'),
+                        text: QUILocale.get('quiqqer/system', 'cancel'),
                         textimage: 'fa fa-remove'
                     },
 
                     ok_button: {
-                        text     : QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.btn'),
+                        text: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.btn'),
                         textimage: 'fa fa-trash'
                     },
 
                     events: {
-                        onOpen  : function (Popup) {
+                        onOpen: function(Popup) {
                             var SubmitBtn = Popup.getButton('submit');
 
                             SubmitBtn.disable();
 
                             Popup.Loader.show();
 
-                            self.$checkDeleteAccount().then(function () {
+                            self.$checkDeleteAccount().then(function() {
                                 SubmitBtn.enable();
                                 Popup.Loader.hide();
-                            }, function (Error) {
+                            }, function(Error) {
                                 Popup.setAttribute(
                                     'information',
                                     QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information_error', {
                                         username: username,
-                                        error   : Error.getMessage()
+                                        error: Error.getMessage()
                                     })
                                 );
 
                                 Popup.Loader.hide();
                             });
                         },
-                        onSubmit: function (Popup) {
+                        onSubmit: function(Popup) {
                             confirmed = true;
                             Popup.close();
                             SubmitBtn.click();
@@ -126,11 +127,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
          *
          * @return {Promise}
          */
-        $checkDeleteAccount: function () {
-            return new Promise(function (resolve, reject) {
+        $checkDeleteAccount: function() {
+            return new Promise(function(resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_checkDeleteAccount', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject,
+                    onError: reject,
                     showError: false
                 });
             });

@@ -43,7 +43,10 @@ class UserData extends AbstractProfileControl
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-userdata');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
+
+        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
+        }
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData');
     }
@@ -101,7 +104,7 @@ class UserData extends AbstractProfileControl
             'showLanguageChangeInProfile' => $Config->getValue('userProfile', 'showLanguageChangeInProfile')
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/UserData.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

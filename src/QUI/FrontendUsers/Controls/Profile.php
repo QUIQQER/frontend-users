@@ -35,8 +35,10 @@ class Profile extends Control
 
         parent::__construct($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
-        $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
+//        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
+            $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
+//        }
 
         $this->setAttribute(
             'data-qui',
@@ -171,7 +173,7 @@ class Profile extends Control
             'this' => $this
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

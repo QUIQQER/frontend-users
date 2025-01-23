@@ -28,8 +28,12 @@ class UserAvatar extends AbstractProfileControl
 
         $this->setAttribute('data-qui', 'package/quiqqer/frontend-users/bin/frontend/controls/profile/UserAvatar');
 
+        $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
         $this->addCSSClass('quiqqer-frontendUsers-UserAvatar');
-        $this->addCSSFile(dirname(__FILE__) . '/UserAvatar.css');
+
+        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/UserAvatar.css');
+        }
     }
 
     /**
@@ -103,7 +107,7 @@ class UserAvatar extends AbstractProfileControl
             )
         );
 
-        return $Engine->fetch(dirname(__FILE__) . '/UserAvatar.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

@@ -830,11 +830,24 @@
             <en><![CDATA[Gravatar]]></en>
         </locale>
 
-        <locale name="dialog.frontend-users.delete.address">
+        <locale name="dialog.frontend-users.btn.cancel">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
+        </locale>
+
+        <locale name="dialog.frontend-users.address.delete.title">
+            <de><![CDATA[Adresse löschen]]></de>
+            <en><![CDATA[Delete address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.address.delete.message">
             <de><![CDATA[Möchten Sie die Adresse wirklichen löschen?]]></de>
             <en><![CDATA[Do you really want to delete the address?]]></en>
         </locale>
-        <locale name="dialog.frontend-users.title">
+        <locale name="dialog.frontend-users.address.delete.btn">
+            <de><![CDATA[Adresse löschen]]></de>
+            <en><![CDATA[Delete address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.edit.title">
             <de><![CDATA[Neue Adresse anlegen]]></de>
             <en><![CDATA[Create new address]]></en>
         </locale>

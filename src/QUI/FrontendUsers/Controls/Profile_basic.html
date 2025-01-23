@@ -9,35 +9,35 @@
         {if $this->getAttribute('menu')}
             <div class="quiqqer-frontendUsers-controls-profile-categories">
                 {foreach $categories as $category}
-                <div class="quiqqer-fupc-category"
-                     data-category="{$category.name}"
-                     data-name="nav-category"
-                     data-open="1"
-                >
-                    <div class="quiqqer-fupc-category-header" data-name="header">
-                        <span class="quiqqer-fupc-category-header__text">{$category.title}</span>
-                        <span class="fa-solid fa-angle-right quiqqer-fupc-category-header__icon" data-name="opener"></span>
-                    </div>
-                    <div class="quiqqer-fu-profile-categories-category-items">
-                        {foreach $category.items as $setting}
-                            {assign var=active value=false}
-                            {if $currentCategory == $category.name && $currentSetting == $setting.name}
-                                {assign var=active value=true}
-                            {/if}
-                            <a href="{$Site->getUrlRewritten()}/{$category.name}/{$setting.name}"
-                                class="quiqqer-fupc-category-items-item"
-                                {if $active}data-active{/if}
-                                data-name="nav-category-item"
-                                data-setting="{$setting.name}"
-                            >
-                                {if $setting.icon}
-                                <span class="fa-fw quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
+                    <div class="quiqqer-fupc-category"
+                         data-category="{$category.name}"
+                         data-name="nav-category"
+                         data-open="1"
+                    >
+                        <div class="quiqqer-fupc-category-header" data-name="header">
+                            <span>{$category.title}</span>
+                            <span class="fa-solid fa-angle-right quiqqer-fupc-category-header-opener" data-name="opener"></span>
+                        </div>
+                        <div class="quiqqer-fu-profile-categories-category-items">
+                            {foreach $category.items as $setting}
+                                {assign var=active value=false}
+                                {if $currentCategory == $category.name && $currentSetting == $setting.name}
+                                    {assign var=active value=true}
                                 {/if}
-                                <span>{$setting.title}</span>
-                            </a>
-                        {/foreach}
+                                <a href="{$Site->getUrlRewritten()}/{$category.name}/{$setting.name}"
+                                    class="quiqqer-fupc-category-items-item"
+                                    {if $active}data-active{/if}
+                                    data-name="nav-category-item"
+                                    data-setting="{$setting.name}"
+                                >
+                                    {if $setting.icon}
+                                    <span class="fa-fw quiqqer-fupc-category-items-item-icon {$setting.icon}"></span>
+                                    {/if}
+                                    <span>{$setting.title}</span>
+                                </a>
+                            {/foreach}
+                        </div>
                     </div>
-                </div>
                 {/foreach}
             </div>
         {/if}

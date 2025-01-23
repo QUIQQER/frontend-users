@@ -108,10 +108,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 this.Loader.show();
             }
 
-            var Elm = this.getElm();
+            const Elm = this.getElm(),
+                HeaderElm = Elm.querySelector('[data-name="header"]');
 
-            if (this.getAttribute('header') === false) {
-                Elm.getElement('h2').destroy();
+            if (this.getAttribute('header') === false && HeaderElm) {
+                HeaderElm.destroy();
             }
 
             this.$parseQuiControls();
@@ -128,22 +129,24 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             }
 
             QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getControl', function(result) {
-                var Ghost = new Element('div', {
+                const Ghost = new Element('div', {
                     html: result
                 });
 
-                if (self.getAttribute('header') === false) {
-                    Ghost.getElement('h2').destroy();
+                const HeaderElm = Ghost.querySelector('[data-name="header"]');
+
+                if (self.getAttribute('header') === false && HeaderElm) {
+                    HeaderElm.destroy();
                 }
 
                 self.getElm().set(
                     'html',
-                    Ghost.getElement('.quiqqer-fu-login').get('html')
+                    Ghost.querySelector('.quiqqer-fu-login').get('html')
                 );
 
                 self.Loader.inject(self.$Elm);
 
-                Ghost.getElements('style').inject(self.getElm());
+                Ghost.querySelector('style').inject(self.getElm());
 
                 self.$parseQuiControls();
             }, {
@@ -161,7 +164,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             var self = this;
 
             QUI.parse(this.getElm()).then(function() {
-                var Login = self.getElm().getElement('.quiqqer-fu-login-container');
+                var Login = self.getElm().querySelector('[data-name="login-container"]');
 
                 // already logged in
                 if (!Login) {
@@ -174,6 +177,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 Login.setStyle('opacity', 0);
                 Login.setStyle('display', null);
+                Login.setStyle('positino', 'relative');
 
                 self.getElm().getElements('form[name="quiqqer-fu-login-email"]').addEvent('submit', function(event) {
                     event.stop();
@@ -185,15 +189,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 var emailAddress = self.getAttribute('emailAddress');
 
                 if (emailAddress) {
-                    self.getElm().getElement('form[name="quiqqer-fu-login-email"]').getElement('input[name="username"]').value = emailAddress;
+                    self.getElm().querySelector('form[name="quiqqer-fu-login-email"]').querySelector(
+                        'input[name="username"]').value = emailAddress;
 
-                    self.getElm().getElement('form[name="quiqqer-fu-login-email"]').getElement('input[name="password"]').focus();
+                    self.getElm().querySelector('form[name="quiqqer-fu-login-email"]').querySelector(
+                        'input[name="password"]').focus();
                 }
 
-                self.getElm().getElements('.quiqqer-fu-login-social-entry').addEvent('click', self.$auth);
+                self.getElm().getElements('[data-name="social-login-form"]').addEvent('click', self.$auth);
 
                 self.getElm().getElements(
-                    '.quiqqer-fu-login-forget-password-link a'
+                    '[data-name="forgot-password-link"] a'
                 ).addEvent('click', function(event) {
                     event.stop();
                     self.openForgottenPassword();
@@ -213,9 +219,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     self.sendForgottenPassword();
                 });
 
-
                 // submit events
-                var container = self.getElm().getElements('.quiqqer-fu-login-social-entry-control');
+                var container = self.getElm().getElements('[data-name="social-login-controlContainer"]');
                 var i, len, Control, ControlDom;
 
                 for (i = 0, len = container.length; i < len; i++) {
@@ -225,7 +230,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     //Control.addEvent('');
                 }
 
-                self.getElm().getElements('form.quiqqer-fu-login-social-entry').addEvents({
+                self.getElm().getElements('[data-name="social-login-form"]').addEvents({
                     submit: self.$authBySocial
                 });
 
@@ -258,7 +263,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 }
 
                 if (submitauth) {
-                    var Form = self.getElm().getElement('form[data-authenticator-hash="' +
+                    var Form = self.getElm().querySelector('form[data-authenticator-hash="' +
                         self.getAttribute('submitauth') + '"]');
 
                     if (Form) {
@@ -273,7 +278,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          */
         authByEmail: function() {
             var self = this,
-                Form = this.getElm().getElement('form[name="quiqqer-fu-login-email"]');
+                Form = this.getElm().querySelector('form[name="quiqqer-fu-login-email"]');
 
             if (this.getAttribute('showLoader')) {
                 this.Loader.show();
@@ -402,8 +407,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param Form
          */
         $showSocialLoader: function(Form) {
-            var Icon = Form.getElement('.quiqqer-fu-login-social-entry-icon');
-            var Loader = Form.getElement('.quiqqer-fu-login-social-entry-loader');
+            var Icon = Form.querySelector('[data-name="social-login-entry-icon"]');
+            var Loader = Form.querySelector('[data-name="social-login-entry-loader"]');
 
             Loader.setStyle('opacity', 0);
             Loader.setStyle('display', 'inline-block');
@@ -430,8 +435,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param Form
          */
         $hideSocialLoader: function(Form) {
-            var Icon = Form.getElement('.quiqqer-fu-login-social-entry-icon');
-            var Loader = Form.getElement('.quiqqer-fu-login-social-entry-loader');
+            var Icon = Form.querySelector('[data-name="social-login-entry-icon"]');
+            var Loader = Form.querySelector('[data-name="social-login-entry-loader"]');
 
             Icon.setStyle('opacity', 0);
             Icon.setStyle('display', 'inline-block');
@@ -462,11 +467,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             var Target = event.target;
 
-            if (!Target.hasClass('quiqqer-fu-login-social-entry')) {
-                Target = Target.getParent('.quiqqer-fu-login-social-entry');
+            if (Target.getAttribute('data-name') !== 'social-login-form') {
+                Target = Target.getAttribute('[data-name="social-login-form"]');
             }
 
-            var Container = Target.getElement('.quiqqer-fu-login-social-entry-control');
+            var Container = Target.getElement('[data-name="social-login-controlContainer"]');
             var ControlDom = Container.getFirst();
             var Control = QUI.Controls.getById(ControlDom.get('data-quiid'));
 
@@ -512,18 +517,26 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * opens the password forgotten sheet
          */
         openForgottenPassword: function() {
-
-            var Reset = this.getElm().getElement('.quiqqer-fu-login-forget-password-reset');
+            var Reset = this.getElm().querySelector('[data-name="password-reset"]');
 
             if (!Reset) {
                 return;
             }
 
-            const Login = this.getElm().getElement('.quiqqer-fu-login-container');
+            // set these styles to make the animation work correctly when using _basic files
+            Reset.style.position = 'absolute';
+            Reset.style.left = 0;
+            Reset.style.top = 0;
+            Reset.style.width = '100%';
+            Reset.style.zIndex = 1;
+            Reset.style.opacity = 0;
+
+            const Login = this.getElm().querySelector('[data-name="login-container"]');
             Login.style.height = Login.offsetHeight + 'px';
 
-            const LoginInner = this.getElm().getElement('.quiqqer-fu-login-container__inner');
+            const LoginInner = this.getElm().querySelector('[data-name="login-container-inner"]');
 
+            // set these styles to make the animation work correctly when using _basic files
             Reset.setStyle('opacity', 0);
             Reset.setStyle('left', -50);
             Reset.setStyle('display', 'block');
@@ -556,9 +569,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param {Object} error
          */
         $onUserLoginError: function(Control, error) {
-            var ActivationInfoBox = this.$Elm.getElement(
-                '.quiqqer-fu-login-activation-info'
-            );
+            var ActivationInfoBox = this.$Elm.querySelector('[data-name="activation-info"]');
 
             ActivationInfoBox.set('html', '');
 
@@ -592,14 +603,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     var email = this.getAttribute('emailAddress');
 
                     if (!email) {
-                        var Form = this.getElm().getElement('form[name="quiqqer-fu-login-email"]');
+                        var Form = this.getElm().querySelector('form[name="quiqqer-fu-login-email"]');
 
                         if (!Form) {
                             showResendError();
                             return;
                         }
 
-                        email = Form.getElement('input[name="username"]').value.trim();
+                        email = Form.querySelector('input[name="username"]').value.trim();
                     }
 
                     new ResendActivationLinkBtn({
@@ -626,16 +637,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * close the password reset
          */
         closeForgottenPassword: function() {
-            var Reset = this.getElm().getElement('.quiqqer-fu-login-forget-password-reset');
+            var Reset = this.getElm().querySelector('[data-name="password-reset"]');
 
             if (!Reset) {
                 return;
             }
 
-            const Login = this.getElm().getElement('.quiqqer-fu-login-container');
+            const Login = this.getElm().querySelector('[data-name="login-container"]');
             Login.style.height = Login.offsetHeight + 'px';
 
-            const LoginInner = this.getElm().getElement('.quiqqer-fu-login-container__inner');
+            const LoginInner = this.getElm().querySelector('[data-name="login-container-inner"]');
 
             if (LoginInner) {
                 moofx(LoginInner).animate({
@@ -669,9 +680,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         sendForgottenPassword: function() {
             var self = this,
                 Elm = this.getElm(),
-                SubmitBtn = Elm.getElement('.quiqqer-fu-login-forget-password-reset [type="submit"]'),
-                EmailInput = Elm.getElement('.quiqqer-fu-login-forget-password-reset [name="email"]'),
-                Section = Elm.getElement('.quiqqer-fu-login-forget-password-reset section');
+                PasswordReset = Elm.querySelector('[data-name="password-reset"]'),
+                SubmitBtn = PasswordReset.querySelector('[type="submit"]'),
+                EmailInput = PasswordReset.querySelector('[name="email"]'),
+                Section = PasswordReset.querySelector('[data-name="password-reset-inner"]');
 
             if (EmailInput.value === '') {
                 return Promise.resolve();

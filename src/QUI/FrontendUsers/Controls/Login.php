@@ -39,7 +39,10 @@ class Login extends QUI\Control
 
         $this->setAttributes($attributes);
 
-        $this->addCSSFile(dirname(__FILE__) . '/Login.css');
+        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/Login.css');
+        }
+
         $this->addCSSClass('quiqqer-fu-login');
 
         $this->setJavaScriptControl(
@@ -120,7 +123,7 @@ class Login extends QUI\Control
             'showPasswordReset' => $showPasswordReset
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Login.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

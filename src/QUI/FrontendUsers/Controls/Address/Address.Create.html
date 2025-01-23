@@ -1,7 +1,5 @@
 <section class="quiqqer-frontend-users-address-create">
-    <header>
-        <h1>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.title"}</h1>
-    </header>
+    <h2>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.title"}</h2>
 
     {template_event name="quiqqer::frontend-users::user-address-create-begin" User=$User}
 
@@ -55,12 +53,14 @@
             {locale group="quiqqer/frontend-users" var="street_no"}
             {if $settings.street_no.required}*{/if}
         </span>
-        <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}
-               placeholder="{locale group='quiqqer/frontend-users' var='street'}"
-        />
-        <input type="text" name="street_number" value=""
-               placeholder="{locale group='quiqqer/frontend-users' var='house_no'}"
-        />
+        <div class="address-street--2-col">
+            <input type="text" name="street" value="" autocomplete="shipping street-address" {if $settings.street_no.required}required{/if}
+                   placeholder="{locale group='quiqqer/frontend-users' var='street'}"
+            />
+            <input type="text" name="street_number" value=""
+                   placeholder="{locale group='quiqqer/frontend-users' var='house_no'}"
+            />
+        </div>
     </label>
     {/if}
 
@@ -95,7 +95,7 @@
     {/if}
 
     {if $settings.country.show}
-    <label class="quiqqer-frontendUsers-userdata-create-address-country">
+    <label class="quiqqer-frontendUsers-userdata-address-country">
         <span>
             {locale group="quiqqer/frontend-users" var="country"}
             {if $settings.country.required}*{/if}
@@ -142,7 +142,7 @@
 
     {template_event name="quiqqer::frontend-users::user-address-create-end" User=$User}
 
-    <button type="submit" name="createSave" value="1" class="quiqqer-frontend-users-address-edit-button">
+    <button type="submit" name="createSave" value="1" class="btn btn-primary quiqqer-frontend-users-address-edit-button">
         {locale group="quiqqer/frontend-users" var="dialog.frontend-users.create.address.btn"}
     </button>
 

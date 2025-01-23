@@ -1,7 +1,5 @@
 <section class="quiqqer-frontend-users-address-edit">
-    <header>
-        <h1>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.title"}</h1>
-    </header>
+    <h2>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.edit.title"}</h2>
 
     {template_event name="quiqqer::frontend-users::user-address-edit-begin" User=$User Address=$Address}
 
@@ -104,7 +102,7 @@
     {/if}
 
     {if $settings.country.show}
-    <label>
+    <label class="quiqqer-frontendUsers-userdata-address-country">
         <span>
             {locale group="quiqqer/system" var="country"}
             {if $settings.country.required}*{/if}

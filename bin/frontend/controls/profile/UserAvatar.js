@@ -62,7 +62,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserAvatar'
                     );
 
                     if (Node) {
-                        Node.getElement('.quiqqer-fupc-category-items-item--active').click();
+                        Node.getElement('[data-active="1"]').click();
                     }
                 });
 

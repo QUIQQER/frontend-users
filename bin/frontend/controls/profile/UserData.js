@@ -17,15 +17,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData.css'
 
-], function (QUI, QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
-    "use strict";
+], function(QUI, QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
+    'use strict';
 
     var lg = 'quiqqer/frontend-users';
 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData',
 
         Binds: [
             '$onInject',
@@ -33,7 +33,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
             '$clearEmailErrorMsg'
         ],
 
-        initialize: function (options) {
+        initialize: function(options) {
             this.parent(options);
 
             this.$EmailErrorMsgElm = null;
@@ -46,37 +46,41 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
         /**
          * event: on import
          */
-        $onImport: function () {
-            var self           = this;
-            var Elm            = this.getElm();
-            var ChangeEmailElm = Elm.getElement('.quiqqer-frontendUsers-userdata-email-edit');
-            var EmailNewElm    = Elm.getElement('.quiqqer-frontendUsers-userdata-email-new');
-            var EmailNewInput  = Elm.getElement('input[name="emailNew"]');
-            var ProfileNode    = Elm.getParent('.quiqqer-frontendUsers-controls-profile');
+        $onImport: function() {
+            const self = this;
+            const Elm = this.getElm();
+            const ChangeEmailElm = Elm.querySelector('[data-name="email-edit"]');
+            const EmailNewElm = Elm.querySelector('[data-name="email-new"]');
+            const EmailNewInput = Elm.querySelector('input[name="emailNew"]');
+            let ProfileNode = Elm.querySelector(
+                '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
+            );
 
             if (ProfileNode) {
-                QUIControlUtils.getControlByElement(ProfileNode).then(function (ProfileControl) {
+                QUIControlUtils.getControlByElement(ProfileNode).then(function(ProfileControl) {
                     ProfileControl.addEvents({
-                        onSave     : function () {
-                            EmailNewElm.addClass('quiqqer-frontendUsers-userdata-email__hidden');
+                        onSave: function() {
+                            EmailNewElm.addAttribute('data-hidden');
+                            // EmailNewElm.addClass('quiqqer-frontendUsers-userdata-email__hidden');
                             EmailNewInput.value = '';
                         },
-                        onSaveError: function () {
+                        onSaveError: function() {
                             EmailNewInput.value = '';
                             EmailNewInput.focus();
                         }
                     });
-                }, function () {
+                }, function() {
                     // do nothing
                 });
             }
 
-            ChangeEmailElm.addEvent('click', function () {
-                EmailNewElm.removeClass('quiqqer-frontendUsers-userdata-email__hidden');
+            ChangeEmailElm.addEvent('click', function() {
+                // EmailNewElm.removeClass('quiqqer-frontendUsers-userdata-email__hidden');
+                EmailNewElm.removeAttribute('data-hidden');
                 EmailNewInput.focus();
 
                 // resize profile
-                var ProfileNode = self.getElm().getParent(
+                ProfileNode = self.getElm().getParent(
                     '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
                 );
 
@@ -84,22 +88,22 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
                     return;
                 }
 
-                var Profile = QUI.Controls.getById(ProfileNode.get('data-quiid'));
+                const Profile = QUI.Controls.getById(ProfileNode.get('data-quiid'));
 
                 if (Profile) {
                     Profile.resize();
                 }
             });
 
-            var CheckMail = function (event) {
-                var email = event.target.value.trim();
+            const CheckMail = function(event) {
+                const email = event.target.value.trim();
 
                 Promise.all([
                     Registration.emailSyntaxValidation(email),
                     Registration.emailValidation(email)
-                ]).then(function (result) {
+                ]).then(function(result) {
                     var emailSyntaxValid = result[0];
-                    var emailValid       = result[1];
+                    var emailValid = result[1];
 
                     if (emailSyntaxValid && emailValid) {
                         self.$clearEmailErrorMsg();
@@ -131,7 +135,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
          *
          * @param {String} msg
          */
-        $showEmailErrorMsg: function (msg) {
+        $showEmailErrorMsg: function(msg) {
             if (!this.$EmailErrorMsgElm) {
                 this.$EmailErrorMsgElm = new Element('div', {
                     'class': 'content-message-error'
@@ -144,7 +148,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
         /**
          * Hide error msg for e-mail change
          */
-        $clearEmailErrorMsg: function () {
+        $clearEmailErrorMsg: function() {
             if (this.$EmailErrorMsgElm) {
                 this.$EmailErrorMsgElm.destroy();
                 this.$EmailErrorMsgElm = null;
