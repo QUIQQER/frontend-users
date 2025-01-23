@@ -301,7 +301,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
                     new QUIConfirm({
                         'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-delete',
-                        maxHeight: 400,
+                        maxHeight: 450,
                         maxWidth: 500,
                         autoclose: false,
                         backgroundClosable: false,
