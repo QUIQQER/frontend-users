@@ -767,7 +767,7 @@ class Handler extends Singleton
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'date' => $L->formatDate(time()),
-                        'confirmLink' => $verification
+                        'confirmLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
