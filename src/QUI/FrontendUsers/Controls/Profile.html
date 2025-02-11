@@ -53,7 +53,7 @@
                                 {if $currentCategory == $category.name && $currentSetting == $setting.name}
                                     {assign var=active value="selected"}
                                 {/if}
-                                <option value="{$category.name}:{$setting.name}" {$active} data-test="{$currentCategory} - {$category.name}" >
+                                <option value="{$category.name}:{$setting.name}" {$active}>
                                     {$setting.title}
                                 </option>
                             {/foreach}
