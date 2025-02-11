@@ -23,18 +23,16 @@
             {foreach $addresses as $Address}
                 <div class="quiqqer-frontend-users-address-list-entry" data-name="address">
                     <header>
-                        <label>
-                            <span class="fa fa-address-card-o"></span>
-                            {if $Address->getUUID() == $User->getAttribute('address')}
-                            {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
-                            {else}
-                            {locale group="quiqqer/frontend-users" var="control.address.header.title"}
-                            {/if}
-                            <input type="hidden"
-                                   name="address"
-                                   value="{$Address->getUUID()}"
-                            >
-                        </label>
+                        <span class="fa fa-address-card-o"></span>
+                        {if $Address->getUUID() == $User->getAttribute('address')}
+                        {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
+                        {else}
+                        {locale group="quiqqer/frontend-users" var="control.address.header.title"}
+                        {/if}
+                        <input type="hidden"
+                               name="address"
+                               value="{$Address->getUUID()}"
+                        >
                     </header>
 
                     {$Address->render()}
