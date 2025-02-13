@@ -10,6 +10,7 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
+use QUI\Verification\Enum\VerificationStatus;
 use QUI\Verification\Interface\VerificationRepositoryInterface;
 use QUI\Verification\VerificationRepository;
 
@@ -19,7 +20,6 @@ use function in_array;
 use function json_decode;
 use function json_encode;
 use function trim;
-use QUI\Verification\Enum\VerificationStatus;
 
 /**
  * Class UserData
