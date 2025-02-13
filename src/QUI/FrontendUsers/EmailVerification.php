@@ -40,6 +40,11 @@ class EmailVerification extends AbstractFrontendUsersLinkVerificationHandler
             $User = QUI::getUsers()->get($verification->getCustomDataEntry('uuid'));
             $email = $verification->getCustomDataEntry('email');
 
+            // Set primary email as verified
+            if ($email === $User->getAttribute('email')) {
+                Utils::setDefaultUserEmailVerified($User);
+            }
+
             Utils::setEmailAddressAsVerfifiedForUser($email, $User);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
