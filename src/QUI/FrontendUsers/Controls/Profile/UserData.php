@@ -19,6 +19,7 @@ use function in_array;
 use function json_decode;
 use function json_encode;
 use function trim;
+use QUI\Verification\Enum\VerificationStatus;
 
 /**
  * Class UserData
@@ -75,7 +76,7 @@ class UserData extends AbstractProfileControl
                 'confirmemail-' . $User->getUUID()
             );
 
-            if (is_null($verification)) {
+            if (is_null($verification) || $verification->status !== VerificationStatus::PENDING) {
                 $emailChangeRequested = false;
             }
         } catch (Exception) {
