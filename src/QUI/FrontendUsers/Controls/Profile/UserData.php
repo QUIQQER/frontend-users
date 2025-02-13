@@ -10,6 +10,7 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
+use QUI\Verification\Enum\VerificationStatus;
 use QUI\Verification\Interface\VerificationRepositoryInterface;
 use QUI\Verification\VerificationRepository;
 
@@ -75,7 +76,7 @@ class UserData extends AbstractProfileControl
                 'confirmemail-' . $User->getUUID()
             );
 
-            if (is_null($verification)) {
+            if (is_null($verification) || $verification->status !== VerificationStatus::PENDING) {
                 $emailChangeRequested = false;
             }
         } catch (Exception) {
