@@ -1,3 +1,13 @@
+/* popup */
+.qui-window-popup--frontendUsers-profile {
+    --_qui-frontend-users-profile__popup__bg-color: var(--qui-frontend-users-profile__popup__bg-color, #f5f5f5);
+    --_qui-frontend-users-profile__popup__radius: var(--qui-frontend-users-profile__popup__radius, 0.5rem);
+    --_qui-frontend-users-profile__popup__conten-maxWidth: var(--qui-frontend-users-profile__popup__conten-maxWidth, 30rem);
+}
+
+/***********/
+/* General */
+/***********/
 .quiqqer-frontendUsers-manager,
 .quiqqer-frontend-users-address {
     position: relative;
@@ -96,8 +106,10 @@
 /*****************/
 /* Address popup */
 /*****************/
-.qui-window-popup--frontendUsers-profile .quiqqer-frontend-users-address-create {
-    max-width: 500px;
+.qui-window-popup--frontendUsers-profile .quiqqer-frontend-users-address-create,
+.qui-window-popup--frontendUsers-profile .quiqqer-frontend-users-address-edit {
+    max-width: var(--_qui-frontend-users-profile__popup__conten-maxWidth);
+    margin-inline: auto;
 }
 /************************/
 /* Address delete popup */

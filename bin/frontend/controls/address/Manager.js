@@ -25,8 +25,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             '$editClick',
             '$deleteClick',
             '$addClick',
-            '$openContainer',
-            '$closeContainer',
             '$clickCreateSubmit',
             '$clickEditSave'
         ],
@@ -167,7 +165,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 const Form = new Element('form', {
                     'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
                     html: result,
-                    dataName: 'address-container'
+                    'data-name': 'address-container'
                 });
 
                 QUI.parse(Form).then(function() {
@@ -293,7 +291,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 const Form = new Element('form', {
                     'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
                     html: result,
-                    dataName: 'address-container'
+                    'data-name': 'address-container'
                 });
 
                 QUI.parse(Form).then(function() {
@@ -397,7 +395,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                 const Form = new Element('form', {
                     'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
                     html: result,
-                    dataName: 'address-container'
+                    'data-name': 'address-container'
                 });
 
                 QUI.parse(Form).then(function() {
@@ -493,77 +491,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         },
 
         //endregion
-
-        /**
-         * Open a div container with effect
-         *
-         * @return {Promise}
-         */
-        $openContainer: function(Parent) {
-            const self = this;
-
-            const Container = new Element('div', {
-                'class': 'quiqqer-frontend-users-address-container',
-                html: '<div class="quiqqer-frontend-users-address-container-header" data-name="header"></div>' +
-                    '<div class="quiqqer-frontend-users-address-container-content" data-name="content"></div>',
-                tabIndex: -1,
-                dataName: 'address-container'
-            }).inject(Parent);
-
-            new Element('span', {
-                'class': 'fa fa-close quiqqer-frontend-users-address-container-close',
-                events: {
-                    click: function() {
-                        self.$closeContainer(Container);
-                    }
-                }
-            }).inject(Container, 'top');
-
-            return new Promise(function(resolve) {
-                moofx(Container).animate({
-                    left: 0,
-                    opacity: 1
-                }, {
-                    duration: 250,
-                    callback: function() {
-                        // no scroll animation because after address edit is open
-                        // there may be an animation depend on selected option in "businessType" select
-                        self.getElm().scrollIntoView();
-                        resolve(Container);
-                    }
-                });
-            });
-        },
-
-        /**
-         * Close a div container with effect
-         *
-         * @param {HTMLDivElement} Container
-         * @return {Promise}
-         */
-        $closeContainer: function(Container) {
-            const self = this;
-
-            return new Promise(function(resolve) {
-                moofx(Container).animate({
-                    left: -50,
-                    opacity: 0
-                }, {
-                    duration: 250,
-                    callback: function() {
-                        Container.destroy();
-                        self.getElm().setStyle('height', null);
-
-                        if (self.$Profile) {
-                            self.$Profile.getElm().setStyle('overflow', null);
-                        }
-
-                        self.resize();
-                        resolve();
-                    }
-                });
-            });
-        },
 
         $removeUnusedNodes: function(Node) {
             if (Node.querySelector('button')) {

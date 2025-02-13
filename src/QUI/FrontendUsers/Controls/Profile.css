@@ -33,12 +33,6 @@
     }
 }
 
-/* popup */
-.qui-window-popup--frontendUsers-profile {
-    --_qui-frontend-users-profile__popup__bg-color: var(--qui-frontend-users-profile__popup__bg-color, #f5f5f5);
-    --_qui-frontend-users-profile__popup__radius: var(--qui-frontend-users-profile__popup__radius, 0.5rem);
-}
-
 /* general */
 address {
     font-style: normal;
