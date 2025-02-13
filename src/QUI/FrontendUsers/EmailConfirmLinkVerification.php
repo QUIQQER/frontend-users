@@ -44,11 +44,11 @@ class EmailConfirmLinkVerification extends AbstractFrontendUsersLinkVerification
             $userUuid = $verification->getCustomDataEntry('uuid');
             $User = QUI::getUsers()->get($userUuid);
             $newEmail = $verification->getCustomDataEntry('newEmail');
+            $oldEmail = $User->getAttribute('email');
 
             // if users cannot set their own username -> change username as well
             // if it equals the old email-address
             if (!$RegistrarHandler->isUsernameInputAllowed()) {
-                $oldEmail = $User->getAttribute('email');
                 $username = $User->getUsername();
 
                 if ($oldEmail === $username) {
@@ -58,6 +58,8 @@ class EmailConfirmLinkVerification extends AbstractFrontendUsersLinkVerification
 
             $User->setAttribute('email', $newEmail);
             $User->save(QUI::getUsers()->getSystemUser());
+
+            QUI::getEvents()->fireEvent('quiqqerFrontendUsersEmailChanged', [$User, $oldEmail, $newEmail]);
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
                 self::class . ' :: onSuccess -> Could not find user #' . $userUuid
