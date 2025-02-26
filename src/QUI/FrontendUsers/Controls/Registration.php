@@ -129,7 +129,7 @@ class Registration extends QUI\Control
 
                 $Engine->assign(
                     'error',
-                    QUI::getLocale()->get('quiqqer/frontend-user', 'controls.Registation.general_error')
+                    QUI::getLocale()->get('quiqqer/frontend-users', 'controls.Registation.general_error')
                 );
             }
         }
