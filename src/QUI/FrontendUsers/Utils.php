@@ -31,7 +31,6 @@ class Utils
         $packages = QUI::getPackageManager()->getInstalled();
         $list = [];
 
-        /* @var $Package <Package */
         foreach ($packages as $package) {
             try {
                 $Package = QUI::getPackage($package['name']);
@@ -72,7 +71,6 @@ class Utils
         $packages = self::getFrontendUsersPackages();
         $Engine = QUI::getTemplateManager()->getEngine();
 
-        /** @var Package $Package */
         foreach ($packages as $Package) {
             $Parser = new QUI\Utils\XML\Settings();
             $Parser->setXMLPath('//quiqqer/frontend-users/profile');
@@ -136,7 +134,7 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileSetting(string $category, bool|string $settings = false): array
+    public static function getProfileSetting(string $category, bool | string $settings = false): array
     {
         if ($category) {
             $categories = [self::getProfileCategory($category)];
@@ -167,8 +165,10 @@ class Utils
      *
      * @throws Exception
      */
-    public static function getProfileSettingControl(string $category, bool|string $settings = false): ?ControlInterface
-    {
+    public static function getProfileSettingControl(
+        string $category,
+        bool | string $settings = false
+    ): ?ControlInterface {
         $setting = self::getProfileSetting($category, $settings);
         $Control = null;
 
@@ -291,8 +291,8 @@ class Utils
      */
     public static function hasPermissionToViewCategory(
         string $category,
-        bool|string $setting = false,
-        QUI\Interfaces\Users\User $User = null
+        bool | string $setting = false,
+        null | QUI\Interfaces\Users\User $User = null
     ): bool {
         if ($User === null) {
             $User = QUI::getUserBySession();
@@ -348,7 +348,7 @@ class Utils
      */
     public static function setUrlsToCategorySettings(
         array $categories = [],
-        QUI\Projects\Project $Project = null
+        null | QUI\Projects\Project $Project = null
     ): array {
         try {
             if ($Project === null) {

@@ -19,7 +19,7 @@ class RegistrationUtils
      * @param Project|null $Project $Project (optional) - QUIQQER Project [default: QUI::getRewrite()->getProject()]
      * @return string
      */
-    public static function getFurtherLinksText(Project $Project = null): string
+    public static function getFurtherLinksText(null | Project $Project = null): string
     {
         try {
             if (empty($Project)) {

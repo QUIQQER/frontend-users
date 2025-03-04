@@ -114,7 +114,10 @@ class UserAvatarUpload extends Form
         );
 
         $File->activate(QUI::getUsers()->getSystemUser());
-        $File->setTitle($SessionUser->getUsername());
+
+        if (method_exists($File, 'setTitle')) {
+            $File->setTitle($SessionUser->getUsername());
+        }
 
         $SessionUser->setAttribute('avatar', $File->getUrl());
         $SessionUser->save();

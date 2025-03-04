@@ -62,8 +62,9 @@ class Events
     {
         // register path
         if (
-            $Site->getAttribute('active') &&
-            $Site->getAttribute('type') == 'quiqqer/frontend-users:types/profile'
+            $Site->getAttribute('active')
+            && $Site->getAttribute('type') == 'quiqqer/frontend-users:types/profile'
+            && method_exists($Site, 'getLocation')
         ) {
             $url = $Site->getLocation();
             $url = str_replace(QUI\Rewrite::URL_DEFAULT_SUFFIX, '', $url);

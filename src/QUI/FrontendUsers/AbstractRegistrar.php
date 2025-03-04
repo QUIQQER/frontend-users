@@ -56,7 +56,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    abstract public function getTitle(QUI\Locale $Locale = null): string;
+    abstract public function getTitle(null | QUI\Locale $Locale = null): string;
 
     /**
      * Get description
@@ -64,7 +64,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
      * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    abstract public function getDescription(QUI\Locale $Locale = null): string;
+    abstract public function getDescription(null | QUI\Locale $Locale = null): string;
 
     /**
      * Return an icon for the registrar

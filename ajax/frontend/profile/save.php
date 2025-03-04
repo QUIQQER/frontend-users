@@ -28,7 +28,11 @@ QUI::$Ajax->registerFunction(
         }
 
         $Control = QUI\FrontendUsers\Utils::getProfileSettingControl($category, $settings);
-        $Control->setAttribute('User', QUI::getUserBySession());
+
+        if (method_exists($Control, 'setAttribute')) {
+            $Control->setAttribute('User', QUI::getUserBySession());
+        }
+
         $Control->onSave();
     },
     ['category', 'settings', 'data'],
