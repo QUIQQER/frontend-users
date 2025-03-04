@@ -151,7 +151,6 @@ class Login extends QUI\Control
             }
 
             $authenticators = array_filter($authenticators, function ($authenticator) use ($allowed) {
-                /** @var QUI\Users\AuthenticatorInterface $authenticator */
                 return in_array($authenticator, $allowed);
             });
         } catch (Exception $Exception) {
@@ -163,7 +162,6 @@ class Login extends QUI\Control
         }
 
         return array_filter($authenticators, function ($authenticator) use ($filterRegistrars) {
-            /** @var QUI\Users\AuthenticatorInterface $Authenticator */
             return in_array($authenticator, $filterRegistrars);
         });
     }

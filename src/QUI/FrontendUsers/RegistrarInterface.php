@@ -98,7 +98,7 @@ interface RegistrarInterface
      * @param ?QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getTitle(QUI\Locale $Locale = null): string;
+    public function getTitle(null | QUI\Locale $Locale = null): string;
 
     /**
      * Get description
@@ -106,7 +106,7 @@ interface RegistrarInterface
      * @param ?QUI\Locale $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getDescription(QUI\Locale $Locale = null): string;
+    public function getDescription(null | QUI\Locale $Locale = null): string;
 
     /**
      * Set current Project the Registrar works for

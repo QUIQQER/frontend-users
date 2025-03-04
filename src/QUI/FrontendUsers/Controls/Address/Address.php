@@ -38,7 +38,7 @@ class Address extends QUI\Control
      * @param null|QUI\Locale $Locale
      * @return string
      */
-    public function getName(QUI\Locale $Locale = null): string
+    public function getName(null | QUI\Locale $Locale = null): string
     {
         return 'Address';
     }

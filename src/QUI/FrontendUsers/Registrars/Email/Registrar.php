@@ -37,7 +37,6 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $useAddress = boolval($registrationSettings['addressInput']);
 
-        /** @var QUI\Users\User $User */
         $firstname = $this->getAttribute('firstname');
         $lastname = $this->getAttribute('lastname');
 
@@ -382,7 +381,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
      * @param QUI\Locale|null $Locale (optional) - If omitted use QUI::getLocale()
      * @return string
      */
-    public function getDescription(QUI\Locale $Locale = null): string
+    public function getDescription(null | QUI\Locale $Locale = null): string
     {
         if (is_null($Locale)) {
             $Locale = QUI::getLocale();

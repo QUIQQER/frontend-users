@@ -59,7 +59,7 @@ class UserAvatar extends AbstractProfileControl
         if (!empty($userGravatarIcon) && $gravatarEnabled && !empty($userEmail)) {
             $userGravatarIcon = true;
             $AvatarImage = new ExternalImage(Utils::getGravatarUrl($userEmail, 100));
-            $url = $AvatarImage->getSizeCacheUrl(100, 100);
+            $url = $AvatarImage->getSizeCacheUrl();
 
             $Engine->assign([
                 'avatarImageUrl' => ' style="background-image: url(\'' . $url . '\')"'

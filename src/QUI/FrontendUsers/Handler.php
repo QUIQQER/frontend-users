@@ -141,7 +141,7 @@ class Handler extends Singleton
      * @param string $registrar - Registrar type
      * @return false|RegistrarInterface
      */
-    public function getRegistrar(string $registrar): bool|RegistrarInterface
+    public function getRegistrar(string $registrar): bool | RegistrarInterface
     {
         /** @var RegistrarInterface $Registrar */
         foreach ($this->getAvailableRegistrars() as $Registrar) {
@@ -159,7 +159,7 @@ class Handler extends Singleton
      * @param QUI\Interfaces\Users\User $User
      * @return RegistrarInterface|false
      */
-    public function getRegistrarByUser(QUI\Interfaces\Users\User $User): bool|RegistrarInterface
+    public function getRegistrarByUser(QUI\Interfaces\Users\User $User): bool | RegistrarInterface
     {
         $registrar = $User->getAttribute(self::USER_ATTR_REGISTRAR);
 
@@ -176,7 +176,7 @@ class Handler extends Singleton
      * @param string $hash
      * @return false|RegistrarInterface
      */
-    public function getRegistrarByHash(string $hash): bool|RegistrarInterface
+    public function getRegistrarByHash(string $hash): bool | RegistrarInterface
     {
         /** @var RegistrarInterface $Registrar */
         foreach ($this->getAvailableRegistrars() as $Registrar) {
@@ -347,10 +347,10 @@ class Handler extends Singleton
     /**
      * Get settings for one or all Registrars
      *
-     * @param string|null $registrarClass (optional) - Registar class path (namespace)
+     * @param string|null $registrarClass (optional) - Registrar class path (namespace)
      * @return array
      */
-    public function getRegistrarSettings(string $registrarClass = null): array
+    public function getRegistrarSettings(null | string $registrarClass = null): array
     {
         try {
             $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
@@ -484,7 +484,7 @@ class Handler extends Singleton
     public function sendWelcomeMail(
         QUI\Interfaces\Users\User $User,
         QUI\Projects\Project $Project,
-        string $userPassword = null
+        null | string $userPassword = null
     ): void {
         $email = $User->getAttribute('email');
 
@@ -600,10 +600,10 @@ class Handler extends Singleton
     }
 
     /**
-     * Send activtion mail for a user account
+     * Send deactivation mail for a user account
      *
-     * @param QUI\Users\User $User
-     * @param string $newEmail - New E-Mail-Adress
+     * @param QUI\Interfaces\Users\User $User
+     * @param string $newEmail - New E-Mail-Address
      * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
      * @return void
      * @throws QUI\Exception
@@ -838,7 +838,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE registration site found
      * @throws QUI\Exception
      */
-    public function getRegistrationSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getRegistrationSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -865,7 +865,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE registration site found
      * @throws QUI\Exception
      */
-    public function getRegistrationSignUpSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getRegistrationSignUpSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -892,7 +892,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE login site found
      * @throws QUI\Exception
      */
-    public function getLoginSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getLoginSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -919,7 +919,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE profile site found
      * @throws QUI\Exception
      */
-    public function getProfileSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getProfileSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -944,7 +944,7 @@ class Handler extends Singleton
      *
      * @return false|QUI\Projects\Site
      */
-    public function getRedirectOnActivationSite(): bool|QUI\Projects\Site
+    public function getRedirectOnActivationSite(): bool | QUI\Projects\Site
     {
         try {
             $registrationSettings = $this->getRegistrationSettings();
