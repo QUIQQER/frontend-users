@@ -22,6 +22,10 @@ class GetRegisterRequiredFields
      */
     public static function call(SlimRequest $Request, SlimResponse $Response, array $args): SlimResponse
     {
+        if (!class_exists('QUI\REST\ResponseFactory')) {
+            throw new QUI\Exception('Class "QUI\REST\ResponseFactory" not found.');
+        }
+
         $ResponseFactory = new QUI\REST\ResponseFactory();
 
         try {

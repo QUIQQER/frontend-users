@@ -463,10 +463,15 @@ class Address extends QUI\Control
      * Validate if the order has an invoice address
      *
      * @param QUI\Users\Address $Address
-     * @throws QUI\ERP\Order\Exception
+     * @throws QUI\Exception
      */
     public function validate(QUI\Users\Address $Address): void
     {
+        if (!class_exists('QUI\ERP\Order\Exception')) {
+            QUI\System\Log::addError('Class "QUI\ERP\Order\Exception" not found.');
+            throw new QUI\Exception('An error occurred.');
+        }
+
         $exception = [
             'quiqqer/order',
             'exception.missing.address.field'
