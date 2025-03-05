@@ -398,7 +398,7 @@ class SendUserMails extends QUI\System\Console\Tool
      *
      * @return array|false - Limit config or false if limits not yet configured
      */
-    protected function getLimits(): bool|array
+    protected function getLimits(): bool | array
     {
         try {
             $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
@@ -585,7 +585,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * @param string|null $testMailAddress (optional) - If set, a single test mail will be sent to this address
      * @return void
      */
-    protected function sendMails(string $testMailAddress = null): void
+    protected function sendMails(null | string $testMailAddress = null): void
     {
         $Users = QUI::getUsers();
         $SystemUser = $Users->getSystemUser();
@@ -630,7 +630,7 @@ class SendUserMails extends QUI\System\Console\Tool
                     );
 
                     sleep(60);
-                } while (!$mailAllowed);
+                } while (!$mailAllowed); // @phpstan-ignore-line
             }
 
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {

@@ -1,16 +1,14 @@
 {template_event name="quiqqer::frontend-users::user-address-top" User=$User}
 
 <section class="quiqqer-frontend-users-address quiqqer-frontendUsers-userdata-section">
-    <header>
-        <h2>{locale group="quiqqer/frontend-users" var="profile.address.category.title"}</h2>
-    </header>
+    <h2>{locale group="quiqqer/frontend-users" var="profile.address.category.title"}</h2>
 
     <div class="quiqqer-frontend-users-address-description">
         <div class="quiqqer-frontend-users-address-description-text">
             {locale group="quiqqer/frontend-users" var="control.address.title.Address.description"}
         </div>
 
-        <button name="create" class="quiqqer-frontend-users-address-description-button">
+        <button name="create" class="btn btn-secondary quiqqer-frontend-users-address-description-button">
             <span class="fa fa-plus"></span>
             <span>{locale group="quiqqer/frontend-users" var="control.address.title.Address.addButton"}</span>
         </button>
@@ -22,41 +20,39 @@
         {if $User->getId()}
         {* Logged in user *}
 
-        {foreach $addresses as $Address}
-        <div class="quiqqer-frontend-users-address-list-entry">
-            <header>
-                <label>
-                    <span class="fa fa-address-card-o"></span>
-                    {if $Address->getUUID() == $User->getAttribute('address')}
-                    {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
-                    {else}
-                    {locale group="quiqqer/frontend-users" var="control.address.header.title"}
-                    {/if}
-                    <input type="hidden"
-                           name="address"
-                           value="{$Address->getUUID()}"
-                    >
-                </label>
-            </header>
+            {foreach $addresses as $Address}
+                <div class="quiqqer-frontend-users-address-list-entry" data-name="address">
+                    <header>
+                        <span class="fa fa-address-card-o"></span>
+                        {if $Address->getUUID() == $User->getAttribute('address')}
+                        {locale group="quiqqer/frontend-users" var="control.address.header.defaultAddress.title"}
+                        {else}
+                        {locale group="quiqqer/frontend-users" var="control.address.header.title"}
+                        {/if}
+                        <input type="hidden"
+                               name="address"
+                               value="{$Address->getUUID()}"
+                        >
+                    </header>
 
-            {$Address->render()}
+                    {$Address->render()}
 
-            <div class="quiqqer-frontend-users-address-list-entry-buttons">
-                <button type="submit" name="edit" value="{$Address->getUUID()}">
-                    <span class="fa fa-edit"></span>
-                    <span>
-                        {locale group="quiqqer/frontend-users" var="control.address.title.Address.editButton"}
-                    </span>
-                </button>
-                <button type="submit" name="delete" value="{$Address->getUUID()}" class="btn btn-danger">
-                    <span class="fa fa-trash"></span>
-                    <span>
-                        {locale group="quiqqer/frontend-users" var="control.address.title.Address.deleteButton"}
-                    </span>
-                </button>
-            </div>
-        </div>
-        {/foreach}
+                    <div class="quiqqer-frontend-users-address-list-entry-buttons">
+                        <button type="submit" name="edit" value="{$Address->getUUID()}">
+                            <span class="fa fa-edit"></span>
+                            <span>
+                                {locale group="quiqqer/frontend-users" var="control.address.title.Address.editButton"}
+                            </span>
+                        </button>
+                        <button type="submit" name="delete" value="{$Address->getUUID()}" class="btn btn-danger">
+                            <span class="fa fa-trash"></span>
+                            <span>
+                                {locale group="quiqqer/frontend-users" var="control.address.title.Address.deleteButton"}
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            {/foreach}
         {/if}
     </div>
 

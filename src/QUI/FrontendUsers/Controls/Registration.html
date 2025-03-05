@@ -25,9 +25,13 @@
     {if !$instantRedirect}
         {$Registrar->getSuccessMessage()}
     {/if}
-    {if $redirectUrl}
-    <div class="quiqqer-frontendUsers-redirect" data-url="{$redirectUrl}" data-instant="{if $instantRedirect}1{else}0{/if}">
-        {if !$instantRedirect}
+    {if $redirectUrl || $instantReload}
+    <div class="quiqqer-frontendUsers-redirect"
+         {if !empty($redirectUrl)}data-url="{$redirectUrl}"{/if}
+         data-instant="{if $instantRedirect}1{else}0{/if}"
+         data-reload="{if $instantReload}1{else}0{/if}"
+    >
+        {if !$instantRedirect && !$instantReload}
             {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
         {/if}
     </div>

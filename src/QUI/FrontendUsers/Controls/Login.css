@@ -22,6 +22,10 @@
     width: 100%;
 }
 
+.quiqqer-fu-login-container__inner {
+    display: flow-root;
+}
+
 .quiqqer-fu-login-social-entry {
     border: 1px solid #ddd;
     border-radius: 100%;
@@ -135,8 +139,6 @@
 }
 
 .quiqqer-fu-login-forget-password-reset {
-    background: #fff;
-    height: 100%;
     opacity: 0;
     position: absolute;
     top: 0;
@@ -173,13 +175,6 @@
     display: block;
     margin: 0 auto;
     width: 100%;
-}
-
-.quiqqer-fu-login-forget-password-reset [name="cancel"] {
-    bottom: 0;
-    padding: 0.5rem 2rem;
-    position: absolute;
-    right: 0;
 }
 
 .quiqqer-fu-login-activation-info {

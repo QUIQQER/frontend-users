@@ -1,0 +1,213 @@
+<noscript>
+    <style>
+        [data-hidden] {
+            display: inline-block;
+        }
+    </style>
+</noscript>
+
+{template_event name="quiqqer::frontend-users::profile::user-data-begin" User=$User Address=$Address}
+
+{if $changeMailRequest}
+<div class="content-message-information">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_request"}
+</div>
+{/if}
+
+{if $action == 'change_email_success'}
+<div class="content-message-success">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_success"}
+</div>
+{/if}
+
+{if $action == 'change_email_error'}
+<div class="content-message-error">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.message.change_email_error"}
+</div>
+{/if}
+
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userdata-address">
+    <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.title"}</h2>
+
+    {template_event name="quiqqer::frontend-users::profile::customer-data-begin" User=$User Address=$Address}
+
+    <label class="quiqqer-frontendUsers-userdata-address-firstname">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.firstname"}
+        </span>
+        <input type="text"
+               name="firstname"
+               autocomplete="given-name"
+               value="{$User->getAttribute('firstname')|escape:'html'}"
+        />
+    </label>
+
+    <label class="quiqqer-frontendUsers-userdata-address-lastname">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.lastname"}
+        </span>
+        <input type="text"
+               name="lastname"
+               autocomplete="family-name"
+               value="{$User->getAttribute('lastname')|escape:'html'}"
+        />
+    </label>
+
+    <label class="quiqqer-frontendUsers-userdata-address-street">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="street_no"}
+        </span>
+
+        {if $Address->getAttribute('street_no') === ''}
+            <div class="quiqqer-frontendUsers-userdata-address-street-2-col">
+                <input type="text" name="street" value="" autocomplete="street-address"/>
+                <input type="text" name="street_number" value=""/>
+            </div>
+        {else}
+            <input type="text"
+                   name="street_no"
+                   autocomplete="street-address"
+                   value="{$Address->getAttribute('street_no')|escape:'html'}"
+            />
+        {/if}
+    </label>
+
+    <label class="quiqqer-frontendUsers-userdata-address-zip">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="zip"}
+        </span>
+        <input type="text"
+               name="zip"
+               autocomplete="postal-code"
+               value="{$Address->getAttribute('zip')|escape:'html'}"
+        />
+    </label>
+
+    <label class="quiqqer-frontendUsers-userdata-address-city">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="city"}
+        </span>
+        <input type="text"
+               name="city"
+               autocomplete="address-level2"
+               value="{$Address->getAttribute('city')|escape:'html'}"
+        />
+    </label>
+
+    <label class="quiqqer-frontendUsers-userdata-address-country">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/system" var="country"}
+        </span>
+        <span class="quiqqer-frontendUsers-userdata-address-country-select">
+            {control
+            name="country"
+            control="QUI\Countries\Controls\Select"
+            selected=$Address->getAttribute('country')
+            }
+        </span>
+    </label>
+
+    <label class="quiqqer-frontendUsers-userdata-address-phone">
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/system" var="phone"}
+        </span>
+        <input type="text"
+               name="tel"
+               autocomplete="address-phone"
+               value="{$Address->getPhone()|escape:'html'}"
+        />
+    </label>
+
+    {template_event name="quiqqer::frontend-users::profile::customer-data-end" User=$User Address=$Address}
+</section>
+
+{template_event name="quiqqer::frontend-users::profile::user-data-middle" User=$User Address=$Address}
+
+<section class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-userdata-additional">
+    <h2>{locale group="quiqqer/frontend-users" var="profile.userdata.additional.title"}</h2>
+
+    <label>
+        <span class="quiqqer-frontendUsers-userdata-label">
+           {locale group="quiqqer/frontend-users" var="profile.userdata.dateOfBirth"}
+        </span>
+
+        {assign var=day value=$User->getAttribute('birthday')|date_format:"%d"}
+        {assign var=month value=$User->getAttribute('birthday')|date_format:"%m"}
+        {assign var=year value=$User->getAttribute('birthday')|date_format:"%Y"}
+
+        <div class="package-intranet-profile-birthday">
+            {birthday type="day"
+            name="birth_day"
+            id="intranet-profile-birthday-day"
+            value=$day
+            }
+
+            {birthday type="month"
+            name="birth_month"
+            id="intranet-profile-birthday-month"
+            value=$month
+            }
+
+            {birthday type="year"
+            name="birth_year"
+            id="intranet-profile-birthday-year"
+            value=$year
+            }
+        </div>
+    </label>
+
+    {if $username}
+        <label>
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.username"}
+        </span>
+            <input name="username" value="{$User->getUsername()}"/>
+        </label>
+    {/if}
+
+    {if $showLanguageChangeInProfile}
+        <label>
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.language"}
+        </span>
+            <div class="quiqqer-frontendUsers-userdata-language">
+                <input data-qui="controls/lang/Select" name="language" value="{$User->getLang()}"/>
+            </div>
+        </label>
+    {/if}
+
+    <label class="qui-form-label">
+        <span class="qui-form-label__text">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.email"}
+        </span>
+        <div class="quiqqer-frontendUsers-userdata-email">
+            <input name="email" autocomplete="email" class="qui-form-label__input"
+                   value="{$User->getAttribute('email')|escape:'html'}"
+                   disabled
+            />
+            <button type="button" data-name="email-edit"
+                    class="btn btn-secondary btn-icon quiqqer-frontendUsers-userdata-email-edit"
+            >
+                <span class="fa fa-edit"></span>
+            </button>
+        </div>
+    </label>
+
+    <label class="qui-frontendUsers-userdata-email-new" data-name="email-new" data-hidden>
+        <span class="quiqqer-frontendUsers-userdata-label">
+            {locale group="quiqqer/frontend-users" var="profile.userdata.email_new"}
+        </span>
+        <input name="emailNew"/>
+        <span class="quiqqer-frontendUsers-userdata-email-new-hint">
+        {locale group="quiqqer/frontend-users" var="profile.userdata.email_new_hint"}
+    </span>
+    </label>
+</section>
+
+{template_event name="quiqqer::frontend-users::profile::user-data-end" User=$User Address=$Address}
+
+<button type="submit" class="quiqqer-frontendUsers-saveButton">
+    {locale group="quiqqer/frontend-users" var="profile.userdata.save"}
+</button>
+
+{template_event name="quiqqer::frontend-users::profile::user-data-last" User=$User Address=$Address}

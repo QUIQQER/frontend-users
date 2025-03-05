@@ -83,7 +83,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         resize: function () {
             var self      = this,
                 Elm       = this.getElm(),
-                Animation = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContentAnimation');
+                Animation = Elm.querySelector('[data-name="content-animated"]');
 
             return new Promise(function (resolve) {
                 self.$parseContent().then(() => {
@@ -128,7 +128,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$bindCategoriesEvents();
 
             this.openSetting().then(function () {
-                var Form     = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+                var Form     = Elm.querySelector('[data-name="form"]');
                 var category = Form.get('data-category');
                 var settings = Form.get('data-setting');
 
@@ -155,7 +155,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$parseContent().then(function () {
                 self.$addFormEvents();
 
-                var Form = Elm.getElement('.quiqqer-frontendUsers-controls-profile-categoryContent');
+                var Form = Elm.querySelector('[data-name="form"]');
 
                 if (!Form) {
                     return;
@@ -204,6 +204,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         $onChangeState: function () {
             var pathName = window.location.pathname,
                 url      = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
+
+            if (url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1) {
+                pathName = window.location.href;
+            }
 
             if (!this.$settings || !this.$category) {
                 return;
@@ -255,9 +259,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             category = category || false;
             settings = settings || false;
 
-            var Animation = Elm.getElement(
-                '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
-            );
+            var Animation = Elm.querySelector('[data-name="content-animated"]');
 
             var Animate = new Promise(function (resolve) {
                 if (!Animation) {
@@ -280,12 +282,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return new Promise(function (resolve, reject) {
                     QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_getControl', function (result) {
                         var height = self.$Elm.getSize().y;
-                        var Form   = self.$Elm.getElement(
-                            '.quiqqer-frontendUsers-controls-profile-categoryContent'
-                        );
+                        var Form   = self.$Elm.querySelector('[data-name="form"]');
 
                         if (!result) {
-                            result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation">' +
+                            result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation" ' +
+                                'data-name="content-animated">' +
                                 QUILocale.get(lg, 'controls.profile.Profile.setting_error') +
                                 '</div>';
                         }
@@ -296,7 +297,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                         // build the form
                         if (!Form) {
-                            var Control = Ghost.getElement(
+                            var Control = Ghost.querySelector(
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile"]'
                             );
 
@@ -305,26 +306,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             }
 
                             self.$Elm.set('html', Control.get('html'));
-
-                            Animation = Elm.getElement(
-                                '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
-                            );
-
-                            // Form = self.$Elm.getElement(
-                            //     '.quiqqer-frontendUsers-controls-profile-categoryContent'
-                            // );
-
+                            Animation = Elm.querySelector('[data-name="content-animated"]');
                             self.$bindCategoriesEvents();
                         }
 
                         var styles  = Ghost.getElements('style');
                         var scripts = Ghost.getElements('script');
 
-                        var Content = Ghost.getElement(
-                            '.quiqqer-frontendUsers-controls-profile-categoryContentAnimation'
-                        );
-
-                        //Form.setStyle('height', height);
+                        var Content = Ghost.querySelector('[data-name="content-animated"]');
 
                         if (!Content) {
                             return;
@@ -378,56 +367,45 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * init category events
          */
         $bindCategoriesEvents: function () {
-            var i, len, Header;
-            var self       = this;
-            var Elm        = this.getElm();
-            var categories = Elm.getElements('.quiqqer-fupc-category');
+            let i, len, Header;
+            const self       = this;
+            const Elm        = this.getElm();
+            const categories = Elm.querySelectorAll('[data-name="nav-category"]');
 
             var toggle = function () {
                 var Category = this;
 
-                if (!this.hasClass('quiqqer-fupc-category')) {
-                    Category = this.getParent('.quiqqer-fupc-category');
+                if (this.getAttribute('data-name') !== 'nav-category') {
+                    Category = this.getParent('[data-name="nav-category"]');
                 }
 
-                var Opener = Category.getElement('.quiqqer-fupc-category-header-opener');
-
-                Opener.removeClass('fa-arrow-circle-o-right');
-                Opener.removeClass('fa-arrow-circle-o-down');
-
-                if (Category.hasClass('quiqqer-fupc-category--open')) {
-                    Category.removeClass('quiqqer-fupc-category--open');
-                    Opener.addClass('fa-arrow-circle-o-right');
+                if (Category.getAttribute('data-open') === "1") {
+                    Category.setAttribute('data-open', 0);
                     return;
                 }
 
-                Category.addClass('quiqqer-fupc-category--open');
-                Opener.addClass('fa-arrow-circle-o-down');
+                Category.setAttribute('data-open', 1);
             };
 
             for (i = 0, len = categories.length; i < len; i++) {
-                Header = categories[i].getElement('.quiqqer-fupc-category-header');
-
-                new Element('span', {
-                    'class': 'fa fa-arrow-circle-o-down quiqqer-fupc-category-header-opener'
-                }).inject(Header);
+                Header = categories[i].querySelector('[data-name="header"]');
 
                 Header.addEvent('click', toggle);
             }
 
             // category settings click
-            var items = Elm.getElements('.quiqqer-fupc-category-items-item');
+            const items = Elm.getElements('[data-name="nav-category-item"]');
 
             items.addEvent('click', function (event) {
                 event.stop();
 
-                var Target = event.target;
+                let Target = event.target;
 
-                if (!Target.hasClass('quiqqer-fupc-category-items-item')) {
-                    Target = Target.getParent('.quiqqer-fupc-category-items-item');
+                if (Target.getAttribute('data-name') !== 'nav-category-item') {
+                    Target = Target.getParent('[data-name="nav-category-item"]');
                 }
 
-                var category = Target.getParent('.quiqqer-fupc-category').get('data-category'),
+                const category = Target.getParent('[data-name="nav-category"]').get('data-category'),
                     setting  = Target.get('data-setting');
 
                 self.$setMenuItemActive(category, setting);
@@ -437,10 +415,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
 
             // mobile
-            var MobileCategories = Elm.getElement(
-                '.quiqqer-frontendUsers-controls-profile-categories-mobile select'
-            );
-
+            const MobileCategories = Elm.getElement('[name="profile-categories-mobile"]');
             if (MobileCategories) {
                 if (self.$category && self.$settings) {
                     MobileCategories.value = self.$category + ':' + self.$settings;
@@ -468,7 +443,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * @return {Promise}
          */
         save: function () {
-            var self = this;
+            const self = this;
 
             this.fireEvent('saveBegin', [this]);
 
@@ -523,7 +498,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         },
 
         /**
-         * Set an menu item active
+         * Set a menu item active
          *
          * @param {String} category
          * @param {String} settings
@@ -537,10 +512,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return;
             }
 
-            this.$Elm.getElements('.quiqqer-fupc-category-items-item--active')
-                .removeClass('quiqqer-fupc-category-items-item--active');
+            this.$Elm.querySelectorAll('[data-active]').forEach((ActiveItem) => {
+                ActiveItem.removeAttribute('data-active');
+            });
 
-            Item.addClass('quiqqer-fupc-category-items-item--active');
+            Item.setAttribute('data-active', 1);
         }
     });
 });

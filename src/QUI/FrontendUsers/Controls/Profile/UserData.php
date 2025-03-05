@@ -10,6 +10,9 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
 use QUI\Utils\Security\Orthos;
+use QUI\Verification\Enum\VerificationStatus;
+use QUI\Verification\Interface\VerificationRepositoryInterface;
+use QUI\Verification\VerificationRepository;
 
 use function array_filter;
 use function array_keys;
@@ -29,13 +32,22 @@ class UserData extends AbstractProfileControl
      * UserData constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = [])
-    {
+    public function __construct(
+        array $attributes = [],
+        private ?VerificationRepositoryInterface $verificationRepository = null
+    ) {
+        if (is_null($this->verificationRepository)) {
+            $this->verificationRepository = new VerificationRepository();
+        }
+
         parent::__construct($attributes);
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-userdata');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
+
+        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/UserData.css');
+        }
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData');
     }
@@ -60,11 +72,13 @@ class UserData extends AbstractProfileControl
         }
 
         try {
-            QUI\Verification\Verifier::getVerificationByIdentifier(
-                $User->getUUID(),
-                QUI\FrontendUsers\EmailConfirmVerification::getType(),
-                true
+            $verification = $this->verificationRepository->findByIdentifier(
+                'confirmemail-' . $User->getUUID()
             );
+
+            if (is_null($verification) || $verification->status !== VerificationStatus::PENDING) {
+                $emailChangeRequested = false;
+            }
         } catch (Exception) {
             $emailChangeRequested = false;
         }
@@ -91,7 +105,7 @@ class UserData extends AbstractProfileControl
             'showLanguageChangeInProfile' => $Config->getValue('userProfile', 'showLanguageChangeInProfile')
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/UserData.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

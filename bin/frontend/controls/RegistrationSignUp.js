@@ -332,6 +332,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         sendRegistration: function (registrar, registration_id, formData) {
             this.showLoader();
 
+            console.log(111);
             var self = this;
 
             return new Promise(function (resolve, reject) {
@@ -395,8 +396,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                                 var Redirect = Section.getElement('.quiqqer-frontendUsers-redirect');
 
-                                if (Redirect && Redirect.get('data-instant') && self.getAttribute('reloadOnSuccess')) {
-                                    window.location = Redirect.get('data-url');
+                                if (Redirect && self.getAttribute('reloadOnSuccess')) {
+                                    if (Redirect.get('data-reload')) {
+                                        window.location.reload();
+                                        return;
+                                    }
+
+                                    if (Redirect.get('data-instant')){
+                                        window.location = Redirect.get('data-url');
+                                    }
                                 }
 
                                 if (Section.getElement('.content-message-error')) {
@@ -442,8 +450,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         showTerms: function (registrar, isSocial) {
-            console.log('show terms', this.getAttribute('termsAccepted'));
-
             if (this.getAttribute('termsAccepted')) {
                 return Promise.resolve();
             }
@@ -638,8 +644,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                                 var Redirect = Section.getElement('.quiqqer-frontendUsers-redirect');
 
-                                if (Redirect && Redirect.get('data-instant')) {
-                                    window.location = Redirect.get('data-url');
+                                if (Redirect && self.getAttribute('reloadOnSuccess')) {
+                                    if (Redirect.get('data-reload')) {
+                                        window.location.reload();
+                                        return;
+                                    }
+
+                                    if (Redirect.get('data-instant')){
+                                        window.location = Redirect.get('data-url');
+                                    }
                                 }
 
                                 var ErrorBox = Section.getElement('.content-message-error');
@@ -1331,7 +1344,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     duration: 250,
                     callback: function () {
                         Captcha.setStyle('display', 'none');
-                        Password.setStyle('display', 'none');
+
+                        if (Password) {
+                            Password.setStyle('display', 'none');
+                        }
 
                         Mail.setStyle('opacity', 0);
                         Mail.setStyle('display', 'inline');
@@ -1378,8 +1394,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 childNodes.setStyle('display', 'none');
 
-                return self.hideTerms().then(function () {
-                    return self.showLoader();
+                return self.showLoader().then(() => {
+                    return self.hideTerms();
                 }).then(function () {
                     var Form     = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
                         FormData = QUIFormUtils.getFormData(Form);

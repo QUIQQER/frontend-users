@@ -10,7 +10,8 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler;
 use QUI\System\Log;
-use QUI\Verification\Verifier;
+use QUI\Verification\Interface\VerificationRepositoryInterface;
+use QUI\Verification\VerificationRepository;
 
 /**
  * Class DeleteAccount
@@ -23,13 +24,22 @@ class DeleteAccount extends AbstractProfileControl
      * DeleteAccount constructor.
      * @param array $attributes
      */
-    public function __construct(array $attributes = [])
-    {
+    public function __construct(
+        array $attributes = [],
+        private ?VerificationRepositoryInterface $verificationRepository = null
+    ) {
+        if (is_null($this->verificationRepository)) {
+            $this->verificationRepository = new VerificationRepository();
+        }
+
         parent::__construct($attributes);
 
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-deleteaccount');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile-control');
-        $this->addCSSFile(dirname(__FILE__) . '/DeleteAccount.css');
+
+        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
+            $this->addCSSFile(dirname(__FILE__) . '/DeleteAccount.css');
+        }
 
         $this->setJavaScriptControl('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount');
         $this->setJavaScriptControlOption('username', QUI::getUserBySession()->getUsername());
@@ -44,17 +54,17 @@ class DeleteAccount extends AbstractProfileControl
         $action = false;
 
         try {
-            $DeleteVerification = Verifier::getVerificationByIdentifier(
-                QUI::getUserBySession()->getUUID(),
-                QUI\FrontendUsers\UserDeleteConfirmVerification::getType(),
-                true
+            $verification = $this->verificationRepository->findByIdentifier(
+                'confirmdelete-' . QUI::getUserBySession()->getUUID()
             );
 
-            if (Verifier::isVerificationValid($DeleteVerification)) {
-                $action = 'deleteaccount_confirm_wait';
-                $this->setJavaScriptControlOption('deletestarted', 1);
-            } else {
-                Verifier::removeVerification($DeleteVerification);
+            if ($verification) {
+                if ($verification->isValid()) {
+                    $action = 'deleteaccount_confirm_wait';
+                    $this->setJavaScriptControlOption('deletestarted', 1);
+                } else {
+                    $this->verificationRepository->delete($verification);
+                }
             }
         } catch (Exception) {
             // nothing - no active user delete verification
@@ -69,7 +79,7 @@ class DeleteAccount extends AbstractProfileControl
             'action' => $action
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/DeleteAccount.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

@@ -6,9 +6,9 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 use QUI;
-use QUI\FrontendUsers\ActivationVerification;
+use QUI\FrontendUsers\ActivationLinkVerification;
 use QUI\FrontendUsers\Exception;
-use QUI\Verification\Verifier;
+use QUI\Verification\VerificationFactory;
 
 use function boolval;
 use function explode;
@@ -212,19 +212,23 @@ class PostRegister
 
     /**
      * @throws QUI\Exception
-     * @throws QUI\Verification\Exception
+     * @throws QUI\Verification\Exception|\DateMalformedStringException
      */
     protected static function sendActivationMail(
         QUI\Interfaces\Users\User $User,
         QUI\Projects\Project $Project
     ): bool {
         // TODO: Verification uses Project from QUI::getRewrite instead of the parameter, therefore the default project is always used (see quiqqer/verification#5)
-        $ActivationVerification = new ActivationVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang()
-        ]);
-
-        $activationLink = Verifier::startVerification($ActivationVerification, true);
+        $verificationFactory = new VerificationFactory();
+        $verification = $verificationFactory->createLinkVerification(
+            'activate-' . $User->getUUID(),
+            new ActivationLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang()
+            ]
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -253,7 +257,7 @@ class PostRegister
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'email' => $User->getAttribute('email'),
                         'date' => $L->formatDate(time()),
-                        'activationLink' => $activationLink
+                        'activationLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );

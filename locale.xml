@@ -460,6 +460,14 @@
             <en>
                 <![CDATA[Automatic redirect to the specified page after the user has been successfully activated. The automatic forwarding takes place after <b>10 seconds</b>. <b>Note:</b> Does not apply if users are required to be activated <b>manually</b> after a registration.]]></en>
         </locale>
+        <locale name="settings.reloadOnSuccess.title">
+            <de><![CDATA[Seite neu laden nach Registrierung]]></de>
+            <en><![CDATA[Reload page after registration]]></en>
+        </locale>
+        <locale name="settings.reloadOnSuccess.description">
+            <de><![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
+            <en><![CDATA[After successful registration the page should be reloaded. This setting overwrites the setting "Auto redirect on activation".]]></en>
+        </locale>
         <locale name="settings.redirectOnLogin.title">
             <de><![CDATA[Automatische Weiterleitung nach Login]]></de>
             <en><![CDATA[Auto redirect on log in]]></en>
@@ -822,11 +830,24 @@
             <en><![CDATA[Gravatar]]></en>
         </locale>
 
-        <locale name="dialog.frontend-users.delete.address">
+        <locale name="dialog.frontend-users.btn.cancel">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
+        </locale>
+
+        <locale name="dialog.frontend-users.address.delete.title">
+            <de><![CDATA[Adresse löschen]]></de>
+            <en><![CDATA[Delete address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.address.delete.message">
             <de><![CDATA[Möchten Sie die Adresse wirklichen löschen?]]></de>
             <en><![CDATA[Do you really want to delete the address?]]></en>
         </locale>
-        <locale name="dialog.frontend-users.title">
+        <locale name="dialog.frontend-users.address.delete.btn">
+            <de><![CDATA[Adresse löschen]]></de>
+            <en><![CDATA[Delete address]]></en>
+        </locale>
+        <locale name="dialog.frontend-users.edit.title">
             <de><![CDATA[Neue Adresse anlegen]]></de>
             <en><![CDATA[Create new address]]></en>
         </locale>
@@ -1642,6 +1663,32 @@ The e-mail address for your user account on [host] has been changed to the addre
 </p>]]></en>
         </locale>
 
+        <!-- E-Mail-Address confirm mail -->
+        <locale name="mail.confirm_email_address.subject">
+            <de><![CDATA[Bestätigung Ihrer E-Mail-Adresse]]></de>
+            <en><![CDATA[Confirm your email address]]></en>
+        </locale>
+        <locale name="mail.confirm_email_address.body" html="true">
+            <de><![CDATA[<h1>Hallo [username]!</h1>
+<p>
+Bitte bestätigen Sie Ihre E-Mail-Adresse für Ihr Benutzerkonto auf [host]. Für die Bestätigung öffnen Sie bitte folgenden Link:
+<br><br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>
+<b>Hinweis:</b> Sollten Sie diese E-Mail nicht veranlasst haben, können Sie sie einfach ignorieren.
+</p>]]></de>
+            <en><![CDATA[<h1>Hello [username]!</h1>
+<p>
+Please confirm your e-mail address for your user account on [host]. To confirm your e-mail address, please click on the following link:
+<br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>
+<b>Note:</b> If you have not initiated this email, please ignore this it.
+</p>]]></en>
+        </locale>
+
         <!-- User delete confirm mail -->
         <locale name="mail.delete_user_confirm.subject">
             <de><![CDATA[Löschung Ihres Benutzerkontos]]></de>
@@ -1771,36 +1818,36 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="control.sign.up.terms_of_use_and_privacy_policy.label" html="true">
             <de><![CDATA[
             Durch das Erstellen eines Benutzerkontos versichere ich die
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> und
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> und
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>
             gelesen zu haben und erkläre mich mit diesen einverstanden.
             ]]></de>
             <en><![CDATA[
             By creating a user account, I confirm that I have read and agree to the
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> and
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> and
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>.
             ]]></en>
         </locale>
         <locale name="control.sign.up.terms_of_use.label" html="true">
             <de><![CDATA[
             Durch das Erstellen eines Benutzerkontos versichere ich die
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a> gelesen zu haben
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> gelesen zu haben
             und erkläre mich mit diesen einverstanden.
             ]]></de>
             <en><![CDATA[
             By creating a user account, I confirm that I have read and agree to the
-            <a href="[termsOfUseUrl]">[termsOfUseSiteTitle]</a>.
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a>.
             ]]></en>
         </locale>
         <locale name="control.sign.up.privacy_policy.label" html="true">
             <de><![CDATA[
             Durch das Erstellen eines Benutzerkontos versichere ich die
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>
             gelesen zu haben und erkläre mich mit diesen einverstanden.
             ]]></de>
             <en><![CDATA[
             By creating a user account, I confirm that I have read and agree to the
-            <a href="[privacyPolicyUrl]">[privacyPolicySiteTitle]</a>.
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>.
             ]]></en>
         </locale>
         <locale name="control.sign.up.type.login.in.button">
@@ -1975,6 +2022,58 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             ]]></en>
         </locale>
 
+        <locale name="mail.text.confirmEmail.title">
+            <de><![CDATA[Frontend Users: Bestätigung der E-Mail-Adresse]]></de>
+            <en><![CDATA[Frontend Users: Confirmation of e-mail address]]></en>
+        </locale>
+        <locale name="mail.text.confirmEmail.description">
+            <de><![CDATA[
+            E-Mail zur Bestägigung einer E-Mail-Adresse.
+            ]]></de>
+            <en><![CDATA[
+            Email for confirmation of an email address.
+            ]]></en>
+        </locale>
+        <locale name="order.confirmEmail.subject.description">
+            <de><![CDATA[
+            <p>Betreff der Bestätigungs--E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (System)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Subject of the confirmation e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+            </ul>
+            ]]></en>
+        </locale>
+        <locale name="order.confirmEmail.body.description">
+            <de><![CDATA[
+            <p>Inhalt der Bestätigungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (System)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[email]:</b> E-Mail des Benutzers</li>
+                <li><b>[confirmLink]:</b> Bestätigungs-Link (muss enthalten sein!)</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+            <en><![CDATA[
+            <p>Content of the confirmation e-mail. Available variables:</p>
+            <ul>
+                <li><b>[host]:</b> Host of the project (system)</li>
+                <li><b>[userId]:</b> User id of the user</li>
+                <li><b>[email]:</b> E mail of the user</li>
+                <li><b>[confirmLink]:</b> Confirmation link (must be included!)</li>
+                <li><b>[username]:</b> Username</li>
+                <li><b>[userFirstName]:</b> First name of the user (if available)</li>
+                <li><b>[userLastName]:</b> Last name of the user (if available)</li>
+            </ul>
+            ]]></en>
+        </locale>
 
         <locale name="mail.text.changeEmail.title">
             <de><![CDATA[Frontend Users: E-Mail ändern]]></de>
@@ -2134,6 +2233,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="controls.settings.registrars.template.activationModeOptionAuto">
             <de><![CDATA[Automatische Aktivierung]]></de>
             <en><![CDATA[Auto activation]]></en>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionAutoWithEmailConfirm">
+            <de><![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
+            <en><![CDATA[Auto activation (link to confirm email address will be sent regardless)]]></en>
         </locale>
         <locale name="controls.settings.registrars.template.activationModeOptionManual">
             <de><![CDATA[Manuelle Aktivierung (über Benutzer-Verwaltung)]]></de>

@@ -120,6 +120,10 @@
                 <conf name="autoRedirectOnSuccess">
                     <type><![CDATA[string]]></type>
                 </conf>
+                <conf name="reloadOnSuccess">
+                    <type><![CDATA[bool]]></type>
+                    <defaultvalue>0</defaultvalue>
+                </conf>
                 <conf name="addressFields">
                     <type><![CDATA[string]]></type>
                 </conf>
@@ -579,6 +583,16 @@
                             <description>
                                 <locale group="quiqqer/frontend-users"
                                         var="settings.autoRedirectOnSuccess.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.reloadOnSuccess" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.reloadOnSuccess.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.reloadOnSuccess.description"/>
                             </description>
                         </input>
 

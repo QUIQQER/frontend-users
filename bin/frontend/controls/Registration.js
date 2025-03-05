@@ -110,6 +110,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             );
 
             if (RedirectElm) {
+                if (RedirectElm.get('data-reload')) {
+                    window.location.reload();
+                    return;
+                }
+
                 var url     = RedirectElm.get('data-url');
                 var instant = RedirectElm.get('data-instant') === "1";
 

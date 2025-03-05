@@ -81,7 +81,7 @@ class UserIcon extends Control
             $AvatarImage = new ExternalImage(Utils::getGravatarUrl($userEmail, $iconHeight));
 
             $Engine->assign([
-                'avatarImageUrl' => $AvatarImage->getSizeCacheUrl($iconWidth, $iconHeight)
+                'avatarImageUrl' => $AvatarImage->getSizeCacheUrl()
             ]);
         } else {
             $avatarMediaUrl = $User->getAttribute('avatar');
@@ -133,7 +133,7 @@ class UserIcon extends Control
      *
      * @return false|QUI\Projects\Media\Image|string
      */
-    protected function getDefaultAvatarImage(): QUI\Projects\Media\Image|bool|string
+    protected function getDefaultAvatarImage(): QUI\Projects\Media\Image | bool | string
     {
         try {
             $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();

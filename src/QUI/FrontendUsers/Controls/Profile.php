@@ -35,8 +35,10 @@ class Profile extends Control
 
         parent::__construct($attributes);
 
+//        if (!defined('QUIQQER_CONTROL_TEMPLATE_USE_BASIC') || QUIQQER_CONTROL_TEMPLATE_USE_BASIC !== true) {
         $this->addCSSFile(dirname(__FILE__) . '/Profile.css');
         $this->addCSSClass('quiqqer-frontendUsers-controls-profile');
+//        }
 
         $this->setAttribute(
             'data-qui',
@@ -82,7 +84,7 @@ class Profile extends Control
          * @param bool $category
          * @return bool
          */
-        $getFirstCategorySetting = function ($array, bool|string|int $category = false) use ($getFirstCategory) {
+        $getFirstCategorySetting = function ($array, bool | string | int $category = false) use ($getFirstCategory) {
             if ($category === false) {
                 $category = $getFirstCategory($array);
             }
@@ -145,7 +147,9 @@ class Profile extends Control
                     return '';
                 }
 
-                $Control->setAttribute('User', $this->getUser());
+                if (method_exists($Control, 'setAttribute')) {
+                    $Control->setAttribute('User', $this->getUser());
+                }
 
                 if ($Request->request->get('profile-save')) {
                     try {
@@ -171,7 +175,7 @@ class Profile extends Control
             'this' => $this
         ]);
 
-        return $Engine->fetch(dirname(__FILE__) . '/Profile.html');
+        return $Engine->fetch($this->getTemplateFile());
     }
 
     /**

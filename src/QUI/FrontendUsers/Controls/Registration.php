@@ -129,7 +129,7 @@ class Registration extends QUI\Control
 
                 $Engine->assign(
                     'error',
-                    QUI::getLocale()->get('quiqqer/frontend-user', 'controls.Registation.general_error')
+                    QUI::getLocale()->get('quiqqer/frontend-users', 'controls.Registation.general_error')
                 );
             }
         }
@@ -157,12 +157,16 @@ class Registration extends QUI\Control
         // redirect directives
         $redirectUrl = false;
         $instantRedirect = false;
+        $instantReload = false;
 
         if ($success) {
+            $instantReload = !empty($registrationSettings['reloadOnSuccess']);
+
             if (
-                $this->RegisteredUser
-                && $this->RegisteredUser->isActive()
-                && $registrationSettings['autoLoginOnActivation']
+                !$instantReload &&
+                $this->RegisteredUser &&
+                $this->RegisteredUser->isActive() &&
+                $registrationSettings['autoLoginOnActivation']
             ) {
                 // instantly redirect (only used on auto-login)
                 $loginSettings = $RegistrarHandler->getLoginSettings();
@@ -180,7 +184,9 @@ class Registration extends QUI\Control
                 } catch (Exception $Exception) {
                     QUI\System\Log::writeException($Exception);
                 }
-            } elseif (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
+            }
+
+            if (!$instantReload && !$redirectUrl && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 // show success message and redirect after 10 seconds
                 try {
                     $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -333,6 +339,7 @@ class Registration extends QUI\Control
             'success' => $success,
             'redirectUrl' => $redirectUrl,
             'instantRedirect' => $instantRedirect,
+            'instantReload' => $instantReload,
             'Login' => $Login,
             'termsOfUseLabel' => $termsOfUseLabel,
             'termsOfUseRequired' => $termsOfUseRequired,
@@ -551,8 +558,17 @@ class Registration extends QUI\Control
                 break;
 
             case $RegistrarHandler::ACTIVATION_MODE_AUTO:
+            case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
                 if (!$NewUser->isActive()) {
-                    $NewUser->activate(false, $SystemUser);
+                    $NewUser->activate('', $SystemUser);
+                }
+
+                if ($registrarSettings['activationMode'] == $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM) {
+                    $RegistrarHandler->sendEmailConfirmationMail(
+                        $NewUser,
+                        $NewUser->getAttribute('email'),
+                        $Registrar->getProject()
+                    );
                 }
                 break;
         }

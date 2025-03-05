@@ -1,17 +1,16 @@
 <?php
 
-/**
- * This file contains QUI\FrontendUsers\Handler
- */
-
 namespace QUI\FrontendUsers;
 
 use QUI;
+use QUI\Interfaces\Users\User as QUIUserInterface;
 use QUI\Mail\Mailer;
 use QUI\Utils\Singleton;
-use QUI\Verification\Verifier;
+use QUI\Verification\Interface\VerificationFactoryInterface;
+use QUI\Verification\VerificationFactory;
 
 use function array_filter;
+use function time;
 
 /**
  * Class Registration Handling
@@ -33,6 +32,7 @@ class Handler extends Singleton
      */
     const ACTIVATION_MODE_MAIL = 'mail';
     const ACTIVATION_MODE_AUTO = 'auto';
+    const ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM = 'autoWithEmailConfirm';
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
@@ -75,6 +75,7 @@ class Handler extends Singleton
     const USER_ATTR_REGISTRAR = 'quiqqer.frontendUsers.registrar';
     const USER_ATTR_ACTIVATION_LOGIN_EXECUTED = 'quiqqer.frontendUsers.activationLoginExecuted';
     const USER_ATTR_EMAIL_VERIFIED = 'quiqqer.frontendUsers.emailVerified';
+    const USER_ATTR_EMAIL_ADDRESSES_VERIFIED = 'quiqqer.frontendUsers.emailAddressesVerified';
     const USER_ATTR_USER_ACTIVATION_REQUIRED = 'quiqqer.frontendUsers.userActivationRequired';
 
     /**
@@ -97,8 +98,13 @@ class Handler extends Singleton
     /**
      * Handler constructor.
      */
-    public function __construct()
-    {
+    public function __construct(
+        private ?VerificationFactoryInterface $verificationFactory = null
+    ) {
+        if (is_null($this->verificationFactory)) {
+            $this->verificationFactory = new VerificationFactory();
+        }
+
         $this->Registrar = new RegistrarCollection();
     }
 
@@ -135,7 +141,7 @@ class Handler extends Singleton
      * @param string $registrar - Registrar type
      * @return false|RegistrarInterface
      */
-    public function getRegistrar(string $registrar): bool|RegistrarInterface
+    public function getRegistrar(string $registrar): bool | RegistrarInterface
     {
         /** @var RegistrarInterface $Registrar */
         foreach ($this->getAvailableRegistrars() as $Registrar) {
@@ -153,7 +159,7 @@ class Handler extends Singleton
      * @param QUI\Interfaces\Users\User $User
      * @return RegistrarInterface|false
      */
-    public function getRegistrarByUser(QUI\Interfaces\Users\User $User): bool|RegistrarInterface
+    public function getRegistrarByUser(QUI\Interfaces\Users\User $User): bool | RegistrarInterface
     {
         $registrar = $User->getAttribute(self::USER_ATTR_REGISTRAR);
 
@@ -170,7 +176,7 @@ class Handler extends Singleton
      * @param string $hash
      * @return false|RegistrarInterface
      */
-    public function getRegistrarByHash(string $hash): bool|RegistrarInterface
+    public function getRegistrarByHash(string $hash): bool | RegistrarInterface
     {
         /** @var RegistrarInterface $Registrar */
         foreach ($this->getAvailableRegistrars() as $Registrar) {
@@ -341,10 +347,10 @@ class Handler extends Singleton
     /**
      * Get settings for one or all Registrars
      *
-     * @param string|null $registrarClass (optional) - Registar class path (namespace)
+     * @param string|null $registrarClass (optional) - Registrar class path (namespace)
      * @return array
      */
-    public function getRegistrarSettings(string $registrarClass = null): array
+    public function getRegistrarSettings(null | string $registrarClass = null): array
     {
         try {
             $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
@@ -412,13 +418,17 @@ class Handler extends Singleton
     {
         $Project = $Registrar->getProject();
 
-        $ActivationVerification = new ActivationVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang(),
-            'registrar' => $Registrar->getHash()
-        ]);
-
-        $activationLink = Verifier::startVerification($ActivationVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'activate-' . $User->getUUID(),
+            new ActivationLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang(),
+                'registrar' => $Registrar->getHash()
+            ],
+            true
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -445,7 +455,7 @@ class Handler extends Singleton
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'email' => $User->getAttribute('email'),
                         'date' => $L->formatDate(time()),
-                        'activationLink' => $activationLink
+                        'activationLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
@@ -474,7 +484,7 @@ class Handler extends Singleton
     public function sendWelcomeMail(
         QUI\Interfaces\Users\User $User,
         QUI\Projects\Project $Project,
-        string $userPassword = null
+        null | string $userPassword = null
     ): void {
         $email = $User->getAttribute('email');
 
@@ -590,10 +600,10 @@ class Handler extends Singleton
     }
 
     /**
-     * Send activtion mail for a user account
+     * Send deactivation mail for a user account
      *
-     * @param QUI\Users\User $User
-     * @param string $newEmail - New E-Mail-Adress
+     * @param QUI\Interfaces\Users\User $User
+     * @param string $newEmail - New E-Mail-Address
      * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
      * @return void
      * @throws QUI\Exception
@@ -603,13 +613,17 @@ class Handler extends Singleton
         string $newEmail,
         QUI\Projects\Project $Project
     ): void {
-        $EmailConfirmVerification = new EmailConfirmVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang(),
-            'newEmail' => $newEmail
-        ]);
-
-        $confirmLink = Verifier::startVerification($EmailConfirmVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'confirmemail-' . $User->getUUID(),
+            new EmailConfirmLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang(),
+                'newEmail' => $newEmail
+            ],
+            true
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -632,9 +646,71 @@ class Handler extends Singleton
                         'username' => $User->getUsername(),
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
-                        'newEmail' => $newEmail,
+                        'email' => $newEmail,
                         'date' => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'confirmLink' => $verification->getVerificationUrl()
+                    ])
+                ]
+            );
+        } catch (\Exception $Exception) {
+            QUI\System\Log::addError(
+                self::class . ' :: sendChangeEmailAddressMail -> Send mail failed'
+            );
+
+            QUI\System\Log::writeException($Exception);
+        }
+    }
+
+    /**
+     * Send email to confirm an email address.
+     *
+     * @param QUIUserInterface $User
+     * @param string $email - New E-Mail-Adress
+     * @param QUI\Projects\Project $Project - The QUIQQER Project where the change action took place
+     * @return void
+     *
+     * @throws QUI\Exception
+     */
+    public function sendEmailConfirmationMail(
+        QUIUserInterface $User,
+        string $email,
+        QUI\Projects\Project $Project
+    ): void {
+        $verification = $this->verificationFactory->createLinkVerification(
+            'confirmemail-' . $User->getUUID(),
+            new EmailVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang(),
+                'email' => $email
+            ]
+        );
+
+        $L = QUI::getLocale();
+        $lg = 'quiqqer/frontend-users';
+        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
+        $host = $Project->getVHost();
+
+        try {
+            $this->sendMail(
+                [
+                    'subject' => $L->get($lg, 'mail.confirm_email_address.subject')
+                ],
+                [
+                    $email
+                ],
+                $tplDir . 'mail.confirm_email_address.html',
+                [
+                    'body' => $L->get($lg, 'mail.confirm_email_address.body', [
+                        'host' => $host,
+                        'userId' => $User->getUUID(),
+                        'username' => $User->getUsername(),
+                        'userFirstName' => $User->getAttribute('firstname') ?: '',
+                        'userLastName' => $User->getAttribute('lastname') ?: '',
+                        'email' => $email,
+                        'date' => $L->formatDate(time()),
+                        'confirmLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
@@ -659,12 +735,15 @@ class Handler extends Singleton
      */
     public function sendDeleteUserConfirmationMail(QUI\Interfaces\Users\User $User, QUI\Projects\Project $Project): void
     {
-        $DeleteUserVerification = new UserDeleteConfirmVerification($User->getUUID(), [
-            'project' => $Project->getName(),
-            'projectLang' => $Project->getLang()
-        ]);
-
-        $confirmLink = Verifier::startVerification($DeleteUserVerification, true);
+        $verification = $this->verificationFactory->createLinkVerification(
+            'confirmdelete-' . $User->getUUID(),
+            new UserDeleteConfirmLinkVerification(),
+            [
+                'uuid' => $User->getUUID(),
+                'project' => $Project->getName(),
+                'projectLang' => $Project->getLang()
+            ]
+        );
 
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
@@ -688,7 +767,7 @@ class Handler extends Singleton
                         'userFirstName' => $User->getAttribute('firstname') ?: '',
                         'userLastName' => $User->getAttribute('lastname') ?: '',
                         'date' => $L->formatDate(time()),
-                        'confirmLink' => $confirmLink
+                        'confirmLink' => $verification->getVerificationUrl()
                     ])
                 ]
             );
@@ -759,7 +838,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE registration site found
      * @throws QUI\Exception
      */
-    public function getRegistrationSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getRegistrationSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -786,7 +865,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE registration site found
      * @throws QUI\Exception
      */
-    public function getRegistrationSignUpSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getRegistrationSignUpSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -813,7 +892,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE login site found
      * @throws QUI\Exception
      */
-    public function getLoginSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getLoginSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -840,7 +919,7 @@ class Handler extends Singleton
      * @return QUI\Projects\Site|false - Site object or false if no ACTIVE profile site found
      * @throws QUI\Exception
      */
-    public function getProfileSite(QUI\Projects\Project $Project = null): bool|QUI\Projects\Site
+    public function getProfileSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
         if (is_null($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
@@ -865,7 +944,7 @@ class Handler extends Singleton
      *
      * @return false|QUI\Projects\Site
      */
-    public function getRedirectOnActivationSite(): bool|QUI\Projects\Site
+    public function getRedirectOnActivationSite(): bool | QUI\Projects\Site
     {
         try {
             $registrationSettings = $this->getRegistrationSettings();

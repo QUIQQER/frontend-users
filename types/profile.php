@@ -12,7 +12,7 @@
 $SessionUser = QUI::getUserBySession();
 
 if (QUI::getUsers()->isNobodyUser($SessionUser)) {
-    $Control = new QUI\Users\Controls\Login();
+    $Control = new QUI\FrontendUsers\Controls\Login();
 } else {
     $_REQUEST['_url'] = ltrim($_REQUEST['_url'], '/'); // nginx fix
     $_REQUEST['_url'] = urldecode($_REQUEST['_url']);
