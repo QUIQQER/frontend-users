@@ -32,26 +32,30 @@ QUI::$Ajax->registerFunction(
         $categories = utils::setUrlsToCategorySettings($categories);
 
         // Check if "go to profile" button is added
-        try {
-            $profileBarSettings = Handler::getInstance()->getProfileBarSettings();
+        $User = QUI::getUserBySession();
 
-            if (!empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
-                \array_unshift($categories['user']['items'], [
-                    'name' => 'toprofile',
-                    'title' => QUI::getLocale()->get(
-                        'quiqqer/frontend-users',
-                        'profilebar.to_profile'
-                    ),
-                    'index' => 0,
-                    'icon' => 'fa fa-user',
-                    'control' => false,
-                    'showinprofilebar' => true,
-                    'content' => false,
-                    'url' => $ProfileSite->getUrlRewritten()
-                ]);
+        if (QUI::getUsers()->isUser($User) && !($User instanceof QUI\Users\Nobody)) {
+            try {
+                $profileBarSettings = Handler::getInstance()->getProfileBarSettings();
+
+                if (!empty($profileBarSettings['showToProfile']) && !empty($categories['user'])) {
+                    \array_unshift($categories['user']['items'], [
+                        'name' => 'toprofile',
+                        'title' => QUI::getLocale()->get(
+                            'quiqqer/frontend-users',
+                            'profilebar.to_profile'
+                        ),
+                        'index' => 0,
+                        'icon' => 'fa fa-user',
+                        'control' => false,
+                        'showinprofilebar' => true,
+                        'content' => false,
+                        'url' => $ProfileSite->getUrlRewritten()
+                    ]);
+                }
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
             }
-        } catch (\Exception $Exception) {
-            QUI\System\Log::writeException($Exception);
         }
 
         return $categories;
