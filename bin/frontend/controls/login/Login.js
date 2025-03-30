@@ -357,8 +357,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 self.$hideSocialLoader(Form);
                 self.$onSuccess();
 
-                if (typeof self.getAttribute('onSuccess') === 'function') {
-                    self.getAttribute('onSuccess')(self);
+                if (
+                    typeof self.getAttribute('onSuccess') === 'function' &&
+                    self.getAttribute('onSuccess')(self)
+                ) {
                     return;
                 }
 
