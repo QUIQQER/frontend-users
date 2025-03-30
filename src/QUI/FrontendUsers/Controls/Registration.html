@@ -11,7 +11,7 @@
     require(['qui/QUI'], function(QUI) {
         (function() {
             QUI.fireEvent('quiqqerFrontendUsersUserActivate', [
-                {$User->getId()},
+                '{$User->getUUID()}',
                 '{$registrarHash}',
                 '{$registrarType}'
             ]);
@@ -21,97 +21,108 @@
 {/if}
 
 {if $success}
-<div class="content-message-success">
-    {if !$instantRedirect}
-        {$Registrar->getSuccessMessage()}
-    {/if}
-    {if $redirectUrl || $instantReload}
-    <div class="quiqqer-frontendUsers-redirect"
-         {if !empty($redirectUrl)}data-url="{$redirectUrl}"{/if}
-         data-instant="{if $instantRedirect}1{else}0{/if}"
-         data-reload="{if $instantReload}1{else}0{/if}"
-    >
-        {if !$instantRedirect && !$instantReload}
-            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
+    <div class="content-message-success">
+        {if !$instantRedirect}
+            {$registrar->getSuccessMessage()}
+        {/if}
+        {if $redirectUrl || $instantReload}
+        <div class="quiqqer-frontendUsers-redirect"
+             {if !empty($redirectUrl)}data-url="{$redirectUrl}"{/if}
+             data-instant="{if $instantRedirect}1{else}0{/if}"
+             data-reload="{if $instantReload}1{else}0{/if}"
+        >
+            {if !$instantRedirect && !$instantReload}
+                {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
+            {/if}
+        </div>
+        {elseif $nextLinksText}
+        <p class="quiqqer-frontendUsers-controls-registration-nextlinks">
+            {$nextLinksText}
+        </p>
         {/if}
     </div>
-    {elseif $nextLinksText}
-    <p class="quiqqer-frontendUsers-controls-registration-nextlinks">
-        {$nextLinksText}
-    </p>
-    {/if}
-</div>
     {if $Login}
         {$Login->create()}
     {/if}
 
-{template_event name="quiqqer::frontendUsers::registrationSuccess"}
-
-{elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
-<div class="content-message-information">
-    {$Registrar->getPendingMessage()}
-</div>
-
-{template_event name="quiqqer::frontendUsers::registrationPending"}
-
+    {template_event name="quiqqer::frontendUsers::registrationSuccess"}
+{elseif $registrar && isset($registrationStatus) && $registrationStatus === 2}
+    <div class="content-message-information">
+        {$registrar->getPendingMessage()}
+    </div>
+    {template_event name="quiqqer::frontendUsers::registrationPending"}
 {else}
     {if isset($error) && !$redirectUrl}
-    <div class="content-message-error">
-        {$error}
-    </div>
-
-    {template_event name="quiqqer::frontendUsers::registrationError"}
-
+        <div class="content-message-error">
+            {$error}
+        </div>
+        {template_event name="quiqqer::frontendUsers::registrationError"}
     {/if}
 
     {if !isset($isGeneralError)}
-        {if $Registrars->isEmpty()}
+        {if $registrars->isEmpty() || $mailRegistrars->isEmpty()}
         <div class="content-message-information">
             {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
         </div>
         {else}
         <div class="quiqqer-frontendUsers-controls-registration">
-            {foreach $Registrars as $Registrar}
+            {foreach $mailRegistrars as $registrar}
             <form action=""
                   method="POST"
                   class="quiqqer-frontendUsers-controls-registration-registrar"
-                  data-registrar="{$Registrar->getHash()}"
+                  data-registrar="{$registrar->getHash()}"
             >
                 {if $showRegistrarTitle}
                 <header>
-                    <h2>{$Registrar->getTitle()}</h2>
+                    <h2>{$registrar->getTitle()}</h2>
                 </header>
                 {/if}
 
-                {$Registrar->getControl()->create()}
+                {$registrar->getControl()->create()}
 
-                <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
+                <input type="hidden" name="registrar" value="{$registrar->getHash()}"/>
                 <input type="hidden" name="registration" value="1"/>
                 <input type="hidden" name="registration_id" value="{$registrationId}"/>
             </form>
+            {/foreach}
 
-            {if $Registrar !== $Registrars->last()}
+            {if !$registrars->isEmpty() && !$mailRegistrars->isEmpty()}
             <div class="quiqqer-frontendUsers-controls-registration-or">
-                                        <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
-                                            {locale group="quiqqer/frontend-users" var="control.registration.or"}
-                                        </span>
+                <span class="quiqqer-frontendUsers-controls-registration-or-text">
+                    OR
+                </span>
             </div>
             {/if}
+
+            {foreach $registrars as $registrar}
+            <form action=""
+                  method="POST"
+                  class="quiqqer-frontendUsers-controls-registration-registrar"
+                  data-registrar="{$registrar->getHash()}"
+            >
+                {if $showRegistrarTitle}
+                <header>
+                    <h2>{$registrar->getTitle()}</h2>
+                </header>
+                {/if}
+
+                {$registrar->getControl()->create()}
+
+                <input type="hidden" name="registrar" value="{$registrar->getHash()}"/>
+                <input type="hidden" name="registration" value="1"/>
+                <input type="hidden" name="registration_id" value="{$registrationId}"/>
+            </form>
             {/foreach}
 
             {if $termsOfUseRequired}
             <div class="quiqqer-frontendUsers-controls-registration-termsOfUse"
                  {if $termsOfUseSiteId} data-termsofusesiteid="{$termsOfUseSiteId}"{/if}
-            {if $privacyPolicySiteId} data-privacypolicysiteid="{$privacyPolicySiteId}"{/if}
+                 {if $privacyPolicySiteId} data-privacypolicysiteid="{$privacyPolicySiteId}"{/if}
             >
-            <p>
                 <label>
-                            <span>
-                                {$termsOfUseLabel}
-                            </span>
-                    <input type="checkbox"{if $termsOfUseAcctepted} checked{/if}/>
+                    <input type="checkbox"{if $termsOfUseAccepted} checked{/if}/>
+                    <span>{$termsOfUseLabel}</span>
                 </label>
-            </p>
             </div>
             {/if}
         </div>

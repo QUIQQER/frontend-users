@@ -11,6 +11,8 @@
  * @throws QUI\Exception
  */
 
+use QUI\FrontendUsers\Handler;
+
 QUI::$Ajax->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_register',
     function ($registrar, $data, $registrars, $isSignUpRegistration = false) {
@@ -27,11 +29,10 @@ QUI::$Ajax->registerFunction(
         ]);
 
         $_POST = array_merge($_POST, json_decode($data, true));
-
         $_POST['registration'] = 1;
         $_POST['registrar'] = $registrar;
 
-        $Registrar = \QUI\FrontendUsers\Handler::getInstance()->getRegistrarByHash($registrar);
+        $Registrar = Handler::getInstance()->getRegistrarByHash($registrar);
 
         try {
             $status = $Registration->create();

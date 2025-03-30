@@ -15,17 +15,19 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
     'package/quiqqer/controls/bin/site/Window',
     'qui/utils/Form',
     'Locale',
-    'Ajax'
+    'Ajax',
+
+    'css!package/quiqqer/frontend-users/bin/frontend/controls/Registration.css'
 
 ], function (QUI, QUIControl, QUILoader, QUISiteWindow, QUIFormUtils, QUILocale, QUIAjax) {
     "use strict";
 
-    var lg = 'quiqqer/frontend-users';
+    const lg = 'quiqqer/frontend-users';
 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
 
         Binds: [
             '$onImport',
@@ -39,8 +41,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader              = null;
-            this.$TermsOfUseCheckBox = null;
+            this.Loader = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -51,8 +52,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
          * event: on import
          */
         $onImport: function () {
-            var self  = this,
-                Elm   = this.getElm(),
+            const self = this,
+                Elm = this.getElm(),
                 forms = Elm.getElements('form.quiqqer-frontendUsers-controls-registration-registrar');
 
             QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
@@ -66,11 +67,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             });
 
             // Terms Of Use / Privacy Policy
-            var TermsOfUseElm = Elm.getElement('.quiqqer-frontendUsers-controls-registration-termsOfUse');
+            const TermsOfUseElm = Elm.getElement('.quiqqer-frontendUsers-controls-registration-termsOfUse');
 
             if (TermsOfUseElm) {
-                var TermsOfUseLink    = TermsOfUseElm.getElement('a.quiqqer-frontendusers-termsofuse-link');
-                var PrivacyPolicyLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-privacypolicy-link');
+                const TermsOfUseLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-termsofuse-link');
+                const PrivacyPolicyLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-privacypolicy-link');
 
                 if (TermsOfUseLink) {
                     TermsOfUseLink.addEvent('click', function (event) {
@@ -78,10 +79,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
                         new QUISiteWindow({
                             closeButtonText: QUILocale.get(lg, 'btn.close'),
-                            showTitle      : true,
-                            project        : QUIQQER_PROJECT.name,
-                            lang           : QUIQQER_PROJECT.lang,
-                            id             : TermsOfUseElm.get('data-termsofusesiteid')
+                            showTitle: true,
+                            project: QUIQQER_PROJECT.name,
+                            lang: QUIQQER_PROJECT.lang,
+                            id: TermsOfUseElm.get('data-termsofusesiteid')
                         }).open();
                     });
                 }
@@ -92,20 +93,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
                         new QUISiteWindow({
                             showTitle: true,
-                            project  : QUIQQER_PROJECT.name,
-                            lang     : QUIQQER_PROJECT.lang,
-                            id       : TermsOfUseElm.get('data-privacypolicysiteid')
+                            project: QUIQQER_PROJECT.name,
+                            lang: QUIQQER_PROJECT.lang,
+                            id: TermsOfUseElm.get('data-privacypolicysiteid')
                         }).open();
                     });
                 }
-
-                this.$TermsOfUseCheckBox = Elm.getElement(
-                    '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
-                );
             }
 
             // Redirect
-            var RedirectElm = Elm.getElement(
+            const RedirectElm = Elm.getElement(
                 '.quiqqer-frontendUsers-redirect'
             );
 
@@ -115,8 +112,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     return;
                 }
 
-                var url     = RedirectElm.get('data-url');
-                var instant = RedirectElm.get('data-instant') === "1";
+                const url = RedirectElm.get('data-url');
+                const instant = RedirectElm.get('data-instant') === "1";
 
                 if (instant) {
                     window.location = url;
@@ -138,16 +135,20 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         $sendForm: function (Form) {
             this.Loader.show();
 
-            var self     = this,
+            const self = this,
                 formData = QUIFormUtils.getFormData(Form);
 
-            if (this.$TermsOfUseCheckBox) {
-                formData.termsOfUseAccepted = this.$TermsOfUseCheckBox.checked;
+            const termsOfUse = this.getElm().getElement(
+                '.quiqqer-frontendUsers-controls-registration-termsOfUse input[type="checkbox"]'
+            );
+
+            if (termsOfUse) {
+                formData.termsOfUseAccepted = termsOfUse.checked;
             }
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (Data) {
-                    var Elm = self.getElm();
+                    const Elm = self.getElm();
 
                     if (Data.userActivated) {
                         QUI.fireEvent('quiqqerFrontendUsersUserActivate', [
@@ -157,11 +158,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         ]);
                     }
 
-                    var Container = new Element('div', {
+                    const Container = new Element('div', {
                         html: Data.html
                     });
 
-                    var Registration = Container.getElement(
+                    const Registration = Container.getElement(
                         '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
                     );
 
@@ -178,11 +179,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         resolve();
                     }, reject);
                 }, {
-                    'package' : 'quiqqer/frontend-users',
-                    registrar : Form.get('data-registrar'),
-                    data      : JSON.encode(formData),
+                    'package': 'quiqqer/frontend-users',
+                    registrar: Form.get('data-registrar'),
+                    data: JSON.encode(formData),
                     registrars: self.getAttribute('registrars'),
-                    onError   : reject
+                    onError: reject
                 });
             });
         }

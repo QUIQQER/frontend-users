@@ -89,10 +89,10 @@ class Registration extends QUI\Control
     public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
-        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-        $Registrars = $this->getRegistrars();
-        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $CurrentRegistrar = $this->isCurrentlyExecuted();
+        $registrarHandler = QUI\FrontendUsers\Handler::getInstance();
+        $registrars = $this->getRegistrars();
+        $registrationSettings = $registrarHandler->getRegistrationSettings();
+        $currentRegistrar = $this->isCurrentlyExecuted();
         $registrationStatus = false;
         $projectLang = QUI::getRewrite()->getProject()->getLang();
 
@@ -108,7 +108,6 @@ class Registration extends QUI\Control
                     'registrationStatus' => $registrationStatus
                 ]);
             } catch (QUI\FrontendUsers\Exception\UserAlreadyExistsException $Exception) {
-                QUI\System\Log::writeDebugException($Exception);
                 $Engine->assign('error', $Exception->getMessage());
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::write(
@@ -116,12 +115,10 @@ class Registration extends QUI\Control
                     QUI\System\Log::LEVEL_WARNING,
                     [
                         'process' => 'registration',
-                        'registrar' => $CurrentRegistrar ? $CurrentRegistrar->getTitle() : 'unknown'
+                        'registrar' => $currentRegistrar ? $currentRegistrar->getTitle() : 'unknown'
                     ],
                     'frontend-users'
                 );
-
-                QUI\System\Log::writeDebugException($Exception);
 
                 $Engine->assign('error', $Exception->getMessage());
             } catch (Exception $Exception) {
@@ -137,8 +134,8 @@ class Registration extends QUI\Control
         // check for errors
         $status = $this->getAttribute('status');
 
-        if ($status === $RegistrarHandler::REGISTRATION_STATUS_ERROR && $CurrentRegistrar) {
-            $Engine->assign('error', $CurrentRegistrar->getErrorMessage());
+        if ($status === $registrarHandler::REGISTRATION_STATUS_ERROR && $currentRegistrar) {
+            $Engine->assign('error', $currentRegistrar->getErrorMessage());
         } elseif ($status === 'error') {
             $Engine->assign([
                 'error' => QUI::getLocale()->get(
@@ -150,9 +147,8 @@ class Registration extends QUI\Control
         }
 
         // determine success
-        $success = $CurrentRegistrar
-            && ($status === 'success'
-                || $registrationStatus === $RegistrarHandler::REGISTRATION_STATUS_SUCCESS);
+        $success = $currentRegistrar &&
+            ($status === 'success' || $registrationStatus === $registrarHandler::REGISTRATION_STATUS_SUCCESS);
 
         // redirect directives
         $redirectUrl = false;
@@ -169,7 +165,7 @@ class Registration extends QUI\Control
                 $registrationSettings['autoLoginOnActivation']
             ) {
                 // instantly redirect (only used on auto-login)
-                $loginSettings = $RegistrarHandler->getLoginSettings();
+                $loginSettings = $registrarHandler->getLoginSettings();
                 $redirectOnLogin = $loginSettings['redirectOnLogin'];
                 $Project = $this->getProject();
                 $projectLang = $Project->getLang();
@@ -206,7 +202,7 @@ class Registration extends QUI\Control
         if (!$success && $loggedIn) {
             switch ($registrationSettings['visitRegistrationSiteBehaviour']) {
                 case 'showProfile':
-                    $ProfileSite = $RegistrarHandler->getProfileSite(QUI::getRewrite()->getProject());
+                    $ProfileSite = $registrarHandler->getProfileSite(QUI::getRewrite()->getProject());
 
                     if ($ProfileSite) {
                         header('Location: ' . $ProfileSite->getUrlRewritten());
@@ -311,9 +307,38 @@ class Registration extends QUI\Control
         }
 
         // Sort registrars by display position
-        $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
-            $settingsB = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+        $mailRegistrars = $registrars->filter(function ($Registrar) use ($registrarHandler) {
+            if (class_exists('QUI\Registration\Trial\Registrar')) {
+                if ($Registrar instanceof QUI\Registration\Trial\Registrar) {
+                    return true;
+                }
+            }
+
+            if ($Registrar instanceof QUI\FrontendUsers\Registrars\Email\Registrar) {
+                return true;
+            }
+
+            return false;
+        });
+
+        // remove mail registrars
+        $registrars = $registrars->filter(function ($Registrar) use ($registrarHandler) {
+            if (class_exists('QUI\Registration\Trial\Registrar')) {
+                if ($Registrar instanceof QUI\Registration\Trial\Registrar) {
+                    return false;
+                }
+            }
+
+            if ($Registrar instanceof QUI\FrontendUsers\Registrars\Email\Registrar) {
+                return false;
+            }
+
+            return true;
+        });
+
+        $registrars->sort(function ($RegistrarA, $RegistrarB) use ($registrarHandler) {
+            $settingsA = $registrarHandler->getRegistrarSettings(get_class($RegistrarA));
+            $settingsB = $registrarHandler->getRegistrarSettings(get_class($RegistrarB));
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -321,21 +346,24 @@ class Registration extends QUI\Control
         });
 
         if (!empty($_REQUEST['registrar'])) {
-            $Registrar = $RegistrarHandler->getRegistrarByHash($_REQUEST['registrar']);
+            $registrar = $registrarHandler->getRegistrarByHash($_REQUEST['registrar']);
 
-            if ($Registrar) {
+            if ($registrar) {
                 $Engine->assign([
                     'fireUserActivationEvent' => true,
                     'User' => QUI::getUserBySession(),
-                    'registrarHash' => $Registrar->getHash(),
-                    'registrarType' => str_replace('\\', '\\\\', $Registrar->getType())
+                    'registrarHash' => $registrar->getHash(),
+                    'registrarType' => str_replace('\\', '\\\\', $registrar->getType())
                 ]);
             }
         }
 
+        // Mail Registrar
+
         $Engine->assign([
-            'Registrars' => $Registrars,
-            'Registrar' => $CurrentRegistrar,
+            'registrars' => $registrars,
+            'mailRegistrars' => $mailRegistrars,
+            'registrar' => $currentRegistrar,
             'success' => $success,
             'redirectUrl' => $redirectUrl,
             'instantRedirect' => $instantRedirect,
@@ -343,7 +371,7 @@ class Registration extends QUI\Control
             'Login' => $Login,
             'termsOfUseLabel' => $termsOfUseLabel,
             'termsOfUseRequired' => $termsOfUseRequired,
-            'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
+            'termsOfUseAccepted' => !empty($_POST['termsOfUseAccepted']),
             'registrationId' => $this->id,
             'showRegistrarTitle' => $this->getAttribute('showRegistrarTitle'),
             'nextLinksText' => $success ? RegistrationUtils::getFurtherLinksText() : false
@@ -397,7 +425,7 @@ class Registration extends QUI\Control
      *
      * @return bool|QUI\FrontendUsers\RegistrarInterface
      */
-    protected function isCurrentlyExecuted(): bool|QUI\FrontendUsers\RegistrarInterface
+    protected function isCurrentlyExecuted(): bool | QUI\FrontendUsers\RegistrarInterface
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
         $Registrar = $this->getAttribute('Registrar');

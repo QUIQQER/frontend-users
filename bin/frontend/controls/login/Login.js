@@ -28,7 +28,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
     'Ajax',
     'Locale'
 
-], function(QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, URI, QUIAjax, QUILocale) {
+], function (QUI, QUIControl, QUILoader, QUIFormUtils, ResendActivationLinkBtn, URI, QUIAjax, QUILocale) {
     'use strict';
 
     var lg = 'quiqqer/frontend-users';
@@ -62,7 +62,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             submitauth: false   // md5sum of classname of authenticator that is *immediately* submitted upon control load
         },
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.$Elm = null;
@@ -80,7 +80,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          *
          * @return {HTMLDivElement}
          */
-        create: function() {
+        create: function () {
             this.$Elm = this.parent();
 
             this.$Elm.addClass('quiqqer-frontendUsers-login');
@@ -101,7 +101,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * event: on import
          */
-        $onImport: function() {
+        $onImport: function () {
             this.Loader.inject(this.$Elm);
 
             if (this.getAttribute('showLoader')) {
@@ -121,14 +121,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * event: on import
          */
-        $onInject: function() {
+        $onInject: function () {
             var self = this;
 
             if (this.getAttribute('showLoader')) {
                 this.Loader.show();
             }
 
-            QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getControl', function(result) {
+            QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getControl', function (result) {
                 const Ghost = new Element('div', {
                     html: result
                 });
@@ -160,10 +160,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * parse qui controls for loading
          */
-        $parseQuiControls: function() {
+        $parseQuiControls: function () {
             var self = this;
 
-            QUI.parse(this.getElm()).then(function() {
+            QUI.parse(this.getElm()).then(function () {
                 var Login = self.getElm().querySelector('[data-name="login-container"]');
 
                 // already logged in
@@ -179,9 +179,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 Login.setStyle('display', null);
                 Login.setStyle('positino', 'relative');
 
-                self.getElm().getElements('form[name="quiqqer-fu-login-email"]').addEvent('submit', function(event) {
+                self.getElm().getElements('form[name="quiqqer-fu-login-email"]').addEvent('submit', function (event) {
                     event.stop();
-                    self.authByEmail().catch(function(e) {
+                    self.authByEmail().catch(function (e) {
                         // nothing
                     });
                 });
@@ -200,21 +200,21 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 self.getElm().getElements(
                     '[data-name="forgot-password-link"] a'
-                ).addEvent('click', function(event) {
+                ).addEvent('click', function (event) {
                     event.stop();
                     self.openForgottenPassword();
                 });
 
                 self.getElm().getElements(
                     '.quiqqer-fu-login-forget-password-reset [name="cancel"]'
-                ).addEvent('click', function(event) {
+                ).addEvent('click', function (event) {
                     event.stop();
                     self.closeForgottenPassword();
                 });
 
                 self.getElm().getElements(
                     '.quiqqer-fu-login-forget-password-reset [type="submit"]'
-                ).addEvent('click', function(event) {
+                ).addEvent('click', function (event) {
                     event.stop();
                     self.sendForgottenPassword();
                 });
@@ -237,7 +237,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 moofx(Login).animate({
                     opacity: 1
                 }, {
-                    callback: function() {
+                    callback: function () {
                         self.Loader.hide();
                         self.fireEvent('load', [self]);
 
@@ -276,7 +276,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * Authentication via email
          */
-        authByEmail: function() {
+        authByEmail: function () {
             var self = this,
                 Form = this.getElm().querySelector('form[name="quiqqer-fu-login-email"]');
 
@@ -289,8 +289,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             var FormData = QUIFormUtils.getFormData(Form);
 
-            return new Promise(function(resolve, reject) {
-                QUIAjax.post('ajax_users_login', function(result) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.post('ajax_users_login', function (result) {
                     window.QUIQQER_USER = result.user;
 
                     self.fireEvent('success', [self]);
@@ -316,7 +316,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     authenticator: 'QUI\\Users\\Auth\\QUIQQER',
                     globalauth: 1,
                     params: JSON.encode(FormData),
-                    onError: function(e) {
+                    onError: function (e) {
                         self.Loader.hide();
                         self.fireEvent('userLoginError', [
                             self,
@@ -338,7 +338,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          *
          * @param Form
          */
-        $authBySocial: function(Form) {
+        $authBySocial: function (Form) {
+            console.log('$authBySocial', Form);
+
             var self = this;
 
             this.fireEvent('authBegin', [this]);
@@ -346,7 +348,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             this.$showSocialLoader(Form);
 
-            QUIAjax.post('ajax_users_login', function(result) {
+            QUIAjax.post('ajax_users_login', function (result) {
                 window.QUIQQER_USER = result.user;
 
                 self.fireEvent('success', [self]);
@@ -360,7 +362,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     return;
                 }
 
-                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function(redirect) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (redirect) {
                     if (!self.getAttribute('reload')) {
                         return;
                     }
@@ -386,7 +388,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 params: JSON.encode(
                     QUIFormUtils.getFormData(Form)
                 ),
-                onError: function(e) {
+                onError: function (e) {
                     self.$hideSocialLoader(Form);
                     self.Loader.hide();
                     self.fireEvent('userLoginError', [
@@ -406,9 +408,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          *
          * @param Form
          */
-        $showSocialLoader: function(Form) {
+        $showSocialLoader: function (Form) {
             var Icon = Form.querySelector('[data-name="social-login-entry-icon"]');
             var Loader = Form.querySelector('[data-name="social-login-entry-loader"]');
+
+            if (!Icon || !Loader) {
+                return;
+            }
 
             Loader.setStyle('opacity', 0);
             Loader.setStyle('display', 'inline-block');
@@ -417,7 +423,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 opacity: 0
             }, {
                 duration: 250,
-                callback: function() {
+                callback: function () {
                     Icon.setStyle('display', 'none');
                 }
             });
@@ -434,9 +440,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          *
          * @param Form
          */
-        $hideSocialLoader: function(Form) {
+        $hideSocialLoader: function (Form) {
             var Icon = Form.querySelector('[data-name="social-login-entry-icon"]');
             var Loader = Form.querySelector('[data-name="social-login-entry-loader"]');
+
+            if (!Icon || !Loader) {
+                return;
+            }
 
             Icon.setStyle('opacity', 0);
             Icon.setStyle('display', 'inline-block');
@@ -451,7 +461,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 opacity: 1
             }, {
                 duration: 250,
-                callback: function() {
+                callback: function () {
                     Loader.setStyle('display', 'none');
                 }
             });
@@ -460,7 +470,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * social authentication
          */
-        $auth: function(event) {
+        $auth: function (event) {
             if (clicked) {
                 return;
             }
@@ -478,7 +488,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             Control.click();
             clicked = true; // we need that because of control click
 
-            (function() {
+            (function () {
                 clicked = false;
             }).delay(200);
         },
@@ -486,14 +496,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * on success
          */
-        $onSuccess: function() {
+        $onSuccess: function () {
             if (!this.getAttribute('redirect')) {
                 return;
             }
 
             var self = this;
 
-            QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function(result) {
+            QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect', function (result) {
                 if (!self.getAttribute('reload')) {
                     return;
                 }
@@ -516,7 +526,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * opens the password forgotten sheet
          */
-        openForgottenPassword: function() {
+        openForgottenPassword: function () {
             var Reset = this.getElm().querySelector('[data-name="password-reset"]');
 
             if (!Reset) {
@@ -551,7 +561,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 left: 0,
                 opacity: 1
             }, {
-                callback: function() {
+                callback: function () {
 
                 }
             });
@@ -568,7 +578,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          *
          * @param {Object} error
          */
-        $onUserLoginError: function(Control, error) {
+        $onUserLoginError: function (Control, error) {
+            if (!this.$Elm) {
+                console.error(error);
+                return;
+            }
             var ActivationInfoBox = this.$Elm.querySelector('[data-name="activation-info"]');
 
             ActivationInfoBox.set('html', '');
@@ -586,7 +600,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 html: error.getMessage()
             });
 
-            var showResendError = function() {
+            var showResendError = function () {
                 MsgElm.set('html', QUILocale.get(lg, 'controls.frontend.Login.resend_activation_mail_error'));
                 MsgElm.removeClass('content-message-attention');
                 MsgElm.addClass('content-message-error');
@@ -616,10 +630,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     new ResendActivationLinkBtn({
                         email: email,
                         events: {
-                            onResendSuccess: function(Btn) {
+                            onResendSuccess: function (Btn) {
                                 Btn.disable();
                             },
-                            onResendFail: function(Btn) {
+                            onResendFail: function (Btn) {
                                 showResendError();
                                 Btn.enable();
                             }
@@ -636,7 +650,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * close the password reset
          */
-        closeForgottenPassword: function() {
+        closeForgottenPassword: function () {
             var Reset = this.getElm().querySelector('[data-name="password-reset"]');
 
             if (!Reset) {
@@ -658,7 +672,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 left: -50,
                 opacity: 0
             }, {
-                callback: function() {
+                callback: function () {
                     Reset.setStyle('display', 'none');
                 }
             });
@@ -667,7 +681,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 moofx(Login).animate({
                     height: LoginInner.offsetHeight
                 }, {
-                    callback: function() {
+                    callback: function () {
                         Login.style.height = null;
                     }
                 });
@@ -677,7 +691,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         /**
          * send password reset call
          */
-        sendForgottenPassword: function() {
+        sendForgottenPassword: function () {
             var self = this,
                 Elm = this.getElm(),
                 PasswordReset = Elm.querySelector('[data-name="password-reset"]'),
@@ -692,11 +706,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             EmailInput.disabled = true;
             SubmitBtn.disabled = true;
 
-            var showHideMessage = function(Message) {
+            var showHideMessage = function (Message) {
                 moofx(Section).animate({
                     opacity: 0
                 }, {
-                    callback: function() {
+                    callback: function () {
                         Section.setStyle('display', 'none');
                     }
                 });
@@ -706,14 +720,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                     top: 0
                 }, {
                     duration: 200,
-                    callback: function() {
-                        (function() {
+                    callback: function () {
+                        (function () {
                             moofx(Message).animate({
                                 opacity: 0,
                                 top: -20
                             }, {
                                 duration: 200,
-                                callback: function() {
+                                callback: function () {
                                     Message.destroy();
 
                                     EmailInput.value = '';
@@ -730,7 +744,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
                 });
             };
 
-            this.$sendPasswordResetConfirmMail(EmailInput.value).then(function() {
+            this.$sendPasswordResetConfirmMail(EmailInput.value).then(function () {
                 self.Loader.hide();
 
                 var Message = new Element('div', {
@@ -751,7 +765,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
                 EmailInput.disabled = false;
                 SubmitBtn.disabled = false;
-            }, function(e) {
+            }, function (e) {
                 self.Loader.hide();
 
                 var Message = new Element('div', {
@@ -783,8 +797,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
          * @param {String} email
          * @return {Promise}
          */
-        $sendPasswordResetConfirmMail: function(email) {
-            return new Promise(function(resolve, reject) {
+        $sendPasswordResetConfirmMail: function (email) {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.post('ajax_users_authenticator_sendPasswordResetConfirmMail', resolve, {
                     email: email,
                     onError: reject,
