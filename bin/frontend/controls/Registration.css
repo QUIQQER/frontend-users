@@ -34,6 +34,13 @@
     top: -15px;
 }
 
+.quiqqer-frontendUsers-controls-registrars-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
 .quiqqer-frontendUsers-controls-registration .quiqqer-frontend-social-button {
     width: 100%;
 }

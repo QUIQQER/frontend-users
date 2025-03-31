@@ -94,6 +94,7 @@
             </div>
             {/if}
 
+            <div class="quiqqer-frontendUsers-controls-registrars-list">
             {foreach $registrars as $registrar}
             <form action=""
                   method="POST"
@@ -113,6 +114,7 @@
                 <input type="hidden" name="registration_id" value="{$registrationId}"/>
             </form>
             {/foreach}
+            </div>
 
             {if $termsOfUseRequired}
             <div class="quiqqer-frontendUsers-controls-registration-termsOfUse"

@@ -70,9 +70,7 @@ class Registration extends QUI\Control
         ]);
 
         $this->setAttributes($attributes);
-
         $this->setJavaScriptControlOption('registrars', json_encode($this->getAttribute('registrars')));
-        $this->addCSSFile(dirname(__FILE__) . '/Registration.css');
 
         $this->id = QUI\FrontendUsers\Handler::getInstance()->createRegistrationId();
         $this->isAsync = $this->getAttribute('async');
