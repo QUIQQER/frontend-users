@@ -2,6 +2,10 @@
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
+        <locale name="exception.registrars.email.email_blacklisted">
+            <de><![CDATA[Die eingegebene E-Mail-Adresse kann nicht verwendet werden, da sie Wortbestandteile enthält, die nicht zugelassen sind.]]></de>
+            <en><![CDATA[The e-mail address entered cannot be used because it contains word components that are not permitted.]]></en>
+        </locale>
         <!-- Cron -->
         <locale name="cron.deleteUnverifiedInactiveUsers.title">
             <de><![CDATA[Nicht aktive Benutzer löschen]]></de>
@@ -926,8 +930,10 @@
             <en><![CDATA[Frontend-Users: Content by auth status and group(s)]]></en>
         </locale>
         <locale name="brick.AuthContent.description">
-            <de><![CDATA[Zeigt jeweils spezifischen Content, wenn ein Benutzer nicht eingeloggt, nicht in einer Gruppe oder in einer Gruppe ist.]]></de>
-            <en><![CDATA[Shows specific content each time a user is not logged in, not in a group, or in a group.]]></en>
+            <de>
+                <![CDATA[Zeigt jeweils spezifischen Content, wenn ein Benutzer nicht eingeloggt, nicht in einer Gruppe oder in einer Gruppe ist.]]></de>
+            <en>
+                <![CDATA[Shows specific content each time a user is not logged in, not in a group, or in a group.]]></en>
         </locale>
         <locale name="brick.AuthContent.settings.content_guest.title">
             <de><![CDATA[Inhalt (Gast)]]></de>
@@ -974,8 +980,10 @@ Available placeholders:
             <en><![CDATA[Groups]]></en>
         </locale>
         <locale name="brick.AuthContent.settings.groups.description">
-            <de><![CDATA[Liste der Gruppe, von denen sich der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
-            <en><![CDATA[List of groups from which the user must be assigned to at least one to see the "Content (in group(s))" content.]]></en>
+            <de>
+                <![CDATA[Liste der Gruppe, von denen sich der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
+            <en>
+                <![CDATA[List of groups from which the user must be assigned to at least one to see the "Content (in group(s))" content.]]></en>
         </locale>
 
         <locale name="mail.delete_user_confirm.subject.description">
@@ -1075,6 +1083,34 @@ Available placeholders:
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
+        <locale name="settings.registration.emailBlacklist">
+            <de><![CDATA[Registrierung E-Mail Blacklist]]></de>
+            <en><![CDATA[Registration email blacklist]]></en>
+        </locale>
+        <locale name="settings.registration.emailBlacklist.description" html="true">
+            <de><![CDATA[
+<p>Liste von E-Mail-Adressen oder Teilen von E-Mail-Adressen, mit denen sich Benutzer nicht registrieren dürfen.</p>
+<p><b>Ein Eintrag pro Zeile!</b></p>
+<p>Beispiele:
+<ul>
+<li><b>user@mail.com</b> - Verbietet eine explizite E-Mail-Adresse</li>
+<li><b>*@mail.com</b> - Verbietet alle E-Mail-Adressen der Domain "mail.com"</li>
+<li><b>user@*</b> - Verbietet alle E-Mail-Adressen, die mit user@ beginnen (unabhängig von der Domain)</li>
+</ul>
+</p>
+]]></de>
+            <en><![CDATA[
+<p>List of email addresses or parts of email addresses users are not permitted to register with.</p>
+<p><b>One entry per line!</b></p>
+<p>Examples:
+<ul>
+<li><b>user@mail.com</b> - Proibits an explicit email address</li>
+<li><b>*@mail.com</b> - Prohibits all email addresses of the domain "mail.com"</li>
+<li><b>user@*</b> - Prhoibits all email addresses that start with "user@" (independent of the domain)</li>
+</ul>
+</p>
+]]></en>
+        </locale>
 
         <locale name="GdprDataProvider.title">
             <de><![CDATA[Daten aus Benutzerregistrierung]]></de>

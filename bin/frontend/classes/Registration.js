@@ -50,6 +50,22 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
         },
 
         /**
+         * Check if an email address is blacklisted.
+         *
+         * @param {String} email
+         * @return {Promise<Boolean>}
+         */
+        isEmailBlacklisted: function(email) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_emailBlacklisted', resolve, {
+                    'package': pkg,
+                    email    : email,
+                    onError  : reject
+                });
+            });
+        },
+
+        /**
          * Execute username validation
          *
          * @param {String} username
