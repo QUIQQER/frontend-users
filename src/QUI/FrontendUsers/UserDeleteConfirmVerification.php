@@ -58,7 +58,7 @@ class UserDeleteConfirmVerification extends AbstractVerification
                     break;
 
                 case 'destroy':
-                    $User->delete();
+                    $User->delete(QUI::getUsers()->getSystemUser());
                     break;
             }
 
