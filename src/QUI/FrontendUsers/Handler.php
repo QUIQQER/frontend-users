@@ -742,7 +742,8 @@ class Handler extends Singleton
                 'uuid' => $User->getUUID(),
                 'project' => $Project->getName(),
                 'projectLang' => $Project->getLang()
-            ]
+            ],
+            true
         );
 
         $L = QUI::getLocale();
