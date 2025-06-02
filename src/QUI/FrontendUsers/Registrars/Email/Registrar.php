@@ -195,6 +195,13 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             ]);
         }
 
+        if (FrontendUsers\Utils::isEmailBlacklisted($email)) {
+            throw new FrontendUsers\Exception([
+                $lg,
+                $lgPrefix . 'email_blacklisted'
+            ]);
+        }
+
         // Address validation
         if ($this->getAttribute('addressValidation') && (int)$settings['addressInput']) {
             foreach ($Handler->getAddressFieldSettings() as $field => $addressSettings) {

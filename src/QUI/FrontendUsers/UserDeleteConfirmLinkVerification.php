@@ -61,7 +61,7 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
                     break;
 
                 case 'destroy':
-                    $User->delete();
+                    $User->delete(QUI::getUsers()->getSystemUser());
                     break;
             }
 
@@ -70,13 +70,6 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
             $User->logout();
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
-
-            QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find/delete user #' . $userUuid
-            );
-
-            QUI\System\Log::writeException($Exception);
-
             throw $Exception;
         }
     }

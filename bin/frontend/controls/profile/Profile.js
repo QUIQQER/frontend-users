@@ -205,6 +205,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             var pathName = window.location.pathname,
                 url      = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
 
+            if (url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1) {
+                pathName = window.location.href;
+            }
+
             if (!this.$settings || !this.$category) {
                 return;
             }
