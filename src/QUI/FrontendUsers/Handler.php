@@ -922,7 +922,11 @@ class Handler extends Singleton
      */
     public function getProfileSite(null | QUI\Projects\Project $Project = null): bool | QUI\Projects\Site
     {
-        if (is_null($Project)) {
+        if (empty($Project)) {
+            $Project = QUI::getRewrite()->getProject();
+        }
+
+        if (empty($Project)) {
             $Project = QUI::getProjectManager()->getStandard();
         }
 
