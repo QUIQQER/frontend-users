@@ -489,11 +489,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return;
             }
 
-            if ("history" in window) {
-                window.history.pushState({}, "", newUrl);
-                window.fireEvent('popstate');
-            } else {
-                window.location = newUrl;
+            try {
+                if ("history" in window) {
+                    window.history.pushState({}, "", newUrl);
+                    window.fireEvent('popstate');
+                } else {
+                    window.location = newUrl;
+                }
+            } catch (e) {
             }
         },
 
