@@ -11,7 +11,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 ], function (QUI, QUILocale, QUIAjax) {
     "use strict";
 
-    var pkg = 'quiqqer/frontend-users';
+    const pkg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -27,8 +27,8 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_userExists', resolve, {
                     'package': pkg,
-                    username : username,
-                    onError  : reject
+                    username: username,
+                    onError: reject
                 });
             });
         },
@@ -43,8 +43,8 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_emailExists', resolve, {
                     'package': pkg,
-                    email    : email,
-                    onError  : reject
+                    email: email,
+                    onError: reject
                 });
             });
         },
@@ -55,12 +55,12 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          * @param {String} email
          * @return {Promise<Boolean>}
          */
-        isEmailBlacklisted: function(email) {
+        isEmailBlacklisted: function (email) {
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_emailBlacklisted', resolve, {
                     'package': pkg,
-                    email    : email,
-                    onError  : reject
+                    email: email,
+                    onError: reject
                 });
             });
         },
@@ -86,7 +86,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
         },
 
         /**
-         * Exdecute email address validation for the e-mail address
+         * Execute email address validation for the e-mail address
          *
          * @param {String} email
          * @return {Promise} - return true if valid and false if invalid
@@ -119,8 +119,59 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_validateEmailSyntax', resolve, {
                     'package': pkg,
-                    email    : email,
-                    onError  : reject
+                    email: email,
+                    onError: reject
+                });
+            });
+        },
+
+        register: function (registrar, data) {
+            console.log('register', typeof data, data);
+
+            if (typeof data === 'undefined' || typeof data !== 'object') {
+                data = {};
+            }
+
+            console.log('register 2', typeof data, data);
+
+            data.registrar = registrar;
+            data.registration = 1;
+
+            return new Promise((resolve, reject) => {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_termsOfUse', (touNeeded) => {
+                    if (!touNeeded) {
+                        return resolve();
+                    }
+
+                    require(['qui/controls/windows/Confirm'], (QUIConfirm) => {
+                        new QUIConfirm({
+                            title: QUILocale.get(pkg, 'registration.tou.title'),
+                            message: QUILocale.get(pkg, 'registration.tou.message'),
+                            maxWidth: 600,
+                            maxHeight: 400,
+                            events: {
+                                onCancel: () => {
+                                    reject();
+                                },
+                                onSubmit: () => {
+                                    data.termsOfUseAccepted = 1;
+                                    resolve();
+                                }
+                            }
+                        }).open();
+                    });
+                }, {
+                    'package': pkg,
+                    onError: reject
+                })
+            }).then(() => {
+                return new Promise((resolve, reject) => {
+                    QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', resolve, {
+                        'package': pkg,
+                        registrar: registrar,
+                        data: JSON.encode(data),
+                        onError: reject
+                    });
                 });
             });
         }

@@ -410,6 +410,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
             var Icon = Form.querySelector('[data-name="social-login-entry-icon"]');
             var Loader = Form.querySelector('[data-name="social-login-entry-loader"]');
 
+            if (!Loader && !Icon) {
+                return;
+            }
+            
             Loader.setStyle('opacity', 0);
             Loader.setStyle('display', 'inline-block');
 
@@ -437,6 +441,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
         $hideSocialLoader: function(Form) {
             var Icon = Form.querySelector('[data-name="social-login-entry-icon"]');
             var Loader = Form.querySelector('[data-name="social-login-entry-loader"]');
+
+            if (!Loader && !Icon) {
+                return;
+            }
 
             Icon.setStyle('opacity', 0);
             Icon.setStyle('display', 'inline-block');

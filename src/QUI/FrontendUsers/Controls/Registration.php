@@ -397,7 +397,7 @@ class Registration extends QUI\Control
      *
      * @return bool|QUI\FrontendUsers\RegistrarInterface
      */
-    protected function isCurrentlyExecuted(): bool|QUI\FrontendUsers\RegistrarInterface
+    protected function isCurrentlyExecuted(): bool | QUI\FrontendUsers\RegistrarInterface
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
         $Registrar = $this->getAttribute('Registrar');
@@ -413,7 +413,21 @@ class Registration extends QUI\Control
         $Registrar = $FrontendUsers->getRegistrarByHash($_REQUEST['registrar']);
 
         if (!$Registrar) {
-            return false;
+            // check if registrar class
+            if (class_exists($_REQUEST['registrar'])) {
+                $class = $_REQUEST['registrar'];
+
+                foreach ($FrontendUsers->getAvailableRegistrars() as $instance) {
+                    if (is_object($instance) && is_a($instance, $class)) {
+                        $Registrar = $instance;
+                        break;
+                    }
+                }
+            }
+
+            if (!$Registrar) {
+                return false;
+            }
         }
 
         if (!$Registrar->isActive()) {
