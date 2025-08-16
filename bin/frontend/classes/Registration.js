@@ -1,12 +1,13 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/classes/Registration
- * @author www.pcsg.de (Henning Leutz)
  */
 define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
     'qui/QUI',
     'Locale',
-    'Ajax'
+    'Ajax',
+
+    'css!package/quiqqer/frontend-users/bin/frontend/classes/Registration.css'
 
 ], function (QUI, QUILocale, QUIAjax) {
     "use strict";
@@ -126,34 +127,73 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
         },
 
         register: function (registrar, data) {
-            console.log('register', typeof data, data);
-
             if (typeof data === 'undefined' || typeof data !== 'object') {
                 data = {};
             }
-
-            console.log('register 2', typeof data, data);
 
             data.registrar = registrar;
             data.registration = 1;
 
             return new Promise((resolve, reject) => {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_termsOfUse', (touNeeded) => {
-                    if (!touNeeded) {
+                    if (!touNeeded.required) {
                         return resolve();
                     }
 
                     require(['qui/controls/windows/Confirm'], (QUIConfirm) => {
                         new QUIConfirm({
-                            title: QUILocale.get(pkg, 'registration.tou.title'),
-                            message: QUILocale.get(pkg, 'registration.tou.message'),
+                            title: touNeeded.title,
                             maxWidth: 600,
-                            maxHeight: 400,
+                            maxHeight: 500,
+                            ok_button: {
+                                text: QUILocale.get(pkg, 'confirm.registration.tou_pp.submit'),
+                                textimage: 'fa fa-check'
+                            },
+                            cancel_button: {
+                                text: QUILocale.get(pkg, 'confirm.registration.tou_pp.cancel'),
+                                textimage: 'fa fa-close'
+                            },
                             events: {
+                                onOpen: (win) => {
+                                    win.Loader.show();
+
+                                    const content = win.getContent();
+                                    content.classList.add('quiqqer-frontendUsers-touConfirm');
+
+                                    content.innerHTML = `
+                                        <header>
+                                            <h1>${touNeeded.title}</h1>
+                                        </header>
+                                        <div class="quiqqer-frontendUsers-touConfirm-content">
+                                            ${touNeeded.content}
+                                        </div>      
+                                        <label>
+                                            <input type="checkbox" />
+                                            <span>
+                                                ${touNeeded.label}
+                                            </span>
+                                        </label>
+                                    `;
+
+                                    const submitButton = win.getElm().querySelector('button[name="submit"]');
+                                    const checkbox = win.getElm().querySelector('input[type="checkbox"]');
+
+                                    submitButton.disabled = true;
+                                    checkbox.addEventListener('change', () => {
+                                        submitButton.disabled = !checkbox.checked;
+                                    });
+
+                                    win.Loader.hide();
+                                },
                                 onCancel: () => {
                                     reject();
                                 },
-                                onSubmit: () => {
+                                onSubmit: (win) => {
+                                    const content = win.getContent();
+                                    if (!content.querySelector('input[type="checkbox"]').checked) {
+                                        return;
+                                    }
+
                                     data.termsOfUseAccepted = 1;
                                     resolve();
                                 }
