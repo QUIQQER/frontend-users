@@ -817,6 +817,28 @@
             <de><![CDATA[Passwort ändern]]></de>
             <en><![CDATA[Change password]]></en>
         </locale>
+        <locale name="profile.2fa.title">
+            <de><![CDATA[Zwei-Faktor-Authentifizierung]]></de>
+            <en><![CDATA[Two-factor authentication]]></en>
+        </locale>
+        <locale name="profile.2fa.not.enabled.title">
+            <de><![CDATA[Die Zwei-Faktor-Authentifizierung ist noch nicht aktiviert.]]></de>
+            <en><![CDATA[Two-factor authentication is not enabled yet]]></en>
+        </locale>
+        <locale name="profile.2fa.not.enabled.description">
+            <de><![CDATA[
+            Die Zwei-Faktor-Authentifizierung sorgt für zusätzliche Sicherheit für Ihr Konto,
+            da für die Anmeldung mehr als nur ein Passwort erforderlich ist.
+            ]]></de>
+            <en><![CDATA[
+            Two-factor authentication adds an additional layer of security to your account by requiring more than just a
+            password to sign in.
+            ]]></en>
+        </locale>
+        <locale name="profile.2fa.not.enable.button">
+            <de><![CDATA[Enable two-factor authentication]]></de>
+            <en><![CDATA[Zwei-Faktor-Authentifizierung aktivieren]]></en>
+        </locale>
         <locale name="profile.deleteaccount.title">
             <de><![CDATA[Benutzerkonto löschen]]></de>
             <en><![CDATA[Delete user account]]></en>
