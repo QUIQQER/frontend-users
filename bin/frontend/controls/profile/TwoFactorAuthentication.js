@@ -58,7 +58,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAu
             });
 
             Array.from(container.querySelectorAll('[name="activate-settings"]')).forEach((button) => {
-                button.addEventListener('click', () => {
+                button.addEventListener('click', (e) => {
                     let button = e.target;
 
                     if (button.nodeName === 'BUTTON') {
@@ -71,23 +71,55 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAu
                         button.getAttribute('data-authenticator')
                     ).then(() => {
                         button.disabled = false;
-                    })
+                    }).catch(() => {
+                        button.disabled = false;
+                    });
                 });
             });
         },
 
         activate2FAAuthenticator: function (authenticator) {
             return new Promise(() => {
-                QUIAjax.post('');
+                // QUIAjax.post('');
             });
 
         },
 
         activate2FAAuthenticatorWithSettings: function (authenticator) {
-            return new Promise(() => {
-                require(['qui/controls/windows/Window'], (Win) => {
-                    new Win({
+            return new Promise((resolve, reject) => {
+                require([
+                    'qui/controls/windows/Popup',
+                    'Ajax'
+                ], (Popup, Ajax) => {
+                    new Popup({
+                        maxHeight: 600,
+                        maxWidth: 800,
+                        title: 'Settings for ',
+                        icon: 'fa fa-gears',
+                        buttons: false,
+                        events: {
+                            onOpen: function (win) {
+                                win.Loader.show();
+                                win.getContent().innerHTML = '';
 
+                                Ajax.get('ajax_users_authenticator_settings', (settingHtml) => {
+                                    win.getContent().innerHTML = settingHtml;
+
+                                    QUI.parse(win.getContent()).then(() => {
+                                        win.Loader.hide();
+                                        resolve();
+                                    });
+                                }, {
+                                    authenticator: authenticator,
+                                    uid: QUIQQER_USER.id,
+                                    onError: (err) => {
+                                        console.error(err);
+                                        win.close();
+                                        reject();
+                                    }
+                                });
+                            }
+                        }
                     }).open();
                 });
             });
