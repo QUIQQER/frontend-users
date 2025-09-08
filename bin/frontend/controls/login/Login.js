@@ -33,9 +33,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 ], function (QUI, QUIControl, QUILoader, QUIPopup, QUIFormUtils, ResendActivationLinkBtn, URI, QUIAjax, QUILocale) {
     'use strict';
 
-    const lg = 'quiqqer/frontend-users';
-    let clicked = false;
-
     return new Class({
 
         Extends: QUIControl,

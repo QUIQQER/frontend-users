@@ -7,22 +7,66 @@
     <div class="two-factor-authenticator-list">
         {foreach $authenticators as $authenticator}
         <div class="two-factor-authenticator">
-            <h2>{$authenticator->getFrontendTitle()}</h2>
-            <div>{$authenticator->getFrontendDescription()}</div>
+            <h2 class="flex flex-col mb-2">
+                <span class="w-full block">
+                    {$authenticator->getFrontendTitle()}
+                </span>
 
-            {if $authenticator->getSettingsControl()}
+                <span>
+                    {if $self->isAuthenticatorEnabled($authenticator)}
+                    <span class="badge badge-success">
+                        <span class="fa fa-check"></span>
+                        <span>
+                            {locale group="quiqqer/frontend-users" var="profile.2fa.label.enabled"}
+                        </span>
+                    </span>
+                    {else}
+                    <span class="badge badge-error">
+                        <span class="fa fa-check"></span>
+                        <span>
+                            {locale group="quiqqer/frontend-users" var="profile.2fa.label.disabled"}
+                        </span>
+                    </span>
+                    {/if}
+                </span>
+            </h2>
+
+            <div class="w-full block">
+                {$authenticator->getFrontendDescription()}
+            </div>
+
+            {if $self->isAuthenticatorEnabled($authenticator)}
+            <button class="btn btn-secondary mt-4"
+                    name="deactivate"
+                    data-authenticator="{get_class($authenticator)}"
+            >
+                {locale
+                    group="quiqqer/frontend-users"
+                    var="profile.2fa.button.disable.authentication"
+                    title=$authenticator->getFrontendTitle()
+                }
+            </button>
+            {elseif $authenticator->getSettingsControl()}
             <button class="btn btn-primary mt-4"
                     name="activate-settings"
                     data-authenticator="{get_class($authenticator)}"
             >
-                Authentifizierung aktivieren
+                {locale
+                    group="quiqqer/frontend-users"
+                    var="profile.2fa.button.enable.authentication"
+                    title=$authenticator->getFrontendTitle()
+                }
             </button>
             {else}
             <button class="btn btn-primary mt-4"
                     name="activate"
                     data-authenticator="{get_class($authenticator)}"
             >
-                Authentifizierung aktivieren
+                {locale
+                    group="quiqqer/frontend-users"
+                    var="profile.2fa.button.enable.authentication"
+                    title=$authenticator->getFrontendTitle()
+                }
             </button>
             {/if}
         </div>

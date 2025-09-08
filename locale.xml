@@ -839,6 +839,22 @@
             <de><![CDATA[Enable two-factor authentication]]></de>
             <en><![CDATA[Zwei-Faktor-Authentifizierung aktivieren]]></en>
         </locale>
+        <locale name="profile.2fa.button.disable.authentication">
+            <de><![CDATA[[title] deaktivieren]]></de>
+            <en><![CDATA[Disable [title]]]></en>
+        </locale>
+        <locale name="profile.2fa.button.enable.authentication">
+            <de><![CDATA[[title] aktivieren]]></de>
+            <en><![CDATA[Enable [title]]]></en>
+        </locale>
+        <locale name="profile.2fa.label.enabled">
+            <de><![CDATA[Authentifizierung ist aktiviert]]></de>
+            <en><![CDATA[Authentication is enabled]]></en>
+        </locale>
+        <locale name="profile.2fa.label.disabled">
+            <de><![CDATA[Authentifizierung ist deaktiviert]]></de>
+            <en><![CDATA[Authentication is disabled]]></en>
+        </locale>
         <locale name="profile.deleteaccount.title">
             <de><![CDATA[Benutzerkonto löschen]]></de>
             <en><![CDATA[Delete user account]]></en>

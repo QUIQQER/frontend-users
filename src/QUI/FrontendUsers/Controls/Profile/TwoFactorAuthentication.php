@@ -5,6 +5,7 @@ namespace QUI\FrontendUsers\Controls\Profile;
 use QUI;
 use QUI\Verification\Interface\VerificationRepositoryInterface;
 use QUI\Verification\VerificationRepository;
+use QUI\Users\AuthenticatorInterface;
 
 class TwoFactorAuthentication extends AbstractProfileControl
 {
@@ -55,11 +56,18 @@ class TwoFactorAuthentication extends AbstractProfileControl
         }
 
         $Engine->assign([
+            'self' => $this,
             'twoFactorAuthIsEnabled' => $twoFactorAuthIsEnabled,
             'authenticators' => $authenticators
         ]);
 
         return $Engine->fetch($this->getTemplateFile());
+    }
+
+    public function isAuthenticatorEnabled(AuthenticatorInterface $authenticator): bool
+    {
+        $User = QUI::getUserBySession();
+        return $User->hasAuthenticator($authenticator::class);
     }
 
     /**

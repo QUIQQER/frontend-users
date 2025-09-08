@@ -38,39 +38,60 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAu
                 section = container.querySelector('[data-name="2fa-is-enabled"]');
             }
 
+            // activate without settings
             Array.from(container.querySelectorAll('[name="activate"]')).forEach((button) => {
                 button.addEventListener('click', (e) => {
-                    let button = e.target;
+                    e.stopPropagation();
+                    e.preventDefault();
 
-                    if (button.nodeName === 'BUTTON') {
-                        button = button.closest('button');
-                    }
-
+                    let button = e.target.nodeName === 'BUTTON' ? e.target : e.target.closest('button');
                     button.disabled = true;
 
                     this.activate2FAAuthenticator(
                         button.getAttribute('data-authenticator')
                     ).then(() => {
                         button.disabled = false;
+                        this.refresh();
+                    }).catch(() => {
+                        button.disabled = false;
                     });
-
                 });
             });
 
+            // activate with authenticator settings
             Array.from(container.querySelectorAll('[name="activate-settings"]')).forEach((button) => {
                 button.addEventListener('click', (e) => {
-                    let button = e.target;
+                    e.stopPropagation();
+                    e.preventDefault();
 
-                    if (button.nodeName === 'BUTTON') {
-                        button = button.closest('button');
-                    }
-
+                    let button = e.target.nodeName === 'BUTTON' ? e.target : e.target.closest('button');
                     button.disabled = true;
 
                     this.activate2FAAuthenticatorWithSettings(
                         button.getAttribute('data-authenticator')
                     ).then(() => {
                         button.disabled = false;
+                        this.refresh();
+                    }).catch(() => {
+                        button.disabled = false;
+                    });
+                });
+            });
+
+            // deactivate
+            Array.from(container.querySelectorAll('[name="deactivate"]')).forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    let button = e.target.nodeName === 'BUTTON' ? e.target : e.target.closest('button');
+                    button.disabled = true;
+
+                    this.disable2FAAuthenticator(
+                        button.getAttribute('data-authenticator')
+                    ).then(() => {
+                        button.disabled = false;
+                        this.refresh();
                     }).catch(() => {
                         button.disabled = false;
                     });
@@ -78,46 +99,46 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAu
             });
         },
 
-        activate2FAAuthenticator: function (authenticator) {
-            return new Promise(() => {
-                // QUIAjax.post('');
-            });
+        refresh: function() {
+            const profileQui = 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile';
+            const container = this.getElm();
 
+            const profileNode = container.closest('[data-qui="' + profileQui +'"]');
+
+            if (profileNode) {
+                profileNode.querySelector('a[data-active="1"]').click();
+                return;
+            }
+
+            console.log('NOT IN PROFILE');
+        },
+
+        disable2FAAuthenticator: function (authenticator) {
+            return new Promise((resolve) => {
+                QUIAjax.post('ajax_users_authenticator_disableByUser', resolve, {
+                    authenticator: authenticator
+                });
+            });
+        },
+
+        activate2FAAuthenticator: function (authenticator) {
+            return new Promise((resolve) => {
+                QUIAjax.post('ajax_users_authenticator_enableByUser', resolve, {
+                    authenticator: authenticator
+                });
+            });
         },
 
         activate2FAAuthenticatorWithSettings: function (authenticator) {
             return new Promise((resolve, reject) => {
                 require([
-                    'qui/controls/windows/Popup',
-                    'Ajax'
-                ], (Popup, Ajax) => {
-                    new Popup({
-                        maxHeight: 600,
-                        maxWidth: 800,
-                        title: 'Settings for ',
-                        icon: 'fa fa-gears',
-                        buttons: false,
+                    'controls/users/auth/EnableSecondaryAuthenticatorWindow'
+                ], (EnableSecondaryAuthenticatorWindow) => {
+                    new EnableSecondaryAuthenticatorWindow({
+                        authenticator: authenticator,
                         events: {
-                            onOpen: function (win) {
-                                win.Loader.show();
-                                win.getContent().innerHTML = '';
-
-                                Ajax.get('ajax_users_authenticator_settings', (settingHtml) => {
-                                    win.getContent().innerHTML = settingHtml;
-
-                                    QUI.parse(win.getContent()).then(() => {
-                                        win.Loader.hide();
-                                        resolve();
-                                    });
-                                }, {
-                                    authenticator: authenticator,
-                                    uid: QUIQQER_USER.id,
-                                    onError: (err) => {
-                                        console.error(err);
-                                        win.close();
-                                        reject();
-                                    }
-                                });
+                            onCompleted: () => {
+                                resolve();
                             }
                         }
                     }).open();
