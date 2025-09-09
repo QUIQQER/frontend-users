@@ -45,7 +45,7 @@ class EmailVerification extends AbstractFrontendUsersLinkVerificationHandler
                 Utils::setDefaultUserEmailVerified($User);
             }
 
-            Utils::setEmailAddressAsVerfifiedForUser($email, $User);
+            Utils::setEmailAddressAsVerifiedForUser($email, $User);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             throw $Exception;
