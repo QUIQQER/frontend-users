@@ -1,7 +1,5 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
- * @author www.pcsg.de (Henning Leutz)
- * @author www.pcsg.de (Patrick Müller)
  *
  * @event onSelect [itemName, this]
  * @event onMenuShow [self, MenuElm]
@@ -25,7 +23,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/UserIcon',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/UserIcon',
 
         Binds: [
             '$onImport'
@@ -33,7 +31,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
 
         options: {
             menuPosition: 'bottom', // bottom | top
-            showlogout  : true // enable logout entry in the menu
+            showlogout: true // enable logout entry in the menu
         },
 
         initialize: function (options) {
@@ -44,15 +42,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
             });
 
             this.$Loader = null;
-            this.$Menu   = null;
+            this.$Menu = null;
         },
 
         /**
          * event: on inject
          */
         $onImport: function () {
-            var self    = this,
-                Elm     = this.getElm(),
+            var self = this,
+                Elm = this.getElm(),
                 IconElm = Elm.getElement('.quiqqer-frontendUsers-userIcon-icon');
 
             var corner = 'topRight';
@@ -86,35 +84,35 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                         continue;
                     }
 
-                    Cat   = categories[i];
+                    Cat = categories[i];
                     items = Cat.items;
 
                     for (c = 0, clen = items.length; c < clen; c++) {
                         self.$Menu.appendChild(
                             new QUIMenuItem({
-                                title   : items[c].title,
-                                text    : items[c].title,
-                                icon    : items[c].icon,
-                                url     : items[c].url,
+                                title: items[c].title,
+                                text: items[c].title,
+                                icon: items[c].icon,
+                                url: items[c].url,
                                 category: Cat.name,
                                 settings: items[c].name,
-                                events  : {
+                                events: {
                                     onClick: menuClick
                                 }
                             })
                         );
                     }
                 }
-                
+
                 if (self.getAttribute('showlogout')) {
                     self.$Menu.appendChild(new QUIMenuSeparator());
 
                     self.$Menu.appendChild(
                         new QUIMenuItem({
-                            name  : 'profile',
-                            title : QUILocale.get('quiqqer/system', 'logout'),
-                            text  : QUILocale.get('quiqqer/system', 'logout'),
-                            icon  : 'fa fa-sign-out',
+                            name: 'profile',
+                            title: QUILocale.get('quiqqer/system', 'logout'),
+                            text: QUILocale.get('quiqqer/system', 'logout'),
+                            icon: 'fa fa-sign-out',
                             events: {
                                 onClick: function () {
                                     new LogoutWindow().open();
@@ -135,7 +133,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     if (menuPos === 'bottom' || !menuPos) {
                         MenuElm.setStyles({
                             left: 0,
-                            top : Elm.getSize().y + 10
+                            top: Elm.getSize().y + 10
                         });
                     } else {
                         MenuElm.setStyle('opacity', 0);
@@ -143,7 +141,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
 
                         MenuElm.setStyles({
                             left: 0,
-                            top : (MenuElm.getSize().y + 10) * -1
+                            top: (MenuElm.getSize().y + 10) * -1
                         });
 
                         MenuElm.setStyle('opacity', null);
@@ -168,7 +166,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_getProfileBarCategories', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject
+                    onError: reject
                 });
             });
         }

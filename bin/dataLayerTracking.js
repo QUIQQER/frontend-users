@@ -1,30 +1,28 @@
-window.whenQuiLoaded().then(function() {
+window.whenQuiLoaded().then(function () {
     'use strict';
-    
-    require(['qui/QUI'], function(QUI) {
+
+    require(['qui/QUI'], function (QUI) {
         /**
          * tracks the start of a deletion process from an user
          */
-        function trackUserDeleteStart()
-        {
+        function trackUserDeleteStart() {
             window.qTrack('event', 'user_deleted_start');
         }
 
         /**
          * tracks the success of a deletion from an user
          */
-        function trackUserDelete()
-        {
+        function trackUserDelete() {
             window.qTrack('event', 'user_deleted');
         }
 
 
         // registration tracking
-        QUI.addEvent('onQuiqqerFrontendUsersRegisterStart', function() {
+        QUI.addEvent('onQuiqqerFrontendUsersRegisterStart', function () {
             window.qTrack('event', 'user_register_start');
         });
 
-        QUI.addEvent('onQuiqqerFrontendUsersRegisterSuccess', function() {
+        QUI.addEvent('onQuiqqerFrontendUsersRegisterSuccess', function () {
             window.qTrack('event', 'user_register_success');
             window.qTrack('event', 'sign_up');
         });
@@ -35,7 +33,7 @@ window.whenQuiLoaded().then(function() {
             trackUserDeleteStart();
         }
 
-        QUI.addEvent('quiqqerFrontendUsersAccountDeleteStart', function() {
+        QUI.addEvent('quiqqerFrontendUsersAccountDeleteStart', function () {
             trackUserDeleteStart();
         });
 
@@ -47,13 +45,13 @@ window.whenQuiLoaded().then(function() {
             }
         }
 
-        QUI.addEvent('quiqqerVerifierSuccess', function(verifier) {
+        QUI.addEvent('quiqqerVerifierSuccess', function (verifier) {
             if (verifier === 'QUIFrontendUsersUserDeleteConfirmVerification') {
                 trackUserDelete();
             }
         });
 
-        QUI.addEvent('quiqqerUserAuthLoginSuccess', function(Instance, authenticator) {
+        QUI.addEvent('quiqqerUserAuthLoginSuccess', function (Instance, authenticator) {
             if (typeof authenticator === 'undefined' || authenticator === '') {
                 window.qTrack('event', 'user_register_success');
                 window.qTrack('event', 'sign_up');

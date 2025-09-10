@@ -2,7 +2,6 @@
  * Manage fields that are shown for address input on registration
  *
  * @module package/quiqqer/frontend-users/bin/controls/settings/AddressFields
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
 
@@ -25,7 +24,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/controls/settings/AddressFields',
+        Type: 'package/quiqqer/frontend-users/bin/controls/settings/AddressFields',
 
         Binds: [
             '$onImport',
@@ -35,7 +34,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
         initialize: function (options) {
             this.parent(options);
 
-            this.$Input    = null;
+            this.$Input = null;
             this.$Settings = {};
 
             this.addEvents({
@@ -49,28 +48,28 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
         $onImport: function () {
             var self = this;
 
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             var lgPrefix = 'controls.settings.addressfields.template.';
 
             this.$Content = new Element('div', {
                 'class': 'quiqqer-frontendusers-settings-addressfields',
-                html   : Mustache.render(template, {
-                    field          : QUILocale.get(lg, lgPrefix + 'field'),
-                    fieldShow      : QUILocale.get(lg, lgPrefix + 'fieldShow'),
-                    fieldRequired  : QUILocale.get(lg, lgPrefix + 'fieldRequired'),
+                html: Mustache.render(template, {
+                    field: QUILocale.get(lg, lgPrefix + 'field'),
+                    fieldShow: QUILocale.get(lg, lgPrefix + 'fieldShow'),
+                    fieldRequired: QUILocale.get(lg, lgPrefix + 'fieldRequired'),
                     labelSalutation: QUILocale.get('quiqqer/system', 'salutation'),
-                    labelFirstName : QUILocale.get('quiqqer/system', 'firstname'),
-                    labelLastName  : QUILocale.get('quiqqer/system', 'lastname'),
-                    labelStreet    : QUILocale.get('quiqqer/system', 'street'),
-                    labelZip       : QUILocale.get('quiqqer/system', 'zip'),
-                    labelCity      : QUILocale.get('quiqqer/system', 'city'),
-                    labelCountry   : QUILocale.get('quiqqer/system', 'country'),
-                    labelCompany   : QUILocale.get('quiqqer/system', 'company'),
-                    labelPhone     : QUILocale.get('quiqqer/system', 'tel'),
-                    labelMobile    : QUILocale.get('quiqqer/system', 'mobile'),
-                    labelFax       : QUILocale.get('quiqqer/system', 'fax')
+                    labelFirstName: QUILocale.get('quiqqer/system', 'firstname'),
+                    labelLastName: QUILocale.get('quiqqer/system', 'lastname'),
+                    labelStreet: QUILocale.get('quiqqer/system', 'street'),
+                    labelZip: QUILocale.get('quiqqer/system', 'zip'),
+                    labelCity: QUILocale.get('quiqqer/system', 'city'),
+                    labelCountry: QUILocale.get('quiqqer/system', 'country'),
+                    labelCompany: QUILocale.get('quiqqer/system', 'company'),
+                    labelPhone: QUILocale.get('quiqqer/system', 'tel'),
+                    labelMobile: QUILocale.get('quiqqer/system', 'mobile'),
+                    labelFax: QUILocale.get('quiqqer/system', 'fax')
                 })
             }).inject(this.$Input, 'after');
 
@@ -80,13 +79,13 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
             }
 
             this.$Content.getElements('input').addEvent('change', function (event) {
-                var n      = event.target.get('name');
-                var c      = event.target.get('class');
+                var n = event.target.get('name');
+                var c = event.target.get('class');
                 var status = event.target.checked;
 
                 if (!(n in self.$Settings)) {
                     self.$Settings[n] = {
-                        show    : false,
+                        show: false,
                         required: false
                     };
                 }

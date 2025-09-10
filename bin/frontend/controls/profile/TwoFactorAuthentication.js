@@ -1,3 +1,6 @@
+/**
+ * @module package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAuthentication
+ */
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAuthentication', [
 
     'qui/controls/Control',

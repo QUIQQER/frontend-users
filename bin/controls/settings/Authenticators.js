@@ -2,7 +2,6 @@
  * Manage settings for all Authenticators
  *
  * @module package/quiqqer/frontend-users/bin/controls/settings/Authenticators
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/controls/settings/Authenticators', [
 
@@ -27,7 +26,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Authenticators', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/controls/settings/Authenticators',
+        Type: 'package/quiqqer/frontend-users/bin/controls/settings/Authenticators',
 
         Binds: [
             '$onImport',
@@ -51,7 +50,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Authenticators', [
         $onImport: function () {
             var self = this;
 
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             var SettingData = {};
@@ -104,7 +103,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Authenticators', [
             var AuthenticatorDate = {};
 
             for (var i = 0, len = entryElms.length; i < len; i++) {
-                var Checkbox  = entryElms[i];
+                var Checkbox = entryElms[i];
                 var registrar = btoa(Checkbox.value);
 
                 AuthenticatorDate[registrar] = Checkbox.checked;
@@ -122,7 +121,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Authenticators', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_settings_getAuthenticators', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject
+                    onError: reject
                 });
             });
         }
