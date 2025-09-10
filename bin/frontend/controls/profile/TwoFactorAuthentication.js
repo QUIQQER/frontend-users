@@ -142,6 +142,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/TwoFactorAu
                         events: {
                             onCompleted: () => {
                                 resolve();
+                            },
+                            onCancel: () => {
+                                resolve();
                             }
                         }
                     }).open();
