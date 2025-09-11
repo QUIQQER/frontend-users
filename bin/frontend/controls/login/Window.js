@@ -1,6 +1,5 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/login/Window
- * @author www.pcsg.de (Henning Leutz)
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
@@ -18,7 +17,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
     return new Class({
 
         Extends: QUIPopup,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/login/Window',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/login/Window',
 
         Binds: [
             '$onOpen'
@@ -26,10 +25,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
         options: {
             maxHeight: 640,
-            maxWidth : 500,
-            buttons  : false,
-            logo     : false,
-            reload   : true,
+            maxWidth: 500,
+            buttons: false,
+            logo: false,
+            reload: true,
 
             ownRedirectOnLogin: false, // redirect function
 
@@ -54,7 +53,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
          * event: on open
          */
         $onOpen: function () {
-            var self    = this,
+            var self = this,
                 Content = this.getContent();
 
             this.Loader.show();
@@ -63,8 +62,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
             new Element('button', {
                 'class': 'quiqqer-frontendUsers-loginWindow-close',
-                html   : '<span class="fa fa-close"></span>',
-                events : {
+                html: '<span class="fa fa-close"></span>',
+                events: {
                     click: this.cancel.bind(this)
                 }
             }).inject(Content);
@@ -72,14 +71,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
             if (this.getAttribute('message')) {
                 new Element('div', {
                     'class': 'quiqqer-frontendUsers-loginWindow-message message-attention',
-                    html   : this.getAttribute('message')
+                    html: this.getAttribute('message')
                 }).inject(Content);
             }
 
             if (this.getAttribute('logo')) {
                 new Element('img', {
                     'class': 'quiqqer-frontendUsers-loginWindow-logo',
-                    src    : this.getAttribute('logo')
+                    src: this.getAttribute('logo')
                 }).inject(Content);
             }
 
@@ -95,18 +94,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
 
             Prom.then(function (registrationLink) {
                 self.$Login = new Login({
-                    showLoader        : false,
-                    reload            : self.getAttribute('reload'),
+                    showLoader: false,
+                    reload: self.getAttribute('reload'),
                     ownRedirectOnLogin: self.getAttribute('ownRedirectOnLogin'),
-                    onSuccess         : function () {
+                    onSuccess: function () {
                         self.close();
                         self.fireEvent('success', [self]);
                     },
-                    events            : {
+                    events: {
                         onAuthBegin: function () {
                             self.Loader.show();
                         },
-                        onAuthNext : function () {
+                        onAuthNext: function () {
                             self.Loader.hide();
                         },
 
@@ -124,8 +123,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
                 if (self.getAttribute('show-registration-link')) {
                     new Element('a', {
                         'class': 'quiqqer-frontendUsers-loginWindow-registration-link',
-                        href   : registrationLink,
-                        html   : QUILocale.get('quiqqer/frontend-users', 'registration.control.registration.link')
+                        href: registrationLink,
+                        html: QUILocale.get('quiqqer/frontend-users', 'registration.control.registration.link')
                     }).inject(Content);
                 }
             });

@@ -60,6 +60,8 @@ class EmailConfirmLinkVerification extends AbstractFrontendUsersLinkVerification
             $User->setAttribute('email', $newEmail);
             $User->save(QUI::getUsers()->getSystemUser());
 
+            Utils::setEmailAddressAsVerifiedForUser($newEmail, $User);
+
             QUI::getEvents()->fireEvent('quiqqerFrontendUsersEmailChanged', [$User, $oldEmail, $newEmail]);
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);

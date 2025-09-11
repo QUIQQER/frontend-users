@@ -2,7 +2,6 @@
  * JS-Control for default email registrar
  *
  * @module package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', [
 
@@ -25,12 +24,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email',
 
         options: {
             emailisusername: false,  // checks for existing username if only email field is enabled
-            usecaptcha     : false,  // Captcha is used
-            noBlurCheck    : true
+            usecaptcha: false,  // Captcha is used
+            noBlurCheck: true
         },
 
         Binds: [
@@ -52,7 +51,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
          * event: on import
          */
         $onImport: function () {
-            var Elm  = this.getElm();
+            var Elm = this.getElm();
             var self = this;
 
             Elm.set('data-quiid', this.getId());
@@ -111,7 +110,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
                 new Element('span', {
                     'class': 'quiqqer-registration-field-error-msg',
-                    html   : errorMsg
+                    html: errorMsg
                 }).inject(Input, 'after');
             };
 
@@ -129,7 +128,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
                 // check for CAPTCHA (if used)
                 if (self.getAttribute('usecaptcha')) {
-                    isValid            = isValid && self.$captchaResponse;
+                    isValid = isValid && self.$captchaResponse;
                     SubmitBtn.disabled = !self.$captchaResponse;
                 }
 
@@ -139,9 +138,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             };
 
             // Email validation
-            var EmailInput        = Elm.getElement('input[name="email"]');
+            var EmailInput = Elm.getElement('input[name="email"]');
             var EmailConfirmInput = Elm.getElement('input[name="emailConfirm"]');
-            var emailIsUsername   = this.getAttribute('emailisusername');
+            var emailIsUsername = this.getAttribute('emailisusername');
 
             if (EmailInput) {
                 EmailInput.addEvents({
@@ -150,7 +149,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                             return;
                         }
 
-                        var value         = event.target.value;
+                        var value = event.target.value;
                         var checkPromises = [
                             Registration.emailValidation(value)
                         ];
@@ -213,7 +212,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             }
 
             // Password validation
-            var PasswordInput        = Elm.getElement('input[name="password"]');
+            var PasswordInput = Elm.getElement('input[name="password"]');
             var PasswordConfirmInput = Elm.getElement('input[name="passwordConfirm"]');
 
             var PasswordStrengthElm = this.$Elm.getElement(
@@ -265,12 +264,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                 CaptchaDisplay.getCaptchaControl().then(function (CaptchaControl) {
                     CaptchaControl.addEvents({
                         onSuccess: function (response) {
-                            self.$captchaResponse      = response;
+                            self.$captchaResponse = response;
                             CaptchaResponseInput.value = response;
                             CheckFormValidation();
                         },
                         onExpired: function () {
-                            self.$captchaResponse      = false;
+                            self.$captchaResponse = false;
                             CaptchaResponseInput.value = '';
                             CheckFormValidation();
                         }

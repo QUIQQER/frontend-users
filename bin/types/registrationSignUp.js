@@ -24,8 +24,8 @@ function signUpOnLoad() {
             'package/quiqqer/frontend-users/bin/frontend/controls/login/Window',
             'URI'
         ], function (Login, URI) {
-            var Url        = URI(window.location),
-                query      = Url.query(true),
+            var Url = URI(window.location),
+                query = Url.query(true),
                 submitauth = false;
 
             if ("submitauth" in query) {
@@ -35,7 +35,7 @@ function signUpOnLoad() {
             Button.addEvent('click', function () {
                 new Login({
                     submitauth: submitauth,
-                    events    : {
+                    events: {
                         onClose: function () {
                             window.location.hash = '';
                         },
@@ -60,9 +60,9 @@ function signUpOnLoad() {
     }
 
     require(['qui/QUI'], function (QUI) {
-        var Container        = document.getElement('.registration-sign-in-container');
+        var Container = document.getElement('.registration-sign-in-container');
         var ControlContainer = document.getElement('.registration-sign-in-container-instance');
-        var Control          = ControlContainer.getElement(
+        var Control = ControlContainer.getElement(
             '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp"]'
         );
 
@@ -75,7 +75,7 @@ function signUpOnLoad() {
                 duration: 250,
                 callback: function () {
                     Container.setStyles({
-                        height  : null,
+                        height: null,
                         overflow: null
                     });
                 }
@@ -123,15 +123,15 @@ function signUpOnLoad() {
                 'package/quiqqer/controls/bin/site/Window',
                 'Locale'
             ], function (QUISiteWindow, QUILocale) {
-                var lg     = 'quiqqer/frontend-users',
+                var lg = 'quiqqer/frontend-users',
                     sideId = Target.get('data-id');
 
                 new QUISiteWindow({
                     closeButtonText: QUILocale.get(lg, 'btn.close'),
-                    showTitle      : true,
-                    project        : QUIQQER_PROJECT.name,
-                    lang           : QUIQQER_PROJECT.lang,
-                    id             : sideId
+                    showTitle: true,
+                    project: QUIQQER_PROJECT.name,
+                    lang: QUIQQER_PROJECT.lang,
+                    id: sideId
                 }).open();
             });
         };
