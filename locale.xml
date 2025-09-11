@@ -3,8 +3,10 @@
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
         <locale name="exception.registrars.email.email_blacklisted">
-            <de><![CDATA[Die eingegebene E-Mail-Adresse kann nicht verwendet werden, da sie Wortbestandteile enthält, die nicht zugelassen sind.]]></de>
-            <en><![CDATA[The e-mail address entered cannot be used because it contains word components that are not permitted.]]></en>
+            <de>
+                <![CDATA[Die eingegebene E-Mail-Adresse kann nicht verwendet werden, da sie Wortbestandteile enthält, die nicht zugelassen sind.]]></de>
+            <en>
+                <![CDATA[The e-mail address entered cannot be used because it contains word components that are not permitted.]]></en>
         </locale>
         <!-- Cron -->
         <locale name="cron.deleteUnverifiedInactiveUsers.title">
@@ -469,8 +471,10 @@
             <en><![CDATA[Reload page after registration]]></en>
         </locale>
         <locale name="settings.reloadOnSuccess.description">
-            <de><![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
-            <en><![CDATA[After successful registration the page should be reloaded. This setting overwrites the setting "Auto redirect on activation".]]></en>
+            <de>
+                <![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
+            <en>
+                <![CDATA[After successful registration the page should be reloaded. This setting overwrites the setting "Auto redirect on activation".]]></en>
         </locale>
         <locale name="settings.redirectOnLogin.title">
             <de><![CDATA[Automatische Weiterleitung nach Login]]></de>
@@ -1079,6 +1083,61 @@ Available placeholders:
     <li><b>[host]</b> - Website URL (e.g. https://www.my-website.com)</li>
     <li><b>[userPassword]</b> - Text section containing the login password. Inserted only if the password was randomly generated and not if the user set the password himself.</li>
 </ul>]]></en>
+        </locale>
+
+        <locale name="confirm.registration.tou.title">
+            <de><![CDATA[Registrierung erforderlich – Zustimmung zu Nutzungsbedingungen]]></de>
+            <en><![CDATA[Registration required – Agreement to terms of use]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_tou_pp.title">
+            <de>
+                <![CDATA[Registrierung erforderlich – Zustimmung zu Nutzungsbedingungen und Datenschutzerklärung]]></de>
+            <en><![CDATA[Registration required – Agreement to terms of use and privacy policy]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.title">
+            <de><![CDATA[Registrierung erforderlich – Zustimmung zu Datenschutzerklärung]]></de>
+            <en><![CDATA[Registration required – Agreement to privacy policy]]></en>
+        </locale>
+
+        <locale name="confirm.registration.tou.content">
+            <de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen, musst du unseren Nutzungsbedingungen zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+            <en><![CDATA[
+            To create your account using your social media login, you must agree to our Terms of Use.
+            Without your consent, the registration process cannot be completed.
+            ]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_tou_pp.content">
+            <de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen,
+            musst du unseren Nutzungsbedingungen und der Datenschutzerklärung zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+            <en><![CDATA[
+            To create your account using your social media login,
+            you must agree to our Terms of Use and Privacy Policy.
+            Without your consent, the registration process cannot be completed.
+            ]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.content">
+            <de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen, musst du unserer Datenschutzerklärung zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+            <en><![CDATA[
+            To create your account using your social media login, you must agree to our privacy policy.
+            Without your consent, the registration process cannot be completed.
+            ]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.submit">
+            <de><![CDATA[Zustimmen]]></de>
+            <en><![CDATA[Agree]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.cancel">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
         </locale>
     </groups>
 
@@ -2271,7 +2330,8 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Auto activation]]></en>
         </locale>
         <locale name="controls.settings.registrars.template.activationModeOptionAutoWithEmailConfirm">
-            <de><![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
+            <de>
+                <![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
             <en><![CDATA[Auto activation (link to confirm email address will be sent regardless)]]></en>
         </locale>
         <locale name="controls.settings.registrars.template.activationModeOptionManual">
