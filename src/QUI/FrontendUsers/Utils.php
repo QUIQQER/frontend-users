@@ -11,6 +11,7 @@ use QUI\FrontendUsers\Controls\Profile\ControlInterface;
 use QUI\FrontendUsers\Exception\EmailAddressNotVerifiableException;
 use QUI\Interfaces\Users\User as QUIUserInterface;
 use QUI\Permissions;
+use QUI\Users\Attribute\AttributeVerificationStatus;
 use QUI\Utils\Security\Orthos;
 
 use function class_exists;
@@ -468,6 +469,17 @@ class Utils
      */
     public static function isEmailAddressVerifiedForUser(string $email, QUIUserInterface $User): bool
     {
+        if (method_exists($User, 'isAttributeVerified')) {
+            $isVerified = $User->isAttributeVerified(
+                $email,
+                QUI\Users\Attribute\Verifiable\MailAttribute::class
+            );
+
+            if ($isVerified) {
+                return true;
+            }
+        }
+
         $verifiedEmailAddresses = $User->getAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED);
 
         if (empty($verifiedEmailAddresses)) {
@@ -486,7 +498,7 @@ class Utils
      *
      * @throws EmailAddressNotVerifiableException
      */
-    public static function setEmailAddressAsVerfifiedForUser(string $email, QUIUserInterface $User): void
+    public static function setEmailAddressAsVerifiedForUser(string $email, QUIUserInterface $User): void
     {
         if (self::isEmailAddressVerifiedForUser($email, $User)) {
             return;
@@ -514,6 +526,14 @@ class Utils
         }
 
         $verifiedEmailAddresses[] = $email;
+
+        if (method_exists($User, 'setStatusToVerifiableAttribute')) {
+            $User->setStatusToVerifiableAttribute(
+                $email,
+                QUI\Users\Attribute\Verifiable\MailAttribute::class,
+                AttributeVerificationStatus::VERIFIED
+            );
+        }
 
         $User->setAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED, $verifiedEmailAddresses);
         $User->save(QUI::getUsers()->getSystemUser());
@@ -571,7 +591,7 @@ class Utils
      */
     public static function setDefaultUserEmailVerified(QUIUserInterface $User): void
     {
-        self::setEmailAddressAsVerfifiedForUser($User->getAttribute('email'), $User);
+        self::setEmailAddressAsVerifiedForUser($User->getAttribute('email'), $User);
 
         $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
         $User->save(QUI::getUsers()->getSystemUser());

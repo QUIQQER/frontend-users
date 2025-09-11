@@ -2,7 +2,6 @@
  * Registration Handler
  *
  * @module package/quiqqer/frontend-users/bin/Registration
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/Registration', [
 
@@ -10,6 +9,5 @@ define('package/quiqqer/frontend-users/bin/Registration', [
 
 ], function (RegistrationClass) {
     "use strict";
-
     return new RegistrationClass();
 });

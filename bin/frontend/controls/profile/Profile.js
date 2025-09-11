@@ -1,6 +1,5 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile
- * @author www.pcsg.de (Henning Leutz)
  *
  * @event onLoad [self]
  * @event onSave [self]
@@ -35,7 +34,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile',
 
         Binds: [
             '$onInject',
@@ -45,7 +44,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
         ],
 
         options: {
-            category     : false,
+            category: false,
             windowHistory: true
         },
 
@@ -54,7 +53,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
             this.$category = null;
             this.$settings = null;
-            this.Loader    = new QUILoader();
+            this.Loader = new QUILoader();
 
             this.$FX = null;
 
@@ -81,8 +80,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          * @return {Promise}
          */
         resize: function () {
-            var self      = this,
-                Elm       = this.getElm(),
+            var self = this,
+                Elm = this.getElm(),
                 Animation = Elm.querySelector('[data-name="content-animated"]');
 
             return new Promise(function (resolve) {
@@ -98,7 +97,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         callback: function () {
                             moofx(Animation).animate({
                                 opacity: 1,
-                                left   : 0
+                                left: 0
                             }, {
                                 duration: 100,
                                 callback: function () {
@@ -119,7 +118,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          */
         $onInject: function () {
             var self = this,
-                Elm  = this.getElm();
+                Elm = this.getElm();
 
             window.addEventListener('changestate', this.$onChangeState, false);
 
@@ -128,7 +127,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.$bindCategoriesEvents();
 
             this.openSetting().then(function () {
-                var Form     = Elm.querySelector('[data-name="form"]');
+                var Form = Elm.querySelector('[data-name="form"]');
                 var category = Form.get('data-category');
                 var settings = Form.get('data-setting');
 
@@ -145,7 +144,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          */
         $onImport: function () {
             var self = this,
-                Elm  = this.getElm();
+                Elm = this.getElm();
 
             window.addEventListener('changestate', this.$onChangeState, false);
 
@@ -176,7 +175,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          */
         $addFormEvents: function () {
             var self = this;
-            var Elm  = this.getElm();
+            var Elm = this.getElm();
 
             // setting form events
             var forms = Elm.getElements('form');
@@ -203,7 +202,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          */
         $onChangeState: function () {
             var pathName = window.location.pathname,
-                url      = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
+                url = QUIQQER_SITE.url + '/' + this.$category + '/' + this.$settings;
 
             if (url.indexOf('http://') !== -1 || url.indexOf('https://') !== -1) {
                 pathName = window.location.href;
@@ -250,7 +249,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          */
         openSetting: function (category, settings, setUrl) {
             var self = this,
-                Elm  = this.getElm();
+                Elm = this.getElm();
 
             if (typeof setUrl === 'undefined') {
                 setUrl = true;
@@ -269,7 +268,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
 
                 moofx(Animation).animate({
                     opacity: 0,
-                    left   : -20
+                    left: -20
                 }, {
                     duration: 250,
                     callback: resolve
@@ -282,7 +281,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 return new Promise(function (resolve, reject) {
                     QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_getControl', function (result) {
                         var height = self.$Elm.getSize().y;
-                        var Form   = self.$Elm.querySelector('[data-name="form"]');
+                        var Form = self.$Elm.querySelector('[data-name="form"]');
 
                         if (!result) {
                             result = '<div class="quiqqer-frontendUsers-controls-profile-categoryContentAnimation" ' +
@@ -310,7 +309,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                             self.$bindCategoriesEvents();
                         }
 
-                        var styles  = Ghost.getElements('style');
+                        var styles = Ghost.getElements('style');
                         var scripts = Ghost.getElements('script');
 
                         var Content = Ghost.querySelector('[data-name="content-animated"]');
@@ -350,14 +349,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                         }).delay(100);
                     }, {
                         'package': 'quiqqer/frontend-users',
-                        category : category,
-                        settings : settings,
-                        project  : JSON.encode({
+                        category: category,
+                        settings: settings,
+                        project: JSON.encode({
                             name: QUIQQER_PROJECT.name,
                             lang: QUIQQER_PROJECT.lang
                         }),
-                        siteId   : QUIQQER_SITE.id,
-                        onError  : reject
+                        siteId: QUIQQER_SITE.id,
+                        onError: reject
                     });
                 });
             });
@@ -368,8 +367,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
          */
         $bindCategoriesEvents: function () {
             let i, len, Header;
-            const self       = this;
-            const Elm        = this.getElm();
+            const self = this;
+            const Elm = this.getElm();
             const categories = Elm.querySelectorAll('[data-name="nav-category"]');
 
             var toggle = function () {
@@ -406,7 +405,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                 }
 
                 const category = Target.getParent('[data-name="nav-category"]').get('data-category'),
-                    setting  = Target.get('data-setting');
+                    setting = Target.get('data-setting');
 
                 self.$setMenuItemActive(category, setting);
 
@@ -448,7 +447,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
             this.fireEvent('saveBegin', [this]);
 
             var forms = this.getElm().getElements('form'),
-                data  = {};
+                data = {};
 
             forms.each(function (Form) {
                 data = Object.merge(data, QUIFormUtils.getFormData(Form));
@@ -460,10 +459,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     resolve();
                 }, {
                     'package': 'quiqqer/frontend-users',
-                    category : self.$category,
-                    settings : self.$settings,
-                    data     : JSON.encode(data),
-                    onError  : function (error) {
+                    category: self.$category,
+                    settings: self.$settings,
+                    data: JSON.encode(data),
+                    onError: function (error) {
                         self.fireEvent('saveError', [self, error]);
                         reject();
                     }

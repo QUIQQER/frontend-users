@@ -1,8 +1,6 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
- * @author www.pcsg.de (Henning Leutz)
- * @author www.pcsg.de (Patrick Müller)
- *
+
  * @event onRegister [this] - fires if the user successfully registers a user account
  * @event onQuiqqerFrontendUsersRegisterStart [this]
  * @event onQuiqqerFrontendUsersRegisterSuccess [this]
@@ -25,7 +23,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
 
         Binds: [
             '$onImport',
@@ -33,13 +31,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         ],
 
         options: {
-            registrars: [] // list of registar that are displayed in this controls
+            registrars: [] // list of registrar that are displayed in this controls
         },
 
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader              = null;
+            this.Loader = null;
             this.$TermsOfUseCheckBox = null;
 
             this.addEvents({
@@ -51,8 +49,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
          * event: on import
          */
         $onImport: function () {
-            var self  = this,
-                Elm   = this.getElm(),
+            var self = this,
+                Elm = this.getElm(),
                 forms = Elm.getElements('form.quiqqer-frontendUsers-controls-registration-registrar');
 
             QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
@@ -69,7 +67,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             var TermsOfUseElm = Elm.getElement('.quiqqer-frontendUsers-controls-registration-termsOfUse');
 
             if (TermsOfUseElm) {
-                var TermsOfUseLink    = TermsOfUseElm.getElement('a.quiqqer-frontendusers-termsofuse-link');
+                var TermsOfUseLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-termsofuse-link');
                 var PrivacyPolicyLink = TermsOfUseElm.getElement('a.quiqqer-frontendusers-privacypolicy-link');
 
                 if (TermsOfUseLink) {
@@ -78,10 +76,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
                         new QUISiteWindow({
                             closeButtonText: QUILocale.get(lg, 'btn.close'),
-                            showTitle      : true,
-                            project        : QUIQQER_PROJECT.name,
-                            lang           : QUIQQER_PROJECT.lang,
-                            id             : TermsOfUseElm.get('data-termsofusesiteid')
+                            showTitle: true,
+                            project: QUIQQER_PROJECT.name,
+                            lang: QUIQQER_PROJECT.lang,
+                            id: TermsOfUseElm.get('data-termsofusesiteid')
                         }).open();
                     });
                 }
@@ -92,9 +90,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
 
                         new QUISiteWindow({
                             showTitle: true,
-                            project  : QUIQQER_PROJECT.name,
-                            lang     : QUIQQER_PROJECT.lang,
-                            id       : TermsOfUseElm.get('data-privacypolicysiteid')
+                            project: QUIQQER_PROJECT.name,
+                            lang: QUIQQER_PROJECT.lang,
+                            id: TermsOfUseElm.get('data-privacypolicysiteid')
                         }).open();
                     });
                 }
@@ -115,7 +113,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     return;
                 }
 
-                var url     = RedirectElm.get('data-url');
+                var url = RedirectElm.get('data-url');
                 var instant = RedirectElm.get('data-instant') === "1";
 
                 if (instant) {
@@ -138,7 +136,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
         $sendForm: function (Form) {
             this.Loader.show();
 
-            var self     = this,
+            var self = this,
                 formData = QUIFormUtils.getFormData(Form);
 
             if (this.$TermsOfUseCheckBox) {
@@ -178,11 +176,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                         resolve();
                     }, reject);
                 }, {
-                    'package' : 'quiqqer/frontend-users',
-                    registrar : Form.get('data-registrar'),
-                    data      : JSON.encode(formData),
+                    'package': 'quiqqer/frontend-users',
+                    registrar: Form.get('data-registrar'),
+                    data: JSON.encode(formData),
                     registrars: self.getAttribute('registrars'),
-                    onError   : reject
+                    onError: reject
                 });
             });
         }
