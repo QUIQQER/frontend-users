@@ -53,22 +53,25 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         // set address data
         if ($useAddress) {
-            $UserAddress = $User->addAddress([
+            $Address = $User->getStandardAddress();
+            $Address->setAttributes([
                 'salutation' => $this->getAttribute('salutation'),
                 'firstname' => $this->getAttribute('firstname'),
                 'lastname' => $this->getAttribute('lastname'),
-                'mail' => $this->getAttribute('email'),
                 'company' => $this->getAttribute('company'),
                 'street_no' => $this->getAttribute('street_no'),
                 'zip' => $this->getAttribute('zip'),
                 'city' => $this->getAttribute('city'),
                 'country' => mb_strtolower($this->getAttribute('country'))
-            ], $SystemUser);
+            ]);
+
+            $Address->editMail(0, $this->getAttribute('email'));
+            $Address->save($SystemUser);
 
             $User->setAttributes([
                 'firstname' => $this->getAttribute('firstname'),
                 'lastname' => $this->getAttribute('lastname'),
-                'address' => $UserAddress->getUUID()    // set as main address
+                'address' => $Address->getUUID()    // set as main address
             ]);
 
             $tel = $this->getAttribute('phone');
@@ -76,27 +79,18 @@ class Registrar extends FrontendUsers\AbstractRegistrar
             $fax = $this->getAttribute('fax');
 
             if (!empty($tel)) {
-                $UserAddress->addPhone([
-                    'type' => 'tel',
-                    'no' => $tel
-                ]);
+                $Address->editPhone(0, $tel);
             }
 
             if (!empty($mobile)) {
-                $UserAddress->addPhone([
-                    'type' => 'mobile',
-                    'no' => $mobile
-                ]);
+                $Address->editMobile($mobile);
             }
 
             if (!empty($fax)) {
-                $UserAddress->addPhone([
-                    'type' => 'fax',
-                    'no' => $fax
-                ]);
+                $Address->editFax($fax);
             }
 
-            $UserAddress->save($SystemUser);
+            $Address->save($SystemUser);
         }
 
         if ($this->getAttribute('password')) {
