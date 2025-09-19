@@ -536,6 +536,18 @@ class Events
             'categoryViewDefaultPermission'
         );
 
+        // TODO $defaultViewPermission muss raus
+        // TODO es wäre besser wenn das permission in der settings.xml gesetzt wird
+        // die kategorien wissen eigentlich nur selbst
+        // also so:
+        /*    <category name="userProfile">
+                    <permission name="view" type="bool">
+                        <defaultvalue>0</defaultvalue>
+                        <rootPermission>1</rootPermission>
+                        <everyonePermission>0</everyonePermission>
+                    </permission>
+        */
+
         foreach (Utils::getProfileCategories() as $c) {
             foreach ($c['items'] as $setting) {
                 $permission = $permissionPrefix . $c['name'] . '.' . $setting['name'];
