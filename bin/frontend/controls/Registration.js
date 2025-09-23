@@ -66,9 +66,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 });
             });
 
-            QUI.addEvent('quiqqerUserAuthLoginSuccess', (login, authenticator) => {
-                console.log('boooom');
-
+            QUI.addEvent('quiqqerUserAuthLoginSuccess', () => {
                 this.fireEvent('register', [this]);
                 QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [this]);
             });

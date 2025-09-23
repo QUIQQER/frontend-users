@@ -116,6 +116,18 @@ class Registration extends QUI\Control
                     $registrationStatus = QUI\FrontendUsers\Handler::REGISTRATION_STATUS_SUCCESS;
                     $Engine->assign('registrationStatus', $registrationStatus);
                 }
+
+                try {
+                    $registrar = $this->isCurrentlyExecuted();
+                    $username = $registrar->getUsername();
+                    $user = QUI::getUsers()->getUserByName($username);
+
+                    QUI::getSession()->set('inAuthentication', 1);
+                    QUI::getSession()->set('auth-primary', 1);
+                    QUI::getSession()->set('uid', $user->getUUID());
+                    QUI::getSession()->set('username', $user->getUsername());
+                } catch (\Exception) {
+                }
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::write(
                     $Exception->getMessage(),
@@ -348,7 +360,6 @@ class Registration extends QUI\Control
                 ]);
             }
         }
-
 
         $Engine->assign([
             'socialRegistrars' => $socialRegistrars,
@@ -593,7 +604,6 @@ class Registration extends QUI\Control
             case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
                 if (!$NewUser->isActive()) {
                     $NewUser->activate('', $SystemUser);
-
                     // TODO set login session ???
                 }
 
