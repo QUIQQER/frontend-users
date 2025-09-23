@@ -65,53 +65,63 @@
     {/if}
 
     {if !isset($isGeneralError)}
-        {if $Registrars->isEmpty()}
+        {if $socialRegistrars->isEmpty() && $mailRegistrars->isEmpty()}
         <div class="content-message-information">
             {locale group="quiqqer/frontend-users" var="control.registration.registration_disabled"}
         </div>
         {else}
         <div class="quiqqer-frontendUsers-controls-registration">
-            {foreach $Registrars as $Registrar}
+            {foreach $socialRegistrars as $registrar}
+            <!-- social registrations -->
             <form action=""
                   method="POST"
                   class="quiqqer-frontendUsers-controls-registration-registrar"
-                  data-registrar="{$Registrar->getHash()}"
+                  data-registrar="{$registrar->getHash()}"
             >
-                {if $showRegistrarTitle}
-                <header>
-                    <h2>{$Registrar->getTitle()}</h2>
-                </header>
-                {/if}
+                {$registrar->getControl()->create()}
 
-                {$Registrar->getControl()->create()}
-
-                <input type="hidden" name="registrar" value="{$Registrar->getHash()}"/>
+                <input type="hidden" name="registrar" value="{$registrar->getHash()}"/>
                 <input type="hidden" name="registration" value="1"/>
                 <input type="hidden" name="registration_id" value="{$registrationId}"/>
             </form>
+            {/foreach}
 
-            {if $Registrar !== $Registrars->last()}
+            {if !$socialRegistrars->isEmpty() && !$mailRegistrars->isEmpty()}
             <div class="quiqqer-frontendUsers-controls-registration-or">
-                                        <span class="quiqqer-frontendUsers-controls-registration-or-text control-background">
-                                            {locale group="quiqqer/frontend-users" var="control.registration.or"}
-                                        </span>
+                <span class="quiqqer-frontendUsers-controls-registration-or-text">
+                    {locale group="quiqqer/frontend-users" var="control.registration.or"}
+                </span>
             </div>
             {/if}
+
+            <!-- mail registrations -->
+            {foreach $mailRegistrars as $registrar}
+            <!-- social registrations -->
+            <form action=""
+                  method="POST"
+                  class="quiqqer-frontendUsers-controls-registration-registrar"
+                  data-registrar="{$registrar->getHash()}"
+            >
+                {$registrar->getControl()->create()}
+
+                <input type="hidden" name="registrar" value="{$registrar->getHash()}"/>
+                <input type="hidden" name="registration" value="1"/>
+                <input type="hidden" name="registration_id" value="{$registrationId}"/>
+            </form>
             {/foreach}
+
 
             {if $termsOfUseRequired}
             <div class="quiqqer-frontendUsers-controls-registration-termsOfUse"
-                 {if $termsOfUseSiteId} data-termsofusesiteid="{$termsOfUseSiteId}"{/if}
-            {if $privacyPolicySiteId} data-privacypolicysiteid="{$privacyPolicySiteId}"{/if}
+                {if $termsOfUseSiteId} data-termsofusesiteid="{$termsOfUseSiteId}"{/if}
+                {if $privacyPolicySiteId} data-privacypolicysiteid="{$privacyPolicySiteId}"{/if}
             >
-            <p>
                 <label>
-                            <span>
-                                {$termsOfUseLabel}
-                            </span>
-                    <input type="checkbox"{if $termsOfUseAcctepted} checked{/if}/>
+                    <input  name="termsOfUse" type="checkbox"{if $termsOfUseAccepted} checked{/if}/>
+                    <span>
+                        {$termsOfUseLabel}
+                    </span>
                 </label>
-            </p>
             </div>
             {/if}
         </div>

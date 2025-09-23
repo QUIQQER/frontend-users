@@ -320,6 +320,16 @@ class Registration extends QUI\Control
             return $displayPositionA - $displayPositionB;
         });
 
+        $socialRegistrars = $Registrars->filter(function ($registrar) {
+            return $registrar->getType() !== 'QUI\Registration\Trial\Registrar'
+                && $registrar->getType() !== 'QUI\FrontendUsers\Registrars\Email\Registrar';
+        });
+
+        $mailRegistrars = $Registrars->filter(function ($registrar) {
+            return $registrar->getType() === 'QUI\Registration\Trial\Registrar'
+                || $registrar->getType() === 'QUI\FrontendUsers\Registrars\Email\Registrar';
+        });
+
         if (!empty($_REQUEST['registrar'])) {
             $Registrar = $RegistrarHandler->getRegistrarByHash($_REQUEST['registrar']);
 
@@ -333,8 +343,11 @@ class Registration extends QUI\Control
             }
         }
 
+
         $Engine->assign([
-            'Registrars' => $Registrars,
+            'socialRegistrars' => $socialRegistrars,
+            'mailRegistrars' => $mailRegistrars,
+
             'Registrar' => $CurrentRegistrar,
             'success' => $success,
             'redirectUrl' => $redirectUrl,
@@ -343,9 +356,8 @@ class Registration extends QUI\Control
             'Login' => $Login,
             'termsOfUseLabel' => $termsOfUseLabel,
             'termsOfUseRequired' => $termsOfUseRequired,
-            'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
+            'termsOfUseAccepted' => !empty($_POST['termsOfUseAccepted']),
             'registrationId' => $this->id,
-            'showRegistrarTitle' => $this->getAttribute('showRegistrarTitle'),
             'nextLinksText' => $success ? RegistrationUtils::getFurtherLinksText() : false
         ]);
 
