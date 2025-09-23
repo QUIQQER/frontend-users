@@ -21,39 +21,40 @@
 {/if}
 
 {if $success}
-<div class="content-message-success">
-    {if !$instantRedirect}
-        {$Registrar->getSuccessMessage()}
-    {/if}
-    {if $redirectUrl || $instantReload}
-    <div class="quiqqer-frontendUsers-redirect"
-         {if !empty($redirectUrl)}data-url="{$redirectUrl}"{/if}
-         data-instant="{if $instantRedirect}1{else}0{/if}"
-         data-reload="{if $instantReload}1{else}0{/if}"
-    >
-        {if !$instantRedirect && !$instantReload}
-            {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
+    <div class="content-message-success">
+        {if !$instantRedirect}
+            {$Registrar->getSuccessMessage()}
+        {/if}
+
+        {if $redirectUrl || $instantReload}
+        <div class="quiqqer-frontendUsers-redirect"
+             {if !empty($redirectUrl)}data-url="{$redirectUrl}"{/if}
+             data-instant="{if $instantRedirect}1{else}0{/if}"
+             data-reload="{if $instantReload}1{else}0{/if}"
+        >
+            {if !$instantRedirect && !$instantReload}
+                {locale group="quiqqer/frontend-users" var="control.registration.auto_redirect" url=$redirectUrl}
+            {/if}
+        </div>
+        {elseif $nextLinksText}
+        <p class="quiqqer-frontendUsers-controls-registration-nextlinks">
+            {$nextLinksText}
+        </p>
         {/if}
     </div>
-    {elseif $nextLinksText}
-    <p class="quiqqer-frontendUsers-controls-registration-nextlinks">
-        {$nextLinksText}
-    </p>
-    {/if}
-</div>
+
     {if $Login}
         {$Login->create()}
     {/if}
 
-{template_event name="quiqqer::frontendUsers::registrationSuccess"}
+    {template_event name="quiqqer::frontendUsers::registrationSuccess"}
 
 {elseif $Registrar && isset($registrationStatus) && $registrationStatus === 2}
-<div class="content-message-information">
-    {$Registrar->getPendingMessage()}
-</div>
+    <div class="content-message-information">
+        {$Registrar->getPendingMessage()}
+    </div>
 
-{template_event name="quiqqer::frontendUsers::registrationPending"}
-
+    {template_event name="quiqqer::frontendUsers::registrationPending"}
 {else}
     {if isset($error) && !$redirectUrl}
     <div class="content-message-error">
