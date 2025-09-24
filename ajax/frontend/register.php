@@ -25,7 +25,8 @@ QUI::$Ajax->registerFunction(
         $Registration = new QUI\FrontendUsers\Controls\Registration([
             'async' => true,
             'registrars' => $registrars,
-            'addressValidation' => !empty($isSignUpRegistration)
+            'addressValidation' => !empty($isSignUpRegistration),
+            'ignoreAlreadyRegistered' => true
         ]);
 
         $_POST = array_merge($_POST, json_decode($data, true));

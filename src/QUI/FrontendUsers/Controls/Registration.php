@@ -61,6 +61,7 @@ class Registration extends QUI\Control
             'async' => false,
             'data-qui' => 'package/quiqqer/frontend-users/bin/frontend/controls/Registration',
             'status' => false,
+            'ignoreAlreadyRegistered' => false,
             'Registrar' => false,
             // currently executed Registrar
             'registrars' => [],
@@ -108,8 +109,25 @@ class Registration extends QUI\Control
                     'registrationStatus' => $registrationStatus
                 ]);
             } catch (QUI\FrontendUsers\Exception\UserAlreadyExistsException $Exception) {
-                QUI\System\Log::writeDebugException($Exception);
-                $Engine->assign('error', $Exception->getMessage());
+                if ($this->getAttribute('ignoreAlreadyRegistered') === false) {
+                    QUI\System\Log::writeDebugException($Exception);
+                    $Engine->assign('error', $Exception->getMessage());
+                } else {
+                    $registrationStatus = QUI\FrontendUsers\Handler::REGISTRATION_STATUS_SUCCESS;
+                    $Engine->assign('registrationStatus', $registrationStatus);
+                }
+
+                try {
+                    $registrar = $this->isCurrentlyExecuted();
+                    $username = $registrar->getUsername();
+                    $user = QUI::getUsers()->getUserByName($username);
+
+                    QUI::getSession()->set('inAuthentication', 1);
+                    QUI::getSession()->set('auth-primary', 1);
+                    QUI::getSession()->set('uid', $user->getUUID());
+                    QUI::getSession()->set('username', $user->getUsername());
+                } catch (\Exception) {
+                }
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::write(
                     $Exception->getMessage(),
@@ -320,6 +338,16 @@ class Registration extends QUI\Control
             return $displayPositionA - $displayPositionB;
         });
 
+        $socialRegistrars = $Registrars->filter(function ($registrar) {
+            return $registrar->getType() !== 'QUI\Registration\Trial\Registrar'
+                && $registrar->getType() !== 'QUI\FrontendUsers\Registrars\Email\Registrar';
+        });
+
+        $mailRegistrars = $Registrars->filter(function ($registrar) {
+            return $registrar->getType() === 'QUI\Registration\Trial\Registrar'
+                || $registrar->getType() === 'QUI\FrontendUsers\Registrars\Email\Registrar';
+        });
+
         if (!empty($_REQUEST['registrar'])) {
             $Registrar = $RegistrarHandler->getRegistrarByHash($_REQUEST['registrar']);
 
@@ -334,7 +362,9 @@ class Registration extends QUI\Control
         }
 
         $Engine->assign([
-            'Registrars' => $Registrars,
+            'socialRegistrars' => $socialRegistrars,
+            'mailRegistrars' => $mailRegistrars,
+
             'Registrar' => $CurrentRegistrar,
             'success' => $success,
             'redirectUrl' => $redirectUrl,
@@ -343,9 +373,8 @@ class Registration extends QUI\Control
             'Login' => $Login,
             'termsOfUseLabel' => $termsOfUseLabel,
             'termsOfUseRequired' => $termsOfUseRequired,
-            'termsOfUseAcctepted' => !empty($_POST['termsOfUseAccepted']),
+            'termsOfUseAccepted' => !empty($_POST['termsOfUseAccepted']),
             'registrationId' => $this->id,
-            'showRegistrarTitle' => $this->getAttribute('showRegistrarTitle'),
             'nextLinksText' => $success ? RegistrationUtils::getFurtherLinksText() : false
         ]);
 
@@ -575,6 +604,7 @@ class Registration extends QUI\Control
             case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
                 if (!$NewUser->isActive()) {
                     $NewUser->activate('', $SystemUser);
+                    // TODO set login session ???
                 }
 
                 if ($registrarSettings['activationMode'] == $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM) {
