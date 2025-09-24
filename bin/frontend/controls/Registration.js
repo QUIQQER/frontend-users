@@ -162,12 +162,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     });
                 });
             } else {
-                run = new Promise(function (resolve, reject) {
+                run = new Promise((resolve, reject) => {
                     QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', resolve, {
                         'package': 'quiqqer/frontend-users',
                         registrar: Form.get('data-registrar'),
                         data: JSON.encode(formData),
-                        registrars: self.getAttribute('registrars'),
+                        registrars: this.getAttribute('registrars'),
                         onError: reject
                     });
                 });
