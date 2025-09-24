@@ -211,7 +211,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     });
                 }
 
-                return QUI.parse(container).then(function () {
+                return QUI.parse(container).then(() => {
                     this.fireEvent('register', [this]);
                     QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [this]);
                 });
