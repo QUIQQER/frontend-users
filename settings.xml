@@ -197,7 +197,7 @@
             </section>
         </config>
 
-        <window>
+        <window name="frontend-users">
             <title>
                 <locale group="quiqqer/frontend-users" var="menu.title"/>
             </title>
@@ -206,209 +206,7 @@
             </params>
 
             <categories>
-
-                <category name="userProfile">
-                    <text>
-                        <locale group="quiqqer/frontend-users" var="settings.category.userProfile.title"/>
-                    </text>
-                    <icon>fa fa-user</icon>
-
-                    <settings title="profileBar_section" name="profileBar_section">
-                        <title>
-                            <locale group="quiqqer/frontend-users" var="settings.section.profileBar.title"/>
-                        </title>
-
-                        <input conf="profileBar.showLogin" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showLogin.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.showLogin.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="profileBar.showRegistration" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showRegistration.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.showRegistration.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="profileBar.showToProfile" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.showToProfile.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.showToProfile.description"/>
-                            </description>
-                        </input>
-                    </settings>
-
-                    <settings title="user_avatar_section" name="user_avatar_section">
-                        <title>
-                            <locale group="quiqqer/frontend-users" var="settings.section.userAccount.avatar.title"/>
-                        </title>
-
-                        <input conf="profileBar.defaultAvatar" type="string"
-                               data-qui="controls/projects/project/media/Input"
-                               data-qui-options-cssclasses="1"
-                        >
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.userAvatarUploadAllowed" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.userAvatarUploadAllowed.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.userAvatarUploadAllowed.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.maxAvatarUploadSize"
-                               data-qui="controls/projects/project/settings/FileFormat"
-                               type="number"
-                        >
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadSize.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.maxAvatarUploadSize.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.maxAvatarUploadHeight">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadHeight.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.maxAvatarUploadHeight.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.maxAvatarUploadWidth">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadWidth.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.maxAvatarUploadWidth.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.useGravatar" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.useGravatarUserDefaultValue" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.useGravatarUserDefaultValue.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.useGravatarUserDefaultValue.description"/>
-                            </description>
-                        </input>
-
-                    </settings>
-
-                    <settings title="user_account_section" name="user_account_section">
-                        <title>
-                            <locale group="quiqqer/frontend-users" var="settings.section.userAccount.title"/>
-                        </title>
-
-                        <input conf="userProfile.categoryViewDefaultPermission" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.categoryViewDefaultPermission.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users"
-                                        var="settings.categoryViewDefaultPermission.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="userProfile.useAddressManagement" type="checkbox">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.description"/>
-                            </description>
-                        </input>
-
-                        <select conf="userProfile.userDeleteMode">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.description"/>
-                            </description>
-                            <option value="delete">
-                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.delete"/>
-                            </option>
-                            <option value="wipe">
-                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.wipe"/>
-                            </option>
-                            <option value="destroy">
-                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.destroy"/>
-                            </option>
-                        </select>
-                    </settings>
-
-                </category>
-
-                <category name="login">
-                    <text>
-                        <locale group="quiqqer/frontend-users" var="settings.category.login.title"/>
-                    </text>
-                    <icon>fa fa-sign-in</icon>
-
-                    <settings title="login_section" name="login_section">
-                        <title>
-                            <locale group="quiqqer/frontend-users" var="settings.section.login.title"/>
-                        </title>
-
-                        <input conf="login.redirectOnLogin" type="text"
-                               data-qui="controls/projects/project/site/MultiLangSelect">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.description"/>
-                            </description>
-                        </input>
-
-                        <input conf="login.authenticators" type="text"
-                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/Authenticators">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.authenticators.title"/>
-                            </text>
-                            <description>
-                                <locale group="quiqqer/frontend-users" var="settings.authenticators.description"/>
-                            </description>
-                        </input>
-
-                    </settings>
-                </category>
-
-                <category name="registration">
+                <category name="registration" index="1">
                     <text>
                         <locale group="quiqqer/frontend-users" var="settings.category.registration.title"/>
                     </text>
@@ -666,7 +464,62 @@
                     </settings>
                 </category>
 
-                <category name="registrationAddress">
+                <category name="registrars" index="2">
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="settings.category.registrars.title"/>
+                    </text>
+                    <icon>fa fa-user-plus</icon>
+
+                    <settings title="registrars_section" name="registrars_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.registrars.title"/>
+                        </title>
+
+                        <input conf="registrars.registrarSettings" type="text"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/Registrars" label="false">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.registrarSettings.title"/>
+                            </text>
+                        </input>
+
+                    </settings>
+                </category>
+
+                <category name="login" index="3">
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="settings.category.login.title"/>
+                    </text>
+                    <icon>fa fa-sign-in</icon>
+
+                    <settings title="login_section" name="login_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.login.title"/>
+                        </title>
+
+                        <input conf="login.redirectOnLogin" type="text"
+                               data-qui="controls/projects/project/site/MultiLangSelect">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.redirectOnLogin.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="login.authenticators" type="text"
+                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/Authenticators">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.authenticators.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.authenticators.description"/>
+                            </description>
+                        </input>
+
+                    </settings>
+                </category>
+
+                <category name="registrationAddress" index="4">
                     <text>
                         <locale group="quiqqer/frontend-users" var="settings.category.registrationAddress.title"/>
                     </text>
@@ -713,28 +566,7 @@
                     </settings>
                 </category>
 
-                <category name="registrars">
-                    <text>
-                        <locale group="quiqqer/frontend-users" var="settings.category.registrars.title"/>
-                    </text>
-                    <icon>fa fa-user-plus</icon>
-
-                    <settings title="registrars_section" name="registrars_section">
-                        <title>
-                            <locale group="quiqqer/frontend-users" var="settings.section.registrars.title"/>
-                        </title>
-
-                        <input conf="registrars.registrarSettings" type="text"
-                               data-qui="package/quiqqer/frontend-users/bin/controls/settings/Registrars" label="false">
-                            <text>
-                                <locale group="quiqqer/frontend-users" var="settings.registrarSettings.title"/>
-                            </text>
-                        </input>
-
-                    </settings>
-                </category>
-
-                <category name="mail">
+                <category name="mail" index="5">
                     <text>
                         <locale group="quiqqer/frontend-users" var="settings.category.mail.title"/>
                     </text>
@@ -780,11 +612,175 @@
                                 <locale group="quiqqer/frontend-users" var="settings.mailFromAddress.description"/>
                             </description>
                         </input>
+                    </settings>
+                </category>
+
+                <category name="userProfile" index="6">
+                    <text>
+                        <locale group="quiqqer/frontend-users" var="settings.category.userProfile.title"/>
+                    </text>
+                    <icon>fa fa-user</icon>
+
+                    <settings title="profileBar_section" name="profileBar_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.profileBar.title"/>
+                        </title>
+
+                        <input conf="profileBar.showLogin" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showLogin.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.showLogin.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="profileBar.showRegistration" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showRegistration.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.showRegistration.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="profileBar.showToProfile" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.showToProfile.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.showToProfile.description"/>
+                            </description>
+                        </input>
+                    </settings>
+
+                    <settings title="user_avatar_section" name="user_avatar_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.userAccount.avatar.title"/>
+                        </title>
+
+                        <input conf="profileBar.defaultAvatar" type="string"
+                               data-qui="controls/projects/project/media/Input"
+                               data-qui-options-cssclasses="1"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.defaultAvatar.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.userAvatarUploadAllowed" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.userAvatarUploadAllowed.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.userAvatarUploadAllowed.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.maxAvatarUploadSize"
+                               data-qui="controls/projects/project/settings/FileFormat"
+                               type="number"
+                        >
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadSize.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.maxAvatarUploadSize.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.maxAvatarUploadHeight">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadHeight.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.maxAvatarUploadHeight.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.maxAvatarUploadWidth">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.maxAvatarUploadWidth.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.maxAvatarUploadWidth.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.useGravatar" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.useGravatar.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.useGravatarUserDefaultValue" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.useGravatarUserDefaultValue.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.useGravatarUserDefaultValue.description"/>
+                            </description>
+                        </input>
 
                     </settings>
 
-                </category>
+                    <settings title="user_account_section" name="user_account_section">
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="settings.section.userAccount.title"/>
+                        </title>
 
+                        <input conf="userProfile.categoryViewDefaultPermission" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.categoryViewDefaultPermission.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.categoryViewDefaultPermission.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="userProfile.useAddressManagement" type="checkbox">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.useAddressManagement.description"/>
+                            </description>
+                        </input>
+
+                        <select conf="userProfile.userDeleteMode">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.description"/>
+                            </description>
+                            <option value="delete">
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.delete"/>
+                            </option>
+                            <option value="wipe">
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.wipe"/>
+                            </option>
+                            <option value="destroy">
+                                <locale group="quiqqer/frontend-users" var="settings.userDeleteMode.option.destroy"/>
+                            </option>
+                        </select>
+                    </settings>
+
+                </category>
             </categories>
         </window>
 
