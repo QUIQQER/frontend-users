@@ -1,12 +1,21 @@
-.quiqqer-registration,
-.quiqqer-registration section {
+.quiqqer-registration {
     float: left;
     width: 100%;
 }
 
+.quiqqer-registration section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
 .quiqqer-registration fieldset {
     border: none;
-    margin-bottom: 10px;
+}
+
+.quiqqer-registration fieldset input {
+    margin-bottom: 0;
 }
 
 .quiqqer-registration label,
@@ -15,24 +24,20 @@
     width: 100%;
 }
 
+.quiqqer-registration label {
+    display: flex;
+    flex-direction: column;
+}
+
 .quiqqer-registration-field-title {
-    float: left;
-    width: 40%;
+    font-size: 0.9rem;
+    line-height: 1rem;
 }
 
-.quiqqer-registration-field-element {
-    float: left;
-    width: 60%;
-}
-
-.quiqqer-registration-field-error-msg {
-    color: #ff0000;
-    padding-left:40%;
+.quiqqer-registration-submit button {
+    text-align: center;
+    justify-content: center;
     width: 100%;
-}
-
-.quiqqer-registration-field-error {
-    box-shadow: 0 0 0 2px #ff0000;
 }
 
 .quiqqer-registration-address {
@@ -43,7 +48,7 @@
     cursor: not-allowed;
 }
 
-.qui-utils-passwordsecurity {
-    float: right;
-    width: 60% !important;
+.quiqqer-registration .qui-utils-passwordsecurity {
+    border-radius: 5px;
+    width: 100% !important;
 }
