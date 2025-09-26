@@ -1,6 +1,5 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp
- * @author www.pcsg.de (Henning Leutz)
  *
  * @event onRegister [this] - fires if the user successfully registers a user account
  * @event onQuiqqerFrontendUsersRegisterStart [this]
@@ -31,7 +30,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp',
 
         Binds: [
             '$onInject',
@@ -43,25 +42,25 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         ],
 
         options: {
-            registrars     : [],    // list of registrar that are displayed in this controls
-            useCaptcha     : false,
+            registrars: [],    // list of registrar that are displayed in this controls
+            useCaptcha: false,
             emailIsUsername: false,
             submitregistrar: false, // instantly submit the registration form of this registrar if provided
             reloadOnSuccess: true,  // reload the page, if the user successfully registrated
-            termsAccepted  : false
+            termsAccepted: false
         },
 
         initialize: function (options) {
             this.parent(options);
 
-            this.Loader  = new QUILoader();
+            this.Loader = new QUILoader();
             this.$loaded = false;
 
             this.$RegistrationSection = null;
-            this.$captchaResponse     = false;
-            this.$tooltips            = {};
-            this.$LoginControl        = null;
-            this.$openSection         = 'email';
+            this.$captchaResponse = false;
+            this.$tooltips = {};
+            this.$LoginControl = null;
+            this.$openSection = 'email';
 
             this.addEvents({
                 onImport: this.$onImport,
@@ -123,8 +122,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             this.$RegistrationSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration');
-            this.$TextSection         = this.getElm().getElement('.quiqqer-fu-registrationSignUp-info');
-            this.$SocialLogins        = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration-social');
+            this.$TextSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-info');
+            this.$SocialLogins = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration-social');
 
             this.$RegistrationSection.setStyle('opacity', 0);
             this.$RegistrationSection.setStyle('display', 'inline');
@@ -201,7 +200,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                     self.$TextSection.setStyles({
                         height: null,
-                        width : null
+                        width: null
                     });
 
                     moofx(self.$RegistrationSection).animate({
@@ -213,7 +212,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 });
             }, {
                 'package': 'quiqqer/frontend-users',
-                onError  : function (err) {
+                onError: function (err) {
                     console.error(err);
                 }
             });
@@ -248,9 +247,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         $loadRegistrar: function (registrar) {
-            var self  = this,
+            var self = this,
                 Terms = self.getElm().getElement('.quiqqer-fu-registrationSignUp-terms'),
-                Form  = Terms.getElement('form');
+                Form = Terms.getElement('form');
 
             return this.$getRegistrar(registrar).then(function (result) {
                 if (!Form) {
@@ -269,7 +268,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 if (MailRegistrar) {
                     var Button = new Element('button', {
                         'class': 'quiqqer-fu-registrationSignUp-terms-mail',
-                        html   : QUILocale.get(lg, 'control.registration.sign.up.create.button')
+                        html: QUILocale.get(lg, 'control.registration.sign.up.create.button')
                     }).inject(MailRegistrar.getParent());
 
                     MailRegistrar.destroy();
@@ -402,7 +401,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                         return;
                                     }
 
-                                    if (Redirect.get('data-instant')){
+                                    if (Redirect.get('data-instant')) {
                                         window.location = Redirect.get('data-url');
                                     }
                                 }
@@ -426,12 +425,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         }
                     });
                 }, {
-                    'package'           : 'quiqqer/frontend-users',
-                    registrar           : registrar,
-                    registration_id     : registration_id,
-                    data                : JSON.encode(formData),
+                    'package': 'quiqqer/frontend-users',
+                    registrar: registrar,
+                    registration_id: registration_id,
+                    data: JSON.encode(formData),
                     isSignUpRegistration: 1,
-                    onError             : function (err) {
+                    onError: function (err) {
                         console.error(err);
                         reject(err);
                     }
@@ -454,8 +453,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return Promise.resolve();
             }
 
-            var self     = this,
-                Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms'),
+            var self = this,
+                Terms = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms'),
                 children = this.$RegistrationSection.getChildren();
 
             children = children.filter(function (Child) {
@@ -467,7 +466,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             return new Promise(function (resolve, reject) {
                 moofx(children).animate({
-                    left   : -30,
+                    left: -30,
                     opacity: 0
                 }, {
                     callback: function () {
@@ -499,10 +498,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                                 new QUISiteWindow({
                                     closeButtonText: QUILocale.get(lg, 'btn.close'),
-                                    showTitle      : true,
-                                    project        : QUIQQER_PROJECT.name,
-                                    lang           : QUIQQER_PROJECT.lang,
-                                    siteUrl        : href
+                                    showTitle: true,
+                                    project: QUIQQER_PROJECT.name,
+                                    lang: QUIQQER_PROJECT.lang,
+                                    siteUrl: href
                                 }).open();
                             });
 
@@ -513,9 +512,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             }
 
                             // create the social login form
-                            var Form       = Terms.getElement('form');
+                            var Form = Terms.getElement('form');
                             var SocialForm = self.getElm().getElement('form[data-registrar="' + registrar + '"]');
-                            var hidden     = SocialForm.getElements('[type="hidden"]');
+                            var hidden = SocialForm.getElements('[type="hidden"]');
 
                             Form.set('method', SocialForm.get('method'));
                             Form.set('data-registrar', SocialForm.get('data-registrar'));
@@ -536,7 +535,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                             self.Loader.hide();
 
                             moofx(Terms).animate({
-                                left   : 0,
+                                left: 0,
                                 opacity: 1
                             });
                         });
@@ -551,7 +550,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         hideTerms: function () {
-            var Terms    = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms');
+            var Terms = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms');
             var children = this.$RegistrationSection.getChildren();
 
             children = children.filter(function (Child) {
@@ -565,14 +564,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             return new Promise(function (resolve) {
                 moofx(Terms).animate({
-                    left   : -30,
+                    left: -30,
                     opacity: 0
                 }, {
                     callback: function () {
                         Terms.setStyle('display', 'none');
 
                         moofx(children).animate({
-                            left   : 0,
+                            left: 0,
                             opacity: 1
                         }, {
                             callback: resolve
@@ -650,7 +649,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                         return;
                                     }
 
-                                    if (Redirect.get('data-instant')){
+                                    if (Redirect.get('data-instant')) {
                                         window.location = Redirect.get('data-url');
                                     }
                                 }
@@ -660,9 +659,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 if (ErrorBox) {
                                     new Element('a', {
                                         'class': 'quiqqer-fu-registrationSignUp-back',
-                                        href   : '#',
-                                        html   : QUILocale.get(lg, 'controls.RegistrationSignUp.error.back'),
-                                        events : {
+                                        href: '#',
+                                        html: QUILocale.get(lg, 'controls.RegistrationSignUp.error.back'),
+                                        events: {
                                             click: function (event) {
                                                 event.stop();
 
@@ -689,8 +688,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }, {
                     'package': 'quiqqer/frontend-users',
                     registrar: registrar,
-                    data     : JSON.encode([]),
-                    onError  : function (err) {
+                    data: JSON.encode([]),
+                    onError: function (err) {
                         console.error(err);
                         reject(err);
                     }
@@ -706,7 +705,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         showLoader: function () {
-            var self     = this,
+            var self = this,
                 children = this.$RegistrationSection.getChildren();
 
             return new Promise(function (resolve) {
@@ -722,7 +721,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                         require(['qui/controls/loader/Loader'], function (Loader) {
                             self.Loader = new Loader({
-                                type  : 'fa-spinner',
+                                type: 'fa-spinner',
                                 styles: {
                                     background: 'transparent'
                                 }
@@ -751,9 +750,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     duration: 250,
                     callback: function () {
                         moofx(self.$TextSection).animate({
-                            height : 0,
+                            height: 0,
                             padding: 0,
-                            width  : 0
+                            width: 0
                         }, {
                             duration: 250,
                             callback: function () {
@@ -787,10 +786,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * init mail registration
          */
         $initMail: function () {
-            var ButtonTrial   = this.getElm().getElement('[name="trial-account"]'),
-                EmailNext     = this.getElm().getElement('[name="email-next"]'),
-                PasswordNext  = this.getElm().getElement('[name="create-account"]'),
-                EmailField    = this.getElm().getElement('[name="email"]'),
+            var ButtonTrial = this.getElm().getElement('[name="trial-account"]'),
+                EmailNext = this.getElm().getElement('[name="email-next"]'),
+                PasswordNext = this.getElm().getElement('[name="create-account"]'),
+                EmailField = this.getElm().getElement('[name="email"]'),
                 PasswordField = this.getElm().getElement(
                     '.quiqqer-fu-registrationSignUp-email-passwordSection [name="password"]'
                 );
@@ -818,7 +817,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
 
             // email validation
-            var self        = this,
+            var self = this,
                 mailTimeout = null;
 
             //EmailField.addEvent('blur', function () {
@@ -849,7 +848,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             //        self.emailValidation(EmailField);
             //    }).delay(2000);
             //});
-
             EmailField.addEvent('keydown', function (event) {
                 if (event.key === 'enter') {
                     event.stop();
@@ -888,21 +886,21 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             var self = this;
 
             var CaptchaDisplay = CaptchaContainer.getElement('.quiqqer-captcha-display'),
-                Captcha        = QUI.Controls.getById(CaptchaDisplay.get('data-quiid'));
+                Captcha = QUI.Controls.getById(CaptchaDisplay.get('data-quiid'));
 
             var onCaptchaLoad = function () {
                 var CaptchaResponseInput = self.getElm().getElement('input[name="captchaResponse"]'),
-                    CaptchaDisplay       = CaptchaContainer.getElement('.quiqqer-captcha-display'),
-                    Captcha              = QUI.Controls.getById(CaptchaDisplay.get('data-quiid'));
+                    CaptchaDisplay = CaptchaContainer.getElement('.quiqqer-captcha-display'),
+                    Captcha = QUI.Controls.getById(CaptchaDisplay.get('data-quiid'));
 
                 Captcha.getCaptchaControl().then(function (CaptchaControl) {
                     CaptchaControl.addEvents({
                         onSuccess: function (response) {
-                            self.$captchaResponse      = response;
+                            self.$captchaResponse = response;
                             CaptchaResponseInput.value = response;
                         },
                         onExpired: function () {
-                            self.$captchaResponse      = false;
+                            self.$captchaResponse = false;
                             CaptchaResponseInput.value = '';
 
                             self.$resetMail();
@@ -923,10 +921,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * create trial account
          */
         $onTrialClick: function () {
-            var self         = this,
-                Form         = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]'),
-                Email        = self.getElm().getElement('[name="email"]'),
-                ButtonTrial  = this.getElm().getElement('[name="trial-account"]'),
+            var self = this,
+                Form = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]'),
+                Email = self.getElm().getElement('[name="email"]'),
+                ButtonTrial = this.getElm().getElement('[name="trial-account"]'),
                 GoToPassword = this.getElm().getElement('[name="email-next"]');
 
             Email.set('disabled', true);
@@ -948,7 +946,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 return new Promise(function (resolve) {
                     moofx(MailSection).animate({
-                        left   : -50,
+                        left: -50,
                         opacity: 0
                     }, {
                         duration: 250,
@@ -961,10 +959,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }).then(function () {
                 return self.showTerms(Form.get('data-registrar'));
             }).then(function () {
-                var Form     = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
+                var Form = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
                     formData = {
                         termsOfUseAccepted: true,
-                        trial_email       : Form.elements.email.value
+                        trial_email: Form.elements.email.value
                     };
 
                 if (typeof Form.elements.captchaResponse !== 'undefined') {
@@ -1021,10 +1019,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             var MailSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-mailSection'),
                 ButtonTrial = this.getElm().getElement('[name="trial-account"]'),
-                EmailNext   = this.getElm().getElement('[name="email-next"]');
+                EmailNext = this.getElm().getElement('[name="email-next"]');
 
-            var self      = this,
-                Elm       = this.getElm(),
+            var self = this,
+                Elm = this.getElm(),
                 MailInput = this.getElm().getElement('[name="email"]');
 
             if (MailInput.value === '') {
@@ -1039,7 +1037,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 ButtonTrial.set('disabled', true);
             }
 
-            this.emailValidation(MailInput).then(function (isValid) {
+            Registration.isEmailBlacklisted(MailInput.value).then((isBlacklisted) => {
+                if (isBlacklisted) {
+                    QUI.getMessageHandler((MH) => {
+                        MH.addAttention(QUILocale.get(lg, 'exception.registrars.email.email_blacklisted'), MailInput);
+                    });
+                    return false;
+                }
+
+                return this.emailValidation(MailInput);
+            }).then(function (isValid) {
                 if (!isValid) {
                     return Promise.reject('isInValid');
                 }
@@ -1054,7 +1061,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 moofx(MailSection).animate({
-                    left   : -50,
+                    left: -50,
                     opacity: 0
                 }, {
                     duration: 250,
@@ -1095,7 +1102,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * Shows password input section
          */
         $showPasswordSection: function () {
-            var Elm     = this.getElm(),
+            var Elm = this.getElm(),
                 Section = Elm.getElement('.quiqqer-fu-registrationSignUp-email-passwordSection');
 
             Section.setStyle('opacity', 0);
@@ -1104,7 +1111,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             Section.setStyle('top', 0);
 
             moofx(Section).animate({
-                left   : 0,
+                left: 0,
                 opacity: 1
             }, {
                 duration: 250,
@@ -1120,12 +1127,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         $showFullnameSection: function () {
             this.$openSection = 'fullname';
 
-            var self           = this,
-                Elm            = this.getElm(),
-                Section        = Elm.getElement('.quiqqer-fu-registrationSignUp-email-fullnameSection'),
-                NextBtn        = Section.getElement('[name="fullname-next"]'),
+            var self = this,
+                Elm = this.getElm(),
+                Section = Elm.getElement('.quiqqer-fu-registrationSignUp-email-fullnameSection'),
+                NextBtn = Section.getElement('[name="fullname-next"]'),
                 FirstnameInput = Section.getElement('[name="firstname"]'),
-                LastnameInput  = Section.getElement('[name="lastname"]');
+                LastnameInput = Section.getElement('[name="lastname"]');
 
             if (FirstnameInput) {
                 FirstnameInput.addEvent('keyup', function (event) {
@@ -1169,7 +1176,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 moofx(Section).animate({
-                    left   : -50,
+                    left: -50,
                     opacity: 0
                 }, {
                     duration: 250,
@@ -1195,7 +1202,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             Section.setStyle('top', 0);
 
             moofx(Section).animate({
-                left   : 0,
+                left: 0,
                 opacity: 1
             }, {
                 duration: 250,
@@ -1230,7 +1237,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             var self = this;
 
             moofx(PasswordSection).animate({
-                left   : -50,
+                left: -50,
                 opacity: 0
             }, {
                 duration: 250,
@@ -1267,7 +1274,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return Promise.resolve();
             }
 
-            var self    = this;
+            var self = this;
             var Display = this.getElm().getElement(
                 '.quiqqer-fu-registrationSignUp-email-captcha-display'
             );
@@ -1322,15 +1329,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         $resetMail: function () {
-            var self     = this;
-            var Mail     = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-mailSection');
-            var Captcha  = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-captcha-display');
+            var self = this;
+            var Mail = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-mailSection');
+            var Captcha = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-captcha-display');
             var Password = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-passwordSection');
 
             return new Promise(function (resolve) {
                 self.$TextSection.setStyles({
                     height: null,
-                    width : null
+                    width: null
                 });
 
                 if (!Captcha) {
@@ -1338,7 +1345,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 moofx([Captcha, Password]).animate({
-                    left   : -50,
+                    left: -50,
                     opacity: 0
                 }, {
                     duration: 250,
@@ -1353,7 +1360,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         Mail.setStyle('display', 'inline');
 
                         moofx(Mail).animate({
-                            left   : 0,
+                            left: 0,
                             opacity: 1
                         }, {
                             duration: 250,
@@ -1369,9 +1376,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * password is filled out
          */
         $onMailPasswordClick: function () {
-            var self          = this,
+            var self = this,
                 PasswordInput = this.getElm().getElement('[name="password"]'),
-                Form          = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]');
+                Form = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]');
 
             if (PasswordInput) {
                 if (PasswordInput.value === '') {
@@ -1397,7 +1404,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return self.showLoader().then(() => {
                     return self.hideTerms();
                 }).then(function () {
-                    var Form     = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
+                    var Form = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
                         FormData = QUIFormUtils.getFormData(Form);
 
                     FormData.termsOfUseAccepted = true;
@@ -1427,7 +1434,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          */
         emailValidation: function (Field) {
             var value = Field.value;
-            var self  = this;
+            var self = this;
 
             var checkPromises = [
                 Registration.emailValidation(value)
@@ -1475,14 +1482,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     this.$LoginControl.destroy();
                 }
 
-                var RegistrationElm       = document.getElement('.quiqqer-fu-registrationSignUp-registration');
+                var RegistrationElm = document.getElement('.quiqqer-fu-registrationSignUp-registration');
                 var RegistrationElmParent = RegistrationElm.getParent();
-                var RegistrationInfo      = document.getElement('.quiqqer-fu-registrationSignUp-info');
+                var RegistrationInfo = document.getElement('.quiqqer-fu-registrationSignUp-info');
 
                 var RegistrationElmSize = RegistrationElm.getComputedSize();
-                var width               = RegistrationElmSize.width;
-                var height              = RegistrationElmSize.height;
-                var infoMarginSet       = false;
+                var width = RegistrationElmSize.width;
+                var height = RegistrationElmSize.height;
+                var infoMarginSet = false;
 
                 RegistrationElmParent.setStyle('height', height);
 
@@ -1510,7 +1517,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 this.$LoginControl = new QUILogin({
                     emailAddress: value,
-                    events      : {
+                    events: {
                         onLoadNoAnimation: function () {
                             LoginControlElm.setStyle('display', null);
                             LoginControlElm.addClass('quiqqer-fu-login-container-width');
@@ -1531,15 +1538,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 );
                             });
                         },
-                        onLoad           : function (LoginControl) {
+                        onLoad: function (LoginControl) {
                             RegistrationElmParent.setStyle('height', null);
 
                             LoginControlElm.getElement('.quiqqer-fu-login-email-mailSection input[type="password"]').focus();
 
                             var CloseBtn = new Element('span', {
                                 'class': 'fa fa-close quiqqer-fu-registrationSignUp-login-close',
-                                title  : QUILocale.get(lg, 'control.registration.sign.up.back_to_registration'),
-                                events : {
+                                title: QUILocale.get(lg, 'control.registration.sign.up.back_to_registration'),
+                                events: {
                                     click: function () {
                                         self.$LoginControl.destroy();
                                         CloseBtn.destroy();
@@ -1582,7 +1589,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 var tipId = Input.get('data-has-tooltip');
-                var Tip   = null;
+                var Tip = null;
 
                 if (typeof self.$tooltips[tipId] !== 'undefined') {
                     Tip = self.$tooltips[tipId];
@@ -1601,16 +1608,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     return;
                 }
 
-                Tip   = new window.HTML5TooltipUIComponent();
+                Tip = new window.HTML5TooltipUIComponent();
                 tipId = String.uniqueID();
 
                 Tip.set({
-                    target         : Input,
-                    maxWidth       : "200px",
+                    target: Input,
+                    maxWidth: "200px",
                     animateFunction: "scalein",
-                    color          : "#ef5753",
-                    stickTo        : "top",
-                    contentText    : errorMsg
+                    color: "#ef5753",
+                    stickTo: "top",
+                    contentText: errorMsg
                 });
 
                 Tip.mount();

@@ -2,7 +2,6 @@
  * Manage settings for all Registrars
  *
  * @module package/quiqqer/frontend-users/bin/controls/settings/Registrars
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
 
@@ -19,7 +18,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
     'css!package/quiqqer/frontend-users/bin/controls/settings/Registrars.css'
 
 ], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUILocale, QUIAjax,
-    Mustache, entryTemplate) {
+             Mustache, entryTemplate) {
     "use strict";
 
     var lg = 'quiqqer/frontend-users';
@@ -27,7 +26,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/controls/settings/Registrars',
+        Type: 'package/quiqqer/frontend-users/bin/controls/settings/Registrars',
 
         Binds: [
             '$onImport',
@@ -51,7 +50,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
         $onImport: function () {
             var self = this;
 
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             var FormData = {};
@@ -76,21 +75,21 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
 
                 for (var i = 0, len = registrars.length; i < len; i++) {
                     var Registrar = registrars[i];
-                    var type      = btoa(Registrar.type);
+                    var type = btoa(Registrar.type);
 
                     var EntryElm = new Element('div', {
-                        'class'         : 'quiqqer-frontendusers-settings-registrars-entry',
+                        'class': 'quiqqer-frontendusers-settings-registrars-entry',
                         'data-registrar': Registrar.type,
-                        html            : Mustache.render(entryTemplate, {
-                            title                                   : Registrar.title,
-                            description                             : Registrar.description,
-                            labelActivationMode                     : QUILocale.get(lg, lgPrefix + 'labelActivationMode'),
-                            activationModeOptionMail                : QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
-                            activationModeOptionAuto                : QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
+                        html: Mustache.render(entryTemplate, {
+                            title: Registrar.title,
+                            description: Registrar.description,
+                            labelActivationMode: QUILocale.get(lg, lgPrefix + 'labelActivationMode'),
+                            activationModeOptionMail: QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
+                            activationModeOptionAuto: QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
                             activationModeOptionAutoWithEmailConfirm: QUILocale.get(lg, lgPrefix + 'activationModeOptionAutoWithEmailConfirm'),
-                            activationModeOptionManual              : QUILocale.get(lg, lgPrefix + 'activationModeOptionManual'),
-                            labelActive                             : QUILocale.get(lg, lgPrefix + 'labelActive'),
-                            labelDisplayPosition                    : QUILocale.get(lg, lgPrefix + 'labelDisplayPosition')
+                            activationModeOptionManual: QUILocale.get(lg, lgPrefix + 'activationModeOptionManual'),
+                            labelActive: QUILocale.get(lg, lgPrefix + 'labelActive'),
+                            labelDisplayPosition: QUILocale.get(lg, lgPrefix + 'labelDisplayPosition')
                         })
                     }).inject(self.$Content);
 
@@ -110,13 +109,13 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
          * Set settings to input
          */
         $setSettings: function () {
-            var entryElms     = this.$Input.getParent().getElements(
+            var entryElms = this.$Input.getParent().getElements(
                 '.quiqqer-frontendusers-settings-registrars-entry'
             );
             var RegistrarData = {};
 
             for (var i = 0, len = entryElms.length; i < len; i++) {
-                var EntryElm  = entryElms[i];
+                var EntryElm = entryElms[i];
                 var registrar = btoa(EntryElm.get('data-registrar'));
 
                 RegistrarData[registrar] = QUIFormUtils.getFormData(
@@ -136,7 +135,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_settings_getRegistrars', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject
+                    onError: reject
                 });
             });
         }

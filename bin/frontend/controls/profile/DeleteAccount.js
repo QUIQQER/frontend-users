@@ -2,7 +2,6 @@
  * Frontend Profile: Delete account
  *
  * @module package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount', [
 
@@ -11,7 +10,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
     'Locale',
     'Ajax'
 
-], function(QUIControl, QUIConfirm, QUILocale, QUIAjax) {
+], function (QUIControl, QUIConfirm, QUILocale, QUIAjax) {
     'use strict';
 
     var lg = 'quiqqer/frontend-users';
@@ -31,7 +30,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
             deletestarted: 0
         },
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.addEvents({
@@ -42,7 +41,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         /**
          * event: on import
          */
-        $onImport: function() {
+        $onImport: function () {
             var Elm = this.getElm();
 
             var SubmitBtn = Elm.querySelector('[type="submit"]'),
@@ -59,7 +58,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                 username = '';
             }
 
-            SubmitBtn.addEvent('click', function(event) {
+            SubmitBtn.addEvent('click', function (event) {
                 if (confirmed || self.getAttribute('deletestarted')) {
                     return;
                 }
@@ -90,17 +89,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                     },
 
                     events: {
-                        onOpen: function(Popup) {
+                        onOpen: function (Popup) {
                             var SubmitBtn = Popup.getButton('submit');
 
                             SubmitBtn.disable();
 
                             Popup.Loader.show();
 
-                            self.$checkDeleteAccount().then(function() {
+                            self.$checkDeleteAccount().then(function () {
                                 SubmitBtn.enable();
                                 Popup.Loader.hide();
-                            }, function(Error) {
+                            }, function (Error) {
                                 Popup.setAttribute(
                                     'information',
                                     QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information_error', {
@@ -112,7 +111,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                                 Popup.Loader.hide();
                             });
                         },
-                        onSubmit: function(Popup) {
+                        onSubmit: function (Popup) {
                             confirmed = true;
                             Popup.close();
                             SubmitBtn.click();
@@ -127,8 +126,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
          *
          * @return {Promise}
          */
-        $checkDeleteAccount: function() {
-            return new Promise(function(resolve, reject) {
+        $checkDeleteAccount: function () {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_checkDeleteAccount', resolve, {
                     'package': 'quiqqer/frontend-users',
                     onError: reject,

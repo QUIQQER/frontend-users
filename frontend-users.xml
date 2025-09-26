@@ -41,6 +41,17 @@
                         </title>
                     </settings>
 
+                    <!-- 2FA  -->
+                    <settings control="\QUI\FrontendUsers\Controls\Profile\TwoFactorAuthentication"
+                              name="2fa"
+                              icon="fa fa-shield-alt"
+                              showinprofilebar="0"
+                    >
+                        <title>
+                            <locale group="quiqqer/frontend-users" var="profile.2fa.title"/>
+                        </title>
+                    </settings>
+
                     <!-- Avatar -->
                     <settings control="\QUI\FrontendUsers\Controls\Profile\UserAvatar"
                               name="avatar"

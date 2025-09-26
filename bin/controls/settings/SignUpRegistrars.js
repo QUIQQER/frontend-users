@@ -2,7 +2,6 @@
  * Manage settings for all Registrars
  *
  * @module package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', [
 
@@ -23,7 +22,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars',
+        Type: 'package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars',
 
         Binds: [
             '$onImport',
@@ -46,7 +45,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
         $onImport: function () {
             var self = this;
 
-            this.$Input      = this.getElm();
+            this.$Input = this.getElm();
             this.$Input.type = 'hidden';
 
             this.$Elm = new Element('div', {
@@ -87,8 +86,8 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
                     }).inject(Container);
 
                     Checkbox = new Element('input', {
-                        type  : 'checkbox',
-                        value : registrars[i].type,
+                        type: 'checkbox',
+                        value: registrars[i].type,
                         events: {
                             change: self.$onChange
                         }
@@ -114,7 +113,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_settings_getRegistrars', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    onError  : reject
+                    onError: reject
                 });
             });
         },
@@ -123,7 +122,7 @@ define('package/quiqqer/frontend-users/bin/controls/settings/SignUpRegistrars', 
          * event: on checkbox change
          */
         $onChange: function () {
-            var lists  = this.getElm().getElements('input[type="checkbox"]');
+            var lists = this.getElm().getElements('input[type="checkbox"]');
             var values = lists.filter(function (Item) {
                 return Item.checked;
             }).map(function (Item) {

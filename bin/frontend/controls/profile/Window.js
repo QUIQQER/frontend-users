@@ -16,17 +16,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Window', [
     return new Class({
 
         Extends: QUIPopup,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile',
 
         options: {
             maxHeight: 600,
-            maxWidth : 800,
-            buttons  : false
+            maxWidth: 800,
+            buttons: false
         },
 
         initialize: function (options) {
             this.setAttributes({
-                icon : 'fa fa-user',
+                icon: 'fa fa-user',
                 title: QUILocale.get(lg, 'control.profile.window.title')
             });
 
@@ -56,9 +56,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Window', [
 
             this.$Profile = new Profile({
                 events: {
-                    saveBegin  : showLoader,
-                    onLoad     : hideLoader,
-                    onSave     : hideLoader,
+                    saveBegin: showLoader,
+                    onLoad: hideLoader,
+                    onSave: hideLoader,
                     onSaveError: hideLoader
                 }
             }).inject(this.getContent());

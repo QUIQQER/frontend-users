@@ -1,0 +1,25 @@
+.quiqqer-frontendUsers-touConfirm {
+    padding: 4rem !important;
+}
+
+.quiqqer-frontendUsers-touConfirm header h1 {
+    font-size: 18px;
+}
+
+.quiqqer-frontendUsers-touConfirm-content {
+    margin-bottom: 20px;
+}
+
+.quiqqer-frontendUsers-touConfirm label {
+    clear: both;
+    cursor: pointer;
+    width: 100%;
+
+    padding: 10px;
+    display: flex;
+    align-items: flex-start;
+
+    background-color: rgba(255, 250, 235, 1);
+    border: 1px solid rgba(253, 222, 138, 1);
+    color: rgba(218, 104, 5, 1);
+}

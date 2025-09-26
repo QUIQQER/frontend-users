@@ -1,13 +1,18 @@
 <?php
 
+/**
+ * This file contains QUI\FrontendUsers\Utils
+ */
+
 namespace QUI\FrontendUsers;
 
 use QUI;
 use QUI\FrontendUsers\Controls\Profile\ControlInterface;
-use QUI\Package\Package;
-use QUI\Permissions;
-use QUI\Interfaces\Users\User as QUIUserInterface;
 use QUI\FrontendUsers\Exception\EmailAddressNotVerifiableException;
+use QUI\Interfaces\Users\User as QUIUserInterface;
+use QUI\Permissions;
+use QUI\Users\Attribute\AttributeVerificationStatus;
+use QUI\Utils\Security\Orthos;
 
 use function class_exists;
 use function in_array;
@@ -464,6 +469,17 @@ class Utils
      */
     public static function isEmailAddressVerifiedForUser(string $email, QUIUserInterface $User): bool
     {
+        if (method_exists($User, 'isAttributeVerified')) {
+            $isVerified = $User->isAttributeVerified(
+                $email,
+                QUI\Users\Attribute\Verifiable\MailAttribute::class
+            );
+
+            if ($isVerified) {
+                return true;
+            }
+        }
+
         $verifiedEmailAddresses = $User->getAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED);
 
         if (empty($verifiedEmailAddresses)) {
@@ -482,7 +498,7 @@ class Utils
      *
      * @throws EmailAddressNotVerifiableException
      */
-    public static function setEmailAddressAsVerfifiedForUser(string $email, QUIUserInterface $User): void
+    public static function setEmailAddressAsVerifiedForUser(string $email, QUIUserInterface $User): void
     {
         if (self::isEmailAddressVerifiedForUser($email, $User)) {
             return;
@@ -510,6 +526,14 @@ class Utils
         }
 
         $verifiedEmailAddresses[] = $email;
+
+        if (method_exists($User, 'setStatusToVerifiableAttribute')) {
+            $User->setStatusToVerifiableAttribute(
+                $email,
+                QUI\Users\Attribute\Verifiable\MailAttribute::class,
+                AttributeVerificationStatus::VERIFIED
+            );
+        }
 
         $User->setAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED, $verifiedEmailAddresses);
         $User->save(QUI::getUsers()->getSystemUser());
@@ -567,7 +591,7 @@ class Utils
      */
     public static function setDefaultUserEmailVerified(QUIUserInterface $User): void
     {
-        self::setEmailAddressAsVerfifiedForUser($User->getAttribute('email'), $User);
+        self::setEmailAddressAsVerifiedForUser($User->getAttribute('email'), $User);
 
         $User->setAttribute(Handler::USER_ATTR_EMAIL_VERIFIED, true);
         $User->save(QUI::getUsers()->getSystemUser());
@@ -627,5 +651,74 @@ class Utils
         }
 
         return $missing;
+    }
+
+    /**
+     * Check if an email address is blacklisted from registration.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public static function isEmailBlacklisted(string $email): bool
+    {
+        foreach (self::getBlacklistedEmailPatterns() as $pattern) {
+            if (self::doesEmailMatchPattern($email, $pattern)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $email
+     * @param string $pattern
+     * @return bool
+     */
+    private static function doesEmailMatchPattern(string $email, string $pattern): bool
+    {
+        if (!Orthos::checkMailSyntax($email)) {
+            return false;
+        }
+
+        $partsPattern = explode('@', $pattern);
+
+        if (empty($partsPattern[1])) {
+            return false;
+        }
+
+        $patternName = $partsPattern[0];
+        $patternNameIsWildcard = $patternName === '*';
+        $patternDomain = $partsPattern[1];
+        $patternDomainIsWildcard = $patternDomain === '*';
+
+        $partsEmail = explode('@', $email);
+        $emailName = $partsEmail[0];
+        $emailDomain = $partsEmail[1];
+
+        $nameMatch = $patternNameIsWildcard || $emailName === $patternName;
+        $domainMatch = $patternDomainIsWildcard || $emailDomain === $patternDomain;
+
+        return $nameMatch && $domainMatch;
+    }
+
+    /**
+     * @return array
+     */
+    private static function getBlacklistedEmailPatterns(): array
+    {
+        try {
+            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+            $setting = $Conf->get('registration', 'emailBlacklist');
+        } catch (\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+            return [];
+        }
+
+        if (empty($setting)) {
+            return [];
+        }
+
+        return json_decode($setting, true);
     }
 }

@@ -1,8 +1,15 @@
 .quiqqer-frontendUsers-controls-registration {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: 100%;
+    gap: 0.5rem;
 }
+
+.quiqqer-frontendUsers-controls-registration .quiqqer-frontend-social-button {
+    width: 100%;
+}
+
 
 .quiqqer-frontendUsers-controls-registration-or {
     border-top: 1px solid #CFD2D2;
@@ -10,7 +17,7 @@
     color: #CFD2D2;
     float: left;
     line-height: 30px;
-    margin: 50px 0;
+    margin: 30px 0 0;
     text-align: center;
     position: relative;
     width: 100%;
@@ -32,9 +39,9 @@
 
 .quiqqer-frontendUsers-controls-registration-locked {
     height: 100%;
-    left: 0px;
+    left: 0;
     position: absolute;
-    top: 0px;
+    top: 0;
     width: 100%;
     z-index: 10;
     background: rgba(255, 255, 255, 0.7);
@@ -42,12 +49,15 @@
 
 .quiqqer-frontendUsers-controls-registration-termsOfUse {
     float: left;
-    margin-bottom: 50px;
     width: 100%;
 }
 
 .quiqqer-frontendUsers-controls-registration-termsOfUse label {
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
     float: left;
+    margin-top: 1rem;
     width: 100%;
 }
 

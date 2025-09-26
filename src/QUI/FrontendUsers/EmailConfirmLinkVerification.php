@@ -36,6 +36,7 @@ class EmailConfirmLinkVerification extends AbstractFrontendUsersLinkVerification
      *
      * @param LinkVerification $verification
      * @return void
+     * @throws Exception
      */
     public function onSuccess(LinkVerification $verification): void
     {
@@ -59,13 +60,12 @@ class EmailConfirmLinkVerification extends AbstractFrontendUsersLinkVerification
             $User->setAttribute('email', $newEmail);
             $User->save(QUI::getUsers()->getSystemUser());
 
+            Utils::setEmailAddressAsVerifiedForUser($newEmail, $User);
+
             QUI::getEvents()->fireEvent('quiqqerFrontendUsersEmailChanged', [$User, $oldEmail, $newEmail]);
         } catch (\Exception $Exception) {
-            QUI\System\Log::addError(
-                self::class . ' :: onSuccess -> Could not find user #' . $userUuid
-            );
-
             QUI\System\Log::writeException($Exception);
+            throw $Exception;
         }
     }
 

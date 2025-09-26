@@ -2,6 +2,12 @@
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
+        <locale name="exception.registrars.email.email_blacklisted">
+            <de>
+                <![CDATA[Die eingegebene E-Mail-Adresse kann nicht verwendet werden, da sie Wortbestandteile enthält, die nicht zugelassen sind.]]></de>
+            <en>
+                <![CDATA[The e-mail address entered cannot be used because it contains word components that are not permitted.]]></en>
+        </locale>
         <!-- Cron -->
         <locale name="cron.deleteUnverifiedInactiveUsers.title">
             <de><![CDATA[Nicht aktive Benutzer löschen]]></de>
@@ -465,8 +471,10 @@
             <en><![CDATA[Reload page after registration]]></en>
         </locale>
         <locale name="settings.reloadOnSuccess.description">
-            <de><![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
-            <en><![CDATA[After successful registration the page should be reloaded. This setting overwrites the setting "Auto redirect on activation".]]></en>
+            <de>
+                <![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
+            <en>
+                <![CDATA[After successful registration the page should be reloaded. This setting overwrites the setting "Auto redirect on activation".]]></en>
         </locale>
         <locale name="settings.redirectOnLogin.title">
             <de><![CDATA[Automatische Weiterleitung nach Login]]></de>
@@ -809,6 +817,44 @@
             <de><![CDATA[Passwort ändern]]></de>
             <en><![CDATA[Change password]]></en>
         </locale>
+        <locale name="profile.2fa.title">
+            <de><![CDATA[Zwei-Faktor-Authentifizierung]]></de>
+            <en><![CDATA[Two-factor authentication]]></en>
+        </locale>
+        <locale name="profile.2fa.not.enabled.title">
+            <de><![CDATA[Die Zwei-Faktor-Authentifizierung ist noch nicht aktiviert.]]></de>
+            <en><![CDATA[Two-factor authentication is not enabled yet]]></en>
+        </locale>
+        <locale name="profile.2fa.not.enabled.description">
+            <de><![CDATA[
+            Die Zwei-Faktor-Authentifizierung sorgt für zusätzliche Sicherheit für Ihr Konto,
+            da für die Anmeldung mehr als nur ein Passwort erforderlich ist.
+            ]]></de>
+            <en><![CDATA[
+            Two-factor authentication adds an additional layer of security to your account by requiring more than just a
+            password to sign in.
+            ]]></en>
+        </locale>
+        <locale name="profile.2fa.not.enable.button">
+            <de><![CDATA[Enable two-factor authentication]]></de>
+            <en><![CDATA[Zwei-Faktor-Authentifizierung aktivieren]]></en>
+        </locale>
+        <locale name="profile.2fa.button.disable.authentication">
+            <de><![CDATA[[title] deaktivieren]]></de>
+            <en><![CDATA[Disable [title]]]></en>
+        </locale>
+        <locale name="profile.2fa.button.enable.authentication">
+            <de><![CDATA[[title] aktivieren]]></de>
+            <en><![CDATA[Enable [title]]]></en>
+        </locale>
+        <locale name="profile.2fa.label.enabled">
+            <de><![CDATA[Authentifizierung ist aktiviert]]></de>
+            <en><![CDATA[Authentication is enabled]]></en>
+        </locale>
+        <locale name="profile.2fa.label.disabled">
+            <de><![CDATA[Authentifizierung ist deaktiviert]]></de>
+            <en><![CDATA[Authentication is disabled]]></en>
+        </locale>
         <locale name="profile.deleteaccount.title">
             <de><![CDATA[Benutzerkonto löschen]]></de>
             <en><![CDATA[Delete user account]]></en>
@@ -926,8 +972,10 @@
             <en><![CDATA[Frontend-Users: Content by auth status and group(s)]]></en>
         </locale>
         <locale name="brick.AuthContent.description">
-            <de><![CDATA[Zeigt jeweils spezifischen Content, wenn ein Benutzer nicht eingeloggt, nicht in einer Gruppe oder in einer Gruppe ist.]]></de>
-            <en><![CDATA[Shows specific content each time a user is not logged in, not in a group, or in a group.]]></en>
+            <de>
+                <![CDATA[Zeigt jeweils spezifischen Content, wenn ein Benutzer nicht eingeloggt, nicht in einer Gruppe oder in einer Gruppe ist.]]></de>
+            <en>
+                <![CDATA[Shows specific content each time a user is not logged in, not in a group, or in a group.]]></en>
         </locale>
         <locale name="brick.AuthContent.settings.content_guest.title">
             <de><![CDATA[Inhalt (Gast)]]></de>
@@ -974,8 +1022,10 @@ Available placeholders:
             <en><![CDATA[Groups]]></en>
         </locale>
         <locale name="brick.AuthContent.settings.groups.description">
-            <de><![CDATA[Liste der Gruppe, von denen sich der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
-            <en><![CDATA[List of groups from which the user must be assigned to at least one to see the "Content (in group(s))" content.]]></en>
+            <de>
+                <![CDATA[Liste der Gruppe, von denen sich der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
+            <en>
+                <![CDATA[List of groups from which the user must be assigned to at least one to see the "Content (in group(s))" content.]]></en>
         </locale>
 
         <locale name="mail.delete_user_confirm.subject.description">
@@ -1072,9 +1122,92 @@ Available placeholders:
     <li><b>[userPassword]</b> - Text section containing the login password. Inserted only if the password was randomly generated and not if the user set the password himself.</li>
 </ul>]]></en>
         </locale>
+
+        <locale name="confirm.registration.tou.title">
+            <de><![CDATA[Registrierung erforderlich – Zustimmung zu Nutzungsbedingungen]]></de>
+            <en><![CDATA[Registration required – Agreement to terms of use]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_tou_pp.title">
+            <de>
+                <![CDATA[Registrierung erforderlich – Zustimmung zu Nutzungsbedingungen und Datenschutzerklärung]]></de>
+            <en><![CDATA[Registration required – Agreement to terms of use and privacy policy]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.title">
+            <de><![CDATA[Registrierung erforderlich – Zustimmung zu Datenschutzerklärung]]></de>
+            <en><![CDATA[Registration required – Agreement to privacy policy]]></en>
+        </locale>
+
+        <locale name="confirm.registration.tou.content">
+            <de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen, musst du unseren Nutzungsbedingungen zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+            <en><![CDATA[
+            To create your account using your social media login, you must agree to our Terms of Use.
+            Without your consent, the registration process cannot be completed.
+            ]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_tou_pp.content">
+            <de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen,
+            musst du unseren Nutzungsbedingungen und der Datenschutzerklärung zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+            <en><![CDATA[
+            To create your account using your social media login,
+            you must agree to our Terms of Use and Privacy Policy.
+            Without your consent, the registration process cannot be completed.
+            ]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.content">
+            <de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen, musst du unserer Datenschutzerklärung zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+            <en><![CDATA[
+            To create your account using your social media login, you must agree to our privacy policy.
+            Without your consent, the registration process cannot be completed.
+            ]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.submit">
+            <de><![CDATA[Zustimmen]]></de>
+            <en><![CDATA[Agree]]></en>
+        </locale>
+        <locale name="confirm.registration.tou_pp.cancel">
+            <de><![CDATA[Abbrechen]]></de>
+            <en><![CDATA[Cancel]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
+        <locale name="settings.registration.emailBlacklist">
+            <de><![CDATA[Registrierung E-Mail Blacklist]]></de>
+            <en><![CDATA[Registration email blacklist]]></en>
+        </locale>
+        <locale name="settings.registration.emailBlacklist.description" html="true">
+            <de><![CDATA[
+<p>Liste von E-Mail-Adressen oder Teilen von E-Mail-Adressen, mit denen sich Benutzer nicht registrieren dürfen.</p>
+<p><b>Ein Eintrag pro Zeile!</b></p>
+<p>Beispiele:
+<ul>
+<li><b>user@mail.com</b> - Verbietet eine explizite E-Mail-Adresse</li>
+<li><b>*@mail.com</b> - Verbietet alle E-Mail-Adressen der Domain "mail.com"</li>
+<li><b>user@*</b> - Verbietet alle E-Mail-Adressen, die mit user@ beginnen (unabhängig von der Domain)</li>
+</ul>
+</p>
+]]></de>
+            <en><![CDATA[
+<p>List of email addresses or parts of email addresses users are not permitted to register with.</p>
+<p><b>One entry per line!</b></p>
+<p>Examples:
+<ul>
+<li><b>user@mail.com</b> - Proibits an explicit email address</li>
+<li><b>*@mail.com</b> - Prohibits all email addresses of the domain "mail.com"</li>
+<li><b>user@*</b> - Prhoibits all email addresses that start with "user@" (independent of the domain)</li>
+</ul>
+</p>
+]]></en>
+        </locale>
 
         <locale name="GdprDataProvider.title">
             <de><![CDATA[Daten aus Benutzerregistrierung]]></de>
@@ -2235,7 +2368,8 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Auto activation]]></en>
         </locale>
         <locale name="controls.settings.registrars.template.activationModeOptionAutoWithEmailConfirm">
-            <de><![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
+            <de>
+                <![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
             <en><![CDATA[Auto activation (link to confirm email address will be sent regardless)]]></en>
         </locale>
         <locale name="controls.settings.registrars.template.activationModeOptionManual">

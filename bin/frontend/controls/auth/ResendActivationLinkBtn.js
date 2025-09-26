@@ -2,7 +2,6 @@
  * Button to re-send and activation link
  *
  * @module package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn
- * @author www.pcsg.de (Patrick Müller)
  *
  * @event onResendSuccess [this]
  * @event onResendFail [this]
@@ -22,15 +21,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
     return new Class({
 
         Extends: QUIButton,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
 
         Binds: [
             '$onClick'
         ],
 
         options: {
-            email    : false,   // User e-mail address
-            text     : QUILocale.get(lg, 'controls.frontend.auth.resendactivationlinkbtn.resend_activation_mail'),
+            email: false,   // User e-mail address
+            text: QUILocale.get(lg, 'controls.frontend.auth.resendactivationlinkbtn.resend_activation_mail'),
             textimage: 'fa fa-envelope'
         },
 
@@ -60,7 +59,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
 
                 this.setAttributes({
                     textimage: 'fa fa-check',
-                    text     : QUILocale.get(lg, 'controls.frontend.auth.resendactivationlinkbtn.resend_completed')
+                    text: QUILocale.get(lg, 'controls.frontend.auth.resendactivationlinkbtn.resend_completed')
                 });
 
                 this.fireEvent('resendSuccess', [this]);
@@ -78,8 +77,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    email    : self.getAttribute('email'),
-                    onError  : reject
+                    email: self.getAttribute('email'),
+                    onError: reject
                 })
             });
         }

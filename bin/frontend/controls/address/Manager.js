@@ -10,7 +10,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
     'Locale',
     'Ajax'
 
-], function(QUI, QUIControl, QUILoader, QUIConfirm, QUILocale, QUIAjax) {
+], function (QUI, QUIControl, QUILoader, QUIConfirm, QUILocale, QUIAjax) {
     'use strict';
 
     const lg = 'quiqqer/frontend-users';
@@ -29,7 +29,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             '$clickEditSave'
         ],
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.Loader = new QUILoader();
@@ -47,7 +47,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * event: on import
          */
-        $onImport: function() {
+        $onImport: function () {
             if (this.$imported) {
                 return;
             }
@@ -80,7 +80,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * event: on inject
          */
-        $onInject: function() {
+        $onInject: function () {
             if (this.$imported || this.$injected) {
                 return;
             }
@@ -92,7 +92,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * resize the control
          */
-        resize: function() {
+        resize: function () {
             if (!this.$Profile) {
                 return;
             }
@@ -126,7 +126,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         /**
          * Refresh the display
          */
-        refresh: function() {
+        refresh: function () {
             const self = this;
 
             this.Loader.show();
@@ -134,8 +134,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             this.$injected = false;
             this.$imported = false;
 
-            return new Promise(function(resolve, reject) {
-                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_control', function(control) {
+            return new Promise(function (resolve, reject) {
+                QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_control', function (control) {
                     self.getElm().set('html', control);
                     self.resize();
                     self.$onImport();
@@ -156,23 +156,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param event
          */
-        $addClick: function(event) {
+        $addClick: function (event) {
             event.stop();
 
             const self = this;
 
-            self.getCreateTemplate().then(function(result) {
+            self.getCreateTemplate().then(function (result) {
                 const Form = new Element('form', {
                     'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
                     html: result,
                     'data-name': 'address-container'
                 });
 
-                QUI.parse(Form).then(function() {
+                QUI.parse(Form).then(function () {
                     self.$removeUnusedNodes(Form);
 
                     new QUIConfirm({
-                        'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-add',
+                        'class': 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-add',
                         maxHeight: 800,
                         maxWidth: 700,
                         autoclose: false,
@@ -189,15 +189,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                         },
 
                         events: {
-                            onOpen: function(Popup) {
+                            onOpen: function (Popup) {
                                 const Content = Popup.getContent();
                                 Content.innerHTML = '';
                                 Form.inject(Content);
                             },
-                            onSubmit: function(Popup) {
+                            onSubmit: function (Popup) {
                                 Popup.Loader.show();
 
-                                self.$clickCreateSubmit(Popup).then(function() {
+                                self.$clickCreateSubmit(Popup).then(function () {
                                     Popup.close();
                                     self.refresh();
                                 }).catch(() => {
@@ -215,11 +215,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param {QUIConfirm} Popup
          */
-        $clickCreateSubmit: function(Popup) {
+        $clickCreateSubmit: function (Popup) {
             const Content = Popup.getContent(),
                 Form = Content.getElement('form');
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 require(['qui/utils/Form'], (FormUtils) => {
                     const formData = FormUtils.getFormData(Form);
                     const requiredFields = Form.getElements('[required]');
@@ -241,7 +241,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                         'package': 'quiqqer/frontend-users',
                         data: JSON.encode(formData),
                         onError: (err) => {
-                            QUI.getMessageHandler().then(function(MH) {
+                            QUI.getMessageHandler().then(function (MH) {
                                 MH.addError(err.getMessage());
                             });
 
@@ -257,8 +257,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @return {Promise}
          */
-        getCreateTemplate: function() {
-            return new Promise(function(resolve, reject) {
+        getCreateTemplate: function () {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_getCreate', resolve, {
                     'package': 'quiqqer/frontend-users',
                     onError: reject
@@ -274,7 +274,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param event
          */
-        $deleteClick: function(event) {
+        $deleteClick: function (event) {
             event.stop();
 
             let Target = event.target;
@@ -286,7 +286,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             const addressId = Target.getParent('[data-name="address"]').querySelector('[name="address"]').value;
             const self = this;
 
-            self.getDeleteTemplate(addressId).then(function(result) {
+            self.getDeleteTemplate(addressId).then(function (result) {
 
                 const Form = new Element('form', {
                     'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
@@ -294,11 +294,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                     'data-name': 'address-container'
                 });
 
-                QUI.parse(Form).then(function() {
+                QUI.parse(Form).then(function () {
                     self.$removeUnusedNodes(Form);
 
                     new QUIConfirm({
-                        'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-delete',
+                        'class': 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-delete',
                         maxHeight: 450,
                         maxWidth: 500,
                         autoclose: false,
@@ -315,7 +315,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                         },
 
                         events: {
-                            onOpen: function(Popup) {
+                            onOpen: function (Popup) {
                                 const Content = Popup.getContent();
                                 Content.innerHTML = '';
                                 Form.inject(Content);
@@ -325,10 +325,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                                 ConfirmBtn.classList.remove('btn-success');
                                 ConfirmBtn.classList.add('btn-danger');
                             },
-                            onSubmit: function(Popup) {
+                            onSubmit: function (Popup) {
                                 Popup.Loader.show();
 
-                                self.deleteAddress(addressId).then(function() {
+                                self.deleteAddress(addressId).then(function () {
                                     Popup.close();
                                     self.refresh();
                                 }).catch(() => {
@@ -346,8 +346,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @return {Promise}
          */
-        getDeleteTemplate: function(addressId) {
-            return new Promise(function(resolve, reject) {
+        getDeleteTemplate: function (addressId) {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_getDelete', resolve, {
                     'package': 'quiqqer/frontend-users',
                     onError: reject,
@@ -361,8 +361,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param {Integer} addressId
          */
-        deleteAddress: function(addressId) {
-            return new Promise(function(resolve, reject) {
+        deleteAddress: function (addressId) {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_delete', resolve, {
                     'package': 'quiqqer/frontend-users',
                     addressId: addressId,
@@ -379,7 +379,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @param event
          */
-        $editClick: function(event) {
+        $editClick: function (event) {
             event.stop();
 
             let Target = event.target;
@@ -391,18 +391,18 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
             const addressId = Target.getParent('[data-name="address"]').querySelector('[name="address"]').value;
             const self = this;
 
-            self.getEditTemplate(addressId).then(function(result) {
+            self.getEditTemplate(addressId).then(function (result) {
                 const Form = new Element('form', {
                     'class': 'quiqqer-frontendUsers-controls-profile-control default-content',
                     html: result,
                     'data-name': 'address-container'
                 });
 
-                QUI.parse(Form).then(function() {
+                QUI.parse(Form).then(function () {
                     self.$removeUnusedNodes(Form);
 
                     new QUIConfirm({
-                        'class' : 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-edit',
+                        'class': 'qui-window-popup--frontendUsers-profile qui-window-popup--frontendUsers-profile-address-edit',
                         maxHeight: 800,
                         maxWidth: 700,
                         autoclose: false,
@@ -419,15 +419,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
                         },
 
                         events: {
-                            onOpen: function(Popup) {
+                            onOpen: function (Popup) {
                                 const Content = Popup.getContent();
                                 Content.innerHTML = '';
                                 Form.inject(Content);
                             },
-                            onSubmit: function(Popup) {
+                            onSubmit: function (Popup) {
                                 Popup.Loader.show();
 
-                                self.$clickEditSave(Popup).then(function() {
+                                self.$clickEditSave(Popup).then(function () {
                                     Popup.close();
                                     self.refresh();
                                 }).catch(() => {
@@ -445,12 +445,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * {QUIConfirm} Popup
          */
-        $clickEditSave: function(Popup) {
+        $clickEditSave: function (Popup) {
             const self = this,
                 Content = Popup.getContent(),
                 Form = Content.getElement('form');
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 require(['qui/utils/Form'], (FormUtils) => {
                     const formData = FormUtils.getFormData(Form);
 
@@ -480,8 +480,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          *
          * @return {Promise}
          */
-        getEditTemplate: function(addressId) {
-            return new Promise(function(resolve, reject) {
+        getEditTemplate: function (addressId) {
+            return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_profile_address_getEdit', resolve, {
                     'package': 'quiqqer/frontend-users',
                     onError: reject,
@@ -492,13 +492,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
         //endregion
 
-        $removeUnusedNodes: function(Node) {
+        $removeUnusedNodes: function (Node) {
             if (Node.querySelector('button')) {
                 Node.querySelector('button').destroy();
             }
         },
 
-        $hasValidityIssues: function(Form) {
+        $hasValidityIssues: function (Form) {
             const requiredFields = Form.getElements('[required]');
             let i = 0,
                 len = requiredFields.length;

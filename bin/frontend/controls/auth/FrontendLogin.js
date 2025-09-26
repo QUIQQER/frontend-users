@@ -2,7 +2,6 @@
  * Frontend Login
  *
  * @module package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin
- * @author www.pcsg.de (Patrick Müller)
  *
  * @event onLogin [this] - fires if the user successfully authenticates
  */
@@ -27,7 +26,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
     return new Class({
 
         Extends: QUIControl,
-        Type   : 'package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin',
+        Type: 'package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin',
 
         Binds: [
             '$onImport',
@@ -39,7 +38,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
             this.parent(options);
 
             this.Loader = new QUILoader();
-            this.$Elm   = null;
+            this.$Elm = null;
 
             this.addEvents({
                 onImport: this.$onImport
@@ -50,7 +49,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
          * event: on import
          */
         $onImport: function () {
-            var self  = this;
+            var self = this;
             this.$Elm = this.getElm();
 
             var LoginControlElm = this.$Elm.getElement('div[data-qui="controls/users/Login"]');
@@ -83,7 +82,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
 
                                 new Element('div', {
                                     'class': 'content-message-error',
-                                    html   : error.getMessage()
+                                    html: error.getMessage()
                                 }).inject(MsgElm);
                         }
                     }
@@ -98,7 +97,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
          * @param {Number} userId
          */
         $checkForUnverifiedActivationVerification: function (userId) {
-            var self   = this;
+            var self = this;
             var MsgElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-message');
 
             MsgElm.set('html', '');
@@ -110,7 +109,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
 
                 var InfoElm = new Element('div', {
                     'class': 'content-message-information',
-                    html   : QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.user_not_active')
+                    html: QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.user_not_active')
                 }).inject(MsgElm);
 
                 if (!userEmail) {
@@ -135,7 +134,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                 }).inject(ResendBtnElm);
 
                 new ResendActivationLinkBtn({
-                    email : userEmail,
+                    email: userEmail,
                     events: {
                         onResendSuccess: function () {
                             ResendMsgElm.set(
@@ -143,7 +142,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                                 QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.resend_activation_mail_success')
                             );
                         },
-                        onResendFail   : function () {
+                        onResendFail: function () {
                             ResendMsgElm.set(
                                 'html',
                                 QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.resend_activation_mail_fail')
@@ -158,7 +157,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
          * Redirect on successful login
          */
         $onLogin: function () {
-            var LoginElm    = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-login');
+            var LoginElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-login');
             var redirectUrl = LoginElm.get('data-redirect');
 
             this.fireEvent('login', [this]);
@@ -178,8 +177,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
             return new Promise(function (resolve, reject) {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_auth_existsUnverifiedActivation', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    userId   : userId,
-                    onError  : reject
+                    userId: userId,
+                    onError: reject
                 });
             });
         }

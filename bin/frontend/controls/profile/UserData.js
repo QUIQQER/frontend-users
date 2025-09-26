@@ -2,7 +2,6 @@
  * Frontend Profile: Change user data
  *
  * @module package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData
- * @author www.pcsg.de (Patrick Müller)
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', [
 
@@ -17,7 +16,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData.css'
 
-], function(QUI, QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
+], function (QUI, QUIControl, QUIControlUtils, QUIFunctionUtils, QUILocale, Registration) {
     'use strict';
 
     var lg = 'quiqqer/frontend-users';
@@ -33,7 +32,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
             '$clearEmailErrorMsg'
         ],
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.parent(options);
 
             this.$EmailErrorMsgElm = null;
@@ -46,7 +45,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
         /**
          * event: on import
          */
-        $onImport: function() {
+        $onImport: function () {
             const self = this;
             const Elm = this.getElm();
             const ChangeEmailElm = Elm.querySelector('[data-name="email-edit"]');
@@ -57,24 +56,24 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
             );
 
             if (ProfileNode) {
-                QUIControlUtils.getControlByElement(ProfileNode).then(function(ProfileControl) {
+                QUIControlUtils.getControlByElement(ProfileNode).then(function (ProfileControl) {
                     ProfileControl.addEvents({
-                        onSave: function() {
+                        onSave: function () {
                             EmailNewElm.addAttribute('data-hidden');
                             // EmailNewElm.addClass('quiqqer-frontendUsers-userdata-email__hidden');
                             EmailNewInput.value = '';
                         },
-                        onSaveError: function() {
+                        onSaveError: function () {
                             EmailNewInput.value = '';
                             EmailNewInput.focus();
                         }
                     });
-                }, function() {
+                }, function () {
                     // do nothing
                 });
             }
 
-            ChangeEmailElm.addEvent('click', function() {
+            ChangeEmailElm.addEvent('click', function () {
                 // EmailNewElm.removeClass('quiqqer-frontendUsers-userdata-email__hidden');
                 EmailNewElm.removeAttribute('data-hidden');
                 EmailNewInput.focus();
@@ -95,13 +94,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
                 }
             });
 
-            const CheckMail = function(event) {
+            const CheckMail = function (event) {
                 const email = event.target.value.trim();
 
                 Promise.all([
                     Registration.emailSyntaxValidation(email),
                     Registration.emailValidation(email)
-                ]).then(function(result) {
+                ]).then(function (result) {
                     var emailSyntaxValid = result[0];
                     var emailValid = result[1];
 
@@ -135,7 +134,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
          *
          * @param {String} msg
          */
-        $showEmailErrorMsg: function(msg) {
+        $showEmailErrorMsg: function (msg) {
             if (!this.$EmailErrorMsgElm) {
                 this.$EmailErrorMsgElm = new Element('div', {
                     'class': 'content-message-error'
@@ -148,7 +147,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/UserData', 
         /**
          * Hide error msg for e-mail change
          */
-        $clearEmailErrorMsg: function() {
+        $clearEmailErrorMsg: function () {
             if (this.$EmailErrorMsgElm) {
                 this.$EmailErrorMsgElm.destroy();
                 this.$EmailErrorMsgElm = null;
