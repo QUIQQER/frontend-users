@@ -7,15 +7,24 @@
                     {locale group="quiqqer/frontend-users" var="control.registration.label.username"}{if $usernameSetting == 'required'} *{/if}
                 </span>
 
+                {assign var=userNameRequired value=""}
+                {if $usernameSetting == 'required'}
+                    {assign var=userNameRequired value="required"}
+                {/if}
+
                 <input type="text" name="username"
                        class="quiqqer-registration-field-element{if isset($invalidFields['username'])} quiqqer-registration-field-error{/if}"
                        value="{if isset($fields['username'])}{$fields['username']}{/if}"
                        maxlength="40"
-                       {if $usernameSetting == 'required'}required{/if}/>
+                       {$userNameRequired}
+                />
                 {if isset($invalidFields['username'])}
-                    <span class="quiqqer-registration-field-error-msg">
-                        {$invalidFields['username']->getMsg()}
-                    </span>
+                <span data-name="error-message"
+                      role="alert"
+                      class="q-message q-message-error content-message-error"
+                >
+                    {$invalidFields['username']->getMsg()}
+                </span>
                 {/if}
             </label>
         </fieldset>
@@ -31,26 +40,16 @@
                    value="{if isset($fields['email'])}{$fields['email']}{/if}"
                    class="quiqqer-registration-field-element{if isset($invalidFields['email'])} quiqqer-registration-field-error{/if}"
                    maxlength="40"
-                   required/>
+                   required
+            />
             {if isset($invalidFields['email'])}
-            <span class="quiqqer-registration-field-error-msg">
-                    {$invalidFields['email']->getMsg()}
-                </span>
-            {/if}
-        </label>
-    </fieldset>
-
-    <fieldset class="quiqqer-registration-emailConfirm">
-        <label>
-            <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/frontend-users" var="registrars.email.label.email_confirm"} *
+            <span data-name="error-message"
+                  role="alert"
+                  class="q-message q-message-error content-message-error"
+            >
+                {$invalidFields['email']->getMsg()}
             </span>
-
-            <input type="email" name="emailConfirm"
-                   value="{if isset($fields['emailConfirm'])}{$fields['emailConfirm']}{/if}"
-                   class="quiqqer-registration-field-element{if isset($invalidFields['email'])} quiqqer-registration-field-error{/if}"
-                   maxlength="40"
-                   required/>
+            {/if}
         </label>
     </fieldset>
 
@@ -61,39 +60,29 @@
                     {locale group="quiqqer/frontend-users" var="registrars.email.label.password"} *
                 </span>
 
-                <input type="password" name="password"
+                <input type="password"
+                       name="password"
                        value="{if isset($fields['password'])}{$fields['password']}{/if}"
                        class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
                        autocomplete="off"
                        maxlength="200"
-                       required/>
+                       required
+                />
                 {if isset($invalidFields['password'])}
-                <span class="quiqqer-registration-field-error-msg">
-                        {$invalidFields['password']->getMsg()}
+                <span data-name="error-message"
+                      role="alert"
+                      class="q-message q-message-error content-message-error"
+                >
+                    {$invalidFields['password']->getMsg()}
                 </span>
                 {/if}
             </label>
         </fieldset>
 
-        <fieldset class="quiqqer-registration-passwordConfirm">
-            <label>
-                <span class="quiqqer-registration-field-title">
-                    {locale group="quiqqer/frontend-users" var="registrars.email.label.password_confirm"} *
-                </span>
-
-                <input type="password" name="passwordConfirm"
-                       value="{if isset($fields['passwordConfirm'])}{$fields['passwordConfirm']}{/if}"
-                       class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
-                       autocomplete="off"
-                       maxlength="200"
-                       required/>
-            </label>
-        </fieldset>
         {if $passwordInput == 'validation'}
             <div class="quiqqer-registration-passwordstrength"></div>
         {/if}
     {/if}
-
 </section>
 
 {if $addressTemplate}
@@ -128,9 +117,18 @@
     {/if}
 
     <div class="quiqqer-registration-submit quiqqer-frontendUsers__noScriptHidden">
-        <button type="submit"
-                class="btn-green grid-60 mobile-grid-100 push-40 mobile-push-0"{if $useCaptcha && $jsRequired} disabled{/if}>
-            {locale group="quiqqer/frontend-users" var="registrars.email.btn.submit"}
+        {assign var=submitDisabled value=""}
+        {if $useCaptcha && $jsRequired}
+        {assign var=submitDisabled value="disabled"}
+        {/if}
+
+        <button
+            type="submit"
+            data-type="registration"
+            {$submitDisabled}
+        >
+            <span class="fa fa-envelope"></span>
+            <span>{locale group="quiqqer/frontend-users" var="registrars.email.btn.submit"}</span>
         </button>
     </div>
 </section>

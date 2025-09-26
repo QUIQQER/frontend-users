@@ -62,7 +62,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 form.addEventListener('submit', (event) => {
                     event.stopPropagation();
                     event.preventDefault();
-                    this.$sendForm(event.target).then(this.$onImport);
+
+                    this.$sendForm(event.target).then(this.$onImport).catch(() => {
+                        QUI.fireEvent('quiqqerFrontendUsersRegisterError', [this]);
+                        this.fireEvent('registerError', [this]);
+                        this.Loader.hide();
+                    });
                 });
             });
 

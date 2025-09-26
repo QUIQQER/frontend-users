@@ -11,7 +11,7 @@
     require(['qui/QUI'], function(QUI) {
         (function() {
             QUI.fireEvent('quiqqerFrontendUsersUserActivate', [
-                {$User->getId()},
+                '{$User->getUUID()}',
                 '{$registrarHash}',
                 '{$registrarType}'
             ]);

@@ -7,6 +7,8 @@
 }
 
 .quiqqer-frontendUsers-controls-registration .quiqqer-frontend-social-button {
+    justify-content: center;
+    text-align: center;
     width: 100%;
 }
 

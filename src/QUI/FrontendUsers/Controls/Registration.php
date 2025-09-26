@@ -123,6 +123,7 @@ class Registration extends QUI\Control
                     $user = QUI::getUsers()->getUserByName($username);
 
                     QUI::getSession()->set('inAuthentication', 1);
+                    //QUI::getSession()->set('auth', 1);
                     QUI::getSession()->set('auth-primary', 1);
                     QUI::getSession()->set('uid', $user->getUUID());
                     QUI::getSession()->set('username', $user->getUsername());

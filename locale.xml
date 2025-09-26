@@ -1177,6 +1177,28 @@ Available placeholders:
             <de><![CDATA[Abbrechen]]></de>
             <en><![CDATA[Cancel]]></en>
         </locale>
+
+        <locale name="registrars.email.btn.submit">
+            <de><![CDATA[Weiter mit E-Mail]]></de>
+            <en><![CDATA[Continue with email]]></en>
+        </locale>
+        <locale name="registrars.email.username.btn.submit">
+            <de><![CDATA[Weiter mit E-Mail oder Benutzername]]></de>
+            <en><![CDATA[Continue with email or username]]></en>
+        </locale>
+        <locale name="registrars.email.btn.login">
+            <de><![CDATA[Login mit E-Mail]]></de>
+            <en><![CDATA[Sign in with email]]></en>
+        </locale>
+        <locale name="registrars.email.username.btn.login">
+            <de><![CDATA[Login mit E-Mail oder Benutzername]]></de>
+            <en><![CDATA[Sign in with email or username]]></en>
+        </locale>
+
+        <locale name="registrars.email.message.already.exists">
+            <de><![CDATA[Es gibt bereits ein Konto für diese E‑Mail-Adresse. Logge dich bitte ein.]]></de>
+            <en><![CDATA[There is already an account for this email address. Please log in.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -1660,10 +1682,6 @@ Available placeholders:
         <locale name="registrars.email.label.captcha">
             <de><![CDATA[Sicherheitsabfrage]]></de>
             <en><![CDATA[Security Check]]></en>
-        </locale>
-        <locale name="registrars.email.btn.submit">
-            <de><![CDATA[Jetzt registrieren]]></de>
-            <en><![CDATA[Register now]]></en>
         </locale>
         <locale name="exception.registrars.email.empty_username">
             <de><![CDATA[Bitte geben Sie einen Benutzernamen an.]]></de>
@@ -2547,4 +2565,5 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[To the Sign up]]></en>
         </locale>
     </groups>
+
 </locales>
