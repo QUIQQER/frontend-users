@@ -272,8 +272,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
             this.startLoading();
 
             Registration.usernameValidation(emailInput.value).then((isValid) => {
-                console.log('isValid', isValid);
-
                 if (isValid) {
                     form.dispatchEvent(
                         new Event('submit', {
@@ -374,9 +372,26 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
 
                             login.auth(
                                 loginNode.querySelector('[name="username"]').closest('form')
-                            ).then(() => {
-                                // @todo consider 2FA
+                            ).then((responseData) => {
+                                if (typeof responseData === 'undefined') {
+                                    return;
+                                }
 
+                                // consider 2FA
+                                // show login
+                                const loginNode = login.getElm();
+
+                                container.style.position = 'relative';
+
+                                loginNode.style.position = 'absolute';
+                                loginNode.style.opacity = 0;
+                                loginNode.style.top = 0;
+                                loginNode.style.left = 0;
+                                loginNode.style.display = '';
+
+                                moofx(loginNode).animate({
+                                    opacity: 1
+                                });
                             }).catch(() => {
                                 this.stopLoading();
                             });

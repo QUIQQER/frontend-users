@@ -69,6 +69,7 @@ QUI::$Ajax->registerFunction(
 
         return [
             'html' => $status,
+            'loggedIn' => QUI::getUsers()->isAuth($User),
             'userActivated' => $User && $User->isActive(),
             'userId' => $User ? $User->getUUID() : false,
             'registrarHash' => $registrar,
