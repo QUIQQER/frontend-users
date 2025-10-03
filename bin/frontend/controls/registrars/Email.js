@@ -316,7 +316,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                             <span class="quiqqer-registration-field-title">
                                 Password
                             </span>
-                            <input type="text" name="password" class="quiqqer-registration-field-element" />
+                            <input type="password" name="password" class="quiqqer-registration-field-element" />
                         </label>
                         <div class="q-message q-message-warning content-message-attention">
                             ${QUILocale.get(lg, 'registrars.email.message.already.exists')}

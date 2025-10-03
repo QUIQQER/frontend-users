@@ -13,25 +13,26 @@
 }
 
 .quiqqer-frontendUsers-controls-registration-or {
-    border-top: 1px solid #CFD2D2;
-    clear: both;
-    color: #CFD2D2;
-    float: left;
-    line-height: 30px;
-    margin: 30px 0 0;
+    margin-block: 1rem;
     text-align: center;
-    position: relative;
     width: 100%;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    color: var(--qui-colors-muted);
 }
 
 .quiqqer-frontendUsers-controls-registration-or-text {
-    color: #666666;
-    font-size: 16px;
-    line-height: 30px;
-    padding: 0 10px;
-    position: relative;
-    text-align: center;
-    top: -15px;
+}
+
+.quiqqer-frontendUsers-controls-registration-or:before,
+.quiqqer-frontendUsers-controls-registration-or:after {
+    content: "";
+    display: inline-block;
+    height: 1px;
+    width: 50%;
+    flex-grow: 1;
+    background-color: currentColor;
 }
 
 .quiqqer-frontendUsers-autoRedirect {
@@ -49,21 +50,16 @@
 }
 
 .quiqqer-frontendUsers-controls-registration-termsOfUse {
-    float: left;
     width: 100%;
 }
 
 .quiqqer-frontendUsers-controls-registration-termsOfUse label {
     cursor: pointer;
     display: flex;
+    gap: 1rem;
     align-items: flex-start;
-    float: left;
     margin-top: 1rem;
     width: 100%;
-}
-
-.quiqqer-frontendUsers-controls-registration-termsOfUse label > input {
-    float: left;
 }
 
 .quiqqer-frontendUsers-controls-registration-nextlinks {
