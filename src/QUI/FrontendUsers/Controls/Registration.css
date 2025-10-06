@@ -1,9 +1,11 @@
 .quiqqer-frontendUsers-controls-registration {
+    position: relative;
+}
+
+.quiqqer-frontendUsers-controls-registration__social {
     display: flex;
     flex-direction: column;
-    position: relative;
-    width: 100%;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .quiqqer-frontendUsers-controls-registration .quiqqer-frontend-social-button {
@@ -12,7 +14,7 @@
     width: 100%;
 }
 
-.quiqqer-frontendUsers-controls-registration-or {
+.quiqqer-frontendUsers-controls-registration__or {
     margin-block: 1rem;
     text-align: center;
     width: 100%;
@@ -22,15 +24,11 @@
     color: var(--qui-colors-muted);
 }
 
-.quiqqer-frontendUsers-controls-registration-or-text {
-}
-
-.quiqqer-frontendUsers-controls-registration-or:before,
-.quiqqer-frontendUsers-controls-registration-or:after {
+.quiqqer-frontendUsers-controls-registration__or:before,
+.quiqqer-frontendUsers-controls-registration__or:after {
     content: "";
     display: inline-block;
     height: 1px;
-    width: 50%;
     flex-grow: 1;
     background-color: currentColor;
 }
