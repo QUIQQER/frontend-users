@@ -105,6 +105,10 @@ class Registration extends QUI\Control
             try {
                 $registrationStatus = $this->register();
 
+                // during the registration
+                // 2fa session is set
+                QUI::getSession()->set('auth-secondary', 1);
+
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
@@ -115,19 +119,6 @@ class Registration extends QUI\Control
                 } else {
                     $registrationStatus = QUI\FrontendUsers\Handler::REGISTRATION_STATUS_SUCCESS;
                     $Engine->assign('registrationStatus', $registrationStatus);
-                }
-
-                try {
-                    $registrar = $this->isCurrentlyExecuted();
-                    $username = $registrar->getUsername();
-                    $user = QUI::getUsers()->getUserByName($username);
-
-                    QUI::getSession()->set('inAuthentication', 1);
-                    //QUI::getSession()->set('auth', 1);
-                    QUI::getSession()->set('auth-primary', 1);
-                    QUI::getSession()->set('uid', $user->getUUID());
-                    QUI::getSession()->set('username', $user->getUsername());
-                } catch (\Exception) {
                 }
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::write(
@@ -148,8 +139,24 @@ class Registration extends QUI\Control
 
                 $Engine->assign(
                     'error',
-                    QUI::getLocale()->get('quiqqer/frontend-users', 'controls.Registation.general_error')
+                    QUI::getLocale()->get('quiqqer/frontend-users', 'controls.registration.general_error')
                 );
+            }
+
+            try {
+                // auto login for the primary login
+                // in this case, mail is primary login
+                $registrar = $this->isCurrentlyExecuted();
+                $username = $registrar->getUsername();
+                $user = QUI::getUsers()->getUserByName($username);
+
+                QUI::getSession()->set('inAuthentication', 1);
+                QUI::getSession()->set('auth-primary', 1);
+                QUI::getSession()->set('uid', $user->getUUID());
+                QUI::getSession()->set('username', $user->getUsername());
+
+                QUI::getUsers()->login();
+            } catch (\Exception) {
             }
         }
 

@@ -1,8 +1,3 @@
-.quiqqer-registration {
-    float: left;
-    width: 100%;
-}
-
 .quiqqer-registration section {
     display: flex;
     flex-direction: column;
@@ -12,16 +7,11 @@
 
 .quiqqer-registration fieldset {
     border: none;
+    padding: 0;
 }
 
 .quiqqer-registration fieldset input {
     margin-bottom: 0;
-}
-
-.quiqqer-registration label,
-.quiqqer-registration fieldset {
-    float: left;
-    width: 100%;
 }
 
 .quiqqer-registration label {
@@ -38,10 +28,6 @@
     text-align: center;
     justify-content: center;
     width: 100%;
-}
-
-.quiqqer-registration-address {
-    float: left;
 }
 
 .quiqqer-registration button[disabled] {

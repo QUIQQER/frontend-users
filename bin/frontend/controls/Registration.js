@@ -187,7 +187,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     ]);
                 }
 
-
                 const node = new Element('div', {
                     html: result.html
                 });
@@ -199,13 +198,36 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                 container.set('html', Registration.get('html'));
                 const login = container.querySelector('.quiqqer-frontendUsers-frontendlogin-login');
 
-                if (login) {
-                    // 2fa login?
-                    Array.from(login.querySelectorAll('h1')).forEach((h1) => {
-                        h1.parentNode.removeChild(h1);
-                    });
+                if (!login) {
+                    return;
                 }
 
+                // 2fa login
+                Array.from(login.querySelectorAll('h1')).forEach((h1) => {
+                    h1.parentNode.removeChild(h1);
+                });
+
+                // wait for login
+                // 2fa login
+                return QUI.parse(container).then(() => {
+                    const loginInstance = QUI.Controls.getById(
+                        container
+                            .querySelector('[data-qui="controls/users/Login"]')
+                            .getAttribute('data-quiid')
+                    );
+
+                    if (!loginInstance) {
+                        return;
+                    }
+
+                    // no redirect or reload
+                    loginInstance.setAttribute('onSuccess', () => {});
+
+                    return new Promise((resolve) => {
+                        loginInstance.addEvent('success', resolve);
+                    });
+                });
+            }).then(() => {
                 if (this.getAttribute('showSuccess') === false) {
                     const messages = Array.from(
                         container.querySelectorAll('.content-message-success, .content-message-information')
@@ -216,10 +238,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
                     });
                 }
 
-                return QUI.parse(container).then(() => {
-                    this.fireEvent('register', [this]);
-                    QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [this]);
-                });
+                return QUI.parse(container);
+            }).then(() => {
+                this.fireEvent('register', [this]);
+                QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [this]);
             });
         }
     });
