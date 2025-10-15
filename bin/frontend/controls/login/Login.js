@@ -2,7 +2,6 @@
  * @module package/quiqqer/frontend-users/bin/frontend/controls/login/Login
  *
  * @event onLoad [self]
- * @event onLoadNoAnimation [self]
  * @event onAuthBegin [self]
  * @event onAuthNext [self]
  * @event onSuccess [self]
@@ -69,8 +68,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             this.addEvents({
                 onImport: this.$onImport,
-                onInject: this.$onInject,
-                onUserLoginError: this.$onUserLoginError
+                onInject: this.$onInject
             });
         },
 
@@ -106,18 +104,31 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Login', [
 
             require(['controls/users/Login'], (Login) => {
                 new Login({
+                    onSuccess: this.getAttribute('onSuccess'),
+                    showLoader: this.getAttribute('showLoader'),
                     events: {
                         onAuthBegin: () => {
                             container.style.overflow = 'hidden';
-                            this.Loader.show();
+                            this.fireEvent('authBegin', [this]);
+
+                            if (this.getAttribute('showLoader')) {
+                                this.Loader.show();
+                            }
                         },
                         onAuthNext: () => {
                             container.style.overflow = '';
                             this.Loader.hide();
+                            this.fireEvent('authNext', [this]);
                         },
                         onBuildAuthenticator: () => {
                             container.style.overflow = '';
                             this.Loader.hide();
+                        },
+                        onSuccess: () => {
+                            this.fireEvent('success', [this]);
+                        },
+                        onLoad: () => {
+                            this.fireEvent('load', [this]);
                         }
                     }
                 }).inject(container);

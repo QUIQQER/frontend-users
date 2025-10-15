@@ -108,12 +108,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/login/Window', [
                         onAuthNext: function () {
                             self.Loader.hide();
                         },
-
                         onLoad: function () {
                             self.Loader.hide();
                             self.fireEvent('load', [self]);
                         },
-
                         userLoginError: function () {
                             self.Loader.hide();
                         }
