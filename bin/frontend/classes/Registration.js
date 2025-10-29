@@ -164,7 +164,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                                         <header>
                                             <h1>${touNeeded.title}</h1>
                                         </header>
-                                        <div class="quiqqer-frontendUsers-touConfirm-content">
+                                        <div class="quiqqer-frontendUsers-touConfirm-content default-content">
                                             ${touNeeded.content}
                                         </div>      
                                         <label>
