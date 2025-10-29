@@ -158,13 +158,13 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                                     win.Loader.show();
 
                                     const content = win.getContent();
-                                    content.classList.add('quiqqer-frontendUsers-touConfirm');
+                                    content.classList.add('quiqqer-frontendUsers-touConfirm default-content');
 
                                     content.innerHTML = `
                                         <header>
                                             <h1>${touNeeded.title}</h1>
                                         </header>
-                                        <div class="quiqqer-frontendUsers-touConfirm-content default-content">
+                                        <div class="quiqqer-frontendUsers-touConfirm-content">
                                             ${touNeeded.content}
                                         </div>      
                                         <label>
