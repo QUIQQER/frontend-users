@@ -1,6 +1,6 @@
 /**
  * @module package/quiqqer/frontend-users/bin/frontend/controls/Registration
-
+ *
  * @event onRegister [this] - fires if the user successfully registers a user account
  * @event onQuiqqerFrontendUsersRegisterStart [this]
  * @event onQuiqqerFrontendUsersRegisterSuccess [this]
@@ -53,10 +53,19 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/Registration', [
             const Elm = this.getElm(),
                 forms = Elm.querySelectorAll('form.quiqqer-frontendUsers-controls-registration-registrar');
 
-            QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
-
             this.Loader = new QUILoader();
             this.Loader.inject(Elm);
+
+            QUI.fireEvent('quiqqerFrontendUsersRegisterStart', [this]);
+
+            QUI.addEvent('quiqqerRegistrationSuccess', () => {
+                this.fireEvent('register', [this]);
+                QUI.fireEvent('quiqqerFrontendUsersRegisterSuccess', [this]);
+            });
+
+            QUI.addEvent('quiqqerRegistrationError', () => {
+                this.Loader.hide();
+            });
 
             Array.from(forms).forEach((form) => {
                 form.addEventListener('submit', (event) => {
