@@ -96,6 +96,7 @@ class Registration extends QUI\Control
         $CurrentRegistrar = $this->isCurrentlyExecuted();
         $registrationStatus = false;
         $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $executeLogin = false;
 
         // execute registration process
         if (
@@ -112,7 +113,10 @@ class Registration extends QUI\Control
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
+
+                $executeLogin = true;
             } catch (QUI\FrontendUsers\Exception\UserAlreadyExistsException $Exception) {
+                $executeLogin = true;
                 if ($this->getAttribute('ignoreAlreadyRegistered') === false) {
                     QUI\System\Log::writeDebugException($Exception);
                     $Engine->assign('error', $Exception->getMessage());
@@ -147,7 +151,7 @@ class Registration extends QUI\Control
                 );
             }
 
-            if (!isset($Exception)) {
+            if ($executeLogin) {
                 try {
                     // auto login for the primary login
                     // in this case, mail is primary login

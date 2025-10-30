@@ -220,9 +220,19 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                                     mh.addError(errorText);
                                 });
 
+                                QUI.fireEvent('quiqqerRegistrationError', [{
+                                    registrar: registrar,
+                                    data: data
+                                }]);
+
                                 return reject(errorText);
                             }
                         }
+
+                        QUI.fireEvent('quiqqerRegistrationSuccess', [{
+                            registrar: registrar,
+                            data: data
+                        }]);
 
                         resolve();
                     }, {
