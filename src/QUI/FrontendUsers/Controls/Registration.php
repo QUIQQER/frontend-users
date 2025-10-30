@@ -96,6 +96,7 @@ class Registration extends QUI\Control
         $CurrentRegistrar = $this->isCurrentlyExecuted();
         $registrationStatus = false;
         $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $executeLogin = false;
 
         // execute registration process
         if (
@@ -105,29 +106,23 @@ class Registration extends QUI\Control
             try {
                 $registrationStatus = $this->register();
 
+                // during the registration
+                // 2fa session is set
+                QUI::getSession()->set('auth-secondary', 1);
+
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
+
+                $executeLogin = true;
             } catch (QUI\FrontendUsers\Exception\UserAlreadyExistsException $Exception) {
+                $executeLogin = true;
                 if ($this->getAttribute('ignoreAlreadyRegistered') === false) {
                     QUI\System\Log::writeDebugException($Exception);
                     $Engine->assign('error', $Exception->getMessage());
                 } else {
                     $registrationStatus = QUI\FrontendUsers\Handler::REGISTRATION_STATUS_SUCCESS;
                     $Engine->assign('registrationStatus', $registrationStatus);
-                }
-
-                try {
-                    $registrar = $this->isCurrentlyExecuted();
-                    $username = $registrar->getUsername();
-                    $user = QUI::getUsers()->getUserByName($username);
-
-                    QUI::getSession()->set('inAuthentication', 1);
-                    //QUI::getSession()->set('auth', 1);
-                    QUI::getSession()->set('auth-primary', 1);
-                    QUI::getSession()->set('uid', $user->getUUID());
-                    QUI::getSession()->set('username', $user->getUsername());
-                } catch (\Exception) {
                 }
             } catch (QUI\FrontendUsers\Exception $Exception) {
                 QUI\System\Log::write(
@@ -141,15 +136,37 @@ class Registration extends QUI\Control
                 );
 
                 QUI\System\Log::writeDebugException($Exception);
+                QUI::getSession()->destroy();
+                QUI::getMessagesHandler()->addError($Exception->getMessage());
 
                 $Engine->assign('error', $Exception->getMessage());
             } catch (Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
+                QUI::getSession()->destroy();
+                QUI::getMessagesHandler()->addError($Exception->getMessage());
 
                 $Engine->assign(
                     'error',
-                    QUI::getLocale()->get('quiqqer/frontend-users', 'controls.Registation.general_error')
+                    QUI::getLocale()->get('quiqqer/frontend-users', 'controls.registration.general_error')
                 );
+            }
+
+            if ($executeLogin) {
+                try {
+                    // auto login for the primary login
+                    // in this case, mail is primary login
+                    $registrar = $this->isCurrentlyExecuted();
+                    $username = $registrar->getUsername();
+                    $user = QUI::getUsers()->getUserByName($username);
+
+                    QUI::getSession()->set('inAuthentication', 1);
+                    QUI::getSession()->set('auth-primary', 1);
+                    QUI::getSession()->set('uid', $user->getUUID());
+                    QUI::getSession()->set('username', $user->getUsername());
+
+                    QUI::getUsers()->login();
+                } catch (\Exception) {
+                }
             }
         }
 

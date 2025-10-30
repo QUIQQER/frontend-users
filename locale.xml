@@ -697,11 +697,13 @@
             <de><![CDATA[Erfolg!]]></de>
             <en><![CDATA[Success!]]></en>
         </locale>
-        <locale name="controls.Registation.general_error">
-            <de>
-                <![CDATA[Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte wiederholen Sie den Registrierungsvorgang oder probieren Sie es später noch einmal.]]></de>
-            <en>
-                <![CDATA[An unexpected error occurred during registration. Please repeat the registration process or try again later.]]></en>
+        <locale name="controls.registration.general_error">
+            <de><![CDATA[
+            Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte wiederholen Sie den Registrierungsvorgang oder probieren Sie es später noch einmal.
+            ]]></de>
+            <en><![CDATA[
+            An unexpected error occurred during registration. Please repeat the registration process or try again later.
+            ]]></en>
         </locale>
 
         <locale name="exception.registration.rest.project_required">

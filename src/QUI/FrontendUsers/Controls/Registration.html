@@ -72,26 +72,26 @@
         </div>
         {else}
         <div class="quiqqer-frontendUsers-controls-registration">
-            {foreach $socialRegistrars as $registrar}
-            <!-- social registrations -->
-            <form action=""
-                  method="POST"
-                  class="quiqqer-frontendUsers-controls-registration-registrar"
-                  data-registrar="{$registrar->getHash()}"
-            >
-                {$registrar->getControl()->create()}
+            <section data-name="social-logins" class="quiqqer-frontendUsers-controls-registration__social">
+                {foreach $socialRegistrars as $registrar}
+                <!-- social registrations -->
+                <form action=""
+                      method="POST"
+                      class="quiqqer-frontendUsers-controls-registration-registrar"
+                      data-registrar="{$registrar->getHash()}"
+                >
+                    {$registrar->getControl()->create()}
 
-                <input type="hidden" name="registrar" value="{$registrar->getHash()}"/>
-                <input type="hidden" name="registration" value="1"/>
-                <input type="hidden" name="registration_id" value="{$registrationId}"/>
-            </form>
-            {/foreach}
+                    <input type="hidden" name="registrar" value="{$registrar->getHash()}"/>
+                    <input type="hidden" name="registration" value="1"/>
+                    <input type="hidden" name="registration_id" value="{$registrationId}"/>
+                </form>
+                {/foreach}
+            </section>
 
             {if !$socialRegistrars->isEmpty() && !$mailRegistrars->isEmpty()}
-            <div class="quiqqer-frontendUsers-controls-registration-or">
-                <span class="quiqqer-frontendUsers-controls-registration-or-text">
-                    {locale group="quiqqer/frontend-users" var="control.registration.or"}
-                </span>
+            <div class="quiqqer-frontendUsers-controls-registration__or">
+                {locale group="quiqqer/frontend-users" var="control.registration.or"}
             </div>
             {/if}
 

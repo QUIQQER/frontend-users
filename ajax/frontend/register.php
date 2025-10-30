@@ -36,6 +36,11 @@ QUI::$Ajax->registerFunction(
 
         $Registrar = Handler::getInstance()->getRegistrarByHash($registrar);
 
+        if (empty($Registrar)) {
+            $Registrar = Handler::getInstance()->getRegistrar($registrar);
+        }
+
+
         try {
             $status = $Registration->create();
 
@@ -45,7 +50,7 @@ QUI::$Ajax->registerFunction(
                         'quiqqerFrontendUsersUserRegisterCallback',
                         [
                             'userId' => $Registration->getRegisteredUser()->getUUID(),
-                            'registrarHash' => $registrar,
+                            'registrarHash' => $Registrar ? $Registrar->getHash() : '',
                             'registrarType' => $Registrar ? $Registrar->getType() : ''
                         ]
                     );
@@ -69,6 +74,7 @@ QUI::$Ajax->registerFunction(
 
         return [
             'html' => $status,
+            'loggedIn' => QUI::getUsers()->isAuth($User),
             'userActivated' => $User && $User->isActive(),
             'userId' => $User ? $User->getUUID() : false,
             'registrarHash' => $registrar,
