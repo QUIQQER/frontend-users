@@ -207,7 +207,25 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                 })
             }).then(() => {
                 return new Promise((resolve, reject) => {
-                    QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', resolve, {
+                    QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', (data) => {
+                        const ghost = document.createElement('div');
+                        ghost.innerHTML = data.html;
+
+                        if (ghost.querySelector('.content-message-error')) {
+                            let errorText = ghost.querySelector('.content-message-error').innerHTML;
+                            errorText = errorText.trim();
+
+                            if (errorText !== '') {
+                                QUI.getMessageHandler().then((mh) => {
+                                    mh.addError(errorText);
+                                });
+
+                                return reject(errorText);
+                            }
+                        }
+
+                        resolve();
+                    }, {
                         'package': pkg,
                         registrar: registrar,
                         data: JSON.encode(data),

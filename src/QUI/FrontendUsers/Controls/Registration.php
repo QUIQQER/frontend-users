@@ -132,10 +132,14 @@ class Registration extends QUI\Control
                 );
 
                 QUI\System\Log::writeDebugException($Exception);
+                QUI::getSession()->destroy();
+                QUI::getMessagesHandler()->addError($Exception->getMessage());
 
                 $Engine->assign('error', $Exception->getMessage());
             } catch (Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
+                QUI::getSession()->destroy();
+                QUI::getMessagesHandler()->addError($Exception->getMessage());
 
                 $Engine->assign(
                     'error',
@@ -143,20 +147,22 @@ class Registration extends QUI\Control
                 );
             }
 
-            try {
-                // auto login for the primary login
-                // in this case, mail is primary login
-                $registrar = $this->isCurrentlyExecuted();
-                $username = $registrar->getUsername();
-                $user = QUI::getUsers()->getUserByName($username);
+            if (!isset($Exception)) {
+                try {
+                    // auto login for the primary login
+                    // in this case, mail is primary login
+                    $registrar = $this->isCurrentlyExecuted();
+                    $username = $registrar->getUsername();
+                    $user = QUI::getUsers()->getUserByName($username);
 
-                QUI::getSession()->set('inAuthentication', 1);
-                QUI::getSession()->set('auth-primary', 1);
-                QUI::getSession()->set('uid', $user->getUUID());
-                QUI::getSession()->set('username', $user->getUsername());
+                    QUI::getSession()->set('inAuthentication', 1);
+                    QUI::getSession()->set('auth-primary', 1);
+                    QUI::getSession()->set('uid', $user->getUUID());
+                    QUI::getSession()->set('username', $user->getUsername());
 
-                QUI::getUsers()->login();
-            } catch (\Exception) {
+                    QUI::getUsers()->login();
+                } catch (\Exception) {
+                }
             }
         }
 
