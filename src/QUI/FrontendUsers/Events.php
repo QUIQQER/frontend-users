@@ -182,6 +182,8 @@ class Events
         $Session = QUI::getSession();
         $Session->set('uid', $User->getUUID());
         $Session->set('auth', 1);
+        $Session->set('auth-primary', 1);
+        $Session->set('auth-secondary', 1);
         $Session->set('secHash', $secHash);
 
         $useragent = '';
