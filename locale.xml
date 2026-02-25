@@ -1931,9 +1931,9 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[<p>oder verwende deine E-Mail-Adresse für die Anmeldung</p>]]></de>
             <en><![CDATA[<p>or you use your email account for registration</p>]]></en>
         </locale>
-        <locale name="control.registration.sign.up.title">
-            <de><![CDATA[Konto erstellen]]></de>
-            <en><![CDATA[Create an Account]]></en>
+        <locale name="control.registration.sign.up.title" html="true">
+            <de><![CDATA[<h2>Konto erstellen</h2>]]></de>
+            <en><![CDATA[<h2>Create an Account</h2>]]></en>
         </locale>
         <locale name="control.registration.sign.up.email.title">
             <de><![CDATA[E-Mail]]></de>
