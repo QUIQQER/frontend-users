@@ -9,7 +9,7 @@
 
 use QUI\FrontendUsers\Utils;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_emailBlacklisted',
     function ($email) {
         return Utils::isEmailBlacklisted($email);

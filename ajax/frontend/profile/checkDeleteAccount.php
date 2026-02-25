@@ -9,7 +9,7 @@
 
 use QUI\FrontendUsers\Controls\Profile\DeleteAccount;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_checkDeleteAccount',
     function () {
         DeleteAccount::checkDeleteAccount();

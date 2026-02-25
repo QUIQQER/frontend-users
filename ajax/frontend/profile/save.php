@@ -7,7 +7,7 @@
 
 use QUI\FrontendUsers\Utils;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_save',
     function ($category, $settings, $data) {
         $data = json_decode($data);

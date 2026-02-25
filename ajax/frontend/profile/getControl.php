@@ -16,7 +16,7 @@ use QUI\Utils\Security\Orthos;
  * @param int $siteId
  * @return false|string - false if category does not exist or user has no permission -> category control html otherwise
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getControl',
     function ($category, $settings, $project, $siteId, $menu) {
         $category = Orthos::clear($category);

@@ -2,7 +2,7 @@
 
 use QUI\Projects\Site\Utils as QUISiteUtils;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_termsOfUse',
     function () {
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();

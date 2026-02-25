@@ -9,7 +9,7 @@
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Utils;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_getProfileBarCategories',
     function () {
         $ProfileSite = Handler::getInstance()->getProfileSite();
