@@ -77,12 +77,16 @@
 }
 
 .quiqqer-fu-registrationSignUp .quiqqer-frontend-social-button {
-    --padding-block: 0.5rem;
+    --padding-block: 0;
     --padding-inline: 1rem;
 
+    display: flex;
+    align-content: center;
+    justify-items: center;
+    line-height: 2rem;
     max-width: 400px;
     font-size: 0.85rem;
-    width: calc(100% - 2rem);
+    width: 100%;
 }
 
 .quiqqer-fu-registrationSignUp-registration-social-entry-control {
@@ -117,7 +121,7 @@
     margin: 0.5rem auto;
     position: relative;
     max-width: 400px;
-    width: calc(100% - 2rem);
+    width: 100%;
 }
 
 .quiqqer-fu-registrationSignUp-registration-email label .icon {
