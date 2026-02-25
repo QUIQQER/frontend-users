@@ -23,7 +23,7 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
     $requestPart = '';
 
     // $requestPart = str_replace($siteUrl, '', $url);
-    if (substr($url, 0, strlen($siteUrl)) == $siteUrl) { // remove only the first part
+    if (str_starts_with($url, $siteUrl)) { // remove only the first part
         $requestPart = substr($url, strlen($siteUrl));
     }
 
