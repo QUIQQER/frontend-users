@@ -6,7 +6,7 @@
  * @return string
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_getRegistrationLink',
     function ($project) {
         $Project = QUI\Projects\Manager::decode($project);

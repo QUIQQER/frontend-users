@@ -6,7 +6,7 @@
  * @return string
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_login_getAuthenticator',
     function ($authenticator) {
         $available = QUI\Users\Auth\Handler::getInstance()->getAvailableAuthenticators();

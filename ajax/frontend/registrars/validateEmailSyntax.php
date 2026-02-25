@@ -9,7 +9,7 @@
 
 use QUI\Utils\Security\Orthos;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_validateEmailSyntax',
     function ($email) {
         return Orthos::checkMailSyntax($email);

@@ -15,7 +15,7 @@ use QUI\Verification\VerificationRepository;
  *
  * @return bool - success
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail',
     function ($email) {
         try {

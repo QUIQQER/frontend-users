@@ -9,7 +9,7 @@
  *
  * @param string $data - json array
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_address_edit',
     function ($addressId, $data) {
         $_REQUEST['addressId'] = $addressId;

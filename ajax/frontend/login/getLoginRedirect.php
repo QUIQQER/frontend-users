@@ -8,7 +8,7 @@
 
 use QUI\Projects\Site\Utils as SiteUtils;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_login_getLoginRedirect',
     function ($project) {
         $Project = QUI\Projects\Manager::decode($project);
