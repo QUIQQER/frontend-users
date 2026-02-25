@@ -8,6 +8,8 @@ parameters:
         - ajax
         - types
     excludePaths:
+        # REST integration is optional and depends on psr/http-message
+        - src/QUI/FrontendUsers/Rest
         # Ignore files that use classes from optional packages
         - src/QUI/FrontendUsers/ErpProvider.php
         - src/QUI/FrontendUsers/Rest/Provider.php
