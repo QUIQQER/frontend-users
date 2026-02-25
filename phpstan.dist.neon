@@ -11,29 +11,6 @@ parameters:
         # Ignore files that use classes from optional packages
         - src/QUI/FrontendUsers/ErpProvider.php
         - src/QUI/FrontendUsers/Rest/Provider.php
-        - src/QUI/FrontendUsers/GdprDataProvider.php
+        - src/QUI/FrontendUsers/GdprDataProvider.php (?)
     bootstrapFiles:
         - tests/phpstan-bootstrap.php
-    treatPhpDocTypesAsCertain: false
-    customRulesetUsed: true
-services:
-    -
-        class: \PHPStan\Rules\Properties\TypesAssignedToPropertiesRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: \PHPStan\Rules\Functions\ArrowFunctionReturnTypeRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: \PHPStan\Rules\Functions\ClosureReturnTypeRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: \PHPStan\Rules\Functions\ReturnTypeRule
-        tags:
-            - phpstan.rules.rule
-    -
-        class: \PHPStan\Rules\Methods\ReturnTypeRule
-        tags:
-            - phpstan.rules.rule

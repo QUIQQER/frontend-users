@@ -30,7 +30,7 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
     $requestPart = trim($requestPart, '/');
     $requestPart = explode('/', $requestPart);
 
-    if (isset($requestPart[0]) && isset($requestPart[1])) {
+    if (isset($requestPart[1])) {
         $category = $requestPart[0];
         $settings = $requestPart[1];
     } else {
