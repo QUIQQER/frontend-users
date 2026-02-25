@@ -23,14 +23,14 @@ if (QUI::getUsers()->isNobodyUser($SessionUser)) {
     $requestPart = '';
 
     // $requestPart = str_replace($siteUrl, '', $url);
-    if (substr($url, 0, strlen($siteUrl)) == $siteUrl) { // remove only the first part
+    if (str_starts_with($url, $siteUrl)) { // remove only the first part
         $requestPart = substr($url, strlen($siteUrl));
     }
 
     $requestPart = trim($requestPart, '/');
     $requestPart = explode('/', $requestPart);
 
-    if (isset($requestPart[0]) && isset($requestPart[1])) {
+    if (isset($requestPart[1])) {
         $category = $requestPart[0];
         $settings = $requestPart[1];
     } else {

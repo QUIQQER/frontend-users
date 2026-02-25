@@ -8,7 +8,7 @@
  * @return boolean
  */
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_userExists',
     function ($username) {
         return QUI::getUsers()->usernameExists($username);

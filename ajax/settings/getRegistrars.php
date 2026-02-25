@@ -12,7 +12,7 @@ use QUI\FrontendUsers\Handler;
  *
  * @return array
  */
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_settings_getRegistrars',
     function () {
         $registrars = [];

@@ -27,6 +27,7 @@
 
 .registration-sign-in-logo img {
     height: 32px;
+    width: auto;
 }
 
 .registration-login {
@@ -37,19 +38,17 @@
 
 .registration-login button {
     background: transparent;
-    box-shadow: rgba(0, 0, 0, 0.11) 0 0 0 2px;
     color: #242c3a;
     border: transparent;
     width: 120px;
 }
 
 .registration-sign-in-container {
-    background: rgba(255, 255, 255, 0.75);
     margin: 0 auto;
     width: 100%;
 }
 
-.registration-sign-in-container > .fa-spinner {
+.registration-sign-in-container > .fa-spin {
     display: block;
     font-size: 2rem;
     line-height: 4rem;

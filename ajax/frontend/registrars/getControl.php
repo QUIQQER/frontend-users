@@ -9,7 +9,7 @@
 
 use QUI\FrontendUsers\Handler;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_getControl',
     function ($registrar) {
         $Registrar = Handler::getInstance()->getRegistrarByHash($registrar);

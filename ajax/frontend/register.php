@@ -13,7 +13,7 @@
 
 use QUI\FrontendUsers\Handler;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_register',
     function ($registrar, $data, $registrars, $isSignUpRegistration = false) {
         if (!empty($registrars)) {

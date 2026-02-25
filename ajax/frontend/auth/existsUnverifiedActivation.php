@@ -6,7 +6,7 @@
 
 use QUI\Verification\VerificationRepository;
 
-QUI::$Ajax->registerFunction(
+QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_auth_existsUnverifiedActivation',
     function ($userId) {
         try {

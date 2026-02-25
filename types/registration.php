@@ -69,7 +69,7 @@ $Registrar = false;
 if (!empty($_REQUEST['registrar'])) {
     try {
         $Registrar = $FrontendUsersHandler->getRegistrarByHash($_REQUEST['registrar']);
-    } catch (\Exception $Exception) {
+    } catch (Exception $Exception) {
         $Engine->assign(
             'msg',
             QUI::getLocale()->get(

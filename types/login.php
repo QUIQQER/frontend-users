@@ -39,7 +39,7 @@ if (
         $Users->login();
     } catch (QUI\Users\Exception $Exception) {
         $error = $Exception->getMessage();
-    } catch (\Exception $Exception) {
+    } catch (Exception $Exception) {
         QUI\System\Log::writeException($Exception);
         $error = QUI::getLocale()->get('quiqqer/frontend-users', 'login.general_error');
     }

@@ -448,7 +448,7 @@ class RegistrationSignUp extends QUI\Control
     }
 
     /**
-     * Return the icon html for a registrar
+     * Return the icon HTML for a registrar
      *
      * @param $Registrar
      * @return string
