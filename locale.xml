@@ -2519,9 +2519,10 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <en><![CDATA[Create Account]]></en>
         </locale>
         <locale name="control.registration.sign.up.email_already_exists">
-            <de>
-                <![CDATA[Es existiert bereits ein Benutzerkonto mit dieser E-Mail-Adresse. Bitte loggen Sie sich ein.]]></de>
-            <en><![CDATA[A user account with this e-mail address already exists. Please sign in.]]></en>
+            <de><![CDATA[
+            Es existiert bereits ein Benutzerkonto mit dieser E-Mail-Adresse. Bitte loggen Sie sich ein.
+            ]]></de>
+            <en><![CDATA[An account with this email address already exists. Please sign in]]></en>
         </locale>
         <locale name="control.registration.sign.up.full_name_required">
             <de><![CDATA[Bitte geben Sie Ihren vollständigen Namen an, um sich zu registrieren.]]></de>
