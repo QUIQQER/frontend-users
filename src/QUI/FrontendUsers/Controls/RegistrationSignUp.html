@@ -103,7 +103,7 @@
 
                         <div class="quiqqer-fu-registrationSignUp-email-buttons">
                             {if $RegistrationTrial && $this->getAttribute('registration-trial')}
-                                <button type="submit" name="trial-account" class="btn btn-primary">
+                                <button type="submit" name="trial-account" class="quiqqer-frontend-social-button btn btn-primary">
                                     {locale group="quiqqer/frontend-users" var="control.registration.sign.up.try"}
                                 </button>
                                 <input type="hidden"
@@ -111,7 +111,7 @@
                                        value="{$RegistrationTrial->getHash()}"
                                 />
                             {/if}
-                            <button type="submit" name="email-next" class="quiqqer-frontend-social-button btn btn-dark-outline">
+                            <button type="submit" name="email-next" class="quiqqer-frontend-social-button btn btn-primary">
                                 {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
                             </button>
                         </div>
@@ -148,7 +148,7 @@
                             {/if}
 
                             <div class="quiqqer-fu-registrationSignUp-email-buttons">
-                                <button type="submit" name="fullname-next" class="btn btn-primary">
+                                <button type="submit" name="fullname-next" class="quiqqer-frontend-social-button btn btn-primary">
                                     {locale group="quiqqer/frontend-users" var="control.registration.sign.up.fullname.next"}
                                 </button>
                             </div>
@@ -168,7 +168,7 @@
                             </label>
 
                             <div class="quiqqer-fu-registrationSignUp-email-buttons">
-                                <button type="submit" name="create-account" class="btn btn-primary">
+                                <button type="submit" name="create-account" class="quiqqer-frontend-social-button btn btn-primary">
                                     {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
                                 </button>
                             </div>

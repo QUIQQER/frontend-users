@@ -189,7 +189,7 @@
 
 .quiqqer-fu-registrationSignUp-terms button {
     display: inline-block;
-    margin: 2rem auto;
+    margin: 0 auto;
 }
 
 .quiqqer-fu-registrationSignUp-terms-text {
@@ -202,8 +202,8 @@
     color: #606975;
     margin: 0;
     position: absolute;
-    right: -20px;
-    top: -20px;
+    right: 0;
+    top: 0;
     z-index: 10;
     cursor: pointer;
 }
