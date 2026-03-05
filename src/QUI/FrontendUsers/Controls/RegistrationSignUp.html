@@ -177,16 +177,19 @@
                 </form>
             {/if}
             <div class="quiqqer-fu-registrationSignUp-terms">
+                <button name="decline"
+                        class="btn btn-close quiqqer-fu-registrationSignUp-terms__btn-cancel"
+                        title="{locale group='quiqqer/frontend-users' var='control.registration.sign.up.button.terms.decline'}"
+                >
+                    <span class="fa fa-close"></span>
+                </button>
+
                 <span class="quiqqer-fu-registrationSignUp-terms-text">
-                    {$termsPrivacyMessage}
+                    <p>
+                        {$termsPrivacyMessage}
+                    </p>
 
                     {template_event name="quiqqer::frontend-users::RegistrationSignUp::termsAfter"}
-
-                    <button name="decline"
-                            title="{locale group='quiqqer/frontend-users' var='control.registration.sign.up.button.terms.decline'}"
-                    >
-                        <span class="fa fa-close"></span>
-                    </button>
                 </span>
                 <div class="quiqqer-fu-registrationSignUp-terms-buttons"></div>
             </div>
