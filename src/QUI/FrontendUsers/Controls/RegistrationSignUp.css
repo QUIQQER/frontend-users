@@ -1,23 +1,28 @@
 .quiqqer-fu-registrationSignUp {
-    display: flex;
-    justify-content: center;
-    margin: 3rem 0;
-    width: 100%;
-}
+    --_registration-background-color: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-bgColor, var(--qui-colors-surface, #f6f6f7));
+    --_registration-background-shadow: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-shadow, var(--qui-shadow-card, none));
+    --_registration-padding: var(--quiqqer-frontendUsers-controls-registrationSignUp-padding, clamp(1rem, 5vw, 3rem));
 
-.quiqqer-fu-registrationSignUp h1,
-.quiqqer-fu-registrationSignUp h2 {
-    font-weight: normal;
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(2rem, 5vw, 6rem);
+    justify-content: center;
+    margin: 3rem auto;
+    width: 100rem;
+    max-width: calc(100% - clamp(2rem, 5vw, 6rem)); /* works like padding */
+    align-items: center;
 }
 
 .quiqqer-fu-registrationSignUp-info,
 .quiqqer-fu-registrationSignUp-registration {
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
     position: relative;
     text-align: center;
-    width: 40%;
+    flex: 1;
+    flex-basis: min(100%, 400px);
+}
+
+.quiqqer-fu-registrationSignUp-registration {
+    justify-content: center;
 }
 
 .quiqqer-fu-registrationSignUp-registration-content {
@@ -25,20 +30,12 @@
 }
 
 .quiqqer-fu-registrationSignUp-registration--inner {
-    background: #ffffff;
-    border-radius: 18px;
+    background: var(--_registration-background-color);
+    border-radius: var(--qui-radius-card);
     display: inline-block;
-    padding: 3rem;
-
-    box-shadow:
-            0 30px 60px -15px rgba(15, 23, 42, 0.12),
-            0 10px 25px -10px rgba(15, 23, 42, 0.08);
-
-    background: linear-gradient(
-            180deg,
-            #f8fafc 0%,
-            #f1f5f9 100%
-    );
+    padding: var(--_registration-padding);
+    box-shadow: var(--_registration-background-shadow);
+    width: min(100%, 26rem);
 }
 
 .quiqqer-fu-registrationSignUp-info {
@@ -77,15 +74,10 @@
 }
 
 .quiqqer-fu-registrationSignUp .quiqqer-frontend-social-button {
-    --padding-block: 0;
-    --padding-inline: 1rem;
-
     display: flex;
     align-content: center;
     justify-items: center;
-    line-height: 2rem;
     max-width: 400px;
-    font-size: 0.85rem;
     width: 100%;
 }
 
@@ -116,7 +108,6 @@
 }
 
 .quiqqer-fu-registrationSignUp-registration-email label {
-    clear: both;
     display: block;
     margin: 0.5rem auto;
     position: relative;
@@ -163,7 +154,6 @@
     align-items: center;
     display: none;
     flex-direction: column;
-    font-size: 1.3rem;
     left: 0;
     height: 100%;
     justify-content: center;
@@ -171,45 +161,28 @@
     top: 0;
     width: 100%;
     z-index: 10;
-}
-
-.quiqqer-fu-registrationSignUp-terms-text {
-    font-size: 16px;
-    max-width: 570px;
-    padding: 2rem;
-}
-
-.quiqqer-fu-registrationSignUp-terms-buttons {
-    clear: both;
+    border-radius: var(--qui-radius-card);
+    padding: var(--_registration-padding);
+    gap: 1rem;
 }
 
 .quiqqer-fu-registrationSignUp-terms {
     position: relative;
 }
 
-.quiqqer-fu-registrationSignUp-terms button {
-    display: inline-block;
-    margin: 0 auto;
+.quiqqer-fu-registrationSignUp-terms form {
+    width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-terms-text {
-    position: relative;
+.quiqqer-fu-registrationSignUp-terms-mail {
+    width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-terms-text [name="decline"] {
-    background: transparent;
-    border: none;
-    color: #606975;
-    margin: 0;
+.quiqqer-fu-registrationSignUp-terms__btn-cancel {
     position: absolute;
     right: 0;
     top: 0;
     z-index: 10;
-    cursor: pointer;
-}
-
-.quiqqer-fu-registrationSignUp-terms button[name="decline"]:hover {
-    opacity: 0.5 !important;
 }
 
 .quiqqer-fu-registrationSignUp-terms label {
@@ -284,16 +257,6 @@
     .registration-sign-in {
         align-items: baseline;
         overflow: auto;
-    }
-
-    .quiqqer-fu-registrationSignUp {
-        flex-direction: column-reverse;
-        justify-content: initial;
-    }
-
-    .quiqqer-fu-registrationSignUp-info,
-    .quiqqer-fu-registrationSignUp-registration {
-        width: 100%;
     }
 }
 
