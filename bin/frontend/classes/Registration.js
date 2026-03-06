@@ -142,9 +142,10 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
                     require(['qui/controls/windows/Confirm'], (QUIConfirm) => {
                         new QUIConfirm({
+                            'class': 'qui-frontendUsers-registration-touConfirmWindow',
                             title: touNeeded.title,
-                            maxWidth: 600,
-                            maxHeight: 500,
+                            maxWidth: 700,
+                            maxHeight: 600,
                             ok_button: {
                                 text: QUILocale.get(pkg, 'confirm.registration.tou_pp.submit'),
                                 textimage: 'fa fa-check'

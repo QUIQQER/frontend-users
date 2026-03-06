@@ -268,7 +268,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 if (MailRegistrar) {
                     const Button = new Element('button', {
-                        'class': 'quiqqer-fu-registrationSignUp-terms-mail',
+                        'class': 'quiqqer-fu-registrationSignUp-terms-mail btn btn-primary ',
                         html: QUILocale.get(lg, 'control.registration.sign.up.create.button')
                     }).inject(MailRegistrar.getParent());
 
@@ -453,95 +453,79 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 return Promise.resolve();
             }
 
-            const self = this,
-                Terms = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms');
+            const Terms = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms');
+            const innerContainer = this.$RegistrationSection.querySelector(
+                '.quiqqer-fu-registrationSignUp-registration--inner'
+            );
 
-            let children = this.$RegistrationSection.getChildren();
+            innerContainer.style.position = 'relative';
 
-            children = children.filter(function (Child) {
-                return !Child.hasClass('quiqqer-fu-registrationSignUp-terms') &&
-                    !Child.hasClass('qui-loader');
-            });
+            this.Loader.show();
+            return this.$loadRegistrar(registrar).then((Control) => {
+                Terms.style.display = 'flex';
+                Terms.style.position = 'absolute';
+                Terms.style.opacity = 1;
+                Terms.style.height = '100%';
+                Terms.style.width = '100%';
+                Terms.style.background = '#fff';
 
-            children.setStyle('position', 'relative');
+                const links = Terms.getElements('a');
 
-            return new Promise(function (resolve, reject) {
-                moofx(children).animate({
-                    left: -30,
-                    opacity: 0
-                }, {
-                    callback: function () {
-                        self.showLoader().then(function () {
-                            return self.$loadRegistrar(registrar);
-                        }).then(function (Control) {
-                            Terms.getElement('button[name="decline"]').addEvent('click', reject);
-                            Terms.setStyle('display', 'flex');
-                            Terms.setStyle('position', 'absolute');
+                links.removeEvents('click');
+                links.addEvent('click', function (event) {
+                    let Target = event.target;
 
-                            const links = Terms.getElements('a');
-
-                            links.removeEvents('click');
-
-                            links.addEvent('click', function (event) {
-                                let Target = event.target;
-
-                                if (Target.nodeName !== 'A') {
-                                    Target = Target.getParent('a');
-                                }
-
-                                const href = Target.get('href');
-
-                                if (href.indexOf('/') !== 0) {
-                                    return;
-                                }
-
-                                event.stop();
-
-                                new QUISiteWindow({
-                                    closeButtonText: QUILocale.get(lg, 'btn.close'),
-                                    showTitle: true,
-                                    project: QUIQQER_PROJECT.name,
-                                    lang: QUIQQER_PROJECT.lang,
-                                    siteUrl: href
-                                }).open();
-                            });
-
-                            if (typeOf(Control) === 'element') {
-                                // mail
-                                Control.addEvent('click', resolve);
-                                return;
-                            }
-
-                            // create the social login form
-                            const Form = Terms.getElement('form');
-                            const SocialForm = self.getElm().getElement('form[data-registrar="' + registrar + '"]');
-                            const hidden = SocialForm.getElements('[type="hidden"]');
-
-                            Form.set('method', SocialForm.get('method'));
-                            Form.set('data-registrar', SocialForm.get('data-registrar'));
-                            Form.set('data-registration_id', SocialForm.get('data-registration_id'));
-
-                            for (let i = 0, len = hidden.length; i < len; i++) {
-                                hidden[i].clone().inject(Form);
-                            }
-
-                            Form.addEvent('submit', function (event) {
-                                event.stop();
-
-                                //if (!isSocial) {
-                                self.$sendForm(Form).then(resolve);
-                                //}
-                            });
-                        }).then(function () {
-                            self.Loader.hide();
-
-                            moofx(Terms).animate({
-                                left: 0,
-                                opacity: 1
-                            });
-                        });
+                    if (Target.nodeName !== 'A') {
+                        Target = Target.getParent('a');
                     }
+
+                    const href = Target.get('href');
+
+                    if (href.indexOf('/') !== 0) {
+                        return;
+                    }
+
+                    event.stop();
+
+                    new QUISiteWindow({
+                        closeButtonText: QUILocale.get(lg, 'btn.close'),
+                        showTitle: true,
+                        project: QUIQQER_PROJECT.name,
+                        lang: QUIQQER_PROJECT.lang,
+                        siteUrl: href
+                    }).open();
                 });
+
+                if (typeOf(Control) === 'element') {
+                    // mail registration
+                    this.Loader.hide();
+
+                    return new Promise((resolve, reject) => {
+                        Terms.getElement('button[name="decline"]').addEvent('click', reject);
+                        Terms.getElement('.quiqqer-fu-registrationSignUp-terms-mail').addEvent('click', resolve);
+                        //Control.addEvent('click', resolve);
+                    });
+                }
+
+                // create the social login form
+                const Form = Terms.getElement('form');
+                const SocialForm = this.getElm().getElement('form[data-registrar="' + registrar + '"]');
+                const hidden = SocialForm.getElements('[type="hidden"]');
+
+                Form.set('method', SocialForm.get('method'));
+                Form.set('data-registrar', SocialForm.get('data-registrar'));
+                Form.set('data-registration_id', SocialForm.get('data-registration_id'));
+
+                for (let i = 0, len = hidden.length; i < len; i++) {
+                    hidden[i].clone().inject(Form);
+                }
+
+                Form.addEvent('submit', (event) => {
+                    event.stop();
+                    this.$sendForm(Form).then(resolve);
+                });
+            }).then(() => {
+                this.Loader.hide();
             });
         },
 
@@ -552,12 +536,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          */
         hideTerms: function () {
             const Terms = this.getElm().getElement('.quiqqer-fu-registrationSignUp-terms');
-            let children = this.$RegistrationSection.getChildren();
-
-            children = children.filter(function (Child) {
-                return !Child.hasClass('quiqqer-fu-registrationSignUp-terms') &&
-                    !Child.hasClass('qui-loader');
-            });
 
             if (!Terms) {
                 return Promise.resolve();
@@ -565,18 +543,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             return new Promise(function (resolve) {
                 moofx(Terms).animate({
-                    left: -30,
                     opacity: 0
                 }, {
                     callback: function () {
                         Terms.setStyle('display', 'none');
-
-                        moofx(children).animate({
-                            left: 0,
-                            opacity: 1
-                        }, {
-                            callback: resolve
-                        });
+                        resolve();
                     }
                 });
             });
@@ -706,32 +677,23 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @return {Promise}
          */
         showLoader: function () {
-            const self = this,
-                children = this.$RegistrationSection.getChildren();
+            return new Promise((resolve) => {
+                if (this.Loader) {
+                    this.Loader.show();
+                    resolve(this.Loader);
+                    return;
+                }
 
-            return new Promise(function (resolve) {
-                moofx(children).animate({
-                    opacity: 0
-                }, {
-                    callback: function () {
-                        if (self.Loader) {
-                            self.Loader.show();
-                            resolve(self.Loader);
-                            return;
+                require(['qui/controls/loader/Loader'], (Loader) => {
+                    this.Loader = new Loader({
+                        type: 'fa-spinner',
+                        styles: {
+                            background: 'transparent'
                         }
+                    }).inject(this.$RegistrationSection);
 
-                        require(['qui/controls/loader/Loader'], function (Loader) {
-                            self.Loader = new Loader({
-                                type: 'fa-spinner',
-                                styles: {
-                                    background: 'transparent'
-                                }
-                            }).inject(self.$RegistrationSection);
-
-                            self.Loader.show();
-                            resolve(self.Loader);
-                        });
-                    }
+                    this.Loader.show();
+                    resolve(this.Loader);
                 });
             });
         },
@@ -989,6 +951,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     }
                 });
             }).catch(function (err) {
+                console.error(err);
+
                 if (err !== 'isInValid') {
                     self.hideTerms().then(function () {
                         self.$resetMail();
@@ -1420,7 +1384,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         FormData
                     );
                 });
-            }).catch(function () {
+            }).catch(function (err) {
+                console.error(err);
+
                 self.hideTerms().then(function () {
                     self.$resetMail();
                 });
@@ -1435,7 +1401,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          */
         emailValidation: function (Field) {
             const value = Field.value;
-            const self = this;
 
             const checkPromises = [
                 Registration.emailValidation(value)
@@ -1459,6 +1424,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 Field.disabled = wasDisabled;
             }
 
+            this.Loader.show();
+
             return Promise.all(checkPromises).then(function (result) {
                 let isValid = true;
 
@@ -1470,6 +1437,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 if (isValid) {
+                    this.Loader.hide();
                     return true;
                 }
 
@@ -1484,92 +1452,57 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
 
                 const RegistrationElm = document.getElement('.quiqqer-fu-registrationSignUp-registration');
-                const RegistrationElmParent = RegistrationElm.getParent();
-                const RegistrationInfo = document.getElement('.quiqqer-fu-registrationSignUp-info');
+                const innerContainer = RegistrationElm.querySelector('.quiqqer-fu-registrationSignUp-registration--inner');
 
-                const RegistrationElmSize = RegistrationElm.getComputedSize();
-                const width = RegistrationElmSize.width;
-                const height = RegistrationElmSize.height;
-                let infoMarginSet = false;
+                const container = new Element('section').inject(innerContainer);
+                innerContainer.style.position = 'relative';
+                container.style.position = 'absolute';
+                container.style.top = 0;
+                container.style.left = 0;
+                container.style.height = '100%';
+                container.style.width = '100%';
+                container.style.zIndex = 10;
+                container.style.opacity = 0;
+                container.style.padding = '3rem';
+                container.style.background = '#fff';
 
-                RegistrationElmParent.setStyle('height', height);
-
-                moofx(
-                    RegistrationElm
-                ).animate({
-                    opacity: 0
-                }, {
-                    callback: function () {
-                        if (!infoMarginSet) {
-                            if (RegistrationInfo) {
-                                RegistrationInfo.setStyle('margin-left', width);
-                            }
-
-                            infoMarginSet = true;
-                        }
-
-                        if (RegistrationElm) {
-                            RegistrationElm.setStyle('display', 'none');
-                        }
-                    }
-                });
-
-                let loginHeight, LoginControlElm;
+                const existMessage = new Element('div');
+                existMessage.classList.add('q-message', 'q-message-error');
+                existMessage.innerHTML = QUILocale.get(lg, 'control.registration.sign.up.email_already_exists');
+                existMessage.inject(container);
 
                 this.$LoginControl = new QUILogin({
                     emailAddress: value,
                     events: {
-                        onLoadNoAnimation: function () {
-                            LoginControlElm.setStyle('display', null);
-                            LoginControlElm.addClass('quiqqer-fu-login-container-width');
-
-                            if (RegistrationInfo) {
-                                RegistrationInfo.setStyle('margin-left', null);
-                            }
-
-                            infoMarginSet = true;
-
-                            loginHeight = LoginControlElm.getElement('.quiqqer-fu-login-container').getComputedSize().height;
-                            RegistrationElmParent.setStyle('height', loginHeight);
-
-                            // User info
-                            QUI.getMessageHandler().then(function (MH) {
-                                MH.addAttention(
-                                    QUILocale.get(lg, 'control.registration.sign.up.email_already_exists')
-                                );
-                            });
-                        },
-                        onLoad: function (LoginControl) {
-                            RegistrationElmParent.setStyle('height', null);
-
-                            LoginControlElm.getElement('.quiqqer-fu-login-email-mailSection input[type="password"]').focus();
-
-                            const CloseBtn = new Element('span', {
+                        onLoad: () => {
+                            const closeBtn = new Element('span', {
                                 'class': 'fa fa-close quiqqer-fu-registrationSignUp-login-close',
                                 title: QUILocale.get(lg, 'control.registration.sign.up.back_to_registration'),
+                                styles: {
+                                    width: '2rem',
+                                    height: '2rem',
+                                    lineHeight: '2rem'
+                                },
                                 events: {
-                                    click: function () {
-                                        self.$LoginControl.destroy();
-                                        CloseBtn.destroy();
-
-                                        RegistrationElm.setStyle('display', '');
-
-                                        moofx(
-                                            RegistrationElm
-                                        ).animate({
-                                            opacity: 1
-                                        });
+                                    click: () => {
+                                        this.$LoginControl.destroy();
+                                        closeBtn.destroy();
+                                        container.destroy();
                                     }
 
                                 }
-                            }).inject(LoginControl.getElm());
+                            }).inject(container);
+
+                            this.Loader.hide();
+
+                            moofx(container).animate({
+                                opacity: 1
+                            });
                         }
                     }
-                }).inject(RegistrationElm, 'before');
+                });
 
-                LoginControlElm = this.$LoginControl.getElm();
-                LoginControlElm.setStyle('display', 'none');
-
+                this.$LoginControl.inject(container);
                 return false;
             }.bind(this));
         },

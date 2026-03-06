@@ -23,3 +23,11 @@
     border: 1px solid rgba(253, 222, 138, 1);
     color: rgba(218, 104, 5, 1);
 }
+
+/**
+ * Temporary fix because of styling popup title (float left).
+ * Remove when fixed in quiqqer/qui
+ */
+.qui-frontendUsers-registration-touConfirmWindow .qui-window-popup-title {
+    display: flex;
+}
