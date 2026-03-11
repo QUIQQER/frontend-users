@@ -58,8 +58,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
                 }
 
                 this.setAttributes({
-                    textimage: 'fa fa-check',
-                    text: QUILocale.get(lg, 'controls.frontend.auth.resendactivationlinkbtn.resend_completed')
+                    textimage: 'fa fa-check'
                 });
 
                 this.fireEvent('resendSuccess', [this]);
@@ -79,7 +78,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
                     'package': 'quiqqer/frontend-users',
                     email: self.getAttribute('email'),
                     onError: reject
-                })
+                });
             });
         }
     });

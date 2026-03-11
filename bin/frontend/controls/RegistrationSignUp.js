@@ -14,15 +14,30 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
     'Ajax',
     'Locale',
     'URI',
+    'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
 
     'package/quiqqer/frontend-users/bin/Registration',
     'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
+    'package/quiqqer/frontend-users/bin/frontend/controls/login/Window',
 
     'package/quiqqer/controls/bin/site/Window',
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp.css'
 
-], function (QUI, QUIControl, QUILoader, QUIFormUtils, QUIAjax, QUILocale, URI, Registration, QUILogin, QUISiteWindow) {
+], function (
+    QUI,
+    QUIControl,
+    QUILoader,
+    QUIFormUtils,
+    QUIAjax,
+    QUILocale,
+    URI,
+    ResendActivationLinkBtn,
+    Registration,
+    QUILogin,
+    QUILoginWindow,
+    QUISiteWindow
+) {
     "use strict";
 
     const lg = 'quiqqer/frontend-users';
@@ -38,7 +53,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             '$onTrialClick',
             '$onMailCreateClick',
             '$onMailPasswordClick',
-            '$onPasswordNextClick'
+            '$onPasswordNextClick',
+            '$initResendActivationLink',
+            '$initLoginButton',
+            '$openLoginWindow'
         ],
 
         options: {
@@ -169,6 +187,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             // init
             this.$initMail();
             this.$initCaptcha();
+            this.$initResendActivationLink();
+            this.$initLoginButton();
 
             if (typeof onInject !== 'undefined' && onInject) {
                 this.$loaded = true;
@@ -216,6 +236,81 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     console.error(err);
                 }
             });
+        },
+
+        /**
+         * Show activation mail resend action for expired activation links.
+         */
+        $initResendActivationLink: function () {
+            var ResendElm = this.getElm().getElement('.quiqqer-fu-registrationSignUp-resend');
+            var BtnElm = this.getElm().getElement('.quiqqer-fu-registrationSignUp-resend-btn');
+
+            if (!ResendElm || !BtnElm) {
+                return;
+            }
+
+            var MsgElm = this.getElm().getElement('.quiqqer-fu-registrationSignUp-resend-msg');
+            var EmailInput = this.getElm().getElement('input[name="email"]');
+            var email = ResendElm.get('data-email');
+
+            if (!email && EmailInput) {
+                email = EmailInput.value;
+            }
+
+            if (!email) {
+                return;
+            }
+
+            new ResendActivationLinkBtn({
+                email: email,
+                events: {
+                    onResendSuccess: function () {
+                        MsgElm.set(
+                            'html',
+                            QUILocale.get(
+                                lg,
+                                'RegistrationSignUp.message.error.activation_expired.resend_success'
+                            )
+                        );
+                    },
+                    onResendFail: function () {
+                        MsgElm.set(
+                            'html',
+                            QUILocale.get(
+                                lg,
+                                'RegistrationSignUp.message.error.activation_expired.resend_fail'
+                            )
+                        );
+                    }
+                }
+            }).inject(BtnElm);
+        },
+
+        /**
+         * Register click handler for login CTA in error state.
+         */
+        $initLoginButton: function () {
+            var LoginBtn = this.getElm().getElement('.quiqqer-fu-registrationSignUp-login-btn');
+
+            if (!LoginBtn) {
+                return;
+            }
+
+            LoginBtn.removeEvents('click');
+            LoginBtn.addEvent('click', this.$openLoginWindow);
+        },
+
+        /**
+         * Open login popup.
+         */
+        $openLoginWindow: function (event) {
+            if (event) {
+                event.stop();
+            }
+
+            new QUILoginWindow({
+                'show-registration-link': true
+            }).open();
         },
 
         /**

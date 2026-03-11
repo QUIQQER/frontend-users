@@ -271,3 +271,12 @@
 .quiqqer-fu-registrationSignUp-registration-nextlinks {
     margin: 10px 0 0 0 !important;
 }
+
+.quiqqer-fu-registrationSignUp-login-action,
+.quiqqer-fu-registrationSignUp-resend-btn {
+    margin-top: 20px;
+}
+
+.quiqqer-fu-registrationSignUp-resend-msg {
+    margin-top: 10px;
+}
