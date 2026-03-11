@@ -1201,6 +1201,12 @@ Available placeholders:
             <de><![CDATA[Es gibt bereits ein Konto für diese E‑Mail-Adresse. Logge dich bitte ein.]]></de>
             <en><![CDATA[There is already an account for this email address. Please log in.]]></en>
         </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired.resend_success">
+            <de>
+                <![CDATA[Der Aktivierungs-Link wurde erfolgreich erneut versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.]]></de>
+            <en>
+                <![CDATA[The activation link has been resent successfully. Please also check your spam folder.]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -1295,6 +1301,18 @@ Available placeholders:
             <en>
                 <![CDATA[Your user account has been activated successfully! You will now receive your login credentaisl via e-mail.]]></en>
         </locale>
+        <locale name="verification.ActivationVerification.error.general">
+            <de>
+                <![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+            <en>
+                <![CDATA[Unfortunately an error occurred during the activation of your user account. Please repeat the process.]]></en>
+        </locale>
+        <locale name="verification.ActivationVerification.error.expired">
+            <de>
+                <![CDATA[Der Aktivierungs-Link ist abgelaufen. Bitte fordern Sie einen neuen Aktivierungs-Link an.]]></de>
+            <en>
+                <![CDATA[The activation link has expired. Please request a new activation link.]]></en>
+        </locale>
 
         <!-- Control: RegistrationSignUp -->
         <locale name="RegistrationSignUp.message.success.activation">
@@ -1321,6 +1339,24 @@ Available placeholders:
             <en>
                 <![CDATA[Unfortunately an error occurred during the activation of your user account. Please repeat the process.]]></en>
         </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired">
+            <de>
+                <![CDATA[Der Aktivierungs-Link für Ihr Benutzerkonto ist abgelaufen.]]></de>
+            <en>
+                <![CDATA[The activation link for your user account has expired.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired.resend_info">
+            <de>
+                <![CDATA[Sie können hier direkt einen neuen Aktivierungs-Link anfordern.]]></de>
+            <en>
+                <![CDATA[You can request a new activation link here directly.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired.resend_fail">
+            <de>
+                <![CDATA[Der Aktivierungs-Link konnte nicht erneut versendet werden. Bitte versuchen Sie es später noch einmal.]]></de>
+            <en>
+                <![CDATA[The activation link could not be resent. Please try again later.]]></en>
+        </locale>
         <locale name="RegistrationSignUp.message.error.emailconfirm">
             <de>
                 <![CDATA[Leider ist bei der Bestätigung Ihres E-Mail-Adresse ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
@@ -1338,6 +1374,16 @@ Available placeholders:
                 <![CDATA[Leider ist bei der Registrierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
             <en>
                 <![CDATA[Unfortunately an error occurred while registering your user account. Please repeat the process.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.already_verified">
+            <de>
+                <![CDATA[Ihr Benutzerkonto wurde bereits aktiviert.]]></de>
+            <en>
+                <![CDATA[Your user account has already been activated.]]></en>
+        </locale>
+        <locale name="RegistrationSignUp.button.login">
+            <de><![CDATA[Zum Login]]></de>
+            <en><![CDATA[Go to login]]></en>
         </locale>
         <locale name="RegistrationSignUp.message.error.userdelete.login">
             <de>
