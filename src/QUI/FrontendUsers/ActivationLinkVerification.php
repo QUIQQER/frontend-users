@@ -175,7 +175,7 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
         }
 
         $urlParams = [
-            'error' => match($reason) {
+            'error' => match ($reason) {
                 VerificationErrorReason::ALREADY_VERIFIED => 'already_verified',
                 VerificationErrorReason::EXPIRED => 'activation_expired',
                 default => 'activation'
