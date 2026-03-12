@@ -45,6 +45,23 @@
         {elseif $msgError}
             <div class="content-message-error">
                 {$msgError}
+                {if $showResendActivationLink}
+                    <p>
+                        {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.error.activation_expired.resend_info"}
+                    </p>
+                    <div class="quiqqer-fu-registrationSignUp-resend" data-email="{$valueEmail}">
+                        <div class="btn btn-primary quiqqer-fu-registrationSignUp-resend-btn"></div>
+                        <p class="quiqqer-fu-registrationSignUp-resend-msg"></p>
+                    </div>
+                {/if}
+                {if $showLoginButton}
+                    <div class="quiqqer-fu-registrationSignUp-login-action">
+                        <button type="button"
+                                class="btn btn-primary quiqqer-fu-registrationSignUp-login-btn">
+                            {locale group="quiqqer/frontend-users" var="RegistrationSignUp.button.login"}
+                        </button>
+                    </div>
+                {/if}
             </div>
         {else}
             {if $this->getAttribute('header')}
