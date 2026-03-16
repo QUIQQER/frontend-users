@@ -55,6 +55,7 @@
 .quiqqer-fu-registrationSignUp-info {
     display: flex;
     align-items: center;
+    align-self: stretch;
 }
 
 .quiqqer-fu-registrationSignUp-registration-logged-in {
