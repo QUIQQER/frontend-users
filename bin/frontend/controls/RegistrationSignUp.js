@@ -845,7 +845,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     this.$TermsView.setStyle('display', '');
                     return Control;
                 });
-
             }).then((Control) => {
                 if (typeOf(Control) === 'element') {
                     // mail registration
@@ -1103,7 +1102,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             });
         },
 
-        //region email
+        //region E-Mail
 
         /**
          * init mail registration
@@ -1138,39 +1137,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     event.stop();
                 });
 
+            if (this.$Address && this.$Address.querySelector('form')) {
+                this.$Address.querySelector('form').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                });
+            }
 
             // email validation
-            const self = this,
-                mailTimeout = null;
+            const self = this;
 
-            //EmailField.addEvent('blur', function () {
-            //    if (EmailField.get('data-no-blur-check')) {
-            //        return;
-            //    }
-            //
-            //    if (mailTimeout) {
-            //        clearTimeout(mailTimeout);
-            //    }
-            //
-            //    self.emailValidation(EmailField);
-            //});
-            //
-            //EmailField.addEvent('keyup', function (event) {
-            //    if (mailTimeout) {
-            //        clearTimeout(mailTimeout);
-            //    }
-            //
-            //    // workaround
-            //    if (typeof event.code === 'undefined') {
-            //        self.emailValidation(EmailField);
-            //        event.stop();
-            //        return;
-            //    }
-            //
-            //    mailTimeout = (function () {
-            //        self.emailValidation(EmailField);
-            //    }).delay(2000);
-            //});
             EmailField.addEvent('keydown', function (event) {
                 if (event.key === 'enter') {
                     event.stop();
@@ -1715,8 +1691,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             this.showLoader().then(() => {
+                console.log('showAddress');
                 return this.showAddress();
             }).then(() => {
+                console.log('showTerms');
                 return this.showTerms(Form.get('data-registrar'));
             }).then(() => {
                 let childNodes = this.$RegistrationSection.getChildren();
@@ -1728,6 +1706,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 childNodes.setStyle('display', 'none');
 
                 return this.showLoader().then(() => {
+                    console.log('hideTerms');
                     return this.hideTerms();
                 }).then(() => {
                     const Form = this.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
@@ -1756,13 +1735,28 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
         showAddress: function () {
             return new Promise((resolve) => {
+                const submitButton = this.$Address.querySelector('button[name="next"]');
+                const next = () => {
+                    submitButton.removeEventListener('click', next);
+                    this.setAttribute('termsAccepted', false);
+
+                    moofx(this.$Address).animate({
+                        opacity: 0
+                    }, {
+                        callback: () => {
+                            this.$Address.style.display = 'none';
+                            resolve();
+                        }
+                    });
+                };
+
+                submitButton.addEventListener('click', next);
+
                 this.$animateRegistrationViewChange(
                     this.$RegistrationContainer,
                     this.$Address
                 ).then(() => {
                     this.Loader.hide();
-                    
-                    
                 });
             });
         },

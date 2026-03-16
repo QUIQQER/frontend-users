@@ -277,6 +277,7 @@
 
 .quiqqer-fu-registrationSignUp-registration__address fieldset .quiqqer-registration-field-title {
     display: block;
+    line-height: 2rem;
     width: 100%;
 }
 
