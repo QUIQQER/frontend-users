@@ -1,6 +1,3 @@
-/**
- * @module package/quiqqer/frontend-users/bin/frontend/classes/Registration
- */
 define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
     'qui/QUI',

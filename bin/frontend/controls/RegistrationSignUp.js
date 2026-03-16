@@ -12,7 +12,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
     'Ajax',
     'Locale',
     'URI',
-    'package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivationLinkBtn',
+    'package/quiqqer/frontend-users/bin/frontend/classes/Registration',
 
     'package/quiqqer/frontend-users/bin/Registration',
     'package/quiqqer/frontend-users/bin/frontend/controls/login/Login',
@@ -1218,6 +1218,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
         /**
          * create trial account
+         * @deprecated
          */
         $onTrialClick: function () {
             const self = this,
@@ -1677,8 +1678,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * password is filled out
          */
         $onMailPasswordClick: function () {
-            const PasswordInput = this.getElm().getElement('[name="password"]'),
-                Form = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]');
+            const PasswordInput = this.getElm().getElement('[name="password"]');
 
             if (PasswordInput) {
                 if (PasswordInput.value === '') {
@@ -1691,11 +1691,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             this.showLoader().then(() => {
-                console.log('showAddress');
                 return this.showAddress();
-            }).then(() => {
-                console.log('showTerms');
-                return this.showTerms(Form.get('data-registrar'));
             }).then(() => {
                 let childNodes = this.$RegistrationSection.getChildren();
 
@@ -1706,9 +1702,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 childNodes.setStyle('display', 'none');
 
                 return this.showLoader().then(() => {
-                    console.log('hideTerms');
-                    return this.hideTerms();
-                }).then(() => {
                     const Form = this.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
                         FormData = QUIFormUtils.getFormData(Form);
 
@@ -1718,25 +1711,59 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         FormData.captchaResponse = Form.elements.captchaResponse.value;
                     }
 
-                    return this.sendRegistration(
+                    if (this.$Address && this.$Address.querySelector('form')) {
+                        const addressForm = this.$Address.querySelector('form');
+                        const addressData = QUIFormUtils.getFormData(addressForm);
+
+                        Object.assign(FormData, addressData);
+                    }
+
+                    return Registration.register(
                         Form.get('data-registrar'),
-                        Form.get('data-registration_id'),
                         FormData
                     );
                 });
             }).catch((err) => {
                 console.error(err);
+                this.$resetMail();
 
-                this.hideTerms().then(() => {
-                    this.$resetMail();
+                return new Promise((resolve) => {
+                    const registrationMainNode = this.getElm().querySelectorAll(
+                        '.quiqqer-fu-registrationSignUp-registration__registration, .quiqqer-fu-registrationSignUp-registration__inner'
+                    );
+
+                    Array.from(registrationMainNode).forEach((n) => {
+                        n.style.opacity = 0;
+                        n.style.display = '';
+                    });
+
+                    moofx(registrationMainNode).animate({
+                        opacity: 1
+                    }, {
+                        callback: resolve
+                    });
                 });
+            }).then(() => {
+                this.Loader.hide();
             });
         },
 
         showAddress: function () {
             return new Promise((resolve) => {
+                if (!this.$Address || !this.$Address.querySelector('form')) {
+                    return resolve();
+                }
+
                 const submitButton = this.$Address.querySelector('button[name="next"]');
+                const form = this.$Address.querySelector('form');
+
                 const next = () => {
+                    // validate form
+                    if (this.$hasValidityIssues(form)) {
+                        return;
+                    }
+
+                    // form is validated
                     submitButton.removeEventListener('click', next);
                     this.setAttribute('termsAccepted', false);
 
@@ -1759,6 +1786,48 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     this.Loader.hide();
                 });
             });
+        },
+
+        $hasValidityIssues: function (Form) {
+            if (!Form) {
+                return false;
+            }
+
+            if (typeof Form.reportValidity === 'function') {
+                const isValid = Form.reportValidity();
+
+                if (isValid === false) {
+                    const invalidField = Form.querySelector(':invalid');
+
+                    if (invalidField && typeof invalidField.focus === 'function') {
+                        invalidField.focus();
+                    }
+
+                    return true;
+                }
+            }
+
+            if (typeof Form.checkValidity === 'function' && Form.checkValidity() === false) {
+                const fields = Form.elements || [];
+
+                for (let i = 0, len = fields.length; i < len; i++) {
+                    if (typeof fields[i].checkValidity === 'function' && fields[i].checkValidity() === false) {
+                        if (typeof fields[i].focus === 'function') {
+                            fields[i].focus();
+                        }
+
+                        if (typeof fields[i].reportValidity === 'function') {
+                            fields[i].reportValidity();
+                        }
+
+                        return true;
+                    }
+                }
+
+                return true;
+            }
+
+            return false;
         },
 
         /**
