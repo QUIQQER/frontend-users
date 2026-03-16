@@ -98,7 +98,9 @@
                     {/if}
                     {if !$msgSuccess && $Email}
                     {if $Registrars->count()}
-                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.message.between"}
+                        <div class="quiqqer-fu-registrationSignUp-registration-messageBetween">
+                            {locale group="quiqqer/frontend-users" var="control.registration.sign.up.message.between"}
+                        </div>
                     {/if}
                     <form name="quiqqer-fu-registrationSignUp-email"
                           class="quiqqer-fu-registrationSignUp-registration-email"

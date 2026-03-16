@@ -5,6 +5,7 @@
 
 .quiqqer-fu-registrationSignUp {
     --_registration-card-padding: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cards-padding, clamp(1rem, 5vw, 3rem));
+    --_registration-card-text-align: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cards-text-align, center);
 
     display: flex;
     flex-wrap: wrap;
@@ -159,6 +160,11 @@
 .quiqqer-fu-registrationSignUp-registration-redirect {
     display: block;
     margin-top: 20px;
+}
+
+.quiqqer-fu-registrationSignUp-registration-socialHeader,
+.quiqqer-fu-registrationSignUp-registration-messageBetween {
+    text-align: var(--_registration-card-text-align);
 }
 
 
