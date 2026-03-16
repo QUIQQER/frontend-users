@@ -51,7 +51,8 @@ class RegistrationSignUp extends QUI\Control
             'content' => '',    // right content
             'registration-trial' => false, // use registration trial
             'header' => true,   // how header title
-            'autofill' => true
+            'autofill' => true,
+            'layout' => 'simple' // basic (only basic styling), simple (form in card desgin)
         ]);
 
         $this->setAttributes($attributes);
@@ -132,6 +133,13 @@ class RegistrationSignUp extends QUI\Control
         }
 
         $this->setJavaScriptControlOption('usecaptcha', $useCaptcha);
+
+        $layout = match ($this->getAttribute('layout')) {
+            'basic' => $this->getAttribute('layout'),
+            default => 'simple'
+        };
+
+        $this->addCSSClass('quiqqer-fu-registrationSignUp--' . $layout);
 
         $Engine->assign([
             'Captcha' => $Captcha,

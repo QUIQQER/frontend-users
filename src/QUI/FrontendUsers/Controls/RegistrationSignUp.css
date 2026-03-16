@@ -1,45 +1,59 @@
+.quiqqer-fu-registrationSignUp--simple {
+    --_registration-card-background-color: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-card-bgColor, var(--qui-colors-surface, #f6f6f7));
+    --_registration-card-shadow: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cad-shadow, var(--qui-shadow-card, none));
+}
+
 .quiqqer-fu-registrationSignUp {
-    --_registration-background-color: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-bgColor, var(--qui-colors-surface, #f6f6f7));
-    --_registration-background-shadow: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-shadow, var(--qui-shadow-card, none));
-    --_registration-padding: var(--quiqqer-frontendUsers-controls-registrationSignUp-padding, clamp(1rem, 5vw, 3rem));
+    --_registration-card-padding: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cards-padding, clamp(1rem, 5vw, 3rem));
 
     display: flex;
     flex-wrap: wrap;
-    gap: clamp(2rem, 5vw, 6rem);
     justify-content: center;
     margin: 3rem auto;
     width: 100rem;
-    max-width: calc(100% - clamp(2rem, 5vw, 6rem)); /* works like padding */
+    max-width: calc(100% - clamp(0rem, 5vw - 2rem, 6rem)); /* works like padding, mobile is no spacing */
     align-items: center;
 }
 
 .quiqqer-fu-registrationSignUp-info,
 .quiqqer-fu-registrationSignUp-registration {
     position: relative;
-    text-align: center;
     flex: 1;
     flex-basis: min(100%, 400px);
+    padding: 1rem;
 }
 
-.quiqqer-fu-registrationSignUp-registration {
-    justify-content: center;
+.quiqqer-fu-registrationSignUp-registration__inner {
+    background: var(--_registration-card-background-color);
+    border-radius: var(--qui-radius-card);
+    box-shadow: var(--_registration-card-shadow);
+    width: min(100%, 28rem);
+    margin-inline: auto;
 }
 
-.quiqqer-fu-registrationSignUp-registration-content {
+.quiqqer-fu-registrationSignUp-registration--hasNoContent {
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-registration--inner {
-    background: var(--_registration-background-color);
-    border-radius: var(--qui-radius-card);
-    display: inline-block;
-    padding: var(--_registration-padding);
-    box-shadow: var(--_registration-background-shadow);
-    width: min(100%, 26rem);
+.quiqqer-fu-registrationSignUp-registration__registration,
+.quiqqer-fu-registrationSignUp-registration__login,
+.quiqqer-fu-registrationSignUp-registration__terms {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.quiqqer-fu-registrationSignUp-registration__registration-view,
+.quiqqer-fu-registrationSignUp-registration__login-view,
+.quiqqer-fu-registrationSignUp-registration__terms-view {
+    padding: var(--_registration-card-padding);
+    width: 100%;
+    overflow: hidden;
 }
 
 .quiqqer-fu-registrationSignUp-info {
-    text-align: left;
+    display: flex;
+    align-items: center;
 }
 
 .quiqqer-fu-registrationSignUp-registration-logged-in {
@@ -150,28 +164,21 @@
 /** registration sign in
  ========================================== */
 
-.quiqqer-fu-registrationSignUp-terms {
+.quiqqer-fu-registrationSignUp-registration__terms-view {
     align-items: center;
-    display: none;
+    display: flex;
     flex-direction: column;
-    left: 0;
-    height: 100%;
     justify-content: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-    border-radius: var(--qui-radius-card);
-    padding: var(--_registration-padding);
     gap: 1rem;
 }
 
-.quiqqer-fu-registrationSignUp-terms {
+.quiqqer-fu-registrationSignUp-registration__terms-viewterms {
     position: relative;
 }
 
-.quiqqer-fu-registrationSignUp-terms form {
+.quiqqer-fu-registrationSignUp-registration__terms-view form {
     width: 100%;
+    height: 46px;
 }
 
 .quiqqer-fu-registrationSignUp-terms-mail {
@@ -185,7 +192,7 @@
     z-index: 10;
 }
 
-.quiqqer-fu-registrationSignUp-terms label {
+.quiqqer-fu-registrationSignUp-registration__terms-view label {
     cursor: pointer;
     max-width: 500px;
     width: 100%
@@ -279,4 +286,18 @@
 
 .quiqqer-fu-registrationSignUp-resend-msg {
     margin-top: 10px;
+}
+
+/**
+ * Status - container for messages after registration
+ */
+.quiqqer-fu-registrationSignUp-status {
+    width: min(100%, 600px);
+    margin-inline: auto;
+}
+
+/* content-message-* have float left... */
+.quiqqer-fu-registrationSignUp-status .content-message-success,
+.quiqqer-fu-registrationSignUp-status .content-message-error {
+    float: none !important;
 }

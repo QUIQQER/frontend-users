@@ -2058,6 +2058,26 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Sign In]]></de>
             <en><![CDATA[Sign In]]></en>
         </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout">
+            <de><![CDATA[Layout]]></de>
+            <en><![CDATA[Layout]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.desc">
+            <de><![CDATA[Bestimmt das Layout des Registrierungsformulars.
+            <br><strong>Basic</strong> definiert nur wenige notwendige Styles. Dieses Layout eignet sich für umfangreiche Anpassungen.
+            <br><strong>Simple</strong> stellt das Formular im Kartendesign dar (beeinflusst vom verwendeten Template).]]></de>
+            <en><![CDATA[Defines the layout of the registration form.
+            <br><strong>Basic</strong> applies only a few essential styles. This layout is suitable for extensive customization.
+            <br><strong>Simple</strong> renders the form in a card-style design (influenced by the active template).]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.basic">
+            <de><![CDATA[Basic – nur rudimentäres Styling]]></de>
+            <en><![CDATA[Basic – minimal styling]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.simple">
+            <de><![CDATA[Simple – Formular im Card-Design]]></de>
+            <en><![CDATA[Simple – card-style form]]></en>
+        </locale>
         <locale name="admin.types.registrationSignUp.setting.background">
             <de><![CDATA[Hintergrundbild]]></de>
             <en><![CDATA[Background image]]></en>
