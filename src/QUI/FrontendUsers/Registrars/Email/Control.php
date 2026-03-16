@@ -137,9 +137,11 @@ class Control extends QUI\Control
                 return '';
             }
 
+            $fields = $this->getAttribute('fields');
+
             $Engine->assign([
                 'invalidFields' => $this->getAttribute('invalidFields'),
-                'fields' => $this->getAttribute('fields')
+                'fields' => $fields
             ]);
 
             $addressFields = $RegistrarHandler->getAddressFieldSettings();
