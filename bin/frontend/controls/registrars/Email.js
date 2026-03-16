@@ -1,7 +1,5 @@
 /**
  * JS-Control for default email registrar
- *
- * @module package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email
  */
 define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', [
 

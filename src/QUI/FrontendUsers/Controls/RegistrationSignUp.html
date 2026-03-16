@@ -73,7 +73,6 @@
                     </div>
                 {else}
 
-
                     {if $this->getAttribute('header')}
                         <div class="quiqqer-fu-registrationSignUp-registration-socialHeader">
                         {locale group="quiqqer/frontend-users" var="control.registration.sign.up.title"}
@@ -225,6 +224,22 @@
                 <div class="quiqqer-fu-registrationSignUp-terms-buttons"></div>
             </div>
         </div>
+
+        {if $Email && $Email->getControl()}
+        <div class="quiqqer-fu-registrationSignUp-registration__address" data-name="address" style="display: none;">
+
+            <form name="address" method="post" action="">
+                {$Email->getControl()->renderAddress()}
+
+                <div class="quiqqer-fu-registrationSignUp-email-buttons">
+                    <button type="submit" name="create-account" class="quiqqer-frontend-social-button btn btn-primary">
+                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
+                    </button>
+                </div>
+            </form>
+        </div>
+        {/if}
+
         <div class="quiqqer-fu-registrationSignUp-registration__login" data-name="login">
             <div class="quiqqer-fu-registrationSignUp-registration__login-view" data-name="login-view" style="display: none;"></div>
         </div>

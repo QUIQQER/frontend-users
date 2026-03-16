@@ -43,6 +43,7 @@
     position: relative;
 }
 
+
 .quiqqer-fu-registrationSignUp-registration__registration-view,
 .quiqqer-fu-registrationSignUp-registration__login-view,
 .quiqqer-fu-registrationSignUp-registration__terms-view {
@@ -246,6 +247,36 @@
 
 .visible .quiqqer-fu-registrationSignUp-email-captcha-display {
     display: inline-block;
+}
+
+/** registration with address
+ ========================================== */
+
+.quiqqer-fu-registrationSignUp-registration__address {
+    padding: var(--_registration-card-padding);
+    width: 100%;
+    position: relative;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .qui-select {
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address fieldset .quiqqer-registration-field-title {
+    display: block;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address fieldset label {
+    display: flex;
+    flex-direction: column;
 }
 
 /** no script

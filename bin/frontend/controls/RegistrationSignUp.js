@@ -1,6 +1,4 @@
 /**
- * @module package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp
- *
  * @event onRegister [this] - fires if the user successfully registers a user account
  * @event onQuiqqerFrontendUsersRegisterStart [this]
  * @event onQuiqqerFrontendUsersRegisterStart [this]
@@ -342,6 +340,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             this.$TermsView = Elm.getElement('[data-name="terms-view"]');
             this.$LoginContainer = Elm.getElement('[data-name="login"]');
             this.$LoginView = Elm.getElement('[data-name="login-view"]');
+            this.$Address = Elm.getElement('[data-name="address"]');
         },
 
         /**
@@ -675,6 +674,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             this.showLoader();
 
             const self = this;
+
+            console.log('sendRegistration');
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (Data) {
@@ -1700,8 +1701,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * password is filled out
          */
         $onMailPasswordClick: function () {
-            const self = this,
-                PasswordInput = this.getElm().getElement('[name="password"]'),
+            const PasswordInput = this.getElm().getElement('[name="password"]'),
                 Form = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]');
 
             if (PasswordInput) {
@@ -1714,10 +1714,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 }
             }
 
-            this.showLoader().then(function () {
-                return self.showTerms(Form.get('data-registrar'));
-            }).then(function () {
-                let childNodes = self.$RegistrationSection.getChildren();
+            this.showLoader().then(() => {
+                return this.showAddress();
+            }).then(() => {
+                return this.showTerms(Form.get('data-registrar'));
+            }).then(() => {
+                let childNodes = this.$RegistrationSection.getChildren();
 
                 childNodes = childNodes.filter(function (Child) {
                     return !Child.hasClass('qui-loader');
@@ -1725,10 +1727,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 childNodes.setStyle('display', 'none');
 
-                return self.showLoader().then(() => {
-                    return self.hideTerms();
-                }).then(function () {
-                    const Form = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
+                return this.showLoader().then(() => {
+                    return this.hideTerms();
+                }).then(() => {
+                    const Form = this.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
                         FormData = QUIFormUtils.getFormData(Form);
 
                     FormData.termsOfUseAccepted = true;
@@ -1737,17 +1739,30 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         FormData.captchaResponse = Form.elements.captchaResponse.value;
                     }
 
-                    return self.sendRegistration(
+                    return this.sendRegistration(
                         Form.get('data-registrar'),
                         Form.get('data-registration_id'),
                         FormData
                     );
                 });
-            }).catch(function (err) {
+            }).catch((err) => {
                 console.error(err);
 
-                self.hideTerms().then(function () {
-                    self.$resetMail();
+                this.hideTerms().then(() => {
+                    this.$resetMail();
+                });
+            });
+        },
+
+        showAddress: function () {
+            return new Promise((resolve) => {
+                this.$animateRegistrationViewChange(
+                    this.$RegistrationContainer,
+                    this.$Address
+                ).then(() => {
+                    this.Loader.hide();
+                    
+                    
                 });
             });
         },
