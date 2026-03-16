@@ -48,7 +48,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         Binds: [
             '$onInject',
             '$onImport',
-            '$onTrialClick',
             '$onMailCreateClick',
             '$onMailPasswordClick',
             '$onPasswordNextClick',
@@ -1108,8 +1107,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * init mail registration
          */
         $initMail: function () {
-            const ButtonTrial = this.getElm().getElement('[name="trial-account"]'),
-                EmailNext = this.getElm().getElement('[name="email-next"]'),
+            const EmailNext = this.getElm().getElement('[name="email-next"]'),
                 PasswordNext = this.getElm().getElement('[name="create-account"]'),
                 EmailField = this.getElm().getElement('[name="email"]'),
                 PasswordField = this.getElm().getElement(
@@ -1119,10 +1117,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             if (!EmailField) {
                 this.Loader.hide();
                 return;
-            }
-
-            if (ButtonTrial) {
-                ButtonTrial.addEvent('click', this.$onTrialClick);
             }
 
             EmailNext.addEvent('click', this.$onMailCreateClick);
@@ -1217,96 +1211,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         },
 
         /**
-         * create trial account
-         * @deprecated
-         */
-        $onTrialClick: function () {
-            const self = this,
-                Form = this.getElm().getElement('[name="quiqqer-fu-registrationSignUp-email"]'),
-                Email = self.getElm().getElement('[name="email"]'),
-                ButtonTrial = this.getElm().getElement('[name="trial-account"]'),
-                GoToPassword = this.getElm().getElement('[name="email-next"]');
-
-            Email.set('disabled', true);
-            ButtonTrial.set('disabled', true);
-            GoToPassword.set('disabled', true);
-
-            this.emailValidation(Email).then(function (isValid) {
-                if (!isValid) {
-                    return Promise.reject('isInValid');
-                }
-
-                Email.set('disabled', false);
-                ButtonTrial.set('disabled', false);
-                GoToPassword.set('disabled', false);
-
-                const MailSection = self.getElm().getElement(
-                    '.quiqqer-fu-registrationSignUp-email-mailSection'
-                );
-
-                return new Promise(function (resolve) {
-                    moofx(MailSection).animate({
-                        left: -50,
-                        opacity: 0
-                    }, {
-                        duration: 250,
-                        callback: function () {
-                            MailSection.setStyle('display', 'none');
-                            self.$captchaCheck().then(resolve);
-                        }
-                    });
-                });
-            }).then(function () {
-                return self.showTerms(Form.get('data-registrar'));
-            }).then(function () {
-                const Form = self.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
-                    formData = {
-                        termsOfUseAccepted: true,
-                        trial_email: Form.elements.email.value
-                    };
-
-                if (typeof Form.elements.captchaResponse !== 'undefined') {
-                    formData.captchaResponse = Form.elements.captchaResponse.value;
-                }
-
-                return self.sendRegistration(
-                    Form.elements['registration-trial-registrator'].value,
-                    Form.get('data-registration_id'),
-                    formData
-                ).then(function () {
-                    if (self.getElm().getElement('.content-message-error')) {
-                        (function () {
-                            moofx(self.$RegistrationSection).animate({
-                                opacity: 0
-                            }, {
-                                duration: 250,
-                                callback: function () {
-                                    self.$onInject();
-                                }
-                            });
-                        }).delay(2000);
-                    }
-                });
-            }).catch(function (err) {
-                console.error(err);
-
-                if (err !== 'isInValid') {
-                    self.hideTerms().then(function () {
-                        self.$resetMail();
-                    });
-                }
-
-                Email.set('disabled', false);
-                ButtonTrial.set('disabled', false);
-                GoToPassword.set('disabled', false);
-
-                if (self.Loader) {
-                    self.Loader.hide();
-                }
-            });
-        },
-
-        /**
          * account creation via mail
          * - 1. show password step
          * - 2. show captcha step
@@ -1320,7 +1224,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             }
 
             const MailSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-email-mailSection'),
-                ButtonTrial = this.getElm().getElement('[name="trial-account"]'),
                 EmailNext = this.getElm().getElement('[name="email-next"]');
 
             const self = this,
@@ -1334,10 +1237,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             MailInput.set('disabled', true);
             EmailNext.set('disabled', true);
-
-            if (ButtonTrial) {
-                ButtonTrial.set('disabled', true);
-            }
 
             Registration.isEmailBlacklisted(MailInput.value).then((isBlacklisted) => {
                 if (isBlacklisted) {
@@ -1357,10 +1256,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 MailInput.set('disabled', false);
                 EmailNext.set('disabled', false);
-
-                if (ButtonTrial) {
-                    ButtonTrial.set('disabled', false);
-                }
 
                 moofx(MailSection).animate({
                     left: -50,
@@ -1391,10 +1286,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 MailInput.set('disabled', false);
                 EmailNext.set('disabled', false);
-
-                if (ButtonTrial) {
-                    ButtonTrial.set('disabled', false);
-                }
 
                 self.fireEvent('error', [self, err]);
             });

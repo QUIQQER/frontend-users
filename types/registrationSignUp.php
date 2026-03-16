@@ -39,10 +39,6 @@ $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
     'layout' => $Site->getAttribute('quiqqer.sign.up.layout')
 ]);
 
-if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
-    $Registration->setAttribute('registration-trial', true);
-}
-
 // logo url
 $logoUrl = $Project->firstChild()->getUrlRewritten();
 

@@ -357,13 +357,11 @@ class Registration extends QUI\Control
         });
 
         $socialRegistrars = $Registrars->filter(function ($registrar) {
-            return $registrar->getType() !== 'QUI\Registration\Trial\Registrar'
-                && $registrar->getType() !== 'QUI\FrontendUsers\Registrars\Email\Registrar';
+            return $registrar->getType() !== 'QUI\FrontendUsers\Registrars\Email\Registrar';
         });
 
         $mailRegistrars = $Registrars->filter(function ($registrar) {
-            return $registrar->getType() === 'QUI\Registration\Trial\Registrar'
-                || $registrar->getType() === 'QUI\FrontendUsers\Registrars\Email\Registrar';
+            return $registrar->getType() === 'QUI\FrontendUsers\Registrars\Email\Registrar';
         });
 
         if (!empty($_REQUEST['registrar'])) {

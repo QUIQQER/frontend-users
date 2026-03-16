@@ -231,10 +231,6 @@
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-email-buttons [name="trial-account"] {
-    margin-right: 0.5rem;
-}
-
 .quiqqer-fu-registrationSignUp .quiqqer-frontendUsers-pending {
     background: #e8fffe;
     border: 1px solid #4dc0b5;
