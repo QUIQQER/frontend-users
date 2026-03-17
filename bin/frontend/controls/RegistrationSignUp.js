@@ -1648,7 +1648,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 require([
                     'qui/controls/windows/SimpleConfirmWindow'
                 ], (SimpleConfirmWindow) => {
+                    const addressParent = this.$Address.parentNode;
+
                     new SimpleConfirmWindow({
+                        'class' : 'qui-window-simpleWindow--address',
+                        maxWidth: 900,
+                        maxHeight: 700,
+                        autoclose: false,
                         buttonSubmit: {
                             'class': 'btn btn-primary',
                             'icon': 'fa fa-check',
@@ -1657,47 +1663,45 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         },
                         events: {
                             onOpen: (instance) => {
-                                instance.getContent().classList.add('quiqqer-fu-registrationSignUp-registration__address');
-                                instance.getContent().innerHTML = this.$Address.innerHTML;
+                                instance.getContent().innerHTML = '';
+                                instance.getContent().appendChild(this.$Address);
+                                this.$Address.style.display = 'block';
                             },
-                            onSubmit: resolve,
-                            onCancel: reject
+                            onSubmit: (instance) => {
+                                const windowForm = instance.getContent().querySelector('form');
+                                const form = this.$Address.querySelector('form');
+
+                                if (this.$hasValidityIssues(windowForm)) {
+                                    return;
+                                }
+
+                                Array.from(windowForm.elements).forEach((sourceElement) => {
+                                    if (!sourceElement.name || !form.elements[sourceElement.name]) {
+                                        return;
+                                    }
+
+                                    const targetElement = form.elements[sourceElement.name];
+
+                                    if (sourceElement.type === 'checkbox' || sourceElement.type === 'radio') {
+                                        targetElement.checked = sourceElement.checked;
+                                        return;
+                                    }
+
+                                    targetElement.value = sourceElement.value;
+                                });
+
+                                this.$Address.style.display = 'none';
+                                addressParent.appendChild(this.$Address);
+                                instance.close();
+                                resolve();
+                            },
+                            onCancel: () => {
+                                this.$Address.style.display = 'none';
+                                addressParent.appendChild(this.$Address);
+                                reject();
+                            }
                         }
                     }).open();
-                });
-
-                return;
-
-                const submitButton = this.$Address.querySelector('button[name="next"]');
-                const form = this.$Address.querySelector('form');
-
-                const next = () => {
-                    // validate form
-                    if (this.$hasValidityIssues(form)) {
-                        return;
-                    }
-
-                    // form is validated
-                    submitButton.removeEventListener('click', next);
-                    this.setAttribute('termsAccepted', false);
-
-                    moofx(this.$Address).animate({
-                        opacity: 0
-                    }, {
-                        callback: () => {
-                            this.$Address.style.display = 'none';
-                            resolve();
-                        }
-                    });
-                };
-
-                submitButton.addEventListener('click', next);
-
-                this.$animateRegistrationViewChange(
-                    this.$RegistrationContainer,
-                    this.$Address
-                ).then(() => {
-                    this.Loader.hide();
                 });
             });
         },

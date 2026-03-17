@@ -254,9 +254,12 @@
 
 /** registration with address (window)
  ========================================== */
+.qui-window-simpleWindow--address {
+    background-color: color-mix(in srgb, var(--qui-colors-modal) 97%, black) !important;
+}
 
 .quiqqer-fu-registrationSignUp-registration__address {
-    padding: 2rem;
+    padding: 2.5rem 2rem 3rem;
     width: 100%;
     position: relative;
 }
@@ -264,7 +267,7 @@
 .quiqqer-fu-registrationSignUp-registration__address fieldset {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
     padding: 0;
 }
 
@@ -283,6 +286,40 @@
     flex-direction: column;
 }
 
+.quiqqer-fu-registrationSignUp-registration__address form {
+    margin-top: 1.75rem;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row {
+    display: grid;
+    gap: 1rem;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--two-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--one-column {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--three-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row-item {
+    min-width: 0;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row-item--full {
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-element,
+.quiqqer-fu-registrationSignUp-registration__address .qui-select {
+    width: 100%;
+}
+
 /** no script
  ========================================== */
 
@@ -299,6 +336,15 @@
     .registration-sign-in {
         align-items: baseline;
         overflow: auto;
+    }
+
+    .quiqqer-fu-registrationSignUp-registration__address {
+        padding: 2rem 1.25rem 2.5rem;
+    }
+
+    .quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--two-columns,
+    .quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--three-columns {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 

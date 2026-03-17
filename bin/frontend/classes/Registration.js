@@ -179,19 +179,23 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                         return resolve();
                     }
 
-                    require(['qui/controls/windows/Confirm'], (QUIConfirm) => {
-                        new QUIConfirm({
+                    require(['qui/controls/windows/SimpleConfirmWindow'], (SimpleConfirmWindow) => {
+                        new SimpleConfirmWindow({
                             'class': 'qui-frontendUsers-registration-touConfirmWindow',
                             title: touNeeded.title,
                             maxWidth: 700,
                             maxHeight: 600,
-                            ok_button: {
+                            buttonSubmit: {
+                                'class': 'btn btn-primary',
                                 text: QUILocale.get(pkg, 'confirm.registration.tou_pp.submit'),
-                                textimage: 'fa fa-check'
+                                icon: 'fa fa-check',
+                                order: 2
                             },
-                            cancel_button: {
+                            buttonCancel: {
+                                'class': 'btn btn-inline-body',
                                 text: QUILocale.get(pkg, 'confirm.registration.tou_pp.cancel'),
-                                textimage: 'fa fa-close'
+                                icon: 'fa fa-close',
+                                order: 1
                             },
                             events: {
                                 onOpen: (win) => {
@@ -244,7 +248,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                 }, {
                     'package': pkg,
                     onError: reject
-                })
+                });
             }).then(() => {
                 return new Promise((resolve, reject) => {
                     QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', (data) => {

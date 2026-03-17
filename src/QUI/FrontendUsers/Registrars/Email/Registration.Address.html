@@ -1,32 +1,235 @@
 <fieldset>
-    {foreach $addressFields as $field => $options}
-
-    {if !$options['show']}
-        {continue}
-    {/if}
-
-    <label>
+    {if isset($addressFields['company']) && $addressFields['company']['show']}
+    <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
         <span class="quiqqer-registration-field-title">
-            {locale group="quiqqer/system" var=$field}
-            {if $options['required']}*{/if}
+            {locale group="quiqqer/system" var="company"}
+            {if $addressFields['company']['required']}*{/if}
         </span>
-
-        {if $field == 'country'}
-            {$CountrySelect->create()}
-        {else}
-        <input value="{if isset($fields[$field])}{$fields[$field]}{/if}"
+        <input value="{if isset($fields['company'])}{$fields['company']}{/if}"
                type="text"
-               name="{$field}"
-               class="quiqqer-registration-field-element{if isset($invalidFields[$field])} quiqqer-registration-field-error{/if}"{if $options['required']} required{/if}
-               {if isset($addressFieldLengths[$field])}maxlength="{$addressFieldLengths[$field]}"{/if}
+               name="company"
+               class="quiqqer-registration-field-element{if isset($invalidFields['company'])} quiqqer-registration-field-error{/if}"{if $addressFields['company']['required']} required{/if}
+               {if isset($addressFieldLengths['company'])}maxlength="{$addressFieldLengths['company']}"{/if}
         >
-        {/if}
-
-        {if isset($invalidFields[$field])}
+        {if isset($invalidFields['company'])}
         <span class="quiqqer-registration-field-error-msg">
-            {$invalidFields[$field]->getMsg()}
+            {$invalidFields['company']->getMsg()}
         </span>
         {/if}
     </label>
-    {/foreach}
+    {/if}
+
+    {if isset($addressFields['salutation']) && $addressFields['salutation']['show']}
+    <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
+        <span class="quiqqer-registration-field-title">
+            {locale group="quiqqer/system" var="salutation"}
+            {if $addressFields['salutation']['required']}*{/if}
+        </span>
+        <input value="{if isset($fields['salutation'])}{$fields['salutation']}{/if}"
+               type="text"
+               name="salutation"
+               class="quiqqer-registration-field-element{if isset($invalidFields['salutation'])} quiqqer-registration-field-error{/if}"{if $addressFields['salutation']['required']} required{/if}
+               {if isset($addressFieldLengths['salutation'])}maxlength="{$addressFieldLengths['salutation']}"{/if}
+        >
+        {if isset($invalidFields['salutation'])}
+        <span class="quiqqer-registration-field-error-msg">
+            {$invalidFields['salutation']->getMsg()}
+        </span>
+        {/if}
+    </label>
+    {/if}
+
+    {assign var="showFirstname" value=isset($addressFields['firstname']) && $addressFields['firstname']['show']}
+    {assign var="showLastname" value=isset($addressFields['lastname']) && $addressFields['lastname']['show']}
+    {if $showFirstname || $showLastname}
+    <div class="quiqqer-registration-field-row {if $showFirstname && $showLastname}quiqqer-registration-field-row--two-columns{else}quiqqer-registration-field-row--one-column{/if}">
+        {if $showFirstname}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="firstname"}
+                {if $addressFields['firstname']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['firstname'])}{$fields['firstname']}{/if}"
+                   type="text"
+                   name="firstname"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['firstname'])} quiqqer-registration-field-error{/if}"{if $addressFields['firstname']['required']} required{/if}
+                   {if isset($addressFieldLengths['firstname'])}maxlength="{$addressFieldLengths['firstname']}"{/if}
+            >
+            {if isset($invalidFields['firstname'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['firstname']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+
+        {if $showLastname}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="lastname"}
+                {if $addressFields['lastname']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['lastname'])}{$fields['lastname']}{/if}"
+                   type="text"
+                   name="lastname"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['lastname'])} quiqqer-registration-field-error{/if}"{if $addressFields['lastname']['required']} required{/if}
+                   {if isset($addressFieldLengths['lastname'])}maxlength="{$addressFieldLengths['lastname']}"{/if}
+            >
+            {if isset($invalidFields['lastname'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['lastname']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+    </div>
+    {/if}
+
+    {if isset($addressFields['street_no']) && $addressFields['street_no']['show']}
+    <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
+        <span class="quiqqer-registration-field-title">
+            {locale group="quiqqer/system" var="street_no"}
+            {if $addressFields['street_no']['required']}*{/if}
+        </span>
+        <input value="{if isset($fields['street_no'])}{$fields['street_no']}{/if}"
+               type="text"
+               name="street_no"
+               class="quiqqer-registration-field-element{if isset($invalidFields['street_no'])} quiqqer-registration-field-error{/if}"{if $addressFields['street_no']['required']} required{/if}
+               {if isset($addressFieldLengths['street_no'])}maxlength="{$addressFieldLengths['street_no']}"{/if}
+        >
+        {if isset($invalidFields['street_no'])}
+        <span class="quiqqer-registration-field-error-msg">
+            {$invalidFields['street_no']->getMsg()}
+        </span>
+        {/if}
+    </label>
+    {/if}
+
+    {assign var="showZip" value=isset($addressFields['zip']) && $addressFields['zip']['show']}
+    {assign var="showCity" value=isset($addressFields['city']) && $addressFields['city']['show']}
+    {if $showZip || $showCity}
+    <div class="quiqqer-registration-field-row {if $showZip && $showCity}quiqqer-registration-field-row--two-columns{else}quiqqer-registration-field-row--one-column{/if}">
+        {if $showZip}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="zip"}
+                {if $addressFields['zip']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['zip'])}{$fields['zip']}{/if}"
+                   type="text"
+                   name="zip"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['zip'])} quiqqer-registration-field-error{/if}"{if $addressFields['zip']['required']} required{/if}
+                   {if isset($addressFieldLengths['zip'])}maxlength="{$addressFieldLengths['zip']}"{/if}
+            >
+            {if isset($invalidFields['zip'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['zip']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+
+        {if $showCity}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="city"}
+                {if $addressFields['city']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['city'])}{$fields['city']}{/if}"
+                   type="text"
+                   name="city"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['city'])} quiqqer-registration-field-error{/if}"{if $addressFields['city']['required']} required{/if}
+                   {if isset($addressFieldLengths['city'])}maxlength="{$addressFieldLengths['city']}"{/if}
+            >
+            {if isset($invalidFields['city'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['city']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+    </div>
+    {/if}
+
+    {if isset($addressFields['country']) && $addressFields['country']['show']}
+    <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
+        <span class="quiqqer-registration-field-title">
+            {locale group="quiqqer/system" var="country"}
+            {if $addressFields['country']['required']}*{/if}
+        </span>
+        {$CountrySelect->create()}
+        {if isset($invalidFields['country'])}
+        <span class="quiqqer-registration-field-error-msg">
+            {$invalidFields['country']->getMsg()}
+        </span>
+        {/if}
+    </label>
+    {/if}
+
+    {assign var="showPhone" value=isset($addressFields['phone']) && $addressFields['phone']['show']}
+    {assign var="showMobile" value=isset($addressFields['mobile']) && $addressFields['mobile']['show']}
+    {assign var="showFax" value=isset($addressFields['fax']) && $addressFields['fax']['show']}
+    {if $showPhone || $showMobile || $showFax}
+    <div class="quiqqer-registration-field-row {if $showPhone && $showMobile && $showFax}quiqqer-registration-field-row--three-columns{elseif ($showPhone && $showMobile) || ($showPhone && $showFax) || ($showMobile && $showFax)}quiqqer-registration-field-row--two-columns{else}quiqqer-registration-field-row--one-column{/if}">
+        {if $showPhone}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="phone"}
+                {if $addressFields['phone']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['phone'])}{$fields['phone']}{/if}"
+                   type="text"
+                   name="phone"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['phone'])} quiqqer-registration-field-error{/if}"{if $addressFields['phone']['required']} required{/if}
+                   {if isset($addressFieldLengths['phone'])}maxlength="{$addressFieldLengths['phone']}"{/if}
+            >
+            {if isset($invalidFields['phone'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['phone']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+
+        {if $showMobile}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="mobile"}
+                {if $addressFields['mobile']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['mobile'])}{$fields['mobile']}{/if}"
+                   type="text"
+                   name="mobile"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['mobile'])} quiqqer-registration-field-error{/if}"{if $addressFields['mobile']['required']} required{/if}
+                   {if isset($addressFieldLengths['mobile'])}maxlength="{$addressFieldLengths['mobile']}"{/if}
+            >
+            {if isset($invalidFields['mobile'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['mobile']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+
+        {if $showFax}
+        <label class="quiqqer-registration-field-row-item">
+            <span class="quiqqer-registration-field-title">
+                {locale group="quiqqer/system" var="fax"}
+                {if $addressFields['fax']['required']}*{/if}
+            </span>
+            <input value="{if isset($fields['fax'])}{$fields['fax']}{/if}"
+                   type="text"
+                   name="fax"
+                   class="quiqqer-registration-field-element{if isset($invalidFields['fax'])} quiqqer-registration-field-error{/if}"{if $addressFields['fax']['required']} required{/if}
+                   {if isset($addressFieldLengths['fax'])}maxlength="{$addressFieldLengths['fax']}"{/if}
+            >
+            {if isset($invalidFields['fax'])}
+            <span class="quiqqer-registration-field-error-msg">
+                {$invalidFields['fax']->getMsg()}
+            </span>
+            {/if}
+        </label>
+        {/if}
+    </div>
+    {/if}
 </fieldset>
