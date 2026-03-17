@@ -1640,10 +1640,33 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         },
 
         showAddress: function () {
-            return new Promise((resolve) => {
+            return new Promise((resolve, reject) => {
                 if (!this.$Address || !this.$Address.querySelector('form')) {
                     return resolve();
                 }
+
+                require([
+                    'qui/controls/windows/SimpleConfirmWindow'
+                ], (SimpleConfirmWindow) => {
+                    new SimpleConfirmWindow({
+                        buttonSubmit: {
+                            'class': 'btn btn-primary',
+                            'icon': 'fa fa-check',
+                            'text': QUILocale.get(lg, 'control.registration.sign.up.password.next'),
+                            'order': 2
+                        },
+                        events: {
+                            onOpen: (instance) => {
+                                instance.getContent().classList.add('quiqqer-fu-registrationSignUp-registration__address');
+                                instance.getContent().innerHTML = this.$Address.innerHTML;
+                            },
+                            onSubmit: resolve,
+                            onCancel: reject
+                        }
+                    }).open();
+                });
+
+                return;
 
                 const submitButton = this.$Address.querySelector('button[name="next"]');
                 const form = this.$Address.querySelector('form');

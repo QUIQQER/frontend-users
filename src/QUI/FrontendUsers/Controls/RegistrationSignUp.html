@@ -220,16 +220,12 @@
 
         {if $Email && $Email->getControl()}
         <div class="quiqqer-fu-registrationSignUp-registration__address" data-name="address" style="display: none;">
-            <h2>Ihre Adresse</h2>
-            <p>Damit Sie mit der Registrierung fortführen können, benötigen wir noch Ihre Adresse</p>
+            <h2>
+                {locale group="quiqqer/frontend-users" var="control.registration.address.header"}
+            </h2>
+            {locale group="quiqqer/frontend-users" var="control.registration.address.subheader"}
             <form name="address" method="post" action="">
                 {$Email->getControl()->renderAddress()}
-
-                <div class="quiqqer-fu-registrationSignUp-email-buttons" style="margin-top: 1rem">
-                    <button name="next" class="quiqqer-frontend-social-button btn btn-primary">
-                        {locale group="quiqqer/frontend-users" var="control.registration.sign.up.password.next"}
-                    </button>
-                </div>
             </form>
         </div>
         {/if}

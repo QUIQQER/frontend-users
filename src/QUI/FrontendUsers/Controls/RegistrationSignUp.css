@@ -252,11 +252,11 @@
     display: inline-block;
 }
 
-/** registration with address
+/** registration with address (window)
  ========================================== */
 
 .quiqqer-fu-registrationSignUp-registration__address {
-    padding: var(--_registration-card-padding);
+    padding: 2rem;
     width: 100%;
     position: relative;
 }

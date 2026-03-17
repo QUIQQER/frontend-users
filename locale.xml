@@ -1207,6 +1207,23 @@ Available placeholders:
             <en>
                 <![CDATA[The activation link has been resent successfully. Please also check your spam folder.]]></en>
         </locale>
+
+        <locale name="control.registration.sign.up.password.next">
+            <de><![CDATA[Weiter]]></de>
+            <en><![CDATA[Next]]></en>
+        </locale>
+        <locale name="control.registration.address.header">
+            <de><![CDATA[Ihre Adresse]]></de>
+            <en><![CDATA[Your address]]></en>
+        </locale>
+        <locale name="control.registration.address.subheader" html="true">
+            <de><![CDATA[
+            <p>Damit Sie mit der Registrierung fortführen können, benötigen wir noch Ihre Adresse</p>
+            ]]></de>
+            <en><![CDATA[
+            <p>To continue with the registration process, we still need your address</p>
+            ]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -1996,10 +2013,6 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="control.registration.sign.up.password.title">
             <de><![CDATA[Passwort]]></de>
             <en><![CDATA[Password]]></en>
-        </locale>
-        <locale name="control.registration.sign.up.password.next">
-            <de><![CDATA[Weiter]]></de>
-            <en><![CDATA[Next]]></en>
         </locale>
         <locale name="control.registration.sign.up.firstname.title">
             <de><![CDATA[Vorname]]></de>
