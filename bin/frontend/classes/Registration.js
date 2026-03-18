@@ -125,7 +125,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
         handleRegistrationSuccess: function (response) {
             if (!response || typeof response.html !== 'string') {
-                return;
+                return {};
             }
 
             const ghost = document.createElement('div');
@@ -140,29 +140,54 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                 if (url) {
                     if (instant) {
                         window.location = url;
-                        return;
+                        return {};
                     }
 
                     window.setTimeout(() => {
                         window.location = url;
                     }, 10000);
 
-                    return;
+                    return {
+                        success: redirectElm.innerHTML
+                    };
                 }
 
                 if (redirectElm.getAttribute('data-reload') === '1') {
                     window.location.reload();
-                    return;
+                    return {};
                 }
             }
 
-            if (ghost.querySelector('.content-message-success')) {
-                const successText = ghost.querySelector('.content-message-success').innerHTML.trim();
+            const successMessage = ghost.querySelector(
+                '.content-message-success,.content-message-information,[data-name="status-success"]'
+            );
+
+            if (successMessage) {
+                const successText = successMessage.innerHTML.trim();
 
                 if (successText === '') {
                     window.location.reload();
+                    return;
+                }
+
+                return {
+                    success: successText
+                };
+            }
+
+            const errorMessage = ghost.querySelector('[data-name="status-error"]');
+
+            if (errorMessage) {
+                const errorMessage = successMessage.innerHTML.trim();
+
+                if (errorMessage !== '') {
+                    return {
+                        error: errorMessage
+                    };
                 }
             }
+
+            return {};
         },
 
         register: function (registrar, data) {
@@ -278,7 +303,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                             data: data
                         }]);
 
-                        this.handleRegistrationSuccess(data);
+                        data.message = this.handleRegistrationSuccess(data);
 
                         resolve(data);
                     }, {

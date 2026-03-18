@@ -20,10 +20,10 @@
 
 {if $msgSuccess}
 <div class="quiqqer-fu-registrationSignUp-status" data-name="status">
-    <div class="content-message-success">
+    <div data-name="status-success" class="content-message-success">
         {$msgSuccess}
         {if $redirect}
-            <div data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect" data-name="redirect-msg">
+            <div data-name="redirect-msg" data-redirecturl="{$redirect}" class="quiqqer-fu-registrationSignUp-registration-redirect">
                 {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.redirect" url=$redirect}
             </div>
         {elseif $nextLinksText}
@@ -35,7 +35,7 @@
 </div>
 {elseif $msgError}
 <div class="quiqqer-fu-registrationSignUp-status" data-name="status">
-    <div class="content-message-error">
+    <div data-name="status-error" class="content-message-error">
         {$msgError}
         {if $showResendActivationLink}
             <p>
@@ -237,7 +237,7 @@
 </section>
 
 {if !empty($this->getAttribute('content')) && $showContent && !$msgSuccess && !$msgError}
-    <section class="quiqqer-fu-registrationSignUp-info" style="display: none">
+    <section data-name="registration-info" class="quiqqer-fu-registrationSignUp-info" style="display: none">
         <div class="quiqqer-fu-registrationSignUp-info__inner">
             {$this->getAttribute('content')}
         </div>

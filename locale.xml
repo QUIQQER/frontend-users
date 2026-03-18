@@ -1411,7 +1411,7 @@ Available placeholders:
             <de>
                 <![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
             <en>
-                <![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
+                <![CDATA[You will be automatically redirected in a few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
         </locale>
 
         <locale name="message.UserDeleteConfirmVerification.success">

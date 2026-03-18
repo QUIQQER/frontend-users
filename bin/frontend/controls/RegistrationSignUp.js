@@ -145,14 +145,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             this.$RegistrationSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration');
             this.$TextSection = this.getElm().getElement('.quiqqer-fu-registrationSignUp-info');
-            this.$SocialLogins = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration-social');
+            //this.$SocialLogins = this.getElm().getElement('.quiqqer-fu-registrationSignUp-registration-social');
             this.$cacheRegistrationViews();
 
             this.$RegistrationSection.setStyle('opacity', 0);
             this.$RegistrationSection.setStyle('display', 'block');
 
             if (!this.$TextSection) {
-                this.$TextSection = new Element('div'); // fake element
+                this.$TextSection = document.createElement('div'); // fake element
             }
 
             this.$TextSection.setStyle('opacity', 0);
@@ -165,10 +165,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 opacity: 1
             });
 
-
             Node.getElements('[data-name="terms-view"] a').set('target', '_blank');
 
             // social login click
+            /*
             if (this.$SocialLogins) {
                 this.$SocialLogins.getElements(
                     '.quiqqer-fu-registrationSignUp-registration-social-entry'
@@ -188,6 +188,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     this.$submitRegistrar(this.getAttribute('submitregistrar'));
                 }
             }
+            */
 
             // init
             this.$initMail();
@@ -210,9 +211,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             const self = this;
 
             QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_registrars_getSignInControl', function (result) {
-                const Ghost = new Element('div', {
-                    html: result
-                });
+                const Ghost = document.createElement('div');
+                Ghost.innerHTML = result;
 
                 const Control = Ghost.getElement('.quiqqer-fu-registrationSignUp-registration');
 
@@ -492,21 +492,19 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             const container = this.$LoginView;
 
-            const existMessage = new Element('div', {
-                'class': 'q-message q-message-warning',
-                html: QUILocale.get(lg, 'control.registration.sign.up.email_already_exists')
-            }).inject(container);
+            const existMessage = document.createElement('div');
+            existMessage.classList.add('q-message', 'q-message-warning');
+            existMessage.innerHTML = QUILocale.get(lg, 'control.registration.sign.up.email_already_exists')
+            container.appendChild(existMessage);
 
-            const closeBtn = new Element('button', {
-                'class': 'quiqqer-fu-registrationSignUp-login-close btn btn-close btn-rounded',
-                title: QUILocale.get(lg, 'control.registration.sign.up.back_to_registration'),
-                html: '<i class="fa fa-close"></i>',
-                events: {
-                    click: () => {
-                        this.$showRegistrationControl();
-                    }
-                }
-            }).inject(container);
+            const closeBtn = document.createElement('div');
+            closeBtn.classList.add('quiqqer-fu-registrationSignUp-login-close', 'btn', 'btn-close', 'btn-rounded');
+            closeBtn.title = QUILocale.get(lg, 'control.registration.sign.up.back_to_registration');
+            closeBtn.innerHTML = '<i class="fa fa-close"></i>';
+            closeBtn.addEventListener('click', () => {
+                this.$showRegistrationControl();
+            });
+            container.appendChild(closeBtn);
 
             container.setStyles({
                 display: 'block',
@@ -574,7 +572,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          */
         loadSocialRegistration: function (registrar) {
             const self = this;
-
+            console.error('loadSocialRegistration');
             return this.showTerms(registrar, true).catch(function () {
                 self.Loader.hide();
                 return self.hideTerms();
@@ -594,9 +592,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
             return this.$getRegistrar(registrar).then(function (result) {
                 if (!Form) {
-                    Form = new Element('form', {
-                        method: 'POST'
-                    });
+                    Form = document.createElement('form');
+                    Form.method = 'POST';
                 }
 
                 Form.set('html', result);
@@ -607,11 +604,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 );
 
                 if (MailRegistrar) {
-                    const Button = new Element('button', {
-                        'class': 'quiqqer-fu-registrationSignUp-terms-mail btn btn-primary ',
-                        html: QUILocale.get(lg, 'control.registration.sign.up.create.button')
-                    }).inject(MailRegistrar.getParent());
+                    const Button = document.createElement('button');
+                    Button.classList.add('quiqqer-fu-registrationSignUp-terms-mail', 'btn', 'btn-primary');
+                    Button.innerHTML = QUILocale.get(lg, 'control.registration.sign.up.create.button');
 
+                    MailRegistrar.getParent().appendChild(Button);
                     MailRegistrar.destroy();
 
                     Form.inject(Terms);
@@ -645,6 +642,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          *
          * @param {HTMLFormElement} Form
          * @return {Promise}
+         * @deprecated
          */
         $sendForm: function (Form) {
             this.Loader.show();
@@ -652,6 +650,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
             const formData = QUIFormUtils.getFormData(Form);
 
             formData.termsOfUseAccepted = 1;
+            console.error('$sendForm() is deprecated');
 
             return this.sendRegistration(
                 Form.get('data-registrar'),
@@ -666,15 +665,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @param {string} registrar
          * @param {string} registration_id
          * @param {object} formData
-         *
          * @return {Promise}
+         * @deprecated
          */
         sendRegistration: function (registrar, registration_id, formData) {
+            console.error('sendRegistration() is deprecated');
+
             this.showLoader();
 
             const self = this;
-
-            console.log('sendRegistration');
 
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', function (Data) {
@@ -693,9 +692,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     }, {
                         duration: 250,
                         callback: function () {
-                            const Ghost = new Element('div', {
-                                html: Data.html
-                            });
+                            const Ghost = document.createElement('div');
+                            Ghost.innerHTML = Data.html;
 
                             const Registration = Ghost.getElement(
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
@@ -710,9 +708,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 Login.destroy();
                             }
 
-                            const StatusContainer = new Element('div', {
-                                'class': 'quiqqer-fu-registrationSignUp-status'
-                            });
+                            const StatusContainer = document.createElement('div');
+                            StatusContainer.classList.add('quiqqer-fu-registrationSignUp-status');
 
                             if (Ghost.getElement('.content-message-error')) {
                                 Section.set('html', '');
@@ -795,11 +792,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * @param {String} registrar - registrar id
          * @param {Boolean} [isSocial] - is social registrar
          * @return {Promise}
+         * @deprecated
          */
         showTerms: function (registrar, isSocial) {
             if (this.getAttribute('termsAccepted')) {
                 return Promise.resolve();
             }
+
+            console.error('showTerms() is deprecated');
 
             const Terms = this.getElm().getElement('[data-name="terms-view"]');
 
@@ -923,9 +923,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     }, {
                         duration: 250,
                         callback: function () {
-                            const Ghost = new Element('div', {
-                                html: html
-                            });
+                            const Ghost = document.createElement('div');
+                            Ghost.innerHTML = html;
 
                             const Registration = Ghost.getElement(
                                 '[data-qui="package/quiqqer/frontend-users/bin/frontend/controls/Registration"]'
@@ -940,9 +939,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 Login.destroy();
                             }
 
-                            const StatusContainer = new Element('div', {
-                                'class': 'quiqqer-fu-registrationSignUp-status'
-                            });
+                            const StatusContainer = document.createElement('div');
+                            StatusContainer.classList.add('quiqqer-fu-registrationSignUp-status');
 
                             if (Ghost.getElement('.content-message-error')) {
                                 Section.set('html', '');
@@ -987,20 +985,20 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                                 const ErrorBox = Section.getElement('.content-message-error');
 
                                 if (ErrorBox) {
-                                    new Element('a', {
-                                        'class': 'quiqqer-fu-registrationSignUp-back',
-                                        href: '#',
-                                        html: QUILocale.get(lg, 'controls.RegistrationSignUp.error.back'),
-                                        events: {
-                                            click: function (event) {
-                                                event.stop();
+                                    const link = document.createElement('a');
+                                    link.classList.add('quiqqer-fu-registrationSignUp-back');
+                                    link.href = '#';
+                                    link.innerHTML = QUILocale.get(lg, 'controls.RegistrationSignUp.error.back');
 
-                                                const Url = URI(window.location);
+                                    link.addEventListener('click', function (event) {
+                                        event.stopPropagation();
+                                        event.preventDefault();
 
-                                                window.location = Url.origin() + Url.pathname();
-                                            }
-                                        }
-                                    }).inject(ErrorBox);
+                                        const Url = URI(window.location);
+                                        window.location = Url.origin() + Url.pathname();
+                                    });
+
+                                    ErrorBox.appendChild(link);
                                 }
 
                                 self.hideTextSection().then(function () {
@@ -1534,7 +1532,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 });
 
                 if (!Captcha) {
-                    Captcha = new Element('div');
+                    Captcha = document.createElement('div');
                 }
 
                 moofx([Captcha, Password]).animate({
@@ -1592,28 +1590,69 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
 
                 childNodes.setStyle('display', 'none');
 
-                return this.showLoader().then(() => {
-                    const Form = this.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
-                        FormData = QUIFormUtils.getFormData(Form);
+                return this.showLoader();
+            }).then(() => {
+                const Form = this.getElm().getElement('form[name="quiqqer-fu-registrationSignUp-email"]'),
+                    FormData = QUIFormUtils.getFormData(Form);
 
-                    FormData.termsOfUseAccepted = true;
+                FormData.termsOfUseAccepted = true;
 
-                    if (typeof Form.elements.captchaResponse !== 'undefined') {
-                        FormData.captchaResponse = Form.elements.captchaResponse.value;
-                    }
+                if (typeof Form.elements.captchaResponse !== 'undefined') {
+                    FormData.captchaResponse = Form.elements.captchaResponse.value;
+                }
 
-                    if (this.$Address && this.$Address.querySelector('form')) {
-                        const addressForm = this.$Address.querySelector('form');
-                        const addressData = QUIFormUtils.getFormData(addressForm);
+                if (this.$Address && this.$Address.querySelector('form')) {
+                    const addressForm = this.$Address.querySelector('form');
+                    const addressData = QUIFormUtils.getFormData(addressForm);
 
-                        Object.assign(FormData, addressData);
-                    }
+                    Object.assign(FormData, addressData);
+                }
 
-                    return Registration.register(
-                        Form.get('data-registrar'),
-                        FormData
-                    );
-                });
+                return Registration.register(
+                    Form.get('data-registrar'),
+                    FormData
+                );
+            }).then((data) => {
+                if (
+                    typeof data !== 'undefined'
+                    && typeof data.message !== 'undefined'
+                    && typeof data.message.success !== 'undefined'
+                ) {
+                    const successNode = document.createElement('div');
+                    successNode.classList.add('q-message', 'q-message-success');
+                    successNode.innerHTML = data.message.success;
+                    successNode.style.maxWidth = '500px';
+
+                    const registrationContainer = this.getElm().querySelector('[data-name="registration-container"]');
+                    const registrationInner = this.getElm().querySelector('[data-name="registration-inner"]');
+                    const registrationInfo = this.getElm().querySelector('[data-name="registration-info"]');
+
+                    moofx([registrationContainer, registrationInner, registrationInfo]).animate({
+                        opacity: 0
+                    }, {
+                        callback: () => {
+                            registrationContainer.style.display = 'none';
+                            registrationInner.style.display = 'none';
+                            registrationInfo.style.display = 'none';
+
+                            this.getElm().appendChild(successNode);
+                        }
+                    });
+
+                    return;
+                }
+
+                if (
+                    typeof data !== 'undefined'
+                    && typeof data.message !== 'undefined'
+                    && typeof data.message.error !== 'undefined'
+                ) {
+                    const errorNode = document.createElement('div');
+                    errorNode.classList.add('q-message', 'q-message-success');
+                    errorNode.innerHTML = data.message.error;
+                    errorNode.style.maxWidth = '500px';
+                    this.getElm().prepend(errorNode);
+                }
             }).catch((err) => {
                 console.error(err);
                 this.$resetMail();
@@ -1651,7 +1690,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                     const addressParent = this.$Address.parentNode;
 
                     new SimpleConfirmWindow({
-                        'class' : 'qui-window-simpleWindow--address',
+                        'class': 'qui-window-simpleWindow--address',
                         maxWidth: 900,
                         maxHeight: 700,
                         autoclose: false,
