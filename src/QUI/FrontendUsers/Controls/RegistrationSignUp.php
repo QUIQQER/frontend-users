@@ -188,6 +188,15 @@ class RegistrationSignUp extends QUI\Control
         $msgSuccess = false;
         $msgError = false;
         $activationSuccess = false;
+        $showResendActivationLink = false;
+        $showLoginButton = false;
+
+        // Check values given via $_GET
+        $valueEmail = false;
+
+        if (!empty($_GET['email'])) {
+            $valueEmail = Orthos::clear($_GET['email']);
+        }
 
         if (!empty($_GET['success'])) {
             switch ($_GET['success']) {
@@ -272,6 +281,8 @@ class RegistrationSignUp extends QUI\Control
         if (!empty($_GET['error'])) {
             switch ($_GET['error']) {
                 case 'activation':
+                case 'activation_expired':
+                case 'already_verified':
                 case 'emailconfirm':
                 case 'userdelete':
                 case 'registration':
@@ -280,6 +291,14 @@ class RegistrationSignUp extends QUI\Control
                         'quiqqer/frontend-users',
                         'RegistrationSignUp.message.error.' . $_GET['error']
                     );
+
+                    if ($_GET['error'] === 'activation_expired' && !empty($valueEmail)) {
+                        $showResendActivationLink = true;
+                    }
+
+                    if ($_GET['error'] === 'already_verified') {
+                        $showLoginButton = true;
+                    }
 
                     $showLoggedInWarning = false;
                     break;
@@ -298,13 +317,6 @@ class RegistrationSignUp extends QUI\Control
             );
 
             $redirect = $RedirectSite->getUrlRewrittenWithHost();
-        }
-
-        // Check values given via $_GET
-        $valueEmail = false;
-
-        if (!empty($_GET['email'])) {
-            $valueEmail = Orthos::clear($_GET['email']);
         }
 
         // Check if a registrar has to be submitted instantly
@@ -327,7 +339,9 @@ class RegistrationSignUp extends QUI\Control
             'showContent' => !$msgSuccess && !$msgError,
             'fullnameInput' => $registrationSettings['fullnameInput'],
             'passwordInput' => $registrationSettings['passwordInput'],
-            'valueEmail' => $valueEmail
+            'valueEmail' => $valueEmail,
+            'showResendActivationLink' => $showResendActivationLink,
+            'showLoginButton' => $showLoginButton
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/RegistrationSignUp.html');

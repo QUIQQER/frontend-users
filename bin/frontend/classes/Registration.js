@@ -126,6 +126,48 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
             });
         },
 
+        handleRegistrationSuccess: function (response) {
+            if (!response || typeof response.html !== 'string') {
+                return;
+            }
+
+            const ghost = document.createElement('div');
+            ghost.innerHTML = response.html;
+
+            const redirectElm = ghost.querySelector('.quiqqer-frontendUsers-redirect');
+
+            if (redirectElm) {
+                const url = redirectElm.getAttribute('data-url');
+                const instant = redirectElm.getAttribute('data-instant') === '1';
+
+                if (url) {
+                    if (instant) {
+                        window.location = url;
+                        return;
+                    }
+
+                    window.setTimeout(() => {
+                        window.location = url;
+                    }, 10000);
+
+                    return;
+                }
+
+                if (redirectElm.getAttribute('data-reload') === '1') {
+                    window.location.reload();
+                    return;
+                }
+            }
+
+            if (ghost.querySelector('.content-message-success')) {
+                const successText = ghost.querySelector('.content-message-success').innerHTML.trim();
+
+                if (successText === '') {
+                    window.location.reload();
+                }
+            }
+        },
+
         register: function (registrar, data) {
             if (typeof data === 'undefined' || typeof data !== 'object') {
                 data = {};
@@ -235,7 +277,9 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                             data: data
                         }]);
 
-                        resolve();
+                        this.handleRegistrationSuccess(data);
+
+                        resolve(data);
                     }, {
                         'package': pkg,
                         registrar: registrar,

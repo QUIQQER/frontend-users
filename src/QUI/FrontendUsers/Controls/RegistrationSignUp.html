@@ -45,6 +45,23 @@
         {elseif $msgError}
             <div class="content-message-error">
                 {$msgError}
+                {if $showResendActivationLink}
+                    <p>
+                        {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.error.activation_expired.resend_info"}
+                    </p>
+                    <div class="quiqqer-fu-registrationSignUp-resend" data-email="{$valueEmail}">
+                        <div class="btn btn-primary quiqqer-fu-registrationSignUp-resend-btn"></div>
+                        <p class="quiqqer-fu-registrationSignUp-resend-msg"></p>
+                    </div>
+                {/if}
+                {if $showLoginButton}
+                    <div class="quiqqer-fu-registrationSignUp-login-action">
+                        <button type="button"
+                                class="btn btn-primary quiqqer-fu-registrationSignUp-login-btn">
+                            {locale group="quiqqer/frontend-users" var="RegistrationSignUp.button.login"}
+                        </button>
+                    </div>
+                {/if}
             </div>
         {else}
             {if $this->getAttribute('header')}
@@ -177,16 +194,19 @@
                 </form>
             {/if}
             <div class="quiqqer-fu-registrationSignUp-terms">
+                <button name="decline"
+                        class="btn btn-close quiqqer-fu-registrationSignUp-terms__btn-cancel"
+                        title="{locale group='quiqqer/frontend-users' var='control.registration.sign.up.button.terms.decline'}"
+                >
+                    <span class="fa fa-close"></span>
+                </button>
+
                 <span class="quiqqer-fu-registrationSignUp-terms-text">
-                    {$termsPrivacyMessage}
+                    <p>
+                        {$termsPrivacyMessage}
+                    </p>
 
                     {template_event name="quiqqer::frontend-users::RegistrationSignUp::termsAfter"}
-
-                    <button name="decline"
-                            title="{locale group='quiqqer/frontend-users' var='control.registration.sign.up.button.terms.decline'}"
-                    >
-                        <span class="fa fa-close"></span>
-                    </button>
                 </span>
                 <div class="quiqqer-fu-registrationSignUp-terms-buttons"></div>
             </div>

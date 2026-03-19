@@ -103,7 +103,13 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
      */
     public function getErrorMessage(LinkVerification $verification, VerificationErrorReason $reason): string
     {
-        return '';
+        $localeKey = 'verification.ActivationVerification.error.general';
+
+        if ($reason === VerificationErrorReason::EXPIRED) {
+            $localeKey = 'verification.ActivationVerification.error.expired';
+        }
+
+        return QUI::getLocale()->get('quiqqer/frontend-users', $localeKey);
     }
 
     /**
@@ -168,12 +174,24 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
             }
         }
 
+        $urlParams = [
+            'error' => match ($reason) {
+                VerificationErrorReason::ALREADY_VERIFIED => 'already_verified',
+                VerificationErrorReason::EXPIRED => 'activation_expired',
+                default => 'activation'
+            },
+            'registrar' => $this->getRegistrarHash($verification)
+        ];
+
+        $email = $this->getUserEmail($verification);
+
+        if (!empty($email)) {
+            $urlParams['email'] = $email;
+        }
+
         return $RegistrationSite->getUrlRewritten([
             'error'
-        ], [
-            'error' => 'activation',
-            'registrar' => $this->getRegistrarHash($verification)
-        ]);
+        ], $urlParams);
     }
 
     /**
@@ -191,5 +209,23 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
         }
 
         return $registrar;
+    }
+
+    /**
+     * Get the e-mail address for this verification.
+     */
+    protected function getUserEmail(LinkVerification $verification): string
+    {
+        try {
+            $userUuid = $verification->getCustomDataEntry('uuid');
+
+            if (empty($userUuid)) {
+                return '';
+            }
+
+            return QUI::getUsers()->get($userUuid)->getAttribute('email');
+        } catch (\Throwable) {
+            return '';
+        }
     }
 }
