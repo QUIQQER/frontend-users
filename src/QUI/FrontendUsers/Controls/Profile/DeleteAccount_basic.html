@@ -19,11 +19,23 @@
 </div>
 
 {if $action == 'deleteaccount_confirm_wait'}
-    <button type="submit" class="quiqqer-frontendUsers-saveButton">
-        <span class="fa fa-envelope"></span>
-        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit_again"}
-    </button>
+    <input type="hidden" name="deleteAccountAction" value="resend"/>
 
+    <p>
+        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.confirm_wait.text"}
+    </p>
+
+    <div class="quiqqer-frontendUsers-section--deleteAccount__action">
+        <button type="submit" class="btn btn-light-outline" onclick="this.form.elements.deleteAccountAction.value='resend';" data-name="delete-account-resend">
+            <span class="fa fa-envelope"></span>
+            {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit_again"}
+        </button>
+
+        <button type="submit" class="btn btn-light" onclick="this.form.elements.deleteAccountAction.value='cancel';" data-name="delete-account-cancel">
+            <span class="fa fa-times"></span>
+            {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.cancel"}
+        </button>
+    </div>
     <script>
         require(['qui/QUI'], function (QUI) {
             QUI.fireEvent('quiqqerFrontendUsersAccountDeleteStart');
@@ -31,8 +43,10 @@
         });
     </script>
 {else}
-    <button type="submit" class="quiqqer-frontendUsers-saveButton btn btn-danger">
-        <span class="fa fa-trash"></span>
-        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit"}
-    </button>
+    <div class="quiqqer-frontendUsers-section--deleteAccount__action">
+        <button type="submit" class="quiqqer-frontendUsers-saveButton btn btn-danger" data-name="delete-account-submit">
+            <span class="fa fa-trash"></span>
+            {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.submit"}
+        </button>
+    </div>
 {/if}

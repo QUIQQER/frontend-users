@@ -46,7 +46,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
         $onImport: function () {
             var Elm = this.getElm();
 
-            var SubmitBtn = Elm.querySelector('[type="submit"]'),
+            var SubmitBtn = Elm.querySelector('[data-name="delete-account-submit"]'),
                 confirmed = false;
 
             if (!SubmitBtn) {

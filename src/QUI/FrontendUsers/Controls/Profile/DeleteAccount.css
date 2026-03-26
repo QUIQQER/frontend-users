@@ -1,0 +1,10 @@
+.profile-account-delete .quiqqer-frontendUsers-controls-profile-categoryContent {
+    padding: 0;
+    width: 100%;
+}
+
+.quiqqer-frontendUsers-section--deleteAccount__action {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}

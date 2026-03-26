@@ -1579,12 +1579,20 @@ Available placeholders:
             <de><![CDATA[Mail erneut senden]]></de>
             <en><![CDATA[Re-send mail]]></en>
         </locale>
+        <locale name="profile.deleteaccount.btn.cancel">
+            <de><![CDATA[Löschanfrage widerrufen]]></de>
+            <en><![CDATA[Withdraw deletion request]]></en>
+        </locale>
         <locale name="profile.deleteaccount.message.confirm_wait">
             <de><![CDATA[
             Bitte bestätigen Sie die Löschung Ihres Benutzerkontos über den Link,
             der Ihnen per E-Mail zugesandt wurde.
             ]]></de>
-            <en><![CDATA[Please confirm deletion of your user account via the link sent to you by e-mail.]]></en>
+            <en><![CDATA[<strong>Account deletion in progress</strong> <br>Your account is scheduled for deletion. Please confirm the request via the link we sent to your email address.]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.confirm_wait.text">
+            <de><![CDATA[<strong>E-Mail nicht erhalten?</strong><br>Sie können die Bestätigungs-E-Mail erneut senden oder Ihre Löschanfrage unten abbrechen.]]></de>
+            <en><![CDATA[<strong>Didn't receive the email?</strong><br>You can resend the confirmation email or cancel your deletion request below.]]></en>
         </locale>
         <locale name="profile.deleteaccount.message.error">
             <de><![CDATA[
