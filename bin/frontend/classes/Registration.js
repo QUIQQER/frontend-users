@@ -217,7 +217,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                                 order: 2
                             },
                             buttonCancel: {
-                                'class': 'btn btn-inline-body',
+                                'class': 'btn btn-link-body',
                                 text: QUILocale.get(pkg, 'confirm.registration.tou_pp.cancel'),
                                 icon: 'fa fa-close',
                                 order: 1
