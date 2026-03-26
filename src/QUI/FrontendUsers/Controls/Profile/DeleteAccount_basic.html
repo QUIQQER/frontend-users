@@ -2,13 +2,13 @@
     <h2>{locale group="quiqqer/frontend-users" var="profile.deleteaccount.title"}</h2>
 
     {if $action == 'deleteaccount_error'}
-        <div class="content-message-error">
+        <div class="q-message q-message-error">
             {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.error"}
         </div>
     {/if}
 
     {if $action == 'deleteaccount_confirm_wait'}
-        <div class="content-message-information">
+        <div class="q-message q-message-info">
             {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.confirm_wait"}
         </div>
     {else}

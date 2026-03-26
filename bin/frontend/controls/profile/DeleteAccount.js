@@ -6,11 +6,13 @@
 define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount', [
 
     'qui/controls/Control',
-    'qui/controls/windows/Confirm',
+    'qui/controls/windows/SimpleConfirmWindow',
     'Locale',
-    'Ajax'
+    'Ajax',
 
-], function (QUIControl, QUIConfirm, QUILocale, QUIAjax) {
+    'css!package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount.css'
+
+], function (QUIControl, QUISimpleConfirmWindow, QUILocale, QUIAjax) {
     'use strict';
 
     var lg = 'quiqqer/frontend-users';
@@ -65,48 +67,88 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
 
                 event.stop();
 
-                new QUIConfirm({
-                    maxHeight: 350,
+                new QUISimpleConfirmWindow({
+                    'class': 'quiqqer-frontend-users-delete-account-confirm',
+                    maxHeight: 500,
                     maxWidth: 600,
                     autoclose: true,
-
-                    information: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information', {
-                        username: username
-                    }),
+                    message: false,
                     title: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.title'),
-                    texticon: 'fa fa-trash',
-                    text: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.text'),
-                    icon: 'fa fa-trash',
-
-                    cancel_button: {
+                    buttonCancel: {
+                        'class': 'btn btn-link-body',
+                        order: 1,
                         text: QUILocale.get('quiqqer/system', 'cancel'),
-                        textimage: 'fa fa-remove'
+                        icon: false
                     },
-
-                    ok_button: {
+                    buttonSubmit: {
+                        'class': 'btn btn-danger',
+                        order: 2,
                         text: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.btn'),
-                        textimage: 'fa fa-trash'
+                        icon: 'fa fa-trash'
                     },
 
                     events: {
                         onOpen: function (Popup) {
-                            var SubmitBtn = Popup.getButton('submit');
+                            var Content = Popup.getContent(),
+                                Wrapper,
+                                Header,
+                                SubmitBtn,
+                                Information;
 
-                            SubmitBtn.disable();
+                            Content.set('html', '<div class="quiqqer-frontend-users-delete-account-window" data-name="delete-account-window"></div>');
+
+                            Wrapper = Content.querySelector('[data-name="delete-account-window"]');
+                            Header = new Element('div', {
+                                'class': 'quiqqer-frontend-users-delete-account-window__header',
+                                'data-name': 'delete-account-header'
+                            }).inject(Wrapper);
+
+                            new Element('span', {
+                                'class': 'quiqqer-frontend-users-delete-account-window__icon fa fa-trash',
+                                'data-name': 'delete-account-icon'
+                            }).inject(Header);
+
+                            new Element('h1', {
+                                'class': 'quiqqer-frontend-users-delete-account-window__title',
+                                'data-name': 'delete-account-title',
+                                html: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.text')
+                            }).inject(Header);
+
+                            new Element('div', {
+                                'class': 'quiqqer-frontend-users-delete-account-window__information',
+                                'data-name': 'delete-account-information',
+                                html: QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information', {
+                                    username: username
+                                })
+                            }).inject(Wrapper);
+
+                            SubmitBtn = Popup.getButton('submit');
+                            Information = Content.querySelector('[data-name="delete-account-information"]');
+
+                            if (SubmitBtn && typeof SubmitBtn.disable === 'function') {
+                                SubmitBtn.disable();
+                            }
 
                             Popup.Loader.show();
 
                             self.$checkDeleteAccount().then(function () {
-                                SubmitBtn.enable();
+                                if (SubmitBtn && typeof SubmitBtn.enable === 'function') {
+                                    SubmitBtn.enable();
+                                }
+
                                 Popup.Loader.hide();
                             }, function (Error) {
-                                Popup.setAttribute(
-                                    'information',
-                                    QUILocale.get(lg, 'controls.profile.DeleteAccount.confirm.information_error', {
-                                        username: username,
-                                        error: Error.getMessage()
-                                    })
-                                );
+                                if (Information) {
+                                    Information.classList.add('quiqqer-frontend-users-delete-account-window__information--error');
+                                    Information.innerHTML = QUILocale.get(
+                                        lg,
+                                        'controls.profile.DeleteAccount.confirm.information_error',
+                                        {
+                                            username: username,
+                                            error: Error.getMessage()
+                                        }
+                                    );
+                                }
 
                                 Popup.Loader.hide();
                             });
