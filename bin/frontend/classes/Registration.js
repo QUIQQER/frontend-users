@@ -1,6 +1,3 @@
-/**
- * @module package/quiqqer/frontend-users/bin/frontend/classes/Registration
- */
 define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
     'qui/QUI',
@@ -128,7 +125,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
 
         handleRegistrationSuccess: function (response) {
             if (!response || typeof response.html !== 'string') {
-                return;
+                return {};
             }
 
             const ghost = document.createElement('div');
@@ -143,29 +140,54 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                 if (url) {
                     if (instant) {
                         window.location = url;
-                        return;
+                        return {};
                     }
 
                     window.setTimeout(() => {
                         window.location = url;
                     }, 10000);
 
-                    return;
+                    return {
+                        success: redirectElm.innerHTML
+                    };
                 }
 
                 if (redirectElm.getAttribute('data-reload') === '1') {
                     window.location.reload();
-                    return;
+                    return {};
                 }
             }
 
-            if (ghost.querySelector('.content-message-success')) {
-                const successText = ghost.querySelector('.content-message-success').innerHTML.trim();
+            const successMessage = ghost.querySelector(
+                '.content-message-success,.content-message-information,[data-name="status-success"]'
+            );
+
+            if (successMessage) {
+                const successText = successMessage.innerHTML.trim();
 
                 if (successText === '') {
                     window.location.reload();
+                    return;
+                }
+
+                return {
+                    success: successText
+                };
+            }
+
+            const errorMessage = ghost.querySelector('[data-name="status-error"]');
+
+            if (errorMessage) {
+                const errorMessage = successMessage.innerHTML.trim();
+
+                if (errorMessage !== '') {
+                    return {
+                        error: errorMessage
+                    };
                 }
             }
+
+            return {};
         },
 
         register: function (registrar, data) {
@@ -182,19 +204,23 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                         return resolve();
                     }
 
-                    require(['qui/controls/windows/Confirm'], (QUIConfirm) => {
-                        new QUIConfirm({
+                    require(['qui/controls/windows/SimpleConfirmWindow'], (SimpleConfirmWindow) => {
+                        new SimpleConfirmWindow({
                             'class': 'qui-frontendUsers-registration-touConfirmWindow',
                             title: touNeeded.title,
                             maxWidth: 700,
                             maxHeight: 600,
-                            ok_button: {
+                            buttonSubmit: {
+                                'class': 'btn btn-primary',
                                 text: QUILocale.get(pkg, 'confirm.registration.tou_pp.submit'),
-                                textimage: 'fa fa-check'
+                                icon: 'fa fa-check',
+                                order: 2
                             },
-                            cancel_button: {
+                            buttonCancel: {
+                                'class': 'btn btn-link-body',
                                 text: QUILocale.get(pkg, 'confirm.registration.tou_pp.cancel'),
-                                textimage: 'fa fa-close'
+                                icon: 'fa fa-close',
+                                order: 1
                             },
                             events: {
                                 onOpen: (win) => {
@@ -247,7 +273,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                 }, {
                     'package': pkg,
                     onError: reject
-                })
+                });
             }).then(() => {
                 return new Promise((resolve, reject) => {
                     QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_register', (data) => {
@@ -277,7 +303,7 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
                             data: data
                         }]);
 
-                        this.handleRegistrationSuccess(data);
+                        data.message = this.handleRegistrationSuccess(data);
 
                         resolve(data);
                     }, {

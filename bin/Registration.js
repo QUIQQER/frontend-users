@@ -1,7 +1,5 @@
 /**
  * Registration Handler
- *
- * @module package/quiqqer/frontend-users/bin/Registration
  */
 define('package/quiqqer/frontend-users/bin/Registration', [
 

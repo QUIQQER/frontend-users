@@ -13,11 +13,6 @@ QUI::getAjax()->registerFunction(
             'content' => ''
         ]);
 
-        // @todo use js options
-        if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
-            $Registration->setAttribute('registration-trial', true);
-        }
-
         return $Registration->create();
     }
 );

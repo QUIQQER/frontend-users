@@ -49,9 +49,9 @@ class RegistrationSignUp extends QUI\Control
 
             'Registrar' => false, // currently executed Registrar
             'content' => '',    // right content
-            'registration-trial' => false, // use registration trial
             'header' => true,   // how header title
-            'autofill' => true
+            'autofill' => true,
+            'layout' => 'simple' // basic (only basic styling), simple (form in card desgin)
         ]);
 
         $this->setAttributes($attributes);
@@ -79,7 +79,6 @@ class RegistrationSignUp extends QUI\Control
         $this->siteTermsPrivacy($Engine);
 
         $Registrars = $this->getRegistrars();
-        $RegistrationTrial = null;
 
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
@@ -88,21 +87,6 @@ class RegistrationSignUp extends QUI\Control
         $email = $Registrars->filter(function ($Registrar) {
             return $Registrar instanceof QUI\FrontendUsers\Registrars\Email\Registrar;
         });
-
-        // trial registration
-        if ($this->getAttribute('registration-trial')) {
-            $registrationTrial = $Registrars->filter(function ($Registrar) {
-                if (!class_exists('QUI\Registration\Trial\Registrar')) {
-                    return false;
-                }
-
-                return $Registrar instanceof QUI\Registration\Trial\Registrar;
-            });
-
-            if (isset($registrationTrial[0])) {
-                $RegistrationTrial = $registrationTrial[0];
-            }
-        }
 
         // captcha usage
         $Captcha = false;
@@ -133,6 +117,13 @@ class RegistrationSignUp extends QUI\Control
 
         $this->setJavaScriptControlOption('usecaptcha', $useCaptcha);
 
+        $layout = match ($this->getAttribute('layout')) {
+            'basic' => $this->getAttribute('layout'),
+            default => 'simple'
+        };
+
+        $this->addCSSClass('quiqqer-fu-registrationSignUp--' . $layout);
+
         $Engine->assign([
             'Captcha' => $Captcha,
             'useCaptcha' => $useCaptcha,
@@ -151,13 +142,6 @@ class RegistrationSignUp extends QUI\Control
             $haystack = [
                 QUI\FrontendUsers\Registrars\Email\Registrar::class
             ];
-
-            if (
-                QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')
-                && class_exists('QUI\Registration\Trial\Registrar')
-            ) {
-                $haystack[] = QUI\Registration\Trial\Registrar::class;
-            }
 
             $haystack = array_flip($haystack);
 
@@ -329,7 +313,6 @@ class RegistrationSignUp extends QUI\Control
             'Registrars' => $Registrars,
             'Email' => $Email,
             'registrationId' => $this->id,
-            'RegistrationTrial' => $RegistrationTrial,
             'showLoggedInWarning' => $showLoggedInWarning,
             'msgSuccess' => $msgSuccess,
             'msgError' => $msgError,

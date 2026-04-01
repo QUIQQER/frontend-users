@@ -35,12 +35,9 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
  */
 $Registration = new QUI\FrontendUsers\Controls\RegistrationSignUp([
     'content' => $Site->getAttribute('content'),
-    'registrars' => $registrars
+    'registrars' => $registrars,
+    'layout' => $Site->getAttribute('quiqqer.sign.up.layout')
 ]);
-
-if (QUI::getPackageManager()->isInstalled('quiqqer/registration-trial')) {
-    $Registration->setAttribute('registration-trial', true);
-}
 
 // logo url
 $logoUrl = $Project->firstChild()->getUrlRewritten();

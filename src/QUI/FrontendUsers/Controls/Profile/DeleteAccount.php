@@ -89,6 +89,14 @@ class DeleteAccount extends AbstractProfileControl
      */
     public function onSave(): void
     {
+        $request = QUI::getRequest()->request;
+        $action = $request->get('deleteAccountAction');
+
+        if ($action === 'cancel') {
+            $this->cancelDeleteAccountRequest();
+            return;
+        }
+
         self::checkDeleteAccount();
 
         try {
@@ -110,5 +118,23 @@ class DeleteAccount extends AbstractProfileControl
     public static function checkDeleteAccount(): void
     {
         QUI::getEvents()->fireEvent('quiqqerFrontendUsersDeleteAccountCheck', [QUI::getUserBySession()]);
+    }
+
+    /**
+     * Cancel a pending account deletion verification
+     */
+    protected function cancelDeleteAccountRequest(): void
+    {
+        try {
+            $verification = $this->verificationRepository->findByIdentifier(
+                'confirmdelete-' . QUI::getUserBySession()->getUUID()
+            );
+
+            if ($verification) {
+                $this->verificationRepository->delete($verification);
+            }
+        } catch (Exception) {
+            // nothing - no active user delete verification
+        }
     }
 }

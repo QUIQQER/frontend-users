@@ -16,6 +16,7 @@
 
             <!-- extra attributes -->
             <attributes>
+                <attribute>quiqqer.sign.up.layout</attribute>
                 <attribute>quiqqer.sign.up.background</attribute>
                 <attribute>quiqqer.sign.up.registrars</attribute>
                 <attribute>quiqqer.sign.up.logo</attribute>
@@ -33,6 +34,30 @@
                                     var="quiqqer.sign.up.settings.title"
                             />
                         </title>
+
+                        <select conf="quiqqer.sign.up.layout">
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.layout"
+                                />
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.layout.desc"
+                                />
+                            </description>
+
+                            <option value="basic">
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.layout.basic"
+                                />
+                            </option>
+                            <option value="simple">
+                                <locale group="quiqqer/frontend-users"
+                                        var="admin.types.registrationSignUp.setting.layout.simple"
+                                />
+                            </option>
+                        </select>
 
                         <input conf="quiqqer.sign.up.fullscreen"
                                type="checkbox"
