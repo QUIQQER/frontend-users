@@ -125,4 +125,53 @@ class Control extends QUI\Control
 
         return $Engine->fetch(dirname(__FILE__) . '/Control.html');
     }
+
+    public function renderAddress(): string
+    {
+        try {
+            $Engine = QUI::getTemplateManager()->getEngine();
+            $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+            $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+
+            if (empty($registrationSettings['addressInput'])) {
+                return '';
+            }
+
+            $fields = $this->getAttribute('fields');
+
+            $Engine->assign([
+                'invalidFields' => $this->getAttribute('invalidFields'),
+                'fields' => $fields
+            ]);
+
+            $addressFields = $RegistrarHandler->getAddressFieldSettings();
+
+            $Engine->assign('addressFields', $addressFields);
+            $Engine->assign('addressFieldLengths', $RegistrarHandler->getUserAttributeLengthRestrictions());
+
+            if ($addressFields['country']['show']) {
+                $selectedCountry = mb_strtoupper(QUI::getRewrite()->getProject()->getLang());
+
+                if (!empty($fields['country'])) {
+                    $selectedCountry = $fields['country'];
+                }
+
+                $Engine->assign(
+                    'CountrySelect',
+                    new CountrySelect([
+                        'selected' => $selectedCountry,
+                        'required' => $addressFields['country']['required'],
+                        'class' => 'quiqqer-registration-field-element',
+                        'name' => 'country'
+                    ])
+                );
+            }
+
+            return $Engine->fetch(dirname(__FILE__) . '/Registration.Address.html');
+        } catch (\Exception $e) {
+            QUI\System\Log::writeException($e);
+        }
+
+        return '';
+    }
 }

@@ -1,45 +1,62 @@
+.quiqqer-fu-registrationSignUp--simple {
+    --_registration-card-background-color: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-card-bgColor, var(--qui-colors-surface, #f6f6f7));
+    --_registration-card-shadow: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cad-shadow, var(--qui-shadow-card, none));
+}
+
 .quiqqer-fu-registrationSignUp {
-    --_registration-background-color: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-bgColor, var(--qui-colors-surface, #f6f6f7));
-    --_registration-background-shadow: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-shadow, var(--qui-shadow-card, none));
-    --_registration-padding: var(--quiqqer-frontendUsers-controls-registrationSignUp-padding, clamp(1rem, 5vw, 3rem));
+    --_registration-card-padding: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cards-padding, clamp(1rem, 5vw, 3rem));
+    --_registration-card-text-align: var(--quiqqer-frontendUsers-controls-registrationSignUp-registration-cards-text-align, center);
 
     display: flex;
     flex-wrap: wrap;
-    gap: clamp(2rem, 5vw, 6rem);
     justify-content: center;
     margin: 3rem auto;
     width: 100rem;
-    max-width: calc(100% - clamp(2rem, 5vw, 6rem)); /* works like padding */
+    max-width: calc(100% - clamp(0rem, 5vw - 2rem, 6rem)); /* works like padding, mobile is no spacing */
     align-items: center;
 }
 
 .quiqqer-fu-registrationSignUp-info,
 .quiqqer-fu-registrationSignUp-registration {
     position: relative;
-    text-align: center;
     flex: 1;
     flex-basis: min(100%, 400px);
+    padding: 1rem;
 }
 
-.quiqqer-fu-registrationSignUp-registration {
-    justify-content: center;
+.quiqqer-fu-registrationSignUp-registration__inner {
+    background: var(--_registration-card-background-color);
+    border-radius: var(--qui-radius-card);
+    box-shadow: var(--_registration-card-shadow);
+    width: min(100%, 28rem);
+    margin-inline: auto;
 }
 
-.quiqqer-fu-registrationSignUp-registration-content {
+.quiqqer-fu-registrationSignUp-registration--hasNoContent {
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-registration--inner {
-    background: var(--_registration-background-color);
-    border-radius: var(--qui-radius-card);
-    display: inline-block;
-    padding: var(--_registration-padding);
-    box-shadow: var(--_registration-background-shadow);
-    width: min(100%, 26rem);
+.quiqqer-fu-registrationSignUp-registration__registration,
+.quiqqer-fu-registrationSignUp-registration__login,
+.quiqqer-fu-registrationSignUp-registration__terms {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+
+.quiqqer-fu-registrationSignUp-registration__registration-view,
+.quiqqer-fu-registrationSignUp-registration__login-view,
+.quiqqer-fu-registrationSignUp-registration__terms-view {
+    padding: var(--_registration-card-padding);
+    width: 100%;
+    overflow: hidden;
 }
 
 .quiqqer-fu-registrationSignUp-info {
-    text-align: left;
+    display: flex;
+    align-items: center;
+    align-self: stretch;
 }
 
 .quiqqer-fu-registrationSignUp-registration-logged-in {
@@ -146,32 +163,30 @@
     margin-top: 20px;
 }
 
+.quiqqer-fu-registrationSignUp-registration-socialHeader,
+.quiqqer-fu-registrationSignUp-registration-messageBetween {
+    text-align: var(--_registration-card-text-align);
+}
+
 
 /** registration sign in
  ========================================== */
 
-.quiqqer-fu-registrationSignUp-terms {
+.quiqqer-fu-registrationSignUp-registration__terms-view {
     align-items: center;
-    display: none;
+    display: flex;
     flex-direction: column;
-    left: 0;
-    height: 100%;
     justify-content: center;
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 10;
-    border-radius: var(--qui-radius-card);
-    padding: var(--_registration-padding);
     gap: 1rem;
 }
 
-.quiqqer-fu-registrationSignUp-terms {
+.quiqqer-fu-registrationSignUp-registration__terms-viewterms {
     position: relative;
 }
 
-.quiqqer-fu-registrationSignUp-terms form {
+.quiqqer-fu-registrationSignUp-registration__terms-view form {
     width: 100%;
+    height: 46px;
 }
 
 .quiqqer-fu-registrationSignUp-terms-mail {
@@ -185,7 +200,7 @@
     z-index: 10;
 }
 
-.quiqqer-fu-registrationSignUp-terms label {
+.quiqqer-fu-registrationSignUp-registration__terms-view label {
     cursor: pointer;
     max-width: 500px;
     width: 100%
@@ -216,10 +231,6 @@
     width: 100%;
 }
 
-.quiqqer-fu-registrationSignUp-email-buttons [name="trial-account"] {
-    margin-right: 0.5rem;
-}
-
 .quiqqer-fu-registrationSignUp .quiqqer-frontendUsers-pending {
     background: #e8fffe;
     border: 1px solid #4dc0b5;
@@ -241,6 +252,74 @@
     display: inline-block;
 }
 
+/** registration with address (window)
+ ========================================== */
+.qui-window-simpleWindow--address {
+    background-color: color-mix(in srgb, var(--qui-colors-modal) 97%, black) !important;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address {
+    padding: 2.5rem 2rem 3rem;
+    width: 100%;
+    position: relative;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .qui-select {
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address fieldset .quiqqer-registration-field-title {
+    display: block;
+    line-height: 2rem;
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address fieldset label {
+    display: flex;
+    flex-direction: column;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address form {
+    margin-top: 1.75rem;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row {
+    display: grid;
+    gap: 1rem;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--two-columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--one-column {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--three-columns {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row-item {
+    min-width: 0;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row-item--full {
+    width: 100%;
+}
+
+.quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-element,
+.quiqqer-fu-registrationSignUp-registration__address .qui-select {
+    width: 100%;
+}
+
 /** no script
  ========================================== */
 
@@ -257,6 +336,15 @@
     .registration-sign-in {
         align-items: baseline;
         overflow: auto;
+    }
+
+    .quiqqer-fu-registrationSignUp-registration__address {
+        padding: 2rem 1.25rem 2.5rem;
+    }
+
+    .quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--two-columns,
+    .quiqqer-fu-registrationSignUp-registration__address .quiqqer-registration-field-row--three-columns {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
@@ -279,4 +367,18 @@
 
 .quiqqer-fu-registrationSignUp-resend-msg {
     margin-top: 10px;
+}
+
+/**
+ * Status - container for messages after registration
+ */
+.quiqqer-fu-registrationSignUp-status {
+    width: min(100%, 600px);
+    margin-inline: auto;
+}
+
+/* content-message-* have float left... */
+.quiqqer-fu-registrationSignUp-status .content-message-success,
+.quiqqer-fu-registrationSignUp-status .content-message-error {
+    float: none !important;
 }

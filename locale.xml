@@ -1207,6 +1207,23 @@ Available placeholders:
             <en>
                 <![CDATA[The activation link has been resent successfully. Please also check your spam folder.]]></en>
         </locale>
+
+        <locale name="control.registration.sign.up.password.next">
+            <de><![CDATA[Weiter]]></de>
+            <en><![CDATA[Next]]></en>
+        </locale>
+        <locale name="control.registration.address.header">
+            <de><![CDATA[Ihre Adresse]]></de>
+            <en><![CDATA[Your address]]></en>
+        </locale>
+        <locale name="control.registration.address.subheader" html="true">
+            <de><![CDATA[
+            <p>Damit Sie mit der Registrierung fortführen können, benötigen wir noch Ihre Adresse</p>
+            ]]></de>
+            <en><![CDATA[
+            <p>To continue with the registration process, we still need your address</p>
+            ]]></en>
+        </locale>
     </groups>
 
     <groups name="quiqqer/frontend-users" datatype="php">
@@ -1394,7 +1411,7 @@ Available placeholders:
             <de>
                 <![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
             <en>
-                <![CDATA[You will be automatically redirected ina few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
+                <![CDATA[You will be automatically redirected in a few seconds. If you would like to proceed now, <a href="[url]">please click here</a>.]]></en>
         </locale>
 
         <locale name="message.UserDeleteConfirmVerification.success">
@@ -1562,12 +1579,20 @@ Available placeholders:
             <de><![CDATA[Mail erneut senden]]></de>
             <en><![CDATA[Re-send mail]]></en>
         </locale>
+        <locale name="profile.deleteaccount.btn.cancel">
+            <de><![CDATA[Löschanfrage widerrufen]]></de>
+            <en><![CDATA[Withdraw deletion request]]></en>
+        </locale>
         <locale name="profile.deleteaccount.message.confirm_wait">
             <de><![CDATA[
             Bitte bestätigen Sie die Löschung Ihres Benutzerkontos über den Link,
             der Ihnen per E-Mail zugesandt wurde.
             ]]></de>
-            <en><![CDATA[Please confirm deletion of your user account via the link sent to you by e-mail.]]></en>
+            <en><![CDATA[<strong>Account deletion in progress</strong> <br>Your account is scheduled for deletion. Please confirm the request via the link we sent to your email address.]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.confirm_wait.text">
+            <de><![CDATA[<strong>E-Mail nicht erhalten?</strong><br>Sie können die Bestätigungs-E-Mail erneut senden oder Ihre Löschanfrage unten abbrechen.]]></de>
+            <en><![CDATA[<strong>Didn't receive the email?</strong><br>You can resend the confirmation email or cancel your deletion request below.]]></en>
         </locale>
         <locale name="profile.deleteaccount.message.error">
             <de><![CDATA[
@@ -1997,10 +2022,6 @@ The deletion of your user account on [host] was requested on [date]. Please conf
             <de><![CDATA[Passwort]]></de>
             <en><![CDATA[Password]]></en>
         </locale>
-        <locale name="control.registration.sign.up.password.next">
-            <de><![CDATA[Weiter]]></de>
-            <en><![CDATA[Next]]></en>
-        </locale>
         <locale name="control.registration.sign.up.firstname.title">
             <de><![CDATA[Vorname]]></de>
             <en><![CDATA[First name]]></en>
@@ -2057,6 +2078,26 @@ The deletion of your user account on [host] was requested on [date]. Please conf
         <locale name="quiqqer.sign.up.settings.title">
             <de><![CDATA[Sign In]]></de>
             <en><![CDATA[Sign In]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout">
+            <de><![CDATA[Layout]]></de>
+            <en><![CDATA[Layout]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.desc">
+            <de><![CDATA[Bestimmt das Layout des Registrierungsformulars.
+            <br><strong>Basic</strong> definiert nur wenige notwendige Styles. Dieses Layout eignet sich für umfangreiche Anpassungen.
+            <br><strong>Simple</strong> stellt das Formular im Kartendesign dar (beeinflusst vom verwendeten Template).]]></de>
+            <en><![CDATA[Defines the layout of the registration form.
+            <br><strong>Basic</strong> applies only a few essential styles. This layout is suitable for extensive customization.
+            <br><strong>Simple</strong> renders the form in a card-style design (influenced by the active template).]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.basic">
+            <de><![CDATA[Basic – nur rudimentäres Styling]]></de>
+            <en><![CDATA[Basic – minimal styling]]></en>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.simple">
+            <de><![CDATA[Simple – Formular im Card-Design]]></de>
+            <en><![CDATA[Simple – card-style form]]></en>
         </locale>
         <locale name="admin.types.registrationSignUp.setting.background">
             <de><![CDATA[Hintergrundbild]]></de>
