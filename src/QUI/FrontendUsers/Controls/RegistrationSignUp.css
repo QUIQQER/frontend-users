@@ -254,10 +254,6 @@
 
 /** registration with address (window)
  ========================================== */
-.qui-window-simpleWindow--address {
-    background-color: color-mix(in srgb, var(--qui-colors-modal) 97%, black) !important;
-}
-
 .quiqqer-fu-registrationSignUp-registration__address {
     padding: 2.5rem 2rem 3rem;
     width: 100%;
