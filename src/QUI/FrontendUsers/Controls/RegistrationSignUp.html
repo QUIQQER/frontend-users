@@ -218,7 +218,7 @@
             </div>
         </div>
 
-        {if $Email && $Email->getControl()}
+        {if $useAddress && $Email && $Email->getControl()}
         <div class="quiqqer-fu-registrationSignUp-registration__address" data-name="address" style="display: none;">
             <h2>
                 {locale group="quiqqer/frontend-users" var="control.registration.address.header"}
