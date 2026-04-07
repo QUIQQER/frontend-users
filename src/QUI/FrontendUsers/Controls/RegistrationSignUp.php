@@ -82,6 +82,7 @@ class RegistrationSignUp extends QUI\Control
 
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+        $useAddress = boolval($registrationSettings['addressInput']);
 
         // get email registrar
         $email = $Registrars->filter(function ($Registrar) {
@@ -324,7 +325,8 @@ class RegistrationSignUp extends QUI\Control
             'passwordInput' => $registrationSettings['passwordInput'],
             'valueEmail' => $valueEmail,
             'showResendActivationLink' => $showResendActivationLink,
-            'showLoginButton' => $showLoginButton
+            'showLoginButton' => $showLoginButton,
+            'useAddress' => $useAddress
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/RegistrationSignUp.html');
