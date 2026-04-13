@@ -10,6 +10,8 @@
  **/
 
 use QUI\FrontendUsers\Handler as FrontendUsersHandler;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 // AGB
 $result = $Project->getSites([
@@ -62,6 +64,52 @@ $status = false;
 
 if (!empty($urlParams)) {
     $status = current($urlParams);
+}
+
+$isLoggedIn = QUI::getUsers()->isAuth(QUI::getUserBySession());
+$hasStatusMessage = !empty($status) || !empty($_GET['success']) || !empty($_GET['error']);
+
+if ($isLoggedIn && !$hasStatusMessage) {
+    $url = '/';
+
+    try {
+        $loginSettings = $FrontendUsersHandler->getLoginSettings();
+        $redirectOnLogin = $loginSettings['redirectOnLogin'] ?? [];
+        $projectLang = $Project->getLang();
+        $siteUrl = $redirectOnLogin[$projectLang] ?? '';
+
+        if (!empty($siteUrl)) {
+            if (QUI\Projects\Site\Utils::isSiteLink($siteUrl)) {
+                $Wanted = QUI\Projects\Site\Utils::getSiteByLink($siteUrl);
+                $Output = new QUI\Output();
+
+                $url = $Output->getSiteUrl([
+                    'site' => $Wanted
+                ]);
+            } else {
+                $parts = parse_url($siteUrl);
+
+                if (empty($parts['host'])) {
+                    $siteUrl = HOST . $siteUrl;
+                }
+
+                if (!isset($parts['scheme']) && !str_starts_with($siteUrl, '//')) {
+                    $siteUrl = '//' . $siteUrl;
+                }
+
+                $url = $siteUrl;
+            }
+        }
+    } catch (Throwable $Throwable) {
+        QUI\System\Log::writeDebugException($Throwable);
+    }
+
+    $Redirect = new RedirectResponse($url);
+    $Redirect->setStatusCode(Response::HTTP_SEE_OTHER);
+
+    echo $Redirect->getContent();
+    $Redirect->send();
+    exit;
 }
 
 $Registrar = false;
