@@ -532,7 +532,8 @@ class Handler extends Singleton
                                 'password' => $userPassword
                             ])
                     ])
-                ]
+                ],
+                $Project
             );
 
             // set "welcome mail sent"-flag to user, so it won't be sent again
@@ -592,7 +593,8 @@ class Handler extends Singleton
                         'date' => $L->formatDate(time()),
                         'registrar' => $Registrar ? $Registrar->getTitle() : '-'
                     ])
-                ]
+                ],
+                $Project
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
@@ -654,7 +656,8 @@ class Handler extends Singleton
                         'date' => $L->formatDate(time()),
                         'confirmLink' => $verification->getVerificationUrl()
                     ])
-                ]
+                ],
+                $Project
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
@@ -716,7 +719,8 @@ class Handler extends Singleton
                         'date' => $L->formatDate(time()),
                         'confirmLink' => $verification->getVerificationUrl()
                     ])
-                ]
+                ],
+                $Project
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
@@ -774,7 +778,8 @@ class Handler extends Singleton
                         'date' => $L->formatDate(time()),
                         'confirmLink' => $verification->getVerificationUrl()
                     ])
-                ]
+                ],
+                $Project
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::addError(
@@ -792,12 +797,18 @@ class Handler extends Singleton
      * @param array $recipients - e-mail addresses
      * @param string $templateFile
      * @param array $templateVars (optional) - additional template variables (besides $this)
+     * @param QUI\Projects\Project|null $Project (optional) - explicit project context for the mailer
      * @return void
      *
      * @throws QUI\Exception|\PHPMailer\PHPMailer\Exception
      */
-    public function sendMail(array $mailData, array $recipients, string $templateFile, array $templateVars = []): void
-    {
+    public function sendMail(
+        array $mailData,
+        array $recipients,
+        string $templateFile,
+        array $templateVars = [],
+        null | QUI\Projects\Project $Project = null
+    ): void {
         if (empty($recipients)) {
             return;
         }
@@ -814,7 +825,13 @@ class Handler extends Singleton
         $Engine->assign($templateVars);
 
         $template = $Engine->fetch($templateFile);
-        $Mailer = new Mailer();
+        $mailerAttributes = [];
+
+        if ($Project) {
+            $mailerAttributes['Project'] = $Project;
+        }
+
+        $Mailer = new Mailer($mailerAttributes);
 
         foreach ($recipients as $recipient) {
             $Mailer->addRecipient($recipient);
