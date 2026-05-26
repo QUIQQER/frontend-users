@@ -10,6 +10,8 @@
  **/
 
 use QUI\Utils\Security\Orthos;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 $Site->setAttribute('nocache', 1);
 
@@ -28,6 +30,53 @@ if (QUI\Projects\Media\Utils::isMediaUrl($background)) {
         $Background = QUI\Projects\Media\Utils::getImageByUrl($background);
     } catch (QUI\Exception $exception) {
     }
+}
+
+$isLoggedIn = QUI::getUsers()->isAuth(QUI::getUserBySession());
+$hasStatusMessage = !empty($_GET['success']) || !empty($_GET['error']);
+
+if ($isLoggedIn && !$hasStatusMessage) {
+    $url = '/';
+
+    try {
+        $FrontendUsersHandler = QUI\FrontendUsers\Handler::getInstance();
+        $loginSettings = $FrontendUsersHandler->getLoginSettings();
+        $redirectOnLogin = $loginSettings['redirectOnLogin'] ?? [];
+        $projectLang = $Project->getLang();
+        $siteUrl = $redirectOnLogin[$projectLang] ?? '';
+
+        if (!empty($siteUrl)) {
+            if (QUI\Projects\Site\Utils::isSiteLink($siteUrl)) {
+                $Wanted = QUI\Projects\Site\Utils::getSiteByLink($siteUrl);
+                $Output = new QUI\Output();
+
+                $url = $Output->getSiteUrl([
+                    'site' => $Wanted
+                ]);
+            } else {
+                $parts = parse_url($siteUrl);
+
+                if (empty($parts['host'])) {
+                    $siteUrl = HOST . $siteUrl;
+                }
+
+                if (!isset($parts['scheme']) && !str_starts_with($siteUrl, '//')) {
+                    $siteUrl = '//' . $siteUrl;
+                }
+
+                $url = $siteUrl;
+            }
+        }
+    } catch (Throwable $Throwable) {
+        QUI\System\Log::writeDebugException($Throwable);
+    }
+
+    $Redirect = new RedirectResponse($url);
+    $Redirect->setStatusCode(Response::HTTP_SEE_OTHER);
+
+    echo $Redirect->getContent();
+    $Redirect->send();
+    exit;
 }
 
 /**

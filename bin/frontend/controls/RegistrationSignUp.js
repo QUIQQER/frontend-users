@@ -1631,9 +1631,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         opacity: 0
                     }, {
                         callback: () => {
-                            registrationContainer.style.display = 'none';
-                            registrationInner.style.display = 'none';
-                            registrationInfo.style.display = 'none';
+                            if (registrationContainer) {
+                                registrationContainer.style.display = 'none';
+                            }
+                            if (registrationInner) {
+                                registrationInner.style.display = 'none';
+                            }
+                            if (registrationInfo) {
+                                registrationInfo.style.display = 'none';
+                            }
 
                             this.getElm().appendChild(successNode);
                         }
