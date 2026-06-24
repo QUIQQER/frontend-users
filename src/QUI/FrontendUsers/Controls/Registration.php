@@ -577,7 +577,6 @@ class Registration extends QUI\Control
 
         try {
             $settings = $RegistrarHandler->getRegistrationSettings();
-            $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
 
             // determine if the user has to set a new password on first login
             if ($settings['forcePasswordReset']) {
@@ -611,6 +610,7 @@ class Registration extends QUI\Control
 
         // determine registration status
         $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_SUCCESS;
+        $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
 
         switch ($registrarSettings['activationMode']) {
             case $RegistrarHandler::ACTIVATION_MODE_MAIL:
