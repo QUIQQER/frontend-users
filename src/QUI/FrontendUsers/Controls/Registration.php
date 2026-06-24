@@ -569,18 +569,27 @@ class Registration extends QUI\Control
         ]);
 
         // handle onRegistered from Registrar
-        $Registrar->onRegistered($NewUser);
-        $settings = $RegistrarHandler->getRegistrationSettings();
-        $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
-
-        // determine if the user has to set a new password on first login
-        if ($settings['forcePasswordReset']) {
-            $NewUser->setAttribute('quiqqer.set.new.password', true);
+        try {
+            $Registrar->onRegistered($NewUser);
+        } catch (\Throwable $exception) {
+            QUI\System\Log::writeException($exception);
         }
+
+        try {
+            $settings = $RegistrarHandler->getRegistrationSettings();
+
+            // determine if the user has to set a new password on first login
+            if ($settings['forcePasswordReset']) {
+                $NewUser->setAttribute('quiqqer.set.new.password', true);
+            }
+        } catch (\Throwable $exception) {
+            QUI\System\Log::writeException($exception);
+        }
+
+        $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // send registration notice to admins
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
-        $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // check if the user has a password
         $result = QUI::getDataBase()->fetch([
@@ -601,6 +610,7 @@ class Registration extends QUI\Control
 
         // determine registration status
         $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_SUCCESS;
+        $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
 
         switch ($registrarSettings['activationMode']) {
             case $RegistrarHandler::ACTIVATION_MODE_MAIL:
