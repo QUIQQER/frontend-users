@@ -585,7 +585,6 @@ class Registration extends QUI\Control
             }
         } catch (\Throwable $exception) {
             QUI\System\Log::writeException($exception);
-
         }
 
         $NewUser->save(QUI::getUsers()->getSystemUser());
