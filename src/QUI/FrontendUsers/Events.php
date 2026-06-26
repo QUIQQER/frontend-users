@@ -410,6 +410,10 @@ class Events
                 'show' => true,
                 'required' => false
             ],
+            'email' => [
+                'show' => true,
+                'required' => false
+            ],
         ];
 
         $Conf->setValue('registration', 'addressFields', json_encode($addressFields));

@@ -952,6 +952,10 @@
             <de><![CDATA[Land]]></de>
             <en><![CDATA[Country]]></en>
         </locale>
+        <locale name="email">
+            <de><![CDATA[E-Mail-Adresse]]></de>
+            <en><![CDATA[Email address]]></en>
+        </locale>
         <locale name="phone">
             <de><![CDATA[Tel]]></de>
             <en><![CDATA[Phone]]></en>

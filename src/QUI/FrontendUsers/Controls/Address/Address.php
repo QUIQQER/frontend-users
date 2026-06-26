@@ -107,11 +107,26 @@ class Address extends QUI\Control
         } catch (QUI\Exception) {
         }
 
+        $addresses = $User->getAddressList();
+        $standardAddressUuid = $User->getAttribute('address');
+
+        if (!empty($standardAddressUuid)) {
+            foreach ($addresses as $index => $Address) {
+                if ($Address->getUUID() !== $standardAddressUuid) {
+                    continue;
+                }
+
+                unset($addresses[$index]);
+                array_unshift($addresses, $Address);
+                break;
+            }
+        }
+
         $Engine->assign([
             'this' => $this,
             'User' => $User,
             'UserAddress' => $UserAddress,
-            'addresses' => $User->getAddressList()
+            'addresses' => $addresses
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Address.html');
@@ -151,6 +166,7 @@ class Address extends QUI\Control
             'phone' => $Address->getPhone(),
             'fax' => $Address->getFax(),
             'mobile' => $Address->getMobile(),
+            'email' => $this->getAddressEmail($Address),
             'countries' => QUI\Countries\Manager::getList()
         ]);
 
@@ -175,14 +191,15 @@ class Address extends QUI\Control
             'company',
             'phone',
             'mobile',
-            'fax'
+            'fax',
+            'email'
         ];
 
         foreach ($fields as $field) {
             if (!isset($settings[$field])) {
                 $settings[$field] = [
                     'show' => true,
-                    'required' => true
+                    'required' => $field !== 'email'
                 ];
 
                 continue;
@@ -208,6 +225,23 @@ class Address extends QUI\Control
         }
 
         return $settings;
+    }
+
+    /**
+     * Return the first email address of an address.
+     *
+     * @param QUI\Users\Address $Address
+     * @return string
+     */
+    protected function getAddressEmail(QUI\Users\Address $Address): string
+    {
+        $mailList = $Address->getMailList();
+
+        if (isset($mailList[0])) {
+            return $mailList[0];
+        }
+
+        return '';
     }
 
     /**
@@ -330,6 +364,10 @@ class Address extends QUI\Control
             $Address->editPhone(0, $data['phone']);
         }
 
+        if (isset($data['email'])) {
+            $Address->editMail(0, $data['email']);
+        }
+
         if (isset($data['fax'])) {
             $Address->editFax($data['fax']);
         }
@@ -414,6 +452,10 @@ class Address extends QUI\Control
 
         if (isset($data['phone'])) {
             $Address->editPhone(0, $data['phone']);
+        }
+
+        if (isset($data['email'])) {
+            $Address->editMail(0, $data['email']);
         }
 
         if (isset($data['fax'])) {
