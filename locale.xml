@@ -824,22 +824,16 @@
             <en><![CDATA[Two-factor authentication]]></en>
         </locale>
         <locale name="profile.2fa.not.enabled.title">
-            <de><![CDATA[Die Zwei-Faktor-Authentifizierung ist noch nicht aktiviert.]]></de>
-            <en><![CDATA[Two-factor authentication is not enabled yet]]></en>
+            <de><![CDATA[Die Zwei-Faktor-Authentifizierung ist nicht verfügbar.]]></de>
+            <en><![CDATA[Two-factor authentication is not available]]></en>
         </locale>
         <locale name="profile.2fa.not.enabled.description">
             <de><![CDATA[
-            Die Zwei-Faktor-Authentifizierung sorgt für zusätzliche Sicherheit für Ihr Konto,
-            da für die Anmeldung mehr als nur ein Passwort erforderlich ist.
+            Die Zwei-Faktor-Authentifizierung wurde für diesen Bereich noch nicht freigeschaltet.
             ]]></de>
             <en><![CDATA[
-            Two-factor authentication adds an additional layer of security to your account by requiring more than just a
-            password to sign in.
+            Two-factor authentication has not been enabled for this area yet.
             ]]></en>
-        </locale>
-        <locale name="profile.2fa.not.enable.button">
-            <de><![CDATA[Zwei-Faktor-Authentifizierung aktivieren]]></de>
-            <en><![CDATA[Enable two-factor authentication]]></en>
         </locale>
         <locale name="profile.2fa.no_authenticators_available">
             <de><![CDATA[Es sind keine Zwei-Faktor-Authentifizierungsmethoden verfügbar.]]></de>
