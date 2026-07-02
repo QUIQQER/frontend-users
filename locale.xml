@@ -838,8 +838,12 @@
             ]]></en>
         </locale>
         <locale name="profile.2fa.not.enable.button">
-            <de><![CDATA[Enable two-factor authentication]]></de>
-            <en><![CDATA[Zwei-Faktor-Authentifizierung aktivieren]]></en>
+            <de><![CDATA[Zwei-Faktor-Authentifizierung aktivieren]]></de>
+            <en><![CDATA[Enable two-factor authentication]]></en>
+        </locale>
+        <locale name="profile.2fa.no_authenticators_available">
+            <de><![CDATA[Es sind keine Zwei-Faktor-Authentifizierungsmethoden verfügbar.]]></de>
+            <en><![CDATA[No two-factor authentication methods are available.]]></en>
         </locale>
         <locale name="profile.2fa.button.disable.authentication">
             <de><![CDATA[[title] deaktivieren]]></de>

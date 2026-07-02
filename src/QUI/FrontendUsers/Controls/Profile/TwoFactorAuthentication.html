@@ -5,6 +5,12 @@
     </h1>
 
     <div class="two-factor-authenticator-list">
+        {if empty($authenticators)}
+        <div class="two-factor-authenticator-empty">
+            {locale group="quiqqer/frontend-users" var="profile.2fa.no_authenticators_available"}
+        </div>
+        {/if}
+
         {foreach $authenticators as $authenticator}
         <div class="two-factor-authenticator">
             <h2 class="flex flex-col mb-2">
