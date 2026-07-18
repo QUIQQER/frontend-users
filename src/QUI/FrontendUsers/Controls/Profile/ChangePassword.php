@@ -61,6 +61,12 @@ class ChangePassword extends AbstractProfileControl
         $passwordOld = $Request->get('passwordOld');
         $passwordNew = $Request->get('passwordNew');
 
+        if (!is_string($passwordOld) || !is_string($passwordNew)) {
+            throw new QUI\FrontendUsers\Exception(
+                'Frontend users ChangePassword::onSave: Invalid password request data.'
+            );
+        }
+
         if (!$User) {
             $User = QUI::getUserBySession();
         }

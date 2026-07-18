@@ -126,6 +126,22 @@ class AuxiliaryWorkflowTest extends DatabaseTestCase
         } catch (QUI\FrontendUsers\Exception $Exception) {
             self::assertNotSame('', $Exception->getMessage());
         }
+
+        QUI::getRequest()->request->replace([
+            'passwordOld' => 123,
+            'passwordNew' => 456
+        ]);
+
+        try {
+            (new ChangePassword(['User' => $User]))->onSave();
+            self::fail('Non-string password request data must be rejected.');
+        } catch (QUI\FrontendUsers\Exception $Exception) {
+            self::assertSame(
+                'Frontend users ChangePassword::onSave: Invalid password request data.',
+                $Exception->getMessage()
+            );
+        }
+
         try {
             (new Profile())->getUser();
             self::fail('A profile without a user must reject getUser().');

@@ -172,9 +172,11 @@ class UserData extends AbstractProfileControl
         $Config = FrontendUsersHandler::getPackageConfig();
         $settings = $Config->getValue('profile', 'addressFields');
 
-        if (!empty($settings)) {
+        if (is_string($settings)) {
             $settings = json_decode($settings, true);
-        } else {
+        }
+
+        if (!is_array($settings)) {
             $settings = [];
         }
 

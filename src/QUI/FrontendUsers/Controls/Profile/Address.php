@@ -202,10 +202,8 @@ class Address extends AbstractProfileControl
                 'addressFields'
             );
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
-            } else {
-                $settings = [];
             }
         } catch (QUI\Exception) {
             $settings = [];

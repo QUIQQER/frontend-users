@@ -148,9 +148,11 @@ class Address extends QUI\Control
         try {
             $settings = $Conf->getValue('profile', 'addressFields');
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
-            } else {
+            }
+
+            if (!is_array($settings)) {
                 $settings = [];
             }
 
@@ -287,9 +289,11 @@ class Address extends QUI\Control
         try {
             $settings = $Conf->getValue('profile', 'addressFields');
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
-            } else {
+            }
+
+            if (!is_array($settings)) {
                 $settings = [];
             }
 

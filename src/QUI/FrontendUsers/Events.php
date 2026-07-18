@@ -338,7 +338,18 @@ class Events
             $settings['authenticators'][base64_encode($class)] = true;
         }
 
-        $Conf->setValue('login', 'authenticators', json_encode($settings['authenticators']));
+        $authenticatorsJson = json_encode($settings['authenticators']);
+
+        if ($authenticatorsJson === false) {
+            QUI\System\Log::addError(
+                'Frontend users Events::setAuthenticatorsDefaultSettings: '
+                . 'Authenticator settings could not be JSON-encoded; defaults were not saved.'
+            );
+
+            return;
+        }
+
+        $Conf->setValue('login', 'authenticators', $authenticatorsJson);
         $Conf->save();
     }
 
@@ -430,8 +441,19 @@ class Events
             ],
         ];
 
-        $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
-        $Conf->setValue('profile', 'addressFields', json_encode($addressFields));
+        $addressFieldsJson = json_encode($addressFields);
+
+        if ($addressFieldsJson === false) {
+            QUI\System\Log::addError(
+                'Frontend users Events::setAddressDefaultSettings: '
+                . 'Address field settings could not be JSON-encoded; defaults were not saved.'
+            );
+
+            return;
+        }
+
+        $Conf->setValue('registration', 'addressFields', $addressFieldsJson);
+        $Conf->setValue('profile', 'addressFields', $addressFieldsJson);
         $Conf->save();
     }
 

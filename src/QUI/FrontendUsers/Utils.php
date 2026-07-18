@@ -624,14 +624,14 @@ class Utils
         try {
             $settings = $Conf->getValue('profile', 'addressFields');
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
             }
         } catch (QUI\Exception) {
             return $missing;
         }
 
-        if (empty($settings)) {
+        if (!is_array($settings) || $settings === []) {
             return $missing;
         }
 

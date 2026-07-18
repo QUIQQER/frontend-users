@@ -411,7 +411,18 @@ class Handler extends Singleton
             $writeSettings[base64_encode($registrarType)] = $settingsData;
         }
 
-        $Conf->set('registrars', 'registrarSettings', json_encode($writeSettings));
+        $settingsJson = json_encode($writeSettings);
+
+        if ($settingsJson === false) {
+            QUI\System\Log::addError(
+                'Frontend users Handler::setRegistrarSettings: '
+                . 'Registrar settings could not be JSON-encoded; settings were not saved.'
+            );
+
+            return;
+        }
+
+        $Conf->set('registrars', 'registrarSettings', $settingsJson);
         $Conf->save();
     }
 
