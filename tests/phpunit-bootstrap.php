@@ -9,3 +9,6 @@ if (!defined('QUIQQER_AJAX')) {
 }
 
 require_once __DIR__ . '/../../../../bootstrap.php';
+require_once __DIR__ . '/Support/DatabaseTestCase.php';
+
+QUI\System\TestCleanup::register();

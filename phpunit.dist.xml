@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="tests/phpunit-bootstrap.php">
+<phpunit bootstrap="tests/phpunit-bootstrap.php" processIsolation="true">
     <testsuites>
-        <testsuite name="quiqqer/frontend-users Test Suite">
-            <directory>tests/</directory>
+        <testsuite name="quiqqer/frontend-users Unit Test Suite">
+            <directory>tests/unit</directory>
+        </testsuite>
+        <testsuite name="quiqqer/frontend-users Integration Test Suite">
+            <directory>tests/integration</directory>
         </testsuite>
     </testsuites>
     <source>
