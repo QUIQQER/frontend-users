@@ -153,6 +153,10 @@ class Events
                 return;
             }
 
+            if ($Registrar === false) {
+                return;
+            }
+
             $registrationSettings = $Handler->getRegistrationSettings();
 
             // do not log in if autoLogin is deactivated or user is already logged in!

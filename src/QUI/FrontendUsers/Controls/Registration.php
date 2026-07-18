@@ -156,6 +156,14 @@ class Registration extends QUI\Control
                     // auto login for the primary login
                     // in this case, mail is primary login
                     $registrar = $this->isCurrentlyExecuted();
+
+                    if ($registrar === false) {
+                        throw new QUI\FrontendUsers\Exception([
+                            'quiqqer/frontend-users',
+                            'exception.registration.registrar_not_found'
+                        ]);
+                    }
+
                     $username = $registrar->getUsername();
                     $user = QUI::getUsers()->getUserByName($username);
 
@@ -348,8 +356,8 @@ class Registration extends QUI\Control
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
-            $settingsB = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+            $settingsA = $RegistrarHandler->getRegistrarSettings($RegistrarA::class);
+            $settingsB = $RegistrarHandler->getRegistrarSettings($RegistrarB::class);
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -440,9 +448,9 @@ class Registration extends QUI\Control
     /**
      * Is registration started?
      *
-     * @return bool|QUI\FrontendUsers\RegistrarInterface
+     * @return false|QUI\FrontendUsers\RegistrarInterface
      */
-    protected function isCurrentlyExecuted(): bool | QUI\FrontendUsers\RegistrarInterface
+    protected function isCurrentlyExecuted(): false | QUI\FrontendUsers\RegistrarInterface
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
         $Registrar = $this->getAttribute('Registrar');
@@ -463,7 +471,7 @@ class Registration extends QUI\Control
                 $class = $_REQUEST['registrar'];
 
                 foreach ($FrontendUsers->getAvailableRegistrars() as $instance) {
-                    if (is_object($instance) && is_a($instance, $class)) {
+                    if ($instance instanceof QUI\FrontendUsers\RegistrarInterface && is_a($instance, $class)) {
                         $Registrar = $instance;
                         break;
                     }
