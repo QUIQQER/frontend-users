@@ -216,7 +216,7 @@ class RegistrationSignUp extends QUI\Control
                     break;
                 case 'emailconfirm':
                 case 'userdelete':
-                    $startUrl = QUI::getRewrite()->getProject()->get(1)->getUrlRewrittenWithHost();
+                    $startUrl = QUI::getRewrite()->getProject()?->get(1)->getUrlRewrittenWithHost() ?? '';
 
                     $msgSuccess = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
@@ -294,7 +294,7 @@ class RegistrationSignUp extends QUI\Control
         $redirect = false;
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $Project = QUI::getRewrite()->getProject();
-        $projectLang = $Project->getLang();
+        $projectLang = $Project?->getLang() ?? '';
 
         if ($activationSuccess && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(

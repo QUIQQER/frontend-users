@@ -190,7 +190,7 @@ class UserData extends AbstractProfileControl
 
         if ($changeLang && $Request->has('language')) {
             $Project = QUI::getRewrite()->getProject();
-            $languages = $Project->getLanguages();
+            $languages = $Project?->getLanguages() ?? [];
 
             if (in_array($Request->get('language'), $languages)) {
                 $User->setAttribute('lang', $Request->get('language'));

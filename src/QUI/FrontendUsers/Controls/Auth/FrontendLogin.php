@@ -47,7 +47,7 @@ class FrontendLogin extends QUI\Control
         $Handler = Handler::getInstance();
         $settings = $Handler->getLoginSettings();
         $redirectOnLogin = $settings['redirectOnLogin'];
-        $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
 
         $dataRedirect = false;
 

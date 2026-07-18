@@ -376,17 +376,21 @@ class Utils
                 $Project = QUI::getRewrite()->getProject();
             }
 
-            $ids = $Project->getSitesIds([
+            $ids = $Project?->getSitesIds([
                 'where' => [
                     'type' => 'quiqqer/frontend-users:types/profile'
                 ],
                 'limit' => 1
-            ]);
+            ]) ?? [];
 
             if (!isset($ids[0])) {
-                $Site = $Project->firstChild();
+                $Site = $Project?->firstChild();
             } else {
-                $Site = $Project->get($ids[0]['id']);
+                $Site = $Project?->get($ids[0]['id']);
+            }
+
+            if ($Site === null) {
+                return [];
             }
 
             $url = $Site->getUrlRewritten();

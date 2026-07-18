@@ -95,7 +95,7 @@ class Registration extends QUI\Control
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $CurrentRegistrar = $this->isCurrentlyExecuted();
         $registrationStatus = false;
-        $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
         $executeLogin = false;
 
         // execute registration process

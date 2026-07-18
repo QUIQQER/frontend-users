@@ -871,12 +871,12 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_REGISTRATION
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
         if (empty($result)) {
             return false;
@@ -898,12 +898,12 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_REGISTRATION_SIGNUP
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
         if (empty($result)) {
             return false;
@@ -925,12 +925,12 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_LOGIN
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
         if (empty($result)) {
             return false;
@@ -956,12 +956,12 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_PROFILE
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
         if (empty($result)) {
             return false;
@@ -979,7 +979,7 @@ class Handler extends Singleton
     {
         try {
             $registrationSettings = $this->getRegistrationSettings();
-            $projectLang = QUI::getRewrite()->getProject()->getLang();
+            $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
 
             if (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 return QUI\Projects\Site\Utils::getSiteByLink(
