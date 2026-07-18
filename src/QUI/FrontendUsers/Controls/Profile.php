@@ -23,7 +23,7 @@ class Profile extends Control
     /**
      * Profile constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {

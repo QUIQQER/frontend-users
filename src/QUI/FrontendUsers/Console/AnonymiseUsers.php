@@ -92,7 +92,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
     }
 
     /**
-     * @param array $settings
+     * @param array{groupIds: list<string>, emailHandle: string} $settings
      * @return void
      * @throws QUI\Database\Exception
      */
@@ -245,7 +245,7 @@ class AnonymiseUsers extends QUI\System\Console\Tool
     /**
      * Exits the console tool with an error msg and status 1
      *
-     * @param $msg
+     * @param string $msg
      * @return never
      */
     protected function exitFail($msg): never

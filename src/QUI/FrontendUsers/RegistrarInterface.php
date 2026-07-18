@@ -21,14 +21,15 @@ interface RegistrarInterface
     /**
      * Set registration data
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
+     * @return void
      */
     public function setAttributes(array $attributes);
 
     /**
      * Return the send registrar data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getAttributes(): array;
 
@@ -37,6 +38,7 @@ interface RegistrarInterface
      *
      * @param string $key
      * @param mixed $value
+     * @return void
      */
     public function setAttribute(string $key, mixed $value);
 
@@ -66,6 +68,7 @@ interface RegistrarInterface
     /**
      * Validate registration data
      *
+     * @return InvalidFormField[]
      * @throws Exception
      */
     public function validate(): array;

@@ -17,7 +17,7 @@ class RegistrarCollection extends QUI\Collection
 {
     /**
      * RegistrarCollection constructor.
-     * @param array $children
+     * @param list<AbstractRegistrar> $children
      */
     public function __construct(array $children = [])
     {

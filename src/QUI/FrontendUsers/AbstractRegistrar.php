@@ -174,7 +174,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     /**
      * Get registrar settings
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getSettings(): array
     {

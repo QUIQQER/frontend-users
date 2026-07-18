@@ -22,7 +22,7 @@ class PostRegister
      *
      * @param SlimRequest $Request
      * @param SlimResponse $Response
-     * @param array $args
+     * @param array<string, mixed> $args
      *
      * @return SlimResponse
      */

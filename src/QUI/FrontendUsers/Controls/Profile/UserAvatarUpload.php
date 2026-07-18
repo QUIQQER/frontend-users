@@ -19,7 +19,7 @@ class UserAvatarUpload extends Form
     /**
      * UserAvatarUpload constructor.
      *
-     * @param array $params
+     * @param array<string, mixed> $params
      * @throws QUI\Exception
      */
     public function __construct(array $params = [])

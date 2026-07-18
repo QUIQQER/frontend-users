@@ -30,7 +30,7 @@ class UserData extends AbstractProfileControl
 {
     /**
      * UserData constructor.
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(
         array $attributes = [],

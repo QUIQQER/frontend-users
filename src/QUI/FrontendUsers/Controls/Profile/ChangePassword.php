@@ -18,7 +18,7 @@ class ChangePassword extends AbstractProfileControl
 {
     /**
      * ChangePassword constructor.
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {

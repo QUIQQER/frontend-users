@@ -10,7 +10,6 @@ parameters:
         - src
         - ajax
         - types
-        - tests
     bootstrapFiles:
         - tests/phpstan-bootstrap.php
     tipsOfTheDay: false

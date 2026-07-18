@@ -37,7 +37,7 @@ class RegistrationSignUp extends QUI\Control
     /**
      * constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -449,7 +449,7 @@ class RegistrationSignUp extends QUI\Control
     /**
      * Return the icon HTML for a registrar
      *
-     * @param $Registrar
+     * @param \QUI\FrontendUsers\RegistrarInterface $Registrar
      * @return string
      */
     public function getRegistrarIcon($Registrar): string

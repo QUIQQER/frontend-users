@@ -95,7 +95,7 @@ class Handler extends Singleton
     /**
      * Registration IDs of the current runtime
      *
-     * @var array
+     * @var list<string>
      */
     protected array $registrationIds = [];
 
@@ -251,7 +251,7 @@ class Handler extends Singleton
     /**
      * Get all settings for user profile
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getUserProfileSettings(): array
@@ -264,7 +264,7 @@ class Handler extends Singleton
     /**
      * Get all settings for user bar
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getProfileBarSettings(): array
@@ -277,7 +277,7 @@ class Handler extends Singleton
     /**
      * Get registration settings concerning all Registars alike
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getRegistrationSettings(): array
@@ -303,7 +303,7 @@ class Handler extends Singleton
     /**
      * Get login settings
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getLoginSettings(): array
@@ -325,7 +325,7 @@ class Handler extends Singleton
     /**
      * Get address field settings
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      * @throws QUI\Exception
      */
     public function getAddressFieldSettings(): array
@@ -338,7 +338,7 @@ class Handler extends Singleton
     /**
      * Get settings for mail
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getMailSettings(): array
@@ -352,7 +352,7 @@ class Handler extends Singleton
      * Get settings for one or all Registrars
      *
      * @param string|null $registrarClass (optional) - Registrar class path (namespace)
-     * @return array
+     * @return array<string, mixed>
      */
     public function getRegistrarSettings(null | string $registrarClass = null): array
     {
@@ -393,7 +393,7 @@ class Handler extends Singleton
     /**
      * Set settings for registrars
      *
-     * @param array $settings
+     * @param array<string, array<string, mixed>> $settings
      * @return void
      * @throws QUI\Exception
      */
@@ -793,10 +793,10 @@ class Handler extends Singleton
     /**
      * Send an email, to the frontend user
      *
-     * @param array $mailData - mail data ("subject", "from", "fromName")
-     * @param array $recipients - e-mail addresses
+     * @param array{subject: string, from?: string, fromName?: string} $mailData
+     * @param list<string> $recipients - e-mail addresses
      * @param string $templateFile
-     * @param array $templateVars (optional) - additional template variables (besides $this)
+     * @param array<string, mixed> $templateVars (optional) - additional template variables (besides $this)
      * @param QUI\Projects\Project|null $Project (optional) - explicit project context for the mailer
      * @return void
      *
@@ -1039,7 +1039,7 @@ class Handler extends Singleton
     /**
      * Get max length for each user attribute
      *
-     * @return array
+     * @return array<string, int>
      */
     public function getUserAttributeLengthRestrictions(): array
     {

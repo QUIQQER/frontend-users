@@ -51,7 +51,7 @@ class Registration extends QUI\Control
     /**
      * Registration constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -487,6 +487,7 @@ class Registration extends QUI\Control
     /**
      * Execute the Registration
      *
+     * @return int
      * @throws QUI\FrontendUsers\Exception\UserAlreadyExistsException
      * @throws QUI\FrontendUsers\Exception
      * @throws QUI\Database\Exception

@@ -28,7 +28,7 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Mail settings
      *
-     * @var array
+     * @var array{body: string, senderMail: string, senderName: string, subject: string}
      */
     protected array $mail = [
         'body' => '',
@@ -38,14 +38,14 @@ class SendUserMails extends QUI\System\Console\Tool
     ];
 
     /**
-     * @var array
+     * @var list<array{id: int|string, username: string, email: string, firstname?: string, lastname?: string}>
      */
     protected array $recipients = [];
 
     /**
      * General settings
      *
-     * @var array
+     * @var array{setNewPassword: bool, forcePasswordReset: bool}
      */
     protected array $settings = [
         'setNewPassword' => false,
@@ -350,7 +350,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * Get mail status info for a specific user
      *
      * @param int $userId
-     * @return array
+     * @return array{sent: bool, sent_date: string|false, error?: string}|array{}
      */
     protected function getUserInfo(int $userId): array
     {
@@ -386,7 +386,7 @@ class SendUserMails extends QUI\System\Console\Tool
      * Write mail status info for a specific user to a file
      *
      * @param int $userId
-     * @param array $info
+     * @param array{sent: bool, sent_date: string|false, error?: string} $info
      * @return void
      */
     protected function writeUserInfo(int $userId, array $info): void
@@ -413,7 +413,17 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Check if the sending of a mail is currently within the configured limits
      *
-     * @param array $limits - Limits config
+     * @param array{
+     *     per24h: int|false,
+     *     perHour: int|false,
+     *     perMinute: int|false,
+     *     start24h: string|false,
+     *     startHour: string|false,
+     *     startMinute: string|false,
+     *     current24h: int,
+     *     currentHour: int,
+     *     currentMinute: int
+     * } $limits - Limits config
      * @return void
      */
     protected function setLimits(array $limits): void
@@ -432,7 +442,17 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Get current limits configuration
      *
-     * @return array|false - Limit config or false if limits not yet configured
+     * @return array{
+     *     per24h: int|false,
+     *     perHour: int|false,
+     *     perMinute: int|false,
+     *     start24h: string|false,
+     *     startHour: string|false,
+     *     startMinute: string|false,
+     *     current24h: int,
+     *     currentHour: int,
+     *     currentMinute: int
+     * }|false - Limit config or false if limits not yet configured
      */
     protected function getLimits(): bool | array
     {
@@ -776,7 +796,7 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Exits the console tool with an error msg and status 1
      *
-     * @param $msg
+     * @param string $msg
      * @return never
      */
     protected function exitFail($msg): never

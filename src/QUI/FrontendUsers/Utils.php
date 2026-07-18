@@ -29,7 +29,7 @@ class Utils
     /**
      * Return all packages which have a frontend-users.xml
      *
-     * @return array
+     * @return list<QUI\Package\Package>
      */
     public static function getFrontendUsersPackages(): array
     {
@@ -61,7 +61,7 @@ class Utils
      * Return all extra profile categories
      * - search frontend-users.xml
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getProfileCategories(): array
     {
@@ -135,7 +135,7 @@ class Utils
      *
      * @param string $category
      * @param bool|string $settings
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */
@@ -192,7 +192,7 @@ class Utils
      * Return a specific category
      *
      * @param string $category
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */
@@ -213,7 +213,7 @@ class Utils
     /**
      * Return all categories and settings for the profile control
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getProfileCategorySettings(): array
     {
@@ -257,7 +257,7 @@ class Utils
     /**
      * Return all categories and settings for the profile bar control
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getProfileBarCategorySettings(): array
     {
@@ -316,8 +316,8 @@ class Utils
     /**
      * Search title arrays and set the locale translations to it
      *
-     * @param array $categories
-     * @return array
+     * @param array<string, array<string, mixed>> $categories
+     * @return array<string, array<string, mixed>>
      */
     public static function loadTranslationForCategories(array $categories = []): array
     {
@@ -347,9 +347,9 @@ class Utils
     /**
      * Search title arrays and set the locale translations to it
      *
-     * @param array $categories
+     * @param array<string, array<string, mixed>> $categories
      * @param null|QUI\Projects\Project $Project
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function setUrlsToCategorySettings(
         array $categories = [],
@@ -597,6 +597,9 @@ class Utils
         $User->save(QUI::getUsers()->getSystemUser());
     }
 
+    /**
+     * @return list<string>
+     */
     public static function getMissingAddressFields(QUI\Users\Address $Address): array
     {
         $missing = [];
@@ -713,7 +716,7 @@ class Utils
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
     private static function getBlacklistedEmailPatterns(): array
     {

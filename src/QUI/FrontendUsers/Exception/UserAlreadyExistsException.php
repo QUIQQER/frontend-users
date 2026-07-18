@@ -6,5 +6,5 @@ use QUI\FrontendUsers\Exception;
 
 class UserAlreadyExistsException extends Exception
 {
-    protected $code = 50001;
+    protected int $code = 50001;
 }

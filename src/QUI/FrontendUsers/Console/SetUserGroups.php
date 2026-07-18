@@ -178,7 +178,7 @@ class SetUserGroups extends QUI\System\Console\Tool
     /**
      * Exits the console tool with an error msg and status 1
      *
-     * @param $msg
+     * @param string $msg
      * @return never
      */
     protected function exitFail($msg): never

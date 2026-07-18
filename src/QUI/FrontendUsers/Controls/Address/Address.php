@@ -25,7 +25,7 @@ class Address extends QUI\Control
     /**
      * Address constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -174,8 +174,8 @@ class Address extends QUI\Control
     }
 
     /**
-     * @param array $settings
-     * @return array
+     * @param array<string, array<string, bool>> $settings
+     * @return array<string, array<string, bool>>
      */
     public static function checkSettingsArray(array $settings): array
     {
@@ -310,7 +310,7 @@ class Address extends QUI\Control
     /**
      * Create a new address for the user
      *
-     * @param array $data - address data
+     * @param array<string, mixed> $data - address data
      *
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
@@ -401,7 +401,7 @@ class Address extends QUI\Control
     /**
      * Edit an address
      *
-     * @param array $data - address data
+     * @param array<string, mixed> $data - address data
      *
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception

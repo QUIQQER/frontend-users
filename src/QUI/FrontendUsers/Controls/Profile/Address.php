@@ -20,7 +20,7 @@ class Address extends AbstractProfileControl
 {
     /**
      * Address constructor.
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -188,7 +188,7 @@ class Address extends AbstractProfileControl
     /**
      * Get address field settings for the frontend profile.
      *
-     * @return array
+     * @return array<string, array<string, bool>>
      */
     protected function getProfileAddressFieldSettings(): array
     {

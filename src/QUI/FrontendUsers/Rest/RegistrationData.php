@@ -18,7 +18,7 @@ class RegistrationData extends QDOM
      * The values contain arrays with further information about the fields requirements.
      * For example the maximum allowed length for a field.
      *
-     * @return array
+     * @return array<string, array{max_length: int|null}>
      *
      * @throws QUI\Exception
      */
