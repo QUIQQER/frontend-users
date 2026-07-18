@@ -26,6 +26,7 @@ class Events
      * @param User $User
      * @return void
      *
+     * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
     public static function onUserActivate(User $User): void
@@ -129,6 +130,7 @@ class Events
      * @param bool $checkEligibility (optional) - Checks if the user is eligible for auto login
      * @return void
      *
+     * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
     public static function autoLogin(QUI\Interfaces\Users\User $User, bool $checkEligibility = true): void
@@ -192,15 +194,22 @@ class Events
             $useragent = $_SERVER['HTTP_USER_AGENT'];
         }
 
-        QUI::getDataBase()->update(
-            QUI::getUsers()->table(),
-            [
-                'lastvisit' => time(),
-                'user_agent' => $useragent,
-                'secHash' => $secHash
-            ],
-            ['uuid' => $User->getUUID()]
-        );
+        try {
+            QUI::getDataBaseConnection()->update(
+                QUI::getUsers()::table(),
+                [
+                    'lastvisit' => time(),
+                    'user_agent' => $useragent,
+                    'secHash' => $secHash
+                ],
+                ['uuid' => $User->getUUID()]
+            );
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
 
         QUI::getEvents()->fireEvent(
             'quiqqerFrontendUsersUserAutoLogin',

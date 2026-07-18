@@ -37,6 +37,7 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
      *
      * @param LinkVerification $verification
      * @return void
+     * @throws QUI\Database\Exception
      * @throws \Exception
      */
     public function onSuccess(LinkVerification $verification): void
@@ -49,7 +50,7 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
 
             switch ($userProfileSettings['userDeleteMode']) {
                 case 'delete':
-                    QUI::getDataBase()->update(
+                    QUI::getDataBaseConnection()->update(
                         QUI::getDBTableName('users'),
                         ['active' => -1],
                         ['uuid' => $User->getUUID()]
@@ -68,6 +69,13 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
             QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserDelete', [$User]);
 
             $User->logout();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            QUI\System\Log::writeException($Exception);
+
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             throw $Exception;

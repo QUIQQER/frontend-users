@@ -22,15 +22,21 @@ class Cron
      */
     public static function deleteUnverifiedInactiveUsers(): void
     {
-        $result = QUI::getDataBase()->fetch([
-            'select' => [
-                'id'
-            ],
-            'from' => QUI::getDBTableName('users'),
-            'where' => [
-                'active' => 0
-            ]
-        ]);
+        try {
+            $QueryBuilder = QUI::getDataBaseConnection()->createQueryBuilder();
+            $result = $QueryBuilder
+                ->select(QUI\Utils\Doctrine::quoteIdentifier('id'))
+                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users')))
+                ->where(QUI\Utils\Doctrine::quoteIdentifier('active') . ' = :active')
+                ->setParameter('active', 0)
+                ->executeQuery()
+                ->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
 
         $Users = QUI::getUsers();
         $Handler = Handler::getInstance();

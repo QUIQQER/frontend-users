@@ -489,6 +489,7 @@ class Registration extends QUI\Control
      *
      * @throws QUI\FrontendUsers\Exception\UserAlreadyExistsException
      * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
     public function register()
@@ -592,19 +593,27 @@ class Registration extends QUI\Control
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
 
         // check if the user has a password
-        $result = QUI::getDataBase()->fetch([
-            'select' => 'password',
-            'from' => QUI::getDBTableName('users'),
-            'where' => [
-                'uuid' => $NewUser->getUUID()
-            ],
-            'limit' => 1
-        ]);
+        try {
+            $QueryBuilder = QUI::getDataBaseConnection()->createQueryBuilder();
+            $password = $QueryBuilder
+                ->select(QUI\Utils\Doctrine::quoteIdentifier('password'))
+                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users')))
+                ->where(QUI\Utils\Doctrine::quoteIdentifier('uuid') . ' = :uuid')
+                ->setParameter('uuid', $NewUser->getUUID())
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
 
         $SystemUser = QUI::getUsers()->getSystemUser();
 
         // set random password if the Registrar did not set a password
-        if (empty($result[0]['password'])) {
+        if (empty($password)) {
             $NewUser->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         }
 

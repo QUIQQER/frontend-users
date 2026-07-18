@@ -2,6 +2,7 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Exception;
 use QUI;
 
@@ -25,6 +26,8 @@ class SetUserGroups extends QUI\System\Console\Tool
 
     /**
      * Execute the console tool
+     *
+     * @throws QUI\Database\Exception
      */
     public function execute(): void
     {
@@ -74,32 +77,45 @@ class SetUserGroups extends QUI\System\Console\Tool
         }
 
         // Get all users
-        $sql = "SELECT `id` FROM " . QUI::getUsers()::table();
-        $where = [];
+        $Connection = QUI::getDataBaseConnection();
+        $QueryBuilder = $Connection->createQueryBuilder()
+            ->select(QUI\Utils\Doctrine::quoteIdentifier('id'))
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getUsers()::table()));
 
         if (!empty($languages)) {
-            $where[] = "`lang` IN ('" . implode("','", $languages) . "')";
+            $QueryBuilder->andWhere(
+                $QueryBuilder->expr()->in(QUI\Utils\Doctrine::quoteIdentifier('lang'), ':languages')
+            )->setParameter('languages', $languages, ArrayParameterType::STRING);
         }
 
         if (!$inactiveUsers) {
-            $where[] = "`active` = 1";
+            $QueryBuilder->andWhere(QUI\Utils\Doctrine::quoteIdentifier('active') . ' = :active')
+                ->setParameter('active', 1);
         }
 
         if (!empty($userGroupIds)) {
-            $whereOR = [];
+            $groupConditions = [];
 
-            foreach ($userGroupIds as $groupId) {
-                $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
+            foreach ($userGroupIds as $index => $groupId) {
+                $parameter = 'userGroup' . $index;
+                $groupConditions[] = $QueryBuilder->expr()->like(
+                    QUI\Utils\Doctrine::quoteIdentifier('usergroup'),
+                    ':' . $parameter
+                );
+                $QueryBuilder->setParameter($parameter, '%,' . $groupId . ',%');
             }
 
-            $where[] = "(" . implode(" OR ", $whereOR) . ")";
+            $QueryBuilder->andWhere($QueryBuilder->expr()->or(...$groupConditions));
         }
 
-        if (!empty($where)) {
-            $sql .= " WHERE " . implode(" AND ", $where);
+        try {
+            $result = $QueryBuilder->executeQuery()->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
         }
-
-        $result = QUI::getDataBase()->fetchSQL($sql);
 
         // SUMMARY
         $this->writeLn("\nSUMMARY\n===============================================\n");

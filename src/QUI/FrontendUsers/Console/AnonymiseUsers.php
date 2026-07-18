@@ -99,33 +99,46 @@ class AnonymiseUsers extends QUI\System\Console\Tool
     protected function anonymiseUsers(array $settings): void
     {
         $groupIds = $settings['groupIds'];
-        $tbl = QUI::getDBTableName('users');
-        $tblAddresses = QUI::getDBTableName('users_address');
+        $Connection = QUI::getDataBaseConnection();
+        $tbl = QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users'));
+        $tblAddresses = QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users_address'));
 
         // Get all users
-        $sql = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . $tbl;
-
-        $where = [];
-        $where[] = 'su = 0';
+        $QueryBuilder = $Connection->createQueryBuilder()
+            ->select('id', 'username', 'email', 'firstname', 'lastname')
+            ->from($tbl)
+            ->where(QUI\Utils\Doctrine::quoteIdentifier('su') . ' = :isSuperUser')
+            ->setParameter('isSuperUser', 0);
 
         if (!empty($groupIds)) {
-            $whereOR = [];
+            $groupConditions = [];
 
-            foreach ($groupIds as $groupId) {
-                $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
+            foreach ($groupIds as $index => $groupId) {
+                $parameter = 'group' . $index;
+                $groupConditions[] = $QueryBuilder->expr()->like(
+                    QUI\Utils\Doctrine::quoteIdentifier('usergroup'),
+                    ':' . $parameter
+                );
+                $QueryBuilder->setParameter($parameter, '%,' . $groupId . ',%');
             }
 
-            $where[] = "(" . implode(" OR ", $whereOR) . ")";
+            $QueryBuilder->andWhere($QueryBuilder->expr()->or(...$groupConditions));
         }
 
-        $sql .= " WHERE " . implode(" AND ", $where);
-        $result = QUI::getDataBase()->fetchSQL($sql);
+        try {
+            $result = $QueryBuilder->executeQuery()->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
 
         $anonymiseEmailOnly = !empty($this->getArgument('email_only'));
 
         foreach ($result as $row) {
             $user = $row;
-            $userId = $row['id'];
+            $userId = (int)$row['id'];
 
             $this->writeLn("Anonymise user #" . $userId . "...");
 
@@ -142,28 +155,32 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                     $userData['birthday'] = '1970-01-01';
                 }
 
-                QUI::getDataBase()->update(
+                $Connection->transactional(function () use (
+                    $Connection,
                     $tbl,
+                    $tblAddresses,
                     $userData,
-                    [
-                        'id' => $userId
-                    ]
-                );
+                    $userId,
+                    $settings,
+                    $anonymiseEmailOnly
+                ): void {
+                    $Connection->update($tbl, $userData, ['id' => $userId]);
 
-                $this->write(" OK!");
+                    if ($anonymiseEmailOnly) {
+                        return;
+                    }
 
-                if (!$anonymiseEmailOnly) {
                     $this->writeLn("Anonymise user address(es)...");
-
-                    $addressResult = QUI::getDataBase()->fetch([
-                        'from' => $tblAddresses,
-                        'where' => [
-                            'uid' => $userId
-                        ]
-                    ]);
+                    $addressResult = $Connection->createQueryBuilder()
+                        ->select('*')
+                        ->from($tblAddresses)
+                        ->where(QUI\Utils\Doctrine::quoteIdentifier('uid') . ' = :userId')
+                        ->setParameter('userId', $userId)
+                        ->executeQuery()
+                        ->fetchAllAssociative();
 
                     foreach ($addressResult as $address) {
-                        QUI::getDataBase()->update(
+                        $Connection->update(
                             $tblAddresses,
                             [
                                 'salutation' => $this->anonymiseString($address['salutation']),
@@ -176,14 +193,17 @@ class AnonymiseUsers extends QUI\System\Console\Tool
                                 'phone' => '[]',
                                 'mail' => '["' . $userId . $settings['emailHandle'] . '"]'
                             ],
-                            [
-                                'id' => $address['id']
-                            ]
+                            ['id' => (int)$address['id']]
                         );
                     }
-                }
+                });
 
                 $this->write(" OK!");
+            } catch (\Doctrine\DBAL\Exception $Exception) {
+                throw new QUI\Database\Exception(
+                    $Exception->getMessage(),
+                    (int)$Exception->getCode()
+                );
             } catch (Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
                 $this->write("ERROR: " . $Exception->getMessage());

@@ -2,6 +2,7 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use Doctrine\DBAL\ArrayParameterType;
 use QUI;
 use QUI\Exception;
 
@@ -13,6 +14,8 @@ use function file_get_contents;
 use function file_put_contents;
 use function json_decode;
 use function json_encode;
+use function preg_split;
+use function trim;
 use function unlink;
 
 /**
@@ -68,6 +71,7 @@ class SendUserMails extends QUI\System\Console\Tool
     /**
      * Execute the console tool
      * @throws Exception
+     * @throws QUI\Database\Exception
      */
     public function execute(): void
     {
@@ -137,34 +141,66 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         // ORDER BY
-        $this->writeLn("ORDER BY clause for the `users` table (leave empty to use default order): ");
+        $this->writeLn(
+            "ORDER BY column and optional direction (id, username, email, firstname, lastname, lang or active;"
+            . " leave empty to use default order): "
+        );
         $orderBy = $this->readInput();
 
         // Get all users
-        $sql = "SELECT `id`, `username`, `email`, `firstname`, `lastname` FROM " . QUI::getUsers()::table();
-        $where[] = "`lang` IN ('" . implode("','", $languages) . "')";
+        $Connection = QUI::getDataBaseConnection();
+        $QueryBuilder = $Connection->createQueryBuilder()
+            ->select('id', 'username', 'email', 'firstname', 'lastname')
+            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getUsers()::table()));
+        $QueryBuilder->where(
+            $QueryBuilder->expr()->in(QUI\Utils\Doctrine::quoteIdentifier('lang'), ':languages')
+        )->setParameter('languages', $languages, ArrayParameterType::STRING);
 
         if (!$inactiveUsers) {
-            $where[] = "`active` = 1";
+            $QueryBuilder->andWhere(QUI\Utils\Doctrine::quoteIdentifier('active') . ' = :active')
+                ->setParameter('active', 1);
         }
 
         if (!empty($groupIds)) {
-            $whereOR = [];
+            $groupConditions = [];
 
-            foreach ($groupIds as $groupId) {
-                $whereOR[] = "`usergroup` LIKE '%,$groupId,%'";
+            foreach ($groupIds as $index => $groupId) {
+                $parameter = 'group' . $index;
+                $groupConditions[] = $QueryBuilder->expr()->like(
+                    QUI\Utils\Doctrine::quoteIdentifier('usergroup'),
+                    ':' . $parameter
+                );
+                $QueryBuilder->setParameter($parameter, '%,' . $groupId . ',%');
             }
 
-            $where[] = "(" . implode(" OR ", $whereOR) . ")";
+            $QueryBuilder->andWhere($QueryBuilder->expr()->or(...$groupConditions));
         }
-
-        $sql .= " WHERE " . implode(" AND ", $where);
 
         if (!empty($orderBy)) {
-            $sql .= " ORDER BY $orderBy";
+            $orderParts = preg_split('/\s+/', trim($orderBy));
+            $allowedColumns = ['id', 'username', 'email', 'firstname', 'lastname', 'lang', 'active'];
+            $orderColumn = $orderParts[0] ?? '';
+            $orderDirection = mb_strtoupper($orderParts[1] ?? 'ASC');
+
+            if (
+                count($orderParts) > 2
+                || !in_array($orderColumn, $allowedColumns, true)
+                || !in_array($orderDirection, ['ASC', 'DESC'], true)
+            ) {
+                $this->exitFail('Invalid ORDER BY value. Use an allowed column and optional ASC or DESC.');
+            }
+
+            $QueryBuilder->orderBy(QUI\Utils\Doctrine::quoteIdentifier($orderColumn), $orderDirection);
         }
 
-        $result = QUI::getDataBase()->fetchSQL($sql);
+        try {
+            $result = $QueryBuilder->executeQuery()->fetchAllAssociative();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
         $recipients = [];
 
         foreach ($result as $row) {

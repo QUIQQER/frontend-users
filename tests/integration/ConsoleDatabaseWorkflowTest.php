@@ -322,7 +322,7 @@ class ConsoleDatabaseWorkflowTest extends DatabaseTestCase
             'de',
             $Group->getUUID(),
             'n',
-            '',
+            'id DESC',
             'PHPUnit subject',
             '',
             '',
