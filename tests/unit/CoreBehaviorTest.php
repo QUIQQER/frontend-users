@@ -11,6 +11,7 @@ use QUI\FrontendUsers\EmailConfirmLinkVerification;
 use QUI\FrontendUsers\EmailVerification;
 use QUI\FrontendUsers\ErpProvider;
 use QUI\FrontendUsers\Exception\EmailAddressNotVerifiableException;
+use QUI\FrontendUsers\Exception\UserAlreadyExistsException;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\FrontendUsers\RegistrarCollection;
 use QUI\FrontendUsers\Rest\Provider;
@@ -21,6 +22,14 @@ use QUI\Verification\Enum\VerificationStatus;
 
 class CoreBehaviorTest extends TestCase
 {
+    public function testFrontendUserExceptionCodes(): void
+    {
+        self::assertSame(50001, (new UserAlreadyExistsException())->getCode());
+        self::assertSame(50002, (new EmailAddressNotVerifiableException())->getCode());
+        self::assertSame(42, (new UserAlreadyExistsException('Custom code', 42))->getCode());
+        self::assertSame(43, (new EmailAddressNotVerifiableException('Custom code', 43))->getCode());
+    }
+
     public function testValueObjectsCollectionsAndSettingsNormalization(): void
     {
         $Field = new InvalidFormField('email', 'Invalid email');
