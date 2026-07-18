@@ -19,11 +19,14 @@ require_once __DIR__ . '/stubs/Psr/Http/Message/ServerRequestInterface.php';
 require_once __DIR__ . '/stubs/GuzzleHttp/Psr7/Stream.php';
 require_once __DIR__ . '/stubs/GuzzleHttp/Psr7/Response.php';
 require_once __DIR__ . '/stubs/GuzzleHttp/Psr7/ServerRequest.php';
+require_once __DIR__ . '/stubs/QUI/ERP/Order/Exception.php';
+require_once __DIR__ . '/stubs/QUI/REST/ResponseFactory.php';
 require_once __DIR__ . '/stubs/Slim/Routing/RouteCollector.php';
 require_once __DIR__ . '/stubs/Slim/Routing/RouteCollectorProxy.php';
 require_once __DIR__ . '/stubs/Slim/App.php';
 require_once __DIR__ . '/stubs/Slim/Factory/AppFactory.php';
 require_once __DIR__ . '/stubs/QUI/REST/Server.php';
 require_once __DIR__ . '/Support/DatabaseTestCase.php';
+require_once __DIR__ . '/Support/VerificationSiteFixture.php';
 
 QUI\System\TestCleanup::register();

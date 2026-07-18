@@ -15,6 +15,7 @@ use QUI\FrontendUsers\Rest\RegistrationData;
 use QUI\FrontendUsers\Rest\Routes\GetRegisterRequiredFields;
 use QUI\FrontendUsers\Rest\Routes\PostRegister;
 use QUI\FrontendUsers\Tests\Support\DatabaseTestCase;
+use QUI\FrontendUsers\Tests\Support\VerificationSiteFixture;
 use QUI\FrontendUsers\UserDeleteConfirmLinkVerification;
 use QUI\FrontendUsers\Utils;
 use QUI\Verification\Entity\LinkVerification;
@@ -243,13 +244,19 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             'lastname' => 'Created',
             'password' => 'phpunit-rest-created-password'
         ]);
-        $Method = new ReflectionMethod(PostRegister::class, 'registerUser');
-        $User = $Method->invoke(null, $RegistrationData);
-        $this->trackUser($User);
+        VerificationSiteFixture::setUp();
 
-        self::assertSame('REST', $User->getAttribute('firstname'));
-        self::assertTrue($User->isInGroup($Group->getUUID()));
-        self::assertTrue((bool)$User->getAttribute('quiqqer.set.new.password'));
+        try {
+            $Method = new ReflectionMethod(PostRegister::class, 'registerUser');
+            $User = $Method->invoke(null, $RegistrationData);
+            $this->trackUser($User);
+
+            self::assertSame('REST', $User->getAttribute('firstname'));
+            self::assertTrue($User->isInGroup($Group->getUUID()));
+            self::assertTrue((bool)$User->getAttribute('quiqqer.set.new.password'));
+        } finally {
+            VerificationSiteFixture::tearDown();
+        }
     }
 
     public function testRestRegistrationValidationRejectsEachRequiredInputClass(): void

@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\Interfaces\Users\User as UserInterface;
+use QUI\Verification\VerificationRepository;
 use ReflectionProperty;
 use Throwable;
 
@@ -207,6 +208,14 @@ abstract class DatabaseTestCase extends TestCase
                 ->fetchAllAssociative();
 
             foreach ($rows as $row) {
+                try {
+                    $Connection->delete(
+                        QUI::getDBTableName(VerificationRepository::TBL_VERIFICATION_PROCESSES),
+                        ['identifier' => 'activate-' . $row['uuid']]
+                    );
+                } catch (Throwable) {
+                }
+
                 try {
                     QUI::getUsers()->deleteUser((string)$row['uuid']);
                 } catch (Throwable) {
