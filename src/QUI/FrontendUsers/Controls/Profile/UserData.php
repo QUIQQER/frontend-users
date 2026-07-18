@@ -117,7 +117,7 @@ class UserData extends AbstractProfileControl
     public function onSave(): void
     {
         $Request = QUI::getRequest()->request;
-        $newEmail = $Request->get('emailNew');
+        $newEmail = (string)$Request->get('emailNew');
         $User = QUI::getUserBySession();
 
         if (QUI::getUsers()->isNobodyUser($User)) {
@@ -260,7 +260,9 @@ class UserData extends AbstractProfileControl
 
             // street kommt manchmal als ganzes, dann dies zulassen
             if ($Request->get('street')) {
-                $addressData['street_no'] = trim($Request->get('street')) . ' ' . trim($Request->get('street_number'));
+                $addressData['street_no'] = trim((string)$Request->get('street'))
+                    . ' '
+                    . trim((string)$Request->get('street_number'));
                 $addressData['street_no'] = trim($addressData['street_no']);
             }
 

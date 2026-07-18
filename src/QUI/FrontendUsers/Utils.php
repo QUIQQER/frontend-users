@@ -326,7 +326,7 @@ class Utils
             $permission = $permission . '.' . $setting;
         }
 
-        return Permissions\Permission::hasPermission($permission, $User);
+        return (bool)Permissions\Permission::hasPermission($permission, $User);
     }
 
     /**

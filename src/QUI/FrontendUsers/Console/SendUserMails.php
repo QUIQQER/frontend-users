@@ -660,7 +660,7 @@ class SendUserMails extends QUI\System\Console\Tool
 
         // Queue mails
         foreach ($recipients as $recipient) {
-            $userId = $recipient['id'];
+            $userId = (int)$recipient['id'];
 
             $this->writeLn("### User $userId ###");
 

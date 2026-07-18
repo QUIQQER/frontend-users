@@ -249,7 +249,7 @@ class Address extends AbstractProfileControl
                 continue;
             }
 
-            $value = Orthos::clear($Request->get($field));
+            $value = Orthos::clear((string)$Request->get($field));
 
             if (empty($value) && $options['required']) {
                 throw new QUI\FrontendUsers\Exception([
