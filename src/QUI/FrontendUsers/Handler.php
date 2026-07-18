@@ -898,7 +898,7 @@ class Handler extends Singleton
             'limit' => 1
         ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -925,7 +925,7 @@ class Handler extends Singleton
             'limit' => 1
         ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -952,7 +952,7 @@ class Handler extends Singleton
             'limit' => 1
         ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -983,7 +983,7 @@ class Handler extends Singleton
             'limit' => 1
         ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
