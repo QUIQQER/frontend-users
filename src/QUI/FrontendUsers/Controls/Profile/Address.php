@@ -211,7 +211,12 @@ class Address extends AbstractProfileControl
             $settings = [];
         }
 
-        return \QUI\FrontendUsers\Controls\Address\Address::checkSettingsArray($settings);
+        $settings = \QUI\FrontendUsers\Controls\Address\Address::checkSettingsArray($settings);
+
+        // These helper fields are only used by the address manager templates.
+        unset($settings['street'], $settings['street_number']);
+
+        return $settings;
     }
 
     /**
