@@ -28,17 +28,17 @@ use function trim;
  */
 class UserData extends AbstractProfileControl
 {
+    private VerificationRepositoryInterface $verificationRepository;
+
     /**
      * UserData constructor.
      * @param array<string, mixed> $attributes
      */
     public function __construct(
         array $attributes = [],
-        private ?VerificationRepositoryInterface $verificationRepository = null
+        ?VerificationRepositoryInterface $verificationRepository = null
     ) {
-        if (is_null($this->verificationRepository)) {
-            $this->verificationRepository = new VerificationRepository();
-        }
+        $this->verificationRepository = $verificationRepository ?? new VerificationRepository();
 
         parent::__construct($attributes);
 

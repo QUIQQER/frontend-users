@@ -87,10 +87,9 @@ class Handler extends Singleton
      */
     const SESSION_REGISTRAR = 'frontend_users_registrar';
 
-    /**
-     * @var null|RegistrarCollection
-     */
-    protected ?RegistrarCollection $Registrar = null;
+    protected RegistrarCollection $Registrar;
+
+    private VerificationFactoryInterface $verificationFactory;
 
     /**
      * Registration IDs of the current runtime
@@ -102,13 +101,9 @@ class Handler extends Singleton
     /**
      * Handler constructor.
      */
-    public function __construct(
-        private ?VerificationFactoryInterface $verificationFactory = null
-    ) {
-        if (is_null($this->verificationFactory)) {
-            $this->verificationFactory = new VerificationFactory();
-        }
-
+    public function __construct(?VerificationFactoryInterface $verificationFactory = null)
+    {
+        $this->verificationFactory = $verificationFactory ?? new VerificationFactory();
         $this->Registrar = new RegistrarCollection();
     }
 
@@ -211,9 +206,9 @@ class Handler extends Singleton
     /**
      * Return all available registrar
      *
-     * @return RegistrarCollection|null
+     * @return RegistrarCollection
      */
-    public function getAvailableRegistrars(): ?RegistrarCollection
+    public function getAvailableRegistrars(): RegistrarCollection
     {
         if ($this->Registrar->isNotEmpty()) {
             return $this->Registrar;
