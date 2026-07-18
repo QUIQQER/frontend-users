@@ -43,7 +43,18 @@ QUI::getAjax()->registerFunction(
 
             /** @var RegistrarInterface $Registrar */
             $Registrar = new $registrarClass();
-            $Registrar->setProject(QUI::getRewrite()->getProject());
+            $Project = QUI::getRewrite()->getProject();
+
+            if ($Project === null) {
+                QUI\System\Log::addError(
+                    'Frontend users AJAX resendActivationMail: No current rewrite project is available; '
+                    . 'activation mail was not resent.'
+                );
+
+                return false;
+            }
+
+            $Registrar->setProject($Project);
 
             Handler::getInstance()->sendActivationMail($User, $Registrar);
         } catch (Exception $Exception) {

@@ -37,7 +37,7 @@ class RegistrationSignUp extends QUI\Control
     /**
      * constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -108,7 +108,8 @@ class RegistrationSignUp extends QUI\Control
             $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
 
             if (
-                class_exists('QUI\Captcha\Modules\Google')
+                $Default !== false
+                && class_exists('QUI\Captcha\Modules\Google')
                 && class_exists('QUI\Captcha\Modules\GoogleInvisible\Control')
                 && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class
             ) {
@@ -151,8 +152,8 @@ class RegistrationSignUp extends QUI\Control
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
-            $settingsB = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+            $settingsA = $RegistrarHandler->getRegistrarSettings($RegistrarA::class);
+            $settingsB = $RegistrarHandler->getRegistrarSettings($RegistrarB::class);
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -216,7 +217,7 @@ class RegistrationSignUp extends QUI\Control
                     break;
                 case 'emailconfirm':
                 case 'userdelete':
-                    $startUrl = QUI::getRewrite()->getProject()->get(1)->getUrlRewrittenWithHost();
+                    $startUrl = QUI::getRewrite()->getProject()?->get(1)->getUrlRewrittenWithHost() ?? '';
 
                     $msgSuccess = QUI::getLocale()->get(
                         'quiqqer/frontend-users',
@@ -294,7 +295,7 @@ class RegistrationSignUp extends QUI\Control
         $redirect = false;
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $Project = QUI::getRewrite()->getProject();
-        $projectLang = $Project->getLang();
+        $projectLang = $Project?->getLang() ?? '';
 
         if ($activationSuccess && !empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
             $RedirectSite = QUI\Projects\Site\Utils::getSiteByLink(
@@ -449,7 +450,7 @@ class RegistrationSignUp extends QUI\Control
     /**
      * Return the icon HTML for a registrar
      *
-     * @param $Registrar
+     * @param \QUI\FrontendUsers\AbstractRegistrar $Registrar
      * @return string
      */
     public function getRegistrarIcon($Registrar): string

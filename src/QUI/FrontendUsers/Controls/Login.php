@@ -22,7 +22,7 @@ class Login extends QUI\Control
     /**
      * constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -67,17 +67,29 @@ class Login extends QUI\Control
 
         foreach ($socialAuth as $class) {
             try {
-                /* @var $Auth QUI\Users\AbstractAuthenticator */
+                if (!class_exists($class)) {
+                    continue;
+                }
+
                 $Auth = new $class();
 
+                if (!$Auth instanceof QUI\Users\AuthenticatorInterface) {
+                    continue;
+                }
+
                 $Login = $Auth->getLoginControl();
+
+                if ($Login === null) {
+                    continue;
+                }
+
                 $Login->setAttributes([
                     'onlyIcon' => true
                 ]);
 
                 $icon = false;
                 $image = false;
-                $iconAttribute = $Login->getAttribute('icon');
+                $iconAttribute = (string)$Login->getAttribute('icon');
 
                 if (
                     str_contains($iconAttribute, 'fa ')
@@ -123,7 +135,7 @@ class Login extends QUI\Control
             'showPasswordReset' => $showPasswordReset
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**

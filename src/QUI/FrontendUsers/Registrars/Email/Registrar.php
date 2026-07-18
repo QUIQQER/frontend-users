@@ -54,6 +54,10 @@ class Registrar extends FrontendUsers\AbstractRegistrar
         // set address data
         if ($useAddress) {
             $Address = $User->getStandardAddress();
+
+            if ($Address === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
             $Address->setAttributes([
                 'salutation' => $this->getAttribute('salutation'),
                 'firstname' => $this->getAttribute('firstname'),

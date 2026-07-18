@@ -18,7 +18,7 @@ class ChangePassword extends AbstractProfileControl
 {
     /**
      * ChangePassword constructor.
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -45,7 +45,7 @@ class ChangePassword extends AbstractProfileControl
             'User' => QUI::getUserBySession()
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**
@@ -60,6 +60,12 @@ class ChangePassword extends AbstractProfileControl
 
         $passwordOld = $Request->get('passwordOld');
         $passwordNew = $Request->get('passwordNew');
+
+        if (!is_string($passwordOld) || !is_string($passwordNew)) {
+            throw new QUI\FrontendUsers\Exception(
+                'Frontend users ChangePassword::onSave: Invalid password request data.'
+            );
+        }
 
         if (!$User) {
             $User = QUI::getUserBySession();

@@ -18,7 +18,7 @@ class RegistrationData extends QDOM
      * The values contain arrays with further information about the fields requirements.
      * For example the maximum allowed length for a field.
      *
-     * @return array
+     * @return array<string, array{max_length: int|null}>
      *
      * @throws QUI\Exception
      */
@@ -86,7 +86,13 @@ class RegistrationData extends QDOM
     public static function buildFromRequest(SlimRequest $Request): RegistrationData
     {
         $RegistrationData = new RegistrationData();
-        $RegistrationData->setAttributes($Request->getParsedBody());
+        $attributes = $Request->getParsedBody();
+
+        if (is_object($attributes)) {
+            $attributes = get_object_vars($attributes);
+        }
+
+        $RegistrationData->setAttributes($attributes);
 
         $Handler = QUI\FrontendUsers\Handler::getInstance();
 

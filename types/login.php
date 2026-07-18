@@ -59,7 +59,7 @@ if ($isAuth) {
     }
 
     if (!$RedirectSite && $Site->getId() !== 1) {
-        $RedirectSite = QUI::getRewrite()->getProject()->get(1);
+        $RedirectSite = QUI::getRewrite()->getProject()?->get(1) ?? false;
     }
 
     if ($RedirectSite) {

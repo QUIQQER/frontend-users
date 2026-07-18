@@ -23,7 +23,7 @@ class Profile extends Control
     /**
      * Profile constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -175,7 +175,7 @@ class Profile extends Control
             'this' => $this
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**
@@ -217,6 +217,14 @@ class Profile extends Control
             return $this->getAttribute('Site');
         }
 
-        return QUI::getRewrite()->getSite();
+        $Site = QUI::getRewrite()->getSite();
+
+        if ($Site === null) {
+            throw new Exception(
+                'Frontend users profile: No current site is available.'
+            );
+        }
+
+        return $Site;
     }
 }

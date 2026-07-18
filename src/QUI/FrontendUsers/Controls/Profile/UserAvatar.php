@@ -82,11 +82,8 @@ class UserAvatar extends AbstractProfileControl
             }
         }
 
-        $uploadEnabled = boolval(
-            QUI::getPackage('quiqqer/frontend-users')
-                ->getConfig()
-                ->get('userProfile', 'userAvatarUploadAllowed')
-        );
+        $Config = QUI\FrontendUsers\Handler::getPackageConfig();
+        $uploadEnabled = boolval($Config->get('userProfile', 'userAvatarUploadAllowed'));
 
         if ($uploadEnabled) {
             $Engine->assign('AvatarUpload', new UserAvatarUpload());
@@ -107,7 +104,7 @@ class UserAvatar extends AbstractProfileControl
             )
         );
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**

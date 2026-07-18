@@ -15,6 +15,9 @@ use function explode;
 use function json_encode;
 use function time;
 
+use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_THROW_ON_ERROR;
+
 class PostRegister
 {
     /**
@@ -22,7 +25,7 @@ class PostRegister
      *
      * @param SlimRequest $Request
      * @param SlimResponse $Response
-     * @param array $args
+     * @param array<string, mixed> $args
      *
      * @return SlimResponse
      */
@@ -35,9 +38,10 @@ class PostRegister
             return new Response(
                 400,
                 ['Content-Type' => 'application/json'],
-                json_encode([
-                    'message' => $Exception->getMessage()
-                ])
+                json_encode(
+                    ['message' => $Exception->getMessage()],
+                    JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE
+                )
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
@@ -45,18 +49,20 @@ class PostRegister
             return new Response(
                 500,
                 ['Content-Type' => 'application/json'],
-                json_encode([
-                    'message' => $Exception->getMessage()
-                ])
+                json_encode(
+                    ['message' => $Exception->getMessage()],
+                    JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE
+                )
             );
         }
 
         return new Response(
             200,
             ['Content-Type' => 'application/json'],
-            json_encode([
-                'message' => 'OK'
-            ])
+            json_encode(
+                ['message' => 'OK'],
+                JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE
+            )
         );
     }
 
@@ -82,6 +88,24 @@ class PostRegister
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
+        $projectName = $RegistrationData->getAttribute('project_name');
+
+        if ($projectName) {
+            $Project = QUI::getProject(
+                $projectName,
+                $RegistrationData->getAttribute('project_language')
+            );
+        } else {
+            $Project = QUI::getProjectManager()->getStandard();
+        }
+
+        if ($Project === null) {
+            throw new QUI\Exception(
+                'Frontend users PostRegister::registerUser: '
+                . 'No registration project is available.'
+            );
+        }
+
         $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
 
         // Add the given data to the User
@@ -97,14 +121,6 @@ class PostRegister
         // determine if the user has to set a new password on first login
         if ($registrationSettings['forcePasswordReset']) {
             $NewUser->setAttribute('quiqqer.set.new.password', true);
-        }
-
-        $projectName = $RegistrationData->getAttribute('project_name');
-
-        if ($projectName) {
-            $Project = QUI::getProject($projectName, $RegistrationData->getAttribute('project_language'));
-        } else {
-            $Project = QUI::getProjectManager()->getStandard();
         }
 
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
@@ -173,6 +189,10 @@ class PostRegister
                 'country' => mb_strtolower($RegistrationData->getAttribute('country'))
             ], $SystemUser);
 
+            if ($UserAddress === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
+
             $User->setAttributes([
                 'firstname' => $RegistrationData->getAttribute('firstname'),
                 'lastname' => $RegistrationData->getAttribute('lastname'),
@@ -212,7 +232,7 @@ class PostRegister
 
     /**
      * @throws QUI\Exception
-     * @throws QUI\Verification\Exception|\DateMalformedStringException
+     * @throws \Exception
      */
     protected static function sendActivationMail(
         QUI\Interfaces\Users\User $User,

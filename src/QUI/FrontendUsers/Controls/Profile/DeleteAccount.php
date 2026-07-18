@@ -20,17 +20,17 @@ use QUI\Verification\VerificationRepository;
  */
 class DeleteAccount extends AbstractProfileControl
 {
+    private VerificationRepositoryInterface $verificationRepository;
+
     /**
      * DeleteAccount constructor.
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(
         array $attributes = [],
-        private ?VerificationRepositoryInterface $verificationRepository = null
+        ?VerificationRepositoryInterface $verificationRepository = null
     ) {
-        if (is_null($this->verificationRepository)) {
-            $this->verificationRepository = new VerificationRepository();
-        }
+        $this->verificationRepository = $verificationRepository ?? new VerificationRepository();
 
         parent::__construct($attributes);
 
@@ -79,7 +79,7 @@ class DeleteAccount extends AbstractProfileControl
             'action' => $action
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**
@@ -100,9 +100,20 @@ class DeleteAccount extends AbstractProfileControl
         self::checkDeleteAccount();
 
         try {
+            $Project = QUI::getRewrite()->getProject();
+
+            if ($Project === null) {
+                Log::addError(
+                    'Frontend users DeleteAccount::onSave: No current rewrite project is available; '
+                    . 'the delete confirmation mail was not sent.'
+                );
+
+                return;
+            }
+
             Handler::getInstance()->sendDeleteUserConfirmationMail(
                 QUI::getUserBySession(),
-                QUI::getRewrite()->getProject()
+                $Project
             );
         } catch (Exception $Exception) {
             Log::writeException($Exception);

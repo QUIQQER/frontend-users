@@ -87,29 +87,40 @@ class Handler extends Singleton
      */
     const SESSION_REGISTRAR = 'frontend_users_registrar';
 
-    /**
-     * @var null|RegistrarCollection
-     */
-    protected ?RegistrarCollection $Registrar = null;
+    protected RegistrarCollection $Registrar;
+
+    private VerificationFactoryInterface $verificationFactory;
 
     /**
      * Registration IDs of the current runtime
      *
-     * @var array
+     * @var list<string>
      */
     protected array $registrationIds = [];
 
     /**
      * Handler constructor.
      */
-    public function __construct(
-        private ?VerificationFactoryInterface $verificationFactory = null
-    ) {
-        if (is_null($this->verificationFactory)) {
-            $this->verificationFactory = new VerificationFactory();
+    public function __construct(?VerificationFactoryInterface $verificationFactory = null)
+    {
+        $this->verificationFactory = $verificationFactory ?? new VerificationFactory();
+        $this->Registrar = new RegistrarCollection();
+    }
+
+    /**
+     * Return the mandatory package configuration.
+     *
+     * @throws QUI\Exception
+     */
+    public static function getPackageConfig(): \QUI\Config
+    {
+        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+
+        if ($Config === null) {
+            throw new QUI\Exception('The quiqqer/frontend-users package configuration is unavailable.');
         }
 
-        $this->Registrar = new RegistrarCollection();
+        return $Config;
     }
 
     /**
@@ -195,9 +206,9 @@ class Handler extends Singleton
     /**
      * Return all available registrar
      *
-     * @return RegistrarCollection|null
+     * @return RegistrarCollection
      */
-    public function getAvailableRegistrars(): ?RegistrarCollection
+    public function getAvailableRegistrars(): RegistrarCollection
     {
         if ($this->Registrar->isNotEmpty()) {
             return $this->Registrar;
@@ -251,12 +262,12 @@ class Handler extends Singleton
     /**
      * Get all settings for user profile
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getUserProfileSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
 
         return $Conf->getSection('userProfile');
     }
@@ -264,12 +275,12 @@ class Handler extends Singleton
     /**
      * Get all settings for user bar
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getProfileBarSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
 
         return $Conf->getSection('profileBar');
     }
@@ -277,12 +288,12 @@ class Handler extends Singleton
     /**
      * Get registration settings concerning all Registars alike
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getRegistrationSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
         $settings = $Conf->getSection('registration');
 
         if (!empty($settings['termsOfUseSite'])) {
@@ -303,12 +314,12 @@ class Handler extends Singleton
     /**
      * Get login settings
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getLoginSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
         $settings = $Conf->getSection('login');
 
         $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
@@ -325,7 +336,7 @@ class Handler extends Singleton
     /**
      * Get address field settings
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      * @throws QUI\Exception
      */
     public function getAddressFieldSettings(): array
@@ -338,12 +349,12 @@ class Handler extends Singleton
     /**
      * Get settings for mail
      *
-     * @return array
+     * @return array<string, mixed>
      * @throws QUI\Exception
      */
     public function getMailSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
 
         return $Conf->getSection('mail');
     }
@@ -352,18 +363,12 @@ class Handler extends Singleton
      * Get settings for one or all Registrars
      *
      * @param string|null $registrarClass (optional) - Registrar class path (namespace)
-     * @return array
+     * @return array<string, mixed>
+     * @throws QUI\Exception
      */
     public function getRegistrarSettings(null | string $registrarClass = null): array
     {
-        try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        } catch (QUI\Exception $Exception) {
-            QUI\System\Log::addError($Exception->getMessage());
-
-            return [];
-        }
-
+        $Conf = self::getPackageConfig();
 
         $registrarSettings = $Conf->get('registrars', 'registrarSettings');
 
@@ -393,20 +398,31 @@ class Handler extends Singleton
     /**
      * Set settings for registrars
      *
-     * @param array $settings
+     * @param array<string, array<string, mixed>> $settings
      * @return void
      * @throws QUI\Exception
      */
     public function setRegistrarSettings(array $settings): void
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
         $writeSettings = [];
 
         foreach ($settings as $registrarType => $settingsData) {
             $writeSettings[base64_encode($registrarType)] = $settingsData;
         }
 
-        $Conf->set('registrars', 'registrarSettings', json_encode($writeSettings));
+        $settingsJson = json_encode($writeSettings);
+
+        if ($settingsJson === false) {
+            QUI\System\Log::addError(
+                'Frontend users Handler::setRegistrarSettings: '
+                . 'Registrar settings could not be JSON-encoded; settings were not saved.'
+            );
+
+            return;
+        }
+
+        $Conf->set('registrars', 'registrarSettings', $settingsJson);
         $Conf->save();
     }
 
@@ -421,6 +437,15 @@ class Handler extends Singleton
     public function sendActivationMail(QUI\Interfaces\Users\User $User, RegistrarInterface $Registrar): bool
     {
         $Project = $Registrar->getProject();
+
+        if ($Project === null) {
+            QUI\System\Log::addError(
+                'Frontend users Handler::sendActivationMail: '
+                . 'The registrar has no project; the activation mail was not sent.'
+            );
+
+            return false;
+        }
 
         $verification = $this->verificationFactory->createLinkVerification(
             'activate-' . $User->getUUID(),
@@ -793,10 +818,10 @@ class Handler extends Singleton
     /**
      * Send an email, to the frontend user
      *
-     * @param array $mailData - mail data ("subject", "from", "fromName")
-     * @param array $recipients - e-mail addresses
+     * @param array{subject: string, from?: string, fromName?: string} $mailData
+     * @param list<string> $recipients - e-mail addresses
      * @param string $templateFile
-     * @param array $templateVars (optional) - additional template variables (besides $this)
+     * @param array<string, mixed> $templateVars (optional) - additional template variables (besides $this)
      * @param QUI\Projects\Project|null $Project (optional) - explicit project context for the mailer
      * @return void
      *
@@ -866,14 +891,14 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_REGISTRATION
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -893,14 +918,14 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_REGISTRATION_SIGNUP
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -920,14 +945,14 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_LOGIN
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -951,14 +976,14 @@ class Handler extends Singleton
             $Project = QUI::getProjectManager()->getStandard();
         }
 
-        $result = $Project->getSites([
+        $result = $Project?->getSites([
             'where' => [
                 'type' => self::SITE_TYPE_PROFILE
             ],
             'limit' => 1
-        ]);
+        ]) ?? [];
 
-        if (empty($result)) {
+        if (!is_array($result) || $result === []) {
             return false;
         }
 
@@ -974,7 +999,7 @@ class Handler extends Singleton
     {
         try {
             $registrationSettings = $this->getRegistrationSettings();
-            $projectLang = QUI::getRewrite()->getProject()->getLang();
+            $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
 
             if (!empty($registrationSettings['autoRedirectOnSuccess'][$projectLang])) {
                 return QUI\Projects\Site\Utils::getSiteByLink(
@@ -1039,7 +1064,7 @@ class Handler extends Singleton
     /**
      * Get max length for each user attribute
      *
-     * @return array
+     * @return array<string, int>
      */
     public function getUserAttributeLengthRestrictions(): array
     {

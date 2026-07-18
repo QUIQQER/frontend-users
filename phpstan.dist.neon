@@ -1,18 +1,15 @@
 includes:
-	- phpstan-baseline.neon
+    - phpstan-baseline.neon
 
 parameters:
-    level: 5
+    level: 8
+    phpVersion:
+        min: 80200
+        max: 80509
     paths:
         - src
         - ajax
         - types
-    excludePaths:
-        # REST integration is optional and depends on psr/http-message
-        - src/QUI/FrontendUsers/Rest
-        # Ignore files that use classes from optional packages
-        - src/QUI/FrontendUsers/ErpProvider.php
-        - src/QUI/FrontendUsers/Rest/Provider.php
-        - src/QUI/FrontendUsers/GdprDataProvider.php (?)
     bootstrapFiles:
         - tests/phpstan-bootstrap.php
+    tipsOfTheDay: false

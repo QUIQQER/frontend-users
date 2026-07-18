@@ -29,6 +29,13 @@ QUI::getAjax()->registerFunction(
 
         $Control = QUI\FrontendUsers\Utils::getProfileSettingControl($category, $settings);
 
+        if ($Control === null) {
+            throw new \QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users',
+                'exception.profile.setting.not.found'
+            ]);
+        }
+
         if (method_exists($Control, 'setAttribute')) {
             $Control->setAttribute('User', QUI::getUserBySession());
         }

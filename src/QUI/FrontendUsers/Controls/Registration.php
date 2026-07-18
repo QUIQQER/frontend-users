@@ -51,7 +51,7 @@ class Registration extends QUI\Control
     /**
      * Registration constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -95,7 +95,7 @@ class Registration extends QUI\Control
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $CurrentRegistrar = $this->isCurrentlyExecuted();
         $registrationStatus = false;
-        $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
         $executeLogin = false;
 
         // execute registration process
@@ -156,6 +156,14 @@ class Registration extends QUI\Control
                     // auto login for the primary login
                     // in this case, mail is primary login
                     $registrar = $this->isCurrentlyExecuted();
+
+                    if ($registrar === false) {
+                        throw new QUI\FrontendUsers\Exception([
+                            'quiqqer/frontend-users',
+                            'exception.registration.registrar_not_found'
+                        ]);
+                    }
+
                     $username = $registrar->getUsername();
                     $user = QUI::getUsers()->getUserByName($username);
 
@@ -348,8 +356,8 @@ class Registration extends QUI\Control
 
         // Sort registrars by display position
         $Registrars->sort(function ($RegistrarA, $RegistrarB) use ($RegistrarHandler) {
-            $settingsA = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarA));
-            $settingsB = $RegistrarHandler->getRegistrarSettings(get_class($RegistrarB));
+            $settingsA = $RegistrarHandler->getRegistrarSettings($RegistrarA::class);
+            $settingsB = $RegistrarHandler->getRegistrarSettings($RegistrarB::class);
             $displayPositionA = (int)$settingsA['displayPosition'];
             $displayPositionB = (int)$settingsB['displayPosition'];
 
@@ -440,9 +448,9 @@ class Registration extends QUI\Control
     /**
      * Is registration started?
      *
-     * @return bool|QUI\FrontendUsers\RegistrarInterface
+     * @return false|QUI\FrontendUsers\RegistrarInterface
      */
-    protected function isCurrentlyExecuted(): bool | QUI\FrontendUsers\RegistrarInterface
+    protected function isCurrentlyExecuted(): false | QUI\FrontendUsers\RegistrarInterface
     {
         $FrontendUsers = QUI\FrontendUsers\Handler::getInstance();
         $Registrar = $this->getAttribute('Registrar');
@@ -463,7 +471,7 @@ class Registration extends QUI\Control
                 $class = $_REQUEST['registrar'];
 
                 foreach ($FrontendUsers->getAvailableRegistrars() as $instance) {
-                    if (is_object($instance) && is_a($instance, $class)) {
+                    if ($instance instanceof QUI\FrontendUsers\RegistrarInterface && is_a($instance, $class)) {
                         $Registrar = $instance;
                         break;
                     }
@@ -487,8 +495,10 @@ class Registration extends QUI\Control
     /**
      * Execute the Registration
      *
+     * @return int
      * @throws QUI\FrontendUsers\Exception\UserAlreadyExistsException
      * @throws QUI\FrontendUsers\Exception
+     * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
     public function register()
@@ -509,6 +519,14 @@ class Registration extends QUI\Control
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $Project = QUI::getRewrite()->getProject();
+
+        if ($Project === null) {
+            throw new QUI\Exception(
+                'Frontend users Registration::register: '
+                . 'No current rewrite project is available.'
+            );
+        }
+
         $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);
 
@@ -589,22 +607,30 @@ class Registration extends QUI\Control
         $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // send registration notice to admins
-        $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
+        $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
 
         // check if the user has a password
-        $result = QUI::getDataBase()->fetch([
-            'select' => 'password',
-            'from' => QUI::getDBTableName('users'),
-            'where' => [
-                'uuid' => $NewUser->getUUID()
-            ],
-            'limit' => 1
-        ]);
+        try {
+            $QueryBuilder = QUI::getDataBaseConnection()->createQueryBuilder();
+            $password = $QueryBuilder
+                ->select(QUI\Utils\Doctrine::quoteIdentifier('password'))
+                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users')))
+                ->where(QUI\Utils\Doctrine::quoteIdentifier('uuid') . ' = :uuid')
+                ->setParameter('uuid', $NewUser->getUUID())
+                ->setMaxResults(1)
+                ->executeQuery()
+                ->fetchOne();
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
 
         $SystemUser = QUI::getUsers()->getSystemUser();
 
         // set random password if the Registrar did not set a password
-        if (empty($result[0]['password'])) {
+        if (empty($password)) {
             $NewUser->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         }
 
@@ -637,7 +663,7 @@ class Registration extends QUI\Control
                     $RegistrarHandler->sendEmailConfirmationMail(
                         $NewUser,
                         $NewUser->getAttribute('email'),
-                        $Registrar->getProject()
+                        $Project
                     );
                 }
                 break;

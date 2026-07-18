@@ -14,6 +14,13 @@ QUI::getAjax()->registerFunction(
     function ($registrar) {
         $Registrar = Handler::getInstance()->getRegistrarByHash($registrar);
 
+        if ($Registrar === false) {
+            throw new QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users',
+                'exception.registration.registrar_not_found'
+            ]);
+        }
+
         $Output = new QUI\Output();
         $control = $Registrar->getControl()->create();
         $css = QUI\Control\Manager::getCSS();

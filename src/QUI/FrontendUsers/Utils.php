@@ -27,9 +27,25 @@ use function json_decode;
 class Utils
 {
     /**
+     * Return the mandatory template file for a control.
+     *
+     * @throws QUI\Exception
+     */
+    public static function getRequiredTemplateFile(QUI\Control $Control): string
+    {
+        $templateFile = $Control->getTemplateFile();
+
+        if ($templateFile === false) {
+            throw new QUI\Exception('The template file for ' . $Control::class . ' could not be resolved.');
+        }
+
+        return $templateFile;
+    }
+
+    /**
      * Return all packages which have a frontend-users.xml
      *
-     * @return array
+     * @return list<QUI\Package\Package>
      */
     public static function getFrontendUsersPackages(): array
     {
@@ -61,7 +77,7 @@ class Utils
      * Return all extra profile categories
      * - search frontend-users.xml
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getProfileCategories(): array
     {
@@ -135,7 +151,7 @@ class Utils
      *
      * @param string $category
      * @param bool|string $settings
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */
@@ -192,7 +208,7 @@ class Utils
      * Return a specific category
      *
      * @param string $category
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws Exception
      */
@@ -213,7 +229,7 @@ class Utils
     /**
      * Return all categories and settings for the profile control
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getProfileCategorySettings(): array
     {
@@ -257,7 +273,7 @@ class Utils
     /**
      * Return all categories and settings for the profile bar control
      *
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function getProfileBarCategorySettings(): array
     {
@@ -310,14 +326,14 @@ class Utils
             $permission = $permission . '.' . $setting;
         }
 
-        return Permissions\Permission::hasPermission($permission, $User);
+        return (bool)Permissions\Permission::hasPermission($permission, $User);
     }
 
     /**
      * Search title arrays and set the locale translations to it
      *
-     * @param array $categories
-     * @return array
+     * @param array<string, array<string, mixed>> $categories
+     * @return array<string, array<string, mixed>>
      */
     public static function loadTranslationForCategories(array $categories = []): array
     {
@@ -347,9 +363,9 @@ class Utils
     /**
      * Search title arrays and set the locale translations to it
      *
-     * @param array $categories
+     * @param array<string, array<string, mixed>> $categories
      * @param null|QUI\Projects\Project $Project
-     * @return array
+     * @return array<string, array<string, mixed>>
      */
     public static function setUrlsToCategorySettings(
         array $categories = [],
@@ -360,17 +376,21 @@ class Utils
                 $Project = QUI::getRewrite()->getProject();
             }
 
-            $ids = $Project->getSitesIds([
+            $ids = $Project?->getSitesIds([
                 'where' => [
                     'type' => 'quiqqer/frontend-users:types/profile'
                 ],
                 'limit' => 1
-            ]);
+            ]) ?? [];
 
             if (!isset($ids[0])) {
-                $Site = $Project->firstChild();
+                $Site = $Project?->firstChild();
             } else {
-                $Site = $Project->get($ids[0]['id']);
+                $Site = $Project?->get($ids[0]['id']);
+            }
+
+            if ($Site === null) {
+                return [];
             }
 
             $url = $Site->getUrlRewritten();
@@ -555,10 +575,6 @@ class Utils
         }
 
         foreach ($User->getAddressList() as $Address) {
-            if (!($Address instanceof QUI\Users\Address)) {
-                continue;
-            }
-
             $addressEmails = $Address->getMailList();
 
             if (in_array($email, $addressEmails)) {
@@ -597,27 +613,30 @@ class Utils
         $User->save(QUI::getUsers()->getSystemUser());
     }
 
+    /**
+     * @return list<string>
+     */
     public static function getMissingAddressFields(QUI\Users\Address $Address): array
     {
         $missing = [];
+        $Conf = Handler::getPackageConfig();
 
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
             }
         } catch (QUI\Exception) {
             return $missing;
         }
 
-        if (empty($settings)) {
+        if (!is_array($settings) || $settings === []) {
             return $missing;
         }
 
         foreach ($settings as $setting => $data) {
-            if (empty($data['required'])) {
+            if (empty($data['show']) || empty($data['required'])) {
                 continue;
             }
 
@@ -631,6 +650,16 @@ class Utils
 
             if ($setting === 'fax') {
                 if ($Address->getFax() === '') {
+                    $missing[] = $setting;
+                }
+
+                continue;
+            }
+
+            if ($setting === 'email') {
+                $mailList = $Address->getMailList();
+
+                if (!isset($mailList[0]) || $mailList[0] === '') {
                     $missing[] = $setting;
                 }
 
@@ -703,12 +732,13 @@ class Utils
     }
 
     /**
-     * @return array
+     * @return list<string>
      */
     private static function getBlacklistedEmailPatterns(): array
     {
+        $Conf = Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $setting = $Conf->get('registration', 'emailBlacklist');
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);

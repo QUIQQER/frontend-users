@@ -26,6 +26,7 @@ class Events
      * @param User $User
      * @return void
      *
+     * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
     public static function onUserActivate(User $User): void
@@ -129,6 +130,7 @@ class Events
      * @param bool $checkEligibility (optional) - Checks if the user is eligible for auto login
      * @return void
      *
+     * @throws QUI\Database\Exception
      * @throws QUI\Exception
      */
     public static function autoLogin(QUI\Interfaces\Users\User $User, bool $checkEligibility = true): void
@@ -148,6 +150,10 @@ class Events
             } catch (\Exception $Exception) {
                 QUI\System\Log::writeException($Exception);
 
+                return;
+            }
+
+            if ($Registrar === false) {
                 return;
             }
 
@@ -192,15 +198,22 @@ class Events
             $useragent = $_SERVER['HTTP_USER_AGENT'];
         }
 
-        QUI::getDataBase()->update(
-            QUI::getUsers()->table(),
-            [
-                'lastvisit' => time(),
-                'user_agent' => $useragent,
-                'secHash' => $secHash
-            ],
-            ['uuid' => $User->getUUID()]
-        );
+        try {
+            QUI::getDataBaseConnection()->update(
+                QUI::getUsers()::table(),
+                [
+                    'lastvisit' => time(),
+                    'user_agent' => $useragent,
+                    'secHash' => $secHash
+                ],
+                ['uuid' => $User->getUUID()]
+            );
+        } catch (\Doctrine\DBAL\Exception $Exception) {
+            throw new QUI\Database\Exception(
+                $Exception->getMessage(),
+                (int)$Exception->getCode()
+            );
+        }
 
         QUI::getEvents()->fireEvent(
             'quiqqerFrontendUsersUserAutoLogin',
@@ -220,7 +233,7 @@ class Events
      */
     public static function onUserCreate(QUI\Interfaces\Users\User $User): void
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = Handler::getPackageConfig();
         $userGravatarDefaultValue = $Conf->get('userProfile', 'useGravatarUserDefaultValue');
 
         $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $userGravatarDefaultValue);
@@ -300,8 +313,9 @@ class Events
      */
     protected static function setAuthenticatorsDefaultSettings(): void
     {
+        $Conf = Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getSection('login');
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
@@ -324,7 +338,18 @@ class Events
             $settings['authenticators'][base64_encode($class)] = true;
         }
 
-        $Conf->setValue('login', 'authenticators', json_encode($settings['authenticators']));
+        $authenticatorsJson = json_encode($settings['authenticators']);
+
+        if ($authenticatorsJson === false) {
+            QUI\System\Log::addError(
+                'Frontend users Events::setAuthenticatorsDefaultSettings: '
+                . 'Authenticator settings could not be JSON-encoded; defaults were not saved.'
+            );
+
+            return;
+        }
+
+        $Conf->setValue('login', 'authenticators', $authenticatorsJson);
         $Conf->save();
     }
 
@@ -363,7 +388,7 @@ class Events
      */
     protected static function setAddressDefaultSettings(): void
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = Handler::getPackageConfig();
 
         $addressFields = [
             'salutation' => [
@@ -410,10 +435,25 @@ class Events
                 'show' => true,
                 'required' => false
             ],
+            'email' => [
+                'show' => true,
+                'required' => false
+            ],
         ];
 
-        $Conf->setValue('registration', 'addressFields', json_encode($addressFields));
-        $Conf->setValue('profile', 'addressFields', json_encode($addressFields));
+        $addressFieldsJson = json_encode($addressFields);
+
+        if ($addressFieldsJson === false) {
+            QUI\System\Log::addError(
+                'Frontend users Events::setAddressDefaultSettings: '
+                . 'Address field settings could not be JSON-encoded; defaults were not saved.'
+            );
+
+            return;
+        }
+
+        $Conf->setValue('registration', 'addressFields', $addressFieldsJson);
+        $Conf->setValue('profile', 'addressFields', $addressFieldsJson);
         $Conf->save();
     }
 
@@ -533,7 +573,7 @@ class Events
     {
         $Permissions = new QUI\Permissions\Manager();
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $defaultViewPermission = (int)QUI::getPackage('quiqqer/frontend-users')->getConfig()->get(
+        $defaultViewPermission = (int)Handler::getPackageConfig()->get(
             'user_profile',
             'categoryViewDefaultPermission'
         );
@@ -592,13 +632,21 @@ class Events
      */
     public static function checkUserMediaFolder(): void
     {
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = Handler::getPackageConfig();
         $folder = $Config->getValue('userProfile', 'userAvatarFolder');
 
         try {
             QUI\Projects\Media\Utils::getMediaItemByUrl($folder);
         } catch (QUI\Exception) {
             $Standard = QUI::getProjectManager()->getStandard();
+
+            if ($Standard === null) {
+                throw new QUI\Exception(
+                    'Frontend users Events::checkUserMediaFolder: '
+                    . 'No standard project is available.'
+                );
+            }
+
             $Media = $Standard->getMedia();
             $MainFolder = $Media->firstChild();
 
