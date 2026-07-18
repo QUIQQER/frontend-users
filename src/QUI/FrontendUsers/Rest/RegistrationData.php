@@ -86,7 +86,13 @@ class RegistrationData extends QDOM
     public static function buildFromRequest(SlimRequest $Request): RegistrationData
     {
         $RegistrationData = new RegistrationData();
-        $RegistrationData->setAttributes($Request->getParsedBody());
+        $attributes = $Request->getParsedBody();
+
+        if (is_object($attributes)) {
+            $attributes = get_object_vars($attributes);
+        }
+
+        $RegistrationData->setAttributes($attributes);
 
         $Handler = QUI\FrontendUsers\Handler::getInstance();
 

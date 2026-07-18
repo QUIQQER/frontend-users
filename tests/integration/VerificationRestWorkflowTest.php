@@ -186,6 +186,10 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         self::assertArrayHasKey('email', RegistrationData::getRequiredFields());
         self::assertArrayHasKey('street_no', RegistrationData::getRequiredFields());
 
+        $ObjectRequest = (new ServerRequest('POST', '/frontend-users/register'))->withParsedBody((object)$data);
+        $ObjectRegistrationData = RegistrationData::buildFromRequest($ObjectRequest);
+        self::assertSame($data['username'], $ObjectRegistrationData->getAttribute('username'));
+
         $User = $this->createUser();
         $Method = new ReflectionMethod(PostRegister::class, 'addRegistrationDataToUser');
         $Method->invoke(null, $User, $RegistrationData);
