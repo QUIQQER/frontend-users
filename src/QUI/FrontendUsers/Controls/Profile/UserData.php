@@ -63,7 +63,7 @@ class UserData extends AbstractProfileControl
 
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = FrontendUsersHandler::getPackageConfig();
 
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
@@ -105,7 +105,7 @@ class UserData extends AbstractProfileControl
             'showLanguageChangeInProfile' => $Config->getValue('userProfile', 'showLanguageChangeInProfile')
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**
@@ -156,7 +156,7 @@ class UserData extends AbstractProfileControl
         }
 
         // require fields
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = FrontendUsersHandler::getPackageConfig();
         $settings = $Config->getValue('profile', 'addressFields');
 
         if (!empty($settings)) {

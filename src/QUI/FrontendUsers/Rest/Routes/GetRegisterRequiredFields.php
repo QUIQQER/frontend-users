@@ -9,6 +9,9 @@ use QUI;
 
 use function json_encode;
 
+use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_THROW_ON_ERROR;
+
 class GetRegisterRequiredFields
 {
     /**
@@ -39,7 +42,7 @@ class GetRegisterRequiredFields
         return new \GuzzleHttp\Psr7\Response(
             200,
             ['Content-Type' => 'application/json'],
-            json_encode($requiredFields)
+            json_encode($requiredFields, JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE)
         );
     }
 }

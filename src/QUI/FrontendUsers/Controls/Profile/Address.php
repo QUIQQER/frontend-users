@@ -36,8 +36,7 @@ class Address extends AbstractProfileControl
      */
     public function getBody(): string
     {
-        $Package = QUI::getPackage('quiqqer/frontend-users');
-        $Config = $Package->getConfig();
+        $Config = QUI\FrontendUsers\Handler::getPackageConfig();
 
         if ($Config->get('userProfile', 'useAddressManagement')) {
             $Engine = QUI::getTemplateManager()->getEngine();
@@ -138,7 +137,7 @@ class Address extends AbstractProfileControl
             'addressFields' => $addressFields
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**
@@ -152,8 +151,7 @@ class Address extends AbstractProfileControl
      */
     public function onSave(): void
     {
-        $Package = QUI::getPackage('quiqqer/frontend-users');
-        $Config = $Package->getConfig();
+        $Config = QUI\FrontendUsers\Handler::getPackageConfig();
 
         if (!$Config->get('userProfile', 'useAddressManagement')) {
             return;
@@ -192,8 +190,10 @@ class Address extends AbstractProfileControl
      */
     protected function getProfileAddressFieldSettings(): array
     {
+        $Config = QUI\FrontendUsers\Handler::getPackageConfig();
+
         try {
-            $settings = QUI::getPackage('quiqqer/frontend-users')->getConfig()->getValue(
+            $settings = $Config->getValue(
                 'profile',
                 'addressFields'
             );

@@ -45,7 +45,7 @@ class ChangePassword extends AbstractProfileControl
             'User' => QUI::getUserBySession()
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**

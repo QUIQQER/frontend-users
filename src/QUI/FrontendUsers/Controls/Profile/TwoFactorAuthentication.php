@@ -57,7 +57,7 @@ class TwoFactorAuthentication extends AbstractProfileControl
             'authenticators' => $authenticators
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     public function isAuthenticatorEnabled(AuthenticatorInterface $authenticator): bool

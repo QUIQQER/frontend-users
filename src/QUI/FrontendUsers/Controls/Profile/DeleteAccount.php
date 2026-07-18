@@ -79,7 +79,7 @@ class DeleteAccount extends AbstractProfileControl
             'action' => $action
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**

@@ -143,9 +143,9 @@ class Address extends QUI\Control
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress($_REQUEST['edit']);
+        $Conf = QUI\FrontendUsers\Handler::getPackageConfig();
 
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
@@ -282,8 +282,9 @@ class Address extends QUI\Control
             $currentCountry = $Country->getCode();
         }
 
+        $Conf = QUI\FrontendUsers\Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {

@@ -229,7 +229,7 @@ class Events
      */
     public static function onUserCreate(QUI\Interfaces\Users\User $User): void
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = Handler::getPackageConfig();
         $userGravatarDefaultValue = $Conf->get('userProfile', 'useGravatarUserDefaultValue');
 
         $User->setAttribute('quiqqer.frontendUsers.useGravatarIcon', $userGravatarDefaultValue);
@@ -309,8 +309,9 @@ class Events
      */
     protected static function setAuthenticatorsDefaultSettings(): void
     {
+        $Conf = Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getSection('login');
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
@@ -372,7 +373,7 @@ class Events
      */
     protected static function setAddressDefaultSettings(): void
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = Handler::getPackageConfig();
 
         $addressFields = [
             'salutation' => [
@@ -546,7 +547,7 @@ class Events
     {
         $Permissions = new QUI\Permissions\Manager();
         $permissionPrefix = 'quiqqer.frontendUsers.profile.view.';
-        $defaultViewPermission = (int)QUI::getPackage('quiqqer/frontend-users')->getConfig()->get(
+        $defaultViewPermission = (int)Handler::getPackageConfig()->get(
             'user_profile',
             'categoryViewDefaultPermission'
         );
@@ -605,7 +606,7 @@ class Events
      */
     public static function checkUserMediaFolder(): void
     {
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = Handler::getPackageConfig();
         $folder = $Config->getValue('userProfile', 'userAvatarFolder');
 
         try {

@@ -15,6 +15,9 @@ use function explode;
 use function json_encode;
 use function time;
 
+use const JSON_INVALID_UTF8_SUBSTITUTE;
+use const JSON_THROW_ON_ERROR;
+
 class PostRegister
 {
     /**
@@ -35,9 +38,10 @@ class PostRegister
             return new Response(
                 400,
                 ['Content-Type' => 'application/json'],
-                json_encode([
-                    'message' => $Exception->getMessage()
-                ])
+                json_encode(
+                    ['message' => $Exception->getMessage()],
+                    JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE
+                )
             );
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
@@ -45,18 +49,20 @@ class PostRegister
             return new Response(
                 500,
                 ['Content-Type' => 'application/json'],
-                json_encode([
-                    'message' => $Exception->getMessage()
-                ])
+                json_encode(
+                    ['message' => $Exception->getMessage()],
+                    JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE
+                )
             );
         }
 
         return new Response(
             200,
             ['Content-Type' => 'application/json'],
-            json_encode([
-                'message' => 'OK'
-            ])
+            json_encode(
+                ['message' => 'OK'],
+                JSON_THROW_ON_ERROR | JSON_INVALID_UTF8_SUBSTITUTE
+            )
         );
     }
 

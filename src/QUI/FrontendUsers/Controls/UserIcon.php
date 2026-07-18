@@ -135,8 +135,9 @@ class UserIcon extends Control
      */
     protected function getDefaultAvatarImage(): QUI\Projects\Media\Image | bool | string
     {
+        $Conf = QUI\FrontendUsers\Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $defaultAvatarImage = $Conf->get('profileBar', 'defaultAvatar');
         } catch (Exception $Exception) {
             QUI\System\Log::writeException($Exception);

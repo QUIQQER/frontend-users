@@ -27,6 +27,22 @@ use function json_decode;
 class Utils
 {
     /**
+     * Return the mandatory template file for a control.
+     *
+     * @throws QUI\Exception
+     */
+    public static function getRequiredTemplateFile(QUI\Control $Control): string
+    {
+        $templateFile = $Control->getTemplateFile();
+
+        if ($templateFile === false) {
+            throw new QUI\Exception('The template file for ' . $Control::class . ' could not be resolved.');
+        }
+
+        return $templateFile;
+    }
+
+    /**
      * Return all packages which have a frontend-users.xml
      *
      * @return list<QUI\Package\Package>
@@ -603,9 +619,9 @@ class Utils
     public static function getMissingAddressFields(QUI\Users\Address $Address): array
     {
         $missing = [];
+        $Conf = Handler::getPackageConfig();
 
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
             if (!empty($settings)) {
@@ -720,8 +736,9 @@ class Utils
      */
     private static function getBlacklistedEmailPatterns(): array
     {
+        $Conf = Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $setting = $Conf->get('registration', 'emailBlacklist');
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);

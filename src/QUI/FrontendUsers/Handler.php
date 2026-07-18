@@ -113,6 +113,22 @@ class Handler extends Singleton
     }
 
     /**
+     * Return the mandatory package configuration.
+     *
+     * @throws QUI\Exception
+     */
+    public static function getPackageConfig(): \QUI\Config
+    {
+        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+
+        if ($Config === null) {
+            throw new QUI\Exception('The quiqqer/frontend-users package configuration is unavailable.');
+        }
+
+        return $Config;
+    }
+
+    /**
      * @return RegistrarCollection
      */
     public function getRegistrars(): RegistrarCollection
@@ -256,7 +272,7 @@ class Handler extends Singleton
      */
     public function getUserProfileSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
 
         return $Conf->getSection('userProfile');
     }
@@ -269,7 +285,7 @@ class Handler extends Singleton
      */
     public function getProfileBarSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
 
         return $Conf->getSection('profileBar');
     }
@@ -282,7 +298,7 @@ class Handler extends Singleton
      */
     public function getRegistrationSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
         $settings = $Conf->getSection('registration');
 
         if (!empty($settings['termsOfUseSite'])) {
@@ -308,7 +324,7 @@ class Handler extends Singleton
      */
     public function getLoginSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
         $settings = $Conf->getSection('login');
 
         $settings['redirectOnLogin'] = json_decode($settings['redirectOnLogin'], true);
@@ -343,7 +359,7 @@ class Handler extends Singleton
      */
     public function getMailSettings(): array
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
 
         return $Conf->getSection('mail');
     }
@@ -353,17 +369,11 @@ class Handler extends Singleton
      *
      * @param string|null $registrarClass (optional) - Registrar class path (namespace)
      * @return array<string, mixed>
+     * @throws QUI\Exception
      */
     public function getRegistrarSettings(null | string $registrarClass = null): array
     {
-        try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
-        } catch (QUI\Exception $Exception) {
-            QUI\System\Log::addError($Exception->getMessage());
-
-            return [];
-        }
-
+        $Conf = self::getPackageConfig();
 
         $registrarSettings = $Conf->get('registrars', 'registrarSettings');
 
@@ -399,7 +409,7 @@ class Handler extends Singleton
      */
     public function setRegistrarSettings(array $settings): void
     {
-        $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Conf = self::getPackageConfig();
         $writeSettings = [];
 
         foreach ($settings as $registrarType => $settingsData) {

@@ -12,6 +12,7 @@ use QUI\FrontendUsers\EmailVerification;
 use QUI\FrontendUsers\ErpProvider;
 use QUI\FrontendUsers\Exception\EmailAddressNotVerifiableException;
 use QUI\FrontendUsers\Exception\UserAlreadyExistsException;
+use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\FrontendUsers\RegistrarCollection;
 use QUI\FrontendUsers\Rest\Provider;
@@ -28,6 +29,21 @@ class CoreBehaviorTest extends TestCase
         self::assertSame(50002, (new EmailAddressNotVerifiableException())->getCode());
         self::assertSame(42, (new UserAlreadyExistsException('Custom code', 42))->getCode());
         self::assertSame(43, (new EmailAddressNotVerifiableException('Custom code', 43))->getCode());
+    }
+
+    public function testRequiredPackageResourcesAreAvailable(): void
+    {
+        self::assertInstanceOf(QUI\Config::class, Handler::getPackageConfig());
+
+        $Control = new class extends QUI\Control {
+            public function getTemplateFile(): string | false
+            {
+                return false;
+            }
+        };
+
+        $this->expectException(QUI\Exception::class);
+        Utils::getRequiredTemplateFile($Control);
     }
 
     public function testValueObjectsCollectionsAndSettingsNormalization(): void

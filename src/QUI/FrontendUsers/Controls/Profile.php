@@ -175,7 +175,7 @@ class Profile extends Control
             'this' => $this
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**

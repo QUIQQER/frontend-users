@@ -26,7 +26,7 @@ class UserAvatarUpload extends Form
     {
         parent::__construct($params);
 
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = QUI\FrontendUsers\Handler::getPackageConfig();
 
         $this->setAttributes([
             'contextMenu' => false,
@@ -56,7 +56,7 @@ class UserAvatarUpload extends Form
      */
     public function onFileFinish($file, $params): void
     {
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = QUI\FrontendUsers\Handler::getPackageConfig();
         $folder = $Config->getValue('userProfile', 'userAvatarFolder');
 
         $error = ['quiqqer/frontend-users', 'exception.upload.avatar.error'];
