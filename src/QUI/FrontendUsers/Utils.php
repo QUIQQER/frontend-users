@@ -575,10 +575,6 @@ class Utils
         }
 
         foreach ($User->getAddressList() as $Address) {
-            if (!($Address instanceof QUI\Users\Address)) {
-                continue;
-            }
-
             $addressEmails = $Address->getMailList();
 
             if (in_array($email, $addressEmails)) {

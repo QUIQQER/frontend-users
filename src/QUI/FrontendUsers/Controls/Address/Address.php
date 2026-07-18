@@ -330,6 +330,10 @@ class Address extends QUI\Control
         $User = QUI::getUserBySession();
         $Address = $User->addAddress();
 
+        if ($Address === null) {
+            throw new QUI\Exception('The required user address is unavailable.');
+        }
+
         $fields = [
             'company',
             'salutation',

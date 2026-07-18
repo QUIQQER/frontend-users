@@ -179,6 +179,10 @@ class PostRegister
                 'country' => mb_strtolower($RegistrationData->getAttribute('country'))
             ], $SystemUser);
 
+            if ($UserAddress === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
+
             $User->setAttributes([
                 'firstname' => $RegistrationData->getAttribute('firstname'),
                 'lastname' => $RegistrationData->getAttribute('lastname'),

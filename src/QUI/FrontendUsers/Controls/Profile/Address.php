@@ -54,6 +54,10 @@ class Address extends AbstractProfileControl
 
         try {
             $UserAddress = $User->getStandardAddress();
+
+            if ($UserAddress === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
         } catch (QUI\Users\Exception) {
             // if no user address exist -> create one
             $SystemUser = QUI::getUsers()->getSystemUser();
@@ -241,6 +245,10 @@ class Address extends AbstractProfileControl
 
         /** @var QUI\Users\User $User */
         $UserAddress = $User->getStandardAddress();
+
+        if ($UserAddress === null) {
+            throw new QUI\Exception('The required user address is unavailable.');
+        }
         $userPhoneList = $UserAddress->getPhoneList();
         $addressFields = $this->getProfileAddressFieldSettings();
 
@@ -274,7 +282,7 @@ class Address extends AbstractProfileControl
                     }
 
                     if ($index !== false) {
-                        $UserAddress->editPhone($index, [
+                        $UserAddress->editPhone((int)$index, [
                             'no' => $value,
                             'type' => 'tel'
                         ]);
@@ -292,7 +300,7 @@ class Address extends AbstractProfileControl
                     }
 
                     if ($index !== false) {
-                        $UserAddress->editPhone($index, [
+                        $UserAddress->editPhone((int)$index, [
                             'no' => $value,
                             'type' => $field
                         ]);

@@ -86,6 +86,10 @@ class UserData extends AbstractProfileControl
         /* @var $User QUI\Users\User */
         try {
             $Address = $User->getStandardAddress();
+
+            if ($Address === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
         } catch (QUI\Users\Exception) {
             $Address = $User->addAddress();
         }
@@ -240,6 +244,11 @@ class UserData extends AbstractProfileControl
         // update first address
         try {
             $Address = $User->getStandardAddress();
+
+            if ($Address === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
+
             $addressData = [];
 
             if ($checkFields('firstname')) {
