@@ -22,7 +22,7 @@ class Control extends QUI\Control
     /**
      * Control constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -70,7 +70,7 @@ class Control extends QUI\Control
             $Engine->assign('addressFieldLengths', $RegistrarHandler->getUserAttributeLengthRestrictions());
 
             if ($addressFields['country']['show']) {
-                $selectedCountry = mb_strtoupper(QUI::getRewrite()->getProject()->getLang());
+                $selectedCountry = mb_strtoupper(QUI::getRewrite()->getProject()?->getLang() ?? '');
 
                 if (!empty($fields['country'])) {
                     $selectedCountry = $fields['country'];
@@ -150,7 +150,7 @@ class Control extends QUI\Control
             $Engine->assign('addressFieldLengths', $RegistrarHandler->getUserAttributeLengthRestrictions());
 
             if ($addressFields['country']['show']) {
-                $selectedCountry = mb_strtoupper(QUI::getRewrite()->getProject()->getLang());
+                $selectedCountry = mb_strtoupper(QUI::getRewrite()->getProject()?->getLang() ?? '');
 
                 if (!empty($fields['country'])) {
                     $selectedCountry = $fields['country'];

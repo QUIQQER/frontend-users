@@ -116,6 +116,18 @@
     </label>
     {/if}
 
+    {if $settings.email.show}
+    <label>
+        <span>
+            {locale group="quiqqer/frontend-users" var="email"}
+            {if $settings.email.required}*{/if}
+        </span>
+        <input type="email" name="email" autocomplete="email" {if $settings.email.required}required{/if}
+               placeholder="{locale group='quiqqer/frontend-users' var='email'}"
+        />
+    </label>
+    {/if}
+
     {if $settings.mobile.show}
     <label>
         <span>

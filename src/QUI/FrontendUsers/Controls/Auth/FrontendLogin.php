@@ -22,7 +22,7 @@ class FrontendLogin extends QUI\Control
     /**
      * Control constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -47,7 +47,7 @@ class FrontendLogin extends QUI\Control
         $Handler = Handler::getInstance();
         $settings = $Handler->getLoginSettings();
         $redirectOnLogin = $settings['redirectOnLogin'];
-        $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
 
         $dataRedirect = false;
 

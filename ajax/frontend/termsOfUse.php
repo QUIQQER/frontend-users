@@ -7,7 +7,7 @@ QUI::getAjax()->registerFunction(
     function () {
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
-        $projectLang = QUI::getRewrite()->getProject()->getLang();
+        $projectLang = QUI::getRewrite()->getProject()?->getLang() ?? '';
 
         // Terms Of Use
         $required = false;

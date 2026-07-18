@@ -28,7 +28,12 @@ class RegistrationUtils
 
             $nextLinks = [];
 
-            $StartSite = $Project->get(1);
+            $StartSite = $Project?->get(1);
+
+            if ($StartSite === null) {
+                return '';
+            }
+
             $nextLinks[] = '<a href="' . $StartSite->getUrlRewrittenWithHost() . '">' .
                 $StartSite->getAttribute('title') .
                 '</a>';

@@ -69,7 +69,8 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
                     labelCompany: QUILocale.get('quiqqer/system', 'company'),
                     labelPhone: QUILocale.get('quiqqer/system', 'tel'),
                     labelMobile: QUILocale.get('quiqqer/system', 'mobile'),
-                    labelFax: QUILocale.get('quiqqer/system', 'fax')
+                    labelFax: QUILocale.get('quiqqer/system', 'fax'),
+                    labelEmail: QUILocale.get(lg, 'email')
                 })
             }).inject(this.$Input, 'after');
 
@@ -129,13 +130,20 @@ define('package/quiqqer/frontend-users/bin/controls/settings/AddressFields', [
                     continue;
                 }
 
-                this.$Content.getElement(
+                var ShowInput = this.$Content.getElement(
                     'input[name="' + field + '"].quiqqer-frontendusers-settings-addressfields-show'
-                ).checked = this.$Settings[field].show;
+                );
 
-                this.$Content.getElement(
+                var RequiredInput = this.$Content.getElement(
                     'input[name="' + field + '"].quiqqer-frontendusers-settings-addressfields-required'
-                ).checked = this.$Settings[field].required;
+                );
+
+                if (!ShowInput || !RequiredInput) {
+                    continue;
+                }
+
+                ShowInput.checked = this.$Settings[field].show;
+                RequiredInput.checked = this.$Settings[field].required;
             }
         }
     });

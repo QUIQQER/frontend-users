@@ -38,11 +38,7 @@ class TwoFactorAuthentication extends AbstractProfileControl
         $Engine = QUI::getTemplateManager()->getEngine();
         $Config = QUI::getConfig('etc/conf.ini.php');
 
-        $twoFactorAuthIsEnabled = true;
-
-        if ($Config->getValue('auth_settings', 'secondary_frontend')) {
-            $twoFactorAuthIsEnabled = $Config->getValue('auth_settings', 'secondary_frontend');
-        }
+        $twoFactorAuthIsEnabled = (int)$Config->getValue('auth_settings', 'secondary_frontend') !== 0;
 
         $authenticators = [];
 
@@ -61,7 +57,7 @@ class TwoFactorAuthentication extends AbstractProfileControl
             'authenticators' => $authenticators
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     public function isAuthenticatorEnabled(AuthenticatorInterface $authenticator): bool

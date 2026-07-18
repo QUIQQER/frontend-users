@@ -28,17 +28,17 @@ use function trim;
  */
 class UserData extends AbstractProfileControl
 {
+    private VerificationRepositoryInterface $verificationRepository;
+
     /**
      * UserData constructor.
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(
         array $attributes = [],
-        private ?VerificationRepositoryInterface $verificationRepository = null
+        ?VerificationRepositoryInterface $verificationRepository = null
     ) {
-        if (is_null($this->verificationRepository)) {
-            $this->verificationRepository = new VerificationRepository();
-        }
+        $this->verificationRepository = $verificationRepository ?? new VerificationRepository();
 
         parent::__construct($attributes);
 
@@ -63,7 +63,7 @@ class UserData extends AbstractProfileControl
 
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = FrontendUsersHandler::getPackageConfig();
 
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
 
@@ -86,6 +86,10 @@ class UserData extends AbstractProfileControl
         /* @var $User QUI\Users\User */
         try {
             $Address = $User->getStandardAddress();
+
+            if ($Address === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
         } catch (QUI\Users\Exception) {
             $Address = $User->addAddress();
         }
@@ -105,7 +109,7 @@ class UserData extends AbstractProfileControl
             'showLanguageChangeInProfile' => $Config->getValue('userProfile', 'showLanguageChangeInProfile')
         ]);
 
-        return $Engine->fetch($this->getTemplateFile());
+        return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
 
     /**
@@ -117,7 +121,7 @@ class UserData extends AbstractProfileControl
     public function onSave(): void
     {
         $Request = QUI::getRequest()->request;
-        $newEmail = $Request->get('emailNew');
+        $newEmail = (string)$Request->get('emailNew');
         $User = QUI::getUserBySession();
 
         if (QUI::getUsers()->isNobodyUser($User)) {
@@ -148,20 +152,31 @@ class UserData extends AbstractProfileControl
                 ]);
             }
 
-            FrontendUsersHandler::getInstance()->sendChangeEmailAddressMail(
-                $User,
-                $newEmail,
-                QUI::getRewrite()->getProject()
-            );
+            $Project = QUI::getRewrite()->getProject();
+
+            if ($Project === null) {
+                QUI\System\Log::addError(
+                    'Frontend users UserData::onSave: No current rewrite project is available; '
+                    . 'the email address change mail was not sent.'
+                );
+            } else {
+                FrontendUsersHandler::getInstance()->sendChangeEmailAddressMail(
+                    $User,
+                    $newEmail,
+                    $Project
+                );
+            }
         }
 
         // require fields
-        $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
+        $Config = FrontendUsersHandler::getPackageConfig();
         $settings = $Config->getValue('profile', 'addressFields');
 
-        if (!empty($settings)) {
+        if (is_string($settings)) {
             $settings = json_decode($settings, true);
-        } else {
+        }
+
+        if (!is_array($settings)) {
             $settings = [];
         }
 
@@ -190,7 +205,7 @@ class UserData extends AbstractProfileControl
 
         if ($changeLang && $Request->has('language')) {
             $Project = QUI::getRewrite()->getProject();
-            $languages = $Project->getLanguages();
+            $languages = $Project?->getLanguages() ?? [];
 
             if (in_array($Request->get('language'), $languages)) {
                 $User->setAttribute('lang', $Request->get('language'));
@@ -240,6 +255,11 @@ class UserData extends AbstractProfileControl
         // update first address
         try {
             $Address = $User->getStandardAddress();
+
+            if ($Address === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
+
             $addressData = [];
 
             if ($checkFields('firstname')) {
@@ -260,7 +280,9 @@ class UserData extends AbstractProfileControl
 
             // street kommt manchmal als ganzes, dann dies zulassen
             if ($Request->get('street')) {
-                $addressData['street_no'] = trim($Request->get('street')) . ' ' . trim($Request->get('street_number'));
+                $addressData['street_no'] = trim((string)$Request->get('street'))
+                    . ' '
+                    . trim((string)$Request->get('street_number'));
                 $addressData['street_no'] = trim($addressData['street_no']);
             }
 

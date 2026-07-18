@@ -27,7 +27,7 @@ QUI::getAjax()->registerFunction(
         ]);
 
 
-        if (count($registerSite)) {
+        if (is_array($registerSite) && isset($registerSite[0])) {
             return $registerSite[0]->getUrlRewritten();
         }
 

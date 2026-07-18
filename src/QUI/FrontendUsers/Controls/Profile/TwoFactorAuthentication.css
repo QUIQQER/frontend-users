@@ -3,3 +3,11 @@
     flex-direction: column;
     gap: 3rem;
 }
+
+.two-factor-authenticator-empty {
+    background: #f6f7f8;
+    border: 1px solid #dfe3e7;
+    border-radius: 4px;
+    color: #5f6c76;
+    padding: 1rem;
+}

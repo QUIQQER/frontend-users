@@ -216,12 +216,13 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          * @param {QUIConfirm} Popup
          */
         $clickCreateSubmit: function (Popup) {
-            const Content = Popup.getContent(),
+            const self = this,
+                Content = Popup.getContent(),
                 Form = Content.getElement('form');
 
             return new Promise(function (resolve, reject) {
                 require(['qui/utils/Form'], (FormUtils) => {
-                    const formData = FormUtils.getFormData(Form);
+                    const formData = self.$normalizeAddressFormData(FormUtils.getFormData(Form));
                     const requiredFields = Form.getElements('[required]');
 
                     for (let i = 0, len = requiredFields.length; i < len; i++) {
@@ -452,7 +453,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
             return new Promise(function (resolve, reject) {
                 require(['qui/utils/Form'], (FormUtils) => {
-                    const formData = FormUtils.getFormData(Form);
+                    const formData = self.$normalizeAddressFormData(FormUtils.getFormData(Form));
 
                     if (self.$hasValidityIssues(Form)) {
                         reject();
@@ -491,6 +492,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
         },
 
         //endregion
+
+        $normalizeAddressFormData: function (formData) {
+            if (Array.isArray(formData.email)) {
+                formData.email = formData.email[0] || '';
+            }
+
+            return formData;
+        },
 
         $removeUnusedNodes: function (Node) {
             if (Node.querySelector('button')) {

@@ -27,7 +27,9 @@
         "email": "support@pcsg.de"
     },
     "require": {
-        "quiqqer/core": "^2.2",
+        "php": "^8.2",
+        "ext-mbstring": "*",
+        "quiqqer/core": "^2.24",
         "quiqqer/countries": "^2",
         "quiqqer/verification": "^3",
         "quiqqer/tooltips": "^2",
@@ -39,6 +41,11 @@
     "autoload": {
         "psr-4": {
             "QUI\\FrontendUsers\\": "src/QUI/FrontendUsers"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "QUI\\FrontendUsers\\Tests\\": "tests/"
         }
     },
     "scripts": {

@@ -17,7 +17,14 @@ use QUI\ERP\Api\AbstractErpProvider;
 class ErpProvider extends AbstractErpProvider
 {
     /**
-     * @return array[]
+     * @return list<array{
+     *     title: string,
+     *     description: string,
+     *     subject: array{string, string},
+     *     content: array{string, string},
+     *     'subject.description': array{string, string},
+     *     'content.description': array{string, string}
+     * }>
      */
     public static function getMailLocale(): array
     {

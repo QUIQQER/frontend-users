@@ -25,7 +25,7 @@ class Address extends QUI\Control
     /**
      * Address constructor.
      *
-     * @param array $attributes
+     * @param array<string, mixed> $attributes
      */
     public function __construct(array $attributes = [])
     {
@@ -107,11 +107,26 @@ class Address extends QUI\Control
         } catch (QUI\Exception) {
         }
 
+        $addresses = $User->getAddressList();
+        $standardAddressUuid = $User->getAttribute('address');
+
+        if (!empty($standardAddressUuid)) {
+            foreach ($addresses as $index => $Address) {
+                if ($Address->getUUID() !== $standardAddressUuid) {
+                    continue;
+                }
+
+                unset($addresses[$index]);
+                array_unshift($addresses, $Address);
+                break;
+            }
+        }
+
         $Engine->assign([
             'this' => $this,
             'User' => $User,
             'UserAddress' => $UserAddress,
-            'addresses' => $User->getAddressList()
+            'addresses' => $addresses
         ]);
 
         return $Engine->fetch(dirname(__FILE__) . '/Address.html');
@@ -128,14 +143,16 @@ class Address extends QUI\Control
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
         $Address = $User->getAddress($_REQUEST['edit']);
+        $Conf = QUI\FrontendUsers\Handler::getPackageConfig();
 
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
-            } else {
+            }
+
+            if (!is_array($settings)) {
                 $settings = [];
             }
 
@@ -151,6 +168,7 @@ class Address extends QUI\Control
             'phone' => $Address->getPhone(),
             'fax' => $Address->getFax(),
             'mobile' => $Address->getMobile(),
+            'email' => $this->getAddressEmail($Address),
             'countries' => QUI\Countries\Manager::getList()
         ]);
 
@@ -158,8 +176,8 @@ class Address extends QUI\Control
     }
 
     /**
-     * @param array $settings
-     * @return array
+     * @param array<string, array<string, bool>> $settings
+     * @return array<string, array<string, bool>>
      */
     public static function checkSettingsArray(array $settings): array
     {
@@ -175,14 +193,15 @@ class Address extends QUI\Control
             'company',
             'phone',
             'mobile',
-            'fax'
+            'fax',
+            'email'
         ];
 
         foreach ($fields as $field) {
             if (!isset($settings[$field])) {
                 $settings[$field] = [
                     'show' => true,
-                    'required' => true
+                    'required' => $field !== 'email'
                 ];
 
                 continue;
@@ -208,6 +227,23 @@ class Address extends QUI\Control
         }
 
         return $settings;
+    }
+
+    /**
+     * Return the first email address of an address.
+     *
+     * @param QUI\Users\Address $Address
+     * @return string
+     */
+    protected function getAddressEmail(QUI\Users\Address $Address): string
+    {
+        $mailList = $Address->getMailList();
+
+        if (isset($mailList[0])) {
+            return $mailList[0];
+        }
+
+        return '';
     }
 
     /**
@@ -248,13 +284,16 @@ class Address extends QUI\Control
             $currentCountry = $Country->getCode();
         }
 
+        $Conf = QUI\FrontendUsers\Handler::getPackageConfig();
+
         try {
-            $Conf = QUI::getPackage('quiqqer/frontend-users')->getConfig();
             $settings = $Conf->getValue('profile', 'addressFields');
 
-            if (!empty($settings)) {
+            if (is_string($settings)) {
                 $settings = json_decode($settings, true);
-            } else {
+            }
+
+            if (!is_array($settings)) {
                 $settings = [];
             }
 
@@ -276,7 +315,7 @@ class Address extends QUI\Control
     /**
      * Create a new address for the user
      *
-     * @param array $data - address data
+     * @param array<string, mixed> $data - address data
      *
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
@@ -294,6 +333,10 @@ class Address extends QUI\Control
         /* @var $User QUI\Users\User */
         $User = QUI::getUserBySession();
         $Address = $User->addAddress();
+
+        if ($Address === null) {
+            throw new QUI\Exception('The required user address is unavailable.');
+        }
 
         $fields = [
             'company',
@@ -330,6 +373,10 @@ class Address extends QUI\Control
             $Address->editPhone(0, $data['phone']);
         }
 
+        if (isset($data['email'])) {
+            $Address->editMail(0, $data['email']);
+        }
+
         if (isset($data['fax'])) {
             $Address->editFax($data['fax']);
         }
@@ -363,7 +410,7 @@ class Address extends QUI\Control
     /**
      * Edit an address
      *
-     * @param array $data - address data
+     * @param array<string, mixed> $data - address data
      *
      * @throws QUI\Exception
      * @throws QUI\Permissions\Exception
@@ -414,6 +461,10 @@ class Address extends QUI\Control
 
         if (isset($data['phone'])) {
             $Address->editPhone(0, $data['phone']);
+        }
+
+        if (isset($data['email'])) {
+            $Address->editMail(0, $data['email']);
         }
 
         if (isset($data['fax'])) {
