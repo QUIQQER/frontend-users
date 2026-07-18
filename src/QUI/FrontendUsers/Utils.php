@@ -617,7 +617,7 @@ class Utils
         }
 
         foreach ($settings as $setting => $data) {
-            if (empty($data['required'])) {
+            if (empty($data['show']) || empty($data['required'])) {
                 continue;
             }
 
@@ -631,6 +631,16 @@ class Utils
 
             if ($setting === 'fax') {
                 if ($Address->getFax() === '') {
+                    $missing[] = $setting;
+                }
+
+                continue;
+            }
+
+            if ($setting === 'email') {
+                $mailList = $Address->getMailList();
+
+                if (!isset($mailList[0]) || $mailList[0] === '') {
                     $missing[] = $setting;
                 }
 

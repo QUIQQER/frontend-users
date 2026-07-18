@@ -69,10 +69,16 @@ class Address extends AbstractProfileControl
         }
 
         $userPhoneList = $UserAddress->getPhoneList();
+        $userMailList = $UserAddress->getMailList();
         $Engine = QUI::getTemplateManager()->getEngine();
-        $addressFields = QUI\FrontendUsers\Handler::getInstance()->getAddressFieldSettings();
+        $addressFields = $this->getProfileAddressFieldSettings();
 
         foreach ($addressFields as $field => $options) {
+            if (empty($options['show'])) {
+                unset($addressFields[$field]);
+                continue;
+            }
+
             $options['value'] = '';
 
             switch ($field) {
@@ -111,6 +117,12 @@ class Address extends AbstractProfileControl
                         if ($data['type'] === $field) {
                             $options['value'] = $data['no'];
                         }
+                    }
+                    break;
+
+                case 'email':
+                    if (isset($userMailList[0])) {
+                        $options['value'] = $userMailList[0];
                     }
                     break;
 
@@ -174,6 +186,35 @@ class Address extends AbstractProfileControl
     }
 
     /**
+     * Get address field settings for the frontend profile.
+     *
+     * @return array
+     */
+    protected function getProfileAddressFieldSettings(): array
+    {
+        try {
+            $settings = QUI::getPackage('quiqqer/frontend-users')->getConfig()->getValue(
+                'profile',
+                'addressFields'
+            );
+
+            if (!empty($settings)) {
+                $settings = json_decode($settings, true);
+            } else {
+                $settings = [];
+            }
+        } catch (QUI\Exception) {
+            $settings = [];
+        }
+
+        if (!is_array($settings)) {
+            $settings = [];
+        }
+
+        return \QUI\FrontendUsers\Controls\Address\Address::checkSettingsArray($settings);
+    }
+
+    /**
      * @param QUI\Interfaces\Users\User $User
      * @throws QUI\Exception
      * @throws QUI\FrontendUsers\Exception
@@ -196,9 +237,13 @@ class Address extends AbstractProfileControl
         /** @var QUI\Users\User $User */
         $UserAddress = $User->getStandardAddress();
         $userPhoneList = $UserAddress->getPhoneList();
-        $addressFields = QUI\FrontendUsers\Handler::getInstance()->getAddressFieldSettings();
+        $addressFields = $this->getProfileAddressFieldSettings();
 
         foreach ($addressFields as $field => $options) {
+            if (empty($options['show'])) {
+                continue;
+            }
+
             $value = Orthos::clear($Request->get($field));
 
             if (empty($value) && $options['required']) {
@@ -247,6 +292,10 @@ class Address extends AbstractProfileControl
                             'type' => $field
                         ]);
                     }
+                    break;
+
+                case 'email':
+                    $UserAddress->editMail(0, $value);
                     break;
 
                 default:

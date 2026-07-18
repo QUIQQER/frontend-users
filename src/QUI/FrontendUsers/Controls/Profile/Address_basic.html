@@ -9,13 +9,17 @@
         {foreach $addressFields as $field => $options}
             <label>
                 <span class="quiqqer-frontendUsers-label">
-                    {locale group="quiqqer/system" var=$field}
+                    {if $field == 'email'}
+                        {locale group="quiqqer/frontend-users" var="email"}
+                    {else}
+                        {locale group="quiqqer/system" var=$field}
+                    {/if}
                     {if $options['required']}*{/if}
                 </span>
                 {if $field == 'country'}
                     {$CountrySelect->create()}
                 {else}
-                    <input name="{$field}" value="{$options['value']}"/>
+                    <input name="{$field}" value="{$options['value']}"{if $field == 'email'} type="email" autocomplete="email"{/if}/>
                 {/if}
             </label>
         {/foreach}

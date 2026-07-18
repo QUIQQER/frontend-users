@@ -111,6 +111,11 @@
     max-width: var(--_qui-frontend-users-profile__popup__conten-maxWidth);
     margin-inline: auto;
 }
+
+.qui-window-popup--frontendUsers-profile .quiqqer-frontend-users-address-create label > .quiqqer-frontendUsers-userdata-label,
+.qui-window-popup--frontendUsers-profile .quiqqer-frontend-users-address-edit label > .quiqqer-frontendUsers-userdata-label {
+    color: inherit;
+}
 /************************/
 /* Address delete popup */
 /************************/
