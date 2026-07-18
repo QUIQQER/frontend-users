@@ -2,13 +2,14 @@
 
 namespace QUI\FrontendUsers\Console;
 
+use DateInterval;
+use DateTime;
 use Doctrine\DBAL\ArrayParameterType;
 use QUI;
 use QUI\Exception;
 
 use function date;
 use function date_create;
-use function date_interval_create_from_date_string;
 use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
@@ -84,6 +85,10 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         $body = file_get_contents($bodyFile);
+
+        if ($body === false) {
+            $this->exitFail("Body file $bodyFile could not be read.");
+        }
 
         // Determine users the email is being sent to
 
@@ -177,7 +182,7 @@ class SendUserMails extends QUI\System\Console\Tool
         }
 
         if (!empty($orderBy)) {
-            $orderParts = preg_split('/\s+/', trim($orderBy));
+            $orderParts = preg_split('/\s+/', trim($orderBy)) ?: [];
             $allowedColumns = ['id', 'username', 'email', 'firstname', 'lastname', 'lang', 'active'];
             $orderColumn = $orderParts[0] ?? '';
             $orderDirection = mb_strtoupper($orderParts[1] ?? 'ASC');
@@ -208,7 +213,13 @@ class SendUserMails extends QUI\System\Console\Tool
                 continue;
             }
 
-            $recipients[] = $row;
+            $recipients[] = [
+                'id' => (int)$row['id'],
+                'username' => (string)$row['username'],
+                'email' => (string)$row['email'],
+                'firstname' => (string)$row['firstname'],
+                'lastname' => (string)$row['lastname']
+            ];
         }
 
         // DELETE USER STATISTICS?
@@ -284,6 +295,11 @@ class SendUserMails extends QUI\System\Console\Tool
             ];
 
             $this->setLimits($limits);
+        }
+
+        if ($limits === false) {
+            $this->writeLn('ERROR: Mail limits could not be initialized.');
+            return;
         }
 
         // SUMMARY
@@ -365,7 +381,19 @@ class SendUserMails extends QUI\System\Console\Tool
         $userInfo = [];
 
         if (file_exists($infoFile)) {
-            $userInfo = json_decode(file_get_contents($infoFile), true);
+            $content = file_get_contents($infoFile);
+
+            if ($content === false) {
+                $this->writeLn("ERROR on reading user info file $infoFile.");
+                return [];
+            }
+
+            $userInfo = json_decode($content, true);
+
+            if (!is_array($userInfo)) {
+                $this->writeLn("ERROR: User info file $infoFile contains invalid JSON.");
+                return [];
+            }
         }
 
         if (empty($userInfo[$userId])) {
@@ -402,12 +430,33 @@ class SendUserMails extends QUI\System\Console\Tool
         $userInfo = [];
 
         if (file_exists($infoFile)) {
-            $userInfo = json_decode(file_get_contents($infoFile), true);
+            $content = file_get_contents($infoFile);
+
+            if ($content === false) {
+                $this->writeLn("ERROR on reading user info file $infoFile.");
+                return;
+            }
+
+            $userInfo = json_decode($content, true);
+
+            if (!is_array($userInfo)) {
+                $this->writeLn("ERROR: User info file $infoFile contains invalid JSON.");
+                return;
+            }
         }
 
         $userInfo[$userId] = $info;
+        $json = json_encode($userInfo);
 
-        file_put_contents($infoFile, json_encode($userInfo));
+        if ($json === false) {
+            $this->writeLn('ERROR: Mail status data could not be encoded.');
+            return;
+        }
+
+        if (file_put_contents($infoFile, $json) === false) {
+            $this->writeLn("ERROR on writing user info file $infoFile.");
+            return;
+        }
     }
 
     /**
@@ -436,7 +485,17 @@ class SendUserMails extends QUI\System\Console\Tool
             return;
         }
 
-        file_put_contents($limitsFile, json_encode($limits));
+        $json = json_encode($limits);
+
+        if ($json === false) {
+            $this->writeLn('ERROR: Mail limits could not be encoded.');
+            return;
+        }
+
+        if (file_put_contents($limitsFile, $json) === false) {
+            $this->writeLn("ERROR on writing limits file $limitsFile.");
+            return;
+        }
     }
 
     /**
@@ -468,7 +527,45 @@ class SendUserMails extends QUI\System\Console\Tool
             return false;
         }
 
-        return json_decode(file_get_contents($limitsFile), true);
+        $content = file_get_contents($limitsFile);
+
+        if ($content === false) {
+            $this->writeLn("ERROR on reading limits file $limitsFile.");
+            return false;
+        }
+
+        $limits = json_decode($content, true);
+
+        if (!is_array($limits)) {
+            $this->writeLn("ERROR: Limits file $limitsFile contains invalid JSON.");
+            return false;
+        }
+
+        if (
+            !array_key_exists('per24h', $limits)
+            || (!is_int($limits['per24h']) && $limits['per24h'] !== false)
+            || !array_key_exists('perHour', $limits)
+            || (!is_int($limits['perHour']) && $limits['perHour'] !== false)
+            || !array_key_exists('perMinute', $limits)
+            || (!is_int($limits['perMinute']) && $limits['perMinute'] !== false)
+            || !array_key_exists('start24h', $limits)
+            || (!is_string($limits['start24h']) && $limits['start24h'] !== false)
+            || !array_key_exists('startHour', $limits)
+            || (!is_string($limits['startHour']) && $limits['startHour'] !== false)
+            || !array_key_exists('startMinute', $limits)
+            || (!is_string($limits['startMinute']) && $limits['startMinute'] !== false)
+            || !isset($limits['current24h'])
+            || !is_int($limits['current24h'])
+            || !isset($limits['currentHour'])
+            || !is_int($limits['currentHour'])
+            || !isset($limits['currentMinute'])
+            || !is_int($limits['currentMinute'])
+        ) {
+            $this->writeLn("ERROR: Limits file $limitsFile has an invalid structure.");
+            return false;
+        }
+
+        return $limits;
     }
 
     /**
@@ -481,23 +578,28 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function updateLimits(): void
     {
         $limits = $this->getLimits();
-        $Now = date_create();
+        $Now = new DateTime();
 
         // Update minute limit
         if (!empty($limits['perMinute'])) {
             if (empty($limits['startMinute'])) {
-                $Start = date_create();
+                $Start = new DateTime();
                 $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
             } else {
                 $Start = date_create($limits['startMinute']);
+
+                if ($Start === false) {
+                    $this->writeLn('ERROR: Mail limits contain an invalid minute start date.');
+                    return;
+                }
             }
 
             $End = clone $Start;
-            $End->add(date_interval_create_from_date_string('1 minutes'));
+            $End->add(new DateInterval('PT1M'));
 
             // Reset limit
             if ($Now > $End) {
-                $Start = date_create();
+                $Start = new DateTime();
                 $limits['startMinute'] = $Start->format('Y-m-d H:i:s');
                 $limits['currentMinute'] = 0;
             }
@@ -508,18 +610,23 @@ class SendUserMails extends QUI\System\Console\Tool
         // Update hour limit
         if (!empty($limits['perHour'])) {
             if (empty($limits['startHour'])) {
-                $Start = date_create();
+                $Start = new DateTime();
                 $limits['startHour'] = $Start->format('Y-m-d H:i:s');
             } else {
                 $Start = date_create($limits['startHour']);
+
+                if ($Start === false) {
+                    $this->writeLn('ERROR: Mail limits contain an invalid hour start date.');
+                    return;
+                }
             }
 
             $End = clone $Start;
-            $End->add(date_interval_create_from_date_string('1 hours'));
+            $End->add(new DateInterval('PT1H'));
 
             // Reset limit
             if ($Now > $End) {
-                $Start = date_create();
+                $Start = new DateTime();
                 $limits['startHour'] = $Start->format('Y-m-d H:i:s');
                 $limits['currentHour'] = 0;
             }
@@ -530,18 +637,24 @@ class SendUserMails extends QUI\System\Console\Tool
         // Update 24 hour limit
         if (!empty($limits['per24h'])) {
             if (empty($limits['start24h'])) {
-                $Start = date_create();
+                $Start = new DateTime();
                 $limits['start24h'] = $Start->format('Y-m-d H:i:s');
             } else {
                 $Start = date_create($limits['start24h']);
+
+                if ($Start === false) {
+                    $this->writeLn('ERROR: Mail limits contain an invalid 24-hour start date.');
+                    return;
+                }
             }
 
             $End = clone $Start;
-            $End->add(date_interval_create_from_date_string('24 hours'));
+            // A calendar day preserves the legacy "24 hours" behavior across DST changes.
+            $End->add(new DateInterval('P1D'));
 
             // Reset limit
             if ($Now > $End) {
-                $Start = date_create();
+                $Start = new DateTime();
                 $limits['start24h'] = $Start->format('Y-m-d H:i:s');
                 $limits['current24h'] = 0;
             }
@@ -551,7 +664,17 @@ class SendUserMails extends QUI\System\Console\Tool
 
         try {
             $limitsFile = QUI::getPackage('quiqqer/frontend-users')->getVarDir() . 'send_user_mails_limits';
-            file_put_contents($limitsFile, json_encode($limits));
+            $json = json_encode($limits);
+
+            if ($json === false) {
+                $this->writeLn('ERROR: Mail limits could not be encoded.');
+                return;
+            }
+
+            if (file_put_contents($limitsFile, $json) === false) {
+                $this->writeLn("ERROR on writing limits file $limitsFile.");
+                return;
+            }
         } catch (\Exception $Exception) {
             QUI\System\Log::writeException($Exception);
             $this->writeLn("ERROR on writing limits file: " . $Exception->getMessage());
@@ -566,18 +689,23 @@ class SendUserMails extends QUI\System\Console\Tool
     protected function isMailAllowed(): bool
     {
         $limits = $this->getLimits();
-        $Now = date_create();
+        $Now = new DateTime();
 
         // Check minute limit
         if (!empty($limits['perMinute'])) {
             if (empty($limits['startMinute'])) {
-                $Start = date_create();
+                $Start = new DateTime();
             } else {
                 $Start = date_create($limits['startMinute']);
+
+                if ($Start === false) {
+                    $this->writeLn('ERROR: Mail limits contain an invalid minute start date.');
+                    return false;
+                }
             }
 
             $End = clone $Start;
-            $End->add(date_interval_create_from_date_string('1 minutes'));
+            $End->add(new DateInterval('PT1M'));
 
             // Limit applies
             if ($Now < $End) {
@@ -593,13 +721,18 @@ class SendUserMails extends QUI\System\Console\Tool
         // Check hour limit
         if (!empty($limits['perHour'])) {
             if (empty($limits['startHour'])) {
-                $Start = date_create();
+                $Start = new DateTime();
             } else {
                 $Start = date_create($limits['startHour']);
+
+                if ($Start === false) {
+                    $this->writeLn('ERROR: Mail limits contain an invalid hour start date.');
+                    return false;
+                }
             }
 
             $End = clone $Start;
-            $End->add(date_interval_create_from_date_string('1 hours'));
+            $End->add(new DateInterval('PT1H'));
 
             // Limit applies
             if ($Now < $End) {
@@ -615,13 +748,19 @@ class SendUserMails extends QUI\System\Console\Tool
         // Check 24 hour limit
         if (!empty($limits['per24h'])) {
             if (empty($limits['start24h'])) {
-                $Start = date_create();
+                $Start = new DateTime();
             } else {
                 $Start = date_create($limits['start24h']);
+
+                if ($Start === false) {
+                    $this->writeLn('ERROR: Mail limits contain an invalid 24-hour start date.');
+                    return false;
+                }
             }
 
             $End = clone $Start;
-            $End->add(date_interval_create_from_date_string('24 hours'));
+            // A calendar day preserves the legacy "24 hours" behavior across DST changes.
+            $End->add(new DateInterval('P1D'));
 
             // Limit applies
             if ($Now < $End) {
@@ -674,10 +813,8 @@ class SendUserMails extends QUI\System\Console\Tool
                 }
 
                 // Check if mail limit(s) apply
-                do {
-                    $mailAllowed = $this->isMailAllowed();
-
-                    if ($mailAllowed) {
+                while (true) {
+                    if ($this->isMailAllowed()) {
                         break;
                     }
 
@@ -686,7 +823,7 @@ class SendUserMails extends QUI\System\Console\Tool
                     );
 
                     sleep(60);
-                } while (!$mailAllowed); // @phpstan-ignore-line
+                }
             }
 
             if (!empty($recipient['firstname']) && !empty($recipient['lastname'])) {

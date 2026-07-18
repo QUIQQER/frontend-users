@@ -295,6 +295,103 @@ class ConsoleDatabaseWorkflowTest extends DatabaseTestCase
         }
     }
 
+    public function testSendUserMailsReportsCorruptStateFilesAndLimitDates(): void
+    {
+        $Tool = new class extends SendUserMails {
+            /** @var list<string> */
+            private array $messages = [];
+
+            public function call(string $method, mixed ...$arguments): mixed
+            {
+                return (new ReflectionMethod($this, $method))->invoke($this, ...$arguments);
+            }
+
+            public function writeLn(string $msg = '', bool|string $color = false, bool|string $bg = false): void
+            {
+                $this->messages[] = $msg;
+            }
+
+            /** @return list<string> */
+            public function getMessages(): array
+            {
+                return $this->messages;
+            }
+        };
+
+        $varDir = QUI::getPackage('quiqqer/frontend-users')->getVarDir();
+        $infoFile = $varDir . 'send_user_mails';
+        $limitsFile = $varDir . 'send_user_mails_limits';
+        @unlink($infoFile);
+        @unlink($limitsFile);
+
+        try {
+            $Tool->call(
+                'writeUserInfo',
+                991003,
+                ['sent' => true, 'sent_date' => 'now', 'error' => "\xB1"]
+            );
+            self::assertContains('ERROR: Mail status data could not be encoded.', $Tool->getMessages());
+            self::assertFileDoesNotExist($infoFile);
+
+            $unencodableLimits = [
+                'per24h' => false,
+                'perHour' => false,
+                'perMinute' => 1,
+                'start24h' => false,
+                'startHour' => false,
+                'startMinute' => "\xB1",
+                'current24h' => 0,
+                'currentHour' => 0,
+                'currentMinute' => 0
+            ];
+            $Tool->call('setLimits', $unencodableLimits);
+            self::assertContains('ERROR: Mail limits could not be encoded.', $Tool->getMessages());
+            self::assertFileDoesNotExist($limitsFile);
+
+            file_put_contents($infoFile, '{invalid-json');
+            self::assertSame([], $Tool->call('getUserInfo', 991003));
+            self::assertContains(
+                "ERROR: User info file $infoFile contains invalid JSON.",
+                $Tool->getMessages()
+            );
+            $Tool->call(
+                'writeUserInfo',
+                991003,
+                ['sent' => true, 'sent_date' => 'now']
+            );
+            self::assertSame('{invalid-json', file_get_contents($infoFile));
+
+            file_put_contents($limitsFile, '{"perMinute":"invalid"}');
+            self::assertFalse($Tool->call('getLimits'));
+            self::assertContains(
+                "ERROR: Limits file $limitsFile has an invalid structure.",
+                $Tool->getMessages()
+            );
+
+            $limits = [
+                'per24h' => false,
+                'perHour' => false,
+                'perMinute' => 1,
+                'start24h' => false,
+                'startHour' => false,
+                'startMinute' => 'invalid-date',
+                'current24h' => 0,
+                'currentHour' => 0,
+                'currentMinute' => 0
+            ];
+            file_put_contents($limitsFile, json_encode($limits));
+            self::assertFalse($Tool->call('isMailAllowed'));
+            $Tool->call('updateLimits');
+            self::assertContains(
+                'ERROR: Mail limits contain an invalid minute start date.',
+                $Tool->getMessages()
+            );
+        } finally {
+            @unlink($infoFile);
+            @unlink($limitsFile);
+        }
+    }
+
     public function testSendUserMailsExecuteSelectsScopedRecipientsWithoutSendingInvalidMail(): void
     {
         $User = $this->createUser(true, ['lang' => 'de']);
