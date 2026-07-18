@@ -232,7 +232,7 @@ class PostRegister
 
     /**
      * @throws QUI\Exception
-     * @throws QUI\Verification\Exception|\DateMalformedStringException
+     * @throws \Exception
      */
     protected static function sendActivationMail(
         QUI\Interfaces\Users\User $User,
