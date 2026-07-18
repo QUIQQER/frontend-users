@@ -519,6 +519,14 @@ class Registration extends QUI\Control
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
         $Project = QUI::getRewrite()->getProject();
+
+        if ($Project === null) {
+            throw new QUI\Exception(
+                'Frontend users Registration::register: '
+                . 'No current rewrite project is available.'
+            );
+        }
+
         $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);
 
@@ -599,7 +607,7 @@ class Registration extends QUI\Control
         $NewUser->save(QUI::getUsers()->getSystemUser());
 
         // send registration notice to admins
-        $RegistrarHandler->sendRegistrationNotice($NewUser, $Registrar->getProject());
+        $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
 
         // check if the user has a password
         try {
@@ -655,7 +663,7 @@ class Registration extends QUI\Control
                     $RegistrarHandler->sendEmailConfirmationMail(
                         $NewUser,
                         $NewUser->getAttribute('email'),
-                        $Registrar->getProject()
+                        $Project
                     );
                 }
                 break;

@@ -152,11 +152,20 @@ class UserData extends AbstractProfileControl
                 ]);
             }
 
-            FrontendUsersHandler::getInstance()->sendChangeEmailAddressMail(
-                $User,
-                $newEmail,
-                QUI::getRewrite()->getProject()
-            );
+            $Project = QUI::getRewrite()->getProject();
+
+            if ($Project === null) {
+                QUI\System\Log::addError(
+                    'Frontend users UserData::onSave: No current rewrite project is available; '
+                    . 'the email address change mail was not sent.'
+                );
+            } else {
+                FrontendUsersHandler::getInstance()->sendChangeEmailAddressMail(
+                    $User,
+                    $newEmail,
+                    $Project
+                );
+            }
         }
 
         // require fields

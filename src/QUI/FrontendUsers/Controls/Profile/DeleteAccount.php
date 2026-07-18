@@ -100,9 +100,20 @@ class DeleteAccount extends AbstractProfileControl
         self::checkDeleteAccount();
 
         try {
+            $Project = QUI::getRewrite()->getProject();
+
+            if ($Project === null) {
+                Log::addError(
+                    'Frontend users DeleteAccount::onSave: No current rewrite project is available; '
+                    . 'the delete confirmation mail was not sent.'
+                );
+
+                return;
+            }
+
             Handler::getInstance()->sendDeleteUserConfirmationMail(
                 QUI::getUserBySession(),
-                QUI::getRewrite()->getProject()
+                $Project
             );
         } catch (Exception $Exception) {
             Log::writeException($Exception);

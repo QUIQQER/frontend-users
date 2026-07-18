@@ -617,6 +617,14 @@ class Events
             QUI\Projects\Media\Utils::getMediaItemByUrl($folder);
         } catch (QUI\Exception) {
             $Standard = QUI::getProjectManager()->getStandard();
+
+            if ($Standard === null) {
+                throw new QUI\Exception(
+                    'Frontend users Events::checkUserMediaFolder: '
+                    . 'No standard project is available.'
+                );
+            }
+
             $Media = $Standard->getMedia();
             $MainFolder = $Media->firstChild();
 

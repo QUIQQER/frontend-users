@@ -427,6 +427,15 @@ class Handler extends Singleton
     {
         $Project = $Registrar->getProject();
 
+        if ($Project === null) {
+            QUI\System\Log::addError(
+                'Frontend users Handler::sendActivationMail: '
+                . 'The registrar has no project; the activation mail was not sent.'
+            );
+
+            return false;
+        }
+
         $verification = $this->verificationFactory->createLinkVerification(
             'activate-' . $User->getUUID(),
             new ActivationLinkVerification(),

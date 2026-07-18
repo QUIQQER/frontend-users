@@ -88,6 +88,24 @@ class PostRegister
         $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
         $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
+        $projectName = $RegistrationData->getAttribute('project_name');
+
+        if ($projectName) {
+            $Project = QUI::getProject(
+                $projectName,
+                $RegistrationData->getAttribute('project_language')
+            );
+        } else {
+            $Project = QUI::getProjectManager()->getStandard();
+        }
+
+        if ($Project === null) {
+            throw new QUI\Exception(
+                'Frontend users PostRegister::registerUser: '
+                . 'No registration project is available.'
+            );
+        }
+
         $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
 
         // Add the given data to the User
@@ -103,14 +121,6 @@ class PostRegister
         // determine if the user has to set a new password on first login
         if ($registrationSettings['forcePasswordReset']) {
             $NewUser->setAttribute('quiqqer.set.new.password', true);
-        }
-
-        $projectName = $RegistrationData->getAttribute('project_name');
-
-        if ($projectName) {
-            $Project = QUI::getProject($projectName, $RegistrationData->getAttribute('project_language'));
-        } else {
-            $Project = QUI::getProjectManager()->getStandard();
         }
 
         $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
