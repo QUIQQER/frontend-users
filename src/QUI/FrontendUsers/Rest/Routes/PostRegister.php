@@ -8,10 +8,10 @@ use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 use QUI;
 use QUI\FrontendUsers\ActivationLinkVerification;
 use QUI\FrontendUsers\Exception;
+use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Verification\VerificationFactory;
 
 use function boolval;
-use function explode;
 use function json_encode;
 use function time;
 
@@ -112,9 +112,7 @@ class PostRegister
         static::addRegistrationDataToUser($NewUser, $RegistrationData);
 
         // add user to default groups
-        $defaultGroupIds = explode(",", $registrationSettings['defaultGroups']);
-
-        foreach ($defaultGroupIds as $groupId) {
+        foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
             $NewUser->addToGroup($groupId);
         }
 

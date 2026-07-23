@@ -36,6 +36,16 @@ class Handler extends Singleton
     const ACTIVATION_MODE_MANUAL = 'manual';
 
     /**
+     * @var list<string>
+     */
+    private const ACTIVATION_MODES = [
+        self::ACTIVATION_MODE_MAIL,
+        self::ACTIVATION_MODE_AUTO,
+        self::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM,
+        self::ACTIVATION_MODE_MANUAL
+    ];
+
+    /**
      * Password input types
      */
     const PASSWORD_INPUT_DEFAULT = 'default';
@@ -260,6 +270,48 @@ class Handler extends Singleton
     }
 
     /**
+     * @return non-empty-list<string>
+     */
+    public function getSupportedActivationModes(RegistrarInterface $Registrar): array
+    {
+        $activationModes = [];
+
+        foreach (self::ACTIVATION_MODES as $activationMode) {
+            if ($Registrar->supportsActivationMode($activationMode)) {
+                $activationModes[] = $activationMode;
+            }
+        }
+
+        if ($activationModes === []) {
+            return [self::ACTIVATION_MODE_MANUAL];
+        }
+
+        return $activationModes;
+    }
+
+    public function resolveActivationMode(
+        RegistrarInterface $Registrar,
+        ?string $activationMode
+    ): string {
+        $supportedActivationModes = $this->getSupportedActivationModes($Registrar);
+
+        if (
+            $activationMode !== null
+            && in_array($activationMode, $supportedActivationModes, true)
+        ) {
+            return $activationMode;
+        }
+
+        $defaultActivationMode = $Registrar->getDefaultActivationMode();
+
+        if (in_array($defaultActivationMode, $supportedActivationModes, true)) {
+            return $defaultActivationMode;
+        }
+
+        return $supportedActivationModes[0];
+    }
+
+    /**
      * Get all settings for user profile
      *
      * @return array<string, mixed>
@@ -389,7 +441,18 @@ class Handler extends Singleton
             !is_null($registrarClass)
             && isset($registrarSettings[$registrarClass])
         ) {
-            return $registrarSettings[$registrarClass];
+            $settings = $registrarSettings[$registrarClass];
+            $Registrar = $this->getRegistrar($registrarClass);
+
+            if ($Registrar !== false) {
+                $activationMode = $settings['activationMode'] ?? null;
+                $settings['activationMode'] = $this->resolveActivationMode(
+                    $Registrar,
+                    is_string($activationMode) ? $activationMode : null
+                );
+            }
+
+            return $settings;
         }
 
         return $registrarSettings;

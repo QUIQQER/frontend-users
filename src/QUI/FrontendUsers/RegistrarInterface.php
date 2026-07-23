@@ -112,6 +112,16 @@ interface RegistrarInterface
     public function getDescription(null | QUI\Locale $Locale = null): string;
 
     /**
+     * Check if the registrar supports an activation mode
+     */
+    public function supportsActivationMode(string $activationMode): bool;
+
+    /**
+     * Return the default activation mode
+     */
+    public function getDefaultActivationMode(): string;
+
+    /**
      * Set current Project the Registrar works for
      *
      * @param QUI\Projects\Project $Project

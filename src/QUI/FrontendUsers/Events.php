@@ -367,14 +367,23 @@ class Events
         /** @var RegistrarInterface $Registrar */
         foreach ($RegistrarHandler->getAvailableRegistrars() as $Registrar) {
             $name = $Registrar->getType();
+            $activationMode = $settings[$name]['activationMode'] ?? null;
+            $activationMode = $RegistrarHandler->resolveActivationMode(
+                $Registrar,
+                is_string($activationMode) ? $activationMode : null
+            );
 
             if (!isset($settings[$name])) {
                 $settings[$name] = [
                     'active' => $name === QUI\FrontendUsers\Registrars\Email\Registrar::class,
-                    'activationMode' => 'mail',
+                    'activationMode' => $activationMode,
                     'displayPosition' => 1
                 ];
+
+                continue;
             }
+
+            $settings[$name]['activationMode'] = $activationMode;
         }
 
         $RegistrarHandler->setRegistrarSettings($settings);

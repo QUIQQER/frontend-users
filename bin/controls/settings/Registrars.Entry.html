@@ -31,10 +31,9 @@
                     </span>
                     <select name="activationMode"
                             class="field-container-field quiqqer-frontendusers-settings-registrars-setting">
-                        <option value="mail">{{activationModeOptionMail}}</option>
-                        <option value="auto">{{activationModeOptionAuto}}</option>
-                        <option value="autoWithEmailConfirm">{{activationModeOptionAutoWithEmailConfirm}}</option>
-                        <option value="manual">{{activationModeOptionManual}}</option>
+                        {{#activationModeOptions}}
+                        <option value="{{value}}">{{label}}</option>
+                        {{/activationModeOptions}}
                     </select>
                 </label>
             </td>
