@@ -74,6 +74,20 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
     abstract public function getIcon(): string;
 
     /**
+     * Registrars support every activation mode by default. Implementations can
+     * restrict the available modes for their registration workflow.
+     */
+    public function supportsActivationMode(string $activationMode): bool
+    {
+        return true;
+    }
+
+    public function getDefaultActivationMode(): string
+    {
+        return Handler::ACTIVATION_MODE_MAIL;
+    }
+
+    /**
      * Return the success message
      *
      * @return string

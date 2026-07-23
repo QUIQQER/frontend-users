@@ -15,6 +15,8 @@ use QUI\FrontendUsers\Exception\UserAlreadyExistsException;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\FrontendUsers\RegistrarCollection;
+use QUI\FrontendUsers\Registrars\Email\Registrar;
+use QUI\FrontendUsers\RegistrationUtils;
 use QUI\FrontendUsers\Rest\Provider;
 use QUI\FrontendUsers\Utils;
 use QUI\Verification\Entity\LinkVerification;
@@ -64,6 +66,77 @@ class CoreBehaviorTest extends TestCase
         self::assertTrue($settings['street']['show']);
         self::assertTrue($settings['street_number']['required']);
         self::assertTrue($settings['firstname']['required']);
+    }
+
+    public function testDefaultGroupIdsIgnoreEmptyEntries(): void
+    {
+        self::assertSame([], RegistrationUtils::parseDefaultGroupIds(''));
+        self::assertSame(
+            ['group-a', '42'],
+            RegistrationUtils::parseDefaultGroupIds(' , group-a, ,42,')
+        );
+    }
+
+    public function testRegistrarsCanRestrictSupportedActivationModes(): void
+    {
+        $Handler = new Handler();
+        $Registrar = new Registrar();
+        $allActivationModes = [
+            Handler::ACTIVATION_MODE_MAIL,
+            Handler::ACTIVATION_MODE_AUTO,
+            Handler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM,
+            Handler::ACTIVATION_MODE_MANUAL
+        ];
+
+        self::assertSame(
+            $allActivationModes,
+            $Handler->getSupportedActivationModes($Registrar)
+        );
+        self::assertSame(
+            Handler::ACTIVATION_MODE_MAIL,
+            $Handler->resolveActivationMode($Registrar, null)
+        );
+
+        $RestrictedRegistrar = new class extends Registrar {
+            public function supportsActivationMode(string $activationMode): bool
+            {
+                return in_array(
+                    $activationMode,
+                    [
+                        Handler::ACTIVATION_MODE_AUTO,
+                        Handler::ACTIVATION_MODE_MANUAL
+                    ],
+                    true
+                );
+            }
+
+            public function getDefaultActivationMode(): string
+            {
+                return Handler::ACTIVATION_MODE_AUTO;
+            }
+        };
+
+        self::assertSame(
+            [
+                Handler::ACTIVATION_MODE_AUTO,
+                Handler::ACTIVATION_MODE_MANUAL
+            ],
+            $Handler->getSupportedActivationModes($RestrictedRegistrar)
+        );
+        self::assertSame(
+            Handler::ACTIVATION_MODE_AUTO,
+            $Handler->resolveActivationMode(
+                $RestrictedRegistrar,
+                Handler::ACTIVATION_MODE_MAIL
+            )
+        );
+        self::assertSame(
+            Handler::ACTIVATION_MODE_MANUAL,
+            $Handler->resolveActivationMode(
+                $RestrictedRegistrar,
+                Handler::ACTIVATION_MODE_MANUAL
+            )
+        );
     }
 
     public function testGravatarAndEmailVerificationGuards(): void

@@ -572,9 +572,7 @@ class Registration extends QUI\Control
         $NewUser = $Registrar->createUser();
 
         // add user to default groups
-        $defaultGroups = explode(",", $registrationSettings['defaultGroups']);
-
-        foreach ($defaultGroups as $groupId) {
+        foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
             $NewUser->addToGroup($groupId);
         }
 

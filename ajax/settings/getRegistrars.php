@@ -4,8 +4,8 @@
  * This file contains package_quiqqer_frontend-users_ajax_settings_getRegistrars
  */
 
-use QUI\FrontendUsers\AbstractRegistrar;
 use QUI\FrontendUsers\Handler;
+use QUI\FrontendUsers\RegistrarInterface;
 
 /**
  * Return list of title, description and type of all registrars
@@ -17,12 +17,16 @@ QUI::getAjax()->registerFunction(
     function () {
         $registrars = [];
 
-        /** @var AbstractRegistrar $Registrar */
-        foreach (Handler::getInstance()->getAvailableRegistrars() as $Registrar) {
+        $Handler = Handler::getInstance();
+
+        /** @var RegistrarInterface $Registrar */
+        foreach ($Handler->getAvailableRegistrars() as $Registrar) {
             $registrars[] = [
                 'type' => $Registrar->getType(),
                 'title' => $Registrar->getTitle(),
-                'description' => $Registrar->getDescription()
+                'description' => $Registrar->getDescription(),
+                'activationModes' => $Handler->getSupportedActivationModes($Registrar),
+                'defaultActivationMode' => $Handler->resolveActivationMode($Registrar, null)
             ];
         }
 

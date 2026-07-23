@@ -72,10 +72,27 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
                 self.Loader.hide();
 
                 var lgPrefix = 'controls.settings.registrars.template.';
+                var activationModeLabels = {
+                    mail: QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
+                    auto: QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
+                    autoWithEmailConfirm: QUILocale.get(
+                        lg,
+                        lgPrefix + 'activationModeOptionAutoWithEmailConfirm'
+                    ),
+                    manual: QUILocale.get(lg, lgPrefix + 'activationModeOptionManual')
+                };
 
                 for (var i = 0, len = registrars.length; i < len; i++) {
                     var Registrar = registrars[i];
                     var type = btoa(Registrar.type);
+                    var activationModes = Registrar.activationModes || Object.keys(activationModeLabels);
+                    var defaultActivationMode = Registrar.defaultActivationMode || activationModes[0];
+                    var activationModeOptions = activationModes.map(function (activationMode) {
+                        return {
+                            value: activationMode,
+                            label: activationModeLabels[activationMode] || activationMode
+                        };
+                    });
 
                     var EntryElm = new Element('div', {
                         'class': 'quiqqer-frontendusers-settings-registrars-entry',
@@ -84,24 +101,26 @@ define('package/quiqqer/frontend-users/bin/controls/settings/Registrars', [
                             title: Registrar.title,
                             description: Registrar.description,
                             labelActivationMode: QUILocale.get(lg, lgPrefix + 'labelActivationMode'),
-                            activationModeOptionMail: QUILocale.get(lg, lgPrefix + 'activationModeOptionMail'),
-                            activationModeOptionAuto: QUILocale.get(lg, lgPrefix + 'activationModeOptionAuto'),
-                            activationModeOptionAutoWithEmailConfirm: QUILocale.get(lg, lgPrefix + 'activationModeOptionAutoWithEmailConfirm'),
-                            activationModeOptionManual: QUILocale.get(lg, lgPrefix + 'activationModeOptionManual'),
+                            activationModeOptions: activationModeOptions,
                             labelActive: QUILocale.get(lg, lgPrefix + 'labelActive'),
                             labelDisplayPosition: QUILocale.get(lg, lgPrefix + 'labelDisplayPosition')
                         })
                     }).inject(self.$Content);
+                    var Form = EntryElm.getElement('form');
+                    var registrarSettings = FormData[type] || {};
 
-                    if (type in FormData) {
-                        var Form = EntryElm.getElement('form');
-                        QUIFormUtils.setDataToForm(FormData[type], Form);
+                    if (activationModes.indexOf(registrarSettings.activationMode) === -1) {
+                        registrarSettings.activationMode = defaultActivationMode;
                     }
+
+                    QUIFormUtils.setDataToForm(registrarSettings, Form);
 
                     EntryElm.getElements(
                         '.quiqqer-frontendusers-settings-registrars-setting'
                     ).addEvent('change', self.$setSettings);
                 }
+
+                self.$setSettings();
             });
         },
 
