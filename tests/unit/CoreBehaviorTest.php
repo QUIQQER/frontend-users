@@ -15,6 +15,7 @@ use QUI\FrontendUsers\Exception\UserAlreadyExistsException;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\FrontendUsers\RegistrarCollection;
+use QUI\FrontendUsers\RegistrationUtils;
 use QUI\FrontendUsers\Rest\Provider;
 use QUI\FrontendUsers\Utils;
 use QUI\Verification\Entity\LinkVerification;
@@ -64,6 +65,15 @@ class CoreBehaviorTest extends TestCase
         self::assertTrue($settings['street']['show']);
         self::assertTrue($settings['street_number']['required']);
         self::assertTrue($settings['firstname']['required']);
+    }
+
+    public function testDefaultGroupIdsIgnoreEmptyEntries(): void
+    {
+        self::assertSame([], RegistrationUtils::parseDefaultGroupIds(''));
+        self::assertSame(
+            ['group-a', '42'],
+            RegistrationUtils::parseDefaultGroupIds(' , group-a, ,42,')
+        );
     }
 
     public function testGravatarAndEmailVerificationGuards(): void

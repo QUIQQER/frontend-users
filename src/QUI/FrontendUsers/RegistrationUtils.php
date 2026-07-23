@@ -13,6 +13,26 @@ use QUI\Projects\Project;
 class RegistrationUtils
 {
     /**
+     * @return list<string>
+     */
+    public static function parseDefaultGroupIds(string $groupIds): array
+    {
+        $result = [];
+
+        foreach (explode(',', $groupIds) as $groupId) {
+            $groupId = trim($groupId);
+
+            if ($groupId === '') {
+                continue;
+            }
+
+            $result[] = $groupId;
+        }
+
+        return $result;
+    }
+
+    /**
      * Get the "further links" that are shown in the account activation success message box
      * if the user is NOT automatically redirected.
      *
