@@ -965,7 +965,13 @@ class Handler extends Singleton
             return false;
         }
 
-        return current($result);
+        $Site = current($result);
+
+        if (!($Site instanceof QUI\Projects\Site)) {
+            return false;
+        }
+
+        return $Site;
     }
 
     /**
@@ -992,7 +998,13 @@ class Handler extends Singleton
             return false;
         }
 
-        return current($result);
+        $Site = current($result);
+
+        if (!($Site instanceof QUI\Projects\Site)) {
+            return false;
+        }
+
+        return $Site;
     }
 
     /**
@@ -1019,7 +1031,13 @@ class Handler extends Singleton
             return false;
         }
 
-        return current($result);
+        $Site = current($result);
+
+        if (!($Site instanceof QUI\Projects\Site)) {
+            return false;
+        }
+
+        return $Site;
     }
 
     /**
@@ -1050,7 +1068,13 @@ class Handler extends Singleton
             return false;
         }
 
-        return current($result);
+        $Site = current($result);
+
+        if (!($Site instanceof QUI\Projects\Site)) {
+            return false;
+        }
+
+        return $Site;
     }
 
     /**
