@@ -19,6 +19,8 @@ Features
 * Password reset
 * CAPTCHA for registration (optional via `quiqqer/captcha`)
 * Cron that deletes users whose account has not been activated after X days
+* Configurable cron and console tool for selecting and deleting frontend users by creation date,
+  account age, last login, activation status, group membership, or user attributes
 * Message administrators on new user registration
 * Default user groups for newly registered users
 * Frontend Profile: Lets users manage their account information
@@ -43,6 +45,27 @@ $ ./console frontend-users:anonymiseUsers
 # Anonymise all user email addresses (only) (except SU)
 $ ./console frontend-users:anonymiseUsers --email_only 
 ```
+
+Console tool for cleaning up frontend users
+------------
+
+The cleanup command performs a dry run by default. Pass `--delete` to delete the selected users. Superusers
+and users explicitly marked as backend registrations are always excluded.
+
+```bash
+# List inactive frontend users that are at least 30 days old
+$ ./console frontend-users:cleanup --atLeastDaysOld=30 --activeStatus=0
+
+# Delete the same selection
+$ ./console frontend-users:cleanup --atLeastDaysOld=30 --activeStatus=0 --delete
+
+# Filter by a stored user attribute
+$ ./console frontend-users:cleanup --attr-quiqqer.frontendUsers.emailVerified=0
+```
+
+Available filters are `createDateFrom`, `createDateTo`, `atLeastDaysOld`,
+`atLeastNotLoggedInForDays`, `activeStatus`, `inGroups`, `notInGroups`, and arbitrary
+`attr-<attribute-name>` values. The same filters are available to the configurable cleanup cron.
 
 Installation
 ------------

@@ -28,5 +28,6 @@ require_once __DIR__ . '/stubs/Slim/Factory/AppFactory.php';
 require_once __DIR__ . '/stubs/QUI/REST/Server.php';
 require_once __DIR__ . '/Support/DatabaseTestCase.php';
 require_once __DIR__ . '/Support/VerificationSiteFixture.php';
+require_once __DIR__ . '/Support/CleanupTestConsole.php';
 
 QUI\System\TestCleanup::register();
