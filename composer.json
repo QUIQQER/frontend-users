@@ -38,6 +38,9 @@
     "suggest": {
         "quiqqer/rest": "User registration via REST API"
     },
+    "replace": {
+        "quiqqer/frontend-users-cleanup": "*"
+    },
     "autoload": {
         "psr-4": {
             "QUI\\FrontendUsers\\": "src/QUI/FrontendUsers"

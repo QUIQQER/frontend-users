@@ -21,6 +21,46 @@
             Automatically deletes all users who have registered via the frontend but have not been activated and who have had their registration longer than X days (setting) ago.
             ]]></en>
         </locale>
+        <locale name="cron.cleanup.title">
+            <de><![CDATA[Benutzer aufräumen]]></de>
+            <en><![CDATA[Cleanup users]]></en>
+        </locale>
+        <locale name="cron.cleanup.description">
+            <de><![CDATA[Löscht automatisiert Benutzerkonten anhand der eingestellten Filterkriterien.]]></de>
+            <en><![CDATA[Automatically deletes user accounts based on the configured filter criteria.]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.createDateFrom">
+            <de><![CDATA[Ab Erstellungsdatum (JJJJ-MM-DD)]]></de>
+            <en><![CDATA[From create date (YYYY-MM-DD)]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.createDateTo">
+            <de><![CDATA[Bis Erstellungsdatum (JJJJ-MM-DD)]]></de>
+            <en><![CDATA[To create date (YYYY-MM-DD)]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.atLeastDaysOld">
+            <de><![CDATA[Mindestalter in Tagen (seit Erstellung)]]></de>
+            <en><![CDATA[Minimum age in days (since creation)]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.atLeastNotLoggedInForDays">
+            <de><![CDATA[Nicht eingeloggt für X Tage]]></de>
+            <en><![CDATA[Not logged in for X days]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.activeStatus">
+            <de><![CDATA[Aktivierungsstatus (1 = aktiv; 0 = inaktiv; -1 = aktiv und inaktiv)]]></de>
+            <en><![CDATA[Activation status (1 = active; 0 = inactive; -1 = active and inactive)]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.inGroups">
+            <de><![CDATA[Nur Benutzer in diesen Gruppen (Gruppen-IDs, kommasepariert)]]></de>
+            <en><![CDATA[Only users in these groups (group IDs, comma-separated)]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.notInGroups">
+            <de><![CDATA[Nur Benutzer NICHT in diesen Gruppen (Gruppen-IDs, kommasepariert)]]></de>
+            <en><![CDATA[Only users NOT in these groups (group IDs, comma-separated)]]></en>
+        </locale>
+        <locale name="cron.cleanup.param.emailVerified">
+            <de><![CDATA[E-Mail-Bestätigungsstatus (1 = bestätigt; 0 = unbestätigt)]]></de>
+            <en><![CDATA[Email confirmation status (1 = confirmed; 0 = unconfirmed)]]></en>
+        </locale>
 
         <locale name="package.title">
             <de><![CDATA[QUIQQER - Frontend-Users]]></de>

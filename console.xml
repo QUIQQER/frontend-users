@@ -3,4 +3,5 @@
     <tool exec="\QUI\FrontendUsers\Console\SendUserMails" />
     <tool exec="\QUI\FrontendUsers\Console\SetUserGroups" />
     <tool exec="\QUI\FrontendUsers\Console\AnonymiseUsers" />
+    <tool exec="\QUI\FrontendUsers\Cleanup\Console" />
 </console>
