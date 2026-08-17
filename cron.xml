@@ -13,4 +13,39 @@
             <active>1</active>
         </autocreate>
     </cron>
+
+    <cron exec="\QUI\FrontendUsers\Cleanup\Cron::cleanup">
+        <title>
+            <locale group="quiqqer/frontend-users" var="cron.cleanup.title" />
+        </title>
+        <description>
+            <locale group="quiqqer/frontend-users" var="cron.cleanup.description" />
+        </description>
+        <params>
+            <param name="createDateFrom" type="string">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.createDateFrom" />
+            </param>
+            <param name="createDateTo" type="string">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.createDateTo" />
+            </param>
+            <param name="atLeastDaysOld" type="number">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.atLeastDaysOld" />
+            </param>
+            <param name="atLeastNotLoggedInForDays" type="number">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.atLeastNotLoggedInForDays" />
+            </param>
+            <param name="activeStatus" type="number">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.activeStatus" />
+            </param>
+            <param name="inGroups" type="string">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.inGroups" />
+            </param>
+            <param name="notInGroups" type="string">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.notInGroups" />
+            </param>
+            <param name="emailVerified" type="number">
+                <locale group="quiqqer/frontend-users" var="cron.cleanup.param.emailVerified" />
+            </param>
+        </params>
+    </cron>
 </crons>
