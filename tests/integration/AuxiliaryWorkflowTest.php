@@ -219,6 +219,13 @@ class AuxiliaryWorkflowTest extends DatabaseTestCase
     public function testAvatarUploadStoresAndRemovesUploadedImage(): void
     {
         $User = $this->createUser(true);
+        $Project = QUI::getRewrite()->getProject();
+        self::assertNotNull($Project);
+        $this->setPackageConfig(
+            'userProfile',
+            'userAvatarFolder',
+            $Project->getMedia()->get(1)->getUrl()
+        );
         $file = tempnam(sys_get_temp_dir(), 'frontend-users-avatar-');
         self::assertNotFalse($file);
         $pngFile = $file . '.png';

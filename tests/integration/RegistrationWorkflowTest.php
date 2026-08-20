@@ -37,7 +37,6 @@ class RegistrationWorkflowTest extends DatabaseTestCase
         self::assertSame(Handler::REGISTRATION_STATUS_SUCCESS, $Control->register());
         $User = $Control->getRegisteredUser();
         self::assertNotNull($User);
-        $this->trackUser($User);
         self::assertSame($username, $User->getUsername());
         self::assertTrue($User->isInGroup($Group->getUUID()));
         self::assertSame(Registrar::class, $User->getAttribute(Handler::USER_ATTR_REGISTRAR));
