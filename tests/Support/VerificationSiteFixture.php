@@ -3,13 +3,9 @@
 namespace QUI\FrontendUsers\Tests\Support;
 
 use QUI;
-use QUI\Permissions\Permission;
 use QUI\Projects\Project;
-use QUI\Projects\Site\Edit;
 use QUI\Verification\Utils;
-use ReflectionProperty;
 use RuntimeException;
-use Throwable;
 
 final class VerificationSiteFixture
 {
@@ -36,29 +32,25 @@ final class VerificationSiteFixture
 
         self::$Project = $Project;
         register_shutdown_function([self::class, 'tearDown']);
-
-        self::withSystemUser(static function () use ($Project): void {
-            $Root = $Project->firstChild()->getEdit();
-
-            if ($Root === null) {
-                throw new RuntimeException('The project root site is not editable.');
-            }
-
-            $siteId = $Root->createChild(
-                [
-                    'name' => 'phpunit-frontend-users-verifier-' . bin2hex(random_bytes(6)),
-                    'title' => 'PHPUnit Frontend Users Verifier'
-                ],
-                [],
-                QUI::getUsers()->getSystemUser()
-            );
-            self::$siteId = $siteId;
-
-            $VerifierSite = new Edit($Project, $siteId);
-            $VerifierSite->setAttribute('type', Utils::SITE_TYPE_VERIFIER);
-            $VerifierSite->save(QUI::getUsers()->getSystemUser());
-            $VerifierSite->activate(QUI::getUsers()->getSystemUser());
-        });
+        $Connection = QUI::getDataBaseConnection();
+        self::$siteId = random_int(700000000, 799999999);
+        $Connection->insert($Project->table(), [
+            'id' => self::$siteId,
+            'name' => 'phpunit-frontend-users-verifier-' . bin2hex(random_bytes(6)),
+            'title' => 'PHPUnit Frontend Users Verifier',
+            'type' => Utils::SITE_TYPE_VERIFIER,
+            'active' => 1,
+            'deleted' => 0,
+            'c_date' => date('Y-m-d H:i:s'),
+            'e_date' => date('Y-m-d H:i:s'),
+            'c_user' => '5',
+            'e_user' => '5',
+            'order_field' => 1
+        ]);
+        $Connection->insert($Project->table() . '_relations', [
+            'parent' => 1,
+            'child' => self::$siteId
+        ]);
     }
 
     public static function tearDown(): void
@@ -67,41 +59,10 @@ final class VerificationSiteFixture
             return;
         }
 
-        try {
-            self::withSystemUser(static function (): void {
-                if (self::$Project === null || self::$siteId === null) {
-                    return;
-                }
-
-                $VerifierSite = new Edit(self::$Project, self::$siteId);
-                $VerifierSite->delete();
-                (new Edit(self::$Project, self::$siteId))->destroy();
-            });
-        } catch (Throwable) {
-            // Cleanup must not hide the actual PHPUnit result.
-        } finally {
-            self::$Project = null;
-            self::$siteId = null;
-        }
-    }
-
-    private static function withSystemUser(callable $Callback): void
-    {
-        $Users = QUI::getUsers();
-        $SystemUser = $Users->getSystemUser();
-        $SessionProperty = new ReflectionProperty($Users, 'Session');
-        $previousSessionUser = $SessionProperty->getValue($Users);
-        $PermissionProperty = new ReflectionProperty(Permission::class, 'User');
-        $previousPermissionUser = $PermissionProperty->getValue();
-
-        $SessionProperty->setValue($Users, $SystemUser);
-        $PermissionProperty->setValue(null, $SystemUser);
-
-        try {
-            $Callback();
-        } finally {
-            $SessionProperty->setValue($Users, $previousSessionUser);
-            $PermissionProperty->setValue(null, $previousPermissionUser);
-        }
+        $Connection = QUI::getDataBaseConnection();
+        $Connection->delete(self::$Project->table() . '_relations', ['child' => self::$siteId]);
+        $Connection->delete(self::$Project->table(), ['id' => self::$siteId]);
+        self::$Project = null;
+        self::$siteId = null;
     }
 }

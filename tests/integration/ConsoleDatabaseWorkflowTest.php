@@ -474,4 +474,107 @@ class ConsoleDatabaseWorkflowTest extends DatabaseTestCase
             @unlink($limitsFile);
         }
     }
+
+    public function testSendUserMailsExecuteConfiguresLimitsAndValidatesTestRecipient(): void
+    {
+        $bodyFile = tempnam(sys_get_temp_dir(), 'frontend-users-mail-options-');
+        self::assertNotFalse($bodyFile);
+        file_put_contents($bodyFile, 'Hello [name] [email] [password]');
+        $varDir = QUI::getPackage('quiqqer/frontend-users')->getVarDir();
+        $infoFile = $varDir . 'send_user_mails';
+        $limitsFile = $varDir . 'send_user_mails_limits';
+        file_put_contents($infoFile, '{}');
+        file_put_contents($limitsFile, json_encode([
+            'per24h' => 20,
+            'perHour' => 10,
+            'perMinute' => 5,
+            'start24h' => false,
+            'startHour' => false,
+            'startMinute' => false,
+            'current24h' => 0,
+            'currentHour' => 0,
+            'currentMinute' => 0
+        ]));
+
+        $Tool = new class ([
+            'en',
+            'y',
+            'zz',
+            '',
+            'y',
+            'n',
+            'username DESC',
+            'y',
+            'PHPUnit options subject',
+            '',
+            '',
+            'y',
+            '100',
+            '50',
+            '10',
+            '',
+            'not-an-email',
+            ''
+        ]) extends SendUserMails {
+            private array $inputs;
+
+            /** @var list<string> */
+            private array $messages = [];
+
+            public function __construct(array $inputs)
+            {
+                parent::__construct();
+                $this->inputs = $inputs;
+            }
+
+            public function readInput(): string
+            {
+                return (string)array_shift($this->inputs);
+            }
+
+            public function writeLn(string $msg = '', bool|string $color = false, bool|string $bg = false): void
+            {
+                $this->messages[] = $msg;
+            }
+
+            public function write(string $msg, bool|string $color = false, bool|string $bg = false): void
+            {
+                $this->messages[] = $msg;
+            }
+
+            /** @return list<string> */
+            public function getMessages(): array
+            {
+                return $this->messages;
+            }
+
+            protected function exitSuccess(): never
+            {
+                throw new RuntimeException('phpunit-success');
+            }
+        };
+        $Tool->setArgument('bodyfile', $bodyFile);
+
+        try {
+            try {
+                $Tool->execute();
+                self::fail('The mail tool did not reach its success exit.');
+            } catch (RuntimeException $Exception) {
+                self::assertSame('phpunit-success', $Exception->getMessage());
+            }
+
+            $output = implode("\n", $Tool->getMessages());
+            self::assertStringContainsString('Generate new password: YES', $output);
+            self::assertStringContainsString('Statistics file deleted.', $output);
+            self::assertStringContainsString('not-an-email', $output);
+            $limits = json_decode((string)file_get_contents($limitsFile), true);
+            self::assertSame(100, $limits['per24h']);
+            self::assertSame(50, $limits['perHour']);
+            self::assertSame(10, $limits['perMinute']);
+        } finally {
+            @unlink($bodyFile);
+            @unlink($infoFile);
+            @unlink($limitsFile);
+        }
+    }
 }

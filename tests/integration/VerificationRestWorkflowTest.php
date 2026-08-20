@@ -153,6 +153,129 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         );
     }
 
+    public function testDeleteConfirmationSupportsWipeAndDestroyModes(): void
+    {
+        $Handler = new UserDeleteConfirmLinkVerification();
+
+        foreach (['wipe', 'destroy'] as $mode) {
+            $this->setPackageConfig('userProfile', 'userDeleteMode', $mode);
+            $User = $this->createUser(true);
+            $Handler->onSuccess($this->createVerification(['uuid' => $User->getUUID()]));
+            $stored = self::getConnection()->createQueryBuilder()
+                ->select('active')
+                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table()))
+                ->where('uuid = :uuid')
+                ->setParameter('uuid', $User->getUUID())
+                ->executeQuery()
+                ->fetchOne();
+
+            if ($mode === 'wipe') {
+                self::assertSame(-1, (int)$stored);
+                continue;
+            }
+
+            self::assertFalse($stored);
+        }
+    }
+
+    public function testEmailVerificationPersistsAssociatedAddressAndRejectsInvalidSyntax(): void
+    {
+        $User = $this->createUser();
+        $Address = $User->addAddress(
+            ['mail' => ['secondary@example.invalid']],
+            QUI::getUsers()->getSystemUser()
+        );
+        self::assertSame(['secondary@example.invalid'], $Address->getMailList());
+
+        Utils::setEmailAddressAsVerifiedForUser('secondary@example.invalid', $User);
+        self::assertTrue(Utils::isEmailAddressVerifiedForUser('secondary@example.invalid', $User));
+        self::assertContains(
+            'secondary@example.invalid',
+            $User->getAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED)
+        );
+
+        Utils::setEmailAddressAsVerifiedForUser('secondary@example.invalid', $User);
+        self::assertCount(
+            1,
+            array_keys(
+                $User->getAttribute(Handler::USER_ATTR_EMAIL_ADDRESSES_VERIFIED),
+                'secondary@example.invalid',
+                true
+            )
+        );
+
+        try {
+            Utils::setEmailAddressAsVerifiedForUser('invalid', $User);
+            self::fail('An invalid e-mail address must not be marked as verified.');
+        } catch (QUI\FrontendUsers\Exception\EmailAddressNotVerifiableException $Exception) {
+            self::assertStringContainsString('invalid email address', $Exception->getMessage());
+        }
+    }
+
+    public function testVerificationHandlersBuildRegistrationRedirectsWithContext(): void
+    {
+        $Project = QUI::getRewrite()->getProject();
+        self::assertNotNull($Project);
+        $siteId = random_int(850000000, 899999999);
+        self::getConnection()->insert($Project->table(), [
+            'id' => $siteId,
+            'name' => 'phpunit-registration-signup',
+            'title' => 'PHPUnit Registration',
+            'type' => Handler::SITE_TYPE_REGISTRATION_SIGNUP,
+            'active' => 1,
+            'deleted' => 0,
+            'c_date' => date('Y-m-d H:i:s'),
+            'e_date' => date('Y-m-d H:i:s'),
+            'c_user' => '5',
+            'e_user' => '5',
+            'order_field' => 1
+        ]);
+        self::getConnection()->insert($Project->table() . '_relations', [
+            'parent' => 1,
+            'child' => $siteId
+        ]);
+        $User = $this->createUser();
+        $registrarHash = hash('sha256', Registrar::class);
+        $verification = $this->createVerification([
+            'uuid' => $User->getUUID(),
+            'registrar' => $registrarHash
+        ]);
+
+        $Activation = new ActivationLinkVerification();
+        self::assertGreaterThan(0, $Activation->getValidDuration($verification));
+        $successUrl = $Activation->getOnSuccessRedirectUrl($verification);
+        self::assertNotNull($successUrl);
+        self::assertStringContainsString('success=activation', $successUrl);
+        self::assertStringContainsString($registrarHash, $successUrl);
+
+        foreach (
+            [
+                [VerificationErrorReason::ALREADY_VERIFIED, 'already_verified'],
+                [VerificationErrorReason::EXPIRED, 'activation_expired'],
+                [VerificationErrorReason::INVALID_REQUEST, 'activation']
+            ] as [$reason, $expectedError]
+        ) {
+            $errorUrl = $Activation->getOnErrorRedirectUrl($verification, $reason);
+            self::assertNotNull($errorUrl);
+            self::assertStringContainsString('error=' . $expectedError, $errorUrl);
+            self::assertStringContainsString(rawurlencode((string)$User->getAttribute('email')), $errorUrl);
+        }
+
+        $EmailConfirm = new EmailConfirmLinkVerification();
+        self::assertNotNull($EmailConfirm->getOnSuccessRedirectUrl($verification));
+        self::assertNotNull($EmailConfirm->getOnErrorRedirectUrl(
+            $verification,
+            VerificationErrorReason::EXPIRED
+        ));
+
+        $DeleteConfirm = new UserDeleteConfirmLinkVerification();
+        self::assertNotNull($DeleteConfirm->getOnSuccessRedirectUrl($verification));
+        self::assertNotNull($DeleteConfirm->getOnErrorRedirectUrl(
+            $verification,
+            VerificationErrorReason::EXPIRED
+        ));
+    }
+
     public function testRestRegistrationDataValidationAndAddressMapping(): void
     {
         $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
@@ -249,7 +372,6 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         try {
             $Method = new ReflectionMethod(PostRegister::class, 'registerUser');
             $User = $Method->invoke(null, $RegistrationData);
-            $this->trackUser($User);
 
             self::assertSame('REST', $User->getAttribute('firstname'));
             self::assertTrue($User->isInGroup($Group->getUUID()));
