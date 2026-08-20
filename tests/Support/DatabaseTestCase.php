@@ -3,10 +3,12 @@
 namespace QUI\FrontendUsers\Tests\Support;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Schema\Table;
 use PHPUnit\Framework\TestCase;
 use QUI;
-use QUI\Interfaces\Users\User as UserInterface;
-use QUI\Verification\VerificationRepository;
+use QUI\Permissions\Permission;
+use QUI\Update;
 use ReflectionProperty;
 use Throwable;
 
@@ -14,7 +16,6 @@ abstract class DatabaseTestCase extends TestCase
 {
     protected const TEST_PREFIX = 'phpunit-frontend-users-';
 
-    private mixed $previousSessionUser = null;
     private array $previousSessionValues = [];
     private array $previousRequest = [];
     private array $previousPost = [];
@@ -22,19 +23,88 @@ abstract class DatabaseTestCase extends TestCase
     private array $previousServer = [];
     private array $previousRequestBag = [];
     private array $configValues = [];
-    private array $trackedUserUuids = [];
     private string $previousLocale = '';
+    private Connection $originalConnection;
+    private Connection $connection;
+    private ?QUI\Permissions\Manager $previousPermissionManager;
+    private mixed $previousPermissionUser;
 
-    public static function setUpBeforeClass(): void
-    {
-        self::skipIfDatabaseIsUnavailable();
-        self::cleanupFixtures();
-    }
+    /** @var array<string, mixed> */
+    private array $previousUsersState = [];
+
+    /** @var array<string, mixed> */
+    private array $previousGroupsState = [];
 
     protected function setUp(): void
     {
         parent::setUp();
-        self::skipIfDatabaseIsUnavailable();
+
+        $this->originalConnection = QUI::getDataBaseConnection();
+        $this->connection = DriverManager::getConnection([
+            'driver' => 'pdo_sqlite',
+            'memory' => true
+        ]);
+        $this->previousPermissionManager = QUI::$Rights;
+        $this->previousPermissionUser = (new ReflectionProperty(Permission::class, 'User'))->getValue();
+        $this->previousUsersState = $this->getObjectState(QUI::getUsers(), [
+            'multipleCallPrevention',
+            'users',
+            'usersUUIDs',
+            'Nobody',
+            'SystemUser',
+            'Session'
+        ]);
+        $this->previousGroupsState = $this->getObjectState(QUI::getGroups(), [
+            'Everyone',
+            'Guest',
+            'groups',
+            'groupIdsToHashes',
+            'data'
+        ]);
+
+        $this->setConnection($this->connection);
+        $this->setObjectState(QUI::getUsers(), [
+            'multipleCallPrevention' => false,
+            'users' => [],
+            'usersUUIDs' => [],
+            'Nobody' => null,
+            'SystemUser' => null,
+            'Session' => null
+        ]);
+        $this->setObjectState(QUI::getGroups(), [
+            'Everyone' => null,
+            'Guest' => null,
+            'groups' => [],
+            'groupIdsToHashes' => [],
+            'data' => []
+        ]);
+        QUI::$Rights = null;
+        Permission::setUser(QUI::getUsers()->getSystemUser());
+
+        Update::importDatabase(OPT_DIR . 'quiqqer/core/database.xml');
+        Update::importDatabase(OPT_DIR . 'quiqqer/verification/database.xml');
+        $this->connection->insert(QUI\Users\Manager::table(), [
+            'id' => 5,
+            'uuid' => '5',
+            'username' => 'system',
+            'active' => 1,
+            'su' => 1
+        ]);
+        $this->connection->insert(QUI\Users\Manager::table(), [
+            'id' => 10,
+            'uuid' => 'phpunit-sqlite-sequence',
+            'username' => 'phpunit-sqlite-sequence'
+        ]);
+        $this->connection->delete(QUI\Users\Manager::table(), ['id' => 10]);
+        $this->connection->insert(QUI\Groups\Manager::table(), [
+            'id' => 2,
+            'uuid' => (string)QUI::conf('globals', 'root'),
+            'name' => 'PHPUnit Root',
+            'parent' => 0,
+            'active' => 1,
+            'toolbar' => ''
+        ]);
+        $this->createProjectFixtures();
 
         $this->previousRequest = $_REQUEST;
         $this->previousPost = $_POST;
@@ -49,21 +119,12 @@ abstract class DatabaseTestCase extends TestCase
             $this->previousSessionValues[$key] = $Session->get($key);
         }
 
-        $this->previousSessionUser = self::replaceSessionUser(QUI::getUsers()->getSystemUser());
+        self::replaceSessionUser(QUI::getUsers()->getSystemUser());
     }
 
     protected function tearDown(): void
     {
         $this->restoreConfig();
-
-        foreach ($this->trackedUserUuids as $uuid) {
-            try {
-                QUI::getUsers()->deleteUser($uuid);
-            } catch (Throwable) {
-            }
-        }
-
-        self::cleanupFixtures();
 
         $Session = QUI::getSession();
         $Session->start();
@@ -72,7 +133,6 @@ abstract class DatabaseTestCase extends TestCase
             $Session->set($key, $value);
         }
 
-        self::replaceSessionUser($this->previousSessionUser);
         QUI::getLocale()->setCurrent($this->previousLocale);
         $_REQUEST = $this->previousRequest;
         $_POST = $this->previousPost;
@@ -80,12 +140,14 @@ abstract class DatabaseTestCase extends TestCase
         $_SERVER = $this->previousServer;
         QUI::getRequest()->request->replace($this->previousRequestBag);
 
-        parent::tearDown();
-    }
+        $this->setConnection($this->originalConnection);
+        QUI::$Rights = $this->previousPermissionManager;
+        (new ReflectionProperty(Permission::class, 'User'))->setValue(null, $this->previousPermissionUser);
+        $this->setObjectState(QUI::getUsers(), $this->previousUsersState);
+        $this->setObjectState(QUI::getGroups(), $this->previousGroupsState);
+        $this->connection->close();
 
-    public static function tearDownAfterClass(): void
-    {
-        self::cleanupFixtures();
+        parent::tearDown();
     }
 
     protected function setPackageConfig(string $section, string $key, mixed $value): void
@@ -115,13 +177,7 @@ abstract class DatabaseTestCase extends TestCase
             'lang' => 'de'
         ], $attributes);
 
-        try {
-            $User = $Users->createChildWithAttributes($attributes, $SystemUser);
-        } catch (Throwable $Exception) {
-            self::markTestSkipped('No usable super-user fixture is available: ' . $Exception->getMessage());
-        }
-
-        $this->trackUser($User);
+        $User = $Users->createChildWithAttributes($attributes, $SystemUser);
 
         if ($active) {
             $User->setPassword('phpunit-frontend-users-password', $SystemUser);
@@ -140,11 +196,6 @@ abstract class DatabaseTestCase extends TestCase
             self::TEST_PREFIX . bin2hex(random_bytes(6)),
             QUI::getUsers()->getSystemUser()
         );
-    }
-
-    protected function trackUser(UserInterface $User): void
-    {
-        $this->trackedUserUuids[] = $User->getUUID();
     }
 
     protected static function getConnection(): Connection
@@ -180,61 +231,146 @@ abstract class DatabaseTestCase extends TestCase
         }
     }
 
-    private static function skipIfDatabaseIsUnavailable(): void
+    private function setConnection(Connection $Connection): void
     {
-        try {
-            self::getConnection()->createQueryBuilder()
-                ->select('1')
-                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table()))
-                ->setMaxResults(1)
-                ->executeQuery()
-                ->free();
-        } catch (Throwable $Exception) {
-            self::markTestSkipped('QUIQQER database is not available: ' . $Exception->getMessage());
-        }
+        (new ReflectionProperty(QUI::class, 'QueryBuilder'))->setValue(null, $Connection);
     }
 
-    private static function cleanupFixtures(): void
+    private function createProjectFixtures(): void
     {
-        try {
-            $Connection = self::getConnection();
-            $usersTable = QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table());
-            $rows = $Connection->createQueryBuilder()
-                ->select('id', 'uuid')
-                ->from($usersTable)
-                ->where('username LIKE :username')
-                ->setParameter('username', self::TEST_PREFIX . '%')
-                ->executeQuery()
-                ->fetchAllAssociative();
+        $Project = QUI::getRewrite()->getProject() ?? QUI::getProjectManager()->getStandard();
 
-            foreach ($rows as $row) {
-                try {
-                    $Connection->delete(
-                        QUI::getDBTableName(VerificationRepository::TBL_VERIFICATION_PROCESSES),
-                        ['identifier' => 'activate-' . $row['uuid']]
-                    );
-                } catch (Throwable) {
-                }
+        if ($Project === null) {
+            self::fail('A project is required for the SQLite fixtures.');
+        }
 
-                try {
-                    QUI::getUsers()->deleteUser((string)$row['uuid']);
-                } catch (Throwable) {
-                    $Connection->delete(
-                        QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::tableAddress()),
-                        ['userUuid' => $row['uuid']]
-                    );
-                    $Connection->delete($usersTable, ['uuid' => $row['uuid']]);
-                }
-            }
+        $siteTable = QUI::getDBTableName($Project->getName() . '_' . $Project->getLang() . '_sites');
+        $siteRelationsTable = $siteTable . '_relations';
+        $mediaTable = QUI::getDBTableName($Project->getName() . '_media');
+        $mediaRelationsTable = $mediaTable . '_relations';
 
-            $groupsTable = QUI\Utils\Doctrine::quoteIdentifier(QUI\Groups\Manager::table());
-            $Connection->createQueryBuilder()
-                ->delete($groupsTable)
-                ->where('name LIKE :name')
-                ->setParameter('name', self::TEST_PREFIX . '%')
-                ->executeStatement();
-        } catch (Throwable) {
-            // Availability is reported by the setup check; cleanup must not hide the test result.
+        $Sites = new Table($siteTable);
+        $Sites->addColumn('id', 'bigint', ['autoincrement' => true]);
+        $Sites->addColumn('name', 'string', ['length' => 200]);
+        $Sites->addColumn('title', 'text', ['notnull' => false]);
+        $Sites->addColumn('short', 'text', ['notnull' => false]);
+        $Sites->addColumn('content', 'text', ['notnull' => false]);
+        $Sites->addColumn('type', 'string', ['length' => 255, 'notnull' => false]);
+        $Sites->addColumn('layout', 'string', ['length' => 255, 'notnull' => false]);
+        $Sites->addColumn('active', 'smallint', ['default' => 0]);
+        $Sites->addColumn('deleted', 'smallint', ['default' => 0]);
+        $Sites->addColumn('deleted_at', 'datetime', ['notnull' => false]);
+        $Sites->addColumn('c_date', 'datetime', ['notnull' => false]);
+        $Sites->addColumn('e_date', 'datetime', ['notnull' => false]);
+        $Sites->addColumn('c_user', 'string', ['length' => 50, 'notnull' => false]);
+        $Sites->addColumn('e_user', 'string', ['length' => 50, 'notnull' => false]);
+        $Sites->addColumn('nav_hide', 'smallint', ['default' => 0]);
+        $Sites->addColumn('order_type', 'string', ['length' => 100, 'notnull' => false]);
+        $Sites->addColumn('order_field', 'bigint', ['notnull' => false]);
+        $Sites->addColumn('extra', 'text', ['notnull' => false]);
+        $Sites->addColumn('c_user_ip', 'string', ['length' => 40, 'notnull' => false]);
+        $Sites->addColumn('image_emotion', 'text', ['notnull' => false]);
+        $Sites->addColumn('image_site', 'text', ['notnull' => false]);
+        $Sites->addColumn('release_from', 'datetime', ['notnull' => false]);
+        $Sites->addColumn('release_to', 'datetime', ['notnull' => false]);
+        $Sites->addColumn('auto_release', 'smallint', ['default' => 0]);
+        $Sites->setPrimaryKey(['id']);
+        $this->connection->createSchemaManager()->createTable($Sites);
+
+        $SiteRelations = new Table($siteRelationsTable);
+        $SiteRelations->addColumn('parent', 'bigint', ['notnull' => false]);
+        $SiteRelations->addColumn('child', 'bigint', ['notnull' => false]);
+        $SiteRelations->addColumn('oparent', 'bigint', ['notnull' => false]);
+        $this->connection->createSchemaManager()->createTable($SiteRelations);
+
+        $Media = new Table($mediaTable);
+        $Media->addColumn('id', 'bigint', ['autoincrement' => true]);
+        $Media->addColumn('name', 'string', ['length' => 200]);
+        $Media->addColumn('title', 'text', ['notnull' => false]);
+        $Media->addColumn('short', 'text', ['notnull' => false]);
+        $Media->addColumn('type', 'string', ['length' => 32, 'notnull' => false]);
+        $Media->addColumn('active', 'smallint', ['default' => 0]);
+        $Media->addColumn('deleted', 'smallint', ['default' => 0]);
+        $Media->addColumn('deleted_at', 'datetime', ['notnull' => false]);
+        $Media->addColumn('c_date', 'datetime', ['notnull' => false]);
+        $Media->addColumn('e_date', 'datetime', ['notnull' => false]);
+        $Media->addColumn('c_user', 'string', ['length' => 50, 'notnull' => false]);
+        $Media->addColumn('e_user', 'string', ['length' => 50, 'notnull' => false]);
+        $Media->addColumn('file', 'text', ['notnull' => false]);
+        $Media->addColumn('alt', 'text', ['notnull' => false]);
+        $Media->addColumn('mime_type', 'text', ['notnull' => false]);
+        $Media->addColumn('image_height', 'integer', ['notnull' => false]);
+        $Media->addColumn('image_width', 'integer', ['notnull' => false]);
+        $Media->addColumn('image_effects', 'text', ['notnull' => false]);
+        $Media->addColumn('rate_users', 'text', ['notnull' => false]);
+        $Media->addColumn('rate_count', 'float', ['notnull' => false]);
+        $Media->addColumn('md5hash', 'string', ['length' => 32, 'notnull' => false]);
+        $Media->addColumn('sha1hash', 'string', ['length' => 40, 'notnull' => false]);
+        $Media->addColumn('priority', 'integer', ['notnull' => false]);
+        $Media->addColumn('order', 'string', ['length' => 32, 'notnull' => false]);
+        $Media->addColumn('pathHistory', 'text', ['notnull' => false]);
+        $Media->addColumn('hidden', 'smallint', ['default' => 0]);
+        $Media->addColumn('pathHash', 'string', ['length' => 32]);
+        $Media->addColumn('extra', 'text', ['notnull' => false]);
+        $Media->addColumn('external', 'text', ['notnull' => false]);
+        $Media->setPrimaryKey(['id']);
+        $this->connection->createSchemaManager()->createTable($Media);
+
+        $MediaRelations = new Table($mediaRelationsTable);
+        $MediaRelations->addColumn('parent', 'bigint');
+        $MediaRelations->addColumn('child', 'bigint');
+        $this->connection->createSchemaManager()->createTable($MediaRelations);
+
+        $now = date('Y-m-d H:i:s');
+        $this->connection->insert($siteTable, [
+            'id' => 1,
+            'name' => 'PHPUnit Root',
+            'title' => 'PHPUnit Root',
+            'type' => 'standard',
+            'active' => 1,
+            'deleted' => 0,
+            'c_date' => $now,
+            'e_date' => $now,
+            'c_user' => '5',
+            'e_user' => '5',
+            'nav_hide' => 0
+        ]);
+        $this->connection->insert($mediaTable, [
+            'id' => 1,
+            'name' => 'PHPUnit Root',
+            'title' => 'PHPUnit Root',
+            'type' => 'folder',
+            'active' => 1,
+            'deleted' => 0,
+            'c_date' => $now,
+            'e_date' => $now,
+            'c_user' => '5',
+            'e_user' => '5',
+            'file' => '',
+            'pathHash' => md5('')
+        ]);
+    }
+
+    /**
+     * @param list<string> $properties
+     * @return array<string, mixed>
+     */
+    private function getObjectState(object $Object, array $properties): array
+    {
+        $state = [];
+
+        foreach ($properties as $property) {
+            $state[$property] = (new ReflectionProperty($Object, $property))->getValue($Object);
+        }
+
+        return $state;
+    }
+
+    /** @param array<string, mixed> $state */
+    private function setObjectState(object $Object, array $state): void
+    {
+        foreach ($state as $property => $value) {
+            (new ReflectionProperty($Object, $property))->setValue($Object, $value);
         }
     }
 }

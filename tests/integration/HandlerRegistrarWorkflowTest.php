@@ -108,7 +108,6 @@ class HandlerRegistrarWorkflowTest extends DatabaseTestCase
         self::assertSame('Example City', $Registrar->getAttribute('city'));
 
         $User = $Registrar->createUser();
-        $this->trackUser($User);
         self::assertNotNull($User->getStandardAddress());
         $UserAddress = $User->getStandardAddress();
         $Registrar->onRegistered($User);
