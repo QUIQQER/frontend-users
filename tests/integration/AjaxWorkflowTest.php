@@ -3,6 +3,8 @@
 namespace QUI\FrontendUsers\Tests\Integration;
 
 use QUI;
+use QUI\Cache\Manager as CacheManager;
+use QUI\FrontendUsers\Controls\Profile\UserAvatar;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Registrars\Email\Registrar;
 use QUI\FrontendUsers\Tests\Support\DatabaseTestCase;
@@ -267,12 +269,33 @@ class AjaxWorkflowTest extends DatabaseTestCase
             (new QUI\FrontendUsers\Controls\RegistrationSignUp(['registrars' => [Registrar::class]]))->getBody()
         );
 
-        self::replaceSessionUser(QUI::getUsers()->getSystemUser());
-        self::assertNull($this->call('frontend/profile/save.php', [
-            'category' => 'user',
-            'settings' => 'avatar',
-            'data' => json_encode(['useGravatar' => '1'])
-        ]));
+        $profileCategoriesCache = 'package/quiqqer/frontendUsers/profileCategories';
+        $previousProfileCategories = CacheManager::get($profileCategoriesCache);
+        CacheManager::set($profileCategoriesCache, [
+            'user' => [
+                'name' => 'user',
+                'title' => ['quiqqer/frontend-users', 'profile.user.title'],
+                'items' => [[
+                    'name' => 'avatar',
+                    'title' => ['quiqqer/frontend-users', 'profile.avatar.title'],
+                    'control' => UserAvatar::class
+                ]]
+            ]
+        ]);
+
+        try {
+            $this->setPackageConfig('userProfile', 'useGravatar', 1);
+            $SystemUser = QUI::getUsers()->getSystemUser();
+            self::replaceSessionUser($SystemUser);
+            self::assertNull($this->call('frontend/profile/save.php', [
+                'category' => 'user',
+                'settings' => 'avatar',
+                'data' => json_encode(['useGravatar' => '1'])
+            ]));
+            self::assertTrue((bool)$SystemUser->getAttribute('quiqqer.frontendUsers.useGravatarIcon'));
+        } finally {
+            CacheManager::set($profileCategoriesCache, $previousProfileCategories);
+        }
     }
 
     private function configureRegistrar(): void
