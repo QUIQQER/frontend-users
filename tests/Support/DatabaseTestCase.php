@@ -26,6 +26,7 @@ abstract class DatabaseTestCase extends TestCase
     private string $previousLocale = '';
     private Connection $originalConnection;
     private Connection $connection;
+    private bool $usesCiDatabase;
     private ?QUI\Permissions\Manager $previousPermissionManager;
     private mixed $previousPermissionUser;
 
@@ -40,10 +41,18 @@ abstract class DatabaseTestCase extends TestCase
         parent::setUp();
 
         $this->originalConnection = QUI::getDataBaseConnection();
-        $this->connection = DriverManager::getConnection([
-            'driver' => 'pdo_sqlite',
-            'memory' => true
-        ]);
+        $this->usesCiDatabase = DatabaseEnvironment::usesCiDatabase();
+        $this->connection = $this->usesCiDatabase
+            ? $this->originalConnection
+            : DriverManager::getConnection([
+                'driver' => 'pdo_sqlite',
+                'memory' => true
+            ]);
+
+        if ($this->usesCiDatabase) {
+            $this->connection->beginTransaction();
+        }
+
         $this->previousPermissionManager = QUI::$Rights;
         $this->previousPermissionUser = (new ReflectionProperty(Permission::class, 'User'))->getValue();
         $this->previousUsersState = $this->getObjectState(QUI::getUsers(), [
@@ -81,30 +90,9 @@ abstract class DatabaseTestCase extends TestCase
         QUI::$Rights = null;
         Permission::setUser(QUI::getUsers()->getSystemUser());
 
-        Update::importDatabase(OPT_DIR . 'quiqqer/core/database.xml');
-        Update::importDatabase(OPT_DIR . 'quiqqer/verification/database.xml');
-        $this->connection->insert(QUI\Users\Manager::table(), [
-            'id' => 5,
-            'uuid' => '5',
-            'username' => 'system',
-            'active' => 1,
-            'su' => 1
-        ]);
-        $this->connection->insert(QUI\Users\Manager::table(), [
-            'id' => 10,
-            'uuid' => 'phpunit-sqlite-sequence',
-            'username' => 'phpunit-sqlite-sequence'
-        ]);
-        $this->connection->delete(QUI\Users\Manager::table(), ['id' => 10]);
-        $this->connection->insert(QUI\Groups\Manager::table(), [
-            'id' => 2,
-            'uuid' => (string)QUI::conf('globals', 'root'),
-            'name' => 'PHPUnit Root',
-            'parent' => 0,
-            'active' => 1,
-            'toolbar' => ''
-        ]);
-        $this->createProjectFixtures();
+        if (!$this->usesCiDatabase) {
+            $this->createSqliteFixtures();
+        }
 
         $this->previousRequest = $_REQUEST;
         $this->previousPost = $_POST;
@@ -145,7 +133,14 @@ abstract class DatabaseTestCase extends TestCase
         (new ReflectionProperty(Permission::class, 'User'))->setValue(null, $this->previousPermissionUser);
         $this->setObjectState(QUI::getUsers(), $this->previousUsersState);
         $this->setObjectState(QUI::getGroups(), $this->previousGroupsState);
-        $this->connection->close();
+
+        if ($this->usesCiDatabase) {
+            if ($this->connection->isTransactionActive()) {
+                $this->connection->rollBack();
+            }
+        } else {
+            $this->connection->close();
+        }
 
         parent::tearDown();
     }
@@ -234,6 +229,34 @@ abstract class DatabaseTestCase extends TestCase
     private function setConnection(Connection $Connection): void
     {
         (new ReflectionProperty(QUI::class, 'QueryBuilder'))->setValue(null, $Connection);
+    }
+
+    private function createSqliteFixtures(): void
+    {
+        Update::importDatabase(OPT_DIR . 'quiqqer/core/database.xml');
+        Update::importDatabase(OPT_DIR . 'quiqqer/verification/database.xml');
+        $this->connection->insert(QUI\Users\Manager::table(), [
+            'id' => 5,
+            'uuid' => '5',
+            'username' => 'system',
+            'active' => 1,
+            'su' => 1
+        ]);
+        $this->connection->insert(QUI\Users\Manager::table(), [
+            'id' => 10,
+            'uuid' => 'phpunit-sqlite-sequence',
+            'username' => 'phpunit-sqlite-sequence'
+        ]);
+        $this->connection->delete(QUI\Users\Manager::table(), ['id' => 10]);
+        $this->connection->insert(QUI\Groups\Manager::table(), [
+            'id' => 2,
+            'uuid' => (string)QUI::conf('globals', 'root'),
+            'name' => 'PHPUnit Root',
+            'parent' => 0,
+            'active' => 1,
+            'toolbar' => ''
+        ]);
+        $this->createProjectFixtures();
     }
 
     private function createProjectFixtures(): void

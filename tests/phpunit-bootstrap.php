@@ -26,6 +26,7 @@ require_once __DIR__ . '/stubs/Slim/Routing/RouteCollectorProxy.php';
 require_once __DIR__ . '/stubs/Slim/App.php';
 require_once __DIR__ . '/stubs/Slim/Factory/AppFactory.php';
 require_once __DIR__ . '/stubs/QUI/REST/Server.php';
+require_once __DIR__ . '/Support/DatabaseEnvironment.php';
 require_once __DIR__ . '/Support/DatabaseTestCase.php';
 require_once __DIR__ . '/Support/VerificationSiteFixture.php';
 require_once __DIR__ . '/Support/CleanupTestConsole.php';
