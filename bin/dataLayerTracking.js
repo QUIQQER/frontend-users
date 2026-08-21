@@ -24,7 +24,6 @@ window.whenQuiLoaded().then(function () {
 
         QUI.addEvent('onQuiqqerFrontendUsersRegisterSuccess', function () {
             window.qTrack('event', 'user_register_success');
-            window.qTrack('event', 'sign_up');
         });
 
 
@@ -48,21 +47,6 @@ window.whenQuiLoaded().then(function () {
         QUI.addEvent('quiqqerVerifierSuccess', function (verifier) {
             if (verifier === 'QUIFrontendUsersUserDeleteConfirmVerification') {
                 trackUserDelete();
-            }
-        });
-
-        QUI.addEvent('quiqqerUserAuthLoginSuccess', function (Instance, authenticator) {
-            if (typeof authenticator === 'undefined' || authenticator === '') {
-                window.qTrack('event', 'user_register_success');
-                window.qTrack('event', 'sign_up');
-            } else {
-                window.qTrack('event', 'user_register_success', {
-                    method: authenticator
-                });
-
-                window.qTrack('event', 'sign_up', {
-                    method: authenticator
-                });
             }
         });
     });
