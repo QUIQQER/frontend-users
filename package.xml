@@ -8,6 +8,36 @@
             <locale group="quiqqer/frontend-users" var="package.description"/>
         </description>
 
+        <capabilities schemaVersion="1">
+            <capability id="identity.frontend-user-registration">
+                <title>Frontend user registration</title>
+                <description>
+                    Registers frontend users through configurable registrar providers, including e-mail registration, verification, activation, and optional REST access.
+                </description>
+            </capability>
+
+            <capability id="authentication.frontend-user-login">
+                <title>Frontend user login</title>
+                <description>
+                    Provides configurable frontend login pages and controls for the available QUIQQER authentication providers.
+                </description>
+            </capability>
+
+            <capability id="identity.frontend-user-self-service">
+                <title>Frontend user self-service</title>
+                <description>
+                    Lets frontend users manage their profile data, addresses, password, two-factor authentication, avatar, and account deletion.
+                </description>
+            </capability>
+
+            <capability id="content.authenticated-audience-content">
+                <title>Authenticated audience content</title>
+                <description>
+                    Displays tailored frontend content for guests, authenticated users, and members of selected user groups.
+                </description>
+            </capability>
+        </capabilities>
+
         <image src="URL_OPT_DIR/quiqqer/frontend-users/bin/images/Logo.jpg"/>
 
         <preview>
