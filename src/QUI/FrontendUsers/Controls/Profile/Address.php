@@ -49,16 +49,15 @@ class Address extends AbstractProfileControl
             return $Engine->fetch(dirname(__FILE__) . '/Address.html');
         }
 
-        /** @var QUI\Users\User $User */
         $User = QUI::getUserBySession();
 
         try {
             $UserAddress = $User->getStandardAddress();
-
-            if ($UserAddress === null) {
-                throw new QUI\Exception('The required user address is unavailable.');
-            }
         } catch (QUI\Users\Exception) {
+            $UserAddress = null;
+        }
+
+        if ($UserAddress === null) {
             // if no user address exist -> create one
             $SystemUser = QUI::getUsers()->getSystemUser();
 
@@ -66,6 +65,10 @@ class Address extends AbstractProfileControl
                 'firstname' => $User->getAttribute('firstname'),
                 'lastname' => $User->getAttribute('lastname')
             ], $SystemUser);
+
+            if ($UserAddress === null) {
+                throw new QUI\Exception('The required user address is unavailable.');
+            }
 
             $User->setAttribute('address', $UserAddress->getUUID());
             $User->save($SystemUser);
@@ -231,17 +234,16 @@ class Address extends AbstractProfileControl
     protected function saveAddress(QUI\Interfaces\Users\User $User): void
     {
         $Request = QUI::getRequest()->request;
-        $User = $this->getAttribute('User');
+        $AttributeUser = $this->getAttribute('User');
 
-        if (!$User) {
-            $User = QUI::getUserBySession();
+        if ($AttributeUser instanceof QUI\Interfaces\Users\User) {
+            $User = $AttributeUser;
         }
 
         if (QUI::getUsers()->isNobodyUser($User)) {
             return;
         }
 
-        /** @var QUI\Users\User $User */
         $UserAddress = $User->getStandardAddress();
 
         if ($UserAddress === null) {

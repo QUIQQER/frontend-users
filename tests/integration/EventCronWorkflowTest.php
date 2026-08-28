@@ -12,6 +12,51 @@ use ReflectionMethod;
 
 class EventCronWorkflowTest extends DatabaseTestCase
 {
+    public function testChangePasswordRequestResolvesProjectProfileSite(): void
+    {
+        $ProfileSite = $this->createMock(QUI\Projects\Site::class);
+        $ProfileSite->method('getUrlRewrittenWithHost')->willReturn('https://example.test/profile');
+
+        $Project = $this->createMock(QUI\Projects\Project::class);
+        $Project->expects(self::once())
+            ->method('getSitesIds')
+            ->with([
+                'where' => [
+                    'type' => Handler::SITE_TYPE_PROFILE
+                ],
+                'limit' => 1
+            ])
+            ->willReturn([['id' => 42]]);
+        $Project->expects(self::once())
+            ->method('get')
+            ->with(42)
+            ->willReturn($ProfileSite);
+
+        $Rewrite = $this->createMock(QUI\Rewrite::class);
+        $Rewrite->method('getProject')->willReturn($Project);
+
+        $Method = new ReflectionMethod(Events::class, 'getChangePasswordRedirectUrl');
+
+        self::assertSame(
+            'https://example.test/profile/user/changepassword',
+            $Method->invoke(null, $Rewrite, '/.well-known/change-password')
+        );
+        self::assertNull($Method->invoke(null, $Rewrite, '/.well-known/other'));
+    }
+
+    public function testChangePasswordRequestWithoutProfileSiteIsNotHandled(): void
+    {
+        $Project = $this->createMock(QUI\Projects\Project::class);
+        $Project->method('getSitesIds')->willReturn([]);
+
+        $Rewrite = $this->createMock(QUI\Rewrite::class);
+        $Rewrite->method('getProject')->willReturn($Project);
+
+        $Method = new ReflectionMethod(Events::class, 'getChangePasswordRedirectUrl');
+
+        self::assertNull($Method->invoke(null, $Rewrite, '.well-known/change-password'));
+    }
+
     public function testFrontendSiteTypesAreMarkedAsNonCacheable(): void
     {
         foreach (

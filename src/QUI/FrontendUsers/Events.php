@@ -7,9 +7,13 @@ use QUI\Exception;
 use QUI\Interfaces\Users\User;
 use QUI\Smarty\Collector;
 use QUI\Verification\VerificationRepository;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 use function base64_encode;
 use function json_encode;
+use function ltrim;
+use function rtrim;
 
 /**
  * Class Events
@@ -20,6 +24,67 @@ use function json_encode;
  */
 class Events
 {
+    private const CHANGE_PASSWORD_PATH = '.well-known/change-password';
+
+    /**
+     * Redirect the standardized change-password URL to the current project's profile page.
+     *
+     * @throws QUI\Exception
+     */
+    public static function onRequest(QUI\Rewrite $Rewrite, string $url): void
+    {
+        $redirectUrl = self::getChangePasswordRedirectUrl($Rewrite, $url);
+
+        if ($redirectUrl === null) {
+            return;
+        }
+
+        (new RedirectResponse($redirectUrl, Response::HTTP_FOUND))->send();
+        exit;
+    }
+
+    /**
+     * Return the change-password target for the requested project.
+     *
+     * @throws QUI\Exception
+     */
+    private static function getChangePasswordRedirectUrl(QUI\Rewrite $Rewrite, string $url): ?string
+    {
+        if (ltrim($url, '/') !== self::CHANGE_PASSWORD_PATH) {
+            return null;
+        }
+
+        $Project = $Rewrite->getProject();
+
+        if ($Project === null) {
+            return null;
+        }
+
+        $siteIds = $Project->getSitesIds([
+            'where' => [
+                'type' => Handler::SITE_TYPE_PROFILE
+            ],
+            'limit' => 1
+        ]);
+
+        if (!isset($siteIds[0]['id'])) {
+            return null;
+        }
+
+        // The profile page is commonly protected from anonymous site access. Resolve its URL with the
+        // system user, while leaving the actual target page and its access checks untouched.
+        $PermissionUser = QUI::getUserBySession();
+        QUI\Permissions\Permission::setUser(QUI::getUsers()->getSystemUser());
+
+        try {
+            $ProfileSite = $Project->get((int)$siteIds[0]['id']);
+        } finally {
+            QUI\Permissions\Permission::setUser($PermissionUser);
+        }
+
+        return rtrim($ProfileSite->getUrlRewrittenWithHost(), '/') . '/user/changepassword';
+    }
+
     /**
      * quiqqer/core: onUserActivate
      *
@@ -648,13 +713,6 @@ class Events
             QUI\Projects\Media\Utils::getMediaItemByUrl($folder);
         } catch (QUI\Exception) {
             $Standard = QUI::getProjectManager()->getStandard();
-
-            if ($Standard === null) {
-                throw new QUI\Exception(
-                    'Frontend users Events::checkUserMediaFolder: '
-                    . 'No standard project is available.'
-                );
-            }
 
             $Media = $Standard->getMedia();
             $MainFolder = $Media->firstChild();

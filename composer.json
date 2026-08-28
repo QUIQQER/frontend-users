@@ -29,7 +29,7 @@
     "require": {
         "php": "^8.2",
         "ext-mbstring": "*",
-        "quiqqer/core": "^2.24",
+        "quiqqer/core": "^2.31.1",
         "quiqqer/countries": "^2",
         "quiqqer/verification": "^3",
         "quiqqer/tooltips": "^2",
