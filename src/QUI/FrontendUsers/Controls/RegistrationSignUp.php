@@ -108,8 +108,7 @@ class RegistrationSignUp extends QUI\Control
             $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
 
             if (
-                $Default !== false
-                && class_exists('QUI\Captcha\Modules\Google')
+                class_exists('QUI\Captcha\Modules\Google')
                 && class_exists('QUI\Captcha\Modules\GoogleInvisible\Control')
                 && $Default->getType() === QUI\Captcha\Modules\GoogleInvisible\Control::class
             ) {
