@@ -21,6 +21,7 @@ final class RegistrationRaceWorkerTest extends TestCase
 {
     public function testWorker(): void
     {
+        QUI::getRequest()->server->set('REMOTE_ADDR', '192.0.2.1');
         $file = getenv('FRONTEND_USERS_RACE_INPUT');
         self::assertIsString($file);
         $input = json_decode(file_get_contents($file), true, flags: JSON_THROW_ON_ERROR);

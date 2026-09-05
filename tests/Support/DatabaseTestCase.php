@@ -22,6 +22,7 @@ abstract class DatabaseTestCase extends TestCase
     private array $previousGet = [];
     private array $previousServer = [];
     private array $previousRequestBag = [];
+    private array $previousServerBag = [];
     private string $previousRequestMethod;
     private array $configValues = [];
     private string $previousLocale = '';
@@ -100,6 +101,8 @@ abstract class DatabaseTestCase extends TestCase
         $this->previousGet = $_GET;
         $this->previousServer = $_SERVER;
         $this->previousRequestBag = QUI::getRequest()->request->all();
+        $this->previousServerBag = QUI::getRequest()->server->all();
+        QUI::getRequest()->server->set('REMOTE_ADDR', '192.0.2.1');
         $this->previousRequestMethod = QUI::getRequest()->getMethod();
         $this->previousLocale = QUI::getLocale()->getCurrent();
 
@@ -136,6 +139,7 @@ abstract class DatabaseTestCase extends TestCase
         $_GET = $this->previousGet;
         $_SERVER = $this->previousServer;
         QUI::getRequest()->request->replace($this->previousRequestBag);
+        QUI::getRequest()->server->replace($this->previousServerBag);
         QUI::getRequest()->setMethod($this->previousRequestMethod);
 
         $this->setConnection($this->originalConnection);

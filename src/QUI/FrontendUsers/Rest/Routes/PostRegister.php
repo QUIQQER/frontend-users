@@ -80,6 +80,10 @@ class PostRegister
     protected static function registerUser(
         QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
     ): QUI\Interfaces\Users\User {
+        QUI\FrontendUsers\RegistrationThrottle::reserve(
+            $RegistrationData->getAttribute('email'),
+            $RegistrationData->getAttribute('username')
+        );
         $RegistrationData->validate();
 
         $NewUser = QUI\FrontendUsers\RegistrationTransaction::run(

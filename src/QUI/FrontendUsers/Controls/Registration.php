@@ -505,6 +505,8 @@ class Registration extends QUI\Control
             return QUI\FrontendUsers\Handler::REGISTRATION_STATUS_ERROR;
         }
 
+        QUI\FrontendUsers\RegistrationThrottle::reserve($_POST['email'] ?? null, $_POST['username'] ?? null);
+
         $Registrar = $this->isCurrentlyExecuted();
 
         if ($Registrar === false) {

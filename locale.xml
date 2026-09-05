@@ -2,6 +2,26 @@
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
+        <locale name="exception.registration.throttled">
+            <de><![CDATA[Zu viele Registrierungsversuche. Bitte versuche es in 15 Minuten erneut.]]></de>
+            <en><![CDATA[Too many registration attempts. Please try again in 15 minutes.]]></en>
+        </locale>
+        <locale name="settings.throttleIpLimit.title">
+            <de><![CDATA[Maximale Registrierungsversuche pro IP]]></de>
+            <en><![CDATA[Maximum registration attempts per IP]]></en>
+        </locale>
+        <locale name="settings.throttleIpLimit.description">
+            <de><![CDATA[Wie viele Registrierungsversuche innerhalb von 15 Minuten über dieselbe IP-Adresse erlaubt sind. Fehlgeschlagene Versuche zählen mit. Mehrere Personen können dieselbe IP-Adresse nutzen, etwa in einem Firmennetzwerk. Das Zeitfenster beginnt mit dem ersten Versuch und wird durch weitere Versuche nicht verlängert. Standard: 20. Erlaubt sind ganze Zahlen von 1 bis 1000000; ungültige Werte verwenden den Standard.]]></de>
+            <en><![CDATA[How many registration attempts are allowed from the same IP address within 15 minutes. Failed attempts count too. Several people may share an IP address, for example on a company network. The window starts with the first attempt and is not extended by further attempts. Default: 20. Whole numbers from 1 to 1000000 are accepted; invalid values use the default.]]></en>
+        </locale>
+        <locale name="settings.throttleIdentityLimit.title">
+            <de><![CDATA[Maximale Registrierungsversuche pro Identität]]></de>
+            <en><![CDATA[Maximum registration attempts per identity]]></en>
+        </locale>
+        <locale name="settings.throttleIdentityLimit.description">
+            <de><![CDATA[Wie viele Registrierungsversuche innerhalb von 15 Minuten für dieselbe E-Mail-Adresse oder denselben Benutzernamen erlaubt sind – auch über unterschiedliche IP-Adressen. Beide Angaben werden separat gezählt. Fehlgeschlagene Versuche zählen mit. Groß-/Kleinschreibung und Leerzeichen am Anfang oder Ende werden bei der Zählung ignoriert. Das Zeitfenster beginnt mit dem ersten Versuch und wird durch weitere Versuche nicht verlängert. Standard: 5. Erlaubt sind ganze Zahlen von 1 bis 1000000; ungültige Werte verwenden den Standard.]]></de>
+            <en><![CDATA[How many registration attempts are allowed for the same email address or username within 15 minutes, including attempts from different IP addresses. Email addresses and usernames are counted separately. Failed attempts count too. Letter case and leading or trailing whitespace are ignored when counting. The window starts with the first attempt and is not extended by further attempts. Default: 5. Whole numbers from 1 to 1000000 are accepted; invalid values use the default.]]></en>
+        </locale>
         <locale name="exception.profile.email_change.recent_auth_required">
             <de><![CDATA[Bitte melde dich ab und erneut an, bevor du deine E-Mail-Adresse änderst. Die Anmeldung darf höchstens zehn Minuten zurückliegen.]]></de>
             <en><![CDATA[Please sign out and sign in again before changing your email address. Your sign-in must be no more than ten minutes ago.]]></en>

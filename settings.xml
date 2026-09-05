@@ -143,6 +143,14 @@
                     <type><![CDATA[bool]]></type>
                     <defaultvalue>0</defaultvalue>
                 </conf>
+                <conf name="throttleIpLimit">
+                    <type><![CDATA[int]]></type>
+                    <defaultvalue>20</defaultvalue>
+                </conf>
+                <conf name="throttleIdentityLimit">
+                    <type><![CDATA[int]]></type>
+                    <defaultvalue>5</defaultvalue>
+                </conf>
                 <conf name="deleteInactiveUserAfterDays">
                     <type><![CDATA[integer]]></type>
                     <defaultvalue>3</defaultvalue>
@@ -403,6 +411,24 @@
                             </text>
                             <description>
                                 <locale group="quiqqer/frontend-users" var="settings.useCaptcha.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.throttleIpLimit" type="number" min="1" max="1000000" step="1">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.throttleIpLimit.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.throttleIpLimit.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.throttleIdentityLimit" type="number" min="1" max="1000000" step="1">
+                            <text>
+                                <locale group="quiqqer/frontend-users" var="settings.throttleIdentityLimit.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users" var="settings.throttleIdentityLimit.description"/>
                             </description>
                         </input>
 
