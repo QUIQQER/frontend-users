@@ -364,6 +364,7 @@ class Events
         // Clear cache
         QUI\Cache\Manager::clear('package/quiqqer/frontendUsers');
 
+        RegistrationTransaction::setup();
         self::setRegistrarsDefaultSettings();
         self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();

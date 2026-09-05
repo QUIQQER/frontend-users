@@ -42,7 +42,7 @@ abstract class DatabaseTestCase extends TestCase
         parent::setUp();
 
         $this->originalConnection = QUI::getDataBaseConnection();
-        $this->usesCiDatabase = DatabaseEnvironment::usesCiDatabase();
+        $this->usesCiDatabase = $this->usesCiDatabase();
         $this->connection = $this->usesCiDatabase
             ? $this->originalConnection
             : DriverManager::getConnection([
@@ -154,6 +154,11 @@ abstract class DatabaseTestCase extends TestCase
         parent::tearDown();
     }
 
+    protected function usesCiDatabase(): bool
+    {
+        return DatabaseEnvironment::usesCiDatabase();
+    }
+
     protected function setPackageConfig(string $section, string $key, mixed $value): void
     {
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
@@ -244,6 +249,8 @@ abstract class DatabaseTestCase extends TestCase
     {
         Update::importDatabase(OPT_DIR . 'quiqqer/core/database.xml');
         Update::importDatabase(OPT_DIR . 'quiqqer/verification/database.xml');
+        Update::importDatabase(dirname(__DIR__, 2) . '/database.xml');
+        QUI\FrontendUsers\RegistrationTransaction::setup();
         $this->connection->insert(QUI\Users\Manager::table(), [
             'id' => 5,
             'uuid' => '5',

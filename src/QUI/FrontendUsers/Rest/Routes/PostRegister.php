@@ -82,58 +82,66 @@ class PostRegister
     ): QUI\Interfaces\Users\User {
         $RegistrationData->validate();
 
-        $SystemUser = QUI::getUsers()->getSystemUser();
+        $NewUser = QUI\FrontendUsers\RegistrationTransaction::run(
+            (string)$RegistrationData->getAttribute('username'),
+            (string)$RegistrationData->getAttribute('email'),
+            static function () use ($RegistrationData): QUI\Interfaces\Users\User {
+                $SystemUser = QUI::getUsers()->getSystemUser();
 
-        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+                $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+                $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
-        $projectName = $RegistrationData->getAttribute('project_name');
+                $projectName = $RegistrationData->getAttribute('project_name');
 
-        if ($projectName) {
-            $Project = QUI::getProject(
-                $projectName,
-                $RegistrationData->getAttribute('project_language')
-            );
-        } else {
-            $Project = QUI::getProjectManager()->getStandard();
-        }
+                if ($projectName) {
+                    $Project = QUI::getProject(
+                        $projectName,
+                        $RegistrationData->getAttribute('project_language')
+                    );
+                } else {
+                    $Project = QUI::getProjectManager()->getStandard();
+                }
 
-        $Registrar = new Registrar();
-        $Registrar->setProject($Project);
-        $Policy = new RegistrationPolicy();
-        $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
-        $Policy->setUserAttributes($NewUser, $Registrar, $Project);
+                $Registrar = new Registrar();
+                $Registrar->setProject($Project);
+                $Policy = new RegistrationPolicy();
+                $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
+                $Policy->setUserAttributes($NewUser, $Registrar, $Project);
 
-        // Add the given data to the User
-        static::addRegistrationDataToUser($NewUser, $RegistrationData);
+                // Add the given data to the User
+                static::addRegistrationDataToUser($NewUser, $RegistrationData);
 
-        // add user to default groups
-        foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
-            $NewUser->addToGroup($groupId);
-        }
+                // add user to default groups
+                foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
+                    $NewUser->addToGroup($groupId);
+                }
 
-        // determine if the user has to set a new password on first login
-        if ($registrationSettings['forcePasswordReset']) {
-            $NewUser->setAttribute('quiqqer.set.new.password', true);
-        }
+                // determine if the user has to set a new password on first login
+                if ($registrationSettings['forcePasswordReset']) {
+                    $NewUser->setAttribute('quiqqer.set.new.password', true);
+                }
 
-        $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
+                $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
 
-        $NewUser->save($SystemUser);
+                $NewUser->save($SystemUser);
 
-        $password = $RegistrationData->getAttribute('password');
+                $password = $RegistrationData->getAttribute('password');
 
-        if (!$password) {
-            $password = QUI\Security\Password::generateRandom();
-        }
+                if (!$password) {
+                    $password = QUI\Security\Password::generateRandom();
+                }
 
-        $NewUser->setPassword($password, $SystemUser);
+                $NewUser->setPassword($password, $SystemUser);
 
-        $Policy->activate(
-            $NewUser,
-            $Registrar,
-            $Project,
-            static fn(): bool => static::sendActivationMail($NewUser, $Project)
+                $Policy->activate(
+                    $NewUser,
+                    $Registrar,
+                    $Project,
+                    static fn(): bool => static::sendActivationMail($NewUser, $Project)
+                );
+
+                return $NewUser;
+            }
         );
 
         QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRestRegister', [$NewUser]);
