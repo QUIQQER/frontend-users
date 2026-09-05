@@ -14,7 +14,11 @@ use QUI\Users\Auth\QUIQQER as PasswordAuthenticator;
 use QUI\Utils\Singleton;
 use QUI\Verification\Enum\VerificationStatus;
 use QUI\Verification\VerificationRepository;
+use ReflectionClass;
+use ReflectionMethod;
 use ReflectionProperty;
+use Symfony\Component\HttpFoundation\Session\Session as SymfonySession;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class AccountLookupWorkflowTest extends DatabaseTestCase
 {
@@ -22,11 +26,21 @@ class AccountLookupWorkflowTest extends DatabaseTestCase
     private array $instances;
     private array $callables;
     private QUI\Config $config;
+    private QUI\Session|QUI\System\Console\Session $previousSession;
     private array $sessionValues = [];
 
     protected function setUp(): void
     {
         parent::setUp();
+        $this->previousSession = QUI::getSession();
+        // Exercise the real Web session lifecycle, using isolated in-memory storage.
+        $Session = (new ReflectionClass(QUI\Session::class))->newInstanceWithoutConstructor();
+        (new ReflectionProperty(QUI\Session::class, 'Session'))->setValue(
+            $Session,
+            new SymfonySession(new MockArraySessionStorage())
+        );
+        QUI::$Session = $Session;
+        $Session->start();
         $this->config = QUI::$Conf;
         QUI::$Conf = clone $this->config;
         QUI::$Conf->setValue('auth_settings', 'secondary_frontend', 0);
@@ -70,7 +84,25 @@ class AccountLookupWorkflowTest extends DatabaseTestCase
         (new ReflectionProperty(Singleton::class, 'instances'))->setValue(null, $this->instances);
         (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
         QUI::$Conf = $this->config;
+        QUI::$Session = $this->previousSession;
         parent::tearDown();
+    }
+
+    public function testConsoleSessionCannotStoreActivationProof(): void
+    {
+        $WebSession = QUI::getSession();
+        $ConsoleSession = $this->createMock(QUI\System\Console\Session::class);
+        $ConsoleSession->expects(self::never())->method('start');
+        $ConsoleSession->expects(self::never())->method('set');
+        QUI::$Session = $ConsoleSession;
+
+        try {
+            (new ReflectionMethod(ActivationLookup::class, 'saveProof'))->invoke(null, [
+                'uuid' => 'test-user', 'time' => time()
+            ]);
+        } finally {
+            QUI::$Session = $WebSession;
+        }
     }
 
     public function testRealPasswordLoginPreservesProofAfterCoreClearsTheSession(): void

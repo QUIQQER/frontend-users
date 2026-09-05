@@ -182,6 +182,11 @@ final class ActivationLookup
     private static function saveProof(array $proof): void
     {
         $Session = QUI::getSession();
+
+        if (!$Session instanceof QUI\Session) {
+            return;
+        }
+
         $Session->start();
 
         if ($Session->regenerate()) {
