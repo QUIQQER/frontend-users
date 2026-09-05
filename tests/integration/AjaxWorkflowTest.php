@@ -57,6 +57,7 @@ class AjaxWorkflowTest extends DatabaseTestCase
     public function testAuthenticationAndRegistrarControlEndpointsReturnObservableResults(): void
     {
         $this->configureRegistrar();
+        $this->setPackageConfig('login', 'redirectOnLogin', json_encode([]));
         $Project = QUI::getRewrite()->getProject();
         self::assertNotNull($Project);
         $encodedProject = json_encode([
@@ -146,6 +147,7 @@ class AjaxWorkflowTest extends DatabaseTestCase
 
     public function testProfileAndTermsEndpointsHandleUnavailableConfigurationSafely(): void
     {
+        $this->setPackageConfig('registration', 'termsOfUseRequired', 0);
         $User = $this->createUser(true);
         self::replaceSessionUser($User);
         $Project = QUI::getRewrite()->getProject();
