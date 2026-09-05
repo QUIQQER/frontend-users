@@ -82,7 +82,7 @@ class AccountLookupWorkflowTest extends DatabaseTestCase
         }
         (new ReflectionProperty(QUI\Ajax::class, 'callables'))->setValue(null, $this->callables);
         (new ReflectionProperty(Singleton::class, 'instances'))->setValue(null, $this->instances);
-        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
+        $this->restoreEvents($this->events);
         QUI::$Conf = $this->config;
         QUI::$Session = $this->previousSession;
         parent::tearDown();

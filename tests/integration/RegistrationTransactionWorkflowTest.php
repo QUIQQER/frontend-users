@@ -2,16 +2,17 @@
 
 namespace QUI\FrontendUsers\Tests\Integration;
 
-use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use QUI;
 use QUI\FrontendUsers\Controls\Registration;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Registrars\Email\Registrar;
 use QUI\FrontendUsers\RegistrationTransaction;
+use QUI\FrontendUsers\RegistrationThrottle;
 use QUI\FrontendUsers\Rest\RegistrationData;
 use QUI\FrontendUsers\Rest\Routes\PostRegister;
 use QUI\FrontendUsers\Tests\Support\DatabaseTestCase;
+use QUI\FrontendUsers\Tests\Support\DatabaseEnvironment;
 use QUI\FrontendUsers\Tests\Support\VerificationSiteFixture;
 use QUI\Utils\Singleton;
 use ReflectionMethod;
@@ -24,13 +25,6 @@ class RegistrationTransactionWorkflowTest extends DatabaseTestCase
     private array $instances;
     private array $mails = [];
     private bool $failMail = false;
-
-    protected function usesCiDatabase(): bool
-    {
-        // These workers need an isolated, committed database shared between processes.
-        // Existing RegistrationPolicyWorkflowTest also exercises the service on the CI database.
-        return false;
-    }
 
     protected function setUp(): void
     {
@@ -78,7 +72,7 @@ class RegistrationTransactionWorkflowTest extends DatabaseTestCase
     {
         VerificationSiteFixture::tearDown();
         (new ReflectionProperty(Singleton::class, 'instances'))->setValue(null, $this->instances);
-        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
+        $this->restoreEvents($this->events);
         parent::tearDown();
     }
 
@@ -98,12 +92,22 @@ class RegistrationTransactionWorkflowTest extends DatabaseTestCase
         mkdir($dir, 0700);
         $processes = [];
         $Shared = null;
+        $Group = null;
+        $data = [];
+        $committed = false;
+        $ip = '2001:db8:' . implode(':', str_split(bin2hex(random_bytes(12)), 4));
         try {
             $Group = $this->createGroup();
             $this->setPackageConfig('registration', 'defaultGroups', $Group->getUUID());
             $database = $dir . '/database.sqlite';
-            self::getConnection()->executeStatement('VACUUM INTO ' . self::getConnection()->quote($database));
-            $Shared = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'path' => $database]);
+            if (DatabaseEnvironment::usesCiDatabase()) {
+                // Worker connections must see this test's group and verifier fixture.
+                self::getConnection()->commit();
+                $committed = true;
+            } else {
+                self::getConnection()->executeStatement('VACUUM INTO ' . self::getConnection()->quote($database));
+            }
+            $Shared = DatabaseEnvironment::createConnection($database);
             $before = $this->counts($Shared);
             $data = [$this->data(), $this->data()];
             if ($identity !== 'distinct') {
@@ -112,7 +116,7 @@ class RegistrationTransactionWorkflowTest extends DatabaseTestCase
             foreach ($transports as $i => $transport) {
                 $input = $dir . '/input-' . $i . '.json';
                 file_put_contents($input, json_encode([
-                    'database' => $database, 'transport' => $transport, 'data' => $data[$i],
+                    'database' => $database, 'transport' => $transport, 'data' => $data[$i], 'ip' => $ip,
                     'ready' => $dir . '/ready-' . $i, 'go' => $dir . '/go', 'result' => $dir . '/result-' . $i
                 ], JSON_THROW_ON_ERROR));
                 $pipes = [];
@@ -173,10 +177,38 @@ class RegistrationTransactionWorkflowTest extends DatabaseTestCase
                 }
             }
             $Shared?->close();
+            if ($committed) {
+                $this->removeCommittedFixtures($data, $ip);
+                $Group?->delete();
+            }
             foreach (glob($dir . '/*') as $file) {
                 unlink($file);
             }
             rmdir($dir);
+        }
+    }
+
+    private function removeCommittedFixtures(array $data, string $ip): void
+    {
+        $Connection = self::getConnection();
+        $keys = ['ip:' . bin2hex(inet_pton($ip))];
+        foreach ($data as $values) {
+            $uuids = $Connection->fetchFirstColumn(
+                'SELECT uuid FROM ' . QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table())
+                . ' WHERE username = ? AND email = ?',
+                [$values['username'], $values['email']]
+            );
+            foreach ($uuids as $uuid) {
+                $Connection->delete(QUI::getDBTableName('quiqqer_verification_processes'), [
+                    'identifier' => 'activate-' . $uuid
+                ]);
+                QUI::getUsers()->get($uuid)->delete(QUI::getUsers()->getSystemUser());
+            }
+            $keys[] = 'username:' . mb_strtolower($values['username'], 'UTF-8');
+            $keys[] = 'email:' . mb_strtolower($values['email'], 'UTF-8');
+        }
+        foreach ($keys as $key) {
+            $Connection->delete(RegistrationThrottle::table(), ['subject_key' => hash('sha256', $key)]);
         }
     }
 

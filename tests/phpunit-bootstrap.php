@@ -10,6 +10,9 @@ if (!defined('QUIQQER_AJAX')) {
 
 require_once __DIR__ . '/stubs/QUI/ERP/Api/AbstractErpProvider.php';
 require_once __DIR__ . '/stubs/QUI/REST/ProviderInterface.php';
+require_once __DIR__ . '/Support/DatabaseEnvironment.php';
+require_once __DIR__ . '/Support/LocalTestRuntime.php';
+QUI\FrontendUsers\Tests\Support\LocalTestRuntime::prepare();
 require_once __DIR__ . '/../../../../bootstrap.php';
 
 require_once __DIR__ . '/stubs/Psr/Http/Message/MessageInterface.php';
@@ -31,4 +34,4 @@ require_once __DIR__ . '/Support/DatabaseTestCase.php';
 require_once __DIR__ . '/Support/VerificationSiteFixture.php';
 require_once __DIR__ . '/Support/CleanupTestConsole.php';
 
-QUI\System\TestCleanup::register();
+QUI\FrontendUsers\Tests\Support\LocalTestRuntime::finishBootstrap();

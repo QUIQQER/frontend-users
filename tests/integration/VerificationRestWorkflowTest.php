@@ -189,7 +189,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
 
             $User = $this->createUser();
         } finally {
-            (new \ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $events);
+            $this->restoreEvents($events);
         }
 
         $registrarHash = hash('sha256', Registrar::class);

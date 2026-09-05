@@ -37,6 +37,10 @@ class AvatarReplacementWorkflowTest extends DatabaseTestCase
             'phpunit-avatar-' . bin2hex(random_bytes(8)),
             QUI::getUsers()->getSystemUser()
         );
+        // Use the same media instance that the uploader resolves from the configured URL.
+        $Folder = QUI\Projects\Media\Utils::getMediaItemByUrl($this->Folder->getUrl());
+        self::assertInstanceOf(Folder::class, $Folder);
+        $this->Folder = $Folder;
         $this->projectConfig = $this->Folder->getProject()->getConfig();
         $this->setPlaceholder('');
         $this->setPackageConfig('userProfile', 'userAvatarFolder', $this->Folder->getUrl());
@@ -46,16 +50,20 @@ class AvatarReplacementWorkflowTest extends DatabaseTestCase
 
     protected function tearDown(): void
     {
-        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
+        $this->restoreEvents($this->events);
         (new ReflectionProperty(QUI\Projects\Project::class, 'config'))
             ->setValue($this->Folder->getProject(), $this->projectConfig);
 
         $System = QUI::getUsers()->getSystemUser();
         $Media = $this->Folder->getMedia();
         // Include deleted images: production uses the regular media trash lifecycle.
-        foreach ($Media->getChildrenIds() as $id) {
-            $Item = $Media->get((int)$id);
-            if ($Item instanceof Image && str_starts_with($Item->getFullPath(), $this->Folder->getFullPath())) {
+        $rows = self::getConnection()->fetchAllAssociative(
+            'SELECT * FROM ' . QUI\Utils\Doctrine::quoteIdentifier($Media->getTable()) . ' WHERE type = ?',
+            ['image']
+        );
+        foreach ($rows as $row) {
+            $Item = $Media->parseResultToItem($row);
+            if ($Item instanceof Image && str_starts_with($Item->getFullPath(), rtrim($this->Folder->getFullPath(), '/') . '/')) {
                 if (!$Item->isDeleted()) {
                     $Item->delete($System);
                 }
@@ -93,6 +101,7 @@ class AvatarReplacementWorkflowTest extends DatabaseTestCase
         $User = $this->createUser(true);
         $Placeholder = $this->upload($User);
         $this->setPlaceholder($Placeholder->getUrl());
+        self::assertSame($Placeholder->getUrl(), $this->Folder->getMedia()->getPlaceholderImage()?->getUrl());
         $this->upload($User);
         self::assertFalse($Placeholder->isDeleted());
         self::assertFileExists($Placeholder->getFullPath());

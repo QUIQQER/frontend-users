@@ -59,7 +59,7 @@ class ActivationResendWorkflowTest extends DatabaseTestCase
         VerificationSiteFixture::tearDown();
         QUI::getRequest()->server->replace($this->server);
         (new ReflectionProperty(Singleton::class, 'instances'))->setValue(null, $this->instances);
-        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
+        $this->restoreEvents($this->events);
         parent::tearDown();
     }
 

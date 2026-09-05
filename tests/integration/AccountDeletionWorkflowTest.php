@@ -83,7 +83,7 @@ class AccountDeletionWorkflowTest extends DatabaseTestCase
     {
         VerificationSiteFixture::tearDown();
         (new ReflectionProperty(Singleton::class, 'instances'))->setValue(null, $this->instances);
-        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
+        $this->restoreEvents($this->events);
         try {
             parent::tearDown();
         } finally {

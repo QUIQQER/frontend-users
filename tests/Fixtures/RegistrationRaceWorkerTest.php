@@ -2,7 +2,6 @@
 
 namespace QUI\FrontendUsers\Tests\Fixtures;
 
-use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\FrontendUsers\Controls\Registration;
@@ -10,6 +9,7 @@ use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Registrars\Email\Registrar;
 use QUI\FrontendUsers\Rest\RegistrationData;
 use QUI\FrontendUsers\Rest\Routes\PostRegister;
+use QUI\FrontendUsers\Tests\Support\DatabaseEnvironment;
 use QUI\Permissions\Permission;
 use QUI\Utils\Singleton;
 use ReflectionMethod;
@@ -21,12 +21,14 @@ final class RegistrationRaceWorkerTest extends TestCase
 {
     public function testWorker(): void
     {
-        QUI::getRequest()->server->set('REMOTE_ADDR', '192.0.2.1');
         $file = getenv('FRONTEND_USERS_RACE_INPUT');
         self::assertIsString($file);
         $input = json_decode(file_get_contents($file), true, flags: JSON_THROW_ON_ERROR);
-        $Connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'path' => $input['database']]);
-        $Connection->executeStatement('PRAGMA busy_timeout = 10000');
+        QUI::getRequest()->server->set('REMOTE_ADDR', $input['ip']);
+        $Connection = DatabaseEnvironment::createConnection($input['database']);
+        if (!DatabaseEnvironment::usesCiDatabase()) {
+            $Connection->executeStatement('PRAGMA busy_timeout = 10000');
+        }
         (new ReflectionProperty(QUI::class, 'QueryBuilder'))->setValue(null, $Connection);
 
         $Users = QUI::getUsers();

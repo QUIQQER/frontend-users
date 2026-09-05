@@ -94,7 +94,7 @@ class ProfileSecurityWorkflowTest extends DatabaseTestCase
     {
         VerificationSiteFixture::tearDown();
         (new ReflectionProperty(Singleton::class, 'instances'))->setValue(null, $this->instances);
-        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $this->events);
+        $this->restoreEvents($this->events);
         QUI::getRequest()->setMethod($this->method);
 
         foreach ($this->sessionValues as $key => $value) {

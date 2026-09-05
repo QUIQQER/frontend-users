@@ -2,11 +2,11 @@
 
 namespace QUI\FrontendUsers\Tests\Integration;
 
-use Doctrine\DBAL\DriverManager;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use QUI;
 use QUI\FrontendUsers\ActivationResend;
+use QUI\FrontendUsers\Tests\Support\DatabaseEnvironment;
 use ReflectionProperty;
 
 class ActivationResendConcurrencyTest extends TestCase
@@ -25,18 +25,20 @@ class ActivationResendConcurrencyTest extends TestCase
         $Original = QUI::getDataBaseConnection();
         $Property = new ReflectionProperty(QUI::class, 'QueryBuilder');
         $Shared = null;
+        $subject = 'source:race:' . bin2hex(random_bytes(16));
+        $otherSubject = 'account:race:' . bin2hex(random_bytes(16));
+        $key = hash('sha256', $subject);
+        $otherKey = hash('sha256', $otherSubject);
         try {
-            // Optional connection must point to an isolated, disposable test database.
-            $external = getenv('FRONTEND_USERS_RESEND_TEST_DATABASE');
-            $connection = $external ? json_decode($external, true, flags: JSON_THROW_ON_ERROR)
-                : ['driver' => 'pdo_sqlite', 'path' => $dir . '/database.sqlite'];
-            $Shared = DriverManager::getConnection($connection);
+            $database = $dir . '/database.sqlite';
+            $Shared = DatabaseEnvironment::createConnection($database);
             $Property->setValue(null, $Shared);
-            QUI\Update::importDatabase(dirname(__DIR__, 2) . '/database.xml');
-            $Shared->createQueryBuilder()->delete(ActivationResend::table())->executeStatement();
+            if (!DatabaseEnvironment::usesCiDatabase()) {
+                QUI\Update::importDatabase(dirname(__DIR__, 2) . '/database.xml');
+            }
             if ($state === 'expired') {
                 $Shared->insert(ActivationResend::table(), [
-                    'subject_key' => hash('sha256', 'source:race'), 'expires_at' => time() - 1
+                    'subject_key' => $key, 'expires_at' => time() - 1
                 ]);
             }
             $Property->setValue(null, $Original);
@@ -44,8 +46,8 @@ class ActivationResendConcurrencyTest extends TestCase
             foreach ([0, 1, 2, 3] as $i) {
                 $input = $dir . '/input-' . $i;
                 file_put_contents($input, json_encode([
-                    'connection' => $connection, 'ready' => $dir . '/ready-' . $i,
-                    'go' => $dir . '/go', 'result' => $dir . '/result-' . $i
+                    'database' => $database, 'ready' => $dir . '/ready-' . $i,
+                    'go' => $dir . '/go', 'result' => $dir . '/result-' . $i, 'subject' => $subject
                 ], JSON_THROW_ON_ERROR));
                 $process = proc_open(
                     [
@@ -79,14 +81,16 @@ class ActivationResendConcurrencyTest extends TestCase
             }
             self::assertCount(1, array_filter($results));
             self::assertCount(1, $Shared->createQueryBuilder()->select('*')->from(ActivationResend::table())
+                ->where('subject_key = :key')->setParameter('key', $key)
                 ->executeQuery()->fetchAllAssociative());
             $Property->setValue(null, $Shared);
-            $Shared->transactional(static function () use ($Shared): void {
+            $Shared->transactional(static function () use ($Shared, $subject, $otherSubject, $key, $otherKey): void {
                 $acquire = new \ReflectionMethod(ActivationResend::class, 'acquire');
-                self::assertFalse($acquire->invoke(null, 'source:race', 60));
+                self::assertFalse($acquire->invoke(null, $subject, 60));
                 // A denied INSERT must not poison PostgreSQL's surrounding transaction.
-                self::assertTrue($acquire->invoke(null, 'account:another-user', 300));
+                self::assertTrue($acquire->invoke(null, $otherSubject, 300));
                 self::assertCount(2, $Shared->createQueryBuilder()->select('*')->from(ActivationResend::table())
+                    ->where('subject_key IN (:key, :other)')->setParameter('key', $key)->setParameter('other', $otherKey)
                     ->executeQuery()->fetchAllAssociative());
             });
         } finally {
@@ -97,7 +101,12 @@ class ActivationResendConcurrencyTest extends TestCase
                     proc_close($process);
                 }
             }
-            $Shared?->close();
+            if ($Shared !== null) {
+                foreach ([$key, $otherKey] as $ownedKey) {
+                    $Shared->delete(ActivationResend::table(), ['subject_key' => $ownedKey]);
+                }
+                $Shared->close();
+            }
             foreach (glob($dir . '/*') as $file) {
                 unlink($file);
             }

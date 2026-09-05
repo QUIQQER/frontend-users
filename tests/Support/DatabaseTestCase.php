@@ -164,6 +164,15 @@ abstract class DatabaseTestCase extends TestCase
         return DatabaseEnvironment::usesCiDatabase();
     }
 
+    protected function restoreEvents(array $events): void
+    {
+        $Manager = QUI::getEvents();
+        $Target = $Manager instanceof QUI\Events\Event
+            ? $Manager
+            : (new ReflectionProperty($Manager, 'Events'))->getValue($Manager);
+        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue($Target, $events);
+    }
+
     protected function setPackageConfig(string $section, string $key, mixed $value): void
     {
         $Config = QUI::getPackage('quiqqer/frontend-users')->getConfig();
@@ -253,6 +262,7 @@ abstract class DatabaseTestCase extends TestCase
     private function createSqliteFixtures(): void
     {
         Update::importDatabase(OPT_DIR . 'quiqqer/core/database.xml');
+        Update::importDatabase(OPT_DIR . 'quiqqer/translator/database.xml');
         Update::importDatabase(OPT_DIR . 'quiqqer/verification/database.xml');
         Update::importDatabase(dirname(__DIR__, 2) . '/database.xml');
         QUI\FrontendUsers\RegistrationTransaction::setup();
@@ -286,6 +296,13 @@ abstract class DatabaseTestCase extends TestCase
 
         if ($Project === null) {
             self::fail('A project is required for the SQLite fixtures.');
+        }
+
+        foreach ([CMS_DIR . 'media/sites/', CMS_DIR . 'media/cache/', USR_DIR] as $directory) {
+            $directory .= $Project->getName();
+            if (!is_dir($directory)) {
+                mkdir($directory, 0700, true);
+            }
         }
 
         $siteTable = QUI::getDBTableName($Project->getName() . '_' . $Project->getLang() . '_sites');
