@@ -67,7 +67,7 @@ class AjaxWorkflowTest extends DatabaseTestCase
         self::assertFalse($this->call('frontend/auth/existsUnverifiedActivation.php', [
             'userId' => 'missing-user'
         ]));
-        self::assertFalse($this->call('frontend/auth/resendActivationMail.php', [
+        self::assertTrue($this->call('frontend/auth/resendActivationMail.php', [
             'email' => 'missing@example.invalid'
         ]));
         self::assertSame('', $this->call('frontend/login/getAuthenticator.php', [

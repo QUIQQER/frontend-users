@@ -6,8 +6,11 @@ use QUI;
 use QUI\Interfaces\Users\User as QUIUserInterface;
 use QUI\Mail\Mailer;
 use QUI\Utils\Singleton;
+use QUI\Verification\Entity\LinkVerification;
+use QUI\Verification\Enum\VerificationStatus;
 use QUI\Verification\Interface\VerificationFactoryInterface;
 use QUI\Verification\VerificationFactory;
+use QUI\Verification\VerificationRepository;
 
 use function array_filter;
 use function time;
@@ -522,6 +525,46 @@ class Handler extends Singleton
             true
         );
 
+        return $this->sendActivationVerificationMail($User, $Project, $verification);
+    }
+
+    /** Resend an existing pending activation without replacing or extending its token. */
+    public function resendActivationMail(QUIUserInterface $User): bool
+    {
+        if ($User->isActive()) {
+            return false;
+        }
+
+        $Repository = new VerificationRepository();
+        $verification = $Repository->findByIdentifier('activate-' . $User->getUUID());
+
+        if (
+            !$verification instanceof LinkVerification
+            || $verification->status !== VerificationStatus::PENDING
+            || !$verification->isValid()
+            || $verification->getCustomDataEntry('uuid') !== $User->getUUID()
+            || !$Repository->getVerificationHandler($verification) instanceof ActivationLinkVerification
+        ) {
+            return false;
+        }
+
+        $project = $verification->getCustomDataEntry('project');
+        $language = $verification->getCustomDataEntry('projectLang');
+
+        if (!is_string($project) || $project === '' || !is_string($language) || $language === '') {
+            return false;
+        }
+
+        $Project = QUI::getProjectManager()->getProject($project, $language);
+
+        return $this->sendActivationVerificationMail($User, $Project, $verification);
+    }
+
+    private function sendActivationVerificationMail(
+        QUIUserInterface $User,
+        QUI\Projects\Project $Project,
+        LinkVerification $verification
+    ): bool {
         $L = QUI::getLocale();
         $lg = 'quiqqer/frontend-users';
         $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';

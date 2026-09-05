@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database>
     <global>
+        <table name="quiqqer_frontend_users_activation_resend" no-site-reference="1" no-auto-update="1">
+            <field type="string" length="64" primary="true">subject_key</field>
+            <field type="bigint">expires_at</field>
+            <index>expires_at</index>
+        </table>
         <table name="quiqqer_frontend_users_registration_lock" no-site-reference="1" no-auto-update="1">
             <field type="integer" primary="true">id</field>
             <field type="smallint" default="0">revision</field>

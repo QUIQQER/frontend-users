@@ -181,9 +181,7 @@ class ActivationLoginWorkflowTest extends DatabaseTestCase
         $User = $this->register();
         $hash = $User->getAttribute(ActivationLogin::USER_ATTRIBUTE);
         $this->anonymous();
-        $Registrar = new Registrar();
-        $Registrar->setProject(QUI::getRewrite()->getProject());
-        self::assertTrue(Handler::getInstance()->sendActivationMail($User, $Registrar));
+        self::assertTrue(Handler::getInstance()->resendActivationMail($User));
         self::assertEmpty(QUI::getSession()->get(ActivationLogin::SESSION_KEY));
         self::assertSame($hash, $User->getAttribute(ActivationLogin::USER_ATTRIBUTE));
         $this->activate($User);
@@ -195,9 +193,7 @@ class ActivationLoginWorkflowTest extends DatabaseTestCase
     {
         $User = $this->register();
         $binding = QUI::getSession()->get(ActivationLogin::SESSION_KEY);
-        $Registrar = new Registrar();
-        $Registrar->setProject(QUI::getRewrite()->getProject());
-        self::assertTrue(Handler::getInstance()->sendActivationMail($User, $Registrar));
+        self::assertTrue(Handler::getInstance()->resendActivationMail($User));
         self::assertSame($binding, QUI::getSession()->get(ActivationLogin::SESSION_KEY));
         $this->activate($User);
         self::assertSame($User->getUUID(), QUI::getSession()->get('uid'));
