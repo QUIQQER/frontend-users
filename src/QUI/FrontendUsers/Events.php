@@ -202,6 +202,11 @@ class Events
     {
         $Handler = Handler::getInstance();
 
+        // Activation is not a second factor. Complete configured MFA through the regular login.
+        if (QUI::conf('auth_settings', 'secondary_frontend')) {
+            return;
+        }
+
         if ($checkEligibility) {
             $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
 
@@ -239,6 +244,10 @@ class Events
             if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
                 return;
             }
+
+            if (!ActivationLogin::consume($User)) {
+                return;
+            }
         }
 
         // login
@@ -254,7 +263,7 @@ class Events
         $Session->set('uid', $User->getUUID());
         $Session->set('auth', 1);
         $Session->set('auth-primary', 1);
-        $Session->set('auth-secondary', 1);
+        $Session->remove('auth-secondary');
         $Session->set('secHash', $secHash);
 
         $useragent = '';

@@ -366,9 +366,9 @@
         </locale>
         <locale name="settings.autoLoginOnActivation.description">
             <de>
-                <![CDATA[Benutzer automatisch einloggen, wenn er aktiviert wird (gilt nicht für manuelle Aktivierung durch einen Administrator)]]></de>
+                <![CDATA[Benutzer nach Aktivierung automatisch in der ursprünglichen Registrierungssitzung anmelden (bis zu 24 Stunden). Bei manueller Aktivierung, einem anderen Browser oder aktivierter Zwei-Faktor-Authentifizierung ist eine reguläre Anmeldung erforderlich.]]></de>
             <en>
-                <![CDATA[Users automatically log in after actovation (does not apply to manual activation by an admin)]]></en>
+                <![CDATA[Automatically log users in after activation in the original registration session (for up to 24 hours). Manual activation, a different browser or enabled two-factor authentication requires a regular login.]]></en>
         </locale>
         <locale name="settings.mailFromText.title">
             <de><![CDATA["Von"-Feld Bezeichner]]></de>

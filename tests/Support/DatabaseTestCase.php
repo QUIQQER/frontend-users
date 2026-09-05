@@ -109,6 +109,7 @@ abstract class DatabaseTestCase extends TestCase
             [
             'uid', 'username', 'inAuthentication', 'auth', 'auth-primary', 'auth-secondary', 'secHash',
             QUI\Security\CsrfToken::SESSION_KEY,
+            QUI\FrontendUsers\ActivationLogin::SESSION_KEY,
             QUI\FrontendUsers\ProfileSecurity::RECENT_AUTH_SESSION_KEY
             ] as $key
         ) {

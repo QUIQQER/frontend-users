@@ -107,10 +107,6 @@ class Registration extends QUI\Control
             try {
                 $registrationStatus = $this->register();
 
-                // during the registration
-                // 2fa session is set
-                QUI::getSession()->set('auth-secondary', 1);
-
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
@@ -152,7 +148,8 @@ class Registration extends QUI\Control
                 );
             }
 
-            if ($executeLogin) {
+            // Registration does not verify a second factor; configured MFA requires the regular login.
+            if ($executeLogin && !QUI::conf('auth_settings', 'secondary_frontend')) {
                 try {
                     // auto login for the primary login
                     // in this case, mail is primary login
@@ -588,6 +585,9 @@ class Registration extends QUI\Control
                     QUI\System\Log::writeException($exception);
                 }
 
+                if ($registrationSettings['autoLoginOnActivation']) {
+                    QUI\FrontendUsers\ActivationLogin::bind($NewUser);
+                }
                 $NewUser->save(QUI::getUsers()->getSystemUser());
 
                 // send registration notice to admins
