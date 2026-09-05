@@ -272,7 +272,7 @@ class RegistrationSignUp extends QUI\Control
                         'RegistrationSignUp.message.error.' . $_GET['error']
                     );
 
-                    if ($_GET['error'] === 'activation_expired' && !empty($valueEmail)) {
+                    if ($_GET['error'] === 'activation_expired') {
                         $showResendActivationLink = true;
                     }
 

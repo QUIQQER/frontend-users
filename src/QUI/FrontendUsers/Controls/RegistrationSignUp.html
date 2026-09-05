@@ -41,9 +41,13 @@
             <p>
                 {locale group="quiqqer/frontend-users" var="RegistrationSignUp.message.error.activation_expired.resend_info"}
             </p>
-            <div class="quiqqer-fu-registrationSignUp-resend" data-email="{$valueEmail}">
-                <div class="btn btn-primary quiqqer-fu-registrationSignUp-resend-btn"></div>
-                <p class="quiqqer-fu-registrationSignUp-resend-msg"></p>
+            <div class="quiqqer-fu-registrationSignUp-resend" data-name="resend" data-email="{$valueEmail|escape:'html'}">
+                <label>
+                    <span>{locale group="quiqqer/frontend-users" var="control.registration.sign.up.email.title"}</span>
+                    <input type="email" data-name="resend-email" value="{$valueEmail|escape:'html'}" required autocomplete="email" />
+                </label>
+                <div class="btn btn-primary quiqqer-fu-registrationSignUp-resend-btn" data-name="resend-button"></div>
+                <p class="quiqqer-fu-registrationSignUp-resend-msg" data-name="resend-message" aria-live="polite"></p>
             </div>
         {/if}
         {if $showLoginButton}

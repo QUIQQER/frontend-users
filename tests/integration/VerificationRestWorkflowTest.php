@@ -178,7 +178,20 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             'parent' => 1,
             'child' => $siteId
         ]);
-        $User = $this->createUser();
+        $events = QUI::getEvents()->getList();
+
+        try {
+            foreach ($events['onUserCreate'] ?? [] as $event) {
+                if (!in_array($event['package'], ['quiqqer/core', 'quiqqer/frontend-users'], true)) {
+                    QUI::getEvents()->removeEvent('onUserCreate', $event['callable']);
+                }
+            }
+
+            $User = $this->createUser();
+        } finally {
+            (new \ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue(QUI::getEvents(), $events);
+        }
+
         $registrarHash = hash('sha256', Registrar::class);
         $verification = $this->createVerification([
             'uuid' => $User->getUUID(),
@@ -196,13 +209,18 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             [
                 [VerificationErrorReason::ALREADY_VERIFIED, 'already_verified'],
                 [VerificationErrorReason::EXPIRED, 'activation_expired'],
+                [VerificationErrorReason::INVALID_CODE, 'activation'],
                 [VerificationErrorReason::INVALID_REQUEST, 'activation']
             ] as [$reason, $expectedError]
         ) {
             $errorUrl = $Activation->getOnErrorRedirectUrl($verification, $reason);
             self::assertNotNull($errorUrl);
             self::assertStringContainsString('error=' . $expectedError, $errorUrl);
-            self::assertStringContainsString(rawurlencode((string)$User->getAttribute('email')), $errorUrl);
+            self::assertStringNotContainsString('email=', $errorUrl);
+            self::assertStringNotContainsString((string)$User->getAttribute('email'), $errorUrl);
+            self::assertStringNotContainsString(rawurlencode((string)$User->getAttribute('email')), $errorUrl);
+            self::assertStringNotContainsString(urlencode((string)$User->getAttribute('email')), $errorUrl);
+            self::assertStringContainsString($registrarHash, $errorUrl);
         }
 
         $EmailConfirm = new EmailConfirmLinkVerification();

@@ -247,48 +247,50 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * Show activation mail resend action for expired activation links.
          */
         $initResendActivationLink: function () {
-            var ResendElm = this.getElm().getElement('.quiqqer-fu-registrationSignUp-resend');
-            var BtnElm = this.getElm().getElement('.quiqqer-fu-registrationSignUp-resend-btn');
+            const ResendElm = this.getElm().querySelector('[data-name="resend"]');
+            const BtnElm = this.getElm().querySelector('[data-name="resend-button"]');
 
             if (!ResendElm || !BtnElm) {
                 return;
             }
 
-            var MsgElm = this.getElm().getElement('.quiqqer-fu-registrationSignUp-resend-msg');
-            var EmailInput = this.getElm().getElement('input[name="email"]');
-            var email = ResendElm.get('data-email');
+            const MsgElm = ResendElm.querySelector('[data-name="resend-message"]');
+            const EmailInput = ResendElm.querySelector('[data-name="resend-email"]');
 
-            if (!email && EmailInput) {
-                email = EmailInput.value;
-            }
-
-            if (!email) {
+            if (!MsgElm || !EmailInput) {
                 return;
             }
 
-            new ResendActivationLinkBtn({
-                email: email,
+            const Button = new ResendActivationLinkBtn({
+                email: EmailInput.value,
                 events: {
                     onResendSuccess: function () {
-                        MsgElm.set(
-                            'html',
-                            QUILocale.get(
-                                lg,
-                                'RegistrationSignUp.message.error.activation_expired.resend_success'
-                            )
+                        MsgElm.textContent = QUILocale.get(
+                            lg,
+                            'RegistrationSignUp.message.error.activation_expired.resend_success'
                         );
                     },
                     onResendFail: function () {
-                        MsgElm.set(
-                            'html',
-                            QUILocale.get(
-                                lg,
-                                'RegistrationSignUp.message.error.activation_expired.resend_fail'
-                            )
+                        MsgElm.textContent = QUILocale.get(
+                            lg,
+                            'RegistrationSignUp.message.error.activation_expired.resend_fail'
                         );
                     }
                 }
             }).inject(BtnElm);
+
+            const updateEmail = function () {
+                Button.setAttribute('email', EmailInput.value);
+
+                if (EmailInput.checkValidity()) {
+                    Button.enable();
+                } else {
+                    Button.disable();
+                }
+            };
+
+            EmailInput.addEventListener('input', updateEmail);
+            updateEmail();
         },
 
         /**
