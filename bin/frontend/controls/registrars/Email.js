@@ -192,6 +192,9 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                             );
 
                             CheckFormValidation();
+                        }).catch((error) => {
+                            HandleInputValidation(event.target, false, Registration.getLookupErrorMessage(error));
+                            CheckFormValidation();
                         });
                     }
                 });
@@ -339,6 +342,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/registrars/Email', 
                         this.$passwordFieldset.querySelector('input').focus();
                         this.stopLoading();
                     }
+                });
+            }).catch((error) => {
+                this.stopLoading();
+                QUI.getMessageHandler((Messages) => {
+                    Messages.addAttention(Registration.getLookupErrorMessage(error));
                 });
             });
         },

@@ -27,7 +27,22 @@ final class RegistrationThrottleRaceWorkerTest extends TestCase
             }
             usleep(10000);
         }
-        $allowed = (new ReflectionMethod(RegistrationThrottle::class, 'acquire'))->invoke(null, 'source:race', 2);
+        if (!empty($input['lookup'])) {
+            QUI::getRequest()->server->set('REMOTE_ADDR', '192.0.2.99');
+            $Handler = $this->getMockBuilder(QUI\FrontendUsers\Handler::class)->onlyMethods(['getRegistrationSettings'])->getMock();
+            $Handler->method('getRegistrationSettings')->willReturn(['throttleLookupIpLimit' => 2]);
+            $Instances = new ReflectionProperty(QUI\Utils\Singleton::class, 'instances');
+            $Instances->setValue(null, array_replace($Instances->getValue(), [QUI\FrontendUsers\Handler::class => $Handler]));
+            try {
+                RegistrationThrottle::reserveLookup();
+                $allowed = true;
+            } catch (QUI\FrontendUsers\Exception $Exception) {
+                self::assertSame(429, $Exception->getCode());
+                $allowed = false;
+            }
+        } else {
+            $allowed = (new ReflectionMethod(RegistrationThrottle::class, 'acquire'))->invoke(null, 'source:race', 2);
+        }
         file_put_contents($input['result'], json_encode($allowed, JSON_THROW_ON_ERROR));
         self::assertIsBool($allowed);
         $Connection->close();

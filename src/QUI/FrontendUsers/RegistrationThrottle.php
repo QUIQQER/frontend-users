@@ -21,16 +21,10 @@ final class RegistrationThrottle
     /** Reserve before validation and before the registration transaction starts. */
     public static function reserve(mixed $email, mixed $username): void
     {
-        $source = QUI::getRequest()->getClientIp();
-        $address = $source !== null && filter_var($source, FILTER_VALIDATE_IP) ? inet_pton($source) : false;
+        $address = self::clientAddress();
 
         if ($address === false) {
             self::deny();
-        }
-
-        // IPv4-mapped IPv6 and ordinary IPv4 represent the same source.
-        if (strlen($address) === 16 && substr($address, 0, 12) === str_repeat("\0", 10) . "\xff\xff") {
-            $address = substr($address, 12);
         }
 
         $settings = Handler::getInstance()->getRegistrationSettings();
@@ -60,6 +54,42 @@ final class RegistrationThrottle
                 self::deny();
             }
         }
+    }
+
+    /** Shared lookup quota, independent of registration, resend and browser sessions. */
+    public static function reserveLookup(): void
+    {
+        $address = self::clientAddress();
+
+        if ($address === false) {
+            throw new Exception(['quiqqer/frontend-users', 'exception.account_lookup.throttled'], 429);
+        }
+
+        $settings = Handler::getInstance()->getRegistrationSettings();
+        $limit = self::positiveInt($settings['throttleLookupIpLimit'] ?? null, 60);
+
+        QUI::getDataBaseConnection()->createQueryBuilder()
+            ->delete(Doctrine::quoteIdentifier(self::table()))
+            ->where('expires_at <= :now')
+            ->setParameter('now', time())
+            ->executeStatement();
+
+        if (!self::acquire('lookup:ip:' . bin2hex($address), $limit)) {
+            throw new Exception(['quiqqer/frontend-users', 'exception.account_lookup.throttled'], 429);
+        }
+    }
+
+    private static function clientAddress(): string|false
+    {
+        $source = QUI::getRequest()->getClientIp();
+        $address = $source !== null && filter_var($source, FILTER_VALIDATE_IP) ? inet_pton($source) : false;
+
+        // IPv4-mapped IPv6 and ordinary IPv4 represent the same source.
+        if ($address !== false && strlen($address) === 16 && substr($address, 0, 12) === str_repeat("\0", 10) . "\xff\xff") {
+            return substr($address, 12);
+        }
+
+        return $address;
     }
 
     private static function positiveInt(mixed $value, int $default): int

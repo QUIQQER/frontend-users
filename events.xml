@@ -6,6 +6,8 @@
 
     <event on="onUserCreate" fire="\QUI\FrontendUsers\Events::onUserCreate"/>
     <event on="onUserLogin" fire="\QUI\FrontendUsers\ProfileSecurity::onUserLogin"/>
+    <event on="onAjaxCallBefore" fire="\QUI\FrontendUsers\ActivationLookup::onAjaxCallBefore"/>
+    <event on="onUserLoginError" fire="\QUI\FrontendUsers\ActivationLookup::onUserLoginError"/>
     <event on="onUserActivate" fire="\QUI\FrontendUsers\Events::onUserActivate"/>
     <event on="onUserDelete" fire="\QUI\FrontendUsers\Events::onUserDelete"/>
     <event on="onTemplateGetHeader" fire="\QUI\FrontendUsers\Events::onTemplateGetHeader"/>

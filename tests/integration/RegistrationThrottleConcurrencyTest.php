@@ -13,11 +13,11 @@ class RegistrationThrottleConcurrencyTest extends TestCase
 {
     public static function reservations(): array
     {
-        return [['new'], ['expired']];
+        return [['new', false], ['expired', false], ['new', true], ['expired', true]];
     }
 
     #[DataProvider('reservations')]
-    public function testConcurrentRequestsRespectTheAttemptLimit(string $state): void
+    public function testConcurrentRequestsRespectTheAttemptLimit(string $state, bool $lookup): void
     {
         $dir = sys_get_temp_dir() . '/frontend-users-registration-throttle-race-' . bin2hex(random_bytes(8));
         mkdir($dir, 0700);
@@ -25,6 +25,7 @@ class RegistrationThrottleConcurrencyTest extends TestCase
         $Original = QUI::getDataBaseConnection();
         $Property = new ReflectionProperty(QUI::class, 'QueryBuilder');
         $Shared = null;
+        $subject = $lookup ? 'lookup:ip:' . bin2hex(inet_pton('192.0.2.99')) : 'source:race';
         try {
             // Optional connection must point to an isolated, disposable test database.
             $external = getenv('FRONTEND_USERS_REGISTRATION_THROTTLE_TEST_DATABASE');
@@ -36,7 +37,7 @@ class RegistrationThrottleConcurrencyTest extends TestCase
             $Shared->createQueryBuilder()->delete(RegistrationThrottle::table())->executeStatement();
             if ($state === 'expired') {
                 $Shared->insert(RegistrationThrottle::table(), [
-                    'subject_key' => hash('sha256', 'source:race'), 'attempts' => 2, 'expires_at' => time() - 1
+                    'subject_key' => hash('sha256', $subject), 'attempts' => 2, 'expires_at' => time() - 1
                 ]);
             }
             $Property->setValue(null, $Original);
@@ -45,7 +46,7 @@ class RegistrationThrottleConcurrencyTest extends TestCase
                 $input = $dir . '/input-' . $i;
                 file_put_contents($input, json_encode([
                     'connection' => $connection, 'ready' => $dir . '/ready-' . $i,
-                    'go' => $dir . '/go', 'result' => $dir . '/result-' . $i
+                    'go' => $dir . '/go', 'result' => $dir . '/result-' . $i, 'lookup' => $lookup
                 ], JSON_THROW_ON_ERROR));
                 $process = proc_open(
                     [
@@ -82,9 +83,9 @@ class RegistrationThrottleConcurrencyTest extends TestCase
                 ->executeQuery()->fetchAllAssociative());
             self::assertSame(2, (int)$Shared->fetchOne('SELECT attempts FROM ' . RegistrationThrottle::table()));
             $Property->setValue(null, $Shared);
-            $Shared->transactional(static function () use ($Shared): void {
+            $Shared->transactional(static function () use ($Shared, $subject): void {
                 $acquire = new \ReflectionMethod(RegistrationThrottle::class, 'acquire');
-                self::assertFalse($acquire->invoke(null, 'source:race', 2));
+                self::assertFalse($acquire->invoke(null, $subject, 2));
                 // A denied INSERT must not poison PostgreSQL's surrounding transaction.
                 self::assertTrue($acquire->invoke(null, 'account:another-user', 2));
                 self::assertCount(2, $Shared->createQueryBuilder()->select('*')->from(RegistrationThrottle::table())

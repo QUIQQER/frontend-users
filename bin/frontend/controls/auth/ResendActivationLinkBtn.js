@@ -16,7 +16,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
 ], function (QUIButton, QUIAjax, QUILocale) {
     "use strict";
 
-    var lg = 'quiqqer/frontend-users';
+    const lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -48,7 +48,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
             this.disable();
             this.setAttribute('textimage', 'fa fa-spinner fa-spin');
 
-            this.$resendActivationMail().then(function (success) {
+            return this.$resendActivationMail().then((success) => {
                 if (!success) {
                     this.enable();
                     this.setAttribute('textimage', 'fa fa-envelope');
@@ -62,7 +62,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
                 });
 
                 this.fireEvent('resendSuccess', [this]);
-            }.bind(this));
+            }).catch(() => {
+                this.enable();
+                this.setAttribute('textimage', 'fa fa-envelope');
+                this.fireEvent('resendFail', [this]);
+            });
         },
 
         /**
@@ -71,12 +75,10 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/ResendActivati
          * @return {Promise}
          */
         $resendActivationMail: function () {
-            var self = this;
-
-            return new Promise(function (resolve, reject) {
+            return new Promise((resolve, reject) => {
                 QUIAjax.get('package_quiqqer_frontend-users_ajax_frontend_auth_resendActivationMail', resolve, {
                     'package': 'quiqqer/frontend-users',
-                    email: self.getAttribute('email'),
+                    email: this.getAttribute('email'),
                     onError: reject
                 });
             });

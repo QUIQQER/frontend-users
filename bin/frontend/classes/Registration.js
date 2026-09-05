@@ -70,17 +70,11 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          * @return {Promise} - return true if valid and false if invalid
          */
         usernameValidation: function (username) {
-            var self = this;
-
             if (username === '') {
                 return Promise.resolve(true);
             }
 
-            return new Promise(function (resolve) {
-                self.validateUsername(username).then(function (usernameExists) {
-                    resolve(!usernameExists);
-                });
-            });
+            return this.validateUsername(username).then((usernameExists) => !usernameExists);
         },
 
         /**
@@ -90,17 +84,19 @@ define('package/quiqqer/frontend-users/bin/frontend/classes/Registration', [
          * @return {Promise} - return true if valid and false if invalid
          */
         emailValidation: function (email) {
-            var self = this;
-
             if (email === '') {
                 return Promise.resolve(true);
             }
 
-            return new Promise(function (resolve) {
-                self.validateEmail(email).then(function (emailExists) {
-                    resolve(!emailExists);
-                });
-            });
+            return this.validateEmail(email).then((emailExists) => !emailExists);
+        },
+
+        /** Translate lookup failures without treating a rejected request as an available account. */
+        getLookupErrorMessage: function (error) {
+            const code = Number(error?.getCode?.() ?? error?.getAttribute?.('code') ?? error?.code);
+            return QUILocale.get(pkg, code === 429
+                ? 'exception.account_lookup.throttled'
+                : 'exception.account_lookup.unavailable');
         },
 
         /**

@@ -2,6 +2,22 @@
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
+        <locale name="exception.account_lookup.throttled">
+            <de><![CDATA[Zu viele Abfragen. Bitte versuche es in 15 Minuten erneut. Deine Eingaben bleiben erhalten.]]></de>
+            <en><![CDATA[Too many requests. Please try again in 15 minutes. Your entries are preserved.]]></en>
+        </locale>
+        <locale name="exception.account_lookup.unavailable">
+            <de><![CDATA[Die Prüfung ist momentan nicht möglich. Bitte versuche es später erneut. Deine Eingaben bleiben erhalten.]]></de>
+            <en><![CDATA[The check is currently unavailable. Please try again later. Your entries are preserved.]]></en>
+        </locale>
+        <locale name="settings.throttleLookupIpLimit.title">
+            <de><![CDATA[Maximale Kontoabfragen pro IP]]></de>
+            <en><![CDATA[Maximum account lookups per IP]]></en>
+        </locale>
+        <locale name="settings.throttleLookupIpLimit.description">
+            <de><![CDATA[Gemeinsames Limit für Benutzername-, E-Mail- und Aktivierungsabfragen innerhalb von 15 Minuten pro IP-Adresse. Unbekannte Konten zählen mit. Unabhängig von Registrierungs- und Mail-Limits. Mehrere Personen im selben Netzwerk teilen das Limit. Standard: 60; ganze Zahlen von 1 bis 1000000. Ungültige Werte verwenden den Standard.]]></de>
+            <en><![CDATA[Shared limit for username, email and activation lookups per IP address within 15 minutes. Unknown accounts count too. Independent of registration and mail limits. People on the same network share the limit. Default: 60; whole numbers from 1 to 1000000. Invalid values use the default.]]></en>
+        </locale>
         <locale name="exception.registration.throttled">
             <de><![CDATA[Zu viele Registrierungsversuche. Bitte versuche es in 15 Minuten erneut.]]></de>
             <en><![CDATA[Too many registration attempts. Please try again in 15 minutes.]]></en>

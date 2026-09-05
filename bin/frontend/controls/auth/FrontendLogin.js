@@ -15,13 +15,14 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
 
     'Ajax',
     'Locale',
+    'package/quiqqer/frontend-users/bin/Registration',
 
     'css!package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin.css'
 
-], function (QUIControl, QUILoader, ResendActivationLinkBtn, QUIControlUtils, QUIAjax, QUILocale) {
+], function (QUIControl, QUILoader, ResendActivationLinkBtn, QUIControlUtils, QUIAjax, QUILocale, Registration) {
     "use strict";
 
-    var lg = 'quiqqer/frontend-users';
+    const lg = 'quiqqer/frontend-users';
 
     return new Class({
 
@@ -49,16 +50,16 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
          * event: on import
          */
         $onImport: function () {
-            var self = this;
+            const self = this;
             this.$Elm = this.getElm();
 
-            var LoginControlElm = this.$Elm.getElement('div[data-qui="controls/users/Login"]');
+            const LoginControlElm = this.$Elm.getElement('div[data-qui="controls/users/Login"]');
 
             if (!LoginControlElm) {
                 return;
             }
 
-            var MsgElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-message');
+            const MsgElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-message');
 
             this.Loader.inject(this.$Elm);
             this.Loader.show();
@@ -72,6 +73,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                     onUserLoginError: function (error) {
                         switch (error.getAttribute('reason')) {
                             case 'user_not_active':
+                            case 'auth_error_user_not_active':
                                 self.$checkForUnverifiedActivationVerification(
                                     error.getAttribute('userId')
                                 );
@@ -97,17 +99,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
          * @param {Number} userId
          */
         $checkForUnverifiedActivationVerification: function (userId) {
-            var self = this;
-            var MsgElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-message');
+            const self = this;
+            const MsgElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-message');
 
             MsgElm.set('html', '');
 
             this.Loader.show();
 
-            this.$existsUnverifiedActivationVerification(userId).then(function (userEmail) {
+            return this.$existsUnverifiedActivationVerification(userId).then(function (userEmail) {
                 self.Loader.hide();
 
-                var InfoElm = new Element('div', {
+                const InfoElm = new Element('div', {
                     'class': 'content-message-information',
                     html: QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.user_not_active')
                 }).inject(MsgElm);
@@ -125,11 +127,11 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                     html: QUILocale.get(lg, 'controls.frontend.auth.frontendlogin.resend_activation_mail')
                 }).inject(InfoElm);
 
-                var ResendBtnElm = new Element('div', {
+                const ResendBtnElm = new Element('div', {
                     'class': 'quiqqer-frontendUsers-frontendlogin-resend-btn'
                 }).inject(InfoElm);
 
-                var ResendMsgElm = new Element('p', {
+                const ResendMsgElm = new Element('p', {
                     'class': 'quiqqer-frontendUsers-frontendlogin-resend-msg'
                 }).inject(ResendBtnElm);
 
@@ -150,15 +152,21 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/auth/FrontendLogin'
                         }
                     }
                 }).inject(ResendMsgElm, 'before');
-            });
+            }).catch((error) => {
+                const Message = document.createElement('div');
+                Message.className = 'content-message-error';
+                Message.setAttribute('role', 'alert');
+                Message.textContent = Registration.getLookupErrorMessage(error);
+                this.getElm().querySelector('[data-name="message"]').replaceChildren(Message);
+            }).finally(() => this.Loader.hide());
         },
 
         /**
          * Redirect on successful login
          */
         $onLogin: function () {
-            var LoginElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-login');
-            var redirectUrl = LoginElm.get('data-redirect');
+            const LoginElm = this.$Elm.getElement('.quiqqer-frontendUsers-frontendlogin-login');
+            const redirectUrl = LoginElm.get('data-redirect');
 
             this.fireEvent('login', [this]);
 

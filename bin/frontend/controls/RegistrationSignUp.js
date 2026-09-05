@@ -297,7 +297,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
          * Register click handler for login CTA in error state.
          */
         $initLoginButton: function () {
-            var LoginBtn = this.getElm().getElement('.quiqqer-fu-registrationSignUp-login-btn');
+            const LoginBtn = this.getElm().getElement('.quiqqer-fu-registrationSignUp-login-btn');
 
             if (!LoginBtn) {
                 return;
@@ -1148,6 +1148,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                         if (isValid) {
                             self.$onMailCreateClick();
                         }
+                    }).catch(() => {
+                        // emailValidation already displays the error and restores the loader.
                     });
                 }
             });
@@ -1804,14 +1806,6 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
         emailValidation: function (Field) {
             const value = Field.value;
 
-            const checkPromises = [
-                Registration.emailValidation(value)
-            ];
-
-            if (this.getAttribute('emailIsUsername')) {
-                checkPromises.push(Registration.usernameValidation(value));
-            }
-
             if (this.getAttribute('emailIsUsername') === false) {
                 const wasDisabled = Field.disabled;
 
@@ -1826,9 +1820,15 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 Field.disabled = wasDisabled;
             }
 
+            const checkPromises = [Registration.emailValidation(value)];
+
+            if (this.getAttribute('emailIsUsername')) {
+                checkPromises.push(Registration.usernameValidation(value));
+            }
+
             this.Loader.show();
 
-            return Promise.all(checkPromises).then(function (result) {
+            return Promise.all(checkPromises).then((result) => {
                 let isValid = true;
 
                 for (let i = 0, len = result.length; i < len; i++) {
@@ -1850,7 +1850,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/RegistrationSignUp'
                 //);
 
                 return this.$showLoginControl(value);
-            }.bind(this));
+            }).catch((error) => {
+                QUI.getMessageHandler((Messages) => {
+                    Messages.addAttention(Registration.getLookupErrorMessage(error), Field);
+                });
+                throw error;
+            }).finally(() => this.Loader.hide());
         },
 
         /**

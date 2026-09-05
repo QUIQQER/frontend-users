@@ -151,6 +151,10 @@
                     <type><![CDATA[int]]></type>
                     <defaultvalue>5</defaultvalue>
                 </conf>
+                <conf name="throttleLookupIpLimit">
+                    <type><![CDATA[int]]></type>
+                    <defaultvalue>60</defaultvalue>
+                </conf>
                 <conf name="deleteInactiveUserAfterDays">
                     <type><![CDATA[integer]]></type>
                     <defaultvalue>3</defaultvalue>
@@ -440,6 +444,17 @@
                             <description>
                                 <locale group="quiqqer/frontend-users"
                                         var="settings.deleteInactiveUserAfterDays.description"/>
+                            </description>
+                        </input>
+
+                        <input conf="registration.throttleLookupIpLimit" type="number" min="1" max="1000000" step="1">
+                            <text>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.throttleLookupIpLimit.title"/>
+                            </text>
+                            <description>
+                                <locale group="quiqqer/frontend-users"
+                                        var="settings.throttleLookupIpLimit.description"/>
                             </description>
                         </input>
 

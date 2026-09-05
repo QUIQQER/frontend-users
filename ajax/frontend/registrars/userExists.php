@@ -11,6 +11,7 @@
 QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_userExists',
     function ($username) {
+        QUI\FrontendUsers\RegistrationThrottle::reserveLookup();
         return QUI::getUsers()->usernameExists($username);
     },
     ['username']
