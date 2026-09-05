@@ -4,6 +4,7 @@ namespace QUI\FrontendUsers\Tests\Integration;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use QUI;
+use QUI\Cache\Manager as CacheManager;
 use QUI\FrontendUsers\Controls\Address\Address;
 use QUI\FrontendUsers\Controls\Profile;
 use QUI\FrontendUsers\Controls\Profile\UserData;
@@ -14,6 +15,8 @@ use QUI\FrontendUsers\Tests\Support\VerificationSiteFixture;
 use QUI\Security\CsrfToken;
 use QUI\Utils\Singleton;
 use ReflectionProperty;
+use Stash\Driver\Ephemeral;
+use Stash\Pool;
 
 class ProfileSecurityWorkflowTest extends DatabaseTestCase
 {
@@ -23,10 +26,19 @@ class ProfileSecurityWorkflowTest extends DatabaseTestCase
     private array $mails = [];
     private string $method;
     private QUI\Users\User $User;
+    private ?Pool $previousCachePool;
+    private ?QUI\Config $previousCacheConfig;
 
     protected function setUp(): void
     {
         parent::setUp();
+        // Profile discovery must not inherit another process's synthetic categories.
+        $this->previousCachePool = CacheManager::$Stash;
+        $this->previousCacheConfig = CacheManager::$Config;
+        CacheManager::$Config = clone CacheManager::getConfig();
+        CacheManager::$Config->setValue('general', 'nocache', 0);
+        CacheManager::$Stash = new Pool(new Ephemeral());
+
         $this->method = QUI::getRequest()->getMethod();
         $this->events = QUI::getEvents()->getList();
 
@@ -71,6 +83,10 @@ class ProfileSecurityWorkflowTest extends DatabaseTestCase
             'quiqqer.frontendUsers.profile.view.user.data' => 1
         ], QUI::getUsers()->getSystemUser());
         self::assertTrue(QUI\FrontendUsers\Utils::hasPermissionToViewCategory('user', 'data'));
+        self::assertSame(
+            UserData::class,
+            ltrim(QUI\FrontendUsers\Utils::getProfileSetting('user', 'data')['control'], '\\')
+        );
         VerificationSiteFixture::setUp();
     }
 
@@ -85,7 +101,12 @@ class ProfileSecurityWorkflowTest extends DatabaseTestCase
             QUI::getSession()->set($key, $value);
         }
 
-        parent::tearDown();
+        try {
+            parent::tearDown();
+        } finally {
+            CacheManager::$Stash = $this->previousCachePool;
+            CacheManager::$Config = $this->previousCacheConfig;
+        }
     }
 
     public static function mutationPaths(): array

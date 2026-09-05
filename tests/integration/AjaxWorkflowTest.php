@@ -8,6 +8,8 @@ use QUI\FrontendUsers\Controls\Profile\UserAvatar;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Registrars\Email\Registrar;
 use QUI\FrontendUsers\Tests\Support\DatabaseTestCase;
+use Stash\Driver\Ephemeral;
+use Stash\Pool;
 
 class AjaxWorkflowTest extends DatabaseTestCase
 {
@@ -269,13 +271,13 @@ class AjaxWorkflowTest extends DatabaseTestCase
             (new QUI\FrontendUsers\Controls\RegistrationSignUp(['registrars' => [Registrar::class]]))->getBody()
         );
 
-        $profileCategoriesCache = 'package/quiqqer/frontendUsers/profileCategories';
-        try {
-            $previousProfileCategories = CacheManager::get($profileCategoriesCache);
-        } catch (QUI\Cache\Exception) {
-            $previousProfileCategories = null;
-        }
-        CacheManager::set($profileCategoriesCache, [
+        // Never publish the avatar-only fixture into the shared installation cache.
+        $previousCachePool = CacheManager::$Stash;
+        $previousCacheConfig = CacheManager::$Config;
+        CacheManager::$Config = clone CacheManager::getConfig();
+        CacheManager::$Config->setValue('general', 'nocache', 0);
+        CacheManager::$Stash = new Pool(new Ephemeral());
+        CacheManager::set('package/quiqqer/frontendUsers/profileCategories', [
             'user' => [
                 'name' => 'user',
                 'title' => ['quiqqer/frontend-users', 'profile.user.title'],
@@ -298,11 +300,8 @@ class AjaxWorkflowTest extends DatabaseTestCase
             ]));
             self::assertTrue((bool)$SystemUser->getAttribute('quiqqer.frontendUsers.useGravatarIcon'));
         } finally {
-            if ($previousProfileCategories === null) {
-                CacheManager::clear($profileCategoriesCache);
-            } else {
-                CacheManager::set($profileCategoriesCache, $previousProfileCategories);
-            }
+            CacheManager::$Stash = $previousCachePool;
+            CacheManager::$Config = $previousCacheConfig;
         }
     }
 
