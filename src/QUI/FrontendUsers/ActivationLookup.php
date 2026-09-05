@@ -188,8 +188,9 @@ final class ActivationLookup
         }
 
         $Session->start();
+        $SymfonySession = $Session->getSymfonySession();
 
-        if ($Session->regenerate()) {
+        if ($SymfonySession !== false && $SymfonySession->migrate(true)) {
             $Session->set(self::SESSION_KEY, $proof);
         }
     }

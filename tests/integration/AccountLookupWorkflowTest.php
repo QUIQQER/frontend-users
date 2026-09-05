@@ -105,6 +105,32 @@ class AccountLookupWorkflowTest extends DatabaseTestCase
         }
     }
 
+    #[DataProvider('sessionMigrationResults')]
+    public function testProofRequiresSuccessfulSessionMigration(bool $migrated): void
+    {
+        $WebSession = QUI::getSession();
+        $proof = ['uuid' => 'test-user', 'time' => time()];
+        $SymfonySession = $this->createMock(SymfonySession::class);
+        $SymfonySession->expects(self::once())->method('migrate')->with(true)->willReturn($migrated);
+        $Session = $this->createMock(QUI\Session::class);
+        $Session->expects(self::once())->method('start');
+        $Session->method('getSymfonySession')->willReturn($SymfonySession);
+        $Session->expects($migrated ? self::once() : self::never())
+            ->method('set')->with(ActivationLookup::SESSION_KEY, $proof);
+        QUI::$Session = $Session;
+
+        try {
+            (new ReflectionMethod(ActivationLookup::class, 'saveProof'))->invoke(null, $proof);
+        } finally {
+            QUI::$Session = $WebSession;
+        }
+    }
+
+    public static function sessionMigrationResults(): array
+    {
+        return [[true], [false]];
+    }
+
     public function testRealPasswordLoginPreservesProofAfterCoreClearsTheSession(): void
     {
         $User = $this->pendingUser();
