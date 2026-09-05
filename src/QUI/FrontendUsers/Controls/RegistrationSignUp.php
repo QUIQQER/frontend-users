@@ -92,19 +92,14 @@ class RegistrationSignUp extends QUI\Control
         // captcha usage
         $Captcha = false;
         $jsRequired = false;
-        $useCaptcha = false;
+        $useCaptcha = boolval($registrationSettings['useCaptcha']);
         $isCaptchaInvisible = false;
 
-        if (
-            QUI\FrontendUsers\Utils::isCaptchaModuleInstalled()
-            && class_exists('QUI\Captcha\Controls\CaptchaDisplay')
-            && class_exists('QUI\Captcha\Handler')
-        ) {
+        if ($useCaptcha) {
+            $Default = QUI\FrontendUsers\RegistrationCaptcha::assertAvailable();
             $Captcha = new QUI\Captcha\Controls\CaptchaDisplay();
             $jsRequired = QUI\Captcha\Handler::requiresJavaScript();
-            $useCaptcha = boolval($registrationSettings['useCaptcha']);
 
-            $Default = QUI\Captcha\Handler::getDefaultCaptchaModuleControl();
             $isCaptchaInvisible = QUI\Captcha\Handler::isInvisible();
 
             if (

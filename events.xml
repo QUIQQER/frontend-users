@@ -2,6 +2,7 @@
 <events>
     <event on="onPackageInstall" fire="\QUI\FrontendUsers\Events::onPackageInstall"/>
     <event on="onPackageSetup" fire="\QUI\FrontendUsers\Events::onPackageSetup"/>
+    <event on="onPackageConfigSave" fire="\QUI\FrontendUsers\RegistrationCaptcha::onPackageConfigSave"/>
 
     <event on="onUserCreate" fire="\QUI\FrontendUsers\Events::onUserCreate"/>
     <event on="onUserLogin" fire="\QUI\FrontendUsers\ProfileSecurity::onUserLogin"/>

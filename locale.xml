@@ -1838,6 +1838,10 @@ Available placeholders:
             <de><![CDATA[Bitte beantworten Sie die Sicherheitsabfrage.]]></de>
             <en><![CDATA[Please answer the security check.]]></en>
         </locale>
+        <locale name="exception.registrars.email.captcha_unavailable">
+            <de><![CDATA[Die CAPTCHA-Konfiguration ist unvollständig oder nicht verfügbar. Die Registrierung ist vorübergehend gesperrt. Bitte wenden Sie sich an die Administration.]]></de>
+            <en><![CDATA[The CAPTCHA configuration is incomplete or unavailable. Registration is temporarily blocked. Please contact the administrator.]]></en>
+        </locale>
         <locale name="exception.registrars.email.captcha_invalid_response">
             <de><![CDATA[Die Sicherheitsfrage wurde nicht korrekt beantwortet.]]></de>
             <en><![CDATA[The security check was not answered correctly.]]></en>

@@ -12,8 +12,6 @@ use QUI\FrontendUsers;
 use QUI\FrontendUsers\InvalidFormField;
 use QUI\Utils\Security\Orthos;
 
-use function class_exists;
-
 /**
  * Class Email\Registrar
  *
@@ -216,6 +214,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
 
         // CAPTCHA validation
         if ($settings['useCaptcha']) {
+            FrontendUsers\RegistrationCaptcha::assertAvailable();
             $captchaResponse = $this->getAttribute('captchaResponse');
 
             if (empty($captchaResponse)) {
@@ -225,7 +224,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 ]);
             }
 
-            if (!class_exists('QUI\Captcha\Handler') || !QUI\Captcha\Handler::isResponseValid($captchaResponse)) {
+            if (!is_string($captchaResponse) || !QUI\Captcha\Handler::isResponseValid($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
                     $lgPrefix . 'captcha_invalid_response'
