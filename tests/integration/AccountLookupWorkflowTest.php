@@ -354,8 +354,28 @@ class AccountLookupWorkflowTest extends DatabaseTestCase
         QUI::getRequest()->server->remove('REMOTE_ADDR');
         self::assertSame(429, $this->lookup('username', $User->getUsername())['Exception']['code']);
         QUI::getRequest()->server->set('REMOTE_ADDR', '192.0.2.1');
-        self::getConnection()->createSchemaManager()->dropTable(RegistrationThrottle::table());
-        self::assertArrayNotHasKey('result', $this->lookup('email', $User->getAttribute('email')));
+        $Connection = self::getConnection();
+        $before = $this->counters();
+        $transactionLevel = $Connection->getTransactionNestingLevel();
+        $email = $User->getAttribute('email');
+        $Unavailable = $this->getMockBuilder(\Doctrine\DBAL\Connection::class)
+            ->disableOriginalConstructor()->onlyMethods(['createQueryBuilder'])->getMock();
+        $Unavailable->expects(self::once())->method('createQueryBuilder')
+            ->willThrowException(new \RuntimeException('Lookup quota storage unavailable'));
+        $Property = new ReflectionProperty(QUI::class, 'QueryBuilder');
+        $Property->setValue(null, $Unavailable);
+
+        try {
+            $response = $this->lookup('email', $email);
+            self::assertArrayHasKey('Exception', $response);
+            self::assertArrayNotHasKey('result', $response);
+        } finally {
+            $Property->setValue(null, $Connection);
+        }
+
+        self::assertSame($transactionLevel, $Connection->getTransactionNestingLevel());
+        self::assertSame($before, $this->counters());
+        self::assertTrue($this->lookup('email', $email)['result']);
     }
 
     private function pendingUser(): QUI\Users\User
