@@ -1619,11 +1619,23 @@ Available placeholders:
         </locale>
 
         <!-- Profile: Delete account -->
+        <locale name="exception.profile.deleteaccount.recent_auth_required">
+            <de><![CDATA[Bitte melde dich ab und erneut mit dem zu löschenden Konto an. Öffne danach im Profil die Kontolöschung und bestätige sie innerhalb von zehn Minuten.]]></de>
+            <en><![CDATA[Please sign out and sign in again with the account you want to delete. Then open account deletion in your profile and confirm within ten minutes.]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.message.confirm_ready">
+            <de><![CDATA[Die E-Mail-Bestätigung liegt vor. Dein Konto wurde noch nicht gelöscht. Melde dich bei Bedarf erneut mit diesem Konto an und bestätige die unwiderrufliche Löschung im Profil innerhalb von zehn Minuten nach der Anmeldung.]]></de>
+            <en><![CDATA[The email confirmation is complete. Your account has not been deleted. If necessary, sign in again with this account and confirm the irreversible deletion in your profile within ten minutes of signing in.]]></en>
+        </locale>
+        <locale name="profile.deleteaccount.btn.confirm">
+            <de><![CDATA[Mein Konto jetzt unwiderruflich löschen]]></de>
+            <en><![CDATA[Permanently delete my account now]]></en>
+        </locale>
         <locale name="profile.deleteaccount.info">
             <de>
-                <![CDATA[Bitte klicken Sie auf den Button, um Ihr Benutzerkonto zu löschen. Nach einer Bestätigung per E-Mail wird Ihr Benutzerkonto unwiderruflich gelöscht.]]></de>
+                <![CDATA[Bitte klicken Sie auf den Button, um Ihr Benutzerkonto zu löschen. Öffnen Sie anschließend den Link aus der E-Mail und bestätigen Sie die Löschung nach einer aktuellen Anmeldung noch einmal im Profil.]]></de>
             <en>
-                <![CDATA[Please click on the button to delete your user account. After your verification via E-Mail your account will be irrevocably deleted.]]></en>
+                <![CDATA[Please click on the button to delete your user account. Then open the email link and confirm the deletion in your profile after a recent sign-in.]]></en>
         </locale>
         <locale name="profile.deleteaccount.btn.submit">
             <de><![CDATA[Benutzerkonto löschen]]></de>
@@ -1979,14 +1991,14 @@ Please confirm your e-mail address for your user account on [host]. To confirm y
         <locale name="mail.delete_user_confirm.body" html="true">
             <de><![CDATA[<h1>Hallo [username]!</h1>
 <p>
-Die Löschung Ihres Benutzerkontos auf [host] wurde am [date] beantragt. Bitte bestätigen Sie die unwiderrufliche Löschung Ihres Benutzerkontos mit einem Klick auf folgenden Link:
+Die Löschung Ihres Benutzerkontos auf [host] wurde am [date] beantragt. Öffnen Sie den folgenden Link und melden Sie sich mit diesem Konto an. Erst Ihre anschließende Bestätigung im Profil löscht das Konto unwiderruflich:
 <br><br>
 <a href="[confirmLink]">[confirmLink]</a>
 </p>
 <p>]]></de>
             <en><![CDATA[<h1>Hello [username]!</h1>
 <p>
-The deletion of your user account on [host] was requested on [date]. Please confirm the irrevocable deletion of your user account by clicking on the following link:
+The deletion of your user account on [host] was requested on [date]. Open the following link and sign in with this account. The account is only permanently deleted after you explicitly confirm in your profile:
 <br>
 <a href="[confirmLink]">[confirmLink]</a>
 </p>]]></en>

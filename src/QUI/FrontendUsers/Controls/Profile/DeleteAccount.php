@@ -9,7 +9,10 @@ namespace QUI\FrontendUsers\Controls\Profile;
 use Exception;
 use QUI;
 use QUI\FrontendUsers\Handler;
+use QUI\FrontendUsers\UserDeleteConfirmLinkVerification;
 use QUI\System\Log;
+use QUI\Verification\Entity\LinkVerification;
+use QUI\Verification\Enum\VerificationStatus;
 use QUI\Verification\Interface\VerificationRepositoryInterface;
 use QUI\Verification\VerificationRepository;
 
@@ -21,6 +24,7 @@ use QUI\Verification\VerificationRepository;
 class DeleteAccount extends AbstractProfileControl
 {
     private VerificationRepositoryInterface $verificationRepository;
+    private bool $deleted = false;
 
     /**
      * DeleteAccount constructor.
@@ -53,6 +57,13 @@ class DeleteAccount extends AbstractProfileControl
         $Engine = QUI::getTemplateManager()->getEngine();
         $action = false;
 
+        if ($this->deleted) {
+            return '<p role="status">' . htmlspecialchars(QUI::getLocale()->get(
+                'quiqqer/frontend-users',
+                'message.UserDeleteConfirmVerification.success'
+            ), ENT_QUOTES, 'UTF-8') . '</p>';
+        }
+
         try {
             $verification = $this->verificationRepository->findByIdentifier(
                 'confirmdelete-' . QUI::getUserBySession()->getUUID()
@@ -62,6 +73,10 @@ class DeleteAccount extends AbstractProfileControl
                 if ($verification->isValid()) {
                     $action = 'deleteaccount_confirm_wait';
                     $this->setJavaScriptControlOption('deletestarted', 1);
+
+                    if ($verification->status === VerificationStatus::VERIFIED) {
+                        $action = 'deleteaccount_confirm_ready';
+                    }
                 } else {
                     $this->verificationRepository->delete($verification);
                 }
@@ -70,14 +85,18 @@ class DeleteAccount extends AbstractProfileControl
             // nothing - no active user delete verification
         }
 
-        if (empty($action) && !empty($_GET['action'])) {
-            $action = $_GET['action'];
+        if (empty($action) && ($_GET['action'] ?? null) === 'deleteaccount_error') {
+            $action = 'deleteaccount_error';
         }
 
         $Engine->assign([
             'User' => QUI::getUserBySession(),
             'action' => $action
         ]);
+
+        if ($action === 'deleteaccount_confirm_ready') {
+            return $Engine->fetch(__DIR__ . '/DeleteAccount.Confirm.html');
+        }
 
         return $Engine->fetch(QUI\FrontendUsers\Utils::getRequiredTemplateFile($this));
     }
@@ -91,6 +110,22 @@ class DeleteAccount extends AbstractProfileControl
     {
         $request = QUI::getRequest()->request;
         $action = $request->get('deleteAccountAction');
+
+        if ($action === 'confirm') {
+            $verification = $this->verificationRepository->findByIdentifier(
+                'confirmdelete-' . QUI::getUserBySession()->getUUID()
+            );
+
+            if (!($verification instanceof LinkVerification)) {
+                throw new QUI\FrontendUsers\Exception([
+                    'quiqqer/frontend-users', 'profile.deleteaccount.message.error'
+                ], 403);
+            }
+
+            (new UserDeleteConfirmLinkVerification())->confirmDeletion($verification);
+            $this->deleted = true;
+            return;
+        }
 
         if ($action === 'cancel') {
             $this->cancelDeleteAccountRequest();

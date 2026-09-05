@@ -8,6 +8,8 @@ use QUI\ExceptionStack;
 use QUI\Verification\Entity\AbstractVerification;
 use QUI\Verification\Entity\LinkVerification;
 use QUI\Verification\Enum\VerificationErrorReason;
+use QUI\Verification\Enum\VerificationStatus;
+use QUI\Verification\VerificationRepository;
 
 /**
  * Class UserDeleteConfirmVerification
@@ -42,11 +44,55 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
      */
     public function onSuccess(LinkVerification $verification): void
     {
-        $userUuid = $verification->getCustomDataEntry('uuid');
+        // The link only verifies the mail step. Deletion requires a separate profile POST.
+    }
+
+    public function confirmDeletion(LinkVerification $verification): void
+    {
+        ProfileSecurity::assertValidRequest();
+        $User = QUI::getUserBySession();
+
+        try {
+            ProfileSecurity::assertRecentAuthentication($User);
+        } catch (QUI\FrontendUsers\Exception) {
+            throw new QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users',
+                'exception.profile.deleteaccount.recent_auth_required'
+            ], 403);
+        }
+
+        // Reload the current request: a supplied or previously loaded object is not authorization.
+        $Repository = new VerificationRepository();
+        $current = $Repository->findByIdentifier('confirmdelete-' . $User->getUUID());
+
+        if (
+            !($current instanceof LinkVerification)
+            || $current->uuid !== $verification->uuid
+            || $current->getCustomDataEntry('uuid') !== $User->getUUID()
+            || $current->status !== VerificationStatus::VERIFIED
+            || !$current->isValid()
+            || !($Repository->getVerificationHandler($current) instanceof self)
+        ) {
+            throw new QUI\FrontendUsers\Exception([
+                'quiqqer/frontend-users', 'profile.deleteaccount.message.error'
+            ], 403);
+        }
+
+        Controls\Profile\DeleteAccount::checkDeleteAccount();
         $userProfileSettings = Handler::getInstance()->getUserProfileSettings();
 
         try {
-            $User = QUI::getUsers()->get($userUuid);
+            // Claim the verified request once, including concurrent confirmations and cancellation.
+            $claimed = QUI::getDataBaseConnection()->delete(
+                QUI::getDBTableName(VerificationRepository::TBL_VERIFICATION_PROCESSES),
+                ['uuid' => $current->uuid, 'status' => VerificationStatus::VERIFIED->value]
+            );
+
+            if ($claimed !== 1) {
+                throw new QUI\FrontendUsers\Exception([
+                    'quiqqer/frontend-users', 'profile.deleteaccount.message.error'
+                ], 403);
+            }
 
             switch ($userProfileSettings['userDeleteMode']) {
                 case 'delete':
@@ -103,7 +149,7 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
     {
         return QUI::getLocale()->get(
             'quiqqer/frontend-users',
-            'message.UserDeleteConfirmVerification.success'
+            'profile.deleteaccount.message.confirm_ready'
         );
     }
 
@@ -135,15 +181,20 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
             return null;
         }
 
-        $RegistrationSite = Handler::getInstance()->getRegistrationSignUpSite($project);
+        $PermissionUser = QUI::getUserBySession();
+        QUI\Permissions\Permission::setUser(QUI::getUsers()->getSystemUser());
 
-        if (!$RegistrationSite) {
+        try {
+            $ProfileSite = Handler::getInstance()->getProfileSite($project);
+        } finally {
+            QUI\Permissions\Permission::setUser($PermissionUser);
+        }
+
+        if (!$ProfileSite) {
             return null;
         }
 
-        return $RegistrationSite->getUrlRewritten([], [
-            'success' => 'userdelete'
-        ]);
+        return rtrim($ProfileSite->getUrlRewritten(), '/') . '/user/deleteaccount';
     }
 
     /**
@@ -156,6 +207,10 @@ class UserDeleteConfirmLinkVerification extends AbstractFrontendUsersLinkVerific
      */
     public function getOnErrorRedirectUrl(LinkVerification $verification, VerificationErrorReason $reason): ?string
     {
+        if ($reason === VerificationErrorReason::ALREADY_VERIFIED && $verification->isValid()) {
+            return $this->getOnSuccessRedirectUrl($verification);
+        }
+
         $project = $this->getProject($verification);
 
         if (!$project) {

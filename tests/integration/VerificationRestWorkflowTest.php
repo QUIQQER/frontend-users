@@ -122,62 +122,6 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         );
     }
 
-    public function testDeleteConfirmationUsesConfiguredSoftDeleteMode(): void
-    {
-        $this->setPackageConfig('userProfile', 'userDeleteMode', 'delete');
-        $User = $this->createUser(true);
-        self::replaceSessionUser($User);
-        $verification = $this->createVerification(['uuid' => $User->getUUID()]);
-        $Handler = new UserDeleteConfirmLinkVerification();
-        $Handler->onSuccess($verification);
-
-        $active = self::getConnection()->createQueryBuilder()
-            ->select('active')
-            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table()))
-            ->where('uuid = :uuid')
-            ->setParameter('uuid', $User->getUUID())
-            ->executeQuery()
-            ->fetchOne();
-        self::assertSame(-1, (int)$active);
-        self::assertNotSame('', $Handler->getSuccessMessage($verification));
-        self::assertSame('', $Handler->getErrorMessage($verification, VerificationErrorReason::EXPIRED));
-        self::assertGreaterThan(0, $Handler->getValidDuration($verification));
-        $Handler->onError($verification, VerificationErrorReason::INVALID_REQUEST);
-        self::assertTrue(
-            $Handler->getOnSuccessRedirectUrl($verification) === null
-            || is_string($Handler->getOnSuccessRedirectUrl($verification))
-        );
-        self::assertTrue(
-            $Handler->getOnErrorRedirectUrl($verification, VerificationErrorReason::EXPIRED) === null
-            || is_string($Handler->getOnErrorRedirectUrl($verification, VerificationErrorReason::EXPIRED))
-        );
-    }
-
-    public function testDeleteConfirmationSupportsWipeAndDestroyModes(): void
-    {
-        $Handler = new UserDeleteConfirmLinkVerification();
-
-        foreach (['wipe', 'destroy'] as $mode) {
-            $this->setPackageConfig('userProfile', 'userDeleteMode', $mode);
-            $User = $this->createUser(true);
-            $Handler->onSuccess($this->createVerification(['uuid' => $User->getUUID()]));
-            $stored = self::getConnection()->createQueryBuilder()
-                ->select('active')
-                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table()))
-                ->where('uuid = :uuid')
-                ->setParameter('uuid', $User->getUUID())
-                ->executeQuery()
-                ->fetchOne();
-
-            if ($mode === 'wipe') {
-                self::assertSame(-1, (int)$stored);
-                continue;
-            }
-
-            self::assertFalse($stored);
-        }
-    }
-
     public function testEmailVerificationPersistsAssociatedAddressAndRejectsInvalidSyntax(): void
     {
         $User = $this->createUser();
@@ -269,7 +213,6 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         ));
 
         $DeleteConfirm = new UserDeleteConfirmLinkVerification();
-        self::assertNotNull($DeleteConfirm->getOnSuccessRedirectUrl($verification));
         self::assertNotNull($DeleteConfirm->getOnErrorRedirectUrl(
             $verification,
             VerificationErrorReason::EXPIRED

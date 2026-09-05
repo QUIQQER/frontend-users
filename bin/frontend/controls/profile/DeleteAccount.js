@@ -45,6 +45,17 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
          */
         $onImport: function () {
             var Elm = this.getElm();
+            const ConfirmButton = Elm.querySelector('[data-name="delete-account-confirm"]');
+
+            if (ConfirmButton?.form) {
+                // Complete the final step natively: deletion logs out before an AJAX profile reload.
+                ConfirmButton.form.addEventListener('submit', function (event) {
+                    if (Elm.isConnected && Elm.querySelector('[data-name="delete-account-confirm"]')) {
+                        event.stopImmediatePropagation();
+                    }
+                }, {capture: true});
+                return;
+            }
 
             var SubmitBtn = Elm.querySelector('[data-name="delete-account-submit"]'),
                 confirmed = false;
