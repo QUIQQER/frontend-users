@@ -12,6 +12,8 @@
 QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_address_edit',
     function ($addressId, $data) {
+        QUI\FrontendUsers\ProfileSecurity::assertValidRequest();
+
         $_REQUEST['addressId'] = $addressId;
         $_REQUEST['editSave'] = true;
 

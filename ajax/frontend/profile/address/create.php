@@ -12,6 +12,8 @@
 QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_address_create',
     function ($data) {
+        QUI\FrontendUsers\ProfileSecurity::assertValidRequest();
+
         $Config = QUI\FrontendUsers\Handler::getPackageConfig();
 
         if ($Config->get('userProfile', 'useAddressManagement') === false) {

@@ -22,6 +22,7 @@ abstract class DatabaseTestCase extends TestCase
     private array $previousGet = [];
     private array $previousServer = [];
     private array $previousRequestBag = [];
+    private string $previousRequestMethod;
     private array $configValues = [];
     private string $previousLocale = '';
     private Connection $originalConnection;
@@ -99,11 +100,18 @@ abstract class DatabaseTestCase extends TestCase
         $this->previousGet = $_GET;
         $this->previousServer = $_SERVER;
         $this->previousRequestBag = QUI::getRequest()->request->all();
+        $this->previousRequestMethod = QUI::getRequest()->getMethod();
         $this->previousLocale = QUI::getLocale()->getCurrent();
 
         $Session = QUI::getSession();
 
-        foreach (['uid', 'username', 'inAuthentication', 'auth', 'auth-primary', 'auth-secondary', 'secHash'] as $key) {
+        foreach (
+            [
+            'uid', 'username', 'inAuthentication', 'auth', 'auth-primary', 'auth-secondary', 'secHash',
+            QUI\Security\CsrfToken::SESSION_KEY,
+            QUI\FrontendUsers\ProfileSecurity::RECENT_AUTH_SESSION_KEY
+            ] as $key
+        ) {
             $this->previousSessionValues[$key] = $Session->get($key);
         }
 
@@ -127,6 +135,7 @@ abstract class DatabaseTestCase extends TestCase
         $_GET = $this->previousGet;
         $_SERVER = $this->previousServer;
         QUI::getRequest()->request->replace($this->previousRequestBag);
+        QUI::getRequest()->setMethod($this->previousRequestMethod);
 
         $this->setConnection($this->originalConnection);
         QUI::$Rights = $this->previousPermissionManager;

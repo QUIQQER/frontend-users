@@ -461,6 +461,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/Profile', [
                     'package': 'quiqqer/frontend-users',
                     category: self.$category,
                     settings: self.$settings,
+                    _csrf: self.getElm().querySelector('[data-name="csrf-token"]')?.value ?? '',
                     data: JSON.encode(data),
                     onError: function (error) {
                         self.fireEvent('saveError', [self, error]);

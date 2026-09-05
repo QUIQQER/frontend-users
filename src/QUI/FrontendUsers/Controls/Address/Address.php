@@ -57,6 +57,10 @@ class Address extends QUI\Control
      */
     public function getBody(): string
     {
+        if (isset($_REQUEST['createSave']) || isset($_REQUEST['editSave']) || isset($_REQUEST['executeDeletion'])) {
+            QUI\FrontendUsers\ProfileSecurity::assertValidRequest();
+        }
+
         /* @var $User QUI\Users\User */
         $User = QUI::getUserBySession();
         $Engine = QUI::getTemplateManager()->getEngine();
@@ -124,6 +128,7 @@ class Address extends QUI\Control
 
         $Engine->assign([
             'this' => $this,
+            'csrfToken' => QUI\Security\CsrfToken::get(),
             'User' => $User,
             'UserAddress' => $UserAddress,
             'addresses' => $addresses
@@ -163,6 +168,7 @@ class Address extends QUI\Control
 
         $Engine->assign([
             'this' => $this,
+            'csrfToken' => QUI\Security\CsrfToken::get(),
             'Address' => $Address,
             'User' => $User,
             'phone' => $Address->getPhone(),
@@ -260,6 +266,7 @@ class Address extends QUI\Control
 
         $Engine->assign([
             'this' => $this,
+            'csrfToken' => QUI\Security\CsrfToken::get(),
             'Address' => $Address,
             'User' => $User
         ]);
@@ -304,6 +311,7 @@ class Address extends QUI\Control
 
         $Engine->assign([
             'this' => $this,
+            'csrfToken' => QUI\Security\CsrfToken::get(),
             'currentCountry' => $currentCountry,
             'countries' => QUI\Countries\Manager::getList(),
             'User' => $User

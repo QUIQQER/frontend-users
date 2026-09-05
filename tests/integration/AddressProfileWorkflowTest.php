@@ -85,6 +85,8 @@ class AddressProfileWorkflowTest extends DatabaseTestCase
             'executeDeletion' => 1,
             'addressId' => $Created->getUUID()
         ];
+        QUI::getRequest()->setMethod('POST');
+        QUI::getRequest()->request->set('_csrf', QUI\Security\CsrfToken::get());
         self::assertIsString($Control->getBody());
         self::assertCount($before, $User->getAddressList());
     }

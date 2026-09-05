@@ -754,6 +754,22 @@ class Handler extends Singleton
 
             QUI\System\Log::writeException($Exception);
         }
+
+        $oldEmail = $User->getAttribute('email');
+
+        if (is_string($oldEmail) && $oldEmail !== '' && $oldEmail !== $newEmail) {
+            try {
+                $this->sendMail(
+                    ['subject' => $L->get($lg, 'mail.change_email_address.notice.subject')],
+                    [$oldEmail],
+                    $tplDir . 'mail.change_email_address.html',
+                    ['body' => $L->get($lg, 'mail.change_email_address.notice.body')],
+                    $Project
+                );
+            } catch (\Exception $Exception) {
+                QUI\System\Log::writeException($Exception);
+            }
+        }
     }
 
     /**

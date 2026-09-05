@@ -240,6 +240,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
                     QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_create', resolve, {
                         'package': 'quiqqer/frontend-users',
+                        _csrf: Form.querySelector('[data-name="csrf-token"]')?.value ?? '',
                         data: JSON.encode(formData),
                         onError: (err) => {
                             QUI.getMessageHandler().then(function (MH) {
@@ -363,9 +364,12 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
          * @param {Integer} addressId
          */
         deleteAddress: function (addressId) {
+            const csrfToken = this.getElm().querySelector('[data-name="csrf-token"]')?.value ?? '';
+
             return new Promise(function (resolve, reject) {
                 QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_delete', resolve, {
                     'package': 'quiqqer/frontend-users',
+                    _csrf: csrfToken,
                     addressId: addressId,
                     onError: reject
                 });
@@ -462,6 +466,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/address/Manager', [
 
                     QUIAjax.post('package_quiqqer_frontend-users_ajax_frontend_profile_address_edit', resolve, {
                         'package': 'quiqqer/frontend-users',
+                        _csrf: Form.querySelector('[data-name="csrf-token"]')?.value ?? '',
                         data: JSON.encode(formData),
                         addressId: formData.addressId,
                         onError: (err) => {

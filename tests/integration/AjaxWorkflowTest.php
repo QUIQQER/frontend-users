@@ -270,7 +270,11 @@ class AjaxWorkflowTest extends DatabaseTestCase
         );
 
         $profileCategoriesCache = 'package/quiqqer/frontendUsers/profileCategories';
-        $previousProfileCategories = CacheManager::get($profileCategoriesCache);
+        try {
+            $previousProfileCategories = CacheManager::get($profileCategoriesCache);
+        } catch (QUI\Cache\Exception) {
+            $previousProfileCategories = null;
+        }
         CacheManager::set($profileCategoriesCache, [
             'user' => [
                 'name' => 'user',
@@ -294,7 +298,11 @@ class AjaxWorkflowTest extends DatabaseTestCase
             ]));
             self::assertTrue((bool)$SystemUser->getAttribute('quiqqer.frontendUsers.useGravatarIcon'));
         } finally {
-            CacheManager::set($profileCategoriesCache, $previousProfileCategories);
+            if ($previousProfileCategories === null) {
+                CacheManager::clear($profileCategoriesCache);
+            } else {
+                CacheManager::set($profileCategoriesCache, $previousProfileCategories);
+            }
         }
     }
 
@@ -322,6 +330,18 @@ class AjaxWorkflowTest extends DatabaseTestCase
 
     private function call(string $file, array $values = []): mixed
     {
+        if (
+            in_array($file, [
+            'frontend/profile/save.php',
+            'frontend/profile/address/create.php',
+            'frontend/profile/address/edit.php',
+            'frontend/profile/address/delete.php'
+            ], true)
+        ) {
+            QUI::getRequest()->setMethod('POST');
+            QUI::getRequest()->request->set('_csrf', QUI\Security\CsrfToken::get());
+        }
+
         $result = $this->callRaw($file, $values);
         self::assertArrayNotHasKey('Exception', $result, $file . ': ' . json_encode($result));
 
