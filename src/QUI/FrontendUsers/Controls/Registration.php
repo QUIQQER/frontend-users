@@ -10,6 +10,7 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\FrontendUsers\RegistrarCollection;
+use QUI\FrontendUsers\RegistrationPolicy;
 use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Projects\Site\Utils as QUISiteUtils;
 
@@ -530,23 +531,13 @@ class Registration extends QUI\Control
         $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);
 
-        // check Terms Of Use
-        if (
-            !empty($registrationSettings['termsOfUseRequired'])
-            && empty($_POST['termsOfUseAccepted'])
-        ) {
-            throw new QUI\FrontendUsers\Exception([
-                'quiqqer/frontend-users',
-                'exception.registration.terms_of_use_not_accepted'
-            ]);
-        }
-
         // Set validation settings
         $Registrar->setAttributes([
             'addressValidation' => $this->getAttribute('addressValidation')
         ]);
 
-        $Registrar->validate();
+        $Policy = new RegistrationPolicy();
+        $Policy->validate($Registrar);
 
         // Check user data
         $username = $Registrar->getUsername();
@@ -577,12 +568,7 @@ class Registration extends QUI\Control
         }
 
         // set registration/registrar data to user
-        $NewUser->setAttributes([
-            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT => $Project->getName(),
-            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT_LANG => $Project->getLang(),
-            $RegistrarHandler::USER_ATTR_REGISTRAR => $Registrar->getType(),
-            $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED => true
-        ]);
+        $Policy->setUserAttributes($NewUser, $Registrar, $Project);
 
         // handle onRegistered from Registrar
         try {
@@ -632,40 +618,7 @@ class Registration extends QUI\Control
             $NewUser->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
         }
 
-        // determine registration status
-        $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_SUCCESS;
-        $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
-
-        switch ($registrarSettings['activationMode']) {
-            case $RegistrarHandler::ACTIVATION_MODE_MAIL:
-                $sendMailSuccess = $RegistrarHandler->sendActivationMail($NewUser, $Registrar);
-
-                if (!$sendMailSuccess) {
-                    throw new QUI\FrontendUsers\Exception([
-                        'quiqqer/frontend-users',
-                        'exception.registration.send_mail_error'
-                    ]);
-                }
-
-                $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_PENDING;
-                break;
-
-            case $RegistrarHandler::ACTIVATION_MODE_AUTO:
-            case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
-                if (!$NewUser->isActive()) {
-                    $NewUser->activate('', $SystemUser);
-                    // TODO set login session ???
-                }
-
-                if ($registrarSettings['activationMode'] == $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM) {
-                    $RegistrarHandler->sendEmailConfirmationMail(
-                        $NewUser,
-                        $NewUser->getAttribute('email'),
-                        $Project
-                    );
-                }
-                break;
-        }
+        $registrationStatus = $Policy->activate($NewUser, $Registrar, $Project);
 
         $this->RegisteredUser = $NewUser;
 

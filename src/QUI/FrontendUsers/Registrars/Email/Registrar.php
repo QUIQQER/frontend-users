@@ -225,7 +225,7 @@ class Registrar extends FrontendUsers\AbstractRegistrar
                 ]);
             }
 
-            if (class_exists('QUI\Captcha\Handler') && !QUI\Captcha\Handler::isResponseValid($captchaResponse)) {
+            if (!class_exists('QUI\Captcha\Handler') || !QUI\Captcha\Handler::isResponseValid($captchaResponse)) {
                 throw new FrontendUsers\Exception([
                     $lg,
                     $lgPrefix . 'captcha_invalid_response'

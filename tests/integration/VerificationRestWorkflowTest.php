@@ -278,6 +278,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
 
     public function testRestRegistrationDataValidationAndAddressMapping(): void
     {
+        $this->configureRestRegistrationPolicy();
         $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
         $this->setPackageConfig('registration', 'passwordInput', Handler::PASSWORD_INPUT_DEFAULT);
         $this->setPackageConfig('registration', 'fullnameInput', Handler::FULLNAME_INPUT_FULLNAME_REQUIRED);
@@ -347,22 +348,22 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         self::assertSame(400, $Response->getStatusCode());
     }
 
-    public function testRestRegistrationCreatesUserWithoutDeliveringMailForEmptyRecipient(): void
+    public function testRestRegistrationCreatesPendingUserWithoutActivationMail(): void
     {
+        $this->configureRestRegistrationPolicy();
         $Group = $this->createGroup();
         $this->setPackageConfig('registration', 'defaultGroups', $Group->getUUID());
         $this->setPackageConfig('registration', 'forcePasswordReset', 1);
         $this->setPackageConfig('registration', 'addressInput', 0);
         $this->setPackageConfig('registration', 'sendInfoMailOnRegistrationTo', '');
         $suffix = bin2hex(random_bytes(5));
-        $RegistrationData = new class extends RegistrationData {
-            public function validate(): void
-            {
-            }
-        };
+        $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
+        $this->setPackageConfig('registration', 'passwordInput', Handler::PASSWORD_INPUT_DEFAULT);
+        $this->setPackageConfig('registration', 'fullnameInput', Handler::FULLNAME_INPUT_FULLNAME_OPTIONAL);
+        $RegistrationData = new RegistrationData();
         $RegistrationData->setAttributes([
             'username' => self::TEST_PREFIX . 'rest-create-' . $suffix,
-            'email' => '',
+            'email' => self::TEST_PREFIX . 'rest-create-' . $suffix . '@example.invalid',
             'firstname' => 'REST',
             'lastname' => 'Created',
             'password' => 'phpunit-rest-created-password'
@@ -374,6 +375,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             $User = $Method->invoke(null, $RegistrationData);
 
             self::assertSame('REST', $User->getAttribute('firstname'));
+            self::assertFalse($User->isActive());
             self::assertTrue($User->isInGroup($Group->getUUID()));
             self::assertTrue((bool)$User->getAttribute('quiqqer.set.new.password'));
         } finally {
@@ -383,6 +385,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
 
     public function testRestRegistrationValidationRejectsEachRequiredInputClass(): void
     {
+        $this->configureRestRegistrationPolicy();
         $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
         $this->setPackageConfig('registration', 'passwordInput', Handler::PASSWORD_INPUT_DEFAULT);
         $this->setPackageConfig('registration', 'fullnameInput', Handler::FULLNAME_INPUT_FULLNAME_REQUIRED);
@@ -440,6 +443,20 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         } catch (QUI\FrontendUsers\Exception $Exception) {
             self::assertNotSame('', $Exception->getMessage());
         }
+    }
+
+    private function configureRestRegistrationPolicy(): void
+    {
+        $this->setPackageConfig('registrars', 'registrarSettings', json_encode([
+            base64_encode(Registrar::class) => [
+                'active' => true,
+                'activationMode' => Handler::ACTIVATION_MODE_MANUAL,
+                'displayPosition' => 1
+            ]
+        ]));
+        $this->setPackageConfig('registration', 'termsOfUseRequired', 0);
+        $this->setPackageConfig('registration', 'useCaptcha', 0);
+        $this->setPackageConfig('registration', 'emailBlacklist', '[]');
     }
 
     private function createVerification(array $customData = []): LinkVerification
