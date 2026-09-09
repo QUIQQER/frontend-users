@@ -1,0 +1,1969 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<locales>
+
+    <groups name="quiqqer/frontend-users" datatype="php,js">
+        <locale name="exception.account_lookup.throttled">
+<de><![CDATA[Zu viele Abfragen. Bitte versuche es in 15 Minuten erneut. Deine Eingaben bleiben erhalten.]]></de>
+        </locale>
+        <locale name="exception.account_lookup.unavailable">
+<de><![CDATA[Die Prüfung ist momentan nicht möglich. Bitte versuche es später erneut. Deine Eingaben bleiben erhalten.]]></de>
+        </locale>
+        <locale name="settings.throttleLookupIpLimit.title">
+<de><![CDATA[Maximale Kontoabfragen pro IP]]></de>
+        </locale>
+        <locale name="settings.throttleLookupIpLimit.description">
+<de><![CDATA[Gemeinsames Limit für Benutzername-, E-Mail- und Aktivierungsabfragen innerhalb von 15 Minuten pro IP-Adresse. Unbekannte Konten zählen mit. Unabhängig von Registrierungs- und Mail-Limits. Mehrere Personen im selben Netzwerk teilen das Limit. Standard: 60; ganze Zahlen von 1 bis 1000000. Ungültige Werte verwenden den Standard.]]></de>
+        </locale>
+        <locale name="exception.registration.throttled">
+<de><![CDATA[Zu viele Registrierungsversuche. Bitte versuche es in 15 Minuten erneut.]]></de>
+        </locale>
+        <locale name="settings.throttleIpLimit.title">
+<de><![CDATA[Maximale Registrierungsversuche pro IP]]></de>
+        </locale>
+        <locale name="settings.throttleIpLimit.description">
+<de><![CDATA[Wie viele Registrierungsversuche innerhalb von 15 Minuten über dieselbe IP-Adresse erlaubt sind. Fehlgeschlagene Versuche zählen mit. Mehrere Personen können dieselbe IP-Adresse nutzen, etwa in einem Firmennetzwerk. Das Zeitfenster beginnt mit dem ersten Versuch und wird durch weitere Versuche nicht verlängert. Standard: 20. Erlaubt sind ganze Zahlen von 1 bis 1000000; ungültige Werte verwenden den Standard.]]></de>
+        </locale>
+        <locale name="settings.throttleIdentityLimit.title">
+<de><![CDATA[Maximale Registrierungsversuche pro Identität]]></de>
+        </locale>
+        <locale name="settings.throttleIdentityLimit.description">
+<de><![CDATA[Wie viele Registrierungsversuche innerhalb von 15 Minuten für dieselbe E-Mail-Adresse oder denselben Benutzernamen erlaubt sind – auch über unterschiedliche IP-Adressen. Beide Angaben werden separat gezählt. Fehlgeschlagene Versuche zählen mit. Groß-/Kleinschreibung und Leerzeichen am Anfang oder Ende werden bei der Zählung ignoriert. Das Zeitfenster beginnt mit dem ersten Versuch und wird durch weitere Versuche nicht verlängert. Standard: 5. Erlaubt sind ganze Zahlen von 1 bis 1000000; ungültige Werte verwenden den Standard.]]></de>
+        </locale>
+        <locale name="exception.profile.email_change.recent_auth_required">
+<de><![CDATA[Bitte melde dich ab und erneut an, bevor du deine E-Mail-Adresse änderst. Die Anmeldung darf höchstens zehn Minuten zurückliegen.]]></de>
+        </locale>
+        <locale name="mail.change_email_address.notice.subject">
+<de><![CDATA[Änderung deiner E-Mail-Adresse angefordert]]></de>
+        </locale>
+        <locale name="mail.change_email_address.notice.body" html="true">
+<de><![CDATA[<p>Für dein Benutzerkonto wurde eine Änderung der E-Mail-Adresse angefordert. Die Änderung wird erst nach Bestätigung der neuen Adresse wirksam.</p><p>Wenn du diese Änderung nicht angefordert hast, ändere bitte dein Passwort und kontaktiere den Betreiber der Website.</p>]]></de>
+        </locale>
+        <locale name="exception.registrars.email.email_blacklisted">
+<de>
+                <![CDATA[Die eingegebene E-Mail-Adresse kann nicht verwendet werden, da sie Wortbestandteile enthält, die nicht zugelassen sind.]]></de>
+        </locale>
+<!-- Cron -->
+        <locale name="cron.deleteUnverifiedInactiveUsers.title">
+<de><![CDATA[Nicht aktive Benutzer löschen]]></de>
+        </locale>
+        <locale name="cron.deleteUnverifiedInactiveUsers.description">
+<de><![CDATA[
+            Löscht automatisch alle Benutzer, die sich zwar über das Frontend registriert haben, aber nicht aktiviert wurden und bei denen die Registrierung länger als X Tage (Einstellung) her ist.
+            ]]></de>
+        </locale>
+        <locale name="cron.cleanup.title">
+<de><![CDATA[Benutzer aufräumen]]></de>
+        </locale>
+        <locale name="cron.cleanup.description">
+<de><![CDATA[Löscht automatisiert Benutzerkonten anhand der eingestellten Filterkriterien.]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.createDateFrom">
+<de><![CDATA[Ab Erstellungsdatum (JJJJ-MM-DD)]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.createDateTo">
+<de><![CDATA[Bis Erstellungsdatum (JJJJ-MM-DD)]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.atLeastDaysOld">
+<de><![CDATA[Mindestalter in Tagen (seit Erstellung)]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.atLeastNotLoggedInForDays">
+<de><![CDATA[Nicht eingeloggt für X Tage]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.activeStatus">
+<de><![CDATA[Aktivierungsstatus (1 = aktiv; 0 = inaktiv; -1 = aktiv und inaktiv)]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.inGroups">
+<de><![CDATA[Nur Benutzer in diesen Gruppen (Gruppen-IDs, kommasepariert)]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.notInGroups">
+<de><![CDATA[Nur Benutzer NICHT in diesen Gruppen (Gruppen-IDs, kommasepariert)]]></de>
+        </locale>
+        <locale name="cron.cleanup.param.emailVerified">
+<de><![CDATA[E-Mail-Bestätigungsstatus (1 = bestätigt; 0 = unbestätigt)]]></de>
+        </locale>
+
+        <locale name="package.title">
+<de><![CDATA[QUIQQER - Frontend-Users]]></de>
+        </locale>
+        <locale name="menu.title">
+<de><![CDATA[Benutzer]]></de>
+        </locale>
+
+        <locale name="package.description">
+<de><![CDATA[
+            Das Frontend Users Modul erweitert QUIQQER mit einer Profil-Erweiterung und einer Registrierung für Benutzer
+            ]]></de>
+        </locale>
+
+        <locale name="admin.types.registration">
+<de><![CDATA[Registrierung]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp">
+<de><![CDATA[Registrierung mit SignUp]]></de>
+        </locale>
+        <locale name="admin.types.login">
+<de><![CDATA[Login]]></de>
+        </locale>
+        <locale name="admin.types.profile">
+<de><![CDATA[Benutzerprofil]]></de>
+        </locale>
+
+        <locale name="message.already.loged.in" html="true">
+<de><![CDATA[Sie sind bereits mit dem Benutzernamen <b>[username]</b> eingeloggt.]]></de>
+        </locale>
+        <locale name="message.user.saved.successfully">
+<de><![CDATA[Der Benutzer wurde erfolgreich gespeichert.]]></de>
+        </locale>
+
+<!-- Registrars -->
+        <locale name="registrar.email.title">
+<de><![CDATA[Registrierung per E-Mail]]></de>
+        </locale>
+        <locale name="registrar.email.description">
+<de>
+                <![CDATA[Registrierung eines Benutzerkontos durch die Eingabe einer E-Mail-Adresse und eines Passworts.]]></de>
+        </locale>
+
+<!-- Settings -->
+
+<!-- Settings: User profile -->
+        <locale name="settings.section.userProfile.title">
+<de><![CDATA[Sichtbare Kategorien im Benutzer-Profil]]></de>
+        </locale>
+        <locale name="profile.userdata.title">
+<de><![CDATA[Benutzerdaten]]></de>
+        </locale>
+        <locale name="profile.userdata.additional.title">
+<de><![CDATA[Zusätzliche Daten]]></de>
+        </locale>
+        <locale name="profile.userData.text">
+<de>
+                <![CDATA[Darf seine grundlegenden Benutzerdaten ändern (Vorname, Nachname, Geburtstag, E-Mail-Adresse, Benutzername)]]></de>
+        </locale>
+        <locale name="profile.address.text">
+<de><![CDATA[Darf seine Adress-Daten ändern]]></de>
+        </locale>
+        <locale name="profile.changePassword.text">
+<de><![CDATA[Darf sein Passwort ändern]]></de>
+        </locale>
+        <locale name="profile.avatar.text">
+<de><![CDATA[Darf ein Benutzer-Bild festlegen]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.text">
+<de><![CDATA[Darf sein Benutzerkonto löschen (erfordert Bestätigung über E-Mail)]]></de>
+        </locale>
+        <locale name="settings.section.userAccount.title">
+<de><![CDATA[Benutzerkonto-Aktionen]]></de>
+        </locale>
+        <locale name="settings.section.userAccount.avatar.title">
+<de><![CDATA[Avatar]]></de>
+        </locale>
+        <locale name="settings.maxAvatarUploadSize.title">
+<de><![CDATA[Maximale Größe]]></de>
+        </locale>
+        <locale name="settings.maxAvatarUploadSize.description">
+<de><![CDATA[Legt die maximale Größe (in Byte) eines Avatars fest.]]></de>
+        </locale>
+
+        <locale name="settings.maxAvatarUploadHeight.title">
+<de><![CDATA[Maximale Höhe]]></de>
+        </locale>
+        <locale name="settings.maxAvatarUploadHeight.description">
+<de><![CDATA[Legt die maximale Höhe (in px) eines Avatars fest.]]></de>
+        </locale>
+
+        <locale name="settings.maxAvatarUploadWidth.title">
+<de><![CDATA[Maximale Breite]]></de>
+        </locale>
+        <locale name="settings.maxAvatarUploadWidth.description">
+<de><![CDATA[Legt die maximale Breite (in px) eines Avatars fest.]]></de>
+        </locale>
+
+        <locale name="settings.userDeleteMode.title">
+<de><![CDATA[Verhalten, wenn Benutzerkonto gelöscht wird]]></de>
+        </locale>
+        <locale name="settings.userDeleteMode.description">
+<de>
+                <![CDATA[
+                Legt fest, was intern mit einem Benutzerkonto passiert, das über das Frontend gelöscht wird.]]></de>
+        </locale>
+        <locale name="settings.userDeleteMode.option.delete">
+<de><![CDATA[Benutzerkonto als gelöscht markieren und alle Benutzerdaten beibehalten]]></de>
+        </locale>
+        <locale name="settings.userDeleteMode.option.wipe">
+<de><![CDATA[Benutzerkonto als gelöscht markieren und alle personenbezogenen Benutzerdaten löschen]]></de>
+        </locale>
+        <locale name="settings.userDeleteMode.option.destroy">
+<de><![CDATA[Benutzerkonto vollständig aus der Datenbank löschen (nicht wiederherstellbar!)]]></de>
+        </locale>
+        <locale name="settings.useGravatar.title">
+<de><![CDATA[Gravatar für Benutzerbilder verwenden]]></de>
+        </locale>
+        <locale name="settings.useGravatar.description">
+<de><![CDATA[Gravatar für Benutzerbilder verwenden]]></de>
+        </locale>
+        <locale name="settings.useGravatarUserDefaultValue.title">
+<de><![CDATA[Gravatar-Benutzerbild Standardwert]]></de>
+        </locale>
+        <locale name="settings.useGravatarUserDefaultValue.description">
+<de><![CDATA[Verwendung des Gravatar-Benutzerbilds ist bei Benutzern standardmäßig aktiviert]]></de>
+        </locale>
+        <locale name="settings.useAddressManagement.title">
+<de><![CDATA[Adressverwaltung]]></de>
+        </locale>
+        <locale name="settings.useAddressManagement.description">
+<de><![CDATA[Adressverwaltung im Frontend Profil aktivieren]]></de>
+        </locale>
+        <locale name="settings.categoryViewDefaultPermission.title">
+<de><![CDATA[Standard-Berechtigung für neue Profilkategorien]]></de>
+        </locale>
+        <locale name="settings.categoryViewDefaultPermission.description">
+<de>
+                <![CDATA[Benutzerprofil-Kategorien, die bei einem System-Setup initial eingelesen werden, sollen von Benutzern standardmäßig gesehen werden dürfen.]]></de>
+        </locale>
+
+<!-- Settings: ProfileBar -->
+        <locale name="settings.section.profileBar.title">
+<de><![CDATA[Benutzer-Leiste]]></de>
+        </locale>
+        <locale name="settings.showLogin.title">
+<de><![CDATA[Zeige Login]]></de>
+        </locale>
+        <locale name="settings.showLogin.description">
+<de>
+                <![CDATA[Zeige in der Benutzer-Leiste einen Button, der ein Login-Fenster öffnet, wenn kein Benutzer eingeloggt ist]]></de>
+        </locale>
+        <locale name="settings.showRegistration.title">
+<de><![CDATA[Zeige Registrierung]]></de>
+        </locale>
+        <locale name="settings.showRegistration.description" html="true">
+<de>
+                <![CDATA[Zeige in der Benutzer-Leiste einen Button, der auf die Registrierungs-Seite leitet, wenn kein Benutzer eingeloggt ist (setzt voraus, dass eine Seite mit dem Typ <b>Registrierung</b> angelegt und aktiv ist!)]]></de>
+        </locale>
+        <locale name="settings.showToProfile.description">
+<de>
+                <![CDATA[Zeige in der Benutzer-Leiste einen Button, der auf die Profil-Seite leitet]]></de>
+        </locale>
+        <locale name="settings.showToProfile.title" html="true">
+<de><![CDATA["Zum Profil"-Button anzeigen]]></de>
+        </locale>
+
+        <locale name="settings.defaultAvatar.title">
+<de><![CDATA[Standard Avatar-Bild]]></de>
+        </locale>
+        <locale name="settings.defaultAvatar.description" html="true">
+<de><![CDATA[
+            Bild, welches standardmäßig als Avatar-Icon in der Benutzer-Leiste angezeigt wird, wenn im Benutzer <b>kein</b> Bild hinterlegt ist. Ist hier <b>kein Bild ausgewählt</b>, wird der <b>erste Buchstabe</b> des Benutzernamens angezeigt.
+            ]]></de>
+        </locale>
+
+        <locale name="settings.section.profileAddress.title">
+<de><![CDATA[Adresse in der Profilverwaltung]]></de>
+        </locale>
+        <locale name="settings.showLanguageChangeInProfile">
+<de><![CDATA[Benutzer Sprache im Profil]]></de>
+        </locale>
+        <locale name="settings.showLanguageChangeInProfile.description">
+<de><![CDATA[Legt fest, ob der Benutzer im Profil seine Sprache ändern kann.]]></de>
+        </locale>
+
+<!-- Settings: Registration -->
+        <locale name="settings.section.registration.title">
+<de><![CDATA[Allgemeine Registrierungs-Einstellungen]]></de>
+        </locale>
+        <locale name="settings.category.registration.title">
+<de><![CDATA[Registrierung<br>(Allgemeine Einstellungen)]]></de>
+        </locale>
+        <locale name="settings.category.userProfile.title">
+<de><![CDATA[Benutzer-Profil]]></de>
+        </locale>
+        <locale name="settings.defaultGroups.title">
+<de><![CDATA[Standard-Gruppen]]></de>
+        </locale>
+        <locale name="settings.defaultGroups.description">
+<de>
+                <![CDATA[Gruppen, denen ein Benutzer nach einer erfolgreichen Registrierung automatisch zugewiesen wird.]]></de>
+        </locale>
+        <locale name="settings.sendInfoMailOnRegistrationTo.title">
+<de><![CDATA[E-Mail-Benachrichtigung bei Registrierung]]></de>
+        </locale>
+        <locale name="settings.sendInfoMailOnRegistrationTo.description">
+<de>
+                <![CDATA[E-Mail-Adressen, an die eine Informationsnachricht gesendet wird, wenn sich ein neuer Benutzer am System registriert.]]></de>
+        </locale>
+        <locale name="settings.sendMailOnRegistration.title">
+<de><![CDATA[Aktivierungs-Mail versenden]]></de>
+        </locale>
+        <locale name="settings.sendMailOnRegistration.description">
+<de>
+                <![CDATA[Jeder Benutzer bekommt nach der Registrierung einen Aktivierungs-Link per E-Mail, mit welchem er sein Benutzer-Konto aktivieren muss.]]></de>
+        </locale>
+        <locale name="settings.autoLoginOnActivation.title">
+<de><![CDATA[Automatischer Login nach Aktivierung]]></de>
+        </locale>
+        <locale name="settings.autoLoginOnActivation.description">
+<de>
+                <![CDATA[Benutzer nach Aktivierung automatisch in der ursprünglichen Registrierungssitzung anmelden (bis zu 24 Stunden). Bei manueller Aktivierung, einem anderen Browser oder aktivierter Zwei-Faktor-Authentifizierung ist eine reguläre Anmeldung erforderlich.]]></de>
+        </locale>
+        <locale name="settings.mailFromText.title">
+<de><![CDATA["Von"-Feld Bezeichner]]></de>
+        </locale>
+        <locale name="settings.mailFromText.description">
+<de>
+                <![CDATA[Legt den Bezeichner für das "Von"-Feld für alle E-Mails fest, die an Frontend-Benutzer versendet werden.]]></de>
+        </locale>
+        <locale name="settings.mailFromAddress.title">
+<de><![CDATA[Absender E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="settings.mailFromAddress.description">
+<de>
+                <![CDATA[Legt die Absender E-Mail-Adresse für alle E-Mails fest, die an Frontend-Benutzer versendet werden.]]></de>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.title">
+<de><![CDATA[Verhalten bei eingeloggten Benutzern auf Registrierungs-Seite]]></de>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.description">
+<de>
+                <![CDATA[Legt das Verhalten fest, wenn ein bereits eingeloggter Benutzer die Registrierungs-Seite der Webseite besucht.]]></de>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.showProfile">
+<de><![CDATA[Benutzerprofil anzeigen]]></de>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.showMessage">
+<de><![CDATA[Hinweis-Nachricht anzeigen ("Sie sind bereits registriert...")]]></de>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.nothing">
+<de><![CDATA[Kein besonderes Verhalten (zeige normale Registrierungs-Seite)]]></de>
+        </locale>
+        <locale name="settings.visitRegistrationSiteBehaviour.option.asRedirectOnActivation">
+<de>
+                <![CDATA[Weiterleiten zur selben Seite wie unter "Automatische Weiterleitung nach Aktivierung" festgelegt]]></de>
+        </locale>
+        <locale name="settings.addressInput.title">
+<de><![CDATA[Adress-Eingabe]]></de>
+        </locale>
+        <locale name="settings.addressInput.description">
+<de>
+                <![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihre Haupt-Adresse festzulegen (gilt nur für die Registrierungs-Methode via E-Mail!)]]></de>
+        </locale>
+
+        <locale name="settings.usernameInput.title">
+<de><![CDATA[Eingabe Benutzername]]></de>
+        </locale>
+        <locale name="settings.usernameInput.description">
+<de><![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Benutzernamen festzulegen]]></de>
+        </locale>
+        <locale name="settings.usernameInput.option.none">
+<de><![CDATA[Keine Eingabe des Benutzernamens]]></de>
+        </locale>
+        <locale name="settings.usernameInput.option.optional">
+<de><![CDATA[Benutzername ist optional]]></de>
+        </locale>
+        <locale name="settings.usernameInput.option.required">
+<de><![CDATA[Benutzername ist Pflichtangabe]]></de>
+        </locale>
+
+        <locale name="settings.fullnameInput.title">
+<de><![CDATA[Eingabe vollständiger Name]]></de>
+        </locale>
+        <locale name="settings.fullnameInput.description">
+<de>
+                <![CDATA[Benutzer haben die Möglichkeit, bei der Registrierung ihren Vor- und Nachnamen festzulegen]]></de>
+        </locale>
+        <locale name="settings.fullnameInput.option.none">
+<de><![CDATA[Keine Eingabe des Namens]]></de>
+        </locale>
+        <locale name="settings.fullnameInput.option.firstname_optional">
+<de><![CDATA[Nur Vorname (optional)]]></de>
+        </locale>
+        <locale name="settings.fullnameInput.option.firstname_required">
+<de><![CDATA[Nur Vorname (Pflichtangabe)]]></de>
+        </locale>
+        <locale name="settings.fullnameInput.option.fullname_optional">
+<de><![CDATA[Vor- und Nachname (optional)]]></de>
+        </locale>
+        <locale name="settings.fullnameInput.option.fullname_required">
+<de><![CDATA[Vor- und Nachname (Pflichtangabe)]]></de>
+        </locale>
+
+        <locale name="settings.passwordInput.title">
+<de><![CDATA[Passwort-Eingabe]]></de>
+        </locale>
+        <locale name="settings.passwordInput.description" html="true">
+<de>
+                <![CDATA[Bestimmt die Art der Passwort-Eingabe bei <b>Registrierung via E-Mail-Adresse</b>. Die Anzeige der Passwort-Stärke setzt aktiviertes <b>JavaScript</b> im Browser des Benutzers voraus.]]></de>
+        </locale>
+        <locale name="settings.passwordInput.option.default">
+<de><![CDATA[Passwort-Eingabe per Passwort-Feld]]></de>
+        </locale>
+        <locale name="settings.passwordInput.option.validation">
+<de><![CDATA[Passwort-Eingabe per Passwort-Feld mit Anzeige der Passwort-Stärke]]></de>
+        </locale>
+        <locale name="settings.passwordInput.option.none">
+<de><![CDATA[Keine Passwort-Eingabe]]></de>
+        </locale>
+        <locale name="settings.userWelcomeMail.title">
+<de><![CDATA["Willkommen"-E-Mail nach Aktivierung]]></de>
+        </locale>
+        <locale name="settings.userWelcomeMail.description">
+<de>
+                <![CDATA[
+                Dem Benutzer wird nach erfolgreicher Aktivierung des Benutzerkontos eine Willkommens-Mail geschickt.]]></de>
+        </locale>
+        <locale name="settings.autoRedirectOnSuccess.title">
+<de><![CDATA[Automatische Weiterleitung nach Aktivierung]]></de>
+        </locale>
+        <locale name="settings.autoRedirectOnSuccess.description" html="true">
+<de>
+                <![CDATA[
+                Automatische Weiterleitung auf die festgelegte Seite, nachdem der Benutzer erfolgreich aktiviert wurde. Die automatische Weiterleitung erfolgt nach <b>10 Sekunden</b>. <b>Hinweis:</b> Gilt nicht, wenn Benutzer nach einer Registrierung <b>manuell</b> aktiviert werden müssen.]]></de>
+        </locale>
+        <locale name="settings.reloadOnSuccess.title">
+<de><![CDATA[Seite neu laden nach Registrierung]]></de>
+        </locale>
+        <locale name="settings.reloadOnSuccess.description">
+<de>
+                <![CDATA[Nach einer erfolgreichen Registrierung soll die Seite neu geladen werden. Diese Einstellung überschreibt die Einstellung "Automatische Weiterleitung nach Aktivierung".]]></de>
+        </locale>
+        <locale name="settings.redirectOnLogin.title">
+<de><![CDATA[Automatische Weiterleitung nach Login]]></de>
+        </locale>
+        <locale name="settings.redirectOnLogin.description" html="true">
+<de>
+                <![CDATA[
+                Automatische Weiterleitung auf die festgelegte Seite, nachdem der Benutzer sich im Frontend erfolgreich eingeloggt hat oder wenn ein eingeloggter Benutzer die Login-Seite besucht. Wenn diese Einstellung leergelassen wird, findet keine Weiterleitung statt.]]></de>
+        </locale>
+        <locale name="settings.authenticators.title">
+<de><![CDATA[Verfügbare Login-Methoden]]></de>
+        </locale>
+        <locale name="settings.authenticators.description" html="true">
+<de>
+                <![CDATA[Legen Sie fest, welche Login-Methoden für Benutzer zur Verfügung stehen. Der Login mittels Benutzername/E-Mail-Adresse und Passwort ist <b>immer</b> aktiv.]]></de>
+        </locale>
+
+        <locale name="settings.category.login.title">
+<de><![CDATA[Login]]></de>
+        </locale>
+        <locale name="settings.section.login.title">
+<de><![CDATA[Allgemeine Einstellungen]]></de>
+        </locale>
+        <locale name="settings.useCaptcha.title">
+<de><![CDATA[CAPTCHA benutzen]]></de>
+        </locale>
+        <locale name="settings.useCaptcha.description" html="true">
+<de>
+                <![CDATA[Registrierung erfordert die Eingabe eines CAPTCHAs. <b>Achtung:</b> Je nach eingestelltem Captcha-Modul wird u.U. <b>JavaScript</b> vorausgesetzt. Mit deaktiviertem JavaScript im Browser des Benutzers ist in so einem Fall <b>keine Registrierung</b> möglich!]]></de>
+        </locale>
+        <locale name="settings.deleteInactiveUserAfterDays.title">
+<de><![CDATA[Nicht aktivierte Benutzer nach X Tagen löschen]]></de>
+        </locale>
+        <locale name="settings.deleteInactiveUserAfterDays.description" html="true">
+<de>
+                <![CDATA[Benutzer, die sich zwar registrieren, aber nicht aktivieren, werden automatisch nach X Tagen gelöscht. Dies setzt voraus, dass der Cron <b>Nicht aktive Benutzer löschen</b> eingerichtet und aktiviert ist. Betrifft <b>nicht</b> Benutzer, die über die Benutzerverwaltung deaktiviert wurden.]]></de>
+        </locale>
+        <locale name="settings.termsOfUseRequired.title">
+<de><![CDATA[Nutzungsbedingungen / Datenschutzbestimmungen]]></de>
+        </locale>
+        <locale name="settings.termsOfUseRequired.description" html="true">
+<de>
+                <![CDATA[Benutzer müssen vor der Registrierung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> zustimmen (setzt voraus, dass unter <b>Nutzungsbedingungen-Seiten</b> und/oder <b>Datenschutzbestimmungen-Seiten</b> Seiten eingestellt sind)]]></de>
+        </locale>
+        <locale name="settings.termsOfUseSite.title">
+<de><![CDATA[Nutzungsbedingungen-Seiten]]></de>
+        </locale>
+        <locale name="settings.termsOfUseSite.description" html="true">
+<de>
+                <![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Nutzungsbedingungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> aktiviert ist.]]></de>
+        </locale>
+        <locale name="settings.privacyPolicySite.title">
+<de><![CDATA[Datenschutzbestimmungen-Seiten]]></de>
+        </locale>
+        <locale name="settings.privacyPolicySite.description" html="true">
+<de>
+                <![CDATA[Legt die Seite fest, deren <b>Inhalt</b> die Datenschutzbestimmungen enthält, denen der Benutzer bei Registrierung zustimmen muss. Setzt voraus, dass die Einstellung <b>Nutzungsbedingungen / Datenschutzbestimmungen</b> aktiviert ist.]]></de>
+        </locale>
+        <locale name="settings.sendPassword.title">
+<de><![CDATA[Zufalls-Passwort erstellen & senden]]></de>
+        </locale>
+        <locale name="settings.sendPassword.description">
+<de>
+                <![CDATA[Bei Registrierung ein zufälliges Passwort erstellen und dem Benutzer in der "Willkommen"-Mail mitsenden.]]></de>
+        </locale>
+        <locale name="settings.forcePasswordReset.title">
+<de><![CDATA[Neues Passwort beim ersten Login]]></de>
+        </locale>
+        <locale name="settings.forcePasswordReset.description">
+<de><![CDATA[Der Benutzer muss beim ersten Login nach der Registrierung ein neues Passwort setzen.]]></de>
+        </locale>
+
+<!-- Settings: Registrars -->
+        <locale name="settings.section.registrars.title">
+<de><![CDATA[Spezifische Einstellungen für Registrierungs-Methoden]]></de>
+        </locale>
+        <locale name="settings.category.registrars.title">
+<de><![CDATA[Registrierungs-Methoden]]></de>
+        </locale>
+        <locale name="settings.registrarSettings.title">
+<de><![CDATA[Registrierungs-Methoden]]></de>
+        </locale>
+
+<!-- Settings: Address fields -->
+        <locale name="settings.section.registrationAddress.title">
+<de><![CDATA[Adress-Angabe bei Registrierung]]></de>
+        </locale>
+        <locale name="settings.category.registrationAddress.title">
+<de><![CDATA[Adressen]]></de>
+        </locale>
+
+<!-- Settings: Mail -->
+        <locale name="settings.category.mail.title">
+<de><![CDATA[E-Mail-Versand]]></de>
+        </locale>
+        <locale name="settings.section.mail.title">
+<de><![CDATA[E-Mail Absender]]></de>
+        </locale>
+        <locale name="settings.section.verification_mails.title">
+<de><![CDATA[Verifizierungs E-Mail]]></de>
+        </locale>
+        <locale name="settings.verificationValidityDuration.title">
+<de><![CDATA[Gültigkeitsdauer Verifizierungs-Mails]]></de>
+        </locale>
+        <locale name="settings.verificationValidityDuration.description">
+<de>
+                <![CDATA[Dauer in <b>Minuten</b>, die ein Verifizierungs-Link (z.B. Benutzerkonto-Aktivierung nach Registrierung, Änderung der E-Mail-Adresse) gültig ist.]]></de>
+        </locale>
+
+<!-- Control: Registration -->
+        <locale name="control.registration.label.username">
+<de><![CDATA[Benutzername]]></de>
+        </locale>
+        <locale name="control.registration.label.address">
+<de><![CDATA[Adresse]]></de>
+        </locale>
+        <locale name="control.registration.auto_redirect" html="true">
+<de>
+                <![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
+        </locale>
+        <locale name="control.registration.registration_disabled">
+<de><![CDATA[Eine Registrierung ist zur Zeit nicht möglich.]]></de>
+        </locale>
+        <locale name="control.registration.general_error">
+<de><![CDATA[Dieser Link ist nicht mehr gültig.]]></de>
+        </locale>
+        <locale name="control.registration.terms_of_use.title">
+<de><![CDATA[Nutzungsbedingungen]]></de>
+        </locale>
+        <locale name="control.registration.terms_of_use.info">
+<de><![CDATA[
+            Akzeptieren Sie unsere Nutzungsbedingungen und/oder Datenschutzbestimmungen, um mit der Registrierung fortzufahren.
+            ]]></de>
+        </locale>
+        <locale name="control.registration.terms_of_use.label">
+<de><![CDATA[
+            Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> gelesen
+            und erkläre mich damit einverstanden
+            ]]></de>
+        </locale>
+        <locale name="control.registration.privacy_policy.label">
+<de><![CDATA[
+            Ja, ich habe die <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden
+            ]]></de>
+        </locale>
+        <locale name="control.registration.terms_of_use_and_privacy_policy.label">
+<de><![CDATA[
+            Ja, ich habe die <a href="[termsOfUseUrl]" class="quiqqer-frontendusers-termsofuse-link">[termsOfUseSiteTitle]</a> und <a href="[privacyPolicyUrl]" class="quiqqer-frontendusers-privacypolicy-link">[privacyPolicySiteTitle]</a> gelesen und erkläre mich damit einverstanden
+            ]]></de>
+        </locale>
+        <locale name="exception.registration.registrar_not_found">
+<de><![CDATA[Ungültige Registrierungs-Methode]]></de>
+        </locale>
+        <locale name="exception.registration.terms_of_use_not_accepted">
+<de><![CDATA[Bitte akzeptieren Sie die Nutzungsbedingungen, um sich zu registrieren.]]></de>
+        </locale>
+        <locale name="exception.registration.username_too_long">
+<de>
+                <![CDATA[Der Benutzername bzw. die E-Mail-Adresse ist zu lang. Bitte geben Sie einen Benutzernamen oder eine E-Mail-Adresse mit maximal [maxLength] Zeichen an.]]></de>
+        </locale>
+        <locale name="control.registration.success">
+<de><![CDATA[Erfolg!]]></de>
+        </locale>
+        <locale name="controls.registration.general_error">
+<de><![CDATA[
+            Bei der Registrierung ist ein unerwarteter Fehler aufgetreten. Bitte wiederholen Sie den Registrierungsvorgang oder probieren Sie es später noch einmal.
+            ]]></de>
+        </locale>
+
+        <locale name="exception.registration.rest.project_required">
+<de><![CDATA[Bitte geben Sie einen gültigen Projektnamen und eine gültige Projektsprache an.]]></de>
+        </locale>
+
+<!-- Registrar: E-Mail -->
+        <locale name="exception.registrars.email.username_already_exists">
+<de><![CDATA[Der Benutzername existiert bereits.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.email_already_exists">
+<de><![CDATA[Die E-Mail-Adresse existiert bereits.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.email_invalid">
+<de><![CDATA[Die E-Mail-Adresse ist ungültig.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.first_name_required">
+<de><![CDATA[Bitte geben Sie Ihren Vornamen an.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.full_name_required">
+<de><![CDATA[Bitte geben Sie Ihren Vor- und Nachnamen an.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.password_missing">
+<de><![CDATA[Bitte geben Sie ein Passwort an.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.user_attribute_too_long">
+<de>
+                <![CDATA[Die Angabe für "[label]" ist zu lang. Bitte geben Sie für "[label]" maximal [maxLength] Zeichen an.]]></de>
+        </locale>
+
+        <locale name="registrars.email.javascript_required">
+<de><![CDATA[
+            JavaScript ist in Ihrem Browser deaktiviert. Bitte aktivieren Sie JavaScript in Ihrem Browser, um sich zu registrieren.
+            ]]></de>
+        </locale>
+
+<!-- Permissions -->
+        <locale name="permission.quiqqer.frontendUsers._header">
+<de><![CDATA[Frontend-Benutzer]]></de>
+        </locale>
+        <locale name="permission.quiqqer.frontendUsers.profile._header">
+<de><![CDATA[Profil]]></de>
+        </locale>
+        <locale name="permission.quiqqer.frontendUsers.profile.view._header">
+<de><![CDATA[Profil-Kategorien, die dieser Benutzer/Gruppe sehen darf]]></de>
+        </locale>
+        <locale name="permission.quiqqer.frontendUsers.profile.view.user._header">
+<de>
+                <![CDATA[Profil-Kategorien, die dieser Benutzer/Gruppe in der Kategorie "Benutzerdaten" sehen darf]]></de>
+        </locale>
+
+<!-- Site types -->
+        <locale name="quiqqer/frontend-users:types/registration.title">
+<de><![CDATA[Registrierung]]></de>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/registration.description">
+<de>
+                <![CDATA[Zeigt alle Registrierungs-Methoden, die in den Einstellungen festgelegt wurden. Bietet Besuchern einer Website die Möglichkeit, sich ein Benutzerkonto am System zu erstellen.]]></de>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/login.title">
+<de><![CDATA[Login]]></de>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/login.description">
+<de>
+                <![CDATA[
+                Zeigt eine Login-Maske, mit der sich Benutzer am System anmelden können. Je nach konfigurierten Authentifikatoren werden unterschiedliche Login-Methoden angezeigt.]]></de>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/profile.title">
+<de><![CDATA[Benutzerprofil]]></de>
+        </locale>
+        <locale name="quiqqer/frontend-users:types/profile.description">
+<de>
+                <![CDATA[Zeigt Benutzerdaten an und bietet die Möglichkeit, diese zu ändern (z.B. Adresse, Passwort etc.). Ist durch andere QUIQQER-Plugins erweiterbar.]]></de>
+        </locale>
+
+<!-- Category titles -->
+        <locale name="profile.avatar.title">
+<de><![CDATA[Aktuelles Benutzerbild]]></de>
+        </locale>
+        <locale name="profile.no.avatar.message">
+<de><![CDATA[Kein Bild festgelegt]]></de>
+        </locale>
+        <locale name="profile.avatar.upload.title">
+<de><![CDATA[Neues Benutzerbild hochladen]]></de>
+        </locale>
+        <locale name="profile.changepassword.title">
+<de><![CDATA[Passwort ändern]]></de>
+        </locale>
+        <locale name="profile.2fa.title">
+<de><![CDATA[Zwei-Faktor-Authentifizierung]]></de>
+        </locale>
+        <locale name="profile.2fa.not.enabled.title">
+<de><![CDATA[Die Zwei-Faktor-Authentifizierung ist nicht verfügbar.]]></de>
+        </locale>
+        <locale name="profile.2fa.not.enabled.description">
+<de><![CDATA[
+            Die Zwei-Faktor-Authentifizierung wurde für diesen Bereich noch nicht freigeschaltet.
+            ]]></de>
+        </locale>
+        <locale name="profile.2fa.no_authenticators_available">
+<de><![CDATA[Es sind keine Zwei-Faktor-Authentifizierungsmethoden verfügbar.]]></de>
+        </locale>
+        <locale name="profile.2fa.button.disable.authentication">
+<de><![CDATA[[title] deaktivieren]]></de>
+        </locale>
+        <locale name="profile.2fa.button.enable.authentication">
+<de><![CDATA[[title] aktivieren]]></de>
+        </locale>
+        <locale name="profile.2fa.label.enabled">
+<de><![CDATA[Authentifizierung ist aktiviert]]></de>
+        </locale>
+        <locale name="profile.2fa.label.disabled">
+<de><![CDATA[Authentifizierung ist deaktiviert]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.title">
+<de><![CDATA[Benutzerkonto löschen]]></de>
+        </locale>
+        <locale name="profile.address.title">
+<de><![CDATA[Adressen]]></de>
+        </locale>
+        <locale name="profile.address.category.title">
+<de><![CDATA[Adressenverwaltung]]></de>
+        </locale>
+        <locale name="profile.data.title">
+<de><![CDATA[Meine Daten]]></de>
+        </locale>
+        <locale name="profile.avatar.gravatar.title">
+<de><![CDATA[Gravatar]]></de>
+        </locale>
+
+        <locale name="dialog.frontend-users.btn.cancel">
+<de><![CDATA[Abbrechen]]></de>
+        </locale>
+
+        <locale name="dialog.frontend-users.address.delete.title">
+<de><![CDATA[Adresse löschen]]></de>
+        </locale>
+        <locale name="dialog.frontend-users.address.delete.message">
+<de><![CDATA[Möchten Sie die Adresse wirklich löschen?]]></de>
+        </locale>
+        <locale name="dialog.frontend-users.address.delete.btn">
+<de><![CDATA[Adresse löschen]]></de>
+        </locale>
+        <locale name="dialog.frontend-users.edit.title">
+<de><![CDATA[Neue Adresse anlegen]]></de>
+        </locale>
+        <locale name="dialog.frontend-users.create.address.btn">
+<de><![CDATA[Neue Adresse anlegen]]></de>
+        </locale>
+        <locale name="dialog.frontend-users.edit.title">
+<de><![CDATA[Adresse bearbeiten]]></de>
+        </locale>
+        <locale name="dialog.frontend-users.edit.address.btn">
+<de><![CDATA[Änderungen speichern]]></de>
+        </locale>
+
+        <locale name="salutation">
+<de><![CDATA[Anrede]]></de>
+        </locale>
+        <locale name="firstname">
+<de><![CDATA[Vorname]]></de>
+        </locale>
+        <locale name="lastname">
+<de><![CDATA[Nachname]]></de>
+        </locale>
+        <locale name="company">
+<de><![CDATA[Firma]]></de>
+        </locale>
+        <locale name="street_no">
+<de><![CDATA[Strasse und Hausnummer]]></de>
+        </locale>
+        <locale name="street">
+<de><![CDATA[Strasse]]></de>
+        </locale>
+        <locale name="house_no">
+<de><![CDATA[Hausnummer]]></de>
+        </locale>
+        <locale name="zip">
+<de><![CDATA[PLZ]]></de>
+        </locale>
+        <locale name="city">
+<de><![CDATA[Stadt]]></de>
+        </locale>
+        <locale name="country">
+<de><![CDATA[Land]]></de>
+        </locale>
+        <locale name="email">
+<de><![CDATA[E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="phone">
+<de><![CDATA[Tel]]></de>
+        </locale>
+        <locale name="phone_no">
+<de><![CDATA[Telefonnummer]]></de>
+        </locale>
+        <locale name="mobile">
+<de><![CDATA[Mobil]]></de>
+        </locale>
+        <locale name="fax">
+<de><![CDATA[Fax]]></de>
+        </locale>
+
+        <locale name="brick.AuthContent.title">
+<de><![CDATA[Frontend-Benutzer: Inhalt abh. v. Auth-Status u. Gruppe(n)]]></de>
+        </locale>
+        <locale name="brick.AuthContent.description">
+<de>
+                <![CDATA[Zeigt jeweils spezifischen Content, wenn ein Benutzer nicht eingeloggt, nicht in einer Gruppe oder in einer Gruppe ist.]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_guest.title">
+<de><![CDATA[Inhalt (Gast)]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_guest.description">
+<de><![CDATA[Inhalt, der angezeigt wird, wenn der Benutzer nicht eingeloggt ist.]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_not_in_groups.title">
+<de><![CDATA[Inhalt (nicht in Gruppe(n))]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_not_in_groups.description" html="true">
+<de><![CDATA[Inhalt, der angezeigt wird, wenn der Benutzer sich in keiner der festgelegten Gruppen befindet.<br/><br/>
+Verfügbare Platzhalter:
+<ul>
+<li><b>[username]</b> - Name des Benutzers
+</ul>]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_in_groups.title">
+<de><![CDATA[Inhalt (in Gruppe(n))]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.content_in_groups.description" html="true">
+<de><![CDATA[Inhalt, der angezeigt wird, wenn der Benutzer sich in mindestens einer der festgelegten Gruppen befindet.<br/><br/>
+Verfügbare Platzhalter:
+<ul>
+<li><b>[username]</b> - Name des Benutzers
+</ul>]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.groups.title">
+<de><![CDATA[Gruppen]]></de>
+        </locale>
+        <locale name="brick.AuthContent.settings.groups.description">
+<de>
+                <![CDATA[
+                Liste der Gruppen, von denen der Benutzer mindestens einer zugeordnet sein muss, um den "Inhalt (in Gruppe(n))"-Inhalt angezeigt zu bekommen.]]></de>
+        </locale>
+
+        <locale name="mail.delete_user_confirm.subject.description">
+<de><![CDATA[Keine Platzhalter verfügbar.]]></de>
+        </locale>
+        <locale name="mail.delete_user_confirm.body.description" html="true">
+<de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[confirmLink]</b> <i>(muss enthalten sein)</i> - Link zur Bestätigung der Kündigung des Benutzerkontos</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[date]</b> - Datum der Beantragung der Löschung des Benutzerkontos</li>
+</ul>]]></de>
+        </locale>
+        <locale name="mail.change_email_address.subject.description">
+<de><![CDATA[Keine Platzhalter verfügbar.]]></de>
+        </locale>
+        <locale name="mail.change_email_address.body.description" html="true">
+<de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[confirmLink]</b> <i>(muss enthalten sein)</i> - Link zur Bestätigung der neuen E-Mail-Adresse</li>
+    <li><b>[newEmail]</b> - Neue E-Mail-Adresse des Benutzers</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[date]</b> - Datum der Änderung der E-Mail-Adresse</li>
+</ul>]]></de>
+        </locale>
+        <locale name="mail.registration_activation.subject.description" html="true">
+<de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+</ul>]]></de>
+        </locale>
+        <locale name="mail.registration_activation.body.description">
+<de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[activationLink]</b> <i>(muss enthalten sein)</i> - Link zur Aktivierung des Benutzerkontos</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[date]</b> - Datum der Registrierung</li>
+</ul>]]></de>
+        </locale>
+        <locale name="mail.registration_welcome.subject.description" html="true">
+<de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+</ul>]]></de>
+        </locale>
+        <locale name="mail.registration_welcome.body.description" html="true">
+<de><![CDATA[Verfügbare Platzhalter:
+<ul>
+    <li><b>[loginUrl]</b> - Link zum Login (Startseite)</li>
+    <li><b>[username]</b> - Name des Benutzers</li>
+    <li><b>[host]</b> - URL der Website (z.B. https://www.meine-website.de)</li>
+    <li><b>[userPassword]</b> - Textabschnitt, der das Login-Passwort enthält. Wird nur eingefügt, wenn das Passwort zufällig generiert wurde und nicht, wenn der Benutzer das Passwort selbst festgelegt hat.</li>
+</ul>]]></de>
+        </locale>
+
+        <locale name="confirm.registration.tou.title">
+<de><![CDATA[Registrierung erforderlich – Zustimmung zu Nutzungsbedingungen]]></de>
+        </locale>
+        <locale name="confirm.registration.tou_tou_pp.title">
+<de>
+                <![CDATA[Registrierung erforderlich – Zustimmung zu Nutzungsbedingungen und Datenschutzerklärung]]></de>
+        </locale>
+        <locale name="confirm.registration.tou_pp.title">
+<de><![CDATA[Registrierung erforderlich – Zustimmung zu Datenschutzerklärung]]></de>
+        </locale>
+
+        <locale name="confirm.registration.tou.content">
+<de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen, musst du unseren Nutzungsbedingungen zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+        </locale>
+        <locale name="confirm.registration.tou_tou_pp.content">
+<de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen,
+            musst du unseren Nutzungsbedingungen und der Datenschutzerklärung zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+        </locale>
+        <locale name="confirm.registration.tou_pp.content">
+<de><![CDATA[
+            Um dein Konto mit deinem Social-Media-Login anzulegen, musst du unserer Datenschutzerklärung zustimmen.
+            Ohne deine Zustimmung kann die Registrierung nicht abgeschlossen werden.
+            ]]></de>
+        </locale>
+        <locale name="confirm.registration.tou_pp.submit">
+<de><![CDATA[Zustimmen]]></de>
+        </locale>
+        <locale name="confirm.registration.tou_pp.cancel">
+<de><![CDATA[Abbrechen]]></de>
+        </locale>
+
+        <locale name="registrars.email.btn.submit">
+<de><![CDATA[Weiter mit E-Mail]]></de>
+        </locale>
+        <locale name="registrars.email.username.btn.submit">
+<de><![CDATA[Weiter mit E-Mail oder Benutzername]]></de>
+        </locale>
+        <locale name="registrars.email.btn.login">
+<de><![CDATA[Login mit E-Mail]]></de>
+        </locale>
+        <locale name="registrars.email.username.btn.login">
+<de><![CDATA[Login mit E-Mail oder Benutzername]]></de>
+        </locale>
+
+        <locale name="registrars.email.message.already.exists">
+<de><![CDATA[Es gibt bereits ein Konto für diese E‑Mail-Adresse. Logge dich bitte ein.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired.resend_success">
+<de>
+                <![CDATA[Der Aktivierungs-Link wurde erfolgreich erneut versendet. Bitte prüfen Sie auch Ihren Spam-Ordner.]]></de>
+        </locale>
+
+        <locale name="control.registration.sign.up.password.next">
+<de><![CDATA[Weiter]]></de>
+        </locale>
+        <locale name="control.registration.address.header">
+<de><![CDATA[Ihre Adresse]]></de>
+        </locale>
+        <locale name="control.registration.address.subheader" html="true">
+<de><![CDATA[
+            <p>Damit Sie mit der Registrierung fortfahren können, benötigen wir noch Ihre Adresse</p>
+            ]]></de>
+        </locale>
+    </groups>
+
+    <groups name="quiqqer/frontend-users" datatype="php">
+        <locale name="settings.registration.emailBlacklist">
+<de><![CDATA[Registrierung E-Mail Blacklist]]></de>
+        </locale>
+        <locale name="settings.registration.emailBlacklist.description" html="true">
+<de><![CDATA[
+<p>Liste von E-Mail-Adressen oder Teilen von E-Mail-Adressen, mit denen sich Benutzer nicht registrieren dürfen.</p>
+<p><b>Ein Eintrag pro Zeile!</b></p>
+<p>Beispiele:
+<ul>
+<li><b>user@mail.com</b> - Verbietet eine explizite E-Mail-Adresse</li>
+<li><b>*@mail.com</b> - Verbietet alle E-Mail-Adressen der Domain "mail.com"</li>
+<li><b>user@*</b> - Verbietet alle E-Mail-Adressen, die mit user@ beginnen (unabhängig von der Domain)</li>
+</ul>
+</p>
+]]></de>
+        </locale>
+
+        <locale name="GdprDataProvider.title">
+<de><![CDATA[Daten aus Benutzerregistrierung]]></de>
+        </locale>
+        <locale name="GdprDataProvider.purpose">
+<de>
+                <![CDATA[Ausführung der Website-Funktionen, die grundlegende Benutzerdaten erfordern (z.B. Zusendung angeforderter Dokumente, Zuordnung und Speicherung von benutzerspezifischen Daten zu einem Benutzerkonto).]]></de>
+        </locale>
+        <locale name="GdprDataProvider.recipients">
+<de><![CDATA[Eine Weitergabe dieser personenbezogenen Daten an Dritte erfolgt nicht.]]></de>
+        </locale>
+        <locale name="GdprDataProvider.storageDuration">
+<de>
+                <![CDATA[
+                Die Daten aus der Benutzerregistrierung werden solange gespeichert, wie Sie das Angebot nutzen möchten, für welches ein Benutzerkonto erforderlich ist. Sie haben jederzeit die Möglichkeit, Ihr Benutzerkonto zu löschen.]]></de>
+        </locale>
+        <locale name="GdprDataProvider.origin.defaultRegistrarTitle">
+<de><![CDATA[Registrierungsformular]]></de>
+        </locale>
+        <locale name="GdprDataProvider.origin">
+<de>
+                <![CDATA[Die Daten stammen aus der von Ihnen durchgeführten Registrierung per [registrarTitle]. Sofern Sie sich über ein Konto bei einem Drittanbieter (z.B. Facebook, Google) registriert haben, stammen die Daten von diesem Drittanbieter (in dem von Ihnen freigegebenen Umfang). Die Benutzer-ID ist eine automatisch generierte Zahl, die Ihr Benutzerkonto in unserem System eindeutig identifiziert.]]></de>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.userId">
+<de><![CDATA[Benutzer-ID]]></de>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.email">
+<de><![CDATA[E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.firstName">
+<de><![CDATA[Vorname]]></de>
+        </locale>
+        <locale name="GdprDataProvider.userDataField.lastName">
+<de><![CDATA[Nachname]]></de>
+        </locale>
+
+        <locale name="profilebar.to_profile">
+<de><![CDATA[Benutzerprofil]]></de>
+        </locale>
+
+        <locale name="verification.ActivationVerification.success">
+<de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert!]]></de>
+        </locale>
+        <locale name="verification.ActivationVerification.success_send_password">
+<de>
+                <![CDATA[
+                Ihr Benutzerkonto wurde erfolgreich aktiviert! Sie erhalten nun Ihre Zugangsdaten per E-Mail.]]></de>
+        </locale>
+        <locale name="verification.ActivationVerification.error.general">
+<de>
+                <![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+        </locale>
+        <locale name="verification.ActivationVerification.error.expired">
+<de>
+                <![CDATA[Der Aktivierungs-Link ist abgelaufen. Bitte fordern Sie einen neuen Aktivierungs-Link an.]]></de>
+        </locale>
+
+<!-- Control: RegistrationSignUp -->
+        <locale name="RegistrationSignUp.message.success.activation">
+<de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.success.activation_logged_in">
+<de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.success.emailconfirm">
+<de><![CDATA[Ihre E-Mail-Adresse wurde erfolgreich bestätigt.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.success.userdelete">
+<de>
+                <![CDATA[Ihr Benutzerkonto wurde erfolgreich gelöscht.<br/><br/><a href="[startUrl]">Zurück zur Startseite</a>]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation">
+<de>
+                <![CDATA[Leider ist bei der Aktivierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired">
+<de>
+                <![CDATA[Der Aktivierungs-Link für Ihr Benutzerkonto ist abgelaufen.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired.resend_info">
+<de>
+                <![CDATA[Sie können hier direkt einen neuen Aktivierungs-Link anfordern.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.activation_expired.resend_fail">
+<de>
+                <![CDATA[Der Aktivierungs-Link konnte nicht erneut versendet werden. Bitte versuchen Sie es später noch einmal.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.emailconfirm">
+<de>
+                <![CDATA[
+                Leider ist bei der Bestätigung Ihrer E-Mail-Adresse ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.userdelete">
+<de>
+                <![CDATA[Leider ist beim Löschen Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.registration">
+<de>
+                <![CDATA[Leider ist bei der Registrierung Ihres Benutzerkontos ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.already_verified">
+<de>
+                <![CDATA[Ihr Benutzerkonto wurde bereits aktiviert.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.button.login">
+<de><![CDATA[Zum Login]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.error.userdelete.login">
+<de>
+                <![CDATA[Leider ist beim Login-Vorgang ein Fehler aufgetreten. Bitte wiederholen Sie den Vorgang.]]></de>
+        </locale>
+        <locale name="RegistrationSignUp.message.redirect">
+<de>
+                <![CDATA[Sie werden in wenigen Sekunden automatisch weitergeleitet. Wenn Sie direkt fortfahren möchten, <a href="[url]">klicken Sie bitte hier</a>.]]></de>
+        </locale>
+
+        <locale name="message.UserDeleteConfirmVerification.success">
+<de><![CDATA[Ihr Benutzerkonto wurde erfolgreich gelöscht.]]></de>
+        </locale>
+
+<!-- Ajax -->
+        <locale name="exception.ajax.frontend_register.general_error">
+<de><![CDATA[
+            Bei der Registrierung ist ein unerwarteter Fehler aufgetreten.
+            Bitte kontaktieren Sie einen Administrator oder versuchen Sie es später noch einmal.
+            ]]></de>
+        </locale>
+
+
+        <locale name="control.registration.or">
+<de><![CDATA[oder]]></de>
+        </locale>
+
+<!-- Profile: General -->
+        <locale name="profile.no_categories_available">
+<de><![CDATA[Sie haben z.Z. nicht die Berechtigung, Ihr Benutzerprofil einzusehen oder zu ändern.]]></de>
+        </locale>
+
+<!-- Profile: UserData -->
+        <locale name="profile.user.title">
+<de><![CDATA[Benutzerdaten]]></de>
+        </locale>
+
+        <locale name="profile.userdata.save">
+<de><![CDATA[Speichern]]></de>
+        </locale>
+        <locale name="profile.userdata.firstname">
+<de><![CDATA[Vorname]]></de>
+        </locale>
+        <locale name="profile.userdata.lastname">
+<de><![CDATA[Nachname]]></de>
+        </locale>
+        <locale name="profile.userdata.dateOfBirth">
+<de><![CDATA[Geburtstag]]></de>
+        </locale>
+        <locale name="profile.userdata.username">
+<de><![CDATA[Benutzername]]></de>
+        </locale>
+        <locale name="profile.userdata.language">
+<de><![CDATA[Sprache]]></de>
+        </locale>
+        <locale name="profile.userdata.email">
+<de><![CDATA[E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="profile.userdata.email_new">
+<de><![CDATA[Neue E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="profile.userdata.email_new_hint" html="true">
+<de><![CDATA[<b>Hinweis:</b> Nach dem Speichern muss die neue E-Mail-Adresse bestätigt werden.]]></de>
+        </locale>
+        <locale name="profile.userdata.userData.text">
+<de><![CDATA[Benutzerdaten]]></de>
+        </locale>
+        <locale name="profile.userdata.changePassword.text">
+<de><![CDATA[Passwort ändern]]></de>
+        </locale>
+        <locale name="exception.controls.profile.userdata.invalid_new_email_address">
+<de><![CDATA[
+            Die neue E-Mail-Adresse ist nicht gültig. Bitte geben Sie eine gültige E-Mail-Adresse an, wenn Sie Ihre aktuelle E-Mail-Adresse ändern möchten.
+            ]]></de>
+        </locale>
+        <locale name="exception.controls.profile.userdata.new_email_address_no_change">
+<de><![CDATA[
+            Bitte geben Sie eine andere E-Mail-Adresse als Ihre aktuelle an, wenn Sie Ihre E-Mail-Adresse ändern möchten.
+            ]]></de>
+        </locale>
+        <locale name="exception.controls.profile.userdata.new_email_address_already_exists">
+<de><![CDATA[
+            Die E-Mail-Adresse, die Sie angegeben haben, kann nicht verwendet werden. Bitte geben Sie eine andere E-Mail-Adresse an.
+            ]]></de>
+        </locale>
+        <locale name="profile.userdata.message.change_email_request">
+<de><![CDATA[
+            Sie haben die Änderung Ihrer E-Mail-Adresse beantragt. Klicken Sie bitte auf den Aktivierungs-Link, der Ihnen an die neue E-Mail-Adresse gesendet wurde.
+            ]]></de>
+        </locale>
+        <locale name="profile.userdata.message.change_email_success">
+<de><![CDATA[Ihre E-Mail-Adresse wurde erfolgreich geändert.]]></de>
+        </locale>
+        <locale name="profile.userdata.message.change_email_error">
+<de><![CDATA[
+            Das Ändern Ihrer E-Mail-Adresse hat leider nicht funktioniert. Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.
+            ]]></de>
+        </locale>
+        <locale name="exception.controls.profile.address.required_fields_empty">
+<de><![CDATA[Bitte füllen Sie alle Pflichtfelder aus.]]></de>
+        </locale>
+
+<!-- Profile: ChangePassword -->
+        <locale name="profile.changepassword.label.password_old">
+<de><![CDATA[Aktuelles Passwort]]></de>
+        </locale>
+        <locale name="profile.changepassword.label.password_new">
+<de><![CDATA[Neues Passwort]]></de>
+        </locale>
+        <locale name="profile.changepassword.label.password_new_confirm">
+<de><![CDATA[Neues Passwort bestätigen]]></de>
+        </locale>
+        <locale name="profile.changepassword.btn.submit">
+<de><![CDATA[Passwort ändern]]></de>
+        </locale>
+        <locale name="exception.controls.profile.changepassword.wrong_password">
+<de><![CDATA[Ihr aktuelles Passwort ist falsch. Bitte geben Sie das korrekte Login-Passwort an.]]></de>
+        </locale>
+
+<!-- Profile: Delete account -->
+        <locale name="exception.profile.deleteaccount.recent_auth_required">
+<de><![CDATA[Bitte melde dich ab und erneut mit dem zu löschenden Konto an. Öffne danach im Profil die Kontolöschung und bestätige sie innerhalb von zehn Minuten.]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.message.confirm_ready">
+<de><![CDATA[Die E-Mail-Bestätigung liegt vor. Dein Konto wurde noch nicht gelöscht. Melde dich bei Bedarf erneut mit diesem Konto an und bestätige die unwiderrufliche Löschung im Profil innerhalb von zehn Minuten nach der Anmeldung.]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.btn.confirm">
+<de><![CDATA[Mein Konto jetzt unwiderruflich löschen]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.info">
+<de>
+                <![CDATA[Bitte klicken Sie auf den Button, um Ihr Benutzerkonto zu löschen. Öffnen Sie anschließend den Link aus der E-Mail und bestätigen Sie die Löschung nach einer aktuellen Anmeldung noch einmal im Profil.]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.btn.submit">
+<de><![CDATA[Benutzerkonto löschen]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.btn.submit_again">
+<de><![CDATA[Mail erneut senden]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.btn.cancel">
+<de><![CDATA[Löschanfrage widerrufen]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.message.confirm_wait">
+<de><![CDATA[
+            Bitte bestätigen Sie die Löschung Ihres Benutzerkontos über den Link,
+            der Ihnen per E-Mail zugesandt wurde.
+            ]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.confirm_wait.text">
+<de><![CDATA[<strong>E-Mail nicht erhalten?</strong><br>Sie können die Bestätigungs-E-Mail erneut senden oder Ihre Löschanfrage unten abbrechen.]]></de>
+        </locale>
+        <locale name="profile.deleteaccount.message.error">
+<de><![CDATA[
+            Das Löschen Ihres Benutzerkontos hat leider nicht funktioniert.
+            Bitte wiederholen Sie den Vorgang oder versuchen Sie es später noch einmal.
+            ]]></de>
+        </locale>
+
+<!-- Profile: Address -->
+        <locale name="profile.address.btn.submit">
+<de><![CDATA[Speichern]]></de>
+        </locale>
+
+<!-- Profile: UserAvatar -->
+        <locale name="profile.useravatar.gravatar_option">
+<de><![CDATA[Gravatar benutzen ([email])]]></de>
+        </locale>
+
+        <locale name="settings.userAvatarUploadAllowed.title">
+<de><![CDATA[Upload eines Benutzerbildes erlauben]]></de>
+        </locale>
+        <locale name="settings.userAvatarUploadAllowed.description">
+<de><![CDATA[
+            Der Benutzer kann ein eigenes Benutzerbild hochladen. Benutzerbilder werden im Standardmedienbereich unter .users abgelegt.
+            ]]></de>
+        </locale>
+
+<!-- Class: Handler -->
+        <locale name="exception.handler.check_config.no_welcome_mail_for_password_send">
+<de><![CDATA[Die Einstellung „Zufalls-Passwort erstellen & senden“ ist aktiviert, die Einstellung „"Willkommen"-E-Mail nach Aktivierung“ jedoch deaktiviert. Bitte aktivieren Sie die Willkommens-Mail, damit dem Benutzer das Passwort zugesendet werden kann.]]></de>
+        </locale>
+
+<!-- Site type: types/registration -->
+        <locale name="message.types.registration.already_registered">
+<de><![CDATA[
+            Sie sind bereits registriert und haben ein aktives Benutzerkonto. Um ein neues Benutzerkonto zu registrieren, loggen Sie sich bitte aus.
+            ]]></de>
+        </locale>
+        <locale name="message.types.registration.configuration_error">
+<de><![CDATA[
+            Eine Registrierung ist z.Z. nicht möglich, da eine Fehlkonfiguration im Registrierungs-Modul vorliegt.
+            Bitte wenden Sie sich an einen Administrator.
+            ]]></de>
+        </locale>
+        <locale name="message.types.registration.not.possible">
+<de><![CDATA[Die Registrierung ist zur Zeit nicht möglich.]]></de>
+        </locale>
+
+<!-- Generic registration messages -->
+        <locale name="message.registration_pending">
+<de><![CDATA[
+            Die Registrierung war erfolgreich! Bevor Sie sich einloggen können, müssen Sie noch Ihr Benutzerkonto aktivieren.
+            Bitte klicken Sie dazu auf den Aktivierungslink, der Ihnen per E-Mail zugesandt wurde.
+            ]]></de>
+        </locale>
+        <locale name="message.registration_successful">
+<de><![CDATA[Die Registrierung war erfolgreich!]]></de>
+        </locale>
+        <locale name="message.registration_error">
+<de>
+                <![CDATA[Bei der Registrierung ist leider ein Fehler aufgetreten. Bitte versuchen Sie es nochmal oder kontaktieren Sie einen Administrator.]]></de>
+        </locale>
+
+<!-- Control: ProfileBar -->
+        <locale name="controls.profilebar.login_text">
+<de><![CDATA[Login]]></de>
+        </locale>
+        <locale name="controls.profilebar.registration_text">
+<de><![CDATA[Registrieren]]></de>
+        </locale>
+
+<!-- Control: Login -->
+        <locale name="control.login.title">
+<de><![CDATA[Anmelden]]></de>
+        </locale>
+        <locale name="control.login.button" html="true">
+<de><![CDATA[Login]]></de>
+        </locale>
+        <locale name="control.login.message.between">
+<de><![CDATA[oder verwende deine E-Mail-Adresse für den Login]]></de>
+        </locale>
+
+
+<!-- Class: AbstractRegistrar -->
+        <locale name="message.registrars.registration_success_manual">
+<de><![CDATA[
+            Die Registrierung war erfolgreich. Bevor Sie sich einloggen können, muss ein Administrator Ihr Benutzerkonto aktivieren.
+            ]]></de>
+        </locale>
+        <locale name="message.registrars.registration_success_auto">
+<de><![CDATA[Die Registrierung war erfolgreich. Ihr Benutzerkonto wurde automatisch aktiviert.]]></de>
+        </locale>
+        <locale name="message.registrars.registration_success_mail">
+<de><![CDATA[Ihr Benutzerkonto wurde erfolgreich aktiviert. Sie können sich nun einloggen.]]></de>
+        </locale>
+        <locale name="registrars.password_auto_generate">
+<de><![CDATA[
+            Ihr Zugangspasswort wird Ihnen nach der Aktivierung Ihres Benutzerkontos per E-Mail zugesandt.
+            ]]></de>
+        </locale>
+
+<!-- Registrar: Email -->
+        <locale name="registrars.email.label.email">
+<de><![CDATA[E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="registrars.email.label.email_confirm">
+<de><![CDATA[E-Mail-Adresse bestätigen]]></de>
+        </locale>
+        <locale name="registrars.email.label.password">
+<de><![CDATA[Passwort]]></de>
+        </locale>
+        <locale name="registrars.email.label.password_confirm">
+<de><![CDATA[Passwort bestätigen]]></de>
+        </locale>
+        <locale name="registrars.email.label.captcha">
+<de><![CDATA[Sicherheitsabfrage]]></de>
+        </locale>
+        <locale name="exception.registrars.email.empty_username">
+<de><![CDATA[Bitte geben Sie einen Benutzernamen an.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.empty_email">
+<de><![CDATA[Bitte geben Sie eine E-Mail-Adresse an.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.different_emails">
+<de><![CDATA[Die übergebenen E-Mail-Adressen stimmen nicht überein.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.different_passwords">
+<de><![CDATA[Die übergebenen Passwörter stimmen nicht überein.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.missing_address_fields">
+<de><![CDATA[Es wurden nicht alle Adress-Pflichtfelder angegeben.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.missing_field">
+<de><![CDATA[Bitte füllen Sie dieses Feld aus.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.captcha_empty">
+<de><![CDATA[Bitte beantworten Sie die Sicherheitsabfrage.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.captcha_unavailable">
+<de><![CDATA[Die CAPTCHA-Konfiguration ist unvollständig oder nicht verfügbar. Die Registrierung ist vorübergehend gesperrt. Bitte wenden Sie sich an die Administration.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.captcha_invalid_response">
+<de><![CDATA[Die Sicherheitsfrage wurde nicht korrekt beantwortet.]]></de>
+        </locale>
+
+<!-- Registration Notice -->
+        <locale name="mail.registration_notice.subject">
+<de><![CDATA[Neue Registrierung auf [host]]]></de>
+        </locale>
+        <locale name="mail.registration_notice.body" html="true">
+<de><![CDATA[<h1>Neue Registrierung auf [host]</h1>
+<ul>
+    <li>Benutzer-ID: [userId]</li>
+    <li>Benutzername: [username]</li>
+    <li>E-Mail: [email]</li>
+    <li>Datum: [date]</li>
+    <li>Registrierung über: [registrar]</li>
+</ul>]]></de>
+        </locale>
+
+<!-- Activation Notice -->
+        <locale name="mail.registration_activation.subject">
+<de><![CDATA[Ihre Registrierung auf [host]]]></de>
+        </locale>
+        <locale name="mail.registration_activation.body" html="true">
+<de><![CDATA[<h1>Hallo [username],</h1>
+<p>
+Sie haben sich am [date] auf [host] registriert. Zur Bestätigung Ihrer E-Mail-Adresse und zur Aktivierung Ihres Benutzerkontos besuchen Sie bitte folgenden Link:
+<br><br>
+<a href="[activationLink]">[activationLink]</a>
+</p>]]></de>
+        </locale>
+
+<!-- Welcome mail -->
+        <locale name="mail.registration_welcome.subject">
+<de><![CDATA[Herzlich willkommen bei [host]!]]></de>
+        </locale>
+        <locale name="mail.registration_welcome.body" html="true">
+<de><![CDATA[<h1>Herzlich willkommen, [username]!</h1>
+<p>
+Ihr Benutzerkonto auf [host] wurde erfolgreich aktiviert. Sie können sich nun auf <a href="[loginUrl]">[loginUrl]</a> einloggen.
+[userPassword]
+</p>]]></de>
+        </locale>
+        <locale name="mail.registration_welcome.body.password" html="true">
+<de><![CDATA[<p>Ihre Login-Daten:<br><br>
+
+Benutzername: [username]<br>
+Passwort: [password]</p>]]></de>
+        </locale>
+
+<!-- E-Mail-Address change mail -->
+        <locale name="mail.change_email_address.subject">
+<de><![CDATA[Änderung Ihrer E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="mail.change_email_address.body" html="true">
+<de><![CDATA[<h1>Hallo [username]!</h1>
+<p>
+Am [date] wurde beantragt, die E-Mail-Adresse für Ihr Benutzerkonto auf [host] auf <b>[newEmail]</b> zu ändern. Bitte bestätigen Sie diese Änderung mit einem Klick auf folgenden Link:
+<br><br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>
+<b>Hinweis:</b> Sollten Sie diese Änderung nicht angefordert haben, können Sie diese E-Mail einfach ignorieren.
+</p>]]></de>
+        </locale>
+
+<!-- E-Mail-Address confirm mail -->
+        <locale name="mail.confirm_email_address.subject">
+<de><![CDATA[Bestätigung Ihrer E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="mail.confirm_email_address.body" html="true">
+<de><![CDATA[<h1>Hallo [username]!</h1>
+<p>
+Bitte bestätigen Sie Ihre E-Mail-Adresse für Ihr Benutzerkonto auf [host]. Für die Bestätigung öffnen Sie bitte folgenden Link:
+<br><br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>
+<p>
+<b>Hinweis:</b> Sollten Sie diese E-Mail nicht veranlasst haben, können Sie sie einfach ignorieren.
+</p>]]></de>
+        </locale>
+
+<!-- User delete confirm mail -->
+        <locale name="mail.delete_user_confirm.subject">
+<de><![CDATA[Löschung Ihres Benutzerkontos]]></de>
+        </locale>
+        <locale name="mail.delete_user_confirm.body" html="true">
+<de><![CDATA[<h1>Hallo [username]!</h1>
+<p>
+Die Löschung Ihres Benutzerkontos auf [host] wurde am [date] beantragt. Öffnen Sie den folgenden Link und melden Sie sich mit diesem Konto an. Erst Ihre anschließende Bestätigung im Profil löscht das Konto unwiderruflich:
+<br><br>
+<a href="[confirmLink]">[confirmLink]</a>
+</p>]]></de>
+        </locale>
+
+<!-- Site type: Login -->
+        <locale name="login.btn.logout">
+<de><![CDATA[Logout]]></de>
+        </locale>
+        <locale name="login.general_error">
+<de>
+                <![CDATA[Beim Login ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder kontaktieren Sie einen Administrator.]]></de>
+        </locale>
+
+<!-- Control: Auth\FrontendLogin -->
+        <locale name="controls.auth.frontendlogin.header.login">
+<de><![CDATA[Login]]></de>
+        </locale>
+        <locale name="controls.auth.frontendlogin.header.registration">
+<de><![CDATA[Registrierung]]></de>
+        </locale>
+
+<!-- -->
+        <locale name="control.address.header.title">
+<de><![CDATA[Adresse]]></de>
+        </locale>
+        <locale name="control.address.header.defaultAddress.title">
+<de><![CDATA[Standard-Adresse]]></de>
+        </locale>
+        <locale name="control.address.title.Address.addButton">
+<de><![CDATA[Neue Adresse hinzufügen]]></de>
+        </locale>
+        <locale name="control.address.title.Address.description">
+<de><![CDATA[
+                Verwalten Sie Ihre Adressen. Erstellen Sie weitere Adressen und / oder
+                bearbeiten Sie Ihre bestehenden Adressen.
+            ]]></de>
+        </locale>
+        <locale name="control.address.title.Address.editButton">
+<de><![CDATA[Bearbeiten]]></de>
+        </locale>
+        <locale name="control.address.title.Address.deleteButton">
+<de><![CDATA[Löschen]]></de>
+        </locale>
+        <locale name="exception.add.address.not.allowed">
+<de><![CDATA[Diese Funktion ist deaktiviert.]]></de>
+        </locale>
+
+        <locale name="control.registration.sign.up.button.terms">
+<de><![CDATA[Weiter mit der Registrierung]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.button.terms.decline">
+<de><![CDATA[Abbrechen]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.message.between" html="true">
+<de><![CDATA[<p>oder verwende deine E-Mail-Adresse für die Anmeldung</p>]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.title" html="true">
+<de><![CDATA[<h2>Konto erstellen</h2>]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.email.title">
+<de><![CDATA[E-Mail]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.try">
+<de><![CDATA[Ausprobieren]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.registration">
+<de><![CDATA[Registrieren]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.password.title">
+<de><![CDATA[Passwort]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.firstname.title">
+<de><![CDATA[Vorname]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.lastname.title">
+<de><![CDATA[Nachname]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.fullname.next">
+<de><![CDATA[Weiter]]></de>
+        </locale>
+
+        <locale name="control.sign.up.terms_of_use_and_privacy_policy.label" html="true">
+<de><![CDATA[
+            Durch das Erstellen eines Benutzerkontos versichere ich die
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> und
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>
+            gelesen zu haben und erkläre mich mit diesen einverstanden.
+            ]]></de>
+        </locale>
+        <locale name="control.sign.up.terms_of_use.label" html="true">
+<de><![CDATA[
+            Durch das Erstellen eines Benutzerkontos versichere ich die
+            <a href="[termsOfUseUrl]" data-id="[termsOfUseSiteId]">[termsOfUseSiteTitle]</a> gelesen zu haben
+            und erkläre mich mit diesen einverstanden.
+            ]]></de>
+        </locale>
+        <locale name="control.sign.up.privacy_policy.label" html="true">
+<de><![CDATA[
+            Durch das Erstellen eines Benutzerkontos versichere ich die
+            <a href="[privacyPolicyUrl]" data-id="[privacyPolicySiteId]">[privacyPolicySiteTitle]</a>
+            gelesen zu haben und erkläre mich mit diesen einverstanden.
+            ]]></de>
+        </locale>
+        <locale name="control.sign.up.type.login.in.button">
+<de><![CDATA[Log in]]></de>
+        </locale>
+
+        <locale name="quiqqer.sign.up.settings.title">
+<de><![CDATA[Registrierung]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout">
+<de><![CDATA[Layout]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.desc">
+<de><![CDATA[Bestimmt das Layout des Registrierungsformulars.
+            <br><strong>Basic</strong> definiert nur wenige notwendige Styles. Dieses Layout eignet sich für umfangreiche Anpassungen.
+            <br><strong>Simple</strong> stellt das Formular im Kartendesign dar (beeinflusst vom verwendeten Template).]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.basic">
+<de><![CDATA[Basic – nur rudimentäres Styling]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.layout.simple">
+<de><![CDATA[Simple – Formular im Card-Design]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.background">
+<de><![CDATA[Hintergrundbild]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.registrars">
+<de><![CDATA[Angezeigte Registrare]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.logoUrl">
+<de><![CDATA[Link des Logos]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.logoUrl.description">
+<de><![CDATA[
+            Bestimmt, welche URL bei Klick auf das Logo aufgerufen wird.
+            Wenn die Einstellung leer ist, wird zur Hauptseite weitergeleitet.
+            ]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.logo">
+<de><![CDATA[Logo oben links]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.logo.description">
+<de><![CDATA[
+            Bestimmt, welches Logo bei der Registrierung verwendet werden soll. Dies kann separat zum Projektlogo bestimmt werden.
+            Wenn die Einstellung leer ist, wird das Projektlogo verwendet.
+            ]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.fullscreen">
+<de><![CDATA[Vollbild-Anzeige]]></de>
+        </locale>
+        <locale name="admin.types.registrationSignUp.setting.fullscreen.description">
+<de>
+                <![CDATA[Die Registrierung soll im gesamten Viewport angezeigt werden und alle anderen Elemente der Seite überdecken. Ein Login-Button wird oben rechts angezeigt.]]></de>
+        </locale>
+
+        <locale name="control.login.forgotten.password">
+<de><![CDATA[Passwort vergessen]]></de>
+        </locale>
+        <locale name="quiqqer.auth.login.password.title">
+<de><![CDATA[Passwort zurücksetzen]]></de>
+        </locale>
+
+        <locale name="mail.text.registrationWelcome.title">
+<de><![CDATA[Frontend Users: Registrierung - Willkommens-E-Mail]]></de>
+        </locale>
+        <locale name="mail.text.registrationWelcome.description">
+<de><![CDATA[
+            Frontend Users: Registrierung - E-Mail welche der Benutzer erhält wenn er sich erfolgreich registriert hat.
+            ]]></de>
+        </locale>
+        <locale name="order.registrationWelcome.subject.description">
+<de><![CDATA[
+            <p>Betreff der Willkommens-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+            </ul>
+            ]]></de>
+        </locale>
+        <locale name="order.registrationWelcome.body.description">
+<de><![CDATA[
+            <p>Inhalt der Willkommens-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[loginUrl]:</b> URL (Link) für den Login</li>
+                <li><b>[userPassword]:</b> Textabschnitt mit den Zugangsdaten einschließlich des für den Benutzer generierten Passworts</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+        </locale>
+
+
+        <locale name="mail.text.activation.title">
+<de><![CDATA[Frontend Users: Registrierung - Aktivierungs-E-Mail]]></de>
+        </locale>
+        <locale name="mail.text.activation.description">
+<de><![CDATA[
+            Frontend Users: Registrierung - E-Mail welche der Benutzer erhält für seine Aktivierung.
+            ]]></de>
+        </locale>
+        <locale name="order.activation.subject.description">
+<de><![CDATA[
+            <p>Betreff der Aktivierungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+            </ul>
+            ]]></de>
+        </locale>
+        <locale name="order.activation.body.description">
+<de><![CDATA[
+            <p>Inhalt der Aktivierungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[date]:</b> Datum der Registrierung</li>
+                <li><b>[email]:</b> E-Mail des Benutzers</li>
+                <li><b>[activationLink]:</b> Aktivierungslink</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+        </locale>
+
+        <locale name="mail.text.confirmEmail.title">
+<de><![CDATA[Frontend Users: Bestätigung der E-Mail-Adresse]]></de>
+        </locale>
+        <locale name="mail.text.confirmEmail.description">
+<de><![CDATA[
+            E-Mail zur Bestätigung einer E-Mail-Adresse.
+            ]]></de>
+        </locale>
+        <locale name="order.confirmEmail.subject.description">
+<de><![CDATA[
+            <p>Betreff der Bestätigungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (System)</li>
+            </ul>
+            ]]></de>
+        </locale>
+        <locale name="order.confirmEmail.body.description">
+<de><![CDATA[
+            <p>Inhalt der Bestätigungs-E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (System)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[email]:</b> E-Mail des Benutzers</li>
+                <li><b>[confirmLink]:</b> Bestätigungs-Link (muss enthalten sein!)</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+        </locale>
+
+        <locale name="mail.text.changeEmail.title">
+<de><![CDATA[Frontend Users: E-Mail ändern]]></de>
+        </locale>
+        <locale name="mail.text.changeEmail.description">
+<de><![CDATA[
+            Frontend Users: E-Mail welche der Benutzer erhält wenn er seine E-Mail Adresse ändern möchte.
+            ]]></de>
+        </locale>
+        <locale name="order.changeEmail.subject.description">
+<de><![CDATA[
+            <p>Betreff der E-Mail Adressänderungen. Verfügbare Variablen:</p>
+            <ul>
+                <li>Besitzt keine Variablen</li>
+            </ul>
+            ]]></de>
+        </locale>
+        <locale name="order.changeEmail.body.description">
+<de><![CDATA[
+            <p>Inhalt der E-Mail Adressänderungen. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[newEmail]:</b> Neue E-Mail des Benutzers</li>
+                <li><b>[date]:</b> Datum der Änderungsanfrage</li>
+                <li><b>[confirmLink]:</b> Link für die Bestätigung</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+        </locale>
+
+
+        <locale name="mail.text.deleteUserConfirmation.title">
+<de><![CDATA[Frontend Users: Benutzer löschen]]></de>
+        </locale>
+        <locale name="mail.text.deleteUserConfirmation.description">
+<de><![CDATA[
+            Frontend Users: E-Mail welche der Benutzer erhält wenn er seinen Account löschen möchte.
+            ]]></de>
+        </locale>
+        <locale name="order.deleteUserConfirmation.subject.description">
+<de><![CDATA[
+            <p>Betreff der Benutzer löschen E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li>Besitzt keine Variablen</li>
+            </ul>
+            ]]></de>
+        </locale>
+        <locale name="order.deleteUserConfirmation.body.description">
+<de><![CDATA[
+            <p>Inhalt der Benutzer löschen E-Mail. Verfügbare Variablen:</p>
+            <ul>
+                <li><b>[host]:</b> Host des Projektes (Systems)</li>
+                <li><b>[userId]:</b> Benutzer ID</li>
+                <li><b>[date]:</b> Datum des Löschantrages</li>
+                <li><b>[confirmLink]:</b> Link für die Bestätigung</li>
+                <li><b>[username]:</b> Benutzername</li>
+                <li><b>[userFirstName]:</b> Vorname des Benutzers (falls vorhanden)</li>
+                <li><b>[userLastName]:</b> Nachname des Benutzers (falls vorhanden)</li>
+            </ul>
+            ]]></de>
+        </locale>
+
+        <locale name="rest.provider.title">
+<de><![CDATA[QUIQQER - Frontend-Users]]></de>
+        </locale>
+
+    </groups>
+
+    <groups name="quiqqer/frontend-users" datatype="js">
+
+        <locale name="controls.RegistrationSignUp.error.back">
+<de><![CDATA[Zurück]]></de>
+        </locale>
+
+        <locale name="control.profile.window.title">
+<de><![CDATA[Profil]]></de>
+        </locale>
+        <locale name="controls.frontend.Login.resend_activation_mail_info">
+<de>
+                <![CDATA[Dieses Benutzerkonto wurde noch nicht aktiviert. Bitte bestätige dafür deine Registrierung über den Link in der Aktivierungs-Mail.]]></de>
+        </locale>
+        <locale name="controls.frontend.Login.resend_activation_mail_error">
+<de>
+                <![CDATA[Die Aktivierungs-Mail konnte leider nicht erneut versendet werden. Bitte wende dich an den Betreiber der Website.]]></de>
+        </locale>
+        <locale name="controls.frontend.Login.user_deleted_error">
+<de>
+                <![CDATA[Dieses Benutzerkonto wurde dauerhaft deaktiviert. Bitte wenden Sie sich an den Betreiber der Website.]]></de>
+        </locale>
+
+<!-- Control: settings/Registars -->
+        <locale name="controls.settings.registrars.template.labelActivationMode">
+<de><![CDATA[Benutzer-Aktivierung]]></de>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionMail">
+<de><![CDATA[Bestätigung per Aktivierungs-Link (Versand per E-Mail)]]></de>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionAuto">
+<de><![CDATA[Automatische Aktivierung]]></de>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionAutoWithEmailConfirm">
+<de>
+                <![CDATA[Automatische Aktivierung (Link zur Bestätigung der E-Mail-Adresse wird trotzdem versandt)]]></de>
+        </locale>
+        <locale name="controls.settings.registrars.template.activationModeOptionManual">
+<de><![CDATA[Manuelle Aktivierung (über Benutzer-Verwaltung)]]></de>
+        </locale>
+        <locale name="controls.settings.registrars.template.labelActive">
+<de><![CDATA[Aktiv]]></de>
+        </locale>
+        <locale name="controls.settings.registrars.template.labelDisplayPosition">
+<de><![CDATA[Anzeige-Position]]></de>
+        </locale>
+
+<!-- Control: settings/AddressFields -->
+        <locale name="controls.settings.addressfields.template.field">
+<de><![CDATA[Adress-Feld]]></de>
+        </locale>
+        <locale name="controls.settings.addressfields.template.fieldShow">
+<de><![CDATA[Anzeigen]]></de>
+        </locale>
+        <locale name="controls.settings.addressfields.template.fieldRequired">
+<de><![CDATA[Pflichtfeld]]></de>
+        </locale>
+        <locale name="controls.settings.addressfields.template.labelSalutation">
+<de><![CDATA[Titel]]></de>
+        </locale>
+
+<!-- Class: frontend/classes/Registration -->
+        <locale name="frontend.classes.registration.username_taken">
+<de><![CDATA[Dieser Benutzername ist bereits vergeben und kann daher nicht verwendet werden.]]></de>
+        </locale>
+        <locale name="frontend.classes.registration.email_taken">
+<de><![CDATA[Diese E-Mail-Adresse ist bereits vergeben und kann daher nicht verwendet werden.]]></de>
+        </locale>
+
+<!-- Control: frontend/controls/registrars/Email -->
+        <locale name="exception.registrars.email.email_addresses_not_equal">
+<de><![CDATA[Die E-Mail-Adressen sind nicht identisch.]]></de>
+        </locale>
+        <locale name="exception.registrars.email.passwords_not_equal">
+<de><![CDATA[Die Passwörter sind nicht identisch.]]></de>
+        </locale>
+
+<!-- Control: frontend/controls/auth/FrontendLogin -->
+        <locale name="controls.frontend.auth.frontendlogin.user_not_active">
+<de><![CDATA[Ein Login ist z.Z. nicht möglich, da Ihr Benutzerkonto noch nicht aktiviert wurde.]]></de>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail">
+<de><![CDATA[
+            Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte auf den Aktivierungs-Link, der Ihnen bei der Registrierung per E-Mail zugeschickt wurde.
+            Oder klicken Sie auf den Button, um den Aktivierungs-Link erneut zu versenden.
+            ]]></de>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.manual_activation">
+<de><![CDATA[Sie können sich einloggen, sobald ein Administrator Ihr Benutzerkonto aktiviert hat.]]></de>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_success">
+<de><![CDATA[
+            Der Aktivierungs-Link wurde erfolgreich versandt! Bitte prüfen Sie Ihr E-Mail-Postfach und ggf. auch Ihren Spam-Ordner.
+            ]]></de>
+        </locale>
+        <locale name="controls.frontend.auth.frontendlogin.resend_activation_mail_fail">
+<de><![CDATA[
+            Der Aktivierungs-Link konnte nicht versandt werden. Bitte versuchen Sie es erneut oder versuchen Sie es später noch einmal.
+            ]]></de>
+        </locale>
+
+<!-- Control: frontend/controls/auth/ResendActivationLinkBtn -->
+        <locale name="controls.frontend.auth.resendactivationlinkbtn.resend_activation_mail">
+<de><![CDATA[Aktivierungs-Link erneut versenden]]></de>
+        </locale>
+        <locale name="controls.frontend.auth.resendactivationlinkbtn.resend_completed">
+<de><![CDATA[Aktivierungs-Link erfolgreich verschickt]]></de>
+        </locale>
+
+<!-- Control: frontend/controls/profile/UserData -->
+        <locale name="controls.profile.userdata.email_invalid">
+<de><![CDATA[Diese E-Mail-Adresse ist nicht gültig. Bitte verwenden Sie eine gültige E-Mail-Adresse.]]></de>
+        </locale>
+        <locale name="controls.profile.userdata.email_already_taken">
+<de><![CDATA[
+            Diese E-Mail-Adresse kann nicht verwendet werden. Bitte verwenden Sie eine gültige E-Mail-Adresse.
+            ]]></de>
+        </locale>
+
+<!-- Control: frontend/controls/profile/Profile -->
+        <locale name="controls.profile.Profile.setting_error">
+<de><![CDATA[
+            Beim Laden dieses Profil-Bereichs ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an einen Administrator.
+            ]]></de>
+        </locale>
+
+        <locale name="btn.close">
+<de><![CDATA[Schließen]]></de>
+        </locale>
+
+        <locale name="control.registration.sign.up.create.button">
+<de><![CDATA[Konto erstellen]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.email_already_exists">
+<de><![CDATA[
+            Es existiert bereits ein Benutzerkonto mit dieser E-Mail-Adresse. Bitte loggen Sie sich ein.
+            ]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.full_name_required">
+<de><![CDATA[Bitte geben Sie Ihren vollständigen Namen an, um sich zu registrieren.]]></de>
+        </locale>
+        <locale name="control.registration.sign.up.back_to_registration">
+<de><![CDATA[Zurück zur Registrierung]]></de>
+        </locale>
+
+<!-- Control: package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccount -->
+        <locale name="controls.profile.DeleteAccount.confirm.information" html="true">
+<de>
+                <![CDATA[Ihr Benutzerkonto <b>[username]</b> und alle damit verbundenen Vorteile gehen mit dem Löschvorgang verloren. Ihre persönlichen Daten werden, soweit nicht für geschäftliche Zwecke rechtlich notwendig, gelöscht. Sie müssen die Löschung über einen Link, der Ihnen per E-Mail zugesandt wird, bestätigen.]]></de>
+        </locale>
+        <locale name="controls.profile.DeleteAccount.confirm.information_error" html="true">
+<de><![CDATA[Ihr Benutzerkonto <b>[username]</b> kann z.Z. nicht gelöscht werden:<br/><br/>[error]]]></de>
+        </locale>
+
+        <locale name="controls.profile.DeleteAccount.confirm.text">
+<de><![CDATA[Möchten Sie Ihr Benutzerkonto wirklich löschen?]]></de>
+        </locale>
+        <locale name="controls.profile.DeleteAccount.confirm.title">
+<de><![CDATA[Benutzerkonto löschen]]></de>
+        </locale>
+        <locale name="controls.profile.DeleteAccount.confirm.btn">
+<de><![CDATA[Ja, Benutzerkonto löschen]]></de>
+        </locale>
+
+        <locale name="controls.profile.ChangePassword.success">
+<de><![CDATA[Ihr Passwort wurde erfolgreich geändert.]]></de>
+        </locale>
+
+        <locale name="registration.control.registration.link">
+<de><![CDATA[Zur Registrierung]]></de>
+        </locale>
+    </groups>
+
+</locales>
