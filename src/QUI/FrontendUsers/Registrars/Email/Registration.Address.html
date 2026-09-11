@@ -2,7 +2,7 @@
     {if isset($addressFields['company']) && $addressFields['company']['show']}
     <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
         <span class="quiqqer-registration-field-title">
-            {locale group="quiqqer/system" var="company"}
+            {locale group="quiqqer/core" var="company"}
             {if $addressFields['company']['required']}*{/if}
         </span>
         <input value="{if isset($fields['company'])}{$fields['company']|escape:'html'}{/if}"
@@ -22,7 +22,7 @@
     {if isset($addressFields['salutation']) && $addressFields['salutation']['show']}
     <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
         <span class="quiqqer-registration-field-title">
-            {locale group="quiqqer/system" var="salutation"}
+            {locale group="quiqqer/core" var="salutation"}
             {if $addressFields['salutation']['required']}*{/if}
         </span>
         <input value="{if isset($fields['salutation'])}{$fields['salutation']|escape:'html'}{/if}"
@@ -46,7 +46,7 @@
         {if $showFirstname}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="firstname"}
+                {locale group="quiqqer/core" var="firstname"}
                 {if $addressFields['firstname']['required']}*{/if}
             </span>
             <input value="{if isset($fields['firstname'])}{$fields['firstname']|escape:'html'}{/if}"
@@ -66,7 +66,7 @@
         {if $showLastname}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="lastname"}
+                {locale group="quiqqer/core" var="lastname"}
                 {if $addressFields['lastname']['required']}*{/if}
             </span>
             <input value="{if isset($fields['lastname'])}{$fields['lastname']|escape:'html'}{/if}"
@@ -88,7 +88,7 @@
     {if isset($addressFields['street_no']) && $addressFields['street_no']['show']}
     <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
         <span class="quiqqer-registration-field-title">
-            {locale group="quiqqer/system" var="street_no"}
+            {locale group="quiqqer/core" var="street_no"}
             {if $addressFields['street_no']['required']}*{/if}
         </span>
         <input value="{if isset($fields['street_no'])}{$fields['street_no']|escape:'html'}{/if}"
@@ -112,7 +112,7 @@
         {if $showZip}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="zip"}
+                {locale group="quiqqer/core" var="zip"}
                 {if $addressFields['zip']['required']}*{/if}
             </span>
             <input value="{if isset($fields['zip'])}{$fields['zip']|escape:'html'}{/if}"
@@ -132,7 +132,7 @@
         {if $showCity}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="city"}
+                {locale group="quiqqer/core" var="city"}
                 {if $addressFields['city']['required']}*{/if}
             </span>
             <input value="{if isset($fields['city'])}{$fields['city']|escape:'html'}{/if}"
@@ -154,7 +154,7 @@
     {if isset($addressFields['country']) && $addressFields['country']['show']}
     <label class="quiqqer-registration-field-row-item quiqqer-registration-field-row-item--full">
         <span class="quiqqer-registration-field-title">
-            {locale group="quiqqer/system" var="country"}
+            {locale group="quiqqer/core" var="country"}
             {if $addressFields['country']['required']}*{/if}
         </span>
         {$CountrySelect->create()}
@@ -174,7 +174,7 @@
         {if $showPhone}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="phone"}
+                {locale group="quiqqer/core" var="phone"}
                 {if $addressFields['phone']['required']}*{/if}
             </span>
             <input value="{if isset($fields['phone'])}{$fields['phone']|escape:'html'}{/if}"
@@ -194,7 +194,7 @@
         {if $showMobile}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="mobile"}
+                {locale group="quiqqer/core" var="mobile"}
                 {if $addressFields['mobile']['required']}*{/if}
             </span>
             <input value="{if isset($fields['mobile'])}{$fields['mobile']|escape:'html'}{/if}"
@@ -214,7 +214,7 @@
         {if $showFax}
         <label class="quiqqer-registration-field-row-item">
             <span class="quiqqer-registration-field-title">
-                {locale group="quiqqer/system" var="fax"}
+                {locale group="quiqqer/core" var="fax"}
                 {if $addressFields['fax']['required']}*{/if}
             </span>
             <input value="{if isset($fields['fax'])}{$fields['fax']|escape:'html'}{/if}"

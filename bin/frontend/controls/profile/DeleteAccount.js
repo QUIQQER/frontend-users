@@ -88,7 +88,7 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/profile/DeleteAccou
                     buttonCancel: {
                         'class': 'btn btn-link-body',
                         order: 1,
-                        text: QUILocale.get('quiqqer/system', 'cancel'),
+                        text: QUILocale.get('quiqqer/core', 'cancel'),
                         icon: false
                     },
                     buttonSubmit: {

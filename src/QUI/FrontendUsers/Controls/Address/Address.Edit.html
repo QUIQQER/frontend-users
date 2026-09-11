@@ -105,7 +105,7 @@
     {if $settings.country.show}
     <label class="quiqqer-frontendUsers-userdata-address-country">
         <span>
-            {locale group="quiqqer/system" var="country"}
+            {locale group="quiqqer/core" var="country"}
             {if $settings.country.required}*{/if}
         </span>
         {control name="country" control="QUI\Countries\Controls\Select" selected=$Address->getAttribute('country')}

@@ -110,8 +110,8 @@ define('package/quiqqer/frontend-users/bin/frontend/controls/UserIcon', [
                     self.$Menu.appendChild(
                         new QUIMenuItem({
                             name: 'profile',
-                            title: QUILocale.get('quiqqer/system', 'logout'),
-                            text: QUILocale.get('quiqqer/system', 'logout'),
+                            title: QUILocale.get('quiqqer/core', 'logout'),
+                            text: QUILocale.get('quiqqer/core', 'logout'),
                             icon: 'fa fa-sign-out',
                             events: {
                                 onClick: function () {
