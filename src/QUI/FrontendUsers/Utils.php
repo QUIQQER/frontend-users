@@ -201,6 +201,8 @@ class Utils
             }
         }
 
+        QUI::getEvents()->fireEvent('quiqqerFrontendUsersGetProfileSettingControl', [&$Control, $category, $settings]);
+
         return $Control;
     }
 
