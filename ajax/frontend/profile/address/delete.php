@@ -13,6 +13,8 @@
 QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_address_delete',
     function ($addressId) {
+        QUI\FrontendUsers\ProfileSecurity::assertValidRequest();
+
         $User = QUI::getUserBySession();
         $Address = $User->getAddress($addressId);
         $Address->delete();

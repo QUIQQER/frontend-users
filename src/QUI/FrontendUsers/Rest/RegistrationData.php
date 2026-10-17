@@ -6,6 +6,8 @@ use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 use QUI;
 use QUI\FrontendUsers\Exception;
 use QUI\FrontendUsers\Handler;
+use QUI\FrontendUsers\Registrars\Email\Registrar;
+use QUI\FrontendUsers\RegistrationPolicy;
 use QUI\QDOM;
 use QUI\Utils\Security\Orthos;
 
@@ -48,6 +50,14 @@ class RegistrationData extends QDOM
         }
 
         $requiredFields[] = 'email';
+
+        if (!empty($registrationSettings['termsOfUseRequired'])) {
+            $requiredFields[] = 'termsOfUseAccepted';
+        }
+
+        if (!empty($registrationSettings['useCaptcha'])) {
+            $requiredFields[] = 'captchaResponse';
+        }
 
         if ((int)$registrationSettings['addressInput']) {
             foreach ($Handler->getAddressFieldSettings() as $fieldName => $fieldSettings) {
@@ -238,11 +248,16 @@ class RegistrationData extends QDOM
                     'quiqqer/frontend-users',
                     'exception.registrars.email.user_attribute_too_long',
                     [
-                        'label' => QUI::getLocale()->get('quiqqer/system', $attribute),
+                        'label' => QUI::getLocale()->get('quiqqer/core', $attribute),
                         'maxLength' => $maxLength
                     ]
                 ]);
             }
         }
+
+        $Registrar = new Registrar();
+        $Registrar->setAttributes($this->getAttributes());
+        $Registrar->setAttribute('addressValidation', true);
+        (new RegistrationPolicy())->validate($Registrar);
     }
 }

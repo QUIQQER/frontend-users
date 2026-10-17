@@ -2,7 +2,7 @@
     "name": "quiqqer/frontend-users",
     "type": "quiqqer-module",
     "description": "The Frontend Users module extends QUIQQER with a profile extension and a registration for users.",
-    "license": "GPL-3.0+",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "Henning Leutz",
@@ -29,7 +29,7 @@
     "require": {
         "php": "^8.2",
         "ext-mbstring": "*",
-        "quiqqer/core": "^2.31.1",
+        "quiqqer/core": "^2.37.0",
         "quiqqer/countries": "^2",
         "quiqqer/verification": "^3",
         "quiqqer/tooltips": "^2",

@@ -104,7 +104,11 @@ class AuxiliaryWorkflowTest extends DatabaseTestCase
                     continue;
                 }
 
-                QUI::getRequest()->request->replace(['profile-save' => 1]);
+                QUI::getRequest()->setMethod('POST');
+                QUI::getRequest()->request->replace([
+                    'profile-save' => 1,
+                    '_csrf' => QUI\Security\CsrfToken::get()
+                ]);
                 $SavingProfile = new Profile([
                     'User' => $User,
                     'Site' => $Site,

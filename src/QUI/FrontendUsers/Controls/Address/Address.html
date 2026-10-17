@@ -1,6 +1,7 @@
 {template_event name="quiqqer::frontend-users::user-address-top" User=$User}
 
 <section class="quiqqer-frontend-users-address quiqqer-frontendUsers-userdata-section">
+    <input type="hidden" name="_csrf" data-name="csrf-token" value="{$csrfToken|escape:'html'}">
     <h2>{locale group="quiqqer/frontend-users" var="profile.address.category.title"}</h2>
 
     <div class="quiqqer-frontend-users-address-description">

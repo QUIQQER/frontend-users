@@ -10,6 +10,7 @@ use Exception;
 use QUI;
 use QUI\FrontendUsers\Controls\Auth\FrontendLogin;
 use QUI\FrontendUsers\RegistrarCollection;
+use QUI\FrontendUsers\RegistrationPolicy;
 use QUI\FrontendUsers\RegistrationUtils;
 use QUI\Projects\Site\Utils as QUISiteUtils;
 
@@ -106,10 +107,6 @@ class Registration extends QUI\Control
             try {
                 $registrationStatus = $this->register();
 
-                // during the registration
-                // 2fa session is set
-                QUI::getSession()->set('auth-secondary', 1);
-
                 $Engine->assign([
                     'registrationStatus' => $registrationStatus
                 ]);
@@ -151,7 +148,8 @@ class Registration extends QUI\Control
                 );
             }
 
-            if ($executeLogin) {
+            // Registration does not verify a second factor; configured MFA requires the regular login.
+            if ($executeLogin && !QUI::conf('auth_settings', 'secondary_frontend')) {
                 try {
                     // auto login for the primary login
                     // in this case, mail is primary login
@@ -507,6 +505,8 @@ class Registration extends QUI\Control
             return QUI\FrontendUsers\Handler::REGISTRATION_STATUS_ERROR;
         }
 
+        QUI\FrontendUsers\RegistrationThrottle::reserve($_POST['email'] ?? null, $_POST['username'] ?? null);
+
         $Registrar = $this->isCurrentlyExecuted();
 
         if ($Registrar === false) {
@@ -530,23 +530,13 @@ class Registration extends QUI\Control
         $Registrar->setProject($Project);
         $Registrar->setAttributes($_POST);
 
-        // check Terms Of Use
-        if (
-            !empty($registrationSettings['termsOfUseRequired'])
-            && empty($_POST['termsOfUseAccepted'])
-        ) {
-            throw new QUI\FrontendUsers\Exception([
-                'quiqqer/frontend-users',
-                'exception.registration.terms_of_use_not_accepted'
-            ]);
-        }
-
         // Set validation settings
         $Registrar->setAttributes([
             'addressValidation' => $this->getAttribute('addressValidation')
         ]);
 
-        $Registrar->validate();
+        $Policy = new RegistrationPolicy();
+        $Policy->validate($Registrar);
 
         // Check user data
         $username = $Registrar->getUsername();
@@ -568,104 +558,73 @@ class Registration extends QUI\Control
             throw new QUI\FrontendUsers\Exception\UserAlreadyExistsException();
         }
 
-        // Create user if everything is valid
-        $NewUser = $Registrar->createUser();
+        [$NewUser, $registrationStatus] = QUI\FrontendUsers\RegistrationTransaction::run(
+            $username,
+            (string)$Registrar->getAttribute('email'),
+            function () use ($Registrar, $RegistrarHandler, $registrationSettings, $Project, $Policy): array {
+                // Create user if everything is valid
+                $NewUser = $Registrar->createUser();
 
-        // add user to default groups
-        foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
-            $NewUser->addToGroup($groupId);
-        }
-
-        // set registration/registrar data to user
-        $NewUser->setAttributes([
-            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT => $Project->getName(),
-            $RegistrarHandler::USER_ATTR_REGISTRATION_PROJECT_LANG => $Project->getLang(),
-            $RegistrarHandler::USER_ATTR_REGISTRAR => $Registrar->getType(),
-            $RegistrarHandler::USER_ATTR_USER_ACTIVATION_REQUIRED => true
-        ]);
-
-        // handle onRegistered from Registrar
-        try {
-            $Registrar->onRegistered($NewUser);
-        } catch (\Throwable $exception) {
-            QUI\System\Log::writeException($exception);
-        }
-
-        try {
-            $settings = $RegistrarHandler->getRegistrationSettings();
-
-            // determine if the user has to set a new password on first login
-            if ($settings['forcePasswordReset']) {
-                $NewUser->setAttribute('quiqqer.set.new.password', true);
-            }
-        } catch (\Throwable $exception) {
-            QUI\System\Log::writeException($exception);
-        }
-
-        $NewUser->save(QUI::getUsers()->getSystemUser());
-
-        // send registration notice to admins
-        $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
-
-        // check if the user has a password
-        try {
-            $QueryBuilder = QUI::getDataBaseConnection()->createQueryBuilder();
-            $password = $QueryBuilder
-                ->select(QUI\Utils\Doctrine::quoteIdentifier('password'))
-                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users')))
-                ->where(QUI\Utils\Doctrine::quoteIdentifier('uuid') . ' = :uuid')
-                ->setParameter('uuid', $NewUser->getUUID())
-                ->setMaxResults(1)
-                ->executeQuery()
-                ->fetchOne();
-        } catch (\Doctrine\DBAL\Exception $Exception) {
-            throw new QUI\Database\Exception(
-                $Exception->getMessage(),
-                (int)$Exception->getCode()
-            );
-        }
-
-        $SystemUser = QUI::getUsers()->getSystemUser();
-
-        // set random password if the Registrar did not set a password
-        if (empty($password)) {
-            $NewUser->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
-        }
-
-        // determine registration status
-        $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_SUCCESS;
-        $registrarSettings = $RegistrarHandler->getRegistrarSettings($Registrar->getType());
-
-        switch ($registrarSettings['activationMode']) {
-            case $RegistrarHandler::ACTIVATION_MODE_MAIL:
-                $sendMailSuccess = $RegistrarHandler->sendActivationMail($NewUser, $Registrar);
-
-                if (!$sendMailSuccess) {
-                    throw new QUI\FrontendUsers\Exception([
-                        'quiqqer/frontend-users',
-                        'exception.registration.send_mail_error'
-                    ]);
+                // add user to default groups
+                foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
+                    $NewUser->addToGroup($groupId);
                 }
 
-                $registrationStatus = $RegistrarHandler::REGISTRATION_STATUS_PENDING;
-                break;
+                // set registration/registrar data to user
+                $Policy->setUserAttributes($NewUser, $Registrar, $Project);
 
-            case $RegistrarHandler::ACTIVATION_MODE_AUTO:
-            case $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM:
-                if (!$NewUser->isActive()) {
-                    $NewUser->activate('', $SystemUser);
-                    // TODO set login session ???
+                // handle onRegistered from Registrar
+                $Registrar->onRegistered($NewUser);
+
+                try {
+                    $settings = $RegistrarHandler->getRegistrationSettings();
+
+                    // determine if the user has to set a new password on first login
+                    if ($settings['forcePasswordReset']) {
+                        $NewUser->setAttribute('quiqqer.set.new.password', true);
+                    }
+                } catch (\Throwable $exception) {
+                    QUI\System\Log::writeException($exception);
                 }
 
-                if ($registrarSettings['activationMode'] == $RegistrarHandler::ACTIVATION_MODE_AUTO_WITH_EMAIL_CONFIRM) {
-                    $RegistrarHandler->sendEmailConfirmationMail(
-                        $NewUser,
-                        $NewUser->getAttribute('email'),
-                        $Project
+                if ($registrationSettings['autoLoginOnActivation']) {
+                    QUI\FrontendUsers\ActivationLogin::bind($NewUser);
+                }
+                $NewUser->save(QUI::getUsers()->getSystemUser());
+
+                // send registration notice to admins
+                $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
+
+                // check if the user has a password
+                try {
+                    $QueryBuilder = QUI::getDataBaseConnection()->createQueryBuilder();
+                    $password = $QueryBuilder
+                        ->select(QUI\Utils\Doctrine::quoteIdentifier('password'))
+                        ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI::getDBTableName('users')))
+                        ->where(QUI\Utils\Doctrine::quoteIdentifier('uuid') . ' = :uuid')
+                        ->setParameter('uuid', $NewUser->getUUID())
+                        ->setMaxResults(1)
+                        ->executeQuery()
+                        ->fetchOne();
+                } catch (\Doctrine\DBAL\Exception $Exception) {
+                    throw new QUI\Database\Exception(
+                        $Exception->getMessage(),
+                        (int)$Exception->getCode()
                     );
                 }
-                break;
-        }
+
+                $SystemUser = QUI::getUsers()->getSystemUser();
+
+                // set random password if the Registrar did not set a password
+                if (empty($password)) {
+                    $NewUser->setPassword(QUI\Security\Password::generateRandom(), $SystemUser);
+                }
+
+                $registrationStatus = $Policy->activate($NewUser, $Registrar, $Project);
+
+                return [$NewUser, $registrationStatus];
+            }
+        );
 
         $this->RegisteredUser = $NewUser;
 

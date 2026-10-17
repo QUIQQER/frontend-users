@@ -6,14 +6,13 @@ use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface as SlimResponse;
 use Psr\Http\Message\ServerRequestInterface as SlimRequest;
 use QUI;
-use QUI\FrontendUsers\ActivationLinkVerification;
 use QUI\FrontendUsers\Exception;
+use QUI\FrontendUsers\Registrars\Email\Registrar;
+use QUI\FrontendUsers\RegistrationPolicy;
 use QUI\FrontendUsers\RegistrationUtils;
-use QUI\Verification\VerificationFactory;
 
 use function boolval;
 use function json_encode;
-use function time;
 
 use const JSON_INVALID_UTF8_SUBSTITUTE;
 use const JSON_THROW_ON_ERROR;
@@ -81,52 +80,73 @@ class PostRegister
     protected static function registerUser(
         QUI\FrontendUsers\Rest\RegistrationData $RegistrationData
     ): QUI\Interfaces\Users\User {
+        QUI\FrontendUsers\RegistrationThrottle::reserve(
+            $RegistrationData->getAttribute('email'),
+            $RegistrationData->getAttribute('username')
+        );
         $RegistrationData->validate();
 
-        $SystemUser = QUI::getUsers()->getSystemUser();
+        $NewUser = QUI\FrontendUsers\RegistrationTransaction::run(
+            (string)$RegistrationData->getAttribute('username'),
+            (string)$RegistrationData->getAttribute('email'),
+            static function () use ($RegistrationData): QUI\Interfaces\Users\User {
+                $SystemUser = QUI::getUsers()->getSystemUser();
 
-        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-        $registrationSettings = $RegistrarHandler->getRegistrationSettings();
+                $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
+                $registrationSettings = $RegistrarHandler->getRegistrationSettings();
 
-        $projectName = $RegistrationData->getAttribute('project_name');
+                $projectName = $RegistrationData->getAttribute('project_name');
 
-        if ($projectName) {
-            $Project = QUI::getProject(
-                $projectName,
-                $RegistrationData->getAttribute('project_language')
-            );
-        } else {
-            $Project = QUI::getProjectManager()->getStandard();
-        }
+                if ($projectName) {
+                    $Project = QUI::getProject(
+                        $projectName,
+                        $RegistrationData->getAttribute('project_language')
+                    );
+                } else {
+                    $Project = QUI::getProjectManager()->getStandard();
+                }
 
-        $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
+                $Registrar = new Registrar();
+                $Registrar->setProject($Project);
+                $Policy = new RegistrationPolicy();
+                $NewUser = QUI::getUsers()->createChild($RegistrationData->getAttribute('username'), $SystemUser);
+                $Policy->setUserAttributes($NewUser, $Registrar, $Project);
 
-        // Add the given data to the User
-        static::addRegistrationDataToUser($NewUser, $RegistrationData);
+                // Add the given data to the User
+                static::addRegistrationDataToUser($NewUser, $RegistrationData);
 
-        // add user to default groups
-        foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
-            $NewUser->addToGroup($groupId);
-        }
+                // add user to default groups
+                foreach (RegistrationUtils::parseDefaultGroupIds($registrationSettings['defaultGroups']) as $groupId) {
+                    $NewUser->addToGroup($groupId);
+                }
 
-        // determine if the user has to set a new password on first login
-        if ($registrationSettings['forcePasswordReset']) {
-            $NewUser->setAttribute('quiqqer.set.new.password', true);
-        }
+                // determine if the user has to set a new password on first login
+                if ($registrationSettings['forcePasswordReset']) {
+                    $NewUser->setAttribute('quiqqer.set.new.password', true);
+                }
 
-        $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
+                $RegistrarHandler->sendRegistrationNotice($NewUser, $Project);
 
-        $NewUser->save($SystemUser);
+                $NewUser->save($SystemUser);
 
-        $password = $RegistrationData->getAttribute('password');
+                $password = $RegistrationData->getAttribute('password');
 
-        if (!$password) {
-            $password = QUI\Security\Password::generateRandom();
-        }
+                if (!$password) {
+                    $password = QUI\Security\Password::generateRandom();
+                }
 
-        $NewUser->setPassword($password, $SystemUser);
+                $NewUser->setPassword($password, $SystemUser);
 
-        static::sendActivationMail($NewUser, $Project);
+                $Policy->activate(
+                    $NewUser,
+                    $Registrar,
+                    $Project,
+                    static fn(): bool => static::sendActivationMail($NewUser, $Project)
+                );
+
+                return $NewUser;
+            }
+        );
 
         QUI::getEvents()->fireEvent('quiqqerFrontendUsersUserRestRegister', [$NewUser]);
 
@@ -229,59 +249,9 @@ class PostRegister
         QUI\Interfaces\Users\User $User,
         QUI\Projects\Project $Project
     ): bool {
-        // TODO: Verification uses Project from QUI::getRewrite instead of the parameter, therefore the default project is always used (see quiqqer/verification#5)
-        $verificationFactory = new VerificationFactory();
-        $verification = $verificationFactory->createLinkVerification(
-            'activate-' . $User->getUUID(),
-            new ActivationLinkVerification(),
-            [
-                'uuid' => $User->getUUID(),
-                'project' => $Project->getName(),
-                'projectLang' => $Project->getLang()
-            ]
-        );
+        $Registrar = new Registrar();
+        $Registrar->setProject($Project);
 
-        $L = QUI::getLocale();
-        $lg = 'quiqqer/frontend-users';
-        $tplDir = QUI::getPackage('quiqqer/frontend-users')->getDir() . 'templates/';
-        $host = $Project->getVHost();
-
-        $RegistrarHandler = QUI\FrontendUsers\Handler::getInstance();
-
-        try {
-            $RegistrarHandler->sendMail(
-                [
-                    'subject' => $L->get($lg, 'mail.registration_activation.subject', [
-                        'host' => $host
-                    ])
-                ],
-                [
-                    $User->getAttribute('email')
-                ],
-                $tplDir . 'mail.registration_activation.html',
-                [
-                    'body' => $L->get($lg, 'mail.registration_activation.body', [
-                        'host' => $host,
-                        'userId' => $User->getUUID(),
-                        'username' => $User->getUsername(),
-                        'userFirstName' => $User->getAttribute('firstname') ?: '',
-                        'userLastName' => $User->getAttribute('lastname') ?: '',
-                        'email' => $User->getAttribute('email'),
-                        'date' => $L->formatDate(time()),
-                        'activationLink' => $verification->getVerificationUrl()
-                    ])
-                ]
-            );
-        } catch (\Exception $Exception) {
-            QUI\System\Log::addError(
-                self::class . ' :: sendActivationMail -> Send mail failed'
-            );
-
-            QUI\System\Log::writeException($Exception);
-
-            return false;
-        }
-
-        return true;
+        return QUI\FrontendUsers\Handler::getInstance()->sendActivationMail($User, $Registrar);
     }
 }

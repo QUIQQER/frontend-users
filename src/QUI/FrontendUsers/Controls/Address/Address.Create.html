@@ -1,4 +1,5 @@
 <section class="quiqqer-frontend-users-address-create">
+    <input type="hidden" name="_csrf" data-name="csrf-token" value="{$csrfToken|escape:'html'}">
     <h2>{locale group="quiqqer/frontend-users" var="dialog.frontend-users.title"}</h2>
 
     {template_event name="quiqqer::frontend-users::user-address-create-begin" User=$User}

@@ -1,0 +1,18 @@
+<div class="quiqqer-frontendUsers-profile-section quiqqer-frontendUsers-section--deleteAccount">
+    <h2>{locale group="quiqqer/frontend-users" var="profile.deleteaccount.title"}</h2>
+    <p role="status">
+        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.message.confirm_ready"}
+    </p>
+</div>
+
+<input type="hidden" name="deleteAccountAction" value="confirm"/>
+<div class="quiqqer-frontendUsers-section--deleteAccount__action">
+    <button type="submit" class="btn btn-danger" data-name="delete-account-confirm">
+        <span class="fa fa-trash" aria-hidden="true"></span>
+        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.confirm"}
+    </button>
+    <button type="submit" class="btn btn-light" onclick="this.form.elements.deleteAccountAction.value='cancel';" data-name="delete-account-cancel">
+        <span class="fa fa-times" aria-hidden="true"></span>
+        {locale group="quiqqer/frontend-users" var="profile.deleteaccount.btn.cancel"}
+    </button>
+</div>

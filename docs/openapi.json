@@ -17,7 +17,7 @@
     "/frontend-users/register": {
       "post": {
         "summary": "Registers a new User",
-        "description": "The request body should contain an object with all required fields for the registration. All required fields can be queried via '/frontend-users/register/required-fields'. By default the standard project and language will be used to send registration mails. To change that, you may specify the optional parameters 'project_name' and 'project_language'.",
+        "description": "The request body should contain an object with all required fields for the registration. All required fields can be queried via '/frontend-users/register/required-fields'. By default the standard project and language will be used to send registration mails. To change that, you may specify the optional parameters 'project_name' and 'project_language'. The email registrar must be active. Its activation mode and the configured terms of use, CAPTCHA and email blacklist apply to REST registration. Manual activation never creates a self-activation link. Access is subject to the installation's REST authentication and scope configuration.",
         "operationId": "register",
         "requestBody": {
           "required": true,
@@ -26,6 +26,14 @@
               "schema": {
                 "type": "object",
                 "properties": {
+                  "termsOfUseAccepted": {
+                    "type": "boolean",
+                    "description": "Must be true when acceptance of the terms of use is required."
+                  },
+                  "captchaResponse": {
+                    "type": "string",
+                    "description": "A valid response from the configured CAPTCHA provider, required when CAPTCHA is enabled."
+                  },
                   "project_name": {
                     "type": "string",
                     "description": "Optional, by default the standard project will be used."

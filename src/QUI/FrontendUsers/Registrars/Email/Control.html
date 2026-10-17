@@ -14,7 +14,7 @@
 
                 <input type="text" name="username"
                        class="quiqqer-registration-field-element{if isset($invalidFields['username'])} quiqqer-registration-field-error{/if}"
-                       value="{if isset($fields['username'])}{$fields['username']}{/if}"
+                       value="{if isset($fields['username'])}{$fields['username']|escape:'html'}{/if}"
                        maxlength="40"
                        {$userNameRequired}
                 />
@@ -37,7 +37,7 @@
             </span>
 
             <input type="email" name="email"
-                   value="{if isset($fields['email'])}{$fields['email']}{/if}"
+                   value="{if isset($fields['email'])}{$fields['email']|escape:'html'}{/if}"
                    class="quiqqer-registration-field-element{if isset($invalidFields['email'])} quiqqer-registration-field-error{/if}"
                    maxlength="40"
                    required
@@ -62,7 +62,7 @@
 
                 <input type="password"
                        name="password"
-                       value="{if isset($fields['password'])}{$fields['password']}{/if}"
+                       value=""
                        class="quiqqer-registration-field-element{if isset($invalidFields['password'])} quiqqer-registration-field-error{/if}"
                        autocomplete="off"
                        maxlength="200"
@@ -127,7 +127,7 @@
             data-type="registration"
             {$submitDisabled}
         >
-            <span class="fa fa-envelope"></span>
+            <span class="fa fa-envelope" aria-hidden="true"></span>
             <span>{locale group="quiqqer/frontend-users" var="registrars.email.btn.submit"}</span>
         </button>
     </div>

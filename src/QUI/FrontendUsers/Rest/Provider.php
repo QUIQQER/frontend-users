@@ -49,7 +49,7 @@ class Provider implements QUI\REST\ProviderInterface
         return $filePath;
     }
 
-    public function getTitle(QUI\Locale $Locale = null): string
+    public function getTitle(?QUI\Locale $Locale = null): string
     {
         if (empty($Locale)) {
             $Locale = QUI::getLocale();

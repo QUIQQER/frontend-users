@@ -10,6 +10,8 @@ use QUI\FrontendUsers\Utils;
 QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_profile_save',
     function ($category, $settings, $data) {
+        QUI\FrontendUsers\ProfileSecurity::assertValidRequest();
+
         $data = json_decode($data);
         $Request = QUI::getRequest();
 
