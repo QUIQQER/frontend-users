@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<events>
-    <event on="onPackageInstall" fire="\QUI\FrontendUsers\Events::onPackageInstall"/>
-    <event on="onPackageSetup" fire="\QUI\FrontendUsers\Events::onPackageSetup"/>
-    <event on="onPackageConfigSave" fire="\QUI\FrontendUsers\RegistrationCaptcha::onPackageConfigSave"/>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/events.xsd">
+    <events>
+        <event on="onPackageInstall" fire="\QUI\FrontendUsers\Events::onPackageInstall"/>
+        <event on="onPackageSetup" fire="\QUI\FrontendUsers\Events::onPackageSetup"/>
+        <event on="onPackageConfigSave" fire="\QUI\FrontendUsers\RegistrationCaptcha::onPackageConfigSave"/>
 
-    <event on="onUserCreate" fire="\QUI\FrontendUsers\Events::onUserCreate"/>
-    <event on="onUserLogin" fire="\QUI\FrontendUsers\ProfileSecurity::onUserLogin"/>
-    <event on="onAjaxCallBefore" fire="\QUI\FrontendUsers\ActivationLookup::onAjaxCallBefore"/>
-    <event on="onUserLoginError" fire="\QUI\FrontendUsers\ActivationLookup::onUserLoginError"/>
-    <event on="onUserActivate" fire="\QUI\FrontendUsers\Events::onUserActivate"/>
-    <event on="onUserDelete" fire="\QUI\FrontendUsers\Events::onUserDelete"/>
-    <event on="onTemplateGetHeader" fire="\QUI\FrontendUsers\Events::onTemplateGetHeader"/>
-    <event on="onRequest" fire="\QUI\FrontendUsers\Events::onRequest"/>
+        <event on="onUserCreate" fire="\QUI\FrontendUsers\Events::onUserCreate"/>
+        <!-- Avatar providers run first; this handler supplies only a fallback image. -->
+        <event on="onUserGetAvatar" fire="\QUI\FrontendUsers\Events::onUserGetAvatar" priority="1000"/>
+        <event on="onUserLogin" fire="\QUI\FrontendUsers\ProfileSecurity::onUserLogin"/>
+        <event on="onAjaxCallBefore" fire="\QUI\FrontendUsers\ActivationLookup::onAjaxCallBefore"/>
+        <event on="onUserLoginError" fire="\QUI\FrontendUsers\ActivationLookup::onUserLoginError"/>
+        <event on="onUserActivate" fire="\QUI\FrontendUsers\Events::onUserActivate"/>
+        <event on="onUserDelete" fire="\QUI\FrontendUsers\Events::onUserDelete"/>
+        <event on="onTemplateGetHeader" fire="\QUI\FrontendUsers\Events::onTemplateGetHeader"/>
+        <event on="onRequest" fire="\QUI\FrontendUsers\Events::onRequest"/>
 
-    <event on="onSiteInit" fire="\QUI\FrontendUsers\Events::onSiteInit"/>
-    <event on="onSiteSave" fire="\QUI\FrontendUsers\Events::onSiteSave"/>
-    <event on="onQuiqqer::template::header::end" fire="\QUI\FrontendUsers\Events::onTemplateEnd"/>
-</events>
+        <event on="onSiteInit" fire="\QUI\FrontendUsers\Events::onSiteInit"/>
+        <event on="onSiteSave" fire="\QUI\FrontendUsers\Events::onSiteSave"/>
+        <event on="onQuiqqer::template::header::end" fire="\QUI\FrontendUsers\Events::onTemplateEnd"/>
+    </events>
+</quiqqer>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
@@ -239,7 +241,7 @@
 <pt><![CDATA[Imagem de avatar predefinida]]></pt>
         </locale>
         <locale name="settings.defaultAvatar.description" html="true">
-<pt><![CDATA[Imagem apresentada como avatar predefinido na barra do utilizador quando o utilizador <b>não</b> tem uma imagem atribuída. Se <b>não for selecionada nenhuma imagem aqui</b>, será apresentada a <b>primeira letra</b> do nome de utilizador.]]></pt>
+<pt><![CDATA[Imagem apresentada como avatar predefinido na barra do utilizador quando o utilizador <b>não</b> tem uma imagem atribuída. Se <b>não for selecionada nenhuma imagem aqui</b>, será apresentada a <b>primeira letra</b> do nome de utilizador. A imagem selecionada também é utilizada fora da barra do utilizador quando a imagem do utilizador está em falta ou é inválida. Os ícones CSS aplicam-se apenas à barra do utilizador.]]></pt>
         </locale>
 
         <locale name="settings.section.profileAddress.title">
@@ -1777,3 +1779,4 @@ A [date], foi solicitada a eliminação da tua conta em [host]. Abre a seguinte 
     </groups>
 
 </locales>
+</quiqqer>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
@@ -239,7 +241,7 @@
 <es><![CDATA[Imagen de avatar predeterminada]]></es>
         </locale>
         <locale name="settings.defaultAvatar.description" html="true">
-<es><![CDATA[Imagen que se muestra como avatar predeterminado en la barra de usuario cuando el usuario <b>no</b> tiene una imagen asignada. Si <b>no se selecciona ninguna imagen aquí</b>, se mostrará la <b>primera letra</b> del nombre de usuario.]]></es>
+<es><![CDATA[Imagen que se muestra como avatar predeterminado en la barra de usuario cuando el usuario <b>no</b> tiene una imagen asignada. Si <b>no se selecciona ninguna imagen aquí</b>, se mostrará la <b>primera letra</b> del nombre de usuario. La imagen seleccionada también se utiliza fuera de la barra de usuario cuando la imagen del usuario falta o no es válida. Los iconos CSS solo se aplican a la barra de usuario.]]></es>
         </locale>
 
         <locale name="settings.section.profileAddress.title">
@@ -1777,3 +1779,4 @@ El [date] se solicitó eliminar tu cuenta en [host]. Abre el siguiente enlace e 
     </groups>
 
 </locales>
+</quiqqer>

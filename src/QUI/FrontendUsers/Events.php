@@ -5,6 +5,8 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Exception;
 use QUI\Interfaces\Users\User;
+use QUI\Projects\Media\Image;
+use QUI\Projects\Media\Utils as MediaUtils;
 use QUI\Smarty\Collector;
 use QUI\Verification\VerificationRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,6 +27,39 @@ use function rtrim;
 class Events
 {
     private const CHANGE_PASSWORD_PATH = '.well-known/change-password';
+
+    /**
+     * Supply the configured default image only when the user's own avatar cannot be loaded.
+     */
+    public static function onUserGetAvatar(User $User): ?Image
+    {
+        $avatar = $User->getAttribute('avatar');
+
+        if (MediaUtils::isMediaUrl($avatar)) {
+            try {
+                MediaUtils::getImageByUrl($avatar);
+
+                return null;
+            } catch (QUI\Exception) {
+                // A missing or invalid user image may use the default avatar.
+            }
+        }
+
+        try {
+            $Config = Handler::getPackageConfig();
+            $defaultAvatar = $Config->get('profileBar', 'defaultAvatar');
+
+            // CSS icons belong to the user bar; getAvatar() requires an image object.
+            if (!MediaUtils::isMediaUrl($defaultAvatar)) {
+                return null;
+            }
+
+            return MediaUtils::getImageByUrl($defaultAvatar);
+        } catch (QUI\Exception) {
+            // Leave the general Core placeholder available when the default cannot be loaded.
+            return null;
+        }
+    }
 
     /**
      * Redirect the standardized change-password URL to the current project's profile page.

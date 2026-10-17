@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
@@ -239,7 +241,7 @@
 <fr><![CDATA[Image d’avatar par défaut]]></fr>
         </locale>
         <locale name="settings.defaultAvatar.description" html="true">
-<fr><![CDATA[Image affichée comme avatar par défaut dans la barre utilisateur lorsque l’utilisateur n’a <b>pas</b> d’image attribuée. Si <b>aucune image n’est sélectionnée ici</b>, la <b>première lettre</b> du nom d’utilisateur sera affichée.]]></fr>
+<fr><![CDATA[Image affichée comme avatar par défaut dans la barre utilisateur lorsque l’utilisateur n’a <b>pas</b> d’image attribuée. Si <b>aucune image n’est sélectionnée ici</b>, la <b>première lettre</b> du nom d’utilisateur sera affichée. L’image sélectionnée est également utilisée en dehors de la barre utilisateur lorsque l’image de l’utilisateur est absente ou invalide. Les icônes CSS s’appliquent uniquement à la barre utilisateur.]]></fr>
         </locale>
 
         <locale name="settings.section.profileAddress.title">
@@ -1777,3 +1779,4 @@ La suppression de votre compte sur [host] a été demandée le [date]. Ouvrez le
     </groups>
 
 </locales>
+</quiqqer>

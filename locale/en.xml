@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
@@ -249,6 +251,7 @@
         <locale name="settings.defaultAvatar.description" html="true">
 <en><![CDATA[
             Image that is shown as the default avatar icon in the user bar if the user has <b>no</b> image assigned. If there is <b>no image selected here</b> the <b>first letter</b> of the username will be shown.
+            The selected image is also used outside the user bar as a fallback for missing or invalid user images. CSS icons apply only to the user bar.
             ]]></en>
         </locale>
 
@@ -1929,3 +1932,4 @@ The deletion of your user account on [host] was requested on [date]. Open the fo
     </groups>
 
 </locales>
+</quiqqer>

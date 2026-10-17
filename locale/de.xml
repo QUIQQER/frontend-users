@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
@@ -254,6 +256,7 @@
         <locale name="settings.defaultAvatar.description" html="true">
 <de><![CDATA[
             Bild, welches standardmäßig als Avatar-Icon in der Benutzer-Leiste angezeigt wird, wenn im Benutzer <b>kein</b> Bild hinterlegt ist. Ist hier <b>kein Bild ausgewählt</b>, wird der <b>erste Buchstabe</b> des Benutzernamens angezeigt.
+            Das ausgewählte Bild wird auch außerhalb der Benutzer-Leiste als Ersatz für fehlende oder ungültige Benutzerbilder verwendet. CSS-Icons gelten nur für die Benutzer-Leiste.
             ]]></de>
         </locale>
 
@@ -1967,3 +1970,4 @@ Die Löschung Ihres Benutzerkontos auf [host] wurde am [date] beantragt. Öffnen
     </groups>
 
 </locales>
+</quiqqer>

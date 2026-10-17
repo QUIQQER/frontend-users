@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<quiqqer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://www.quiqqer.com/docs/schemas/2.x/locale.xsd">
 <locales>
 
     <groups name="quiqqer/frontend-users" datatype="php,js">
@@ -239,7 +241,7 @@
 <pl><![CDATA[Domyślne zdjęcie awatara]]></pl>
         </locale>
         <locale name="settings.defaultAvatar.description" html="true">
-<pl><![CDATA[Zdjęcie wyświetlane jako domyślny awatar na pasku użytkownika, gdy użytkownik <b>nie</b> ma przypisanego zdjęcia. Jeśli <b>nie wybrano tutaj żadnego zdjęcia</b>, zostanie wyświetlona <b>pierwsza litera</b> nazwy użytkownika.]]></pl>
+<pl><![CDATA[Zdjęcie wyświetlane jako domyślny awatar na pasku użytkownika, gdy użytkownik <b>nie</b> ma przypisanego zdjęcia. Jeśli <b>nie wybrano tutaj żadnego zdjęcia</b>, zostanie wyświetlona <b>pierwsza litera</b> nazwy użytkownika. Wybrane zdjęcie jest używane również poza paskiem użytkownika, gdy zdjęcia użytkownika brakuje lub jest ono nieprawidłowe. Ikony CSS dotyczą tylko paska użytkownika.]]></pl>
         </locale>
 
         <locale name="settings.section.profileAddress.title">
@@ -1777,3 +1779,4 @@ W dniu [date] zażądano usunięcia Twojego konta w [host]. Otwórz poniższy li
     </groups>
 
 </locales>
+</quiqqer>
