@@ -55,7 +55,12 @@ class Profile extends Control
     public function getBody(): string
     {
         $Engine = QUI::getTemplateManager()->getEngine();
+        $Engine->assign('Error', false);
         $Request = QUI::getRequest();
+        if ($Request->request->get('profile-save')) {
+            QUI\FrontendUsers\ProfileSecurity::assertValidRequest();
+        }
+
         $categories = Utils::getProfileCategorySettings();
 
         $currentCategory = $this->getAttribute('category');
@@ -171,6 +176,7 @@ class Profile extends Control
             'currentCategory' => $currentCategory,
             'currentSetting' => $currentSetting,
             'Category' => $Control,
+            'csrfToken' => QUI\Security\CsrfToken::get(),
             'Site' => $this->getSite(),
             'this' => $this
         ]);

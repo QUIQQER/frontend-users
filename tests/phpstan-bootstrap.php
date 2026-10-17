@@ -14,6 +14,8 @@ require_once __DIR__ . '/stubs/QUI/ERP/Api/AbstractErpProvider.php';
 require_once __DIR__ . '/stubs/QUI/REST/ProviderInterface.php';
 require_once __DIR__ . '/../../../../bootstrap.php';
 
+require_once __DIR__ . '/stubs/QUI/Captcha/Handler.php';
+require_once __DIR__ . '/stubs/QUI/Captcha/Controls/CaptchaDisplay.php';
 require_once __DIR__ . '/stubs/Psr/Http/Message/MessageInterface.php';
 require_once __DIR__ . '/stubs/Psr/Http/Message/StreamInterface.php';
 require_once __DIR__ . '/stubs/Psr/Http/Message/ResponseInterface.php';

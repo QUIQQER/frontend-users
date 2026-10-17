@@ -13,6 +13,7 @@ use QUI\Utils\Security\Orthos;
 QUI::getAjax()->registerFunction(
     'package_quiqqer_frontend-users_ajax_frontend_registrars_emailExists',
     function ($email) {
+        QUI\FrontendUsers\RegistrationThrottle::reserveLookup();
         if (!Orthos::checkMailSyntax($email)) {
             return false;
         }

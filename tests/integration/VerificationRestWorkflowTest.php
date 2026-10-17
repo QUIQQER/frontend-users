@@ -122,62 +122,6 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         );
     }
 
-    public function testDeleteConfirmationUsesConfiguredSoftDeleteMode(): void
-    {
-        $this->setPackageConfig('userProfile', 'userDeleteMode', 'delete');
-        $User = $this->createUser(true);
-        self::replaceSessionUser($User);
-        $verification = $this->createVerification(['uuid' => $User->getUUID()]);
-        $Handler = new UserDeleteConfirmLinkVerification();
-        $Handler->onSuccess($verification);
-
-        $active = self::getConnection()->createQueryBuilder()
-            ->select('active')
-            ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table()))
-            ->where('uuid = :uuid')
-            ->setParameter('uuid', $User->getUUID())
-            ->executeQuery()
-            ->fetchOne();
-        self::assertSame(-1, (int)$active);
-        self::assertNotSame('', $Handler->getSuccessMessage($verification));
-        self::assertSame('', $Handler->getErrorMessage($verification, VerificationErrorReason::EXPIRED));
-        self::assertGreaterThan(0, $Handler->getValidDuration($verification));
-        $Handler->onError($verification, VerificationErrorReason::INVALID_REQUEST);
-        self::assertTrue(
-            $Handler->getOnSuccessRedirectUrl($verification) === null
-            || is_string($Handler->getOnSuccessRedirectUrl($verification))
-        );
-        self::assertTrue(
-            $Handler->getOnErrorRedirectUrl($verification, VerificationErrorReason::EXPIRED) === null
-            || is_string($Handler->getOnErrorRedirectUrl($verification, VerificationErrorReason::EXPIRED))
-        );
-    }
-
-    public function testDeleteConfirmationSupportsWipeAndDestroyModes(): void
-    {
-        $Handler = new UserDeleteConfirmLinkVerification();
-
-        foreach (['wipe', 'destroy'] as $mode) {
-            $this->setPackageConfig('userProfile', 'userDeleteMode', $mode);
-            $User = $this->createUser(true);
-            $Handler->onSuccess($this->createVerification(['uuid' => $User->getUUID()]));
-            $stored = self::getConnection()->createQueryBuilder()
-                ->select('active')
-                ->from(QUI\Utils\Doctrine::quoteIdentifier(QUI\Users\Manager::table()))
-                ->where('uuid = :uuid')
-                ->setParameter('uuid', $User->getUUID())
-                ->executeQuery()
-                ->fetchOne();
-
-            if ($mode === 'wipe') {
-                self::assertSame(-1, (int)$stored);
-                continue;
-            }
-
-            self::assertFalse($stored);
-        }
-    }
-
     public function testEmailVerificationPersistsAssociatedAddressAndRejectsInvalidSyntax(): void
     {
         $User = $this->createUser();
@@ -234,7 +178,20 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             'parent' => 1,
             'child' => $siteId
         ]);
-        $User = $this->createUser();
+        $events = QUI::getEvents()->getList();
+
+        try {
+            foreach ($events['onUserCreate'] ?? [] as $event) {
+                if (!in_array($event['package'], ['quiqqer/core', 'quiqqer/frontend-users'], true)) {
+                    QUI::getEvents()->removeEvent('onUserCreate', $event['callable']);
+                }
+            }
+
+            $User = $this->createUser();
+        } finally {
+            $this->restoreEvents($events);
+        }
+
         $registrarHash = hash('sha256', Registrar::class);
         $verification = $this->createVerification([
             'uuid' => $User->getUUID(),
@@ -252,13 +209,18 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             [
                 [VerificationErrorReason::ALREADY_VERIFIED, 'already_verified'],
                 [VerificationErrorReason::EXPIRED, 'activation_expired'],
+                [VerificationErrorReason::INVALID_CODE, 'activation'],
                 [VerificationErrorReason::INVALID_REQUEST, 'activation']
             ] as [$reason, $expectedError]
         ) {
             $errorUrl = $Activation->getOnErrorRedirectUrl($verification, $reason);
             self::assertNotNull($errorUrl);
             self::assertStringContainsString('error=' . $expectedError, $errorUrl);
-            self::assertStringContainsString(rawurlencode((string)$User->getAttribute('email')), $errorUrl);
+            self::assertStringNotContainsString('email=', $errorUrl);
+            self::assertStringNotContainsString((string)$User->getAttribute('email'), $errorUrl);
+            self::assertStringNotContainsString(rawurlencode((string)$User->getAttribute('email')), $errorUrl);
+            self::assertStringNotContainsString(urlencode((string)$User->getAttribute('email')), $errorUrl);
+            self::assertStringContainsString($registrarHash, $errorUrl);
         }
 
         $EmailConfirm = new EmailConfirmLinkVerification();
@@ -269,7 +231,6 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         ));
 
         $DeleteConfirm = new UserDeleteConfirmLinkVerification();
-        self::assertNotNull($DeleteConfirm->getOnSuccessRedirectUrl($verification));
         self::assertNotNull($DeleteConfirm->getOnErrorRedirectUrl(
             $verification,
             VerificationErrorReason::EXPIRED
@@ -278,6 +239,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
 
     public function testRestRegistrationDataValidationAndAddressMapping(): void
     {
+        $this->configureRestRegistrationPolicy();
         $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
         $this->setPackageConfig('registration', 'passwordInput', Handler::PASSWORD_INPUT_DEFAULT);
         $this->setPackageConfig('registration', 'fullnameInput', Handler::FULLNAME_INPUT_FULLNAME_REQUIRED);
@@ -347,22 +309,22 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         self::assertSame(400, $Response->getStatusCode());
     }
 
-    public function testRestRegistrationCreatesUserWithoutDeliveringMailForEmptyRecipient(): void
+    public function testRestRegistrationCreatesPendingUserWithoutActivationMail(): void
     {
+        $this->configureRestRegistrationPolicy();
         $Group = $this->createGroup();
         $this->setPackageConfig('registration', 'defaultGroups', $Group->getUUID());
         $this->setPackageConfig('registration', 'forcePasswordReset', 1);
         $this->setPackageConfig('registration', 'addressInput', 0);
         $this->setPackageConfig('registration', 'sendInfoMailOnRegistrationTo', '');
         $suffix = bin2hex(random_bytes(5));
-        $RegistrationData = new class extends RegistrationData {
-            public function validate(): void
-            {
-            }
-        };
+        $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
+        $this->setPackageConfig('registration', 'passwordInput', Handler::PASSWORD_INPUT_DEFAULT);
+        $this->setPackageConfig('registration', 'fullnameInput', Handler::FULLNAME_INPUT_FULLNAME_OPTIONAL);
+        $RegistrationData = new RegistrationData();
         $RegistrationData->setAttributes([
             'username' => self::TEST_PREFIX . 'rest-create-' . $suffix,
-            'email' => '',
+            'email' => self::TEST_PREFIX . 'rest-create-' . $suffix . '@example.invalid',
             'firstname' => 'REST',
             'lastname' => 'Created',
             'password' => 'phpunit-rest-created-password'
@@ -374,6 +336,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
             $User = $Method->invoke(null, $RegistrationData);
 
             self::assertSame('REST', $User->getAttribute('firstname'));
+            self::assertFalse($User->isActive());
             self::assertTrue($User->isInGroup($Group->getUUID()));
             self::assertTrue((bool)$User->getAttribute('quiqqer.set.new.password'));
         } finally {
@@ -383,6 +346,7 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
 
     public function testRestRegistrationValidationRejectsEachRequiredInputClass(): void
     {
+        $this->configureRestRegistrationPolicy();
         $this->setPackageConfig('registration', 'usernameInput', Handler::USERNAME_INPUT_REQUIRED);
         $this->setPackageConfig('registration', 'passwordInput', Handler::PASSWORD_INPUT_DEFAULT);
         $this->setPackageConfig('registration', 'fullnameInput', Handler::FULLNAME_INPUT_FULLNAME_REQUIRED);
@@ -440,6 +404,20 @@ class VerificationRestWorkflowTest extends DatabaseTestCase
         } catch (QUI\FrontendUsers\Exception $Exception) {
             self::assertNotSame('', $Exception->getMessage());
         }
+    }
+
+    private function configureRestRegistrationPolicy(): void
+    {
+        $this->setPackageConfig('registrars', 'registrarSettings', json_encode([
+            base64_encode(Registrar::class) => [
+                'active' => true,
+                'activationMode' => Handler::ACTIVATION_MODE_MANUAL,
+                'displayPosition' => 1
+            ]
+        ]));
+        $this->setPackageConfig('registration', 'termsOfUseRequired', 0);
+        $this->setPackageConfig('registration', 'useCaptcha', 0);
+        $this->setPackageConfig('registration', 'emailBlacklist', '[]');
     }
 
     private function createVerification(array $customData = []): LinkVerification

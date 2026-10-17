@@ -22,6 +22,8 @@ abstract class DatabaseTestCase extends TestCase
     private array $previousGet = [];
     private array $previousServer = [];
     private array $previousRequestBag = [];
+    private array $previousServerBag = [];
+    private string $previousRequestMethod;
     private array $configValues = [];
     private string $previousLocale = '';
     private Connection $originalConnection;
@@ -41,7 +43,7 @@ abstract class DatabaseTestCase extends TestCase
         parent::setUp();
 
         $this->originalConnection = QUI::getDataBaseConnection();
-        $this->usesCiDatabase = DatabaseEnvironment::usesCiDatabase();
+        $this->usesCiDatabase = $this->usesCiDatabase();
         $this->connection = $this->usesCiDatabase
             ? $this->originalConnection
             : DriverManager::getConnection([
@@ -99,11 +101,21 @@ abstract class DatabaseTestCase extends TestCase
         $this->previousGet = $_GET;
         $this->previousServer = $_SERVER;
         $this->previousRequestBag = QUI::getRequest()->request->all();
+        $this->previousServerBag = QUI::getRequest()->server->all();
+        QUI::getRequest()->server->set('REMOTE_ADDR', '192.0.2.1');
+        $this->previousRequestMethod = QUI::getRequest()->getMethod();
         $this->previousLocale = QUI::getLocale()->getCurrent();
 
         $Session = QUI::getSession();
 
-        foreach (['uid', 'username', 'inAuthentication', 'auth', 'auth-primary', 'auth-secondary', 'secHash'] as $key) {
+        foreach (
+            [
+            'uid', 'username', 'inAuthentication', 'auth', 'auth-primary', 'auth-secondary', 'secHash',
+            QUI\Security\CsrfToken::SESSION_KEY,
+            QUI\FrontendUsers\ActivationLogin::SESSION_KEY,
+            QUI\FrontendUsers\ProfileSecurity::RECENT_AUTH_SESSION_KEY
+            ] as $key
+        ) {
             $this->previousSessionValues[$key] = $Session->get($key);
         }
 
@@ -127,6 +139,8 @@ abstract class DatabaseTestCase extends TestCase
         $_GET = $this->previousGet;
         $_SERVER = $this->previousServer;
         QUI::getRequest()->request->replace($this->previousRequestBag);
+        QUI::getRequest()->server->replace($this->previousServerBag);
+        QUI::getRequest()->setMethod($this->previousRequestMethod);
 
         $this->setConnection($this->originalConnection);
         QUI::$Rights = $this->previousPermissionManager;
@@ -143,6 +157,20 @@ abstract class DatabaseTestCase extends TestCase
         }
 
         parent::tearDown();
+    }
+
+    protected function usesCiDatabase(): bool
+    {
+        return DatabaseEnvironment::usesCiDatabase();
+    }
+
+    protected function restoreEvents(array $events): void
+    {
+        $Manager = QUI::getEvents();
+        $Target = $Manager instanceof QUI\Events\Event
+            ? $Manager
+            : (new ReflectionProperty($Manager, 'Events'))->getValue($Manager);
+        (new ReflectionProperty(QUI\Events\Event::class, 'events'))->setValue($Target, $events);
     }
 
     protected function setPackageConfig(string $section, string $key, mixed $value): void
@@ -234,7 +262,10 @@ abstract class DatabaseTestCase extends TestCase
     private function createSqliteFixtures(): void
     {
         Update::importDatabase(OPT_DIR . 'quiqqer/core/database.xml');
+        Update::importDatabase(OPT_DIR . 'quiqqer/translator/database.xml');
         Update::importDatabase(OPT_DIR . 'quiqqer/verification/database.xml');
+        Update::importDatabase(dirname(__DIR__, 2) . '/database.xml');
+        QUI\FrontendUsers\RegistrationTransaction::setup();
         $this->connection->insert(QUI\Users\Manager::table(), [
             'id' => 5,
             'uuid' => '5',
@@ -265,6 +296,13 @@ abstract class DatabaseTestCase extends TestCase
 
         if ($Project === null) {
             self::fail('A project is required for the SQLite fixtures.');
+        }
+
+        foreach ([CMS_DIR . 'media/sites/', CMS_DIR . 'media/cache/', USR_DIR] as $directory) {
+            $directory .= $Project->getName();
+            if (!is_dir($directory)) {
+                mkdir($directory, 0700, true);
+            }
         }
 
         $siteTable = QUI::getDBTableName($Project->getName() . '_' . $Project->getLang() . '_sites');

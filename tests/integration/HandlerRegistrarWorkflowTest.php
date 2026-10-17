@@ -157,7 +157,8 @@ class HandlerRegistrarWorkflowTest extends DatabaseTestCase
         $Handler->sendChangeEmailAddressMail($User, 'changed@example.invalid', $Project);
         $Handler->sendEmailConfirmationMail($User, $User->getAttribute('email'), $Project);
         $Handler->sendDeleteUserConfirmationMail($User, $Project);
-        self::assertCount(6, $Handler->mails);
+        self::assertCount(7, $Handler->mails);
+        self::assertSame([$User->getAttribute('email')], $Handler->mails[4][1]);
         self::assertNull($Handler->mails[0][4]);
         self::assertSame($Project, $Handler->mails[1][4]);
 

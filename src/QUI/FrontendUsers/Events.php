@@ -5,6 +5,8 @@ namespace QUI\FrontendUsers;
 use QUI;
 use QUI\Exception;
 use QUI\Interfaces\Users\User;
+use QUI\Projects\Media\Image;
+use QUI\Projects\Media\Utils as MediaUtils;
 use QUI\Smarty\Collector;
 use QUI\Verification\VerificationRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -25,6 +27,39 @@ use function rtrim;
 class Events
 {
     private const CHANGE_PASSWORD_PATH = '.well-known/change-password';
+
+    /**
+     * Supply the configured default image only when the user's own avatar cannot be loaded.
+     */
+    public static function onUserGetAvatar(User $User): ?Image
+    {
+        $avatar = $User->getAttribute('avatar');
+
+        if (MediaUtils::isMediaUrl($avatar)) {
+            try {
+                MediaUtils::getImageByUrl($avatar);
+
+                return null;
+            } catch (QUI\Exception) {
+                // A missing or invalid user image may use the default avatar.
+            }
+        }
+
+        try {
+            $Config = Handler::getPackageConfig();
+            $defaultAvatar = $Config->get('profileBar', 'defaultAvatar');
+
+            // CSS icons belong to the user bar; getAvatar() requires an image object.
+            if (!MediaUtils::isMediaUrl($defaultAvatar)) {
+                return null;
+            }
+
+            return MediaUtils::getImageByUrl($defaultAvatar);
+        } catch (QUI\Exception) {
+            // Leave the general Core placeholder available when the default cannot be loaded.
+            return null;
+        }
+    }
 
     /**
      * Redirect the standardized change-password URL to the current project's profile page.
@@ -202,6 +237,11 @@ class Events
     {
         $Handler = Handler::getInstance();
 
+        // Activation is not a second factor. Complete configured MFA through the regular login.
+        if (QUI::conf('auth_settings', 'secondary_frontend')) {
+            return;
+        }
+
         if ($checkEligibility) {
             $registrar = $User->getAttribute($Handler::USER_ATTR_REGISTRAR);
 
@@ -239,6 +279,10 @@ class Events
             if ($settings['activationMode'] === $Handler::ACTIVATION_MODE_MANUAL) {
                 return;
             }
+
+            if (!ActivationLogin::consume($User)) {
+                return;
+            }
         }
 
         // login
@@ -254,7 +298,7 @@ class Events
         $Session->set('uid', $User->getUUID());
         $Session->set('auth', 1);
         $Session->set('auth-primary', 1);
-        $Session->set('auth-secondary', 1);
+        $Session->remove('auth-secondary');
         $Session->set('secHash', $secHash);
 
         $useragent = '';
@@ -364,6 +408,7 @@ class Events
         // Clear cache
         QUI\Cache\Manager::clear('package/quiqqer/frontendUsers');
 
+        RegistrationTransaction::setup();
         self::setRegistrarsDefaultSettings();
         self::setAuthenticatorsDefaultSettings();
         self::createProfileCategoryViewPermissions();

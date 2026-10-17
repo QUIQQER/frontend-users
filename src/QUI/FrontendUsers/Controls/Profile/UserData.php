@@ -131,6 +131,8 @@ class UserData extends AbstractProfileControl
         /* @var $User QUI\Users\User */
 
         if (!empty($newEmail)) {
+            QUI\FrontendUsers\ProfileSecurity::assertRecentAuthentication($User);
+
             if (!Orthos::checkMailSyntax($newEmail)) {
                 throw new QUI\FrontendUsers\Exception([
                     'quiqqer/frontend-users',

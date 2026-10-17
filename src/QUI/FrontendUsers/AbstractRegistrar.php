@@ -253,7 +253,7 @@ abstract class AbstractRegistrar extends QUI\QDOM implements RegistrarInterface
                     'quiqqer/frontend-users',
                     'exception.registrars.email.user_attribute_too_long',
                     [
-                        'label' => QUI::getLocale()->get('quiqqer/system', $attribute),
+                        'label' => QUI::getLocale()->get('quiqqer/core', $attribute),
                         'maxLength' => $maxLength
                     ]
                 ]);

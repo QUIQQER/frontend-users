@@ -8,6 +8,8 @@ use QUI\FrontendUsers\Controls\Profile\UserAvatar;
 use QUI\FrontendUsers\Handler;
 use QUI\FrontendUsers\Registrars\Email\Registrar;
 use QUI\FrontendUsers\Tests\Support\DatabaseTestCase;
+use Stash\Driver\Ephemeral;
+use Stash\Pool;
 
 class AjaxWorkflowTest extends DatabaseTestCase
 {
@@ -55,6 +57,7 @@ class AjaxWorkflowTest extends DatabaseTestCase
     public function testAuthenticationAndRegistrarControlEndpointsReturnObservableResults(): void
     {
         $this->configureRegistrar();
+        $this->setPackageConfig('login', 'redirectOnLogin', json_encode([]));
         $Project = QUI::getRewrite()->getProject();
         self::assertNotNull($Project);
         $encodedProject = json_encode([
@@ -65,7 +68,7 @@ class AjaxWorkflowTest extends DatabaseTestCase
         self::assertFalse($this->call('frontend/auth/existsUnverifiedActivation.php', [
             'userId' => 'missing-user'
         ]));
-        self::assertFalse($this->call('frontend/auth/resendActivationMail.php', [
+        self::assertTrue($this->call('frontend/auth/resendActivationMail.php', [
             'email' => 'missing@example.invalid'
         ]));
         self::assertSame('', $this->call('frontend/login/getAuthenticator.php', [
@@ -144,6 +147,7 @@ class AjaxWorkflowTest extends DatabaseTestCase
 
     public function testProfileAndTermsEndpointsHandleUnavailableConfigurationSafely(): void
     {
+        $this->setPackageConfig('registration', 'termsOfUseRequired', 0);
         $User = $this->createUser(true);
         self::replaceSessionUser($User);
         $Project = QUI::getRewrite()->getProject();
@@ -269,9 +273,13 @@ class AjaxWorkflowTest extends DatabaseTestCase
             (new QUI\FrontendUsers\Controls\RegistrationSignUp(['registrars' => [Registrar::class]]))->getBody()
         );
 
-        $profileCategoriesCache = 'package/quiqqer/frontendUsers/profileCategories';
-        $previousProfileCategories = CacheManager::get($profileCategoriesCache);
-        CacheManager::set($profileCategoriesCache, [
+        // Never publish the avatar-only fixture into the shared installation cache.
+        $previousCachePool = CacheManager::$Stash;
+        $previousCacheConfig = CacheManager::$Config;
+        CacheManager::$Config = clone CacheManager::getConfig();
+        CacheManager::$Config->setValue('general', 'nocache', 0);
+        CacheManager::$Stash = new Pool(new Ephemeral());
+        CacheManager::set('package/quiqqer/frontendUsers/profileCategories', [
             'user' => [
                 'name' => 'user',
                 'title' => ['quiqqer/frontend-users', 'profile.user.title'],
@@ -294,7 +302,8 @@ class AjaxWorkflowTest extends DatabaseTestCase
             ]));
             self::assertTrue((bool)$SystemUser->getAttribute('quiqqer.frontendUsers.useGravatarIcon'));
         } finally {
-            CacheManager::set($profileCategoriesCache, $previousProfileCategories);
+            CacheManager::$Stash = $previousCachePool;
+            CacheManager::$Config = $previousCacheConfig;
         }
     }
 
@@ -322,6 +331,18 @@ class AjaxWorkflowTest extends DatabaseTestCase
 
     private function call(string $file, array $values = []): mixed
     {
+        if (
+            in_array($file, [
+            'frontend/profile/save.php',
+            'frontend/profile/address/create.php',
+            'frontend/profile/address/edit.php',
+            'frontend/profile/address/delete.php'
+            ], true)
+        ) {
+            QUI::getRequest()->setMethod('POST');
+            QUI::getRequest()->request->set('_csrf', QUI\Security\CsrfToken::get());
+        }
+
         $result = $this->callRaw($file, $values);
         self::assertArrayNotHasKey('Exception', $result, $file . ': ' . json_encode($result));
 

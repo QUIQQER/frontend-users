@@ -183,12 +183,6 @@ class ActivationLinkVerification extends AbstractFrontendUsersLinkVerificationHa
             'registrar' => $this->getRegistrarHash($verification)
         ];
 
-        $email = $this->getUserEmail($verification);
-
-        if (!empty($email)) {
-            $urlParams['email'] = $email;
-        }
-
         return $RegistrationSite->getUrlRewritten([
             'error'
         ], $urlParams);

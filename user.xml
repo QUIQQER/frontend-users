@@ -10,5 +10,6 @@
         <attribute>quiqqer.frontendUsers.emailVerified</attribute> <!-- main email address -->
         <attribute>quiqqer.frontendUsers.emailAddressesVerified</attribute> <!-- additional email addresses -->
         <attribute>quiqqer.frontendUsers.useGravatarIcon</attribute>
+        <attribute>quiqqer.frontendUsers.avatarCleanup</attribute>
     </attributes>
 </user>

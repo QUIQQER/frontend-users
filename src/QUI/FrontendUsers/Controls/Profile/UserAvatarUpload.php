@@ -16,6 +16,8 @@ use function trim;
  */
 class UserAvatarUpload extends Form
 {
+    private const CLEANUP_ATTRIBUTE = 'quiqqer.frontendUsers.avatarCleanup';
+
     /**
      * UserAvatarUpload constructor.
      *
@@ -79,19 +81,28 @@ class UserAvatarUpload extends Form
         }
 
         $PermissionUser = QUI::getUsers()->getSystemUser();
+        // Only this uploader creates this user-specific namespace. Legacy UUID names
+        // do not prove ownership and must not be removed with system permissions.
+        $prefix = 'frontend-users-avatar-' . hash('sha256', (string)$SessionUser->getUUID()) . '-';
+        $pending = $SessionUser->getAttribute(self::CLEANUP_ATTRIBUTE);
+        $previousUrls = is_array($pending) ? $pending : [];
+        $previousUrls[] = $SessionUser->getAttribute('avatar');
+        $previousAvatars = [];
 
-        try {
-            $Avatar = QUI\Projects\Media\Utils::getImageByUrl(
-                $SessionUser->getAttribute('avatar')
-            );
-
-            $Placeholder = $UserFolder->getMedia()->getPlaceholderImage();
-
-            // if avatar is not the placeholder image, we can delete it
-            if ($Placeholder && $Avatar->getId() !== $Placeholder->getId()) {
-                $Avatar->delete($PermissionUser);
+        foreach ($previousUrls as $url) {
+            if (!is_string($url) || $url === '') {
+                continue;
             }
-        } catch (QUI\Exception) {
+
+            try {
+                $Avatar = QUI\Projects\Media\Utils::getImageByUrl($url);
+
+                if ($this->canRemoveAvatar($Avatar, $UserFolder, $prefix)) {
+                    $previousAvatars[$Avatar->getUrl()] = $Avatar;
+                }
+            } catch (QUI\Exception) {
+                // Already removed or no longer a resolvable local image.
+            }
         }
 
         // rename file to user file
@@ -103,7 +114,7 @@ class UserAvatarUpload extends Form
         }
 
         $uuid = QUI\Utils\Uuid::get();
-        $fileName = $fileInfo['dirname'] . '/' . $uuid . '.' . strtolower($fileInfo['extension']);
+        $fileName = $fileInfo['dirname'] . '/' . $prefix . $uuid . '.' . strtolower($fileInfo['extension']);
 
         rename($file, $fileName);
 
@@ -120,6 +131,31 @@ class UserAvatarUpload extends Form
         }
 
         $SessionUser->setAttribute('avatar', $File->getUrl());
+        $SessionUser->setAttribute(self::CLEANUP_ATTRIBUTE, array_keys($previousAvatars));
         $SessionUser->save();
+
+        // Persist cleanup candidates with the new avatar, so failed deletions can
+        // be retried without sweeping files belonging to an upload still in progress.
+        foreach ($previousAvatars as $Avatar) {
+            try {
+                if ($this->canRemoveAvatar($Avatar, $UserFolder, $prefix)) {
+                    $Avatar->delete($PermissionUser);
+                }
+            } catch (QUI\Exception $Exception) {
+                QUI\System\Log::addWarning('Avatar cleanup: ' . $Exception->getMessage());
+            }
+        }
+    }
+
+    private function canRemoveAvatar(QUI\Projects\Media\Image $Avatar, QUI\Projects\Media\Folder $Folder, string $prefix): bool
+    {
+        $Placeholder = $Folder->getMedia()->getPlaceholderImage();
+
+        return !$Avatar->isDeleted()
+            && $Avatar->getProject()->getName() === $Folder->getProject()->getName()
+            && $Avatar->getParentId() === $Folder->getId()
+            && str_starts_with((string)$Avatar->getAttribute('name'), $prefix)
+            && (string)$Avatar->getAttribute('c_user') === (string)QUI::getUsers()->getSystemUser()->getUUID()
+            && ($Placeholder === null || $Avatar->getUrl() !== $Placeholder->getUrl());
     }
 }
