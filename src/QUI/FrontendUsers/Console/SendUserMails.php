@@ -260,7 +260,7 @@ class SendUserMails extends QUI\System\Console\Tool
         $limits = $this->getLimits();
         $setLimits = true;
 
-        if (!empty($limits)) {
+        if ($limits !== false) {
             $this->writeLn("The following mailing limits have been found:\n");
 
             $this->writeLn("Mails / 24 hours: " . ($limits['per24h'] ?: 'unlimited'));
@@ -272,7 +272,7 @@ class SendUserMails extends QUI\System\Console\Tool
             $setLimits = !empty($input) && mb_strtolower($input) === 'y';
         }
 
-        if ($setLimits) {
+        if ($limits === false || $setLimits) {
             $this->writeLn("(Limit) Mails / 24 hours? [unlimited]: ");
             $limitPer24h = $this->readInput();
 
@@ -295,11 +295,6 @@ class SendUserMails extends QUI\System\Console\Tool
             ];
 
             $this->setLimits($limits);
-        }
-
-        if ($limits === false) {
-            $this->writeLn('ERROR: Mail limits could not be initialized.');
-            return;
         }
 
         // SUMMARY
