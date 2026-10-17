@@ -47,6 +47,13 @@ session; the decorator then stores only the narrow lookup proof in the renewed
 session before rethrowing that same error. The session ID is regenerated when
 recording proof. Authentication flags cleared by Core are never restored.
 
+If Core replaces that inactive-user error with its generic public login 401,
+the decorator restores the original inactive-user error and its lookup proof
+only after the trusted event has confirmed password authentication. This keeps
+the activation notice and resend button available. A generic failure without
+that event, an unrelated error or a throttled login cannot restore proof or
+inactive-account details.
+
 A successful primary password step awaiting MFA can also establish this narrow
 proof. It does not complete MFA, authenticate a session, activate a user or grant
 profile access. A subsequent primary login attempt removes previous proof, and

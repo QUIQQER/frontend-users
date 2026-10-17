@@ -77,9 +77,7 @@ final class ActivationLookup
             } catch (\Exception $Exception) {
                 $Session->remove(self::SESSION_KEY);
 
-                self::preserveProof($Exception);
-
-                throw $Exception;
+                throw self::preserveProof($Exception);
             } finally {
                 self::$passwordAttempt = false;
                 self::$inactiveError = null;
@@ -90,11 +88,30 @@ final class ActivationLookup
         QUI::getAjax()->registerFunction($function, self::$loginWrapper, $registration['params']);
     }
 
-    private static function preserveProof(\Exception $Exception): void
+    private static function preserveProof(\Exception $Exception): \Exception
     {
-        if ($Exception === self::$inactiveError && self::$pendingProof !== null) {
-            self::saveProof(self::$pendingProof);
+        $InactiveError = self::$inactiveError;
+        $proof = self::$pendingProof;
+
+        if ($InactiveError === null || $proof === null) {
+            return $Exception;
         }
+
+        if (
+            $Exception !== $InactiveError
+            && (
+                !$Exception instanceof QUI\Users\UserAuthException
+                || $Exception->getCode() !== 401
+            )
+        ) {
+            return $Exception;
+        }
+
+        // Core can replace the inactive-user exception with a generic public 401.
+        // Restore details only from its trusted event after password authentication.
+        self::saveProof($proof);
+
+        return $InactiveError;
     }
 
     /** Called by Core after authentication, before it clears an inactive user's session. */

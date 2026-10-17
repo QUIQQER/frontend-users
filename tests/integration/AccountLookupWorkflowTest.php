@@ -160,6 +160,63 @@ class AccountLookupWorkflowTest extends DatabaseTestCase
         self::assertFalse($this->lookup('activation', $User->getUUID())['result']);
     }
 
+    public function testGenericLoginFailureWithoutTheTrustedInactiveEventCannotCreateProof(): void
+    {
+        $User = $this->pendingUser();
+        QUI::getEvents()->removeEvent('onUserLoginError');
+        $response = $this->login($User->getUsername(), 'phpunit-lookup-password');
+
+        self::assertSame(401, $response['Exception']['code']);
+        self::assertArrayNotHasKey('reason', $response['Exception']['attributes']);
+        self::assertFalse((bool)QUI::getSession()->get(ActivationLookup::SESSION_KEY));
+        self::assertFalse($this->lookup('activation', $User->getUUID())['result']);
+    }
+
+    /** @return iterable<string, array{class-string<\Exception>, int}> */
+    public static function unrelatedLoginFailures(): iterable
+    {
+        yield 'unexpected runtime error' => [\RuntimeException::class, 401];
+        yield 'throttled login' => [QUI\Users\UserAuthException::class, 429];
+        yield 'server error' => [QUI\Users\UserAuthException::class, 500];
+    }
+
+    #[DataProvider('unrelatedLoginFailures')]
+    public function testUnrelatedLoginFailuresCannotRestoreInactiveDetails(string $exceptionClass, int $code): void
+    {
+        $User = $this->pendingUser();
+        $registration = QUI::getAjax()->getRegisteredCallables()['ajax_users_login'];
+        $original = $registration['callable'];
+        QUI::getAjax()->registerFunction(
+            'ajax_users_login',
+            static function (
+                $authenticator,
+                $params,
+                $authStep,
+                null|string|array $authenticators = null
+            ) use (
+                $original,
+                $exceptionClass,
+                $code
+            ) {
+                try {
+                    return $original($authenticator, $params, $authStep, $authenticators);
+                } catch (\Exception) {
+                    throw new $exceptionClass('Unrelated login failure', $code);
+                }
+            },
+            $registration['params']
+        );
+
+        $response = $this->login($User->getUsername(), 'phpunit-lookup-password');
+
+        self::assertSame($code, $response['Exception']['code']);
+        self::assertArrayNotHasKey('reason', $response['Exception']['attributes'] ?? []);
+        self::assertArrayNotHasKey('userId', $response['Exception']['attributes'] ?? []);
+        self::assertFalse((bool)QUI::getSession()->get(ActivationLookup::SESSION_KEY));
+        self::assertFalse((bool)QUI::getSession()->get('auth'));
+        self::assertFalse($this->lookup('activation', $User->getUUID())['result']);
+    }
+
     public function testLookupQuotaIsSharedAndSurvivesSessionDeletion(): void
     {
         $User = $this->pendingUser();
